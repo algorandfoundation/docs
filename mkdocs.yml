@@ -1,0 +1,75 @@
+site_name: Algorand Developer Docs
+
+nav:
+- Learn: 'index.md'
+- Networks:
+    - MainNet: 'networks/mainnet.md'
+    - TestNet: 'networks/testnet.md'
+    - BetaNet: 'networks/betanet.md'
+- Application Development:
+    - Development Environment: 'app-development/environ.md'
+    - Test and Deploy: 'app-development/testing/index.md'
+- Feature Overviews:
+    - Accounts: 'features/accounts.md'
+    - Transactions: 'features/transactions.md'
+    - Signatures: 'features/signatures.md'
+    - Algorand Standard Assets (ASA): 'features/asa.md'
+    - Atomic Transfers: 'features/atomic_transfers.md'
+    - Algorand Smart Contracts (ASC1): 
+        - Overview: 'features/asc1/overview.md'
+        - Usage Modes: 'features/asc1/modes.md'
+        - Example Contract Walkthrough: 'features/asc1/example.md'
+        - Certified Templates: 'features/asc1/templates.md'
+- Network Participation:
+    - Run a Node:
+        - Node Types: 'node/types.md'
+        - Installation: 'node/install.md'
+    - Common Node Operations:
+        - Switch Networks: 'node/switch_networks.md'
+        - Catchup: 'node/catchup.md'
+        - Check Status: 'node/status.md'
+    - Participate in Consensus:
+        - Guidelines & Best Practices: 'participate/guidelines.md'
+        - Generate a Participation Key: 'participate/generate_keys.md'
+        - Register Online: 'participate/online.md'
+        - Register Offline: 'participate/offline.md'
+        - Renew Participation Keys: 'participate/renew.md'
+         
+
+      
+- Reference Docs:
+    - Transaction Execution Approval Language (TEAL):
+        - TEAL Opcodes: 'index.md'
+        - TEAL Templates:
+            - HTLC: 'reference/teal/templates/htlc.md'
+- About:
+    - License: 'license.md'
+    - Release Notes: 'release-notes.md'
+
+theme: 
+    name: material
+    font: Lato
+    palette:
+      primary: 'deep purple'
+      accent: 'purple'
+
+markdown_extensions:
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - toc:
+      permalink: true
+      baselevel: 2
