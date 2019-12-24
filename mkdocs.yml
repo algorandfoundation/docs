@@ -1,29 +1,32 @@
 site_name: Algorand Developer Docs
 
 nav:
-- Learn: 'index.md'
-- Networks:
-    - MainNet: 'networks/mainnet.md'
-    - TestNet: 'networks/testnet.md'
-    - BetaNet: 'networks/betanet.md'
+- Learn:
+    - Terminology: 'learn/terminology.md'
 - Application Development:
-    - Development Environment: 'app-development/environ.md'
-    - Test and Deploy: 'app-development/testing/index.md'
-- Feature Overviews:
+    - Getting Started: 'app-development/getting_started.md'
+    - Environment Setup: 'app-development/environ.md'
+    - Explore algod: 'app-development/algod.md'
+    - Be Inspired: 'app-development/content.md'
+- Feature Guides:
     - Accounts: 'features/accounts.md'
     - Transactions: 'features/transactions.md'
     - Signatures: 'features/signatures.md'
-    - Algorand Standard Assets (ASA): 'features/asa.md'
+    - Algorand Standard Assets (ASA): 
+        - What are they?: 'index.md'
+        - ASA Flows: 'features/asa/flows.md'
+        - ASA Types: 'features/asa.md'
     - Atomic Transfers: 'features/atomic_transfers.md'
     - Algorand Smart Contracts (ASC1): 
-        - Overview: 'features/asc1/overview.md'
+        - What are they?: 'features/asc1/overview.md'
         - Usage Modes: 'features/asc1/modes.md'
-        - Example Contract Walkthrough: 'features/asc1/example.md'
+        - Example Walkthrough: 'features/asc1/example.md'
         - Certified Templates: 'features/asc1/templates.md'
 - Network Participation:
     - Run a Node:
         - Node Types: 'node/types.md'
         - Installation: 'node/install.md'
+        - Node Configurations: 'node/config.md'
     - Common Node Operations:
         - Switch Networks: 'node/switch_networks.md'
         - Catchup: 'node/catchup.md'
@@ -34,14 +37,19 @@ nav:
         - Register Online: 'participate/online.md'
         - Register Offline: 'participate/offline.md'
         - Renew Participation Keys: 'participate/renew.md'
-         
 
-      
+- Algorand Networks:
+    - MainNet: 'networks/mainnet.md'
+    - TestNet: 'networks/testnet.md'
+    - BetaNet: 'networks/betanet.md'
+        
 - Reference Docs:
     - Transaction Execution Approval Language (TEAL):
         - TEAL Opcodes: 'index.md'
         - TEAL Templates:
             - HTLC: 'reference/teal/templates/htlc.md'
+        - TEAL Guidelines: 'reference/teal/'
+- Community Projects: 'index.md'
 - About:
     - License: 'license.md'
     - Release Notes: 'release-notes.md'
@@ -54,6 +62,7 @@ theme:
       accent: 'purple'
 
 markdown_extensions:
+  - admonition
   - pymdownx.arithmatex
   - pymdownx.betterem:
       smart_enable: all
@@ -70,6 +79,7 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+  - codehilite
   - toc:
       permalink: true
       baselevel: 2
