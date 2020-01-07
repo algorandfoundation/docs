@@ -1,4 +1,4 @@
-This page is a guide for developers who want to get started building on the Algorand blockchain. 
+This page is a guide for developers who want to get started building applications on the Algorand blockchain. 
 
 # What does it mean to build on Algorand?
 Building an application on Algorand means that your application reads from or writes to the Algorand blockchain. Writing to the Algorand blockchain is synonymous with issuing a transaction that will later be confirmed within a block.
@@ -14,12 +14,12 @@ There are three public Algorand Networks:
 :-- |:-------------:| :-------------: | :-------------: |
 **Protocol Version** | Current | Current| Future
 **Genesis Distribution** | Unique | Unique | Unique
-**Reliability**         | Most Stable  | Very Stable (restart possible; but very infrequent) | Experimental; frequent restarts
+**Reliability**         | Most Stable  | Very Stable, but restarts are possible | Experimental; frequent restarts
 
 
-- **MainNet**: The primary Algorand Network with real-value assets including the native Algo.  
-- **TestNet**: Has a different genesis block than MainNet, but the protocol version and features are the same. 
-- **BetaNet**: Where future protocols are available for public testing. As its name suggests, BetaNet is meant to be a beta-like environment. Therefore, quality and features may not be final, and protocol upgrades and network restarts may be common.
+- **MainNet**: The primary Algorand Network with real-value assets including the native Algo.  <LINK>
+- **TestNet**: Has a different genesis block than MainNet, but the protocol version and features are the same. <LINK> 
+- **BetaNet**: Where future protocols are available for public testing. Quality and features may not be final, and protocol upgrades and network restarts may be common. <LINK>
 
 ## Best Practices
 1. If your application depends on features currently available on MainNet, use TestNet as your public testing network. 
@@ -31,7 +31,7 @@ There are three public Algorand Networks:
 
 
 
-# How do I obtain an `address` and `token`?
+# How do I obtain an algod address and token?
 There are 3 recommended ways to obtain an `address` and `token`. 
 
 ## 1. Use a third-party service
@@ -99,7 +99,7 @@ $ cat $ALGORAND_DATA/algod.token
 # Install SDKs
 Install your desired SDK by visiting the corresponding SDK documentation: Python, JavaScript, [Go](https://github.com/algorand/go-algorand-sdk), Java. 
 
-# Connect to `algod`
+# Connect to algod
 
 After you have your address and access token. You can instantiate an `algod` client with any of the SDKs as follows:
 

@@ -2,25 +2,26 @@ site_name: Algorand Developer Docs
 
 nav:
 - Learn:
+    - Blockchain 101: 'learn/blockchain101.md'
+    - Algorand Consensus Protocol: 'learn/algorand_consensus.md'
     - Terminology: 'learn/terminology.md'
 - Application Development:
     - Getting Started: 'app-development/getting_started.md'
-    - Environment Setup: 'app-development/environ.md'
-    - Explore algod: 'app-development/algod.md'
-    - Be Inspired: 'app-development/content.md'
+    - Your First Transaction: 'app-development/explore.md'
+    - Build your application: 'app-development/build.md'
 - Feature Guides:
     - Accounts: 'features/accounts.md'
     - Transactions: 'features/transactions.md'
     - Signatures: 'features/signatures.md'
     - Algorand Standard Assets (ASA): 
-        - What are they?: 'index.md'
+        - ASA Intro: 'features/asa/index.md'
         - ASA Flows: 'features/asa/flows.md'
-        - ASA Types: 'features/asa.md'
+        - ASA Types: 'features/asa/types.md'
     - Atomic Transfers: 'features/atomic_transfers.md'
     - Algorand Smart Contracts (ASC1): 
-        - What are they?: 'features/asc1/overview.md'
+        - ASC1 Intro: 'features/asc1/index.md'
         - Usage Modes: 'features/asc1/modes.md'
-        - Example Walkthrough: 'features/asc1/example.md'
+        - Example Walkthrough: 'features/asc1/walkthrough.md'
         - Certified Templates: 'features/asc1/templates.md'
 - Network Participation:
     - Run a Node:
@@ -42,17 +43,41 @@ nav:
     - MainNet: 'networks/mainnet.md'
     - TestNet: 'networks/testnet.md'
     - BetaNet: 'networks/betanet.md'
-        
+
 - Reference Docs:
     - Transaction Execution Approval Language (TEAL):
-        - TEAL Opcodes: 'index.md'
+        - TEAL Opcodes: 'reference/teal/opcodes.md'
         - TEAL Templates:
+            - Delegate KeyReg: 'reference/teal/templates/delegate_keyreg.md'
+            - Dynamic Fee: 'reference/teal/templates/dynamic_fee.md'
             - HTLC: 'reference/teal/templates/htlc.md'
-        - TEAL Guidelines: 'reference/teal/'
-- Community Projects: 'index.md'
+            - Limit Order A: 'reference/teal/templates/limit_ordera.md'
+            - Split Payments: 'reference/teal/templates/split.md'
+        - TEAL Guidelines: 'reference/teal/guidelines.md'
+    - goal:
+      - account: 'reference/goal/account.md'
+      - asset: 'reference/goal/asset.md'
+      - clerk: 'reference/goal/clerk.md'
+    - algokey:
+      - export: 'reference/algokey/export.md'
+      - generate: 'reference/algokey/generate.md'
+      - help: 'reference/algokey/help.md'
+    - SDKs:
+      - Go: 'reference/sdks/go.md'
+      - Java: 'reference/sdks/java.md'
+      - JavaScript: 'reference/sdks/javascript.md'
+      - Python: 'reference/sdks/python.md'
+- Community Projects: 'community.md'
 - About:
-    - License: 'license.md'
-    - Release Notes: 'release-notes.md'
+    - License: 'about/license.md'
+    - Release Notes: 'about/release_notes.md'
+
+## TO BE REMOVED PRIOR TO LAUNCH
+- New Content Categories:
+  - Solutions:
+    - Example: 'solutions/example.md'
+  - Tutorials:
+    - Example: 'tutorials/example.md'
 
 theme: 
     name: material
