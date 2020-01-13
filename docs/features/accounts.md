@@ -3,4 +3,7 @@
 ## Standalone 
 ## Multisignature
 # Attributes
+
+Minimum Balance
+
 # Special Accounts

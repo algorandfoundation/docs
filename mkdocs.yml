@@ -2,13 +2,11 @@ site_name: Algorand Developer Docs
 
 nav:
 - Learn:
-    - Blockchain 101: 'learn/blockchain101.md'
+    - Intro to Blockchain: 'learn/blockchain101.md'
     - Algorand Consensus Protocol: 'learn/algorand_consensus.md'
-    - Terminology: 'learn/terminology.md'
-- Application Development:
-    - Getting Started: 'app-development/getting_started.md'
-    - Your First Transaction: 'app-development/explore.md'
-    - Build your application: 'app-development/build.md'
+- Getting Started:
+    - Workspace Setup: 'getting-started/setup.md'
+    - Your First Transaction: 'getting-started/tutorial.md'
 - Feature Guides:
     - Accounts: 'features/accounts.md'
     - Transactions: 'features/transactions.md'
@@ -67,6 +65,7 @@ nav:
       - Java: 'reference/sdks/java.md'
       - JavaScript: 'reference/sdks/javascript.md'
       - Python: 'reference/sdks/python.md'
+    - Glossary: 'reference/glossary.md'
 - Community Projects: 'community.md'
 - About:
     - License: 'about/license.md'
