@@ -16,9 +16,23 @@ In order to send a transaction, you first need an account<LINK TO GLOSSARY> on A
 ## Generate a public/private key pair
 
 ```javascript tab="JavaScript"
+const algosdk = require('algosdk');
+
+function generateAlgorandKeyPair() {
+	var account = algosdk.generateAccount();
+	var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+	console.log( "My address: " + account.addr );
+	console.log( "My passphrase: " + passphrase );
+}
 ```
 
 ```python tab="Python"
+from algosdk import account, mnemonic
+
+def generate_algorand_keypair():
+	private_key, address = account.generate_account()
+	print("My address: {}".format(address))
+	print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 ```
 
 ```java tab="Java"
@@ -34,6 +48,24 @@ public class GenerateAlgorandKeyPair {
 ```
 
 ```go tab="Go"
+import (
+	"fmt"
+
+	"github.com/algorand/go-algorand-sdk/crypto"
+	"github.com/algorand/go-algorand-sdk/mnemonic"
+)
+
+func main() {
+	account := crypto.GenerateAccount()
+	passphrase, err := mnemonic.FromPrivateKey(account.PrivateKey)
+
+	if err != nil {
+		fmt.Printf("Error creating transaction: %s\n", err)
+	} else {
+		fmt.Printf("My address: %s\n", account.Address)
+		fmt.Printf("My passphrase: %s\n", passphrase)
+	}
+}
 ```
 
 ```bash tab="goal"
@@ -83,6 +115,7 @@ curl -i -X GET \
 
 ```bash tab="goal"
 $ goal account balance -a my-address<PLACEHOLDER>
+[AMOUNT] microAlgos
 ```
 
 _Read all about Accounts, Keys, and Wallets in the Accounts Feature Guide_
@@ -107,26 +140,23 @@ final RECEIVER = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
 BigInteger fee;
 String genesisID;
 Digest genesisHash;
-long firstValidRound;
-
+BigInteger firstValidRound;
+fee = BigInteger.valueOf(1000);
 try {
     TransactionParams params = algodApiInstance.transactionParams();
     genesisHash = new Digest(params.getGenesishashb64());
     genesisID = params.getGenesisID();
-    System.out.println("Minimum fee: " + fee);
-    firstValidRound = params.getLastRound().longValue();
+    System.out.println("Minimum Fee: " + fee);
+    firstValidRound = params.getLastRound();
     System.out.println("Current Round: " + firstValidRound);
 } catch (ApiException e) {
     throw new RuntimeException("Could not get params", e);
 }
-
-fee = BigInteger.valueOf(1000);
-long amount = 1000000; // microAlgos
-long lastValidRound = firstValidRound + 1000; // 1000 is the max tx window
+BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
+BigInteger lastValidRound = firstValidRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
 String note = "Hello World";
-
-Transaction txn = new Transaction(myAccount.getAddress(), fee, BigInteger.valueOf(firstValidRound),
-    	BigInteger.valueOf(lastValidRound), note.getBytes(), BigInteger.valueOf(amount), new Address(RECEIVER),
+Transaction txn = new Transaction(myAccount.getAddress(), fee, firstValidRound,
+        lastValidRound, note.getBytes(), amount, new Address(RECEIVER),
         genesisID, genesisHash);
 ...
 ```
@@ -145,19 +175,8 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
 
 ```java tab="Java"
 ...
-Transaction txn = new Transaction(myAccount.getAddress(), fee, BigInteger.valueOf(firstValidRound),
-    	BigInteger.valueOf(lastValidRound), note.getBytes(), BigInteger.valueOf(amount), new Address(RECEIVER),
-        genesisID, genesisHash);
-SignedTransaction signedTxn = myAccount.signTransaction(txn);
-System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
-
-try {
-    byte[] encodedTxnBytes = Encoder.encodeToMsgPack(signedTxn);
-    TransactionID id = algodApiInstance.rawTransaction(encodedTxnBytes);
-    System.out.println("Successfully sent tx with ID: " + id);
-} catch (ApiException e) {
-    System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-}
+SignedTransaction signedTx = myAccount.signTransaction(txn);
+System.out.println("TXID of signed transaction: " + signedTx.transactionID);
 ...
 ```
 
@@ -178,8 +197,13 @@ $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
 
 ```java tab="Java"
 ...
-SignedTransaction signedTx = myAccount.signTransaction(txn);
-System.out.println("Signed transaction with txid: " + signedTx.transactionID);
+try {
+    byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
+    TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
+    System.out.println("Successfully sent tx with ID: " + id);
+} catch (ApiException e) {
+    System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
+}
 ...
 ```
 
@@ -203,6 +227,205 @@ Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
 ```
 
-# Locate the transaction
+# Wait for ccnfirmation
+
+```javascript tab="JavaScript"
+```
+
+```python tab="Python"
+```
+
+```java tab="Java"
+...
+ while(true) {
+    try {
+        //Check the pending transactions
+        com.algorand.algosdk.algod.client.model.Transaction txInfo =
+                algodApiInstance.pendingTransactionInformation(signedTx.transactionID);
+        if (txInfo.getRound() != null && txInfo.getRound().longValue() > 0) {
+                    System.out.println("Transaction " + txInfo.getTx()
+                            + " confirmed in round " + txInfo.getRound().longValue());
+                    break;
+                } else {
+                    System.out.println("Waiting for confirmation... (pool error, if any:)" + txInfo.getPoolerror());
+                }
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#pendingTxInformation: " + e.getMessage());
+                break;
+            }
+        }
+
+...
+```
+
+```bash tab="cURL"
+curl -i -X POST \
+   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
+   -T "hello-world.stxn" \
+ 'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/v1/transactions'
+```
+
+```bash tab="goal"
+$ goal clerk rawsend --filename="hello-world.stxn"
+Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
+Transaction [TXID] still pending as of round [LAST_ROUND]
+Transaction [TXID] committed in round [COMMITTED_ROUND]
+
+# Or construct, sign, and submit in one line
+$ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
+Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
+Transaction [TXID] still pending as of round [LAST_ROUND]
+Transaction [TXID] committed in round [COMMITTED_ROUND]
+```
+
+# Read the transaction from the blockchain
 
 Notice above the pattern of constructing a transaction, authenticating it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
+
+??? example "Complete Example"
+    
+    ```javascript tab="JavaScript"
+    ```
+
+    ```python tab="Python"
+    ```
+
+    ```java tab="Java"
+    package example;
+
+    import java.math.BigInteger;
+
+    import java.util.concurrent.TimeUnit;
+
+    import com.algorand.algosdk.account.Account;
+    import com.algorand.algosdk.algod.client.AlgodClient;
+    import com.algorand.algosdk.algod.client.ApiException;
+    import com.algorand.algosdk.algod.client.api.AlgodApi;
+    import com.algorand.algosdk.algod.client.model.*;
+    import com.algorand.algosdk.crypto.Address;
+    import com.algorand.algosdk.crypto.Digest;
+    import com.algorand.algosdk.transaction.Transaction;
+    import com.algorand.algosdk.transaction.SignedTransaction;
+    import com.algorand.algosdk.util.Encoder;
+
+    public class MyApp {
+
+        public static void main(String args[]) throws Exception {
+
+            // Initialize an algod client
+            final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
+            final String ALGOD_API_TOKEN = "algod-token"<PLACEHOLDER>;
+
+            //Create an instance of the algod API client
+            AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
+            ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+            api_key.setApiKey(ALGOD_API_TOKEN);
+            AlgodApi algodApiInstance = new AlgodApi(client);
+
+            // Import your private key mnemonic and address
+            final String PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
+            com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
+            System.out.println("My Address: " + myAccount.getAddress());
+            System.out.println("My Passphrase: " + myAccount.toMnemonic());
+
+            String myAddress = myAccount.getAddress().toString();
+            com.algorand.algosdk.algod.client.model.Account accountInfo = 
+                algodApiInstance.accountInformation(myAddress);
+            System.out.println("Account Balance: " + accountInfo.getAmount());
+
+            // Construct the transaction
+            final String RECEIVER = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
+            BigInteger fee;
+            String genesisID;
+            Digest genesisHash;
+            BigInteger firstValidRound;
+            fee = BigInteger.valueOf(1000);
+            try {
+                TransactionParams params = algodApiInstance.transactionParams();
+                genesisHash = new Digest(params.getGenesishashb64());
+                genesisID = params.getGenesisID();
+                System.out.println("Minimum Fee: " + fee);
+                firstValidRound = params.getLastRound();
+                System.out.println("Current Round: " + firstValidRound);
+            } catch (ApiException e) {
+                throw new RuntimeException("Could not get params", e);
+            }
+            BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
+            BigInteger lastValidRound = firstValidRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
+            String note = "Hello World";
+
+
+            Transaction txn = new Transaction(myAccount.getAddress(), fee, firstValidRound,
+                    lastValidRound, note.getBytes(), amount, new Address(RECEIVER),
+                    genesisID, genesisHash);
+
+            // Sign the transaction
+            SignedTransaction signedTxn = myAccount.signTransaction(txn);
+            System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
+
+            // Submit the transaction to the network
+            try {
+                byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+                TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
+                System.out.println("Successfully sent tx with ID: " + id);
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
+            }
+
+            // Wait for transaction confirmation
+            while(true) {
+                try {
+                    //Check the pending transactions
+                    com.algorand.algosdk.algod.client.model.Transaction txInfo =
+                            algodApiInstance.pendingTransactionInformation(signedTxn.transactionID);
+                    if (txInfo.getRound() != null && txInfo.getRound().longValue() > 0) {
+                        System.out.println("Transaction " + txInfo.getTx()
+                                + " confirmed in round " + txInfo.getRound().longValue());
+                        break;
+                    } else {
+                        System.out.println("Waiting for confirmation... (pool error, if any:)" + txInfo.getPoolerror());
+                    }
+                } catch (ApiException e) {
+                    System.err.println("Exception when calling algod#pendingTxInformation: " + e.getMessage());
+                    break;
+                }
+                TimeUnit.SECONDS.sleep(1);
+            }
+
+            //Read the transaction from the blockchain
+            try {
+                com.algorand.algosdk.algod.client.model.Transaction confirmedTxn =
+                        algodApiInstance.transactionInformation(RECEIVER, signedTxn.transactionID);
+                System.out.println("Transaction information (with notes): " + confirmedTxn.toString());
+                System.out.println("Decoded note: " + new String(confirmedTxn.getNoteb64()));
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
+            }
+        }
+    }
+    ```
+
+    ```go tab="Go"
+    ```
+
+    ```bash tab="goal"
+    #!/usr/bin/bash
+
+    $ goal account balance -a my-address<PLACEHOLDER>
+    [AMOUNT] microAlgos
+
+    $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
+
+    $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
+
+    $ goal clerk rawsend --filename="hello-world.stxn"
+    Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
+    Transaction [TXID] still pending as of round [LAST_ROUND]
+    Transaction [TXID] committed in round [COMMITTED_ROUND]
+
+    # Or construct, sign, and submit in one line
+     $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
+     Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
+     Transaction [TXID] still pending as of round [LAST_ROUND]
+     Transaction [TXID] committed in round [COMMITTED_ROUND]
+    ``` 

@@ -273,8 +273,18 @@ curl -i -X GET \
  'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/v1/status'
 ```
 
-```bash tab="goal"
+```bash tab="goal" hl_lines="2 3 4 5 6 7 8 9"
 $ goal node status
+Last committed block: [LATEST_ROUND]
+Time since last block: [TIME_IN_SECONDS]
+Sync Time: [TIME_IN_SECONDS]
+Last consensus protocol: [LINK_TO_CURRENT_PROTOCOL_SPEC]
+Next consensus protocol: [LINK_TO_FUTURE_PROTOCOL_SPEC]
+Round for next consensus protocol: [ROUND_FOR_FUTURE_PROTOCOL]
+Next consensus protocol supported: [true|false]
+Has Synced Since Startup: [true|false]
+Genesis ID: [GENESIS_ID]
+Genesis hash: [BASE64_GENESIS_HASH]
 ```
 
 The _status_ methods return information such as the latest round<LINK TO GLOSSARY>, referred to as `lastRound` from the perspective of the node you are connected to. Each of the SDKs may differ slightly in which information they return for each call so below is the full REST response with the latest round highlighted.
@@ -327,8 +337,18 @@ curl -i -X GET \
  'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/versions'
 ```
 
-```bash tab="goal"
+```bash tab="goal" hl_lines="10 11"
 $ goal node status
+Last committed block: [LATEST_ROUND]
+Time since last block: [TIME_IN_SECONDS]
+Sync Time: [TIME_IN_SECONDS]
+Last consensus protocol: [LINK_TO_CURRENT_PROTOCOL_SPEC]
+Next consensus protocol: [LINK_TO_FUTURE_PROTOCOL_SPEC]
+Round for next consensus protocol: [ROUND_FOR_FUTURE_PROTOCOL]
+Next consensus protocol supported: [true|false]
+Has Synced Since Startup: [true|false]
+Genesis ID: [GENESIS_ID]
+Genesis hash: [BASE64_GENESIS_HASH]
 ```
 
 Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST response below, match your chosen network before proceeding.
