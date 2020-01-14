@@ -19,7 +19,9 @@ nav:
     - Algorand Smart Contracts (ASC1): 
         - ASC1 Intro: 'features/asc1/index.md'
         - Usage Modes: 'features/asc1/modes.md'
-        - Example Walkthrough: 'features/asc1/walkthrough.md'
+        - Teal Overview: 'features/asc1/teal_overview.md'
+        - Goal TEAL Walkthrough: 'features/asc1/goal_teal_walkthrough.md'
+        - ASC1 SDK Usage: 'features/asc1/asc1_sdk_usage.md'
         - Certified Templates: 'features/asc1/templates.md'
 - Network Participation:
     - Run a Node:
