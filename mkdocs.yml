@@ -90,6 +90,7 @@ nav:
     - Example: 'tutorials/example.md'
   - Articles:
     - Example: 'articles/example.md'
+    - Sandbox: 'articles/sandbox_article.md'
   - News:
     - Example: 'news/example.md'
 
