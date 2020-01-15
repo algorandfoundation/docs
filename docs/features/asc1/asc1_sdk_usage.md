@@ -60,14 +60,14 @@ The following example illustrates signing a transaction with a created logic sig
     let program = new Uint8Array(Buffer.from("ASABACI=", "base64"));
     let lsig = algosdk.makeLogicSig(program);
     let txn = {
-        "from": [CONTRACT ADDRESS],
-        "to": [RECEIVER],
-        "fee": [FEE],
-        "amount": [AMOUNT],
-        "firstRound": [FIRST VALID ROUND],
-        "lastRound": [LAST VALID ROUND],
-        "genesisID": [GENESIS ID],
-        "genesisHash": [GENESIS HASH]
+        "from": contract-address<PLACEHOLDER>,
+        "to": receiver<PLACEHOLDER>,
+        "fee": fee<PLACEHOLDER>,
+        "amount": amount<PLACEHOLDER>,
+        "firstRound": first-valid-round<PLACEHOLDER>,
+        "lastRound": last-valid-round<PLACEHOLDER>,
+        "genesisID": genesis-id<PLACEHOLDER>,
+        "genesisHash": genesis-hash<PLACEHOLDER>
     };
     let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob));
@@ -76,7 +76,7 @@ The following example illustrates signing a transaction with a created logic sig
 ```python tab="Python"
 	program = b"\x01\x20\x01\x00\x22"  
 	lsig = transaction.LogicSig(program)
-	txn = transaction.PaymentTxn([CONTRACT ADDRESS], [FEE], [FIRST VALID ROUND], [LAST VALID ROUND], [GENESIS HASH], [RECEIVER], [AMOUNT], [CLOSE REMAINDER TO ADDRESS])
+	txn = transaction.PaymentTxn(contract-address<PLACEHOLDER>, fee<PLACEHOLDER>, first-valid-round<PLACEHOLDER>, last-valid-round<PLACEHOLDER>, genesis-hash<PLACEHOLDER>, receiver<PLACEHOLDER>, amount<PLACEHOLDER>, close-remainder-to-address<PLACEHOLDER>)
 	lstx = transaction.LogicSigTransaction(txn, lsig)
 	txid = acl.send_transaction(lstx)
 ```
@@ -86,7 +86,7 @@ The following example illustrates signing a transaction with a created logic sig
         0x01, 0x20, 0x01, 0x00, 0x22  // int 0
     };
     LogicsigSignature lsig = new LogicsigSignature(program, null);
-    Transaction tx = new Transaction(lsig.toAddress(), new Address([RECIEVER ADDRESS]), BigInteger.valueOf([FEE]), [AMOUNT], [FIRST VALID ROUND], [LAST VALID ROUND], [GENESIS ID], [GENESIS HASH]);
+    Transaction tx = new Transaction(lsig.toAddress(), new Address(receiver-address<PLACEHOLDER>), BigInteger.valueOf(fee<PLACEHOLDER>), amount<PLACEHOLDER>, first-valid-round<PLACEHOLDER>, last-valid-round<PLACEHOLDER>, genesis-id<PLACEHOLDER>, genesis-hash<PLACEHOLDER>);
     try {
         SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
         byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
@@ -102,8 +102,8 @@ The following example illustrates signing a transaction with a created logic sig
     lsig, err := crypto.MakeLogicSig(contract.program, nil, nil, nil)
 	addr := crypto.LogicSigAddress(lsig).String()	
 	tx, err := transaction.MakePaymentTxnWithFlatFee(
-		addr, [RECEIVER], [FEE], [AMOUNT], [FIRST VALID ROUND], [LAST VALID ROUND],
-		[NOTE], [CLOSE REAMAINDER TO ADDRESS], [GENESIS ID], [GENESIS HASH] )
+		addr, receiver<PLACEHOLDER>, fee<PLACEHOLDER>, amount<PLACEHOLDER>, first-valid-round<PLACEHOLDER>, last-valid-round<PLACEHOLDER>,
+		note<PLACEHOLDER>, close-remainder-to-address<PLACEHOLDER>, genesis-id<PLACEHOLDER>, genesis-hash<PLACEHOLDER> )
 	txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
 	transactionID, err := algodClient.SendRawTransaction(stx)
 ```
@@ -111,7 +111,7 @@ The following example illustrates signing a transaction with a created logic sig
 # Account Delegation SDK Usage
 ASC1 allows TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The ASC1 Usage Modes documentation<LINK> explains ASC1 modes in more detail. 
 
-Delegation transactions where the sender is set to the account that signed the specific logic, function much in the same way as normal Algorand transactions<Link>. The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a logic signature<LINK>. See Transaction documentaiton for details on setting up a payment transaction.<Link>
+Delegated transactions are special transactions where the `sender` also signs the logic and the transaction is then signed with the logic signature<LINK>. I all other aspects the transaction functions like a standard transaction. See Transaction documentaiton for details on setting up a payment transaction.<Link>
 
 Delgated Logic Signatures require that the logic signature be signed from a specific account or a multi-signature account. The TEAL program is first loaded, then a Logic Signature is created and then the Logic Signature is signed by a specific account or multi-signaure account. The transaction is created as normal. The transaction is then signed with the Logic Signature. From an SDK standpoint, the following process should be used.
 
@@ -126,21 +126,21 @@ Delgated Logic Signatures require that the logic signature be signed from a spec
 <center>![Delegated Signature Transaction](../../imgs/asc1_sdk_usage-2.png)</center>
 <center>*Delegated Signature Transactiont*</center>
 
-The following example illustrates signing a transaction with a created logic signature.
+The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.
 
 ```javascript tab="JavaScript"
     let program = new Uint8Array(Buffer.from("ASABACI=", "base64"));
     let lsig = algosdk.makeLogicSig(program);
-    lsig.sign([SECRET KEY]);
+    lsig.sign(secret-key<PLACEHOLDER>);
     let txn = {
-        "from": [CONTRACT ADDRESS],
-        "to": [RECEIVER],
-        "fee": [FEE],
-        "amount": [AMOUNT],
-        "firstRound": [FIRST VALID ROUND],
-        "lastRound": [LAST VALID ROUND],
-        "genesisID": [GENESIS ID],
-        "genesisHash": [GENESIS HASH]
+        "from": contract-address<PLACEHOLDER>,
+        "to": receiver<PLACEHOLDER>,
+        "fee": fee<PLACEHOLDER>,
+        "amount": amount<PLACEHOLDER>,
+        "firstRound": first-valid-round<PLACEHOLDER>,
+        "lastRound": last-valid-round<PLACEHOLDER>,
+        "genesisID": genesis-id<PLACEHOLDER>,
+        "genesisHash": genesis-hash<PLACEHOLDER>
     };
     let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob));
@@ -149,8 +149,8 @@ The following example illustrates signing a transaction with a created logic sig
 ```python tab="Python"
 	program = b"\x01\x20\x01\x00\x22"  
 	lsig = transaction.LogicSig(program)
-    lsig.sign([SECRET KEY])
-	txn = transaction.PaymentTxn([CONTRACT ADDRESS], [FEE], [FIRST VALID ROUND], [LAST VALID ROUND], [GENESIS HASH], [RECEIVER], [AMOUNT], [CLOSE REMAINDER TO ADDRESS])
+    lsig.sign(secret-key<PLACEHOLDER>)
+	txn = transaction.PaymentTxn(contract-address<PLACEHOLDER>, fee<PLACEHOLDER>, first-valid-round<PLACEHOLDER>, last-valid-round<PLACEHOLDER>, genesis-hash<PLACEHOLDER>, receiver<PLACEHOLDER>, amount<PLACEHOLDER>, close-remainder-to-address<PLACEHOLDER>)
 	lstx = transaction.LogicSigTransaction(txn, lsig)
 	txid = acl.send_transaction(lstx)
 ```
@@ -160,9 +160,9 @@ The following example illustrates signing a transaction with a created logic sig
         0x01, 0x20, 0x01, 0x00, 0x22  // int 0
     };
     LogicsigSignature lsig = new LogicsigSignature(program, null);
-    Account account = new Account([PASSPHARASE]);
+    Account account = new Account(secret-key<PLACEHOLDER>);
     account.signLogicsig(lsig);
-    Transaction tx = new Transaction(lsig.toAddress(), new Address([RECIEVER ADDRESS]), BigInteger.valueOf([FEE]), [AMOUNT], [FIRST VALID ROUND], [LAST VALID ROUND], [GENESIS ID], [GENESIS HASH]);
+    Transaction tx = new Transaction(lsig.toAddress(), new Address(receiver-address<PLACEHOLDER>), BigInteger.valueOf(fee<PLACEHOLDER>), amount<PLACEHOLDER>, first-valid-round<PLACEHOLDER>, last-valid-round<PLACEHOLDER>, genesis-id<PLACEHOLDER>, genesis-hash<PLACEHOLDER>);
     try {
         SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
         byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
@@ -175,22 +175,649 @@ The following example illustrates signing a transaction with a created logic sig
 ```go tab="Go"
     program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
 	var args [][]byte
-	lsig, err := crypto.MakeLogicSig(program, args, [SECRET KEY], nil)
-	addr := crypto.LogicSigAddress(lsig).String()	
-	tx, err := transaction.MakePaymentTxnWithFlatFee(
-		addr, [RECEIVER], [FEE], [AMOUNT], [FIRST VALID ROUND], [LAST VALID ROUND],
-		[NOTE], [CLOSE REAMAINDER TO ADDRESS], [GENESIS ID], [GENESIS HASH] )
+	lsig, err := crypto.MakeLogicSig(program, args, secret-key<PLACEHOLDER>, nil)
+
+    PASSPHRASE := "25-word-mnemonic<PLACEHOLDER>"
+    sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
+    pk := sk.Public()
+    var a types.Address
+    cpk := pk.(ed25519.PublicKey)
+    copy(a[:], cpk[:])
+    fmt.Printf("Address: %s\n", a.String())	
+    sender := a.String()
+    tx, err := transaction.MakePaymentTxnWithFlatFee(	
+		sender, receiver<PLACEHOLDER>, fee<PLACEHOLDER>, amount<PLACEHOLDER>, first-valid-round<PLACEHOLDER>, last-valid-round<PLACEHOLDER>,
+		note<PLACEHOLDER>, close-remainder-to-address<PLACEHOLDER>, genesis-id<PLACEHOLDER>, genesis-hash<PLACEHOLDER> )
 	txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
 	transactionID, err := algodClient.SendRawTransaction(stx)
 ```
 
 # Save Transaction Output for Debugging
+The goal command line tool provides functionallity to do a test run of a TEAL program using the `goal clerk dryun` command. This processes is described in the goal TEAL Walkthrough documenation<LINK>. From the SDK a logic signature transaction can be written to a file to be used with the `goal clerk dryrun` command. The following code details how this is done. The goal tab illustrates runn the dryrun on the generated file.
+
+```javascript tab="JavaScript"
+    let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+    fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
+```
+
+```python tab="Python"
+    logicsig_txn = transaction.LogicSigTransaction(txn, lsig)
+    transaction.write_to_file([logicsig_txn], "simple.stxn")
+```
+
+```java tab="Java"
+    SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
+    byte[] outBytes = Encoder.encodeToMsgPack(stx);
+    try {
+        String FILEPATH = "./simple.stxn";
+        File file = new File(FILEPATH);
+        OutputStream os = new FileOutputStream(file);
+        os.write(outBytes);
+        os.close();
+    }
+    catch (Exception e) {
+        System.out.println("Exception: " + e);
+    }    
+```
+
+```go tab="Go"
+	txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+	if err != nil {
+        ...
+    }
+    f, err := os.Create("simple.stxn")
+    if err != nil {
+        ...
+    }
+    defer f.Close()
+    if _, err := f.Write(stx); err != nil {
+        ...
+    }
+    if err := f.Sync(); err != nil {
+        ...
+    }    
+```
+
+```text tab="Goal"
+$ goal clerk dryrun -t simple.stxn
+tx[0] cost=2 trace:
+  1 intcblock => <empty stack>
+  4 intc_0 => 0 0x0
+
+REJECT
+```
+
 
 # Passing Parameters using the SDKs
-In SDKs you can use the native language functions. For example to pass in a string argument to the Python SDK you would use code similar to the example below.
-arg_str = "my string"
-arg1 = arg_str.encode()
-lsig = transaction.LogicSig(program, args=[arg1])
-For the Integer argument you would use (remember TEAL only supports positive values):
-arg1 = (123).to_bytes(8, 'big')
-lsig = transaction.LogicSig(program, args=[arg1])
+The SDKs require that parameters to a TEAL program be in byte arrays. This byte array is passed to the method that creates the logic signature. Currently TEAL parameters must be either unsigned integers or binary strings. If comparing a constant string in TEAL, the constant within the TEAL program must be encoded in hex or base64. See the TEAL tab below for a simple example of comparing the string argument used in the other examples. SDK native language functions can be used to encode the parameters to the TEAL program correctly. The example below illustrates both a string parameter and an integer.
+
+
+```javascript tab="JavaScript"
+    //string parameter
+    let args = ["my string"];
+    let lsig = algosdk.makeLogicSig(program, args);
+    //integer parameter
+    let args = [[123]];
+    let lsig = algosdk.makeLogicSig(program, args);
+```
+
+```python tab="Python"
+    #string parameter
+    arg_str = "my string"
+    arg1 = arg_str.encode()
+    lsig = transaction.LogicSig(program, args=[arg1])
+    #integer parameter
+    arg1 = (123).to_bytes(8, 'big')
+    lsig = transaction.LogicSig(program, args=[arg1])
+```
+
+```java tab="Java"
+    // string parameter
+    ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+    String orig = "my string";
+    teal_args.add(orig.getBytes());
+    LogicsigSignature lsig = new LogicsigSignature(program, teal_args);    
+
+    // integer parameter
+    ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+    byte[] arg1 = {123};
+    teal_args.add(arg1);
+    LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
+```
+
+```go tab="Go"
+    // string parameter
+	args := make([][]byte, 1)
+	args[0] = []byte("my string")
+    lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+    
+    // integer parameter
+    args := make([][]byte, 1)
+	var buf [8]byte
+	binary.BigEndian.PutUint64(buf[:], 123)
+	args[0] = buf[:]
+```
+
+```text tab="TEAL"
+//Never use this code for a real tansaction
+//for educational purposes only
+//string compare
+arg_0
+byte b64 bXkgc3RyaW5n
+==
+//integer compare
+arg_0
+btoi
+int 123
+==
+```
+
+??? example "Complete Example = Contract Account"
+    
+    ```javascript tab="JavaScript"
+    const algosdk = require('algosdk');
+
+    const token = "algod-token"<PLACEHOLDER>;
+    const server = "algod-address"<PLACEHOLDER>;
+    const port = algod-port<PLACEHOLDER>;
+
+    // create an algod client
+    let algodclient = new algosdk.Algod(token, server, port);
+    (async() => {
+
+        // get suggested parameters
+        let params = await algodclient.getTransactionParams();
+        let endRound = params.lastRound + parseInt(1000);
+        let fee = await algodclient.suggestedFee();
+
+        // create logic sig
+        // b64 example "ASABACI=" 
+        let program = new Uint8Array(Buffer.from("base64-encoded-program"<PLACEHOLDER>, "base64"));
+        let lsig = algosdk.makeLogicSig(program);
+
+        // create a transaction
+        let txn = {
+            "from": lsig.address(),
+            "to": "receiver-address"<PLACEHOLDER>,
+            "fee": params.fee,
+            "amount": amount<PLACEHOLDER>,
+            "firstRound": params.lastRound,
+            "lastRound": endRound,
+            "genesisID": params.genesisID,
+            "genesisHash": params.genesishashb64
+        };
+
+        // Create the LogicSigTransaction with contract account LogicSig 
+        let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+
+        // send raw LogicSigTransaction to network
+        let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob));
+        console.log("Transaction : " + tx.txId);
+    })().catch(e => {
+        console.log(e);
+    });
+    ```
+
+    ```python tab="Python"
+    from algosdk import algod, transaction, account, mnemonic
+    
+    try:
+
+        # create logic sig
+        # hex example b"\x01\x20\x01\x00\x22" 
+        program = b"hex-encoded-program"  
+        lsig = transaction.LogicSig(program)
+        sender = lsig.address()
+
+        # create an algod client
+        algod_token = "algod-token"<PLACEHOLDER>
+        algod_address = "algod-address"<PLACEHOLDER>
+        receiver = "receiver-address"<PLACEHOLDER>
+        acl = algod.AlgodClient(algod_token, algod_address)
+
+        # get suggested parameters
+        params = acl.suggested_params()
+        gen = params["genesisID"]
+        gh = params["genesishashb64"]
+        last_round = params["lastRound"]
+        fee = params["fee"]
+        amount = amount<PLACEHOLDER>
+        closeremainderto = None
+
+        # create a transaction
+        txn = transaction.PaymentTxn(sender, fee, last_round, last_round+100, gh, receiver, amount, closeremainderto)
+        # Create the LogicSigTransaction with contract account LogicSig
+        lstx = transaction.LogicSigTransaction(txn, lsig)
+
+        # send raw LogicSigTransaction to network
+        txid = acl.send_transaction(lstx)
+        print("Transaction ID: " + txid )
+    except Exception as e:
+        print(e)    
+    ```
+
+    ```java tab="Java"
+    package com.algorand.algosdk.teal;
+
+    import java.math.BigInteger;
+    import java.util.ArrayList;
+
+    import com.algorand.algosdk.account.Account;
+    import com.algorand.algosdk.algod.client.AlgodClient;
+    import com.algorand.algosdk.algod.client.ApiException;
+    import com.algorand.algosdk.algod.client.api.AlgodApi;
+    import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
+    import com.algorand.algosdk.algod.client.model.TransactionID;
+    import com.algorand.algosdk.algod.client.model.TransactionParams;
+    import com.algorand.algosdk.crypto.Address;
+    import com.algorand.algosdk.crypto.Digest;
+    import com.algorand.algosdk.crypto.LogicsigSignature;
+    import com.algorand.algosdk.transaction.SignedTransaction;
+    import com.algorand.algosdk.transaction.Transaction;
+    import com.algorand.algosdk.util.Encoder;
+
+    public class SubmitTealContract 
+    {
+        public static void main(final String args[]) throws Exception {
+            // Initialize an algod client
+            final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
+            final String ALGOD_API_TOKEN = "algod-token"<PLACEHOLDER>;
+
+            //Create an instance of the algod API client
+            AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
+            ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+            api_key.setApiKey(ALGOD_API_TOKEN);
+            AlgodApi algodApiInstance = new AlgodApi(client);
+
+            // Set the reciever
+            final String DEST_ADDR = "receiver-address"<PLACEHOLDER>;
+    
+
+            // get suggested parameters
+            BigInteger suggestedFeePerByte = BigInteger.valueOf(1);
+            BigInteger firstRound = BigInteger.valueOf(301);
+            String genId = null;
+            Digest genesisHash = null;
+            try {
+                // Get suggested parameters from the node
+                TransactionParams params = algodApiInstance.transactionParams();
+                suggestedFeePerByte = params.getFee();
+                firstRound = params.getLastRound();
+                genId = params.getGenesisID();
+                genesisHash = new Digest(params.getGenesishashb64());
+
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#transactionParams");
+                e.printStackTrace();
+            }
+
+            // create logic sig
+            // hex example 0x01, 0x20, 0x01, 0x00, 0x22
+            byte[] program = {
+                hex-encoded-program<PLACEHOLDER>
+                };
+            LogicsigSignature lsig = new LogicsigSignature(program, teal_args);        
+
+            // create a transaction
+            BigInteger amount = BigInteger.valueOf(amount<PLACEHOLDER>);
+            BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); 
+            Transaction tx = new Transaction(lsig.toAddress(), new Address(DEST_ADDR), BigInteger.valueOf(1000), amount, firstRound, lastRound, genId, genesisHash);
+
+            try {
+                // create the LogicSigTransaction with contract account LogicSig
+                SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
+                
+                // send raw LogicSigTransaction to network
+                byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
+                TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
+                System.out.println("Successfully sent tx with id: " + id);
+
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
+            }
+
+        }
+    }
+    ```
+
+    ```go tab="Go"
+    package main
+
+    import (
+        "fmt"
+        "encoding/base64"
+
+        "golang.org/x/crypto/ed25519"
+
+        "github.com/algorand/go-algorand-sdk/client/algod"
+        "github.com/algorand/go-algorand-sdk/crypto"
+        "github.com/algorand/go-algorand-sdk/transaction"
+    )
+
+    func main() {
+
+        const algodToken = "algod-token"<PLACEHOLDER>;
+        const algodAddress = "algod-address"<PLACEHOLDER>;
+
+        // Create logic signature
+        // example base64 encoded program "ASABACI="
+        var sk ed25519.PrivateKey
+        var ma crypto.MultisigAccount
+        program, err :=  base64.StdEncoding.DecodeString("base64-encoded-program"<PLACEHOLDER>)
+        var args [][]byte
+        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        addr := crypto.LogicSigAddress(lsig).String()
+        fmt.Printf("Escrow Address: %s\n" , addr )
+        
+
+        // Create an algod client
+        algodClient, err := algod.MakeClient(algodAddress, algodToken)
+        if err != nil {
+            fmt.Printf("failed to make algod client: %s\n", err)
+            return
+        }	
+        // Get suggested params for the transaction
+        txParams, err := algodClient.SuggestedParams()
+        if err != nil {
+                fmt.Printf("error getting suggested tx params: %s\n", err)
+                return
+        }
+
+        // Make transaction
+        const receiver = "transaction-receiver"<PLACEHOLDER>
+        const fee = fee<PLACEHOLDER>
+        const amount = amount<PLACEHOLDER>
+        var note []byte	
+        genID := txParams.GenesisID
+        genHash := txParams.GenesisHash	
+        tx, err := transaction.MakePaymentTxnWithFlatFee(
+            addr, receiver, fee, amount, txParams.LastRound, (txParams.LastRound + 1000),
+            note, "", genID, genHash )
+
+        txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+        if err != nil {
+            fmt.Printf("Signing failed with %v", err)
+            return
+        }
+        fmt.Printf("Signed tx: %v\n", txid)
+
+        // Submit the raw transaction to network
+        transactionID, err := algodClient.SendRawTransaction(stx)
+        if err != nil {
+            fmt.Printf("Sending failed with %v\n", err)
+        }
+        fmt.Printf("Transaction ID: %v\n", transactionID)
+
+    }
+    ```
+
+??? example "Complete Example = Account Delegation"
+    
+    ```javascript tab="JavaScript"
+    const algosdk = require('algosdk');
+
+    const token = "algod-token"<PLACEHOLDER>;
+    const server = "algod-address"<PLACEHOLDER>;
+    const port = algod-port<PLACEHOLDER>;
+
+    // import your private key mnemonic and address
+    let PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
+    var myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
+    console.log("My Address: " + myAccount.addr);
+
+    // create an algod client
+    let algodclient = new algosdk.Algod(token, server, port);
+    (async() => {
+
+        // get suggested parameters
+        let params = await algodclient.getTransactionParams();
+        let endRound = params.lastRound + parseInt(1000);
+        let fee = await algodclient.suggestedFee();
+
+        // create logic sig
+        // b64 example "ASABACI="
+        let program = new Uint8Array(Buffer.from("base64-encoded-program"<PLACEHOLDER>, "base64"));
+        let lsig = algosdk.makeLogicSig(program);
+
+        // sign the logic signature with an account sk
+        lsig.sign(myAccount.sk);
+
+        // create a transaction
+        let txn = {
+            "from": myAccount.addr,
+            "to": "receiver-address"<PLACEHOLDER>,
+            "fee": params.fee,
+            "amount": amount<PLACEHOLDER>,
+            "firstRound": params.lastRound,
+            "lastRound": endRound,
+            "genesisID": params.genesisID,
+            "genesisHash": params.genesishashb64
+        };
+    
+        // Create the LogicSigTransaction with contract account LogicSig 
+        let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+
+        // send raw LogicSigTransaction to network    
+        let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob));
+        console.log("Transaction : " + tx.txId);
+    })().catch(e => {
+        console.log(e);
+    });
+    ```
+
+    ```python tab="Python"
+    from algosdk import algod, transaction, account, mnemonic
+    
+    try:
+
+        # create logic sig
+        # hex example b"\x01\x20\x01\x00\x22" 
+        program = b"hex-encoded-program"  
+        lsig = transaction.LogicSig(program)
+        sender = lsig.address()
+
+        #Recover the account that is wanting to delegate signature
+        passphrase = "25-word-mnemonic<PLACEHOLDER>";
+        sk = mnemonic.to_private_key(passphrase)
+        addr = account.address_from_private_key(sk)
+        print( "Address of Sender/Delgator: " + addr )
+
+        # sign the logic signature with an account sk
+        lsig.sign(sk)
+
+        # create an algod client
+        algod_token = "algod-token"<PLACEHOLDER>
+        algod_address = "algod-address"<PLACEHOLDER>
+        receiver = "receiver-address"<PLACEHOLDER>
+        acl = algod.AlgodClient(algod_token, algod_address)
+
+        # get suggested parameters
+        params = acl.suggested_params()
+        gen = params["genesisID"]
+        gh = params["genesishashb64"]
+        last_round = params["lastRound"]
+        fee = params["fee"]
+        amount = amount<PLACEHOLDER>
+        closeremainderto = None
+
+        # create a transaction
+        txn = transaction.PaymentTxn(addr, fee, last_round, last_round+100, gh, receiver, amount, closeremainderto)
+        # Create the LogicSigTransaction with contract account LogicSig
+        lstx = transaction.LogicSigTransaction(txn, lsig)
+
+        # send raw LogicSigTransaction to network
+        txid = acl.send_transaction(lstx)
+        print("Transaction ID: " + txid )
+    except Exception as e:
+        print(e)    
+    ```
+
+    ```java tab="Java"
+    package com.algorand.algosdk.teal;
+
+    import java.math.BigInteger;
+    import java.util.ArrayList;
+
+    import com.algorand.algosdk.account.Account;
+    import com.algorand.algosdk.algod.client.AlgodClient;
+    import com.algorand.algosdk.algod.client.ApiException;
+    import com.algorand.algosdk.algod.client.api.AlgodApi;
+    import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
+    import com.algorand.algosdk.algod.client.model.TransactionID;
+    import com.algorand.algosdk.algod.client.model.TransactionParams;
+    import com.algorand.algosdk.crypto.Address;
+    import com.algorand.algosdk.crypto.Digest;
+    import com.algorand.algosdk.crypto.LogicsigSignature;
+    import com.algorand.algosdk.transaction.SignedTransaction;
+    import com.algorand.algosdk.transaction.Transaction;
+    import com.algorand.algosdk.util.Encoder;
+
+    public class SubmitTealDelegate 
+    {
+        public static void main(final String args[]) throws Exception {
+            // Initialize an algod client
+            final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
+            final String ALGOD_API_TOKEN = "algod-token"<PLACEHOLDER>;
+
+            //Create an instance of the algod API client
+            AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
+            ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+            api_key.setApiKey(ALGOD_API_TOKEN);
+            AlgodApi algodApiInstance = new AlgodApi(client);
+
+            // import your private key mnemonic and address
+            final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
+            Account src = new Account(SRC_ACCOUNT);
+            // Set the reciever
+            final String DEST_ADDR = "receiver-address"<PLACEHOLDER>;
+
+            // get suggested parameters
+            BigInteger suggestedFeePerByte = BigInteger.valueOf(1);
+            BigInteger firstRound = BigInteger.valueOf(301);
+            String genId = null;
+            Digest genesisHash = null;
+            try {
+                // Get suggested parameters from the node
+                TransactionParams params = algodApiInstance.transactionParams();
+                suggestedFeePerByte = params.getFee();
+                firstRound = params.getLastRound();
+                genId = params.getGenesisID();
+                genesisHash = new Digest(params.getGenesishashb64());
+
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#transactionParams");
+                e.printStackTrace();
+            }
+
+            // create logic sig
+            // hex example 0x01, 0x20, 0x01, 0x00, 0x22
+            byte[] program = {
+                hex-encoded-program<PLACEHOLDER>
+                };
+            LogicsigSignature lsig = new LogicsigSignature(program, teal_args);        
+
+            // sign the logic signature with an account sk
+            src.signLogicsig(lsig);
+
+            // create a transaction
+            BigInteger amount = BigInteger.valueOf(amount<PLACEHOLDER>);
+            BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); 
+            Transaction tx = new Transaction(src.getAddress(), new Address(DEST_ADDR), BigInteger.valueOf(1000), amount, firstRound, lastRound, genId, genesisHash);
+
+            try {
+                // create the LogicSigTransaction with contract account LogicSig
+                SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
+                
+                // send raw LogicSigTransaction to network
+                byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
+                TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
+                System.out.println("Successfully sent tx with id: " + id);
+
+            } catch (ApiException e) {
+                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
+            }
+
+        }
+    }
+    ```
+
+    ```go tab="Go"
+    package main
+
+    import (
+        "fmt"
+        "encoding/base64"
+
+        "github.com/algorand/go-algorand-sdk/client/algod"
+        "github.com/algorand/go-algorand-sdk/crypto"
+        "github.com/algorand/go-algorand-sdk/mnemonic"
+        "github.com/algorand/go-algorand-sdk/transaction"
+        "github.com/algorand/go-algorand-sdk/types"
+    )
+
+    func main() {
+
+        const algodToken = "algod-token"<PLACEHOLDER>
+        const algodAddress = "algod-address"<PLACEHOLDER>
+
+
+        // Get private key for sender address
+        PASSPHRASE := "25-word-mnemonic<PLACEHOLDER>"
+        sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
+        pk := sk.Public()
+        var a types.Address
+        cpk := pk.(ed25519.PublicKey)
+        copy(a[:], cpk[:])
+        fmt.Printf("Address: %s\n", a.String())	
+        sender := a.String()
+
+        // Create logic signature
+        // example base64 encoded program "ASABACI="
+        var ma crypto.MultisigAccount
+        program, err :=  base64.StdEncoding.DecodeString("base64-encoded-program"<PLACEHOLDER>)
+        var args [][]byte
+        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        addr := crypto.LogicSigAddress(lsig).String()
+        fmt.Printf("Escrow Address: %s\n" , addr )
+        
+
+        // Create an algod client
+        algodClient, err := algod.MakeClient(algodAddress, algodToken)
+        if err != nil {
+            fmt.Printf("failed to make algod client: %s\n", err)
+            return
+        }	
+        // Get suggested params for the transaction
+        txParams, err := algodClient.SuggestedParams()
+        if err != nil {
+                fmt.Printf("error getting suggested tx params: %s\n", err)
+                return
+        }
+
+        // Make transaction
+        const receiver = "transaction-receiver"<PLACEHOLDER>
+        const fee = fee<PLACEHOLDER>
+        const amount = amount<PLACEHOLDER>
+        var note []byte	
+        genID := txParams.GenesisID
+        genHash := txParams.GenesisHash
+        tx, err := transaction.MakePaymentTxnWithFlatFee(
+            sender.String(), receiver, fee, amount, txParams.LastRound, (txParams.LastRound + 1000),
+            note, "", genID, genHash )
+
+        txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+        if err != nil {
+            fmt.Printf("Signing failed with %v", err)
+            return
+        }
+        fmt.Printf("Signed tx: %v\n", txid)
+
+        // Submit the raw transaction as normal
+        transactionID, err := algodClient.SendRawTransaction(stx)
+        if err != nil {
+            fmt.Printf("Sending failed with %v\n", err)
+        }
+        fmt.Printf("Transaction ID: %v\n", transactionID)
+
+    }
+    ```
