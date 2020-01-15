@@ -86,7 +86,7 @@ Public key: [ADDRESS]
 For TestNet and BetaNet, copy and paste the public portion of your key pair in the corresponding faucet prompt and click "Submit". A `200` response means the transaction went through and your balance increased by 100,000,000 microAlgos (i.e. 100 Algos).
 
 !!! info
-	Amounts are returned in microAlgos - the base unit for Algos. 1 Algo equals 1,000,000 microAlgos. 
+	Amounts are returned in microAlgos - the base unit for Algos. 1 Algo equals 1,000,000 microAlgos. <add micro explanation>
 
 ## Check your balance
 

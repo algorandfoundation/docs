@@ -59,6 +59,9 @@ nav:
       - account: 'reference/goal/account.md'
       - asset: 'reference/goal/asset.md'
       - clerk: 'reference/goal/clerk.md'
+    - kmd:
+      - start: 'reference/kmd/start.md'
+      - stop: 'reference/kmd/stop.md'
     - algokey:
       - export: 'reference/algokey/export.md'
       - generate: 'reference/algokey/generate.md'
@@ -68,6 +71,11 @@ nav:
       - Java: 'reference/sdks/java.md'
       - JavaScript: 'reference/sdks/javascript.md'
       - Python: 'reference/sdks/python.md'
+    - REST APIs:
+      - algod Paths: 'reference/rest/algod_rest_paths.md'
+      - algod Models: 'reference/rest/algod_rest_models.md'
+      - kmd Paths: 'reference/rest/kmd_rest_paths.md'
+      - kmd Models: 'reference/rest/kmd_rest_models.md'
     - Glossary: 'reference/glossary.md'
 - Community Projects: 'community.md'
 - About:
