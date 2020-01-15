@@ -6,6 +6,7 @@ nav:
     - Algorand Consensus Protocol: 'learn/algorand_consensus.md'
 - Getting Started:
     - Workspace Setup: 'getting-started/setup.md'
+    - Connect to the Network: 'getting-started/connect.md'
     - Your First Transaction: 'getting-started/tutorial.md'
 - Feature Guides:
     - Accounts: 'features/accounts.md'
@@ -79,6 +80,10 @@ nav:
     - Example: 'solutions/example.md'
   - Tutorials:
     - Example: 'tutorials/example.md'
+  - Articles:
+    - Example: 'articles/example.md'
+  - News:
+    - Example: 'news/example.md'
 
 theme: 
     name: material
