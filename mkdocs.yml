@@ -80,6 +80,7 @@ nav:
     - Example: 'solutions/example.md'
   - Tutorials:
     - Example: 'tutorials/example.md'
+    - Sandbox: 'tutorials/sandbox_tutorial.md'
   - Articles:
     - Example: 'articles/example.md'
   - News:
