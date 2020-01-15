@@ -68,7 +68,7 @@ func main() {
 }
 ```
 
-```bash tab="goal"
+```text tab="goal"
 $ goal account new
 Created new account with address [ADDRESS]
 
@@ -86,24 +86,35 @@ Public key: [ADDRESS]
 For TestNet and BetaNet, copy and paste the public portion of your key pair in the corresponding faucet prompt and click "Submit". A `200` response means the transaction went through and your balance increased by 100,000,000 microAlgos (i.e. 100 Algos).
 
 !!! info
-	Amounts are returned in microAlgos - the base unit for Algos. 1 Algo equals 1,000,000 microAlgos. 
+	Amounts are returned in microAlgos - the base unit for Algos. 1 Algo equals 1,000,000 microAlgos. <add micro explanation>
 
 ## Check your balance
 
 Check your balance to confirm the added funds.
 
 ```javascript tab="JavaScript"
+...
+	const passphrase = "your-25-word-mnemonic<PLACEHOLDER>";
+	let myAccount = algosdk.mnemonicToSecretKey(passphrase)
+	console.log("My address: %s", myAccount.addr)
+
+	let accountInfo = await algodClient.accountInformation(myAccount.addr);
+    console.log("Account balance: %d microAlgos", accountInfo.amount)
+...
 ```
 
 ```python tab="Python"
 ```
 
 ```java tab="Java"
-import com.algorand.algosdk.algod.client.model.Account;	
 ...
-String myAddress = myAccount.getAddress().toString();
-Account accountInfo = algodApiInstance.accountInformation(myAddress);
-System.out.println("Account Balance: " + accountInfo.getAmount());
+    final String PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
+    com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
+    String myAddress = myAccount.getAddress().toString();
+    System.out.println("My Address: " + myAddress);
+
+    Account accountInfo = algodApiInstance.accountInformation(myAddress);
+    System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.getAmount()));
 ...
 ```
 
@@ -123,11 +134,25 @@ _Read all about Accounts, Keys, and Wallets in the Accounts Feature Guide_
 
 Create a transaction to send 1 Algo from your account to the TestNet faucet address (`GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A`) with the note "Hello World".
 
-## Initialize transaction fields
-Transactions require a minimum set of parameters to be valid. Mandatory fields include the **round validity range**, the **fee**, and the **genesis hash** for the network the transaction is valid for. Read all about Transaction types, fields, and configurations in the Transactions Feature Guide<LINK>. For now, construct a payment transaction as follows. Use the _suggested parameters_ methods to initialize network-related 
+Transactions require a certain minimum set of parameters to be valid. Mandatory fields include the **round validity range**, the **fee**, and the **genesis hash** for the network the transaction is valid for. Read all about Transaction types, fields, and configurations in the Transactions Feature Guide<LINK>. For now, construct a payment transaction as follows. Use the _suggested parameters_ methods to initialize network-related 
 fields. 
 
 ```javascript tab="JavaScript"
+...
+	let params = await algodClient.getTransactionParams();
+	let note = algosdk.encodeObj("Hello World");
+	let txn = {
+		"from": myAccount.addr,
+		"to": receiver,
+		"fee": params.minFee,
+		"amount": 1000000,
+		"firstRound": params.lastRound,
+		"lastRound": params.lastRound + 1000,
+		"note": note,
+		"genesisID": params.genesisID,
+		"genesisHash": params.genesishashb64
+	};
+...
 ```
 
 ```python tab="Python"
@@ -161,13 +186,25 @@ Transaction txn = new Transaction(myAccount.getAddress(), fee, firstValidRound,
 ...
 ```
 
+```go tab="Go"
+```
+
 ```bash tab="goal"
 $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
 ```
 
+!!! info
+    Some of the SDKs provide wrapper functions for creating certain types of transactions, like `makePaymentTxn` in Go. 
+
 # Sign the transaction
+Sign the transaction with your private key. This creates a new signed transaction object in the SDKs. Retrieve the transaction ID of the signed transaction.
 
 ```javascript tab="JavaScript"
+...
+	let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
+	let txId = signedTxn.txID;
+    console.log("Signed transaction with txId: %s", txId);
+...
 ```
 
 ```python tab="Python"
@@ -175,8 +212,8 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
 
 ```java tab="Java"
 ...
-SignedTransaction signedTx = myAccount.signTransaction(txn);
-System.out.println("TXID of signed transaction: " + signedTx.transactionID);
+    SignedTransaction signedTx = myAccount.signTransaction(txn);
+    System.out.println("Signed transaction with txId: " + signedTx.transactionID);
 ...
 ```
 
@@ -188,8 +225,12 @@ $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
 ```
 
 # Submit the transaction
+Send the signed transaction to the network with your algod client. 
 
 ```javascript tab="JavaScript"
+...
+    await postAlgodClient.sendRawTransaction(signedTxn.blob)
+...
 ```
 
 ```python tab="Python"
@@ -227,9 +268,74 @@ Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
 ```
 
+!!! Info
+    If you are using a third-party service, it may require you to specify a `Content-Type` header when you send transactions to the network. Set the `Content-Type` to `application/x-binary` and add it as a header to the algod client or the specific request that sends the transaction.
+    
+    ```JavaScript tab=
+	const algosdk = require("algosdk");
+
+	async function gettingStartedExample() {
+
+		const server = algod-address<PLACEHOLDER>;
+		const port = "";
+		const token = {
+			'X-API-Key': service-api-key<PLACEHOLDER>,
+            'Content-Type': 'appliation/x-binary'
+		};
+
+		let postAlgodClient = new algosdk.Algod(token, server, port);
+		...
+	}
+
+	```
+
+	```Python tab=
+	from algodsdk import algod
+
+	algod_address = "https://testnet-algorand.api.purestake.io/ps1"
+	algod_token = ""
+	headers = {
+   		"X-API-Key": service-api-key<PLACEHOLDER>,
+	}
+    tx_confirm = acl.send_transaction(signed_tx, headers={'content-type': 'application/x-binary'})
+	```
+
+	```Go tab=
+	import (
+		"github.com/algorand/go-algorand-sdk/client/algod"
+	)
+	const algodAddress = "algod-address"<PLACEHOLDER>
+	const apiKey = "your-api-key"<PLACEHOLDER>
+
+	func main() {
+		var headers []*algod.Header
+		headers = append(headers, &algod.Header{"X-API-Key", apiKey})
+		algodClient, err := algod.MakeClientWithHeaders(algodAddress, "", headers)
+		...
+	}
+	```
+
 # Wait for ccnfirmation
 
+Successfully submitting your transaction to the network does not necessarily mean the network confirmed it. Always check that the network confirmed your transaction within a block before proceeding. 
+
+!!! info
+    On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced every 5 seconds or less. This means that transactions are confirmed in **less than 5 seconds**! Read more about Algorand's Consensus Protocol<LINK>.
+
 ```javascript tab="JavaScript"
+...
+	setTimeout(async function() {
+		while (true) {
+			txInfo = await algodClient.pendingTransactionInformation(txId);
+			if (txInfo.round != null && txInfo.round > 0) {
+				console.log("Transaction %s confirmed in round %d", txId, txInfo.round);
+				break;
+			} else {
+				console.log("Waiting for confirmation...");
+			}
+		}
+    }, 6000);
+...
 ```
 
 ```python tab="Python"
@@ -280,9 +386,27 @@ Transaction [TXID] committed in round [COMMITTED_ROUND]
 
 # Read the transaction from the blockchain
 
+Read your transaction back from the blockchain. 
+
+!!! info
+    Although you can read any transaction on the blockchain, namely non-archival participation nodes,  only store the last 1000 rounds and return errors when calling for information from earlier rounds. If you need to access data further back, make sure your algod client is connected to an archival, indexer node. Read more about node configurations in the Network Participation Guide or reach out to your service provider to understand their configuration. 
+
+```java tab="Java"
+...
+    try {
+        com.algorand.algosdk.algod.client.model.Transaction confirmedTxn =
+                algodApiInstance.transactionInformation(RECEIVER, signedTxn.transactionID);
+        System.out.println("Transaction information (with notes): " + confirmedTxn.toString());
+        System.out.println("Decoded note: " + new String(confirmedTxn.getNoteb64()));
+    } catch (ApiException e) {
+        System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
+    }
+...
+```
+
 Notice above the pattern of constructing a transaction, authenticating it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
 
-??? example "Complete Example"
+??? example "Complete Example - Sending a Payment Transaction"
     
     ```javascript tab="JavaScript"
     ```
@@ -326,12 +450,11 @@ Notice above the pattern of constructing a transaction, authenticating it, submi
             final String PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
             com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
             System.out.println("My Address: " + myAccount.getAddress());
-            System.out.println("My Passphrase: " + myAccount.toMnemonic());
 
             String myAddress = myAccount.getAddress().toString();
             com.algorand.algosdk.algod.client.model.Account accountInfo = 
                 algodApiInstance.accountInformation(myAddress);
-            System.out.println("Account Balance: " + accountInfo.getAmount());
+            System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.getAmount()));
 
             // Construct the transaction
             final String RECEIVER = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
