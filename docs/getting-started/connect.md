@@ -82,11 +82,13 @@ func main() {
 	```Python tab=
 	from algodsdk import algod
 
-	algod_address = "https://testnet-algorand.api.purestake.io/ps1"
+	algod_address = "algod-address"<PLACEHOLDER>
 	algod_token = ""
 	headers = {
    		"X-API-Key": service-api-key<PLACEHOLDER>,
 	}
+
+	algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 	```
 
 	```Java tab=
@@ -137,6 +139,13 @@ Call the _status_ and _version_ methods fron the algod client to check the detai
 ```
 
 ```python tab="Python"
+...
+	try:
+		status = algod_client.status()
+		print(json.dumps(status, indent=4))
+	except Exception as e:
+		print(e)
+...
 ```
 
 ```java tab="Java"
@@ -149,6 +158,21 @@ Call the _status_ and _version_ methods fron the algod client to check the detai
             e.printStackTrace();
         }
 	...
+```
+
+```go tab="Go"
+...
+	status, err := algodClient.Status()
+	if err != nil {
+		fmt.Printf("Error getting status: %s\n", err)
+		return
+	}
+	statusJSON, err := json.MarshalIndent(status, "", "\t")
+	if err != nil {
+		fmt.Printf("Can not marshall status data: %s\n", err)
+	}
+	fmt.Printf("%s\n", statusJSON)
+...
 ```
 
 ```bash tab="cURL"
@@ -173,7 +197,7 @@ Genesis hash: [BASE64_GENESIS_HASH]
 
 The _status_ methods return information about the status of the node, such as the latest round<LINK TO GLOSSARY>, referred to as `lastRound`, from the perspective of the node you are connected to. Each of the SDKs may differ slightly in which information they return for each call. Shown below is the response from the REST API call.
 
-```json
+```json tab="Response"
 {
     "lastRound": 4243027,
     "lastConsensusVersion": "https://github.com/algorandfoundation/specs/tree/4a9db6a25595c6fd097cf9cc137cc83027787eaa",
@@ -187,7 +211,7 @@ The _status_ methods return information about the status of the node, such as th
 
 ```
 
-Check if the node is caught up by validating against others running nodes, like a public block explorer<LINK TO COMMUNITY PROJECTS>. As a secondary check, see if your `catchupTime` is 0 and your rounds are progressing at a rate of less than 5 seconds on average. This is the time it takes to confirm a block on Algorand. Note that the `timeSinceLastRound` is represented in nanoseconds.
+Check if the node is caught up by validating against others running nodes, like a [public block explorer](../community.md#block-explorers). As a secondary check, see if your `catchupTime` is 0 and your rounds are progressing at a rate of less than 5 seconds on average. This is the time it takes to confirm a block on Algorand. Note that the `timeSinceLastRound` is represented in nanoseconds.
 
 !!! warning
 	If your node is out-of-sync with the rest of the network you cannot send transactions and account balances will be out-of-date. 
@@ -203,6 +227,13 @@ The _version_ methods return information about the identity of the network and t
 ```
 
 ```python tab="Python"
+...
+	try:
+		versions = algod_client.versions()
+		print(json.dumps(versions, indent=4))
+	except Exception as e:
+		print(e)
+...
 ```
 
 ```java tab="Java"
@@ -215,6 +246,21 @@ The _version_ methods return information about the identity of the network and t
             e.printStackTrace();
         }
 	...
+```
+
+```go tab="Go"
+...
+	version, err := algodClient.Versions()
+	if err != nil {
+		fmt.Printf("Error getting versions: %s\n", err)
+		return
+	}
+	versionJSON, err := json.MarshalIndent(version, "", "\t")
+	if err != nil {
+		fmt.Printf("Can not marshall version data: %s\n", err)
+	}
+	fmt.Printf("%s\n", versionJSON)
+...
 ```
 
 ```bash tab="cURL"
@@ -239,7 +285,7 @@ Genesis hash: [BASE64_GENESIS_HASH]
 
 Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST response below, match your chosen network before proceeding.
 
-```json hl_lines="5 6"
+```json hl_lines="5 6" tab="Response"
 {
     "versions": [
         "v1"
@@ -259,5 +305,48 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 ```
 
 ??? example "Complete Example - Connect to the Network"
+
+	```python tab="Python"
+	import json
+	from algosdk import algod
+
+	def main():
+		algod_address = algod-address<PLACEHOLDER>
+		algod_token = algod-token<PLACEHOLDER>
+		algod_client = algod.AlgodClient(algod_token, algod_address)
+
+		try:
+			status = algod_client.status()
+			versions = algod_client.versions()
+			print(json.dumps(status, indent=4))
+			print(json.dumps(versions, indent=4))
+		except Exception as e:
+			print(e)
+	main()
+	```
+
+??? example "Complete Example - Connect to the Network with API Service"
+
+	```python tab="Python"
+	import json
+	from algosdk import algod
+
+	def main():
+		algod_address = algod-address<PLACEHOLDER>
+		algod_token = ""
+		headers = {
+			'X-API-Key': service-api-key<PLACEHOLDER>
+		}
+		algod_client = algod.AlgodClient(algod_token, algod_address, headers)
+
+		try:
+			status = algod_client.status()
+			versions = algod_client.versions()
+			print(json.dumps(status, indent=4))
+			print(json.dumps(versions, indent=4))
+		except Exception as e:
+			print(e)
+	main()
+	```
 
 
