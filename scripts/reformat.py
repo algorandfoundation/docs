@@ -41,9 +41,10 @@ def process(dirpath):
         # For example "goal_account.md" is a root because of commands like "goal_account_new.md"
         root_check = parts.copy()
         root_check.append(re.sub('\.md', '', new_name))
-        extended_path = '_'.join(parts) + '_'
+        extended_path = '_'.join(root_check) + '_'
         is_root = any(extended_path in s for s in os.listdir(dirpath))
         if is_root:
+            print("root: %s" % new_name)
             parts=root_check
             root_path='/'.join(parts)
         try:
