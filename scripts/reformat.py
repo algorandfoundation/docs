@@ -29,9 +29,11 @@ def fix_file_links(new_file, goal_depth):
             tmp.write(result + "\n")
         os.replace(tmp.name, new_file)
     
+
 def process(dirpath):
     """ move files into a directory structure and add .pages files. """
-    for f in os.listdir(dirpath):
+    files = os.listdir(dirpath)
+    for f in files:
         parts = f.split('_')
         # Ignore the root "goal.md" file
         new_name=parts.pop()
@@ -42,9 +44,8 @@ def process(dirpath):
         root_check = parts.copy()
         root_check.append(re.sub('\.md', '', new_name))
         extended_path = '_'.join(root_check) + '_'
-        is_root = any(extended_path in s for s in os.listdir(dirpath))
+        is_root = any(extended_path in s for s in files)
         if is_root:
-            print("root: %s" % new_name)
             parts=root_check
             root_path='/'.join(parts)
         try:

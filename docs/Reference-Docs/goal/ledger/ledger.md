@@ -52,7 +52,7 @@ goal ledger [flags]
 
 
 
-* [goal](goal.md)	 - CLI for interacting with Algorand.
+* [goal](../goal.md)	 - CLI for interacting with Algorand.
 * [goal ledger block](../block/)	 - Dump a block to a file or stdout
 * [goal ledger supply](../supply/)	 - Show ledger token supply
 
