@@ -12,6 +12,7 @@ nav:
     - Accounts: 'features/accounts.md'
     - Transactions: 'features/transactions.md'
     - Signatures: 'features/signatures.md'
+    - Offline Transactions: 'features/offline_transactions'
     - Algorand Standard Assets (ASA): 
         - ASA Intro: 'features/asa/index.md'
         - ASA Flows: 'features/asa/flows.md'

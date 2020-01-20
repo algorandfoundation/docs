@@ -496,14 +496,14 @@ int 123
 
     func main() {
 
-        const algodToken = "algod-token"<PLACEHOLDER>;
-        const algodAddress = "algod-address"<PLACEHOLDER>;
+        const algodToken = "algod-token<PLACEHOLDER>"
+        const algodAddress = "algod-address<PLACEHOLDER>"
 
         // Create logic signature
         // example base64 encoded program "ASABACI="
         var sk ed25519.PrivateKey
         var ma crypto.MultisigAccount
-        program, err :=  base64.StdEncoding.DecodeString("base64-encoded-program"<PLACEHOLDER>)
+        program, err :=  base64.StdEncoding.DecodeString("base64-encoded-program<PLACEHOLDER>")
         var args [][]byte
         lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
         addr := crypto.LogicSigAddress(lsig).String()
