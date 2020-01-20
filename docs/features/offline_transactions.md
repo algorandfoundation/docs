@@ -1,6 +1,6 @@
 Transactions are described in detail in the Transactions documumentation<LINK>. In many cases, transactions must be created for offline usage in an offline application. These transactions can be signed or unsigned depending on the usage case. This guide explains how transactions can be created and saved to a file. The samples do make use of a node connection to get network suggested parameters and to submit transactions. Suggested network parameters can be hardcoded and transactions can be transferred manually for a complete offline application.
 
-# Saving Transactions to File 
+# Saving Unsigned Transactions to File 
 Algorand SDK's and `goal` support writing both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.
 
 Unsigned transactions require the transaction object to be created before writting to a file.
@@ -81,7 +81,7 @@ Unsigned transactions require the transaction object to be created before writti
 ``` goal tab="goal"
 $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
 ```
-
+# Saving Signed Transactions to File 
 Signed Transactions are similar, but require an account to sign the transaction before writting it to a file.
 
 ``` javascript tab="JavaScript"
