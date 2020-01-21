@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # rm -rf goal && mkdir goal && goal generate-docs goal && ./reformat.py -path goal
 
-from os import walk
 import argparse    
 import os    
 import os.path
-import re
-import tempfile
-import shutil
 import pprint
+import re
+import shutil
+import sys
+import tempfile
 pp = pprint.PrettyPrinter(indent=4)
 
 parser = argparse.ArgumentParser(description='Reformat markdown files to display in mkdocs.')    
-parser.add_argument('-path', required=True, help='Path to reformat.')
-parser.add_argument('-cmd', required=True, help='Name of the command (goal).')
+parser.add_argument('-doc-dir', required=True, help='Path to document directory.')
+parser.add_argument('-cmd', required=False, help='Full path to command. If provided the doc-dir will be emptied and new markdown files will be generated with \'cmd generate-docs <doc-dir>\'')
 
 def fix_file_links(new_file, goal_depth, with_subcommand):
     """ Update markdown links to use relative paths in different directories. """
@@ -41,7 +41,7 @@ def fix_file_links(new_file, goal_depth, with_subcommand):
         os.replace(tmp.name, new_file)
     
 
-def process(dirpath, cmd):
+def process(dirpath):
     """ move files into a directory structure and add .pages files. """
 
     with_subcommand = []
@@ -71,10 +71,6 @@ def process(dirpath, cmd):
         new_file = dirpath + '/' + root_path + '/' + new_name
         os.rename(dirpath + '/' + f, new_file)
         moved_files.append((new_file, len(parts)-1))
-
-        # Rewrite file with fixed link paths (except for root command)
-        #if f != (cmd + '.md'):
-        #    fix_file_links(new_file, len(parts)-1, None)
 
         # Make sure root file is displayed first in the navigation par
         if is_root:
@@ -106,7 +102,24 @@ def fix_root(path):
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    files_modified = process(args.path, args.cmd)
-    fix_root(args.path)
+    if os.sep != '/':
+        print("Wont work on this system.")
+    if not os.path.isdir(args.doc_dir):
+        print("The doc dir must be a directory.")
+        sys.exit(1)
+
+    # Don't break if a trailing slash is provided.
+    if args.doc_dir[-1] is '/':
+        args.doc_dir = args.doc_dir[:-1]
+
+    # Check if we should regenerate the markdown files
+    if args.cmd != None:
+        print("Deleting directory: %s" % args.doc_dir)
+        shutil.rmtree(args.doc_dir)
+        os.makedirs(args.doc_dir)
+        os.system('%s generate-docs %s' % (args.cmd, args.doc_dir))
+
+    files_modified = process(args.doc_dir)
+    fix_root(args.doc_dir)
 
     print("Finished formatting %d files." % files_modified)
