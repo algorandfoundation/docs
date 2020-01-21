@@ -1,3 +1,6 @@
+---
+title: Offline Transactions
+---
 Transactions are described in detail in the Transactions documumentation<LINK>. In many cases, transactions must be created for offline usage in an offline application. These transactions can be signed or unsigned depending on the usage case. This guide explains how transactions can be created and saved to a file. The samples do make use of a node connection to get network suggested parameters and to submit transactions. Suggested network parameters can be hardcoded and transactions can be transferred manually for a complete offline application.
 
 # Saving Unsigned Transactions to File 

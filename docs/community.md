@@ -1,3 +1,6 @@
+---
+title: Community Projects
+---
 # Block Explorers
 
 | Name| Description |
