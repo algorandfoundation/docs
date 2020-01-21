@@ -83,6 +83,7 @@ def process(dirpath, cmd):
     # Fix the links at the very end so that we know which ones have subcommands
     for f,depth in moved_files:
         fix_file_links(f, depth, with_subcommand)
+    return len(moved_files)
 
 def fix_root(path):
     """ the algorithm puts everything one directory too deep, move it up. """
@@ -105,5 +106,7 @@ def fix_root(path):
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    process(args.path, args.cmd)
+    files_modified = process(args.path, args.cmd)
     fix_root(args.path)
+
+    print("Finished formatting %d files." % files_modified)
