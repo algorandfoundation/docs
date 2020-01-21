@@ -59,13 +59,13 @@ After generating a private key and corresponding address, sending Algos to the a
 
 ### Attributes
 #### Minimum Balance
-Every account on Algorand must have a minimum balance of 100,000 microAlgos. If ever a transaction is sent that would result in a balance lower than the minimum, the transaction will fail. The minimum balance increases with each asset holding the account has. Read more about assets and changes to the minimum balance requirement in the [Algorand Standard Assets](../features/asa/index.md) section.
+Every account on Algorand must have a minimum balance of 100,000 microAlgos. If ever a transaction is sent that would result in a balance lower than the minimum, the transaction will fail. The minimum balance increases with each asset holding the account has. Read more about assets and changes to the minimum balance requirement in the [Algorand Standard Assets](asa/index.md) section.
 
 #### Online/Offline
-By default, Algorand accounts are set to **offline**. An **online** account is one that participates in Algorand consensus. For an account to go online, it must generate a participation key and send a special key registration transaction. Read more about how to register an account online in the [Network Participation](../participate/generate_keys.md) section.
+By default, Algorand accounts are set to **offline**. An **online** account is one that participates in Algorand consensus. For an account to go online, it must generate a participation key and send a special key registration transaction. Read more about how to register an account online in the [Network Participation](../Network-Participation/participate-in-consensus/generate_keys.md) section.
 
 ### Other Account Types
-Creating an Algorand address from a public key, is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authenticate spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](../features/asc1/modes.md) section. Multisignature accounts are described [below](#multisignature).
+Creating an Algorand address from a public key, is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authenticate spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](asc1/modes.md) section. Multisignature accounts are described [below](#multisignature).
 
 ### Special Accounts
 

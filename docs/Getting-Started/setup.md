@@ -74,7 +74,7 @@ Follow the directions here: https://github.com/algorand/sandbox
 	Recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This should be follow-on to option 2 prior to launching an application on MainNet.
 
   
-This method gives you full control of your node and its configuration. Read the docs to setup and run a node [here](../node/types.md). [Configure your node](../node/config.md) according to your specific needs.
+This method gives you full control of your node and its configuration. Read the docs to setup and run a node [here](../Network-Participation/run-a-node/types.md). [Configure your node](../Network-Participation/run-a-node/config.md) according to your specific needs.
 
 After setup, find your **algod address** here:
 
@@ -94,7 +94,7 @@ $ cat $ALGORAND_DATA/algod.token
 :-- |:-------------:| :-------------: | :-------------: |
 **Time**         | **Seconds** - Just signup| **Minutes** - Same as running a node with no catchup	| **Days** - need to wait for node to catchup
 **Trust**         | 1 party       | 1 party	| Yourself 
-**Cost**         | Usually free for development; pay based on rate limits in production | Variable (with free option) - see [node types](../node/types.md)	| Variable (with free option) - see [node types](../node/types.md)	
+**Cost**         | Usually free for development; pay based on rate limits in production | Variable (with free option) - see [node types](../Network-Participation/run-a-node/types.md)	| Variable (with free option) - see [node types](../Network-Participation/run-a-node/types.md)	
 **Private Networks**| ❌ | ✅ | ✅
 **`goal`, `algokey`, `kmd`**| ❌ | ✅ | ✅
 **Platform**|Varied|MacOS; Linux|MacOS; Linux|
@@ -103,13 +103,13 @@ $ cat $ALGORAND_DATA/algod.token
 # Install your preferred SDK
 Install your preferred SDK by following the setup instructions on the corresponding SDK documentation page.
 
-[Python](../reference/sdks/python.md)
+[Python](../Reference-Docs/SDKs/python.md)
 
-[JavaScript](../reference/sdks/javascript.md) 
+[JavaScript](../Reference-Docs/SDKs/javascript.md) 
 
-[Go](../reference/sdks/go.md)
+[Go](../Reference-Docs/SDKs/go.md)
 
-[Java](../reference/sdks/java.md)
+[Java](../Reference-Docs/SDKs/java.md)
 
 # Other Setup Tips
 

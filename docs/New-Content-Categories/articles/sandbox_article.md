@@ -1,6 +1,6 @@
 # Introducing Sandbox: The quick way to get started on Algorand
 
-Running a node on Algorand is a [very fast and straightforward process](../getting-started/setup.md).
+Running a node on Algorand is a [very fast and straightforward process](../../Getting-Started/setup.md).
 
 Sandbox makes the process of node creation and configuration seamless with several helpful commands for containerization and process management. It is simply a quick and easy way to create and configure an Algorand node using Docker.
 
