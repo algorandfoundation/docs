@@ -49,7 +49,6 @@ def process(dirpath):
     files = os.listdir(dirpath)
     for f in files:
         parts = f.split('_')
-        # Ignore the root "goal.md" file
         new_name=parts.pop()
         root_path='/'.join(parts)
 
@@ -104,6 +103,7 @@ if __name__ == "__main__":
 
     if os.sep != '/':
         print("Wont work on this system.")
+        sys.exit(1)
     if not os.path.isdir(args.doc_dir):
         print("The doc dir must be a directory.")
         sys.exit(1)
