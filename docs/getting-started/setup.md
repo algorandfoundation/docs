@@ -1,3 +1,5 @@
+title: Workspace Setup
+
 PAGE STATUS: IN PROGRESS
 
 This section is a getting started guide for developers, looking to build applications on the Algorand blockchain. Start here to learn what it means to build an application on Algorand and how to get started quickly.

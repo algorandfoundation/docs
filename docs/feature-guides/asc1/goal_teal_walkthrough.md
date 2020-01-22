@@ -1,3 +1,4 @@
+title: goal TEAL Walkthrough
 TEAL programs can be written with any editor and are compiled using the goal command-line tool. The command-line tool provides the ability to use these compiled programs within transactions. In addition, the command-line tool also provides the ability to actually test the program before you use it with a real transaction. 
 # Simple TEAL example
 The simplest program you can write in TEAL is probably the following:

@@ -1,3 +1,5 @@
+title: Algorand Consensus Protocol
+
 The Algorand blockchain uses a decentralized Byzantine Agreement protocol that leverages pure proof of stake (Pure POS). This means that it can tolerate malicious users, achieving consensus without a central authority, as long as a supermajority of the stake is in non-malicious hands. This protocol is very fast and requires minimal computational power per node, giving it the ability to finalize transactions efficiently. 
 
 Before getting into detail on the protocol, we discuss two functional concepts that Algorand uses. This is a simplified version of the protocol that covers the ideal conditions. For all technical details see the white paper<LINK> or the source code<LINK>.

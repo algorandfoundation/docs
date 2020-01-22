@@ -1,3 +1,4 @@
+title: Algorand Standard Assets (ASA)
 [overview text]
 # Fungible Assets
 

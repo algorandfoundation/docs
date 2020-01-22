@@ -1,3 +1,5 @@
+title: Atomic Transfers
+
 Atomic Transfers are irreducible batch operations that allow a group of [transactions](transactions.md) to be submitted as a unit. All transactions in the batch either pass or fail. The batch operation will only be successful if each transaction within the group is successful.
 
 Transactions can contain Alogs or Algorand Assets and may also be governed by Algorand Smart Contracts. 

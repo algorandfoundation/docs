@@ -1,0 +1,5 @@
+title: Algorand Networks
+arrange:
+  - mainnet.md
+  - testnet.md
+  - betanet.md

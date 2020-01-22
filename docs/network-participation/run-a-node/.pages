@@ -1,0 +1,5 @@
+title: Run a Node
+arrange:
+  - types.md
+  - install.md
+  - config.md

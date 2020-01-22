@@ -1,3 +1,5 @@
+title: Glossary
+
 # Keys
 Every user in Algorand will have at least one set of private and public keys. These keys use Ed25519 high-speed, high-security elliptic-curve signatures. We refer to these as spending keys; they are used to sign and verify transactions and to change an account’s online status.
 

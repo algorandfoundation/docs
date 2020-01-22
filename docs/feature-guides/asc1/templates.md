@@ -1,3 +1,5 @@
+title: Official Templates
+
 # Delegate Key Registration
 # Dynamic Fee
 # Hash Time-Locked Contract (HTLC)

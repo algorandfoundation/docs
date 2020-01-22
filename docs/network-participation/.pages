@@ -1,0 +1,5 @@
+title: Network Participation
+arrange:
+  - run-a-node
+  - common-node-operations
+  - participate-in-consensus
