@@ -1,10 +1,10 @@
 arrange:
   - learn
-  - Getting-Started
-  - Feature-Guides
-  - Network-Participation
-  - Algorand-Networks
-  - Reference-Docs
+  - getting-started
+  - feature-guides
+  - network-participation
+  - algorand-networks
+  - reference-docs
   - community.md
   - about
-  - New-Content-Categories
+  - new-content-categories
