@@ -1,10 +1,7 @@
----
-title: Offline Transactions
----
-Transactions are described in detail in the Transactions documumentation<LINK>. In many cases, transactions must be created for offline usage in an offline application. These transactions can be signed or unsigned depending on the usage case. This guide explains how transactions can be created and saved to a file. The samples do make use of a node connection to get network suggested parameters and to submit transactions. Suggested network parameters can be hardcoded and transactions can be transferred manually for a complete offline application.
+Transactions are described in detail in the Transactions documumentation<LINK>. In many cases, transactions must be created for offline usage in an offline application. These transactions can be signed or unsigned depending on the usage case. This guide explains how transactions can be created and saved to a file. The samples do make use of a node connection to get network suggested parameters and to submit transactions. Suggested network parameters can be hardcoded and transactions can be transferred manually for a complete offline application. The same methodology described here can also be used to work with LogicSignatures and Multisig signed transactions. All objects in the following examples use msgpack to store the object allowing interoperability with the SDKs.
 
-# Saving Unsigned Transactions to File 
-Algorand SDK's and `goal` support writing both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.
+# Unsigned Transaction File Operations
+Algorand SDK's and `goal` support writing and reading both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.
 
 Unsigned transactions require the transaction object to be created before writting to a file.
 
@@ -20,10 +17,17 @@ Unsigned transactions require the transaction object to be created before writti
 		"lastRound": params.lastRound + 1000,
 		"genesisID": params.genesisID,
 		"genesisHash": params.genesishashb64
-    };
+	};
+	// Save transaction to file
+    fs.writeFileSync('./unsigned.txn', algosdk.encodeObj( txn ));
+    
+	// read transaction from file and sign it
+    let txn = algosdk.decodeObj(fs.readFileSync('./unsigned.txn')); 
+	let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
+	let txId = signedTxn.txID;
 	
-	// write the unsigned transaction to a file
-    fs.writeFileSync('./unsigned.txn', JSON.stringify(txn) , 'utf-8');
+	// send signed transaction to node
+	await algodClient.sendRawTransaction(signedTxn.blob);         
 ```
 
 ``` python tab="Python"
@@ -45,21 +49,41 @@ Unsigned transactions require the transaction object to be created before writti
 	# write to file
 	dir_path = os.path.dirname(os.path.realpath(__file__))
 	transaction.write_to_file([txn], dir_path + "/unsigned.txn")
+
+	# read from file
+	txns = transaction.retrieve_from_file("./unsigned.txn")
+
+	# sign and submit transaction
+	txn = txns[0]
+	signed_txn = txn.sign(private_key)
+	txid = signed_txn.transaction.get_txid()
+	algod_client.send_transaction(signed_txn)    
 ```
 
 ``` java tab="Java"
-    try { 
-            Transaction tx = new Transaction(new Address(SRC_ADDR),  
-                    BigInteger.valueOf(1000), firstRound, lastRound, 
-                    null, amount, new Address(DEST_ADDR), genId, genesisHash);
-            FileOutputStream file = new FileOutputStream("./unsigned.txn"); 
-            ObjectOutputStream out = new ObjectOutputStream(file); 
-            out.writeObject(tx);
-            out.close(); 
-            file.close();
-    } catch (Exception e) { 
-        System.out.println("Exception: " + e); 
-    }
+    BigInteger amount = BigInteger.valueOf(200000);
+    BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000));  
+    Transaction tx = new Transaction(new Address(SRC_ADDR),  
+            BigInteger.valueOf(1000), firstRound, lastRound, 
+            null, amount, new Address(DEST_ADDR), genId, genesisHash);
+
+    // Save transaction to a file 
+    Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(tx));
+
+    // read transaction from file
+    Transaction decodedTransaction = Encoder.decodeFromMsgPack(
+        Files.readAllBytes(Paths.get("./unsigned.txn")), Transaction.class);            
+
+    // recover account    
+    String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
+    Account src = new Account(SRC_ACCOUNT);
+
+    // sign transaction
+    SignedTransaction signedTx = src.signTransaction(decodedTransaction);
+    byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
+            
+    // submit the encoded transaction to the network
+    TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
 ```
 
 ``` go tab="Go"
@@ -72,37 +96,73 @@ Unsigned transactions require the transaction object to be created before writti
 	}
 
 	// save unsigned transction to file
-	file, err := os.Create("./unsigned.gob")
+	err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(tx), 0644)
 	if err == nil {
-		encoder := gob.NewEncoder(file)
-		encoder.Encode(tx)
+		fmt.Printf("Saved unsigned transaction to file\n")
+		return
+    }
+
+	// read unsigned transaction from file
+	dat, err := ioutil.ReadFile("./unsigned.txn")
+	if err != nil {
+		fmt.Printf("Error reading transaction from file: %s\n", err)
+		return
 	}
-	file.Close()
+	var unsignedTx types.Transaction  
+	msgpack.Decode(dat, &unsignedTx)
+
+	// recover account and sign transaction
+	addr, sk := recoverAccount();
+	fmt.Printf("Address is: %s\n", addr)
+	txid, stx, err := crypto.SignTransaction(sk, unsignedTx)
+	if err != nil {
+		fmt.Printf("Failed to sign transaction: %s\n", err)
+		return
+	}
+	fmt.Printf("Transaction id: %s\n", txid)
+
+	// send transaction to the network
+	sendResponse, err := algodClient.SendRawTransaction(stx)
+	if err != nil {
+		fmt.Printf("failed to send transaction: %s\n", err)
+		return
+	}    
 ```
 
 
 ``` goal tab="goal"
 $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
+
+$ goal clerk sign --infile unsigned.txn --outfile signed.txn
+
+$ goal clerk rawsend --filename signed.txn
+
 ```
-# Saving Signed Transactions to File 
+# Signed Transaction File Operations 
 Signed Transactions are similar, but require an account to sign the transaction before writting it to a file.
 
 ``` javascript tab="JavaScript"
-    let txn = {
-        "from": myAccount.addr,
-        "to": receiver,
-        "fee": params.minFee,
-        "flatFee": true,
-        "amount": 1000000,
-        "firstRound": params.lastRound,
-        "lastRound": params.lastRound + 1000,
-        "genesisID": params.genesisID,
-        "genesisHash": params.genesishashb64
-    };
+	let txn = {
+		"from": myAccount.addr,
+		"to": receiver,
+		"fee": params.minFee,
+		"flatFee": true,
+		"amount": 1000000,
+		"firstRound": params.lastRound,
+		"lastRound": params.lastRound + 1000,
+		"genesisID": params.genesisID,
+		"genesisHash": params.genesishashb64
+	};
 
-    // sign the transaction and write to file 
-    let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-    fs.writeFileSync("./signed.stxn", signedTxn.blob);
+	// sign transaction and write to file
+	let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
+    fs.writeFileSync('./signed.stxn', algosdk.encodeObj( signedTxn ));
+    
+	// read signed transaction from file
+	let stx = algosdk.decodeObj(fs.readFileSync("./signed.stxn"));
+		
+	// send signed transaction to node
+	let tx = await algodClient.sendRawTransaction(stx.blob);    
 ```
 
 ``` python tab="Python"
@@ -127,57 +187,91 @@ Signed Transactions are similar, but require an account to sign the transaction 
     # write to file
     dir_path = os.path.dirname(os.path.realpath(__file__))
     transaction.write_to_file([signed_txn], dir_path + "/signed.txn")
+
+	# read signed transaction from file
+	txns = transaction.retrieve_from_file("./signed.txn")
+	signed_txn = txns[0]
+	txid = signed_txn.transaction.get_txid()
+	print("Signed transaction with txID: {}".format(txid))
+	
+	# send transaction to network
+	algod_client.send_transaction(signed_txn)    
 ```
 
 ``` java tab="Java"
-    try { 
-        Transaction tx = new Transaction(new Address(SRC_ADDR),  
-                BigInteger.valueOf(1000), firstRound, lastRound, 
-                null, amount, new Address(DEST_ADDR), genId, genesisHash);
+    // create transaction 
+    BigInteger amount = BigInteger.valueOf(200000);
+    BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000));  
+    Transaction tx = new Transaction(new Address(SRC_ADDR),  
+            BigInteger.valueOf(1000), firstRound, lastRound, 
+            null, amount, new Address(DEST_ADDR), genId, genesisHash);
 
-        // recover account and sign transaction
-        String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
-        Account src = new Account(SRC_ACCOUNT);
-        SignedTransaction signedTx = src.signTransaction(tx);                    
+    // recover account    
+    String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";                    
+    Account src = new Account(SRC_ACCOUNT);
 
-        // save signed transaction to a file 
-        FileOutputStream file = new FileOutputStream("./signed.stxn"); 
-        ObjectOutputStream out = new ObjectOutputStream(file); 
-        out.writeObject(signedTx);
-        out.close(); 
-        file.close();
-    } catch (Exception e) { 
-        System.out.println("Exception: " + e); 
-    }
+    // sign transaction
+    SignedTransaction signedTx = src.signTransaction(tx);                    
+
+    // save signed transaction to  a file 
+    Files.write(Paths.get("./signed.txn"), Encoder.encodeToMsgPack(signedTx));
+
+    //Read the transaction from a file 
+    SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(
+        Files.readAllBytes(Paths.get("./signed.txn")), SignedTransaction.class);   
+    System.out.println("Signed transaction with txid: " + decodedSignedTransaction.transactionID);           
+
+    // Msgpack encode the signed transaction
+    byte[] encodedTxBytes = Encoder.encodeToMsgPack(decodedSignedTransaction);
+
+    //submit the encoded transaction to the network
+    TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);    
 ```
 
 ``` go tab="Go"
-    tx, err := transaction.MakePaymentTxn(addr, toAddr, 1, 100000,
-        txParams.LastRound, txParams.LastRound+100, nil, "", 
-        genID, txParams.GenesisHash)
-    if err != nil {
-        fmt.Printf("Error creating transaction: %s\n", err)
-        return
-    }
+	tx, err := transaction.MakePaymentTxn(addr, toAddr, 1, 100000,
+		 txParams.LastRound, txParams.LastRound+100, nil, "", 
+		 genID, txParams.GenesisHash)
+	if err != nil {
+		fmt.Printf("Error creating transaction: %s\n", err)
+		return
+	}
 
-    //Sign the Transaction
-    txid, stx, err := crypto.SignTransaction(sk, tx)
-    if err != nil {
-        fmt.Printf("Failed to sign transaction: %s\n", err)
-        return
+	//Sign the Transaction
+	txid, stx, err := crypto.SignTransaction(sk, tx)
+	if err != nil {
+		fmt.Printf("Failed to sign transaction: %s\n", err)
+		return
+	}
+	fmt.Printf("Made signed transaction with TxID %s: %x\n", txid, stx)
+
+	//Save the signed transaction to file
+	err = ioutil.WriteFile("./signed.stxn", msgpack.Encode(stx), 0644)
+	if err == nil {
+		fmt.Printf("Saved signed transaction to file\n")
+		return
     }
-    //Save the signed transaction to file
-    fmt.Printf("Made signed transaction with TxID %s: %x\n", txid, stx)
-    file, err := os.Create("./signed.gob")
-    if err == nil {
-        encoder := gob.NewEncoder(file)
-        encoder.Encode(stx)
-    }
-    file.Close()
+    
+	// read unsigned transaction from file
+	dat, err := ioutil.ReadFile("./signed.stxn")
+	if err != nil {
+		fmt.Printf("Error reading signed transaction from file: %s\n", err)
+		return
+	}
+	var signedTx []byte 
+	msgpack.Decode(dat, &signedTx)
+	
+	// send the transaction to the network
+	sendResponse, err := algodClient.SendRawTransaction(signedTx)
+	if err != nil {
+		fmt.Printf("failed to send transaction: %s\n", err)
+		return
+	}
+
 ```
 
 ``` goal tab="goal"
-$ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="signed.stxn" --sign
+$ goal clerk rawsend --filename signed.txn
 ```
 
 ??? example "Complete Example = Saving Signed and Unsigned Transactions to a File"
@@ -188,27 +282,24 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
     var client = null;
     // make connection to node
     async function setupClient() {
-        
         if( client == null){
             const ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
             const ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
             const port = port-number<PLACEHOLDER>;
-            let algodClient = new algosdk.Algod(ALGOD_API_TOKEN, ALGOD_API_ADDR , port);
+            let algodClient = new algosdk.Algod(token, server, port);
             client = algodClient;
         } else {
             return client;
         }
-        return client;	
-
+        return client;
     }
-
     // recover acccount for example
     function recoverAccount(){
         const passphrase ="your-25-word-mnemonic<PLACEHOLDER>";
         let myAccount = algosdk.mnemonicToSecretKey(passphrase);
         return myAccount;
     }
-    // function used to wait for a tx confirmation
+    // Function used to wait for a tx confirmation
     var waitForConfirmation = async function(algodclient, txId) {
         while (true) {
             let lastround = (await algodclient.status()).lastRound;
@@ -221,113 +312,125 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
             await algodclient.statusAfterBlock(lastround + 1);
         }
     };
-    async function writeUnsignedTransactionToFile() {
+    async function writeUnsignedTransctionToFile() {
 
-        // setup accounts and make node connection
-        const receiver = "receiver-address<PLACEHOLDER>";
-        let algodClient = await setupClient();
-        let myAccount = await recoverAccount();
-        console.log("My address: %s", myAccount.addr)
+        try{
+            const receiver = "transaction-receiver<PLACEHOLDER>";
 
-        // get the current params from the network
-        let params = await algodClient.getTransactionParams();
+            // setup accounts and make node connection
+            let algodClient = await setupClient();
 
-        // setup transaction
-        let txn = {
-            "from": myAccount.addr,
-            "to": receiver,
-            "fee": params.minFee,
-            "flatFee": true,
-            "amount": 1000000,
-            "firstRound": params.lastRound,
-            "lastRound": params.lastRound + 1000,
-            "genesisID": params.genesisID,
-            "genesisHash": params.genesishashb64
-        };
-        
-        // write the unsigned transaction to a file
-        fs.writeFileSync('./unsigned.txn', JSON.stringify(txn) , 'utf-8');
+            // recover account
+            let myAccount = await recoverAccount();
+            console.log("My address: %s", myAccount.addr)
+
+            // get network suggested parameters
+            let params = await algodClient.getTransactionParams();
+            let txn = {
+                "from": myAccount.addr,
+                "to": receiver,
+                "fee": params.minFee,
+                "flatFee": true,
+                "amount": 1000000,
+                "firstRound": params.lastRound,
+                "lastRound": params.lastRound + 1000,
+                "genesisID": params.genesisID,
+                "genesisHash": params.genesishashb64
+            };
+            // Save transaction to file
+            fs.writeFileSync('./unsigned.txn', algosdk.encodeObj( txn ));	
+        }catch( e ){
+            console.log( e );
+        }
     }; 
-    async function readUnsignedTransactionFromFile() {
+    async function readUnsignedTransctionFromFile() {
 
-        // recover account and setup node connection
-        let algodClient = await setupClient();
-        let myAccount = await recoverAccount(); 
-        console.log("My address: %s", myAccount.addr)
-        
-        // read transaction from file and sign
-        let rawdata = fs.readFileSync('./unsigned.txn');
-        let txn = JSON.parse(rawdata);    
-        let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-        
-        let txId = signedTxn.txID;
-        console.log("Signed transaction with txID: %s", txId);
+        try{
+            // setup connection to node
+            let algodClient = await setupClient();
 
-        // send transaction to network
-        await algodClient.sendRawTransaction(signedTxn.blob)
+            // recover account
+            let myAccount = await recoverAccount(); 
+            console.log("My address: %s", myAccount.addr)
 
-        // wait for transaction to be confirmed
-        await waitForConfirmation(algodClient, txId)
+            // read transaction from file and sign it
+            let txn = algosdk.decodeObj(fs.readFileSync('./unsigned.txn'));  
+            let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
+            let txId = signedTxn.txID;
+            console.log("Signed transaction with txID: %s", txId);
+
+            // send signed transaction to node
+            await algodClient.sendRawTransaction(signedTxn.blob);
+
+            // Wait for transaction to be confirmed
+            await waitForConfirmation(algodClient, txId);
+        } catch ( e ){
+            console.log( e );
+        }	
     }; 
-    async function writeSignedTransactionToFile() {
+    async function writeSignedTransctionToFile() {
 
-        // setup accounts and make node connection
-        const receiver = "receiver-address<PLACEHOLDER>";
-        let algodClient = await setupClient();
-        let myAccount = await recoverAccount();
-        console.log("My address: %s", myAccount.addr)
+        try{
+            const receiver = "transaction-receiver<PLACEHOLDER>";
 
-        // get the current params from the network
-        let params = await algodClient.getTransactionParams();
+            // setup connection to node
+            let algodClient = await setupClient();
+            let myAccount = await recoverAccount();
+            console.log("My address: %s", myAccount.addr)
 
-        // setup transaction
-        let txn = {
-            "from": myAccount.addr,
-            "to": receiver,
-            "fee": params.minFee,
-            "flatFee": true,
-            "amount": 1000000,
-            "firstRound": params.lastRound,
-            "lastRound": params.lastRound + 1000,
-            "genesisID": params.genesisID,
-            "genesisHash": params.genesishashb64
-        };
+            // get network suggested parameters
+            let params = await algodClient.getTransactionParams();
 
-        // sign the transaction and write to file 
-        let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-        fs.writeFileSync("./signed.stxn", signedTxn.blob);
+            // setup a transaction
+            let txn = {
+                "from": myAccount.addr,
+                "to": receiver,
+                "fee": params.minFee,
+                "flatFee": true,
+                "amount": 1000000,
+                "firstRound": params.lastRound,
+                "lastRound": params.lastRound + 1000,
+                "genesisID": params.genesisID,
+                "genesisHash": params.genesishashb64
+            };
 
+            // sign transaction and write to file
+            let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
+            fs.writeFileSync('./signed.stxn', algosdk.encodeObj( signedTxn ));	
+        } catch( e ) {
+            console.log(e);
+        }
     }; 
-    async function readSignedTransactionFromFile() {
+    async function readSignedTransctionFromFile() {
 
-        // setup node connection
-        let algodClient = await setupClient();
-        
-        // read signed transaction from file 
-        let stx = fs.readFileSync("./signed.stxn");
-        const buf = Buffer.from(stx);
-        let signedTxnBlob = Uint8Array.from(stx);
+        try{
+            // setup connection to node
+            let algodClient = await setupClient();
+            
+            // read signed transaction from file
+            let stx = algosdk.decodeObj(fs.readFileSync("./signed.stxn"));
+            
+            // send signed transaction to node
+            let tx = await algodClient.sendRawTransaction(stx.blob);
+            console.log("Signed transaction with txID: %s", tx.txId);
 
-        // send signed transaction to the node
-        let tx = await algodClient.sendRawTransaction(signedTxnBlob);
-        console.log("Signed transaction with txID: %s", tx.txId);
-
-        // wait for transaction to be confirmed
-        await waitForConfirmation(algodClient, tx.txId)
+            // Wait for transaction to be confirmed
+            await waitForConfirmation(algodClient, tx.txId);
+        } catch( e ) {
+            console.log(e);
+        }	
     }; 
-    // functions for testing
+
     async function testUnsigned(){
-        await writeUnsignedTransactionToFile();
-        await readUnsignedTransactionFromFile();
+        await writeUnsignedTransctionToFile();
+        await readUnsignedTransctionFromFile();
     }
     async function testSigned(){
-        await writeSignedTransactionToFile();
-        await readSignedTransactionFromFile();
+        await writeSignedTransctionToFile();
+        await readSignedTransctionFromFile();
     }
-    // testUnsigned();
+    //testUnsigned();
     testSigned();
-
-
     ```
 
     ```python tab="Python"
@@ -477,11 +580,9 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
     ```java tab="Java"
     package com.algorand.javatest;
 
-    import java.io.FileInputStream;
-    import java.io.FileOutputStream;
-    import java.io.ObjectInputStream;
-    import java.io.ObjectOutputStream;
     import java.math.BigInteger;
+    import java.nio.file.Files;
+    import java.nio.file.Paths;
 
     import com.algorand.algosdk.account.Account;
     import com.algorand.algosdk.algod.client.AlgodClient;
@@ -532,38 +633,28 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         }
         public void writeUnsignedTransaction(){
 
+            // connect to node
             if( algodApiInstance == null ) connectToNetwork();
 
             final String DEST_ADDR = "transaction-reciever<PLACEHOLDER>";
             final String SRC_ADDR = "transaction-sender<PLACEHOLDER>";
 
-            //Save the Transaction to a file
             try { 
-                
-                // get last round and suggested tx fee
-                BigInteger firstRound = BigInteger.valueOf(301);
-                String genId = null;
-                Digest genesisHash = null;
-
                 // Get suggested parameters from the node
-                TransactionParams params = algodApiInstance.transactionParams();
+                TransactionParams params = algodApiInstance.transactionParams();                     
+                BigInteger firstRound = params.getLastRound();
+                String genId = params.getGenesisID();
+                Digest genesisHash = new Digest(params.getGenesishashb64());
 
-                //create transaction
-                firstRound = params.getLastRound();
-                genId = params.getGenesisID();
-                genesisHash = new Digest(params.getGenesishashb64());
+                // create transaction
                 BigInteger amount = BigInteger.valueOf(200000);
-                BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); 
+                BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000));  
                 Transaction tx = new Transaction(new Address(SRC_ADDR),  
                         BigInteger.valueOf(1000), firstRound, lastRound, 
                         null, amount, new Address(DEST_ADDR), genId, genesisHash);
 
-                //Save unsigned transaction to file 
-                FileOutputStream file = new FileOutputStream("./unsigned.txn"); 
-                ObjectOutputStream out = new ObjectOutputStream(file); 
-                out.writeObject(tx);
-                out.close(); 
-                file.close();
+                // Save transaction to a file 
+                Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(tx));
                 System.out.println("Transaction written to a file");
             } catch (Exception e) { 
                 System.out.println("Save Exception: " + e); 
@@ -572,25 +663,23 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         }
         public void readUnsignedTransaction(){
 
-            Transaction tx = null;
             try {
-
+                // connect to node
                 if( algodApiInstance == null ) connectToNetwork();
 
-                //Reading  from a file 
-                FileInputStream file = new FileInputStream("./unsigned.txn"); 
-                ObjectInputStream in = new ObjectInputStream(file); 
-                tx = (Transaction)in.readObject();
-                in.close(); 
-                file.close(); 
+                // read transaction from file
+                Transaction decodedTransaction = Encoder.decodeFromMsgPack(
+                    Files.readAllBytes(Paths.get("./unsigned.txn")), Transaction.class);            
 
-                // recover account and sign transaction
+                // recover account    
                 String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
                 Account src = new Account(SRC_ACCOUNT);
-                SignedTransaction signedTx = src.signTransaction(tx);
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
 
-                //submit the encoded transaction to the network
+                // sign transaction
+                SignedTransaction signedTx = src.signTransaction(decodedTransaction);
+                byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
+                
+                // submit the encoded transaction to the network
                 TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
                 System.out.println("Successfully sent tx with id: " + id);
                 waitForConfirmation(id.getTxId());
@@ -603,44 +692,36 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         }
         public void writeSignedTransaction(){
 
+            // connect to node
             if( algodApiInstance == null ) connectToNetwork();
 
             final String DEST_ADDR = "transaction-reciever<PLACEHOLDER>";
-            final String SRC_ADDR = "transaction-sender<PLACEHOLDER>";
+            final String SRC_ADDR = "transaction-sender<PLACEHOLDER>";;
 
-            //Save the Transaction to a file
             try { 
-                
-                // get last round and suggested tx fee
-                BigInteger firstRound = BigInteger.valueOf(301);
-                String genId = null;
-                Digest genesisHash = null;
 
                 // Get suggested parameters from the node
                 TransactionParams params = algodApiInstance.transactionParams();
+                BigInteger firstRound = params.getLastRound();
+                String genId = params.getGenesisID();
+                Digest genesisHash = new Digest(params.getGenesishashb64());
 
-                // create transaction
-                firstRound = params.getLastRound();
-                genId = params.getGenesisID();
-                genesisHash = new Digest(params.getGenesishashb64());
+                // create transaction 
                 BigInteger amount = BigInteger.valueOf(200000);
                 BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000));  
                 Transaction tx = new Transaction(new Address(SRC_ADDR),  
                         BigInteger.valueOf(1000), firstRound, lastRound, 
                         null, amount, new Address(DEST_ADDR), genId, genesisHash);
-    
-                // recover account and sign transaction
-                String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
+
+                // recover account    
+                String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";                    
                 Account src = new Account(SRC_ACCOUNT);
+
+                // sign transaction
                 SignedTransaction signedTx = src.signTransaction(tx);                    
-                
-                // save signed transaction to a file 
-                FileOutputStream file = new FileOutputStream("./signed.stxn"); 
-                ObjectOutputStream out = new ObjectOutputStream(file); 
-                out.writeObject(signedTx);
-                out.close(); 
-                file.close();
-                System.out.println("Transaction Signed and written to a file");
+
+                // save signed transaction to  a file 
+                Files.write(Paths.get("./signed.txn"), Encoder.encodeToMsgPack(signedTx));
             } catch (Exception e) { 
                 System.out.println("Save Exception: " + e); 
             }
@@ -650,20 +731,17 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         public void readSignedTransaction(){
 
             try {
-
+                // connect to a node
                 if( algodApiInstance == null ) connectToNetwork();
 
                 //Read the transaction from a file 
-                FileInputStream file = new FileInputStream("./signed.stxn"); 
-                ObjectInputStream in = new ObjectInputStream(file); 
-                SignedTransaction signedTx = (SignedTransaction)in.readObject();
-                in.close(); 
-                file.close(); 
-                System.out.println("Signed transaction with txid: " + signedTx.transactionID);     
-                    
+                SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(
+                    Files.readAllBytes(Paths.get("./signed.txn")), SignedTransaction.class);   
+                System.out.println("Signed transaction with txid: " + decodedSignedTransaction.transactionID);           
+
                 // Msgpack encode the signed transaction
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
-                
+                byte[] encodedTxBytes = Encoder.encodeToMsgPack(decodedSignedTransaction);
+
                 //submit the encoded transaction to the network
                 TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
                 System.out.println("Successfully sent tx with id: " + id); 
@@ -676,7 +754,7 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
 
         }
         public static void main(String args[]) throws Exception {
-            SaveTxStxForOffline mn = new SaveTxStxForOffline();
+            SaveTransactionOffline mn = new SaveTransactionOffline();
             mn.writeUnsignedTransaction();
             mn.readUnsignedTransaction();
 
@@ -693,28 +771,29 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
     package main
 
     import (
-        "encoding/gob"
         "fmt"
-        "os"
+        "io/ioutil"
 
         "golang.org/x/crypto/ed25519"
 
         "github.com/algorand/go-algorand-sdk/client/algod"
         "github.com/algorand/go-algorand-sdk/crypto"
         "github.com/algorand/go-algorand-sdk/mnemonic"
+        "github.com/algorand/go-algorand-sdk/encoding/msgpack"
         "github.com/algorand/go-algorand-sdk/transaction"
         "github.com/algorand/go-algorand-sdk/types"
     )
+
     // Function that waits for a given txId to be confirmed by the network
     func waitForConfirmation(algodClient algod.Client, txID string) {
         for {
-            pendingInfo, err := algodClient.PendingTransactionInformation(txID)
+            pt, err := algodClient.PendingTransactionInformation(txID)
             if err != nil {
                 fmt.Printf("waiting for confirmation... (pool error, if any): %s\n", err)
                 continue
             }
-            if pendingInfo.ConfirmedRound > 0 {
-                fmt.Printf("Transaction "+pendingInfo.TxID+" confirmed in round %d\n", pendingInfo.ConfirmedRound)
+            if pt.ConfirmedRound > 0 {
+                fmt.Printf("Transaction "+pt.TxID+" confirmed in round %d\n", pt.ConfirmedRound)
                 break
             }
             nodeStatus, err := algodClient.Status()
@@ -778,14 +857,12 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
             fmt.Printf("Error creating transaction: %s\n", err)
             return
         }
+	    unsignedTx := types.SignedTxn{
+		    Txn:  tx,
+	    }        
 
         // save unsigned transction to file
-        file, err := os.Create("./unsigned.gob")
-        if err == nil {
-            encoder := gob.NewEncoder(file)
-            encoder.Encode(tx)
-        }
-        file.Close()
+        err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
         if err == nil {
             fmt.Printf("Saved unsigned transaction to file\n")
             return
@@ -799,25 +876,22 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         algodClient := setupConnection()
 
         // read unsigned transaction from file
-        var tx types.Transaction
-        file, err := os.Open("./unsigned.gob")
-        if err == nil {
-            decoder := gob.NewDecoder(file)
-            err := decoder.Decode(&tx)
-            if err != nil {
-                fmt.Printf("Error reading transaction from file: %s\n", err)
-                return
-            }
-        }else{
-            fmt.Printf("failed to open signed transaction: %s\n", err)
-            return	
+        dat, err := ioutil.ReadFile("./unsigned.txn")
+        if err != nil {
+            fmt.Printf("Error reading transaction from file: %s\n", err)
+            return
         }
-        file.Close()
+	    var unsignedTxRaw types.SignedTxn 
+	    var unsignedTxn types.Transaction
+
+	    msgpack.Decode(dat, &unsignedTxRaw)
+
+	    unsignedTxn = unsignedTxRaw.Txn
 
         // recover account and sign transaction
         addr, sk := recoverAccount();
         fmt.Printf("Address is: %s\n", addr)
-        txid, stx, err := crypto.SignTransaction(sk, tx)
+        txid, stx, err := crypto.SignTransaction(sk, unsignedTxn)
         if err != nil {
             fmt.Printf("Failed to sign transaction: %s\n", err)
             return
@@ -861,20 +935,16 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
             return
         }
 
-        //Sign the Transaction
+        // sign the Transaction, msgpack encoding happens in sign
         txid, stx, err := crypto.SignTransaction(sk, tx)
         if err != nil {
             fmt.Printf("Failed to sign transaction: %s\n", err)
             return
         }
-        //Save the signed transaction to file
         fmt.Printf("Made signed transaction with TxID %s: %x\n", txid, stx)
-        file, err := os.Create("./signed.gob")
-        if err == nil {
-            encoder := gob.NewEncoder(file)
-            encoder.Encode(stx)
-        }
-        file.Close()
+
+        //Save the signed transaction to file
+        err = ioutil.WriteFile("./signed.stxn", stx, 0644)
         if err == nil {
             fmt.Printf("Saved signed transaction to file\n")
             return
@@ -887,20 +957,15 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         // setup connection
         algodClient := setupConnection()
 
-        // read signed transaction from file
-        var signedTransaction []byte
-        file, err := os.Open("./signed.gob")
-        if err == nil {
-            decoder := gob.NewDecoder(file)
-            err = decoder.Decode(&signedTransaction)
-        }else{
-            fmt.Printf("failed to open signed transaction: %s\n", err)
-            return	
+        // read unsigned transaction from file
+        dat, err := ioutil.ReadFile("./signed.stxn")
+        if err != nil {
+            fmt.Printf("Error reading signed transaction from file: %s\n", err)
+            return
         }
-        file.Close()
-
+        
         // send the transaction to the network
-        sendResponse, err := algodClient.SendRawTransaction(signedTransaction)
+        sendResponse, err := algodClient.SendRawTransaction(dat)
         if err != nil {
             fmt.Printf("failed to send transaction: %s\n", err)
             return
@@ -910,11 +975,11 @@ $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6
         waitForConfirmation(algodClient, sendResponse.TxID)
     }
     func main() {
-        saveUnsignedTransaction()
-        readUnsignedTransaction()
+        //saveUnsignedTransaction()
+        //readUnsignedTransaction()
 
-        //saveSignedTransaction()
-        //readSignedTransaction()
+        saveSignedTransaction()
+        readSignedTransaction()
 
     }    
     ```
