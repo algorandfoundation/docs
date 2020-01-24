@@ -1,4 +1,4 @@
-
+title: algod
 <a name="paths"></a>
 # Paths
 

@@ -1,1 +1,5 @@
-title: Transaction Execution Approval Language (TEAL)
+title: TEAL
+arrange:
+  - specification.md
+  - opcodes.md
+  - guidelines.md

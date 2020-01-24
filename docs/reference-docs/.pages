@@ -1,1 +1,9 @@
 title: Reference Docs
+arrange:
+  - goal
+  - kmd
+  - algokey
+  - sdks
+  - rest-apis
+  - teal
+  - glossary.md
