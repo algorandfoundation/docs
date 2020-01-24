@@ -188,16 +188,20 @@ After the unsigned transactions are grouped they must be signed individually by 
 ```
 
 ``` goal tab="goal"
-// keys on single machine
+# keys on single machine
  $goal clerk sign -i groupedtransactions.tx -o signout.tx -d data -w yourwallet
-// keys on multiple machines
+
+# keys on multiple machines
 $goal clerk split -i groupedtransactions.tx -o splitfiles -d data -w yourwallet 
+
 Wrote transaction 0 to splitfiles-0
 Wrote transaction 1 to splitfiles-1
-// sign on individual machine
+
+# sign on individual machine
 $goal clerk sign -i splitfiles-0 -o splitfiles-0.sig -d data -w yourwallet
 $goal clerk sign -i splitfiles-1 -o splitfiles-1.sig -d data -w yourwallet
-// combine signed transactions files
+
+# combine signed transactions files
 cat splitfiles-0.sig splitfiles-1.sig > signout.tx
 ```
 
