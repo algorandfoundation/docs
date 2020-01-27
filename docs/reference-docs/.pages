@@ -3,7 +3,7 @@ arrange:
   - goal
   - kmd
   - algokey
-  - sdks
+  - sdks.md
   - rest-apis
   - teal
   - glossary.md
