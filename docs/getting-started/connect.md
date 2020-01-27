@@ -1,4 +1,4 @@
-title: Connect to the Network
+title: 2. Connect to the Network
 
 After you have you an algod address and access token, instantiate an **algod** client with your preferred SDK.
 

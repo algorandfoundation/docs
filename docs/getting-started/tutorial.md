@@ -1,4 +1,4 @@
-title: Your First Transaction
+title: 3. Your First Transaction
 
 PAGE STATUS: IN PROGRESS
 

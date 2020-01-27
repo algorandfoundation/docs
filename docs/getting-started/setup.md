@@ -1,4 +1,4 @@
-title: Workspace Setup
+title: 1. Workspace Setup
 
 PAGE STATUS: IN PROGRESS
 
@@ -44,24 +44,20 @@ If you are not sure which network to start with, TestNet is usually a good optio
 There are three recommended ways to obtain an algod **address** and **token** that each have their respective pros and cons depending on your goals. Below is an explanation of each followed by a side-by-side comparison.
 
 1. [Use a third-party service](#1-use-a-third-party-service)
-2. [Bootstrap from s3](#2-bootstrap-from-s3)
+2. [Use Docker Sandbox](#2-bootstrap-from-s3)
 3. [Run your own node](#3-run-your-own-node)
 
 ## 1. Use a third-party service
 
-!!! summary
-	:thumbsup:
-	Recommended if you plan to use _just_ the SDKs or algod RESTful interfaces, and want to get connected as fast as possible.
+This method is recommended if you plan to use _just_ the SDKs or algod RESTful interfaces, and want to get connected as fast as possible.
 
 A third-party service runs a node and provides access to that node through their own API keys. On signup, the service provides you with an algod address and an API key which will replace your algod token.
 
 Known available services: [Purestake API](https://developer.purestake.io/)
 
-## 2. Bootstrap from S3
+## 2. Use Docker Sandbox
 
-!!! summary
-	:thumbsup:
-	Recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, but can't wait days for your node to catchup.
+This method is recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, but can't wait days for your node to catchup.
 
 
 Follow the directions here: https://github.com/algorand/sandbox
@@ -71,20 +67,18 @@ Follow the directions here: https://github.com/algorand/sandbox
 
 ## 3. Run your own node
 
-!!! summary
-	:thumbsup:
-	Recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This should be follow-on to option 2 prior to launching an application on MainNet.
+This method is recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This should be follow-on to option 2 prior to launching an application on MainNet.
 
   
 This method gives you full control of your node and its configuration. Read the docs to setup and run a node [here](../Network-Participation/run-a-node/types.md). [Configure your node](../Network-Participation/run-a-node/config.md) according to your specific needs.
 
-After setup, find your **algod address** here:
+After setup, find your **REST endpoint's IP address** here:
 
 ```bash
 $ cat $ALGORAND_DATA/algod.net
 ```
 
-and your **algod token** here:
+and your **algod token** (required by your application to authenticate against `algod`) here:
 
 ```bash
 $ cat $ALGORAND_DATA/algod.token
@@ -103,21 +97,13 @@ $ cat $ALGORAND_DATA/algod.token
 **Production Ready**| ✅ | ❌ | ✅
 
 # Install your preferred SDK
-Install your preferred SDK by following the setup instructions on the corresponding SDK documentation page.
-
-[Python](../Reference-Docs/SDKs/python.md)
-
-[JavaScript](../Reference-Docs/SDKs/javascript.md) 
-
-[Go](../Reference-Docs/SDKs/go.md)
-
-[Java](../Reference-Docs/SDKs/java.md)
+Install your preferred SDK by following the setup instructions in the [SDK reference docs](../reference-docs/sdks.md).
 
 # Other Setup Tips
 
 If you use `goal`, it is recommended that you set the `ALGORAND_DATA` environment variable to avoid the need to specify it for each `goal` command. It is also recommended that you place `goal`, `kmd`, and `algokey` within your executable path. The examples in these docs will assume you have done both of these.
 
-So you will see:
+So you will use:
 
 ```bash
 $ goal node status 
