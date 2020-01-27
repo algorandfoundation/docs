@@ -1,3 +1,4 @@
+title: goal account addpartkey
 ## goal account addpartkey
 
 

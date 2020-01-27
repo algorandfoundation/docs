@@ -1,3 +1,4 @@
+title: goal account installpartkey
 ## goal account installpartkey
 
 

@@ -1,3 +1,4 @@
+title: goal account importrootkey
 ## goal account importrootkey
 
 

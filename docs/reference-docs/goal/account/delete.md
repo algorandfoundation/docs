@@ -1,3 +1,4 @@
+title: goal account delete
 ## goal account delete
 
 
