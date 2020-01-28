@@ -15,10 +15,13 @@ parser = argparse.ArgumentParser(description='Reformat markdown files to display
 parser.add_argument('-doc-dir', required=True, help='Path to document directory.')
 parser.add_argument('-cmd', required=False, help='Full path to command. If provided the doc-dir will be emptied and new markdown files will be generated with \'cmd generate-docs <doc-dir>\'')
 
-def fix_file_links(new_file, goal_depth, with_subcommand):
+def process_markdown_file(new_file, original_name, goal_depth, with_subcommand):
     """ Update markdown links to use relative paths in different directories. """
     with tempfile.NamedTemporaryFile(mode='w', dir='.', delete=False) as tmp, \
             open(new_file, 'r') as f:
+        title=original_name.split('.')[0].replace('_', ' ')
+        tmp.write("---\ntitle:%s\n---\n" % title)
+
         for line in f:
             result = line
             m = re.search('(^\* \[.*\]\()(.*)(\).*$)', result)
@@ -43,7 +46,6 @@ def fix_file_links(new_file, goal_depth, with_subcommand):
 
 def process(dirpath):
     """ move files into a directory structure and add .pages files. """
-
     with_subcommand = []
     moved_files = []
     files = os.listdir(dirpath)
@@ -69,19 +71,22 @@ def process(dirpath):
 
         new_file = dirpath + '/' + root_path + '/' + new_name
         os.rename(dirpath + '/' + f, new_file)
-        moved_files.append((new_file, len(parts)-1))
+        moved_files.append((new_file, len(parts)-1, f))
 
         # Make sure root file is displayed first in the navigation par
         if is_root:
             with open(dirpath + '/' + root_path + '/.pages', 'w') as f:
+                f.write('title: %s\n' % ' '.join(parts))
                 f.write('arrange:\n - %s' % new_name)
     # Fix the links at the very end so that we know which ones have subcommands
-    for f,depth in moved_files:
-        fix_file_links(f, depth, with_subcommand)
+    for f,depth,original_name in moved_files:
+        process_markdown_file(f, original_name, depth, with_subcommand)
     return len(moved_files)
 
 def fix_root(path):
-    """ the algorithm puts everything one directory too deep, move it up. """
+    """
+    The algorithm puts everything one directory too deep, move it up.
+    """
     files=[f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
     directories=[f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 
