@@ -1,7 +1,7 @@
 title: Reference Docs
 arrange:
   - goal
-  - kmd
+  - kmd.md
   - algokey
   - sdks.md
   - rest-apis
