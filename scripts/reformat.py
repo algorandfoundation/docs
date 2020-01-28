@@ -86,10 +86,10 @@ def fix_root(path):
     directories=[f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
 
     if len(files) != 0:
-        print("WRONG NUMBER OF FILES IN ROOT PATH.")
+        print("WRONG NUMBER OF FILES IN ROOT PATH: %d" % len(files))
         return
     if len(directories) != 1:
-        print("WRONG NUMBER OF DIRECTORIES IN ROOT PATH.")
+        print("WRONG NUMBER OF DIRECTORIES IN ROOT PATH: %d" % len(directories))
         return
 
     extra_dir = path + '/' + directories[0]
@@ -120,6 +120,8 @@ if __name__ == "__main__":
         os.system('%s generate-docs %s' % (args.cmd, args.doc_dir))
 
     files_modified = process(args.doc_dir)
-    fix_root(args.doc_dir)
+    # No need to fix_root if there are subcommands.
+    if files_modified > 1:
+        fix_root(args.doc_dir)
 
     print("Finished formatting %d files." % files_modified)
