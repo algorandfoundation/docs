@@ -94,7 +94,7 @@ def fix_root(num_files_modified, path):
     if num_files_modified == 1 and len(files) == 1:
         p=Path(path)
         pp.pprint(p)
-        shutil.move(os.path.join(path, files[0]), Path(path).parents[0])
+        shutil.move(os.path.join(path, files[0]), os.path.join(Path(path).parents[0], files[0]))
         shutil.rmtree(path)
         return
 
