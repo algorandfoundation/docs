@@ -1,2 +1,3 @@
 jq '.definitions.Account.properties.thisassettotal += {"type":"object", "additionalProperties":{"$ref": "#/definitions/AssetParams"}}' {specfile}
 jq '.definitions.Account.properties.assets += {"type":"object", "additionalProperties":{"$ref": "#/definitions/AssetHolding"}}' {specfile}
+jq '.definitions.Account.properties.thisassettotal.description |= sub("AssetParams"; "ThisAssetTotal")' ../swagger-algod.json
