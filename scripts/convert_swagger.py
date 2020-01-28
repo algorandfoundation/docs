@@ -89,9 +89,11 @@ if __name__ == '__main__':
         # Generate markdown files.
         convert_swagger_to_markdown(args.specfile, tmpdir)
 
+        title=args.target.split(os.sep)[-1].split('.')[0].lower()
         # Merge paths.md and definitions.md.
         merged_filename=join(tmpdir, 'merged.md')
         with open(merged_filename, 'wb') as merged:
+            merged.write(str('title: %s\n---\n' % title).encode('utf-8'))
             for filename in ['paths.md', 'definitions.md']:
                 markdown_file=join(tmpdir, filename)
                 if not exists(markdown_file):

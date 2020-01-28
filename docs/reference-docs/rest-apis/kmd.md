@@ -1,3 +1,5 @@
+title: kmd
+---
 
 <a name="paths"></a>
 ## Paths
