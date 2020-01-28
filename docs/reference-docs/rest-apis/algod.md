@@ -1,4 +1,4 @@
-title: algod
+
 <a name="paths"></a>
 # Paths
 
@@ -624,13 +624,13 @@ Account Description
 |**address**  <br>*required*|Address indicates the account public key|string|
 |**amount**  <br>*required*|Amount indicates the total number of MicroAlgos in the account|integer (uint64)|
 |**amountwithoutpendingrewards**  <br>*required*|AmountWithoutPendingRewards specifies the amount of MicroAlgos in<br>the account, without the pending rewards.|integer (uint64)|
-|**assets**  <br>*optional*|Assets specifies the holdings of assets by this account,<br>indexed by the asset ID.|string|
+|**assets**  <br>*optional*|Assets specifies the holdings of assets by this account,<br>indexed by the asset ID.|< string, [AssetHolding](assetholding) > map|
 |**participation**  <br>*optional*||[Participation](participation)|
 |**pendingrewards**  <br>*required*|PendingRewards specifies the amount of MicroAlgos of pending<br>rewards in this account.|integer (uint64)|
 |**rewards**  <br>*required*|Rewards indicates the total rewards of MicroAlgos the account has received, including pending rewards.|integer (uint64)|
 |**round**  <br>*required*|Round indicates the round for which this information is relevant|integer (uint64)|
 |**status**  <br>*required*|Status indicates the delegation status of the account's MicroAlgos<br>Offline - indicates that the associated account is delegated.<br>Online  - indicates that the associated account used as part of the delegation pool.<br>NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
-|**thisassettotal**  <br>*optional*|AssetParams specifies the parameters of assets created by this account.|integer|
+|**thisassettotal**  <br>*optional*|ThisAssetTotal specifies the parameters of assets created by this account.|< string, [AssetParams](assetparams) > map|
 
 
 <a name="asset"></a>
