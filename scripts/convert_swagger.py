@@ -67,7 +67,7 @@ def reformat_markdown(filename, outputfilename):
     step2 = re.sub('\#\#\# (.+?)\n```\n((GET|PUT|POST|DELETE|PATCH) \S+)\n```', r'### \2\n\1\n```\n\2\n```', step1)
 
     # Bring every header up a level
-    matches = re.finditer('#+', step2)
+    matches = re.finditer('^\s*#+', step2)
     subtract = 0
     for match in matches:
         replace = match.group()

@@ -1,9 +1,9 @@
 
 <a name="paths"></a>
-# Paths
+## Paths
 
 <a name="healthcheck"></a>
-## GET /health
+### GET /health
 Returns OK if healthy.
 ```
 GET /health
@@ -26,7 +26,7 @@ GET /health
 
 
 <a name="metrics"></a>
-## GET /metrics
+### GET /metrics
 Return metrics about algod functioning.
 ```
 GET /metrics
@@ -37,7 +37,7 @@ GET /metrics
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|text with \-comments and key:value lines|No Content|
+|**200**|text with \#-comments and key:value lines|No Content|
 |**404**|metrics were compiled out|No Content|
 
 
@@ -47,7 +47,7 @@ GET /metrics
 
 
 <a name="swaggerjson"></a>
-## GET /swagger.json
+### GET /swagger.json
 Gets the current swagger spec.
 ```
 GET /swagger.json
@@ -72,7 +72,7 @@ Returns the entire swagger spec in json.
 
 
 <a name="accountinformation"></a>
-## GET /v1/account/{address}
+### GET /v1/account/{address}
 Get account information.
 ```
 GET /v1/account/{address}
@@ -94,7 +94,7 @@ Given a specific account public key, this call returns the accounts status, bala
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|AccountInformationResponse contains an account information|[Account](account)|
+|**200**|AccountInformationResponse contains an account information|[Account](#account)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -107,7 +107,7 @@ Given a specific account public key, this call returns the accounts status, bala
 
 
 <a name="transactioninformation"></a>
-## GET /v1/account/{address}/transaction/{txid}
+### GET /v1/account/{address}/transaction/{txid}
 Get a specific confirmed transaction.
 ```
 GET /v1/account/{address}/transaction/{txid}
@@ -130,7 +130,7 @@ Given a wallet address and a transaction id, it returns the confirmed transactio
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionResponse contains a transaction information|[Transaction](transaction)|
+|**200**|TransactionResponse contains a transaction information|[Transaction](#transaction)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**404**|Transaction Not Found|string|
@@ -143,7 +143,7 @@ Given a wallet address and a transaction id, it returns the confirmed transactio
 
 
 <a name="transactions"></a>
-## GET /v1/account/{address}/transactions
+### GET /v1/account/{address}/transactions
 Get a list of confirmed transactions.
 ```
 GET /v1/account/{address}/transactions
@@ -170,7 +170,7 @@ Returns the list of confirmed transactions between within a date range. This cal
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionsResponse contains a list of transactions|[TransactionList](transactionlist)|
+|**200**|TransactionsResponse contains a list of transactions|[TransactionList](#transactionlist)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -183,7 +183,7 @@ Returns the list of confirmed transactions between within a date range. This cal
 
 
 <a name="getpendingtransactionsbyaddress"></a>
-## GET /v1/account/{addr}/transactions/pending
+### GET /v1/account/{addr}/transactions/pending
 Get a list of unconfirmed transactions currently in the transaction pool by address.
 ```
 GET /v1/account/{addr}/transactions/pending
@@ -206,7 +206,7 @@ Get the list of pending transactions by address, sorted by priority, in decreasi
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|PendingTransactionsResponse contains a (potentially truncated) list of transactions and<br>the total number of transactions currently in the pool.|[PendingTransactions](pendingtransactions)|
+|**200**|PendingTransactionsResponse contains a (potentially truncated) list of transactions and<br>the total number of transactions currently in the pool.|[PendingTransactions](#pendingtransactions)|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
 |**default**|Unknown Error|No Content|
@@ -218,7 +218,7 @@ Get the list of pending transactions by address, sorted by priority, in decreasi
 
 
 <a name="assetinformation"></a>
-## GET /v1/asset/{index}
+### GET /v1/asset/{index}
 Get asset information.
 ```
 GET /v1/asset/{index}
@@ -240,7 +240,7 @@ Given the asset's unique index, this call returns the asset's creator, manager, 
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|AssetInformationResponse contains asset information|[AssetParams](assetparams)|
+|**200**|AssetInformationResponse contains asset information|[AssetParams](#assetparams)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -253,7 +253,7 @@ Given the asset's unique index, this call returns the asset's creator, manager, 
 
 
 <a name="assets"></a>
-## GET /v1/assets
+### GET /v1/assets
 List assets
 ```
 GET /v1/assets
@@ -276,7 +276,7 @@ Returns list of up to `max` assets, where the maximum assetIdx is <= `assetIdx`
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|AssetsResponse contains a list of assets|[AssetList](assetlist)|
+|**200**|AssetsResponse contains a list of assets|[AssetList](#assetlist)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -289,7 +289,7 @@ Returns list of up to `max` assets, where the maximum assetIdx is <= `assetIdx`
 
 
 <a name="getblock"></a>
-## GET /v1/block/{round}
+### GET /v1/block/{round}
 Get the block for the given round.
 ```
 GET /v1/block/{round}
@@ -308,7 +308,7 @@ GET /v1/block/{round}
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|BlockResponse contains block information|[Block](block)|
+|**200**|BlockResponse contains block information|[Block](#block)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -321,7 +321,7 @@ GET /v1/block/{round}
 
 
 <a name="getsupply"></a>
-## GET /v1/ledger/supply
+### GET /v1/ledger/supply
 Get the current supply reported by the ledger.
 ```
 GET /v1/ledger/supply
@@ -332,7 +332,7 @@ GET /v1/ledger/supply
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|SupplyResponse contains the ledger supply information|[Supply](supply)|
+|**200**|SupplyResponse contains the ledger supply information|[Supply](#supply)|
 |**401**|Invalid API Token|No Content|
 |**default**|Unknown Error|No Content|
 
@@ -343,7 +343,7 @@ GET /v1/ledger/supply
 
 
 <a name="getstatus"></a>
-## GET /v1/status
+### GET /v1/status
 Gets the current node status.
 ```
 GET /v1/status
@@ -354,7 +354,7 @@ GET /v1/status
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|StatusResponse contains the node's status information|[NodeStatus](nodestatus)|
+|**200**|StatusResponse contains the node's status information|[NodeStatus](#nodestatus)|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
 |**default**|Unknown Error|No Content|
@@ -366,7 +366,7 @@ GET /v1/status
 
 
 <a name="waitforblock"></a>
-## GET /v1/status/wait-for-block-after/{round}/
+### GET /v1/status/wait-for-block-after/{round}/
 Gets the node status after waiting for the given round.
 ```
 GET /v1/status/wait-for-block-after/{round}/
@@ -388,7 +388,7 @@ Waits for a block to appear after round {round} and returns the node's status at
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|StatusResponse contains the node's status information|[NodeStatus](nodestatus)|
+|**200**|StatusResponse contains the node's status information|[NodeStatus](#nodestatus)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -401,7 +401,7 @@ Waits for a block to appear after round {round} and returns the node's status at
 
 
 <a name="transaction"></a>
-## GET /v1/transaction/{txid}
+### GET /v1/transaction/{txid}
 Get an information of a single transaction.
 ```
 GET /v1/transaction/{txid}
@@ -423,7 +423,7 @@ Returns the transaction information of the given txid. Works only if the indexer
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionResponse contains a transaction information|[Transaction](transaction)|
+|**200**|TransactionResponse contains a transaction information|[Transaction](#transaction)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**404**|Transaction Not Found|string|
@@ -436,7 +436,7 @@ Returns the transaction information of the given txid. Works only if the indexer
 
 
 <a name="rawtransaction"></a>
-## POST /v1/transactions
+### POST /v1/transactions
 Broadcasts a raw transaction to the network.
 ```
 POST /v1/transactions
@@ -454,7 +454,7 @@ POST /v1/transactions
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionIDResponse contains a transaction information|[transactionID](transactionid)|
+|**200**|TransactionIDResponse contains a transaction information|[transactionID](#transactionid)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
@@ -472,7 +472,7 @@ POST /v1/transactions
 
 
 <a name="suggestedfee"></a>
-## GET /v1/transactions/fee
+### GET /v1/transactions/fee
 Get the suggested fee
 ```
 GET /v1/transactions/fee
@@ -487,7 +487,7 @@ Suggested Fee is returned in units of micro-Algos per byte. Suggested Fee may fa
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionFeeResponse contains a suggested fee|[TransactionFee](transactionfee)|
+|**200**|TransactionFeeResponse contains a suggested fee|[TransactionFee](#transactionfee)|
 |**401**|Invalid API Token|No Content|
 |**default**|Unknown Error|No Content|
 
@@ -498,7 +498,7 @@ Suggested Fee is returned in units of micro-Algos per byte. Suggested Fee may fa
 
 
 <a name="transactionparams"></a>
-## GET /v1/transactions/params
+### GET /v1/transactions/params
 Get parameters for constructing a new transaction
 ```
 GET /v1/transactions/params
@@ -509,7 +509,7 @@ GET /v1/transactions/params
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionParamsResponse contains the parameters for<br>constructing a new transaction.|[TransactionParams](transactionparams)|
+|**200**|TransactionParamsResponse contains the parameters for<br>constructing a new transaction.|[TransactionParams](#transactionparams)|
 |**401**|Invalid API Token|No Content|
 |**default**|Unknown Error|No Content|
 
@@ -520,7 +520,7 @@ GET /v1/transactions/params
 
 
 <a name="getpendingtransactions"></a>
-## GET /v1/transactions/pending
+### GET /v1/transactions/pending
 Get a list of unconfirmed transactions currently in the transaction pool.
 ```
 GET /v1/transactions/pending
@@ -542,7 +542,7 @@ Get the list of pending transactions, sorted by priority, in decreasing order, t
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|PendingTransactionsResponse contains a (potentially truncated) list of transactions and<br>the total number of transactions currently in the pool.|[PendingTransactions](pendingtransactions)|
+|**200**|PendingTransactionsResponse contains a (potentially truncated) list of transactions and<br>the total number of transactions currently in the pool.|[PendingTransactions](#pendingtransactions)|
 |**401**|Invalid API Token|No Content|
 |**500**|Internal Error|string|
 |**default**|Unknown Error|No Content|
@@ -554,7 +554,7 @@ Get the list of pending transactions, sorted by priority, in decreasing order, t
 
 
 <a name="pendingtransactioninformation"></a>
-## GET /v1/transactions/pending/{txid}
+### GET /v1/transactions/pending/{txid}
 Get a specific pending transaction.
 ```
 GET /v1/transactions/pending/{txid}
@@ -578,7 +578,7 @@ Or the transaction may have happened sufficiently long ago that the node no long
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|TransactionResponse contains a transaction information|[Transaction](transaction)|
+|**200**|TransactionResponse contains a transaction information|[Transaction](#transaction)|
 |**400**|Bad Request|string|
 |**401**|Invalid API Token|No Content|
 |**404**|Transaction Not Found|string|
@@ -591,7 +591,7 @@ Or the transaction may have happened sufficiently long ago that the node no long
 
 
 <a name="getversion"></a>
-## GET /versions
+### GET /versions
 
 **Description**
 Retrieves the current version
@@ -601,7 +601,7 @@ Retrieves the current version
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|VersionsResponse is the response to 'GET /versions'|[Version](version)|
+|**200**|VersionsResponse is the response to 'GET /versions'|[Version](#version)|
 
 
 **Produces**
@@ -612,10 +612,10 @@ Retrieves the current version
 
 
 <a name="definitions"></a>
-# Definitions
+## Definitions
 
 <a name="account"></a>
-## Account
+### Account
 Account Description
 
 
@@ -624,39 +624,39 @@ Account Description
 |**address**  <br>*required*|Address indicates the account public key|string|
 |**amount**  <br>*required*|Amount indicates the total number of MicroAlgos in the account|integer (uint64)|
 |**amountwithoutpendingrewards**  <br>*required*|AmountWithoutPendingRewards specifies the amount of MicroAlgos in<br>the account, without the pending rewards.|integer (uint64)|
-|**assets**  <br>*optional*|Assets specifies the holdings of assets by this account,<br>indexed by the asset ID.|< string, [AssetHolding](assetholding) > map|
-|**participation**  <br>*optional*||[Participation](participation)|
+|**assets**  <br>*optional*|Assets specifies the holdings of assets by this account,<br>indexed by the asset ID.|< string, [AssetHolding](#assetholding) > map|
+|**participation**  <br>*optional*||[Participation](#participation)|
 |**pendingrewards**  <br>*required*|PendingRewards specifies the amount of MicroAlgos of pending<br>rewards in this account.|integer (uint64)|
 |**rewards**  <br>*required*|Rewards indicates the total rewards of MicroAlgos the account has received, including pending rewards.|integer (uint64)|
 |**round**  <br>*required*|Round indicates the round for which this information is relevant|integer (uint64)|
 |**status**  <br>*required*|Status indicates the delegation status of the account's MicroAlgos<br>Offline - indicates that the associated account is delegated.<br>Online  - indicates that the associated account used as part of the delegation pool.<br>NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
-|**thisassettotal**  <br>*optional*|ThisAssetTotal specifies the parameters of assets created by this account.|< string, [AssetParams](assetparams) > map|
+|**thisassettotal**  <br>*optional*|ThisAssetTotal specifies the parameters of assets created by this account.|< string, [AssetParams](#assetparams) > map|
 
 
 <a name="asset"></a>
-## Asset
+### Asset
 Asset specifies both the unique identifier and the parameters for an asset
 
 
 |Name|Description|Schema|
 |---|---|---|
 |**AssetIndex**  <br>*required*|AssetIndex is the unique asset identifier|integer (uint64)|
-|**AssetParams**  <br>*required*||[AssetParams](assetparams)|
+|**AssetParams**  <br>*required*||[AssetParams](#assetparams)|
 
 
 <a name="assetconfigtransactiontype"></a>
-## AssetConfigTransactionType
+### AssetConfigTransactionType
 AssetConfigTransactionType contains the additional fields for an asset config transaction
 
 
 |Name|Description|Schema|
 |---|---|---|
 |**id**  <br>*optional*|AssetID is the asset being configured (or empty if creating)|integer (uint64)|
-|**params**  <br>*optional*||[AssetParams](assetparams)|
+|**params**  <br>*optional*||[AssetParams](#assetparams)|
 
 
 <a name="assetfreezetransactiontype"></a>
-## AssetFreezeTransactionType
+### AssetFreezeTransactionType
 AssetFreezeTransactionType contains the additional fields for an asset freeze transaction
 
 
@@ -668,17 +668,17 @@ AssetFreezeTransactionType contains the additional fields for an asset freeze tr
 
 
 <a name="assetlist"></a>
-## AssetList
+### AssetList
 AssetList contains a list of assets
 
 
 |Name|Description|Schema|
 |---|---|---|
-|**assets**  <br>*required*|AssetList is a list of assets|< [Asset](asset) > array|
+|**assets**  <br>*required*|AssetList is a list of assets|< [Asset](#asset) > array|
 
 
 <a name="assetparams"></a>
-## AssetParams
+### AssetParams
 
 |Name|Description|Schema|
 |---|---|---|
@@ -697,7 +697,7 @@ AssetList contains a list of assets
 
 
 <a name="assettransfertransactiontype"></a>
-## AssetTransferTransactionType
+### AssetTransferTransactionType
 AssetTransferTransactionType contains the additional fields for an asset transfer transaction
 
 
@@ -711,7 +711,7 @@ AssetTransferTransactionType contains the additional fields for an asset transfe
 
 
 <a name="block"></a>
-## Block
+### Block
 Block contains a block information
 
 
@@ -733,13 +733,13 @@ Block contains a block information
 |**seed**  <br>*required*|Seed is the sortition seed|string|
 |**timestamp**  <br>*required*|TimeStamp in seconds since epoch|integer (int64)|
 |**txnRoot**  <br>*required*|TransactionsRoot authenticates the set of transactions appearing in the block.<br>More specifically, it's the root of a merkle tree whose leaves are the block's Txids, in lexicographic order.<br>For the empty block, it's 0.<br>Note that the TxnRoot does not authenticate the signatures on the transactions, only the transactions themselves.<br>Two blocks with the same transactions but in a different order and with different signatures will have the same TxnRoot.|string|
-|**txns**  <br>*optional*||[TransactionList](transactionlist)|
+|**txns**  <br>*optional*||[TransactionList](#transactionlist)|
 |**upgradeApprove**  <br>*required*|UpgradeApprove indicates a yes vote for the current proposal|boolean|
 |**upgradePropose**  <br>*required*|UpgradePropose indicates a proposed upgrade|string|
 
 
 <a name="buildversion"></a>
-## BuildVersion
+### BuildVersion
 
 |Name|Schema|
 |---|---|
@@ -752,7 +752,7 @@ Block contains a block information
 
 
 <a name="keyregtransactiontype"></a>
-## KeyregTransactionType
+### KeyregTransactionType
 KeyregTransactionType contains the additional fields for a keyreg Transaction
 
 
@@ -766,7 +766,7 @@ KeyregTransactionType contains the additional fields for a keyreg Transaction
 
 
 <a name="nodestatus"></a>
-## NodeStatus
+### NodeStatus
 NodeStatus contains the information about a node status
 
 
@@ -784,7 +784,7 @@ NodeStatus contains the information about a node status
 
 
 <a name="participation"></a>
-## Participation
+### Participation
 Participation Description
 
 
@@ -798,7 +798,7 @@ Participation Description
 
 
 <a name="paymenttransactiontype"></a>
-## PaymentTransactionType
+### PaymentTransactionType
 PaymentTransactionType contains the additional fields for a payment Transaction
 
 
@@ -813,7 +813,7 @@ PaymentTransactionType contains the additional fields for a payment Transaction
 
 
 <a name="pendingtransactions"></a>
-## PendingTransactions
+### PendingTransactions
 PendingTransactions represents a potentially truncated list of transactions currently in the
 node's transaction pool.
 
@@ -821,11 +821,11 @@ node's transaction pool.
 |Name|Description|Schema|
 |---|---|---|
 |**totalTxns**  <br>*required*|TotalTxns|integer (uint64)|
-|**truncatedTxns**  <br>*required*||[TransactionList](transactionlist)|
+|**truncatedTxns**  <br>*required*||[TransactionList](#transactionlist)|
 
 
 <a name="supply"></a>
-## Supply
+### Supply
 Supply represents the current supply of MicroAlgos in the system
 
 
@@ -837,16 +837,16 @@ Supply represents the current supply of MicroAlgos in the system
 
 
 <a name="transaction"></a>
-## Transaction
+### Transaction
 Transaction contains all fields common to all transactions and serves as an envelope to all transactions
 type
 
 
 |Name|Description|Schema|
 |---|---|---|
-|**curcfg**  <br>*optional*||[AssetConfigTransactionType](assetconfigtransactiontype)|
-|**curfrz**  <br>*optional*||[AssetFreezeTransactionType](assetfreezetransactiontype)|
-|**curxfer**  <br>*optional*||[AssetTransferTransactionType](assettransfertransactiontype)|
+|**curcfg**  <br>*optional*||[AssetConfigTransactionType](#assetconfigtransactiontype)|
+|**curfrz**  <br>*optional*||[AssetFreezeTransactionType](#assetfreezetransactiontype)|
+|**curxfer**  <br>*optional*||[AssetTransferTransactionType](#assettransfertransactiontype)|
 |**fee**  <br>*required*|Fee is the transaction fee|integer (uint64)|
 |**first-round**  <br>*required*|FirstRound indicates the first valid round for this transaction|integer (uint64)|
 |**from**  <br>*required*|From is the sender's address|string|
@@ -854,20 +854,20 @@ type
 |**genesisID**  <br>*required*|Genesis ID|string|
 |**genesishashb64**  <br>*required*|Genesis hash  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**group**  <br>*optional*|Group  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**keyreg**  <br>*optional*||[KeyregTransactionType](keyregtransactiontype)|
+|**keyreg**  <br>*optional*||[KeyregTransactionType](#keyregtransactiontype)|
 |**last-round**  <br>*required*|LastRound indicates the last valid round for this transaction|integer (uint64)|
 |**lease**  <br>*optional*|Lease enforces mutual exclusion of transactions.  If this field is<br>nonzero, then once the transaction is confirmed, it acquires the<br>lease identified by the (Sender, Lease) pair of the transaction until<br>the LastValid round passes.  While this transaction possesses the<br>lease, no other transaction specifying this lease can be confirmed.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**noteb64**  <br>*optional*|Note is a free form data  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**payment**  <br>*optional*||[PaymentTransactionType](paymenttransactiontype)|
+|**payment**  <br>*optional*||[PaymentTransactionType](#paymenttransactiontype)|
 |**poolerror**  <br>*optional*|PoolError indicates the transaction was evicted from this node's transaction<br>pool (if non-empty).  A non-empty PoolError does not guarantee that the<br>transaction will never be committed; other nodes may not have evicted the<br>transaction and may attempt to commit it in the future.|string|
 |**round**  <br>*optional*|ConfirmedRound indicates the block number this transaction appeared in|integer (uint64)|
 |**tx**  <br>*required*|TxID is the transaction ID|string|
-|**txresults**  <br>*optional*||[TransactionResults](transactionresults)|
+|**txresults**  <br>*optional*||[TransactionResults](#transactionresults)|
 |**type**  <br>*required*|Type is the transaction type|string|
 
 
 <a name="transactionfee"></a>
-## TransactionFee
+### TransactionFee
 TransactionFee contains the suggested fee
 
 
@@ -877,17 +877,17 @@ TransactionFee contains the suggested fee
 
 
 <a name="transactionlist"></a>
-## TransactionList
+### TransactionList
 TransactionList contains a list of transactions
 
 
 |Name|Description|Schema|
 |---|---|---|
-|**transactions**  <br>*required*|TransactionList is a list of transactions|< [Transaction](transaction) > array|
+|**transactions**  <br>*required*|TransactionList is a list of transactions|< [Transaction](#transaction) > array|
 
 
 <a name="transactionparams"></a>
-## TransactionParams
+### TransactionParams
 TransactionParams contains the parameters that help a client construct
 a new transaction.
 
@@ -903,7 +903,7 @@ a new transaction.
 
 
 <a name="transactionresults"></a>
-## TransactionResults
+### TransactionResults
 TransactionResults contains information about the side effects of a transaction
 
 
@@ -913,21 +913,21 @@ TransactionResults contains information about the side effects of a transaction
 
 
 <a name="version"></a>
-## Version
+### Version
 Note that we annotate this as a model so that legacy clients
 can directly import a swagger generated Version model.
 
 
 |Name|Description|Schema|
 |---|---|---|
-|**build**  <br>*required*||[BuildVersion](buildversion)|
+|**build**  <br>*required*||[BuildVersion](#buildversion)|
 |**genesis_hash_b64**  <br>*required*|**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**genesis_id**  <br>*required*||string|
 |**versions**  <br>*required*||< string > array|
 
 
 <a name="transactionid"></a>
-## transactionID
+### transactionID
 TransactionID Description
 
 
