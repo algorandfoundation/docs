@@ -9,6 +9,7 @@ import re
 import shutil
 import sys
 import tempfile
+from pathlib import Path
 pp = pprint.PrettyPrinter(indent=4)
 
 parser = argparse.ArgumentParser(description='Reformat markdown files to display in mkdocs.')    
@@ -20,7 +21,7 @@ def process_markdown_file(new_file, original_name, goal_depth, with_subcommand):
     with tempfile.NamedTemporaryFile(mode='w', dir='.', delete=False) as tmp, \
             open(new_file, 'r') as f:
         title=original_name.split('.')[0].replace('_', ' ')
-        tmp.write("---\ntitle:%s\n---\n" % title)
+        tmp.write("title: %s\n---\n" % title)
 
         for line in f:
             result = line
@@ -83,12 +84,19 @@ def process(dirpath):
         process_markdown_file(f, original_name, depth, with_subcommand)
     return len(moved_files)
 
-def fix_root(path):
+def fix_root(num_files_modified, path):
     """
     The algorithm puts everything one directory too deep, move it up.
     """
     files=[f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
     directories=[f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+
+    if num_files_modified == 1 and len(files) == 1:
+        p=Path(path)
+        pp.pprint(p)
+        shutil.move(os.path.join(path, files[0]), Path(path).parents[0])
+        shutil.rmtree(path)
+        return
 
     if len(files) != 0:
         print("WRONG NUMBER OF FILES IN ROOT PATH: %d" % len(files))
@@ -110,8 +118,7 @@ if __name__ == "__main__":
         print("Wont work on this system.")
         sys.exit(1)
     if not os.path.isdir(args.doc_dir):
-        print("The doc dir must be a directory.")
-        sys.exit(1)
+        os.makedirs(args.doc_dir)
 
     # Don't break if a trailing slash is provided.
     if args.doc_dir[-1] is '/':
@@ -124,9 +131,8 @@ if __name__ == "__main__":
         os.makedirs(args.doc_dir)
         os.system('%s generate-docs %s' % (args.cmd, args.doc_dir))
 
-    files_modified = process(args.doc_dir)
+    num_files_modified = process(args.doc_dir)
     # No need to fix_root if there are subcommands.
-    if files_modified > 1:
-        fix_root(args.doc_dir)
+    fix_root(num_files_modified, args.doc_dir)
 
-    print("Finished formatting %d files." % files_modified)
+    print("Finished formatting %d files." % num_files_modified)
