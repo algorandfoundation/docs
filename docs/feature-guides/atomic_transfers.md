@@ -1,4 +1,6 @@
-Atomic Transfers are irreducible batch operations that allow a group of [transactions](../features/transactions.md) to be submitted as a unit. All transactions in the batch either pass or fail. The batch operation will only be successful if each transaction within the group is successful.
+title: Atomic Transfers
+
+Atomic Transfers are irreducible batch operations that allow a group of [transactions](../feature-guides/transactions.md) to be submitted as a unit. All transactions in the batch either pass or fail. The batch operation will only be successful if each transaction within the group is successful.
 
 Transactions can contain Alogs or Algorand Assets and may also be governed by Algorand Smart Contracts. 
 
@@ -19,13 +21,13 @@ Atomic Transfers are Created with the following steps:
 * Sign grouped transactions
 * Submit signed grouped transactions
 
-<center>![Atomic Transfer Flow](../../imgs/atomic_transfers-1.png)</center>
+<center>![Atomic Transfer Flow](../imgs/atomic_transfers-1.png)</center>
 <center>*Atomic Transfer Flow*</center>
 
 
 Below you will find examples for creating and sending group transactions and to the network in each of the available SDKs. The same capability is also shown using the `goal` command-line tool. The example code is separated into snippets categorized by these core functions.
 # Create transactions
-Transaction creation functions are described in the [Transactions](../features/transactions.md) documentation. Atomic Transfers are created by constructing two or more unsigned transactions. By not signing the transaction, this allows atomic transfers to be created by one or more parties, possibly at different times. For example, an asset exchange application can create the entire atomic transfer and allow individual parties to sign from their location. If an application is using files to store the transactions, see the [Offline Transactions](../features/offline_transactions.md#saving-unsigned-transactions-to-file) documentation which explains how to create and save individual **unsigned** transactions to a file. 
+Transaction creation functions are described in the [Transactions](../feature-guides/transactions.md) documentation. Atomic Transfers are created by constructing two or more unsigned transactions. By not signing the transaction, this allows atomic transfers to be created by one or more parties, possibly at different times. For example, an asset exchange application can create the entire atomic transfer and allow individual parties to sign from their location. If an application is using files to store the transactions, see the [Offline Transactions](../feature-guides/offline_transactions.md#saving-unsigned-transactions-to-file) documentation which explains how to create and save individual **unsigned** transactions to a file. 
 
 The example below illustrates Account A sending a transaction to Account C and Account B sending a transaction to Account A. Both transactions are combined and submitted as an atomic transfer.
 
@@ -92,7 +94,7 @@ $ goal clerk send --from=my-account-b<PLACEHOLDER> --to=my-account-a<PLACEHOLDER
 
 
 # Combine transactions 
-Individual transactions can be combined in various ways. Each SDK language provides specific methodologies for combining transactions. Transactions can be stored as a local variable within a service application or possibly read from a file. How the transactions are combined will be application dependent. If using the `goal` command-line tool all transaction files will be combined using an OS-level command such as `cat`. If using one of the SDKs, the application may store all the transactions individually or in an array. From the SDK it is also possible to read a transaction from a file created at an earlier time, which is described in the [Offline Transactions](../features/offline_transactions.md) documentation. See the complete example at the bottom of this page that details how transactions are combined in the SDKs. To combine transactions in `goal` use a similar method to the one below.
+Individual transactions can be combined in various ways. Each SDK language provides specific methodologies for combining transactions. Transactions can be stored as a local variable within a service application or possibly read from a file. How the transactions are combined will be application dependent. If using the `goal` command-line tool all transaction files will be combined using an OS-level command such as `cat`. If using one of the SDKs, the application may store all the transactions individually or in an array. From the SDK it is also possible to read a transaction from a file created at an earlier time, which is described in the [Offline Transactions](../feature-guides/offline_transactions.md) documentation. See the complete example at the bottom of this page that details how transactions are combined in the SDKs. To combine transactions in `goal` use a similar method to the one below.
 
 
 ``` goal tab="goal"

@@ -1,3 +1,5 @@
+title: Offline Transactions
+
 Transactions are described in detail in the Transactions documumentation<LINK>. In many cases, transactions must be created for offline usage in an offline application. These transactions can be signed or unsigned depending on the usage case. This guide explains how transactions can be created and saved to a file. The samples do make use of a node connection to get network suggested parameters and to submit transactions. Suggested network parameters can be hardcoded and transactions can be transferred manually for a complete offline application. The same methodology described here can also be used to work with LogicSignatures and Multisig signed transactions. All objects in the following examples use msgpack to store the object allowing interoperability with the SDKs.
 
 # Unsigned Transaction File Operations

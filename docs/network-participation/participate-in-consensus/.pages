@@ -1,6 +1,6 @@
 title: Participate in Consensus
 arrange:
-  - guidelines.md
+  - overview.md
   - generate_keys.md
   - online.md
   - offline.md
