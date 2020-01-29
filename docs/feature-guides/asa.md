@@ -228,7 +228,7 @@ Assets can be created using either the SDKs or `goal`. When using the SDKs all c
 ```
 
 ``` goal tab="Goal"  
-goal asset create --creator <var>address</var> --total 1000 --unitname <var>unit-name</var>--asseturl "https://path/to/my/asset/details" --decimals 0   -d data
+goal asset create --creator <var>address</var> --total 1000 --unitname <var>unit-name</var> --asseturl "https://path/to/my/asset/details" --decimals 0   -d data
 ```
 
 # Modifying an Asset

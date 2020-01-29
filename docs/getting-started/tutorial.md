@@ -564,7 +564,7 @@ curl -i -X GET \
  'http://algod-address<PLACEHOLDER>:port<PLACEHOLDER>/v1/account/my-address<PLACEHOLDER>/transaction/txid<PLACEHOLDER>'
 ```
 
-Notice above the pattern of constructing a transaction, authenticating it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
+Notice above the pattern of constructing a transaction, authorizing it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
 
 ??? example "Complete Example - Sending a Payment Transaction"
     

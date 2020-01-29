@@ -1,15 +1,18 @@
-title: 2. Connect to the Network
+title: 2. Connect through algod
 
-After you have you an algod address and access token, instantiate an **algod** client with your preferred SDK.
+The **algod IP address** and access **token** you obtained in the [Workspace Setup](./setup.md) section gives your application the credentials to interface with the Algorand blockchain. Interfacing with the Algorand blockchain using the SDKs is accomplished through an **algod client**. If using the algod REST API directly, these credentials can be supplied with each request.
+
+# Create an algod client
+Instantiate an **algod** client with your preferred SDK. 
 
 ```JavaScript tab=
 const algosdk = require('algosdk');
 
 async function gettingStartedExample() {
 
-	const server = algod-address<PLACEHOLDER>;
-	const port = port-number<PLACEHOLDER>;
-	const token = algod-token<PLACEHOLDER>;
+	const server = <algod-address>;
+	const port = <port-number>;
+	const token = <algod-token>;
 
 	let algodClient = new algosdk.Algod(token, server, port);
 	...
@@ -19,8 +22,8 @@ async function gettingStartedExample() {
 ```Python tab=
 from algosdk import algod
 
-algod_address = "algod-address" <PLACEHOLDER>
-algod_token = "algod-token" <PLACEHOLDER>
+algod_address = <algod-address>
+algod_token = <algod-token>
 
 algod_client = algod.AlgodClient(algod_token, algod_address)
 ```
@@ -30,11 +33,12 @@ public class GettingStartedExample
 {
     public static void main(String args[]) throws Exception {
         
-        final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
-        final String ALGOD_API_TOKEN = "algod-token"<PLACEHOLDER>;
+        final String ALGOD_API_ADDR = <algod-address>;
+        final String ALGOD_API_TOKEN = <algod-token>;
 
         //Create an instance of the algod API client
-        AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
+        AlgodClient client = (AlgodClient) new AlgodClient()
+		client.setBasePath(ALGOD_API_ADDR);
         ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
         api_key.setApiKey(ALGOD_API_TOKEN);
         AlgodApi algodApiInstance = new AlgodApi(client); 
@@ -50,8 +54,8 @@ import (
 	"github.com/algorand/go-algorand-sdk/client/algod"
 )
 
-const algodAddress = "http://127.0.0.1:8080"
-const algodToken = "ef3120d25723fc3fc22c61f9ab4aa4b989f27ef0855d4f860248cddcb25977ab"
+const algodAddress = <algod-address>
+const algodToken = <algod-token>
 
 func main() {
 	algodClient, err := algod.MakeClient(algodAddress, algodToken)
@@ -61,71 +65,70 @@ func main() {
 }
 ```
 
-!!! info	
-	If you are using a third-party service, use the API key header instead when instantiating an algod client.
+If you are using a third-party service, use the API key header instead when instantiating an algod client.
 
-	```JavaScript tab=
-	const algosdk = require("algosdk");
+```JavaScript tab=
+const algosdk = require("algosdk");
 
-	async function gettingStartedExample() {
+async function gettingStartedExample() {
 
-		const server = algod-address<PLACEHOLDER>;
-		const port = "";
-		const token = {
-			'X-API-Key': service-api-key<PLACEHOLDER>
-		};
+	const server = <algod-address>;
+	const port = "";
+	const token = {
+		'X-API-Key': <service-api-key>
+	};
 
-		let algodClient = new algosdk.Algod(token, server, port);
+	let algodClient = new algosdk.Algod(token, server, port);
+	...
+}
+
+```
+
+```Python tab=
+from algodsdk import algod
+
+algod_address = <algod-address>
+algod_token = ""
+headers = {
+   	"X-API-Key": <service-api-key>,
+}
+
+algod_client = algod.AlgodClient(algod_token, algod_address, headers)
+```
+
+```Java tab=
+import com.algorand.algosdk.algod.client.AlgodClient;
+import com.algorand.algosdk.algod.client.api.AlgodApi;
+
+public class GettingStartedExample {
+	public static void main(String[] args) {
+
+		final String ALGOD_API_ADDR = <algod-address>;
+		final String ALGOD_API_KEY = <service-api-key>;
+
+		AlgodClient client = new AlgodClient();
+		client.setBasePath(ALGOD_API_ADDR);
+		client.addDefaultHeader("X-API-Key", ALGOD_API_KEY);
+		AlgodApi algodApiInstance = new AlgodApi(client);
 		...
 	}
+}
+```
 
-	```
+```Go tab=
+import (
+	"github.com/algorand/go-algorand-sdk/client/algod"
+)
+const algodAddress = <algod-address>
+const apiKey = <your-api-key>
 
-	```Python tab=
-	from algodsdk import algod
-
-	algod_address = "algod-address"<PLACEHOLDER>
-	algod_token = ""
-	headers = {
-   		"X-API-Key": service-api-key<PLACEHOLDER>,
-	}
-
-	algod_client = algod.AlgodClient(algod_token, algod_address, headers)
-	```
-
-	```Java tab=
-	import com.algorand.algosdk.algod.client.AlgodClient;
-	import com.algorand.algosdk.algod.client.api.AlgodApi;
-
-	public class GettingStartedExample {
-		public static void main(String[] args) {
-
-			final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
-			final String ALGOD_API_KEY = "service-api-key"<PLACEHOLDER>;
-
-			AlgodClient client = new AlgodClient();
-			client.setBasePath(ALGOD_API_ADDR);
-			client.addDefaultHeader("X-API-Key", ALGOD_API_KEY);
-			AlgodApi algodApiInstance = new AlgodApi(client);
-			...
-		}
-	}
-	```
-
-	```Go tab=
-	import (
-		"github.com/algorand/go-algorand-sdk/client/algod"
-	)
-	const algodAddress = "algod-address"<PLACEHOLDER>
-	const apiKey = "your-api-key"<PLACEHOLDER>
-
-	func main() {
-		var headers []*algod.Header
-		headers = append(headers, &algod.Header{"X-API-Key", apiKey})
-		algodClient, err := algod.MakeClientWithHeaders(algodAddress, "", headers)
-		...
-	}
-	```
+func main() {
+	var headers []*algod.Header
+	headers = append(headers, &algod.Header{"X-API-Key", apiKey})
+	algodClient, err := algod.MakeClientWithHeaders(algodAddress, "", headers)
+	...
+}
+```
 
 
 
@@ -179,8 +182,8 @@ Call the _status_ and _version_ methods fron the algod client to check the detai
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
- 'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/v1/status'
+   -H "X-Algo-API-Token:<algod-token>" \
+ 'http://<algod-address>:<algod-port>/v1/status'
 ```
 
 ```bash tab="goal" hl_lines="2 3 4 5 6 7 8 9"
@@ -267,8 +270,8 @@ The _version_ methods return information about the identity of the network and t
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
- 'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/versions'
+   -H "X-Algo-API-Token:<algod-token>" \
+ 'http://<algod-address>:<algod-port>/versions'
 ```
 
 ```bash tab="goal" hl_lines="10 11"
@@ -313,8 +316,8 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 	from algosdk import algod
 
 	def main():
-		algod_address = algod-address<PLACEHOLDER>
-		algod_token = algod-token<PLACEHOLDER>
+		algod_address = <algod-address>
+		algod_token = <algod-token>
 		algod_client = algod.AlgodClient(algod_token, algod_address)
 
 		try:
@@ -334,10 +337,10 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 	from algosdk import algod
 
 	def main():
-		algod_address = algod-address<PLACEHOLDER>
+		algod_address = <algod-address>
 		algod_token = ""
 		headers = {
-			'X-API-Key': service-api-key<PLACEHOLDER>
+			'X-API-Key': <service-api-key
 		}
 		algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 
