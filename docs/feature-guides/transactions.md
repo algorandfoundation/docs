@@ -11,9 +11,9 @@ There are five transaction types in the Algorand Protocol:
 4. [Asset Freeze](#asset-freeze)
 5. [Asset Transfers](#asset-freeze)
 
-This guide takes you through the anatomy of each of these transaction types and shows how they take on more granular meanings when configured certain ways. For example, a transaction to create an asset and destroy an asset use the same underlying transaction type (Asset Configuration) and can only be distinguished by the fields they specify. The SDKs abstract away from the underlying transaction types where possible so that as a developer, you interface instead with a method that allows you to create and destroy a transaction, respectively. 
+This guide is meant to show you how these transactions differ underneath (i.e. bottom up), but it will link to associated guides that approach these same transactions from the user-facing (i.e. top down) perspective.
 
-This particular guide is meant to show you how those transactions differ underneath (i.e. bottom up), but it will link to associated guides that approach these same transactions from the user-facing (i.e. top down) perspective. It is the hope that the combination of these guides will aid in a comprehensive understanding of how transactions work on Algorand. 
+As an example, a transaction to create an asset and destroy an asset use the same underlying transaction type (`AssetConfigTx`) and are distinguishable only by the fields they specify. This guide will explain what their underlying differences are. Fortunately, the SDKs abstract away from the transaction types where possible so that as a developer, you interface instead with a method that allows you to create and destroy a transaction, respectively. That perspective is explained in the [Algorand Standard Assets guide](./asa.md). It is the hope that the combination of these guides will aid in a comprehensive understanding of how transactions work on Algorand. 
 
 Note that all of the transactions shown in this guide are not yet authorized and would fail if submitted to the network. The following section, [Signatures](./signatures.md), will guide you on how to authorize transactions before sending them to the network.
 
