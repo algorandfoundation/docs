@@ -68,20 +68,24 @@ Unsigned transactions require the transaction object to be created before writti
     Transaction tx = new Transaction(new Address(SRC_ADDR),  
             BigInteger.valueOf(1000), firstRound, lastRound, 
             null, amount, new Address(DEST_ADDR), genId, genesisHash);
-
+    // save as signed even though it has not been
+    SignedTransaction stx = new SignedTransaction();
+    stx.tx = tx;  
     // Save transaction to a file 
-    Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(tx));
+    Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(stx));
 
     // read transaction from file
-    Transaction decodedTransaction = Encoder.decodeFromMsgPack(
-        Files.readAllBytes(Paths.get("./unsigned.txn")), Transaction.class);            
+    SignedTransaction decodedTransaction = Encoder.decodeFromMsgPack(
+        Files.readAllBytes(Paths.get("./unsigned.txn")), 
+        SignedTransaction.class);            
+    Transaction tx = decodedTransaction.tx;          
 
     // recover account    
     String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
     Account src = new Account(SRC_ACCOUNT);
 
     // sign transaction
-    SignedTransaction signedTx = src.signTransaction(decodedTransaction);
+    SignedTransaction signedTx = src.signTransaction(tx);
     byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
             
     // submit the encoded transaction to the network
@@ -95,28 +99,36 @@ Unsigned transactions require the transaction object to be created before writti
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
-	}
+    }
+    // save as signed tx object without sig
+    unsignedTx := types.SignedTxn{
+		Txn:  tx,
+	 }
 
 	// save unsigned transction to file
-	err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(tx), 0644)
+	err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
 	if err == nil {
 		fmt.Printf("Saved unsigned transaction to file\n")
 		return
     }
 
-	// read unsigned transaction from file
+    // read unsigned transaction from file
 	dat, err := ioutil.ReadFile("./unsigned.txn")
 	if err != nil {
 		fmt.Printf("Error reading transaction from file: %s\n", err)
 		return
 	}
-	var unsignedTx types.Transaction  
-	msgpack.Decode(dat, &unsignedTx)
+	var unsignedTxRaw types.SignedTxn 
+	var unsignedTxn types.Transaction
+
+	msgpack.Decode(dat, &unsignedTxRaw)
+
+    unsignedTxn = unsignedTxRaw.Txn
 
 	// recover account and sign transaction
 	addr, sk := recoverAccount();
 	fmt.Printf("Address is: %s\n", addr)
-	txid, stx, err := crypto.SignTransaction(sk, unsignedTx)
+	txid, stx, err := crypto.SignTransaction(sk, unsignedTxn)
 	if err != nil {
 		fmt.Printf("Failed to sign transaction: %s\n", err)
 		return
@@ -141,7 +153,7 @@ $ goal clerk rawsend --filename signed.txn
 
 ```
 # Signed Transaction File Operations 
-Signed Transactions are similar, but require an account to sign the transaction before writting it to a file.
+Signed Transactions are similar, but require an account to sign the transaction before writing it to a file.
 
 ``` javascript tab="JavaScript"
 	let txn = {
@@ -654,9 +666,11 @@ $ goal clerk rawsend --filename signed.txn
                 Transaction tx = new Transaction(new Address(SRC_ADDR),  
                         BigInteger.valueOf(1000), firstRound, lastRound, 
                         null, amount, new Address(DEST_ADDR), genId, genesisHash);
-
+                // save as signed even though it has not been
+                SignedTransaction stx = new SignedTransaction();
+                stx.tx = tx;  
                 // Save transaction to a file 
-                Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(tx));
+                Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(stx));
                 System.out.println("Transaction written to a file");
             } catch (Exception e) { 
                 System.out.println("Save Exception: " + e); 
@@ -670,15 +684,16 @@ $ goal clerk rawsend --filename signed.txn
                 if( algodApiInstance == null ) connectToNetwork();
 
                 // read transaction from file
-                Transaction decodedTransaction = Encoder.decodeFromMsgPack(
-                    Files.readAllBytes(Paths.get("./unsigned.txn")), Transaction.class);            
+                SignedTransaction decodedTransaction = Encoder.decodeFromMsgPack(
+                    Files.readAllBytes(Paths.get("./unsigned.txn")), SignedTransaction.class);            
+                Transaction tx = decodedTransaction.tx;           
 
                 // recover account    
                 String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
                 Account src = new Account(SRC_ACCOUNT);
 
                 // sign transaction
-                SignedTransaction signedTx = src.signTransaction(decodedTransaction);
+                SignedTransaction signedTx = src.signTransaction(tx);
                 byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
                 
                 // submit the encoded transaction to the network
