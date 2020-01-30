@@ -84,7 +84,6 @@ The Java SDK is available in Maven’s central repository and can be used in you
     <version>1.2.1</version>
 </dependency>
 ```
-The SDK can be used without Maven by downloading the [SDK jars](https://jar-download.com/artifacts/com.algorand) and adding them to the project `classpath`. 
 
 The Java SDK requires Java 7+ and Android minSdkVersion 16+.
 
