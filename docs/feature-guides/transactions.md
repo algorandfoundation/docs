@@ -25,7 +25,7 @@ A `PaymentTxn` sends Algos (the Algorand blockchain's native currency) from one 
 
 [_Payment Transaction Fields Reference_](../reference-docs/transactions.md#payment-transaction)
 
-### Example: Send 5 Algos
+### Send 5 Algos
 Here is an example transaction that sends 5 Algos from one account to another on MainNet. 
 
 ```json
@@ -62,7 +62,7 @@ An account that is marked `online` does not necessarily mean it is participating
 
 [_Key Registration Transaction Fields Reference_](../reference-docs/transactions.md#key-registration-transaction)
 
-### Example - Register account online 
+### Register account online 
 This is an example of an **online** registration transaction. 
 
 ```json
@@ -89,7 +89,7 @@ What distinguishes this as a key registration transaction is `"type": "keyreg"` 
 - [Generate a Participation Key](../network-participation/participate-in-consensus/generate_keys.md)
 - [Register an Account Online](../network-participation/participate-in-consensus/online.md) 
 
-### Example - Register account offline
+### Register account offline
 
 Here is an example of an **offline** key registration transaction.
 
@@ -111,12 +111,12 @@ What distinguishes this from an _online_ transaction is that it does _not_ conta
 
 - [Register an Account Offline](../network-participation/participate-in-consensus/offline.md) 
 
-## Asset Configuration
+## Asset Configuration Transaction
 An `AssetConfigTx` is used to create an asset, modify certain parameters of an asset, or destroy an asset. 
 
 [_Asset Configuration Transaction Fields Reference_](../reference-docs/transactions.md#asset-configuration-transaction)
 
-### Example - Create an Asset
+### Create an Asset
 
 Here is an example asset creation transaction:
 
@@ -152,10 +152,10 @@ This transaction is valid between rounds 6000000 (`"fv"`) and 6001000 (`"lv"`) o
 
 - [Create an Asset](./asa.md#creating-an-asset)
 
-### Example - Reconfigure an Asset
+### Reconfigure an Asset
 A **Reconfiguration Transaction** is issued by the asset manager to change the configuration of an already created asset.
 
-Here is what an example reconfiguration transaction that changes the manager address for the asset with the Id `168103` that was [created above](#example---create-an-asset).  
+Here is what an example reconfiguration transaction that changes the manager address for the asset with the Id `168103` that was [created above](#create-an-asset).  
 
 ```json
 {
@@ -188,7 +188,7 @@ This transaction is valid on [TestNet](../algorand-networks/testnet.md#genesis-h
 
 - [Modifying an Asset](./asa.md#modifying-an-asset)
 
-### Example - Destroy an Asset
+### Destroy an Asset
 
 A **Destroy Transaction** is issued to remove an asset from the Algorand ledger. To destroy an existing asset on Algorand, the original `creator` must be in possession of all units of the asset and the `manager` must send and therefore authorize the transaction. 
 
@@ -214,12 +214,12 @@ This transaction differentiates itself from an **Asset Creation** transaction in
 
 - [Destroying an Asset](./asa.md#destroying-an-asset)
 
-## Asset Transfer
+## Asset Transfer Transaction
 An Asset Transfer Transaction is used to opt-in to receive a specific type of Algorand Standard Asset, transfer an Algorand Standard asset, or revoke an Algorand Standard Asset from a specific account.
 
 [_Asset Transfer Transaction Fields Reference_](../reference-docs/transactions.md#asset-transfer-transaction)
 
-### Example - Opt-in to an Asset
+### Opt-in to an Asset
 Here is an example of an opt-in transaction:
 
 ```json
@@ -242,7 +242,7 @@ The `"type": "axfer"` distinguishes this as an asset transfer transaction. The f
 
 - [Receiving an Asset](./asa.md#receiving-an-asset)
   
-### Example - Transfer an Asset
+### Transfer an Asset
 
 Here is an example of an asset transfer transaction. 
 ```json
@@ -260,7 +260,7 @@ Here is an example of an asset transfer transaction.
   }
 }
 ```
-An asset transfer transaction assumes that the asset receiver has already [opted-in](#example---opt-in-to-an-asset). The account represented by address `"EW64GC6..."` sends 1 million base units (or 10,000.00 units) of asset `168103` between rounds 7631196 annd 7632196 on TestNet. `"EW64GC6..."` pays a fee of 3000 microAlgos.
+An asset transfer transaction assumes that the asset receiver has already [opted-in](#opt-in-to-an-asset). The account represented by address `"EW64GC6..."` sends 1 million base units (or 10,000.00 units) of asset `168103` between rounds 7631196 annd 7632196 on TestNet. `"EW64GC6..."` pays a fee of 3000 microAlgos.
 
 !!! tip
 	If you are displaying asset amounts to users, be sure to include the asset's `"decimal"` configuration for easier readability. 
@@ -269,7 +269,7 @@ An asset transfer transaction assumes that the asset receiver has already [opted
 
 - [Transferring an Asset](./asa.md#transferring-an-asset)
 
-### Example - Revoke an Asset
+### Revoke an Asset
 
 Here is an example of the clawback account revoking assets from another account.
 
@@ -295,10 +295,10 @@ The existence of an [asset sender](../reference-docs/transactions.md#assetsender
 
 - [Revoking an Asset](./asa.md#revoking-an-asset)
 
-## Asset Freeze
+## Asset Freeze Transaction
 An Asset Freeze Transaction is issued by the Freeze Address and results in the asset receiver address losing or being granted the ability to send or receive the frozen asset.
 
-### Example - Freeze an Asset
+### Freeze an Asset
 
 ```json
 {
@@ -320,7 +320,7 @@ An asset freeze transaction is identified by `"type": "afrz"`. In this example, 
 ### See also
 - [Freezing an Asset](./asa.md#freezing-an-asset)
 
-# Other Useful How-Tos
+# Other How-Tos
 
 ## Sending a Transaction in the Future
 
