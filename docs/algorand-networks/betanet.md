@@ -3,8 +3,8 @@ title: BetaNet
 # Version
 v2.0.10.beta
 
-# Protocol Version
-https://github.com/algorandfoundation/specs/tree/4a9db6a25595c6fd097cf9cc137cc83027787eaa
+# Release Version
+https://github.com/algorand/go-algorand/releases/tag/v2.0.10-beta
 
 # Genesis ID
 betanet-v1.0

@@ -3,8 +3,8 @@ title: TestNet
 # Version
 v2.0.2.stable
 
-# Protocol Version
-https://github.com/algorandfoundation/specs/tree/4a9db6a25595c6fd097cf9cc137cc83027787eaa
+# Release Version
+https://github.com/algorand/go-algorand/releases/tag/v2.0.3-stable
 
 # Genesis ID
 testnet-v1.0
