@@ -14,7 +14,7 @@ Edit the configuration file for the node as described in the [configuration](con
 	As a precaution, it is not recommended that relay nodes interact with accounts or participate in consensus.
 
 # Start the Node
-Start the node as described in the [install](/install.md) guide. The node will now listen for incoming traffic on port 4161. Other nodes can now connect to this relay.
+Start the node as described in the [install](install.md) guide. The node will now listen for incoming traffic on port 4161. Other nodes can now connect to this relay.
 
 # Connect a Node to Relay
 Any node can connect to this relay by specifying it in the `goal node start` command. 
