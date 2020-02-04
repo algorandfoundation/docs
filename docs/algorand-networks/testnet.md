@@ -18,7 +18,7 @@ https://github.com/algorand/go-algorand/releases/tag/v2.0.3-stable
 # RewardsPool Address
 `7777777777777777777777777777777777777777777777777774MSJUVU`
 
-# TestNet Dispenser
+# Faucet
 
 You can dispense algos to your TestNet account by visiting [Algorand TestNet Dispenser](https://bank.testnet.algorand.network/).
 
