@@ -6,4 +6,5 @@ arrange:
   - sdks.md
   - rest-apis
   - teal
-  - glossary.md
+  - node_files.md
+

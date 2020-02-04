@@ -62,7 +62,7 @@ A node is a valid relay node if two things are true:
    
 Relay nodes are where other nodes connect. Therefore, a relay node must be able to support a large number of connections and handle the processing load associated with all the data flowing to and from these connections. Thus, relay nodes require significantly more power than non-relay nodes. Relay nodes are always configured in archival mode.
 
-See [Configuring Node as a Relay]() for more information on setting up a relay.
+See [Configuring Node as a Relay](config_relay.md) for more information on setting up a relay.
 
 
 
