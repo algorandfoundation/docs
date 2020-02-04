@@ -10,14 +10,14 @@ At the end of this section are several useful transaction-related how-tos.
 	When you are given a transaction to sign, understanding its underlying representation will help you verify that the details of the transaction are correct.
 
 # Transaction Types
-There are [five transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 1) [Payment](#payment), 2) [Key Registration](#keyreg), 3) [Asset Configuration](#asset-configuration), 4) [Asset Freeze](#asset-freeze), 5) [Asset Transfer](#asset-transfer).
+There are [five transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 1) [Payment](#payment-transaction), 2) [Key Registration](#key-registration), 3) [Asset Configuration](#asset-configuration), 4) [Asset Freeze](#asset-freeze), 5) [Asset Transfer](#asset-transfer).
 
 These five transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](./atomic_transfers.md#creating-an-asset) and [destroy an asset](./atomic_transfers.md#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
 
 Note that all of the transactions shown in this guide are not yet authorized and would fail if submitted to the network. The next section, [Signatures](./signatures.md), will explain how to authorize transactions before sending them to the network.
 
 # Transaction Walkthroughs
-The following sections describe the 5 types of Algorand transactions through example transactions that represent common scenarios. Each transaction is displayed using the `goal clerk inspect` command which takes a signed or unsigned transaction file (msgpack-encoded) as input and outputs a human-readable json object representing the transaction. 
+The following sections describe the five types of Algorand transactions through example transactions that represent common use cases. Each transaction is displayed using the `goal clerk inspect` command which takes a signed or unsigned transaction file (msgpack-encoded) as input and outputs a human-readable json object. 
 
 ## Payment Transaction
 
@@ -46,14 +46,37 @@ Here is an example transaction that sends 5 Algos from one account to another on
 ```
 The `"type": "pay"` signals that this is a payment transaction. 
 
-This transaction transfers 5 Algos (shown aas 5000000 microAlgos) from the account represented by the address starting with `"EW64GC..."` to the account with the address starting with `"GD64YI..."`. The sender address (`"EW64GC..."`) will pay a fee of `1000` microAlgos, which is also the minimum fee. An optional note is included in this transaction, which corresponds to the base64-encoded bytes for `"Hello World"`. Note that the base64 representation is a by product of the output of the `goal clerk inspect` command. 
+This transaction transfers 5 Algos (shown as 5000000 microAlgos) from the account represented by the address starting with `"EW64GC..."` to the account with the address starting with `"GD64YI..."`. The sender address (`"EW64GC..."`) will pay a fee of `1000` microAlgos, which is also the minimum fee. An optional note is included in this transaction, which corresponds to the base64-encoded bytes for `"Hello World"`. Note that the base64 representation is a by product of the output of the `goal clerk inspect` command. 
 
 This transaction is valid on MainNet, as per the genesis hash value which corresponds to [MainNet's genesis hash](../algorand-networks/mainnet.md#genesis-hash). The genesis ID is also provided for human-readibility and also matches [MainNet](../algorand-networks/mainnet.md#genesis-id). Be sure to validate against the genesis hash value since it is unique to the specific network. The genesis ID is not; anyone could spin up a private network and call it `"mainnet-v1.0"` if desired. This transaction is valid if submitted between rounds 6000000 and 6001000.
 
 **Related How-To**
 
 - [Create a Payment Transaction](../getting-started/tutorial.md). 
-  
+
+### Close an Account
+
+Closing an account means removing it from the Algorand ledger. Since there is a minimum balance requirement for every account on Algorand, the only way to completely remove it is to use the [Close Remainder To](../reference-docs/transactions.md#closeremainderto) field as in the transaction below.
+
+```json
+{
+  "txn": {
+    "close": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
+    "fee": 1000,
+    "fv": 4695599,
+    "gen": "testnet-v1.0",
+    "gh": "SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=",
+    "lv": 4696599,
+    "rcv": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
+    "snd": "SYGHTA2DR5DYFWJE6D4T34P4AWGCG7JTNMY4VI6EDUVRMX7NG4KTA2WMDA",
+    "type": "pay"
+  }
+}
+```
+In this transaction, after the fee and the transaction `"amt"` are paid to the [receiver](../reference-docs/transactions.md#receiver) from the [sender](../reference-docs/transactions.md#closeremainderto) account (`"SYGHTA..."`), the remaining balance is transferred to the [closeto](../reference-docs/transactions.md#closeremainderto) account (`"SYGHTA..."`). Note that there is an implicit `"amt"` of 0 Algos when none is specified.
+
+!!! info
+    If you have asset holdings, you must first close out those asset holdings before you can close out the Algorand account completely. Close out your asset holdings by specifying an [Asset Close Remainder To](../reference-docs/transactions.md#closeassetto) address within an Asset Transfer transaction.
 
 ## Key Registration Transaction
 The purpose of a `KeyRegistrationTx` is to register an account either `online` or `offline` to participate (i.e. vote) in Algorand Consensus. 
@@ -291,7 +314,7 @@ Here is an example of the clawback account revoking assets from another account.
 ```
 The existence of an [asset sender](../reference-docs/transactions.md#assetsender) tells us that this transaction is utilizing the clawback workflow. During a clawback, the clawback address (`"EW64GC..."`) sends the transactions and therefore authorizes it and pays the `1000` microAlgo fee. The [asset sender](../reference-docs/transactions.md#assetsender) (`"QC7XT7..."`) is the address of the account from which the assets will be revoked. In this case, 5 million base units (5,000.00 units) of asset `168103` will be revoked from `"QC7XT7..."` and transferred to `"EW64GC..."`.
 
-### Related How-To
+**Related How-To**
 
 - [Revoking an Asset](./asa.md#revoking-an-asset)
 
@@ -320,9 +343,7 @@ An asset freeze transaction is identified by `"type": "afrz"`. In this example, 
 ### See also
 - [Freezing an Asset](./asa.md#freezing-an-asset)
 
-# Other How-Tos
-
-## Sending a Transaction in the Future
+# Sending a Transaction in the Future
 
 Algorand transactions are valid for a specific round range and the range maximum is 1000 rounds. If you plan to submit the transaction right away, specifying this round range is trivial. However, when the transaction requires offline signing or you plan to make frequent transactions from that account, it may be beneficial to specify a future round range or ranges that are more convenient. You can sign these transactions in a single secure session, and then submit them to the network when the valid round range is reached.
 
@@ -331,24 +352,24 @@ Algorand transactions are valid for a specific round range and the range maximum
 
 Calculating the round range requires you to know the **current round**, the **average block time**, and the **target submission time**. 
 
-### Current Round
+## Current Round
 
 To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](../community.md#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](../getting-started/connect.md#check-node-status-and-network-version).
 
-### Average Block Time
+## Average Block Time
 
 This refers to the number of seconds it takes, on average, for a block to be committed on the Algorand blockchain. This number is not dynamically available through the Algorand developer tools, but at the time of writing this, blocks are confirmed in less than 5 seconds on Algorand so you can use a rough estimate of 4.5 seconds if precision is not critical. It is highly recommended that you validate this number against your own analytics or check our [Community Projects](../community.md) for other projects that may provide this information since the average shown above may be out of date at the time of reading this.
 
-### Target Submission Time
+## Target Submission Time
 
 This is the clock time at which you are targeting to send the transaction.
 
-### Calculation
+## Calculation
 Calculate the delta between the target submission time and the current time in seconds. Divide that time by the average seconds per block to get the number of blocks spanning that time period. Add that number to the current round to get the first valid round for your transaction. Add 1000 to the first valid round to get the last valid round.
 
 Keep in mind that these block times are estimations and it is not possible to be exactly precise for a given target time. Also, the longer out you project a round range, the wider the potential drift of round against clock time given natural variability in block times (i.e. 4.5 is just the average now but may vary during certain time periods).
 
-### Example Scenarios
+## Example Scenarios
 
 Here are three example scenarios and how the round range may be calculated for each. 
 
@@ -433,17 +454,11 @@ Here are three example scenarios and how the round range may be calculated for e
 	Last Valid Round = 6018382 + 1000 = 6019382
 	```
 
-## Determining the Optimal Fee
-The minimum fee to send a transaction on Algorand is 1000 microAlgos. If blocks are not full, this fee is generally sufficient for the transaction to be prioritized into a block. The SDKs provide `suggestedFee` methods to help determine an optimal fee. 
+# Determining the Suggested Fee
+The minimum fee to send a transaction on Algorand is 1000 microAlgos. If blocks are not full, this fee is generally sufficient for the transaction to be prioritized into a block. The SDKs provide `suggestedFee` methods to help determine a fee likely to be accepted and committed. 
 
 [Need more explanation around how suggested fee works and how to use in SDKs.]
 
-## Closing an Account
-
-Closing an account means removing it from the Algorand ledger. Since there is a [minimum balance requirement](../feature-guides/accounts.md#minimum-balance) for every account on Algorand, the only way to completely remove it is to use the [Close Remainder To](#close-remainder-to) field. 
-
-If you have asset holdings, you must first close out those asset holdings before you can close out the Algorand account completely. Close out your asset holdings by specifying a Close Remainder To address within an [Asset Transfer](#asset-transfer) transaction of the relevant asset.
-
-## Setting First and Last Valid
+# Setting First and Last Valid
 
 Unless you have specific security concerns or logical constraints embedded within a specific Algorand Smart Contract, it is generally recommended that you set your default range to the maximum, currently 1000. This will give you an ample window of validity time to submit your transaction. 
