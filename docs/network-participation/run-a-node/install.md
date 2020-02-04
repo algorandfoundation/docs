@@ -151,8 +151,13 @@ Running the `diagcfg` commands will create and update the logging configuration 
 + The *Debian* and *RPM* installs automatically start the node. Starting and stopping a node installed with one of these packages should be done using `systemclt` commands:
 
 ```
-sudo systemctl start|stop algorand
+sudo systemctl start algorand
 ```
+
+```
+sudo systemctl stop algorand
+```
+
 
 With these installs, the status of the node can be checked by running:
 

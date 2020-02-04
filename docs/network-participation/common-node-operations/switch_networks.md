@@ -38,7 +38,7 @@ The node will restart and begin communicating with the TestNet network. It will 
 At this point, the original network can be stared as well using the standard data directory.
 
 # Debian or RPM installs
-For *Debian* and *RPM* installs the data directory is set to `/var/lib/algorand`. With these installs, the genesis files are stored in `/var/lib/algorand/genesis/`. Create the new data directory for the network that is being switched to. (eg `~/var/lib/algorand_testnet`). 
+For *Debian* and *RPM* installs the data directory is set to `/var/lib/algorand`. With these installs, the genesis files are stored in `/var/lib/algorand/genesis/`. Create the new data directory for the network that is being switched to. (eg `/var/lib/algorand_testnet`). 
 
 ```
 ALGORAND_DATA=/var/lib/algorand_testnet
