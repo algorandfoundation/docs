@@ -71,9 +71,9 @@ Creating an Algorand address from a public key, is not the only way. A valid add
 
 There are two accounts that carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
 
-_MainNet [FeeSink](../algorand-networks/mainnet.md#feesink) and [RewardsPool](../algorand-networks/mainnet.md#rewardspool) addresses_
+_MainNet [FeeSink](../algorand-networks/mainnet.md#feesink-address) and [RewardsPool](../algorand-networks/mainnet.md#rewardspool-address) addresses_
 
-_TestNet [FeeSink](../algorand-networks/testnet.md#feesink) and [RewardsPool](../algorand-networks/testnet.md#rewardspool) addresses_
+_TestNet [FeeSink](../algorand-networks/testnet.md#feesink-address) and [RewardsPool](../algorand-networks/testnet.md#rewardspool-address) addresses_
 
 ## A note about term usage in these docs
 Even in these docs, use of these terms may be inconsistent. At times this is a deliberate style choice to ensure clarity around a broader concept, other times it may be an error. Here are a couple of reasons terms may be used inconsistently: 
