@@ -71,9 +71,9 @@ Creating an Algorand address from a public key, is not the only way. A valid add
 
 There are two accounts that carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
 
-_MainNet [FeeSink](../algorand-networks/mainnet.md#feesink) and [RewardsPool](../algorand-networks/mainnet.md#rewardspool addresses_
+_MainNet [FeeSink](../algorand-networks/mainnet.md#feesink) and [RewardsPool](../algorand-networks/mainnet.md#rewardspool) addresses_
 
-_TestNet [FeeSink](../algorand-networks/testnet.md#feesink) and [RewardsPool](../algorand-networks/testnet.md#rewardspool addresses_
+_TestNet [FeeSink](../algorand-networks/testnet.md#feesink) and [RewardsPool](../algorand-networks/testnet.md#rewardspool) addresses_
 
 ## A note about term usage in these docs
 Even in these docs, use of these terms may be inconsistent. At times this is a deliberate style choice to ensure clarity around a broader concept, other times it may be an error. Here are a couple of reasons terms may be used inconsistently: 
@@ -88,7 +88,6 @@ Even in these docs, use of these terms may be inconsistent. At times this is a d
 	1. A developer says they are looking to create a wallet for Algorand and are asking about kmd. - _In this situation, it is probably best to direct them to this page so they understand all the ways to create accounts on Algorand. They may want to support more than one generation method, including kmd._
 	2. A consumer says: "I have 5 accounts in my wallet." - _Consumers are likely referring to mobile or web wallets, and probably not the underlying kmd wallet mechanism._
 	3. A protocol developer wants to explore the signature validation mechanism in the Algorand protocol. - _This developer will most definitely encounter the true public/private key pairs as well as many of the concepts detailed above._
-
 
 
 # Creation Methods
@@ -107,7 +106,9 @@ There is no way for someone else to determine that two addresses are generated f
 
 Using kmd requires running a process and storing keys on disk. If you do not have access to a node or require a more lightweight solution, [Standalone Accounts](#standalone) may be a better suited option.
 
-### Start the kmd process
+
+### How-to use kmd
+#### Start the kmd process
 
 To initiate the kmd process and generate the required `kmd.net` and `kmd.token` files use [`goal kmd`](../reference-docs/goal/kmd/kmd.md) or [`kmd`](../reference-docs/kmd.md) command line utilities. 
 
@@ -131,7 +132,7 @@ kmd IP address:  [ip-address]:[port]
 $ echo "kmd token: " `cat $ALGORAND_DATA/kmd.token`
 kmd token:  [token]
 ```
-### Create a wallet and generate an account
+#### Create a wallet and generate an account
 
 Create a new wallet and generate an account. In the SDKs, connect to kmd through a kmd client then create a new wallet. With the wallet handle generate an account. 
 
@@ -273,7 +274,7 @@ $ goal account new
 Created new account with address [address]
 ```
 
-### Recover wallet and regenerate account
+#### Recover wallet and regenerate account
 To recover a wallet and any previously generated accounts, use the wallet backup phrase (also called the wallet mnemonic or passphrase). The master derivation key for the wallet will always generate the same addresses in the same order. Therefore the process of recovering an _account_ within the wallet looks exactly like generating a new account. 
 
 !!! info
@@ -412,19 +413,22 @@ $ goal account new -w <recovered-wallet-name>
 Created new account with address [RECOVERED_ADDRESS]
 ```
 
-### Export account
+#### Export an account
 Use this to retrieve the 25-word mnemonic for the account.
 
-### Import account
+[NEED CODE]
+
+#### Import an account
 Use these methods to import a 25-word account-level mnemonic.
 
 !!! warning
 	For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however keep in mind that an imported account can **not** be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
 
+[NEED CODE]
+
 ## Standalone 
 
 A standalone account is an Algorand address and private key pair that is _not_ stored on disk. The private key is most often in the [25-word mnemonic form](#transformation-private-key-to-25-word-mnemonic).
-
 
 
 **Reasons you might want to use standalone accounts**
@@ -442,6 +446,7 @@ Standalone account mnemonics are widely used across developer tools and services
 
 If you prefer storing your keys encrypted on disk instead of storing humaan-readable 25-word mnemonics, kmd may be a better option. 
 
+### How to generate a standalone account
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
@@ -521,7 +526,7 @@ Other Features:
 
 - Multisignature accounts cannot nest other multisignature accounts. 
 - When creating a multisignature account with Address A, Address B, and Address C will not produce the same address as one with Address B, Address A, and Address C, however signing a multisignature transaction does not require any specific order. 
-- Funding a multisignature account [initializing its state on the blockchain](#accounts) is just like . Once you generate a multisignature address, provide that address to others to receive funds. If you are using TestNet or BetaNet, type the address into the faucet account to 
+- Funding a multisignature account [initializing its state on the blockchain](#accounts) is just like funding any other account on Algorand. Once you generate a multisignature address, provide that address to others to receive funds. If you are using TestNet or BetaNet, type the address into the faucet account to 
 
 
 **Reasons you might want to use multisignature accounts**
@@ -530,10 +535,140 @@ Since every transaction requires a threshold of signatures you can create an ext
 
 The accounts that make up that account can be stored in separate locations and they can be generated with kmd, as standalone accounts, or with a mixture of both.
 
-Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of users. This paired with Algorand Smart Contract functionality has the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](./asc1/teal_overview.md) and [Algorand Smart Contracts](./asc1/index.md).
+Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](./asc1/teal_overview.md) and [Algorand Smart Contracts](./asc1/index.md).
 
 **Reasons you might _not_ want to use multisignature accounts**
 
-Multisignature accounts trade off convenience for security. Every transaction requires multiple signatures which can be overly complex for a scenario where security or governance is not critical. 
+Multisignature accounts trade off convenience for security. Every transaction requires multiple signatures which can be overly complex logistics for a scenario where security or governance is not critical. 
 
-[code for a 2/3 multisig]
+### How to generate a multisignature account
+The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the addresses in the code samples below to recreate a specific multisignature address.
+
+!!! tip
+	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](signatures.md#multisignatures).
+
+```javascript tab="JavaScript"
+const algosdk = require('algosdk');
+
+(async() => {
+    //create an account
+    var account1 = algosdk.generateAccount();
+    console.log(account1.addr);
+    //create an account
+    var account2 = algosdk.generateAccount();
+    console.log(account2.addr);
+    //create an account
+    var account3 = algosdk.generateAccount();
+    console.log(account3.addr);
+
+    //Setup teh parameters for the multisig account
+    const mparams = {
+        version: 1,
+        threshold: 2,
+        addrs: [
+            account1.addr,
+            account2.addr,
+            account3.addr,
+        ],
+    };
+
+    var multsigaddr = algosdk.multisigAddress(mparams);
+    console.log("Multisig Address: " + multsigaddr);
+
+```
+
+```python tab="Python"
+from algosdk import account, transaction
+
+# generate three accounts
+private_key_1, account_1 = account.generate_account()
+private_key_2, account_2 = account.generate_account()
+private_key_3, account_3 = account.generate_account()
+print("Account 1:", account_1)
+print("Account 2", account_2)
+print("Account 3:", account_3)
+
+# create a multisig account
+version = 1  # multisig version
+threshold = 2  # how many signatures are necessary
+msig = transaction.Multisig(version, threshold, [account_1, account_2])
+print("Multisig Address: ", msig.address())
+```
+
+```java tab="Java"
+package com.algorand.algosdk.example;
+
+import com.algorand.algosdk.account.Account;
+import com.algorand.algosdk.crypto.Digest;
+import com.algorand.algosdk.crypto.Ed25519PublicKey;
+import com.algorand.algosdk.crypto.MultisigAddress;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MultisigAccount {
+
+    public static void main(String args[]) throws Exception {
+
+        Account acct1 = new Account();
+        Account acct2 = new Account();
+        Account acct3 = new Account();
+        System.out.println("Account 1 Address: " + acct1.getAddress());
+        System.out.println("Account 2 Address: " + acct2.getAddress());
+        System.out.println("Account 3 Address: " + acct3.getAddress());
+        
+        List<Ed25519PublicKey> publicKeys = new ArrayList<>();
+        publicKeys.add(acct1.getEd25519PublicKey());
+        publicKeys.add(acct2.getEd25519PublicKey());
+        publicKeys.add(acct3.getEd25519PublicKey());
+         
+        MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
+
+        System.out.println("Multisig Address: " + msig.toString());
+
+    }
+}
+```
+
+```go tab="Go"
+package main
+
+import (
+	"fmt"
+
+	"github.com/algorand/go-algorand-sdk/crypto"
+	"github.com/algorand/go-algorand-sdk/types"
+)
+
+func main() {
+	// Generate Accounts
+	acct1 := crypto.GenerateAccount()
+	acct2 := crypto.GenerateAccount()
+	acct3 := crypto.GenerateAccount()
+
+	// Decode the account addresses
+	addr1, _ := types.DecodeAddress(acct1.Address.String())
+	addr2, _ := types.DecodeAddress(acct2.Address.String())
+	addr3, _ := types.DecodeAddress(acct3.Address.String())
+
+	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+		addr1,
+		addr2,
+		addr3,
+	})
+	if err != nil {
+		panic("invalid multisig parameters")
+	}
+
+	fmt.Printf("Multisig address %s \n", ma.Address())
+
+```
+
+```zsh tab="goal"
+$ ADDRESS1=$(goal account new | awk '{ print $6 }')
+$ ADDRESS2=$(goal account new | awk '{ print $6 }')
+$ ADDRESS3=$(goal account new | awk '{ print $6 }')
+
+$ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
+Created new account with address [MULTISIG_ADDRESS]
+```
