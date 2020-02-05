@@ -1,4 +1,4 @@
-title: Algorand Standard Assets
+title: Creating Assets
 
 Algorand Standard Assets (ASA) provides the ability to digitize any asset and have both it and its ownership represented on the Algorand chain. These assets could be fungible (for example: currencies, stable coins, loyalty points, system credits, in-game points, etc) or non-fungible (for example: real estate, collectables, supply chain, in-game items, tickets, etc). ASA functionality allows restrictions to be placed on the assets where needed (for example: securities, certifications, compliance, etc).
 
