@@ -65,7 +65,7 @@ Every account on Algorand must have a minimum balance of 100,000 microAlgos. If 
 By default, Algorand accounts are set to **offline**. An **online** account is one that participates in Algorand consensus. For an account to go online, it must generate a participation key and send a special key registration transaction. Read more about how to register an account online in the [Network Participation](../network-participation/participate-in-consensus/overview.md) section.
 
 ### Other Account Types
-Creating an Algorand address from a public key, is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authenticate spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](asc1/modes.md) section. Multisignature accounts are described [below](#multisignature).
+Creating an Algorand address from a public key, is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authorize spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](asc1/modes.md) section. Multisignature accounts are described [below](#multisignature).
 
 ### Special Accounts
 
@@ -76,10 +76,7 @@ _MainNet [FeeSink](../algorand-networks/mainnet.md#feesink-address) and [Rewards
 _TestNet [FeeSink](../algorand-networks/testnet.md#feesink-address) and [RewardsPool](../algorand-networks/testnet.md#rewardspool-address) addresses_
 
 ## A note about term usage in these docs
-Even in these docs, use of these terms may be inconsistent. At times this is a deliberate style choice to ensure clarity around a broader concept, other times it may be an error. Here are a couple of reasons terms may be used inconsistently: 
-
-1. To emphasize the inherent pairing of the public and private portions of a key. (e.g. In code examples, it is sometimes clearer to name variables as such to emphasize the connection between these two entities.)
-2. To abstract away from complexity related to generating an account on Algorand. For example, code samples may use terms like "generateAccount" to generate a private key and Algorand address. There is an underlying assumption that this pair will be used as an Algorand account even though on generation it is not yet represented on the blockchain and therefore is not yet technically an Algorand account.
+Even in these docs, use of these terms may be inconsistent. At times this is a deliberate style choice to ensure clarity around a broader concept. Sometimes it is to emphasize the inherent pairing of the public and private portions of a key. (e.g. In code examples, it is sometimes clearer to name variables as such to emphasize the connection between these two entities). Other times it is to abstract away from complexity related to generating an account on Algorand. For example, code samples may use terms like "generateAccount" to generate a private key and Algorand address. There is an underlying assumption that this pair will be used as an Algorand account even though on generation it is not yet represented on the blockchain and therefore is not yet technically an Algorand account.
 
 
 ??? tip "Interpretation Guide"
@@ -94,17 +91,17 @@ Even in these docs, use of these terms may be inconsistent. At times this is a d
 
 ## Wallet-derived (kmd)
 
-The Key Management Daemon is a process that runs on [Algorand nodes](../reference-docs/node_files.md#kmd), so if you are using a [third-party API service](../getting-started/setup.md#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs can also connect to kmd through a REST Endpoint IP address and access token. 
+The Key Management Daemon is a process that runs on [Algorand nodes](../reference-docs/node_files.md#kmd), so if you are using a [third-party API service](../getting-started/setup.md#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs also connect to kmd through a REST endpoint and access token. 
 
 **Reasons you might want to use kmd**
 
-Public/private key pairs are generated from a single master derivation key. You only need to remember the single mnemonic that represents this master derivationn key to regenerate all of the accounts in that wallet. Wallet-level mnemonics are not interchangeable with account-level mnemonics. 
+Public/private key pairs are generated from a single master derivation key. You only need to remember the single mnemonic that represents this master derivation key (i.e. the wallet passphrase/mnemonic) to regenerate all of the accounts in that wallet. 
 
 There is no way for someone else to determine that two addresses are generated from the same master derivation key. This provides a potential avenue for applications to implement anonymous spending for end users without requiring users to store multiple passphrases.
 
 **Reasons you might not want to use kmd**
 
-Using kmd requires running a process and storing keys on disk. If you do not have access to a node or require a more lightweight solution, [Standalone Accounts](#standalone) may be a better suited option.
+Using kmd requires running a process and storing keys on disk. If you do not have access to a node or you require a more lightweight solution, [Standalone Accounts](#standalone) may be a better suited option.
 
 
 ### How-to use kmd
@@ -275,10 +272,10 @@ Created new account with address [address]
 ```
 
 #### Recover wallet and regenerate account
-To recover a wallet and any previously generated accounts, use the wallet backup phrase (also called the wallet mnemonic or passphrase). The master derivation key for the wallet will always generate the same addresses in the same order. Therefore the process of recovering an _account_ within the wallet looks exactly like generating a new account. 
+To recover a wallet and any previously generated accounts, use the wallet backup phrase (also called the wallet mnemonic or passphrase). The master derivation key for the wallet will always generate the same addresses in the same order. Therefore the process of recovering an account within the wallet looks exactly like generating a new account. 
 
 !!! info
-	An offline wallet may not accurately reflect account balances, but the state for those accounts (e.g. its balance, online status) are safely stored on the blockchain. kmd will repopulate those balances if connected to a node.
+	An offline wallet may not accurately reflect account balances, but the state for those accounts (e.g. its balance, online status) are safely stored on the blockchain. kmd will repopulate those balances when connected to a node.
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
@@ -444,7 +441,7 @@ Standalone account mnemonics are widely used across developer tools and services
 
 **Reasons you might _not_ want to use standalone accounts**
 
-If you prefer storing your keys encrypted on disk instead of storing humaan-readable 25-word mnemonics, kmd may be a better option. 
+If you prefer storing your keys encrypted on disk instead of storing human-readable 25-word mnemonics, kmd may be a better option. 
 
 ### How to generate a standalone account
 
@@ -520,26 +517,31 @@ Public key: [ADDRESS]
 Multisignature accounts are a logical representation of an ordered set of addresses with a threshold and version. Multisignature accounts can perform the same operations as other accounts, including sending transactions and participating in consensus. The address for a multisignature account is essentially a hash of the _ordered_ list of accounts, the threshold and version values. The threshold determines how many signatures are required to process any transaction from this multisignature account. 
 
 !!! tip
-	You can use the fact that order matters to generate multiple addresses backed by the same set of keys.
+	You can use the fact that order matters to generate multiple addresses that can be signed by the same set of keys.
 
 Other Features:
 
-- Multisignature accounts cannot nest other multisignature accounts. 
-- When creating a multisignature account with Address A, Address B, and Address C will not produce the same address as one with Address B, Address A, and Address C, however signing a multisignature transaction does not require any specific order. 
-- Funding a multisignature account [initializing its state on the blockchain](#accounts) is just like funding any other account on Algorand. Once you generate a multisignature address, provide that address to others to receive funds. If you are using TestNet or BetaNet, type the address into the faucet account to 
+Multisignature accounts cannot nest other multisignature accounts. 
+
+When creating a multisignature account with Address A, Address B, and Address C will not produce the same address as one with Address B, Address A, and Address C, however signing a multisignature transaction does not require any specific order. 
+
+!!! tip
+	You can use the fact that order matters to generate multiple addresses that can be signed by the same set of keys.
+
+Send Algos to the address to [initialize its state on the blockchain](#accounts) as you would any other address.
 
 
 **Reasons you might want to use multisignature accounts**
 
 Since every transaction requires a threshold of signatures you can create an extra layer of security on an account by requiring multiple signatures to authorize spending. The total accounts and threshold can be tailored to fit your security model.
 
-The accounts that make up that account can be stored in separate locations and they can be generated with kmd, as standalone accounts, or with a mixture of both.
+The keys that can sign for the multisignature account can be stored in separate locations and they can be generated with kmd, as standalone accounts, or with a mixture of both.
 
 Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](./asc1/teal_overview.md) and [Algorand Smart Contracts](./asc1/index.md).
 
 **Reasons you might _not_ want to use multisignature accounts**
 
-Multisignature accounts trade off convenience for security. Every transaction requires multiple signatures which can be overly complex logistics for a scenario where security or governance is not critical. 
+Multisignature accounts trade off convenience for security. Every transaction requires multiple signatures which can be overly complex for a scenario where security or governance is not critical. 
 
 ### How to generate a multisignature account
 The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the addresses in the code samples below to recreate a specific multisignature address.
