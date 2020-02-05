@@ -91,7 +91,7 @@ $ cat $ALGORAND_DATA/algod.token
 **Cost**         | Usually free for development; pay based on rate limits in production | Variable (with free option) - see [node types](../network-participation/run-a-node/types.md)	| Variable (with free option) - see [node types](../network-participation/run-a-node/types.md)	
 **Private Networks**| ❌ | ✅ | ✅
 **`goal`, `algokey`, `kmd`**| ❌ | ✅ | ✅
-**Platform**|Varied|MacOS; Linux|MacOS; Linux|
+**Platform**|Varies|MacOS; Linux|MacOS; Linux|
 **Production Ready**| ✅ | ❌ | ✅
 
 # Install your preferred SDK
@@ -111,7 +111,7 @@ instead of:
 
 ```bash
 
-$ goal node status -d your-node-directory <PLACEHOLDER>
+$ goal node status -d <your-node-directory>
 ```
 
 

@@ -1,4 +1,4 @@
-title: Transactions
+title: Constructing Transactions
 
 In the [Getting Started Guide](../getting-started/tutorial.md), you created your first transaction on Algorand and were introduced to the pattern of constructing a transaction, authorizing it, sending it to the network, and validating its inclusion in a block. 
 

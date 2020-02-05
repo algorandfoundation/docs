@@ -1,4 +1,4 @@
-title: Accounts
+title: Creating Accounts
 
 This section is an overview of **Accounts** on Algorand, beginning with core terminology and a guide on how to interpret these terms in different contexts. It then elaborates on the different methods for creating accounts on Algorand using the available developer tools, including the SDKs, `goal`, kmd, and `algokey`.
 
@@ -674,3 +674,4 @@ $ ADDRESS3=$(goal account new | awk '{ print $6 }')
 $ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
 Created new account with address [MULTISIG_ADDRESS]
 ```
+Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
