@@ -14,5 +14,5 @@ Visit the [**Run a Node**](../docs/network-participation/run-a-node/types.md) se
 
 **Everyone**
 
-Learn about [Algorand's Consensus Protocol](./learn/algorand_consensus.md) and check out the [**Community Projects**](./community.md) page to explore the different applications that others have built on Algorand blockchain.
+Learn about [**Algorand's Consensus Protocol**](./algorand_consensus.md) and check out the [**Community Projects**](./community.md) page to explore the different applications that others have built on Algorand blockchain.
 
