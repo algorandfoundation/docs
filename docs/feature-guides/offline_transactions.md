@@ -5,7 +5,7 @@ This section explains how to authorize transactions with private keys that are k
 The same methodology described here can also be used to work with [LogicSignatures](asc1/modes.md#logic-signatures) and [Multisignatures](signatures.md#multisignatures). All objects in the following examples use msgpack to store the transaction object ensuring interoperability with the SDKs and `goal`.
 
 !!! info
-    Storing keys _offline_ is also referred to as placing them in **cold storage**. Keys that are stored on an online device is often referred to as a **hot wallet**.  
+    Storing keys _offline_ is also referred to as placing them in **cold storage**. An _online_ device that stores private keys is often referred to as a **hot wallet**.  
 
 # Unsigned Transaction File Operations
 Algorand SDK's and `goal` support writing and reading both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.
