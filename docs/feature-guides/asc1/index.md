@@ -1,4 +1,4 @@
-title: Introduction
+title: Algorand Smart Contracts
 
 Algorand Smart Contracts are small programs written in an assembly-like language that can be used as a replacement for signatures within a transaction. This language is named Transaction Execution Approval Langauge or TEAL. TEAL programs have one primary function and that is to return true or false and are used to analyze and approve transactions. Algorand transactions are signed with either a private key or a multisig set of private keys. Using ASC1, transactions can be signed with a TEAL program. This is called a logic signature. ASC provides two modes of operation for TEAL logic to operate as a LogicSignature, that are discussed in Usage Modes<LINK>.
 

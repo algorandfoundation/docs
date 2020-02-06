@@ -1,10 +1,9 @@
 arrange:
   - index.md
-  - learn
-  - getting-started
   - feature-guides
-  - algorand-networks
+  - getting-started
   - network-participation
   - reference-docs
+  - algorand_consensus.md
   - community.md
 

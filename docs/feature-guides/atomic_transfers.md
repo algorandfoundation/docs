@@ -1,4 +1,4 @@
-title: Atomic Transfers
+title: Swapping Assets
 
 Atomic Transfers are irreducible batch operations that allow a group of [transactions](../feature-guides/transactions.md) to be submitted as a unit. All transactions in the batch either pass or fail. The batch operation will only be successful if each transaction within the group is successful.
 

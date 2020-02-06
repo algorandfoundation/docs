@@ -6,5 +6,7 @@ arrange:
   - sdks.md
   - rest-apis
   - teal
+  - algorand-networks
+  - transactions.md
   - node_files.md
 

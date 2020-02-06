@@ -1,7 +1,5 @@
 title: 3. Your First Transaction
 
-PAGE STATUS: IN PROGRESS
-
 After you successfully connect to **algod** using your preferred SDK, explore the methods available to read from and write to the blockchain. Remember that writing to the Algorand blockchain is simply sending a transaction to the network that is later confirmed within a block. 
 
 Follow the guide below to send your first transaction on Algorand and familiarize yourself with some of the core functions of the SDKs. Examples of `goal` commands and REST API calls are included when they are the same or similar, allowing you to cross-verify and gain fluency across all available tools and platforms. 
@@ -9,10 +7,10 @@ Follow the guide below to send your first transaction on Algorand and familiariz
 Code snippets are abbreviated for conciseness and clarity. See the full code example for each SDK at the bottom of this guide.
 
 # Create an account
-In order to send a transaction, you first need an account<LINK TO GLOSSARY> on Algorand. Create an account by generating an Algorand public/private key pair and then funding the public address with Algos on your chosen network. 
+In order to send a transaction, you first need an [account](../feature-guides/accounts.md#accounts) on Algorand. Create an account by generating an Algorand public/private key pair and then funding the public address with Algos on your chosen network. 
 
 !!! info
-	The terms **account**, **public key**, and **address** are used interchangeably in certain contexts, but they have slightly different meanings. Read more about these differences on the Account Feature Guide<LINK> and within their respective definitions on the Glossary<LINK> page.
+	The terms **account**, **public key**, and **address** are used interchangeably in certain contexts, but they have slightly different meanings. Read more about these differences in the [Account Feature Guide](../feature-guides/accounts.md).
 
 
 ## Generate a public/private key pair
@@ -88,7 +86,7 @@ Public key: [ADDRESS]
 For TestNet and BetaNet, copy and paste the public portion of your key pair in the corresponding faucet prompt and click "Submit". A `200` response means the transaction went through and your balance increased by 100,000,000 microAlgos (i.e. 100 Algos).
 
 !!! info
-	Amounts are returned in microAlgos - the base unit for Algos. 1 Algo equals 1,000,000 microAlgos. <add micro explanation>
+	Amounts are returned in microAlgos - the base unit for Algos. Micro denotes a factor or 10^-6 i1 Algo equals 1,000,000 microAlgos. <add micro explanation>
 
 ## Check your balance
 
