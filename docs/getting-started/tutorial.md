@@ -72,7 +72,7 @@ func main() {
 $ goal account new
 Created new account with address [ADDRESS]
 
-$ goal account export -a address<PLACEHOLDER>
+$ goal account export -a <address>
 Exported key for account [ADDRESS]: [PASSPHRASE]
 ```
 
@@ -86,7 +86,7 @@ Public key: [ADDRESS]
 For TestNet and BetaNet, copy and paste the public portion of your key pair in the corresponding faucet prompt and click "Submit". A `200` response means the transaction went through and your balance increased by 100,000,000 microAlgos (i.e. 100 Algos).
 
 !!! info
-	Amounts are returned in microAlgos - the base unit for Algos. Micro denotes a factor or 10^-6 i1 Algo equals 1,000,000 microAlgos. <add micro explanation>
+	Amounts are returned in microAlgos - the base unit for Algos. Micro denotes a unit x 10^-6. Therefore, 1 Algo equals 1,000,000 microAlgos.
 
 ## Check your balance
 
@@ -94,7 +94,7 @@ Check your balance to confirm the added funds.
 
 ```javascript tab="JavaScript"
 ...
-	const passphrase = "your-25-word-mnemonic<PLACEHOLDER>";
+	const passphrase = <25-word-mnemonic>;
 	let myAccount = algosdk.mnemonicToSecretKey(passphrase)
 	console.log("My address: %s", myAccount.addr)
 
@@ -105,7 +105,7 @@ Check your balance to confirm the added funds.
 
 ```python tab="Python"
 ...
-	passphrase = 25-word-mnemonic<PLACEHOLDER>
+	passphrase = <25-word-mnemonic>
 	private_key = mnemonic.to_private_key(passphrase)
 	my_address = mnemonic.to_public_key(passphrase)
 	print("My address: {}".format(my_address))
@@ -117,7 +117,7 @@ Check your balance to confirm the added funds.
 
 ```java tab="Java"
 ...
-    final String PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
+    final String PASSPHRASE = <25-word-mnemonic>;
     com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
     String myAddress = myAccount.getAddress().toString();
     System.out.println("My Address: " + myAddress);
@@ -129,7 +129,7 @@ Check your balance to confirm the added funds.
 
 ```go tab="Go"
 ...
-	passphrase := 25-word-mnemonic<PLACEHOLDER>
+	passphrase := <25-word-mnemonic>
 	privateKey, err := mnemonic.ToPrivateKey(passphrase)
 	if err != nil {
 		fmt.Printf("Issue with mnemonic conversion: %s\n", err)
@@ -151,16 +151,17 @@ Check your balance to confirm the added funds.
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
- 'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/v1/account/address<placeholder>'
+   -H "X-Algo-API-Token:<algod-token> \
+ 'http://<algod-address>:<algod-port>/v1/account/<address>'
 ```
 
 ```bash tab="goal"
-$ goal account balance -a my-address<PLACEHOLDER>
+$ goal account balance -a <my-address>
 [AMOUNT] microAlgos
 ```
 
-_Read all about Accounts, Keys, and Wallets in the Accounts Feature Guide_
+_Learn more about [Creating Accounts on Algorand](../feature-guides/accounts.md)._
+
 # Construct the transaction
 
 Create a transaction to send 1 Algo from your account to the TestNet faucet address (`GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A`) with the note "Hello World".
@@ -264,11 +265,13 @@ Transaction txn = new Transaction(myAccount.getAddress(), fee, firstValidRound,
 ```
 
 ```bash tab="goal"
-$ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
+$ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
 ```
 
 !!! info
     Some of the SDKs provide wrapper functions for creating certain types of transactions, like `makePaymentTxn` in Go. 
+
+_Learn more about [Constructing Transactions on Algorand](../feature-guides/transactions.md)._
 
 # Sign the transaction
 Sign the transaction with your private key. This creates a new signed transaction object in the SDKs. Retrieve the transaction ID of the signed transaction.
@@ -314,6 +317,8 @@ $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
 ```bash tab="algokey"
 ```
 
+_Learn more about [Authorizing Transactions on Algorand](../feature-guides/signatures.md)._
+
 # Submit the transaction
 Send the signed transaction to the network with your algod client. 
 
@@ -354,10 +359,10 @@ try {
 
 ```bash tab="cURL"
 curl -i -X POST \
-   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
+   -H "X-Algo-API-Token:<algod-token> \
    -H "Content-Type:application/x-binary" \
    -T "hello-world.stxn" \
- 'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/v1/transactions'
+ 'http://<algod-address>:<algod-port>/v1/transactions'
 ```
 
 ```bash tab="goal"
@@ -367,7 +372,7 @@ Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
 
 # Or construct, sign, and submit in one line
-$ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
+$ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
 Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
 Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
@@ -381,10 +386,10 @@ Transaction [TXID] committed in round [COMMITTED_ROUND]
 
 	async function gettingStartedExample() {
 
-		const server = algod-address<PLACEHOLDER>;
+		const server = <algod-address>;
 		const port = "";
 		const token = {
-			'X-API-Key': service-api-key<PLACEHOLDER>,
+			'X-API-Key': <service-api-key>,
             'Content-Type': 'appliation/x-binary'
 		};
 
@@ -412,7 +417,7 @@ Transaction [TXID] committed in round [COMMITTED_ROUND]
 Successfully submitting your transaction to the network does not necessarily mean the network confirmed it. Always check that the network confirmed your transaction within a block before proceeding. 
 
 !!! info
-    On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced, on average, every 5 seconds. This means that transactions are confirmed, on average, in **5 seconds**! Read more about the [Algorand's Consensus Protocol](../learn/algorand_consensus.md) and how it achieves such high confirmation speeds and immediate transaction finality in the [Learn](../learn/algorand_consensus.md) section.
+    On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced, on average, every 5 seconds. This means that transactions are confirmed, on average, in **5 seconds**! Read more about the [Algorand's Consensus Protocol](../algorand_consensus.md) and how it achieves such high confirmation speeds and immediate transaction finality.
 
 ```javascript tab="JavaScript"
 ...
@@ -483,8 +488,8 @@ let timerId =
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
- 'http://algod-address<PLACEHOLDER>:algod-port<PLACEHOLDER>/v1/transactions/pending/txid<PLACEHOLDER>'
+   -H "X-Algo-API-Token:<algod-token> \
+ 'http://<algod-address>:<algod-port>/v1/transactions/pending/<txid>'
 ```
 
 ```bash tab="goal"
@@ -494,7 +499,7 @@ Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
 
 # Or construct, sign, and submit in one line
-$ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
+$ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
 Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
 Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
@@ -558,8 +563,8 @@ try {
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:algod-token<PLACEHOLDER>" \
- 'http://algod-address<PLACEHOLDER>:port<PLACEHOLDER>/v1/account/my-address<PLACEHOLDER>/transaction/txid<PLACEHOLDER>'
+   -H "X-Algo-API-Token:<algod-token> \
+ 'http://<algod-address>:<port>/v1/account/<my-address>/transaction/<txid>'
 ```
 
 Notice above the pattern of constructing a transaction, authorizing it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
@@ -571,14 +576,14 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
 
     async function gettingStartedExample() {
 
-        const token = algod-token<PLACEHOLDER>;
-        const server = algod-address<PLACEHOLDER>;
-        const port = port<PLACEHOLDER>;
+        const token = <algod-token>;
+        const server = <algod-address>;
+        const port = <port>;
 
         let algodClient = new algosdk.Algod(token, server, port);
 
         const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
-        const passphrase = "your-25-word-mnemonic<PLACEHOLDER>";
+        const passphrase = <your-25-word-mnemonic>;
         
         let myAccount = algosdk.mnemonicToSecretKey(passphrase)
         console.log("My address: %s", myAccount.addr)
@@ -641,11 +646,11 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
     from algosdk import transaction
 
     def main():
-        algod_address = algod-address<PLACEHOLDER>
-        algod_token = algod-token<PLACEHOLDER>
+        algod_address = <algod-address>
+        algod_token = <algod-token>
         algod_client = algod.AlgodClient(algod_token, algod_address)
         
-        passphrase = 25-word-mnemonic<PLACEHOLDER>
+        passphrase = <25-word-mnemonic>
         private_key = mnemonic.to_private_key(passphrase)
         my_address = mnemonic.to_public_key(passphrase)
         print("My address: {}".format(my_address))
@@ -728,7 +733,7 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
             AlgodApi algodApiInstance = new AlgodApi(client);
 
             // Import your private key mnemonic and address
-            final String PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
+            final String PASSPHRASE = <25-word-mnemonic>;
             com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
             System.out.println("My Address: " + myAccount.getAddress());
 
@@ -825,8 +830,8 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
         "github.com/algorand/go-algorand-sdk/types"
     )
 
-    const algodAddress = algod-address<PLACEHOLDER>
-    const algodToken = algod-tokenn<PLACEHOLDER>
+    const algodAddress = <algod-address>
+    const algodToken = <algod-tokenn>
 
     func main() {
 
@@ -835,7 +840,7 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
             return
         }
 
-        passphrase := 25-word-mnemonic<PLACEHOLDER>
+        passphrase := <25-word-mnemonic>
         privateKey, err := mnemonic.ToPrivateKey(passphrase)
         if err != nil {
             fmt.Printf("Issue with mnemonic conversion: %s\n", err)
@@ -927,10 +932,10 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
     ```bash tab="goal"
     #!/usr/bin/bash
 
-    $ goal account balance -a my-address<PLACEHOLDER>
+    $ goal account balance -a <my-address>
     [AMOUNT] microAlgos
 
-    $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
+    $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
 
     $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
 
@@ -940,7 +945,7 @@ Notice above the pattern of constructing a transaction, authorizing it, submitti
     Transaction [TXID] committed in round [COMMITTED_ROUND]
 
     # Or construct, sign, and submit in one line
-     $ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
+     $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
      Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
      Transaction [TXID] still pending as of round [LAST_ROUND]
      Transaction [TXID] committed in round [COMMITTED_ROUND]
