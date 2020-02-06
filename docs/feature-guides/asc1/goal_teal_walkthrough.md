@@ -44,9 +44,9 @@ tx[0] cost=2 trace:
 REJECT
 ```
 
-In this example the logic returns false and the transaction fails.
+In this example, the logic returns false and the transaction fails.
 # Compiling TEAL Options
-Compiling a teal program using the `goal clerk compile` commmand writes the binary raw bytes to a file with the same name as the source file with a `.tok` extension. Specifying the `-n` option will compile the TEAL program but not writeout the binary. The console will display the compiled TEAL's address.
+Compiling a teal program using the `goal clerk compile` coand writes the binary raw bytes to a file with the same name as the source file with a `.tok` extension. Specifying the `-n` option will compile the TEAL program but not writeout the binary. The console will display the compiled TEAL's address.
 
 ```
 $ goal clerk compile -n simple.teal
@@ -128,7 +128,7 @@ Parameters can be passed to a TEAL program using `goal`. The parameters must be 
 $ echo -n mystringargument | base64
 bXlzdHJpbmdhcmd1bWVudA==
 ```
-The base64 encoded string is passed to the TEAL program using the `--agrb64` option. The `goal` commmand line can be passed multiple parameters using the `--argb64` option multiple times. Parameter order is specific and will directly map to the TEAL parameters array.
+The base64 encoded string is passed to the TEAL program using the `--agrb64` option. The `goal` command line can be passed multiple parameters using the `--argb64` option multiple times. Parameter order is specific and will directly map to the TEAL parameters array.
 ```
 goal clerk send -a 1000 -c closeaccountotaddress --to toaddr --from-program myteal.teal --argb64 "bXlzdHJpbmdhcmd1bWVudA==" -d ~/node/data
 ```
