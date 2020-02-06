@@ -516,11 +516,6 @@ Public key: [ADDRESS]
 
 Multisignature accounts are a logical representation of an ordered set of addresses with a threshold and version. Multisignature accounts can perform the same operations as other accounts, including sending transactions and participating in consensus. The address for a multisignature account is essentially a hash of the _ordered_ list of accounts, the threshold and version values. The threshold determines how many signatures are required to process any transaction from this multisignature account. 
 
-!!! tip
-	You can use the fact that order matters to generate multiple addresses that can be signed by the same set of keys.
-
-Other Features:
-
 Multisignature accounts cannot nest other multisignature accounts. 
 
 When creating a multisignature account with Address A, Address B, and Address C will not produce the same address as one with Address B, Address A, and Address C, however signing a multisignature transaction does not require any specific order. 
@@ -547,7 +542,7 @@ Multisignature accounts trade off convenience for security. Every transaction re
 The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the addresses in the code samples below to recreate a specific multisignature address.
 
 !!! tip
-	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](signatures.md#multisignatures).
+	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](signatures.md#multisignatures).
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
@@ -674,4 +669,5 @@ $ ADDRESS3=$(goal account new | awk '{ print $6 }')
 $ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
 Created new account with address [MULTISIG_ADDRESS]
 ```
+
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.

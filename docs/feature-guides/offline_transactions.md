@@ -1,8 +1,11 @@
 title: Authorizing Transactions Offline
 
-This section describes procedures for authorizing a transaction **offline**, meaning the device that is signing the transaction has no connection to the internet. To learn how to construct and authorize transactions in general visit the [Constructing Transactions](./transactions.md) and [Authorizing Transactions](./signatures.md) guides, respectively.
+This section explains how to authorize transactions with private keys that are kept **offline**. In particular, this guide shows how to create and save transactions to a file that can then be transferred to an offline device for signing. To learn how to construct and authorize transactions in general visit the [Constructing Transactions](./transactions.md) and [Authorizing Transactions](./signatures.md) guides, respectively.
 
-In many cases, transactions must be created for offline usage in an offline application. These transactions can be signed or unsigned depending on the usage case. This guide explains how transactions can be created and saved to a file. The samples do make use of a node connection to get network suggested parameters and to submit transactions. Suggested network parameters can be hardcoded and transactions can be transferred manually for a complete offline application. The same methodology described here can also be used to work with LogicSignatures and Multisig signed transactions. All objects in the following examples use msgpack to store the object allowing interoperability with the SDKs.
+The same methodology described here can also be used to work with [LogicSignatures](asc1/modes.md#logic-signatures) and [Multisignatures](signatures.md#multisignatures). All objects in the following examples use msgpack to store the transaction object ensuring interoperability with the SDKs and `goal`.
+
+!!! info
+    Storing keys _offline_ is also referred to as placing them in **cold storage**. Keys that are stored on an online device is often referred to as a **hot wallet**.  
 
 # Unsigned Transaction File Operations
 Algorand SDK's and `goal` support writing and reading both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.

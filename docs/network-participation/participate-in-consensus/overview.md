@@ -32,10 +32,10 @@ Participation keys are valid for a specific range of rounds. You must monitor yo
 !!! info
 	An online or offline key registration actually takes effect 320 rounds after the transaction is committed to the blockchain. 
 
-## Ensure that Participation Nodes are running
+### Ensure that Participation Nodes are running
 You are required to monitor your participation node to ensure it is properly working. An important additional monitoring for participation nodes is to check that your node clock is on time, as blocks in the blockchains are timestamped by the block proposer (i.e., the node proposing the block).
 
-## Security of Participation Keys
+### Security of Participation Keys
 
 To ensure the security of the blockchain, participation keys are regularly updated, so that they cannot be used to vote on earlier rounds. Because of this, it is important that there only exists a single instance of the participation key (files ending in `*.partkey` in the ledger directory) at any time in the system, and prior instances must be securely erased.
 

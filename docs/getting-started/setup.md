@@ -58,7 +58,7 @@ A third-party service runs a node and provides access to that node through their
 This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, but can't wait days for your node to catchup.
 
 
-[Visit thiis Github link fpr Sandbox setup instructions.](https://github.com/algorand/sandbox)
+[Visit this Github link for Sandbox setup instructions.](https://github.com/algorand/sandbox)
 
 !!! warning
 	Bootstrapping from a snapshot bypasses the normal node catchup procedure that cryptographically verifies the whole history of the blockchain - a procedure that is imperative to maintaining a healthy network. Therefore, this method is *only* recommended in the context of early stage application development to avoid catchup wait times and get started quickly. It should *never* be used to run a node in production or participate in consensus. Make sure that you migrate your application to a node that has undergone full catchup prior to launching your application in production.

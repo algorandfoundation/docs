@@ -1,29 +1,21 @@
 title: Creating Assets
 
-Algorand Standard Assets (ASA) provides the ability to digitize any asset and have both it and its ownership represented on the Algorand chain. These assets could be fungible (for example: currencies, stable coins, loyalty points, system credits, in-game points, etc) or non-fungible (for example: real estate, collectables, supply chain, in-game items, tickets, etc). ASA functionality allows restrictions to be placed on the assets where needed (for example: securities, certifications, compliance, etc).
+REVIEW IN PROGRESS
 
-Algorand has implemented standard assets as a truly layer 1 asset. This allows any asset created on Algorand to have:
+The Algorand protocol supports the creation of on-chain assets that benefit from the same security, compatibility, speed and ease of use as the Algo. The official name for assets on Algorand is **Algorand Standard Assets (ASA)**.
 
-* Increased security - New assets will have the same security and safety as Algos, the native currency on Algorand
-* Inherent compatibility - Apps that support any Algorand asset will support all Algorand assets
-* High ease of use - Create your asset with a single transaction to the network
+Examples of assets you can represent include stablecoins, loyalty points, system credits, and in-game points, just to name a few. You can also represent single, unique assets like a deed for a house, collectable items, unique parts on a supply chain, and countless more. 
+
+!!! info
+    Assets that represent many of the same type, like a stablecoin, may be referred to as **fungible assets**. Single, unique assets are referred to as **non-fungible assets**.
+
+Finally, assets can be configured with certain restrictions that help support securities, compliance, and certification use cases. 
 
 # Asset Requirements
 A single Algorand account is permitted to create up to 1000 assets. For every asset and account creates or owns, its minimum balance is increased by 0.1 Algos. Before a new asset can be transfered to a specific account the receiver must option in to receive the asset. This process is described below in Receiving an Asset. If any transaction is issued that would violate the maximum number of assets for an account or not meet the minimum balance requirements, the transaction will fail.
 
 # Asset Parameters
 The type of asset that is created will depend on the parameters that are passed during asset creation or configuration. The primary Asset parameters are listed below. Once set these parameters can never be changed.
-
- |Parameter| **Description** | **Required** | **Note** | 
-:-- |:-------------:| :-------------: | :-------------: | 
-**Creator**  | Address of the creator of the asset | Yes | 
-**Name** | Name of the entire asset | No | 32 char limit
-**Unitname**  | Name of a single unit of the asset | No | 8 char limit 
-**Asseturl**  | URL for Asset Information | No | Can be used for various applications
-**Total**   | Total number of units in Asset | Yes | Max value of 2^64 - 1
-**Decimals** | Implied decimals in the asset | Yes | Total Asset / (10 x decimals) 
-**Defaultfrozen**  | State of asset on creation | Yes | If true assets have to be unfrozen. Defaults to false
-**Assetmetadata64** | Optional hash commitment of some sort relating to the asset  | No | 32 byte limit
 
 
 * The creator address specifies the address of the asset creator. The transaction to create the asset must be signed by this account.
