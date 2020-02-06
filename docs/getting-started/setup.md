@@ -5,12 +5,12 @@ This section is a getting started guide for developers, looking to build applica
 # What does it mean to build on Algorand?
 Building an application on Algorand means that your application, directly or indirectly, reads from or writes to the Algorand blockchain. Writing to the Algorand blockchain is synonymous with issuing a transaction that will later be confirmed within a block. Reading from the blockchain means reading back transactions that have been confirmed within prior blocks.
 
-A program connects to the Algorand blockchain through an **algod** client. The algod client requires a valid algod **address** and access **token** of an Algorand node that is connected to the network you plan to interact with. 
+A program connects to the Algorand blockchain through an **algod** client. The algod client requires a valid **algod REST endpoint IP address** and **algod token** from an Algorand node that is connected to the network you plan to interact with. 
 
 # Available tools
-Algorand officially supports four SDKs for developing applications on Algorand: Javascript<LINK>, Java, Python, and Go. 
+Algorand officially supports four SDKs for developing applications on Algorand: [Javascript](../reference-docs/sdks.md#javascript), [Java](../reference-docs/sdks.md#java), [Python](../reference-docs/sdks.md#python), and [Go](../reference-docs/sdks.md#go). 
 
-There are also three command-line utilities packaged with Algorand node software: `goal`, `kmd`, and `algokey`.
+There are also three command-line utilities packaged with Algorand node software: [`goal`](../reference-docs/goal/goal.md), [`kmd`](../reference-docs/kmd.md), and [`algokey`](../reference-docs/algokey/algokey.md).
 
 `goal` is the primary tool for operating a node and it also contains functionality to manage keys, sign and send transactions, create assets, and perform many of the same or similar functions that are available in the SDKs. Although not required to build an application, developers who run nodes may find it useful to achieve some level of fluency in `goal` as a complementary tool during testing and validation. `goal` _is_ required to setup more advanced testing environments using private networks.
 
@@ -21,7 +21,7 @@ There are also REST APIs available for both **algod** and **kmd** processes.
 # Choosing a network
 There are three **public** Algorand Networks paired with the functionality to create **private** networks using any protocol version. 
 
-**MainNet** <LINK> is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. **TestNet** <LINK> mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  **BetaNet** is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common. <LINK>
+[**MainNet**](../reference-docs/algorand-networks/mainnet.md) is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. [**TestNet**](../reference-docs/algorand-networks/testnet.md) mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  [**BetaNet**](../reference-docs/algorand-networks/betanet.md) is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common.
 
  
 ## Recommended Use
@@ -33,13 +33,13 @@ If you are not sure which network to start with, TestNet is usually a good optio
 
  || **MainNet** | **TestNet** | **BetaNet** | 
 :-- |:-------------:| :-------------: | :-------------: | 
-**Protocol Version** | Current | Current| Future | Any |
+**Protocol Version** | [Current](../reference-docs/algorand-networks/mainnet.md) | Current| Future | Any |
 **Genesis Distribution** | Unique | Unique | Unique | Any |
 **Algo Accessibility** | For sale | Free from faucet | Free from faucet | 
 **Network Reliability**         | Most Stable  | Very Stable, but restarts are possible | Experimental; frequent restarts | 
 
 # How do I obtain an algod address and token?
-There are three recommended ways to obtain an algod **address** and **token** that each have their respective pros and cons depending on your goals. Below is an explanation of each followed by a side-by-side comparison.
+There are three recommended ways to obtain an algod **REST endpoint IP address** and access **token** that each have their respective pros and cons depending on what your goals are. Below is an explanation of each followed by a side-by-side comparison.
 
 1. [Use a third-party service](#1-use-a-third-party-service)
 2. [Use Docker Sandbox](#2-bootstrap-from-s3)
@@ -47,28 +47,27 @@ There are three recommended ways to obtain an algod **address** and **token** th
 
 ## 1. Use a third-party service
 
-This method is recommended if you plan to use _just_ the SDKs or algod RESTful interfaces, and want to get connected as fast as possible.
+This method is recommended if you plan to use _only_ the SDKs or the algod RESTful interface, and want to get connected as fast as possible.
 
 A third-party service runs a node and provides access to that node through their own API keys. On signup, the service provides you with an algod address and an API key which will replace your algod token.
 
-Known available services: [Purestake API](https://developer.purestake.io/)
+[See the list of known API services on the Community Projects page.](../community.md#algorand-api-services)
 
 ## 2. Use Docker Sandbox
 
-This method is recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, but can't wait days for your node to catchup.
+This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, but can't wait days for your node to catchup.
 
 
-Follow the directions here: https://github.com/algorand/sandbox
+[Visit thiis Github link fpr Sandbox setup instructions.](https://github.com/algorand/sandbox)
 
 !!! warning
 	Bootstrapping from a snapshot bypasses the normal node catchup procedure that cryptographically verifies the whole history of the blockchain - a procedure that is imperative to maintaining a healthy network. Therefore, this method is *only* recommended in the context of early stage application development to avoid catchup wait times and get started quickly. It should *never* be used to run a node in production or participate in consensus. Make sure that you migrate your application to a node that has undergone full catchup prior to launching your application in production.
 
 ## 3. Run your own node
 
-This method is recommended if you want access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This should be follow-on to option 2 prior to launching an application on MainNet.
+This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This is the recommended follow-on to [option 2](#2-use-docker-sandbox) prior to launching an application on MainNet. This method gives you full control of your node and its configuration. 
 
-  
-This method gives you full control of your node and its configuration. Read the docs to setup and run a node [here](../network-participation/run-a-node/types.md). [Configure your node](../network-participation/run-a-node/config.md) according to your specific needs.
+[Read the docs to setup and run a node.](../network-participation/run-a-node/install.md)
 
 After setup, find your **REST endpoint's IP address** here:
 

@@ -1,25 +1,36 @@
 title: Swapping Assets
 
-Atomic Transfers are irreducible batch operations that allow a group of [transactions](../feature-guides/transactions.md) to be submitted as a unit. All transactions in the batch either pass or fail. The batch operation will only be successful if each transaction within the group is successful.
+Atomic transfers are irreducible batch operations that allow a group of [transactions](../feature-guides/transactions.md) to be submitted as a unit. All transactions in the batch either pass or fail. The batch operation will only be successful if each transaction within the group is successful.
 
-Transactions can contain Alogs or Algorand Assets and may also be governed by Algorand Smart Contracts. 
+Transactions can contain Algos or Algorand Assets and may also be governed by Algorand Smart Contracts. 
 
 Individual transactions are first created and then grouped into a data structure or a file. The grouped transactions are then singed individually by the originators within the group. This data structure or file is then submitted to the network, where the node verifies the transactions and submits them all at once. This eliminates the need for hashed time-locks for atomic swaps in other blockchains and also avoids the delays inherent with hashed timed-locks.
 Atomic Transfers enable applications such as: 
 
-* Circular trades: Alice pays Bob if and only if Bob pays Clare if and only if Clare pays Alice
-* Group payments: Group funding where everyone pays or none pay.
-* Decentralized exchanges: Atomic multi-party transfers require no trusted intermediaries.
-* Distributed payments: Payments to multiple recipients
+**Circular trades** 
+
+Alice pays Bob if and only if Bob pays Claire if and only if Claire pays Alice.
+
+**Group payments**
+
+Everyone pays or no one pays.
+
+**Decentralized exchanges** 
+
+Atomic multi-party transfers require no trusted intermediaries.
+
+**Distributed payments** 
+
+Payments to multiple recipients. 
 
 
-Atomic Transfers are Created with the following steps:
+Cre:
 
-* Create unsigned transactions 
-* Combine transactions 
-* Group transactions
-* Sign grouped transactions
-* Submit signed grouped transactions
+1. Create unsigned transactions 
+2. Combine transactions 
+3. Group transactions
+4. Sign grouped transactions
+5. Submit signed grouped transactions
 
 <center>![Atomic Transfer Flow](../imgs/atomic_transfers-1.png)</center>
 <center>*Atomic Transfer Flow*</center>

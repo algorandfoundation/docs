@@ -29,6 +29,10 @@ algod_client = algod.AlgodClient(algod_token, algod_address)
 ```
 
 ```Java tab=
+import com.algorand.algosdk.algod.client.AlgodClient;
+import com.algorand.algosdk.algod.client.api.AlgodApi;
+import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
+
 public class GettingStartedExample 
 {
     public static void main(String args[]) throws Exception {
@@ -99,6 +103,7 @@ algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 ```Java tab=
 import com.algorand.algosdk.algod.client.AlgodClient;
 import com.algorand.algosdk.algod.client.api.AlgodApi;
+import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
 
 public class GettingStartedExample {
 	public static void main(String[] args) {
@@ -340,7 +345,7 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 		algod_address = <algod-address>
 		algod_token = ""
 		headers = {
-			'X-API-Key': <service-api-key
+			'X-API-Key': <service-api-key>
 		}
 		algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 
@@ -352,6 +357,46 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 		except Exception as e:
 			print(e)
 	main()
+	```
+
+	```java tab="Java"
+	package example;
+
+	import java.math.BigInteger;
+
+	import java.util.concurrent.TimeUnit;
+
+	import com.algorand.algosdk.account.Account;
+	import com.algorand.algosdk.algod.client.AlgodClient;
+	import com.algorand.algosdk.algod.client.ApiException;
+	import com.algorand.algosdk.algod.client.api.AlgodApi;
+	import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
+	import com.algorand.algosdk.algod.client.model.*;
+
+	public class MyApp {
+
+		public static void main(String args[]) throws Exception {
+
+			// Initialize an algod client
+			final String ALGOD_API_ADDR = <algod-address>;
+			final String ALGOD_API_TOKEN = <algod-token>;
+
+			//Create an instance of the algod API client
+			AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
+			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+			api_key.setApiKey(ALGOD_API_TOKEN);
+			AlgodApi algodApiInstance = new AlgodApi(client);
+
+			        // Get the latest Block
+			try {
+				NodeStatus status = algodApiInstance.getStatus();
+				System.out.println("Algorand network status: " + status);
+			} catch (ApiException e) {
+				System.err.println("Exception when calling algod#getStatus");
+				e.printStackTrace();
+			}
+		}
+	}
 	```
 
 
