@@ -3,31 +3,31 @@ title: The Smart Contract Language
 <center><iframe width="560" height="315" src="https://www.youtube.com/embed/OWFRP9McBmk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <center>*ASC1 Overview*</center>
 
-TEAL is an assembly-like language and is processed with a stack machine. The language is a non-turing-complete language that does not support looping but does support forward branches. TEAL programs are processed one line at a time that push and pop values from the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and some flow control functions like `bnz` for branching. See TEAL Specification Reference<LINK> for more details.
+TEAL is an assembly-like language and is processed with a stack machine. The language is a non-turing-complete language that does not support looping but does support forward branches. TEAL programs are processed one line at a time that push and pop values from the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and some flow control functions like `bnz` for branching. See [TEAL Specification Reference](../../reference-docs/teal/specification.md) for more details.
 
 <center>![TEAL Architecture](../../imgs/teal_overview-1.png)</center>
 <center>*TEAL Architecture Overview*</center>
 
 # Getting Transaction Properties
-The primary purpose of a TEAL program is to return either true or false. When the program completes if there is a non-zero value on the stack then it returns true and if a zero value or the stack is empty it will return false. If the stack has more than one value the program also returns false. The following digagram illustrates how the stack machine processes the program.
+The primary purpose of a TEAL program is to return either true or false. When the program completes if there is a non-zero value on the stack then it returns true and if a zero value or the stack is empty it will return false. If the stack has more than one value the program also returns false. The following diagram illustrates how the stack machine processes the program.
 
 Program line number 1:
 
 <center>![Transaction Properties](../../imgs/teal_overview-2.png)</center>
 <center>*Getting Transaction Properties*</center>
 
-The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction are availble in the global variable `Group Size`. To get the the first transaction's reciever use `gtxn 0 Receiver`. See TEAL Specification Reference<LINK> for more transaction properties.
+The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's reciever use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../reference-docs/teal/specification.md) for more transaction properties.
 
 # Pseudo Opcodes
-The TEAL specification provides several psuedo opcodes for convience.  For example, the second line in the program below uses the `addr` psuedo opcode.
+The TEAL specification provides several pseudo opcodes for convenience.  For example, the second line in the program below uses the `addr` pseudo opcode.
 
 <center>![Pseudo Opcodes](../../imgs/teal_overview-3.png)</center>
 <center>*Pseudo Opcodes*</center>
 
-The `addr` pseudo opcode converts Algorand addresses to a byte constant and pushes the result to the stack. See TEAL Specification Reference<LINK> for additional pseudo opcodes.
+The `addr` pseudo opcode converts Algorand addresses to a byte constant and pushes the result to the stack. See [TEAL Specification Reference](../../reference-docs/teal/specification.md) for additional pseudo opcodes.
 
 # Operators
-TEAL provides operators to work with data that is on the stack. For example, the `==` operator evaluates if the last two values on the stack are equal and pushes either a 1 or 0 depending on the result. The number of values used by an operator will depend on the operator. The TEAL Opcodes documentation explains arguments and return values. See TEAL Specification Reference<LINK> for a list of all operators.
+TEAL provides operators to work with data that is on the stack. For example, the `==` operator evaluates if the last two values on the stack are equal and pushes either a 1 or 0 depending on the result. The number of values used by an operator will depend on the operator. The [TEAL Opcodes](../../reference-docs/teal/opcodes.md) documentation explains arguments and return values. See [TEAL Specification Reference](../../reference-docs/teal/specification.md) for a list of all operators.
 
 <center>![Operators](../../imgs/teal_overview-4.png)</center>
 <center>*Operators*</center>
@@ -38,7 +38,7 @@ TEAL supports program arguments. The diagram below illustrates an example of log
 <center>![Arguments](../../imgs/teal_overview-5.png)</center>
 <center>*Arguments*</center>
 
-All argument parameters to a TEAL program are byte arrays. The order that parameters are passed in is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. If you are using the `goal` command line tool, the parameters must be passed as base64 encoded strings. See the parameter section within the ASC1 SDK usage<LINK> documentation and the Goal Teal Walkthrough<LINK> documentation for more details on parameters.
+All argument parameters to a TEAL program are byte arrays. The order that parameters are passed in is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. If you are using the `goal` command-line tool, the parameters must be passed as base64 encoded strings. See the parameter section within the [ASC1 SDK usage](asc1_sdk_usage.md) documentation and the [Goal Teal Walkthrough](goal_teal_walkthrough.md) documentation for more details on parameters.
 
 # Storing and Loading from Scratchspace
 TEAL provides a scratch space as a way of temporarily storing values for use later in your code. The diagram below illustrates a small TEAL program that loads 12 onto the stack and then duplicates it. These values are multiplied together and result (144) is pushed to the top of the stack. The store command stores the value in the scratch space 1 slot.
@@ -52,12 +52,12 @@ The load command is used to retrieve a value from the scratch space as illustrat
 <center>*Loading Values*</center>
 
 # Operational Cost of TEAL Opcodes
-TEAL programs are limited to 1000 bytes in size. Size enccompasses the compiled program plus arguments. For optimal performance TEAL programs are also limited in opcode cost. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents it's opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 7) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. TEAL programs are limited to 2000 for total opcode cost of all program operators. The TEAL Opcode Reference<LINK> lists the opcode cost for every operator.
+TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. For optimal performance TEAL programs are also limited in opcode cost. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents it's opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 7) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. TEAL programs are limited to 20000 for total opcode cost of all program operators. The [TEAL Opcodes](../../reference-docs/teal/opcodes.md) reference lists the opcode cost for every operator.
 
 # Example Walthrough of a TEAL Program
 The example covered in this tutorial is for an contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
 
-The example uses two address (addr1 and addr2). The variables have the values of addr1 = `RFGEHKTFSLPIEGZYNVYALM6J4LJX4RPWERDWYS2PFKNVDWW3NG7MECQTJY` and addr2 = `SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y`.  The variable addr1 represents the creator of the contact account and funds it. The variable addr2 is the intended recipient of the funds, but only if addr2 supplies a proper secret key and the transaction must be submitted within a time limit (represented with a number of blocks). If addr2 does not submit the transaction in time or can’t supply the proper secret key, addr1 can submit the transaction and retrieve all the tokens. The transaction fee for the transaction is limited to no more than 1 algo. The psuedo code for this example is represented with the following logic:
+The example uses two address (addr1 and addr2). The variables have the values of addr1 = `RFGEHKTFSLPIEGZYNVYALM6J4LJX4RPWERDWYS2PFKNVDWW3NG7MECQTJY` and addr2 = `SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y`.  The variable addr1 represents the creator of the contact account and funds it. The variable addr2 is the intended recipient of the funds, but only if addr2 supplies a proper secret key and the transaction must be submitted within a time limit (represented with a number of blocks). If addr2 does not submit the transaction in time or can’t supply the proper secret key, addr1 can submit the transaction and retrieve all the tokens. The transaction fee for the transaction is limited to no more than 1 algo. The pseudo-code for this example is represented with the following logic:
 
 ``` go
 ((addr2 and secret) || (addr1 and timeout)) && (ok fee)
@@ -147,7 +147,8 @@ The second clause of the pseudo logic is implemented with the following TEAL.
 // The following six lines of teal check if the 
 // transaction is reciever is set to addr1 and that the CloseRemainderTo
 // transaction property is also set to addr1.
-// Once completed the stack will have the 0 or 1 from the previous clause and a 1 or 0 from the 
+// Once completed the stack will have the 0 or 1 
+// from the previous clause and a 1 or 0 from the 
 // the beginning of the second clause. 
 txn CloseRemainderTo
 addr RFGEHKTFSLPIEGZYNVYALM6J4LJX4RPWERDWYS2PFKNVDWW3NG7MECQTJY
@@ -185,7 +186,7 @@ This completes the second clause. Clause 1 and 2 are ORed together.
 // and pops the two values and pushes a 0 or 1 
 || 
 ```
-The third clause is responsibile for verifying that the transaction fee is below 1 Algo. This is an important check to prevent an account being cleared by an errant transaction fee requirement.
+The third clause is responsible for verifying that the transaction fee is below 1 Algo. This is an important check to prevent an account from being cleared by an errant transaction fee requirement.
 
 ```go
 
@@ -202,7 +203,7 @@ int 1000000
 // At this point there will be two values on the stack 
 <
 ```
-The && is the final operator used in this example. This ANDs the third clause with the result of the OR operation between the first and second clause.
+The && is the final operator used in this example. This ANDs the third clause with the result of the OR operation between the first and second clauses.
 
 ``` go
 // The && operator is used to pop those values by anding them and pushing either 
