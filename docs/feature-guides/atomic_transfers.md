@@ -24,7 +24,7 @@ Atomic multi-party transfers require no trusted intermediaries.
 Payments to multiple recipients. 
 
 
-Cre:
+Process Overview:
 
 1. Create unsigned transactions 
 2. Combine transactions 
