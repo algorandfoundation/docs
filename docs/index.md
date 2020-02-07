@@ -1,4 +1,4 @@
-title: Algorand Developer Portal
+title: Algorand Developer Docs
 
 ## Application Developers
 
