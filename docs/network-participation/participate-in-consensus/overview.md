@@ -7,7 +7,7 @@ This section covers the procedure for registering an account to participate in t
 	- Accounts mark themselves online by submitting an [online key registration transaction](../../feature-guides/transactions.md#register-account-online) for a valid participation key.
 	- Accounts mark themselves offline by submitting an [offline key registration transaction](../../feature-guides/transactions.md#register-account-offline). 
 	- It is important to mark your account offline if it is not actually participating. Not doing so is bad network behavior and will decrease the honest/dishonest user ratio that underpins the liveness of the agreement protocol.
-	- It is important to ensure that only the latest update of the participation key ever exists at any time (up to allowed backups dating less than one hour, see above).
+	- It is important to ensure that only the latest update of the participation key ever exists at any time.
 	- In the event of node migration, hardware swap, or other similar events, it is preferable to have your participation key offline for a few rounds than to have it present on multiple nodes at the same time.
 
 
@@ -19,7 +19,7 @@ In the context of this section, participation means participation in the Algoran
 ## Online/Offline Status
 In order for an account to participate in consensus, it must first mark itself online. Marking an account online requires the account to have a valid participation key, which has been registered with the network by way of an [online key registration transaction](../../feature-guides/transactions.md#register-account-online), authorized by the participating account. Marking an account offline requires an [offline key registration transaction](../../feature-guides/transactions.md#register-account-offline) also authorized by the private key of the participating account.
 
-# Best Practices and Guidelines for a Healthy Network
+# Guidelines for a Healthy Network
 
 ## Ensure that Online Accounts are Participating
 If an account registers itself online, it is important that its participation key actually is online. _A participation key is online if there is a single fully-synchronized node on the Algorand network that has that key in its ledger directory._ You should always mark an account offline if it is not actually available to participate, since the network uses the online/offline status of an account to calculate block vote thresholds. If you are marked online but you are not actually participating, you would be considered a dishonest user and will negatively impact the voting threshold. Furthermore, if your node experiences issues you are not able to solve promptly, it is recommended that you register the account offline as soon as possible.
