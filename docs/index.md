@@ -1,18 +1,65 @@
-title: Home
+title: Welcome to the Algorand Developer Docs! 
 
-TO DO: This page will be updated in tile format
+## Application Developers
 
-Welcome to the Algorand Developer Docs! 
+<div class="homepage-cards">
+  <div class="homepage-card">
+    <span class="rocket-icon"></span>
+    <a href="./getting-started/setup/" class="card-title">Getting Started</a>
+    <div class="card-description">
+    Learn how to setup your environment and send your first transaction
+    </div>
+  </div>
+  <div class="homepage-card">
+    <span class="checklist-icon"></span>
+    <a href="./feature-guides/accounts/" class="card-title">Feature Guides</a>
+    <div class="card-description">
+    In-depth explanations and how-tos for core Algorand features
+    </div>
+  </div>
+  <div class="homepage-card">
+    <span class="folder-file-icon"></span>
+    <a href="./reference-docs/goal/goal/" class="card-title">Reference Docs</a>
+    <div class="card-description">
+    Learn commands and syntax for specific developer tools.
+    </div>
+  </div>
+</div>
 
-**Application Developers**
+## Noderunners
 
-Check out the new [**Start Building**](./getting-started/setup.md) section to learn how to setup your environment and send your first transaction. Then visit the [**Explore Features**](./feature-guides/accounts.md) section for in-depth explanations and how-tos for core Algorand features. Jump straight to the [**Reference Docs**](./reference-docs/goal/goal.md) to learn commands and syntax for specific developer tools. 
+<div class="homepage-cards">
+  <div class="homepage-card">
+    <span class="server-icon"></span>
+    <a href="../docs/network-participation/run-a-node/types/" class="card-title">Network Participation</a>
+    <div class="card-description">
+    Learn how to install, configure, and run a node.
+    </div>
+  </div>
+  <div class="homepage-card">
+    <span class="multiple-users-network-icon"></span>
+    <a href="./network-participation/participate-in-consensus/overview/" class="card-title">Participate in Consensus</a>
+    <div class="card-description">
+    Learn how to register accounts to participate in consensus.
+    </div>
+  </div>
+</div>
 
-**Noderunners**
+## Everyone
 
-Visit the [**Run a Node**](../docs/network-participation/run-a-node/types.md) section to learn how to install, configure, and run a node. To learn how to register accounts to participate in consensus, visit the [**Participate in Consensus**](./network-participation/participate-in-consensus/overview.md) section.
-
-**Everyone**
-
-Learn about [**Algorand's Consensus Protocol**](./algorand_consensus.md) and check out the [**Community Projects**](./community.md) page to explore the different applications that others have built on Algorand blockchain.
-
+<div class="homepage-cards">
+  <div class="homepage-card">
+    <span class="community-icon"></span>
+    <a href="./community/" class="card-title">Community Projects</a>
+    <div class="card-description">
+    Learn how to install, configure, and run a node.
+    </div>
+  </div>
+  <div class="homepage-card">
+    <span class="study-owl-icon"></span>
+    <a href="./algorand_consensus/" class="card-title">Learn</a>
+    <div class="card-description">
+    Learn how to register accounts to participate in consensus.
+    </div>
+  </div>
+</div>
