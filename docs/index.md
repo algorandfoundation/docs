@@ -1,20 +1,20 @@
-title: Welcome to the Algorand Developer Docs! 
+title: Developer Home
 
 ## Application Developers
 
 <div class="homepage-cards">
   <div class="homepage-card">
     <span class="rocket-icon"></span>
-    <a href="./getting-started/setup/" class="card-title">Getting Started</a>
+    <a href="./getting-started/setup/" class="card-title">Start Building</a>
     <div class="card-description">
-    Learn how to setup your environment and send your first transaction
+    Learn how to setup your environment and send your first transaction.
     </div>
   </div>
   <div class="homepage-card">
     <span class="checklist-icon"></span>
-    <a href="./feature-guides/accounts/" class="card-title">Feature Guides</a>
+    <a href="./feature-guides/accounts/" class="card-title">Explore Features</a>
     <div class="card-description">
-    In-depth explanations and how-tos for core Algorand features
+    In-depth explanations and how-tos for core Algorand features.
     </div>
   </div>
   <div class="homepage-card">
@@ -31,16 +31,16 @@ title: Welcome to the Algorand Developer Docs!
 <div class="homepage-cards">
   <div class="homepage-card">
     <span class="server-icon"></span>
-    <a href="../docs/network-participation/run-a-node/types/" class="card-title">Network Participation</a>
+    <a href="../docs/network-participation/run-a-node/types/" class="card-title">Run a Node</a>
     <div class="card-description">
-    Learn how to install, configure, and run a node.
+    Install, configure, and run a node.
     </div>
   </div>
   <div class="homepage-card">
     <span class="multiple-users-network-icon"></span>
     <a href="./network-participation/participate-in-consensus/overview/" class="card-title">Participate in Consensus</a>
     <div class="card-description">
-    Learn how to register accounts to participate in consensus.
+    Register accounts to participate in Algorand consensus.
     </div>
   </div>
 </div>
@@ -52,14 +52,14 @@ title: Welcome to the Algorand Developer Docs!
     <span class="community-icon"></span>
     <a href="./community/" class="card-title">Community Projects</a>
     <div class="card-description">
-    Learn how to install, configure, and run a node.
+    Browse existing projects built on Algorand.
     </div>
   </div>
   <div class="homepage-card">
     <span class="study-owl-icon"></span>
-    <a href="./algorand_consensus/" class="card-title">Learn</a>
+    <a href="./algorand_consensus/" class="card-title">Algorand Consensus</a>
     <div class="card-description">
-    Learn how to register accounts to participate in consensus.
+    Learn more about how Algorand consensus works.
     </div>
   </div>
 </div>
