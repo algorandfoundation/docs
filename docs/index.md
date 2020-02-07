@@ -1,4 +1,4 @@
-title: Developer Home
+title: Algorand Developer Docs
 
 ## Application Developers
 

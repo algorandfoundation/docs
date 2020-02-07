@@ -1,1 +1,5 @@
 title: Register Online
+
+
+
+ Technically, the voting keys will never be used if an account has not been taken online. For an account to be taken online it first must have tokens in the account, participation keys generated for it and a “take online” transaction completed on the blockchain. To take an account online you can use the goal account changeonlinestatus command to create the transaction. This command provides a -t option that allows the transactions to be written to a file and signed offline (see signing offline). Once the changeonlinestatus transaction is processed by the blockchain, the VRF public key is written into the account’s data and the account will start participating in consensus with that key. This VRF public key is how the account is associated with the specific participation keys. Changing an account’s status takes 320 rounds after the transaction is processed by the blockchain.

@@ -1,6 +1,6 @@
 title: 1. Workspace Setup
 
-This section is a getting started guide for developers, looking to build applications on the Algorand blockchain. Start here to learn what it means to build an application on Algorand and how to get started quickly.
+This section is a getting started guide for developers looking to build applications on the Algorand blockchain. Start here to learn what it means to build an application on Algorand and how to get started quickly.
 
 # What does it mean to build on Algorand?
 Building an application on Algorand means that your application, directly or indirectly, reads from or writes to the Algorand blockchain. Writing to the Algorand blockchain is synonymous with issuing a transaction that will later be confirmed within a block. Reading from the blockchain means reading back transactions that have been confirmed within prior blocks.
