@@ -1,6 +1,6 @@
 title: Overview
 
-This section covers the procedure for registering an account to participate in the Algorand Consensus Protocol. It begins with a description of important concepts and best practices helpful prior to getting started. 
+This section covers the procedure for registering an account to participate in the Algorand Consensus Protocol. It begins with a description of important concepts and best practices prior to getting started. 
 
 !!! tldr
 	- Accounts participate in the Algorand consensus protocol by generating a valid participation key and then registering that key online with a special online registration transaction.

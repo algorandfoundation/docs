@@ -84,7 +84,7 @@ An account that is marked `online` does not necessarily mean it is participating
 [_Key Registration Transaction Fields Reference_](../reference-docs/transactions.md#key-registration-transaction)
 
 ### Register account online 
-This is an example of an **online** registration transaction. 
+This is an example of an **online** key registration transaction. 
 
 ```json
 {

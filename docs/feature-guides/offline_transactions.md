@@ -39,13 +39,13 @@ Unsigned transactions require the transaction object to be created before writti
 
 ``` python tab="Python"
 	# create transaction
-	receiver = "transaction-receiver<PLACEHOLDER>"
+	receiver = <transaction-receiver>
 	data = {
 		"sender": my_address,
 		"receiver": receiver,
 		"fee": params.get('minFee'),
 		"flat_fee": True,
-		"amt": amount<PLACEHOLDER>,
+		"amt": <amount>,
 		"first": params.get('lastRound'),
 		"last": params.get('lastRound') + 1000,
 		"gen": params.get('genesisID'),
@@ -86,7 +86,7 @@ Unsigned transactions require the transaction object to be created before writti
     Transaction tx = decodedTransaction.tx;          
 
     // recover account    
-    String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
+    String SRC_ACCOUNT = <25-word-passphrase>;
     Account src = new Account(SRC_ACCOUNT);
 
     // sign transaction
@@ -110,7 +110,7 @@ Unsigned transactions require the transaction object to be created before writti
 		Txn:  tx,
 	 }
 
-	// save unsigned transction to file
+	// save unsigned Transaction to file
 	err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
 	if err == nil {
 		fmt.Printf("Saved unsigned transaction to file\n")
@@ -150,7 +150,7 @@ Unsigned transactions require the transaction object to be created before writti
 
 
 ``` goal tab="goal"
-$ goal clerk send --from=my-account<PLACEHOLDER> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
+$ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
 
 $ goal clerk sign --infile unsigned.txn --outfile signed.txn
 
@@ -186,13 +186,13 @@ Signed Transactions are similar, but require an account to sign the transaction 
 
 ``` python tab="Python"
 	# create transaction
-    receiver = "transaction-receiver<PLACEHOLDER>"
+    receiver = <transaction-receiver>
     data = {
         "sender": my_address,
         "receiver": receiver,
         "fee": params.get('minFee'),
         "flat_fee": True,
-        "amt": amount<PLACEHOLDER>,
+        "amt": <amount>,
         "first": params.get('lastRound'),
         "last": params.get('lastRound') + 1000,
         "gen": params.get('genesisID'),
@@ -226,7 +226,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
             null, amount, new Address(DEST_ADDR), genId, genesisHash);
 
     // recover account    
-    String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";                    
+    String SRC_ACCOUNT = <25-word-passphrase>;                    
     Account src = new Account(SRC_ACCOUNT);
 
     // sign transaction
@@ -302,9 +302,9 @@ $ goal clerk rawsend --filename signed.txn
     // make connection to node
     async function setupClient() {
         if( client == null){
-            const ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            const ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
-            const port = port-number<PLACEHOLDER>;
+            const server = <algod-address>;
+            const token = <algod-token>;
+            const port = <port-number>;
             let algodClient = new algosdk.Algod(token, server, port);
             client = algodClient;
         } else {
@@ -312,9 +312,9 @@ $ goal clerk rawsend --filename signed.txn
         }
         return client;
     }
-    // recover acccount for example
+    // recover account for example
     function recoverAccount(){
-        const passphrase ="your-25-word-mnemonic<PLACEHOLDER>";
+        const passphrase =<your-25-word-mnemonic>;
         let myAccount = algosdk.mnemonicToSecretKey(passphrase);
         return myAccount;
     }
@@ -331,10 +331,10 @@ $ goal clerk rawsend --filename signed.txn
             await algodclient.statusAfterBlock(lastround + 1);
         }
     };
-    async function writeUnsignedTransctionToFile() {
+    async function writeUnsignedTransactionToFile() {
 
         try{
-            const receiver = "transaction-receiver<PLACEHOLDER>";
+            const receiver = <transaction-receiver>;
 
             // setup accounts and make node connection
             let algodClient = await setupClient();
@@ -362,7 +362,7 @@ $ goal clerk rawsend --filename signed.txn
             console.log( e );
         }
     }; 
-    async function readUnsignedTransctionFromFile() {
+    async function readUnsignedTransactionFromFile() {
 
         try{
             // setup connection to node
@@ -387,10 +387,10 @@ $ goal clerk rawsend --filename signed.txn
             console.log( e );
         }	
     }; 
-    async function writeSignedTransctionToFile() {
+    async function writeSignedTransactionToFile() {
 
         try{
-            const receiver = "transaction-receiver<PLACEHOLDER>";
+            const receiver = <transaction-receiver>;
 
             // setup connection to node
             let algodClient = await setupClient();
@@ -420,7 +420,7 @@ $ goal clerk rawsend --filename signed.txn
             console.log(e);
         }
     }; 
-    async function readSignedTransctionFromFile() {
+    async function readSignedTransactionFromFile() {
 
         try{
             // setup connection to node
@@ -441,12 +441,12 @@ $ goal clerk rawsend --filename signed.txn
     }; 
 
     async function testUnsigned(){
-        await writeUnsignedTransctionToFile();
-        await readUnsignedTransctionFromFile();
+        await writeUnsignedTransactionToFile();
+        await readUnsignedTransactionFromFile();
     }
     async function testSigned(){
-        await writeSignedTransctionToFile();
-        await readSignedTransctionFromFile();
+        await writeSignedTransactionToFile();
+        await readSignedTransactionFromFile();
     }
     //testUnsigned();
     testSigned();
@@ -463,8 +463,8 @@ $ goal clerk rawsend --filename signed.txn
     from algosdk import transaction
 
     def connect_to_network():
-        algod_address = "algod-address<PLACEHOLDER>"
-        algod_token = "algod-token<PLACEHOLDER>"
+        algod_address = <algod-address>
+        algod_token = <algod-token>
         algod_client = algod.AlgodClient(algod_token, algod_address)
         return algod_client
 
@@ -483,7 +483,7 @@ $ goal clerk rawsend --filename signed.txn
         algod_client = connect_to_network()
 
         # recover account
-        passphrase = "25-word-passphrase<PLACEHOLDER>"
+        passphrase = <25-word-passphrase>
         private_key = mnemonic.to_private_key(passphrase)
         my_address = mnemonic.to_public_key(passphrase)
         print("My address: {}".format(my_address))
@@ -492,13 +492,13 @@ $ goal clerk rawsend --filename signed.txn
         params = algod_client.suggested_params()
 
         # create transaction
-        receiver = "transaction-receiver<PLACEHOLDER>"
+        receiver = <transaction-receiver>
         data = {
             "sender": my_address,
             "receiver": receiver,
             "fee": params.get('minFee'),
             "flat_fee": True,
-            "amt": amount<PLACEHOLDER>,
+            "amt": <amount>,
             "first": params.get('lastRound'),
             "last": params.get('lastRound') + 1000,
             "gen": params.get('genesisID'),
@@ -541,7 +541,7 @@ $ goal clerk rawsend --filename signed.txn
         algod_client = connect_to_network()
         
         # recovere account
-        passphrase = "25-word-passphrase<PLACEHOLDER>"
+        passphrase = <25-word-passphrase>
         private_key = mnemonic.to_private_key(passphrase)
         my_address = mnemonic.to_public_key(passphrase)
         print("My address: {}".format(my_address))
@@ -550,13 +550,13 @@ $ goal clerk rawsend --filename signed.txn
         params = algod_client.suggested_params()
         
         # create transaction
-        receiver = "transaction-receiver<PLACEHOLDER>"
+        receiver = <transaction-receiver>
         data = {
             "sender": my_address,
             "receiver": receiver,
             "fee": params.get('minFee'),
             "flat_fee": True,
-            "amt": amount<PLACEHOLDER>,
+            "amt": <amount>,
             "first": params.get('lastRound'),
             "last": params.get('lastRound') + 1000,
             "gen": params.get('genesisID'),
@@ -622,8 +622,8 @@ $ goal clerk rawsend --filename signed.txn
         private AlgodApi connectToNetwork(){
 
             // Initialize an algod client
-            final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
+            final String ALGOD_API_ADDR = <algod-address>;
+            final String ALGOD_API_TOKEN = <algod-token>;
 
             AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
             ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
@@ -655,8 +655,8 @@ $ goal clerk rawsend --filename signed.txn
             // connect to node
             if( algodApiInstance == null ) connectToNetwork();
 
-            final String DEST_ADDR = "transaction-reciever<PLACEHOLDER>";
-            final String SRC_ADDR = "transaction-sender<PLACEHOLDER>";
+            final String DEST_ADDR = <transaction-reciever>;
+            final String SRC_ADDR = <transaction-sender>;
 
             try { 
                 // Get suggested parameters from the node
@@ -694,7 +694,7 @@ $ goal clerk rawsend --filename signed.txn
                 Transaction tx = decodedTransaction.tx;           
 
                 // recover account    
-                String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";
+                String SRC_ACCOUNT = <25-word-passphrase>;
                 Account src = new Account(SRC_ACCOUNT);
 
                 // sign transaction
@@ -717,8 +717,8 @@ $ goal clerk rawsend --filename signed.txn
             // connect to node
             if( algodApiInstance == null ) connectToNetwork();
 
-            final String DEST_ADDR = "transaction-reciever<PLACEHOLDER>";
-            final String SRC_ADDR = "transaction-sender<PLACEHOLDER>";;
+            final String DEST_ADDR = <transaction-reciever>;
+            final String SRC_ADDR = <transaction-sender>;;
 
             try { 
 
@@ -736,7 +736,7 @@ $ goal clerk rawsend --filename signed.txn
                         null, amount, new Address(DEST_ADDR), genId, genesisHash);
 
                 // recover account    
-                String SRC_ACCOUNT = "25-word-passphrase<PLACEHOLDER>";                    
+                String SRC_ACCOUNT = <25-word-passphrase>;                    
                 Account src = new Account(SRC_ACCOUNT);
 
                 // sign transaction
@@ -828,7 +828,7 @@ $ goal clerk rawsend --filename signed.txn
     }
     // utility function to recover account and return sk and address
     func recoverAccount()(string, ed25519.PrivateKey) {
-        const passphrase = "your-25-word-mnemonic<PLACEHOLDER>"
+        const passphrase = <your-25-word-mnemonic>
 
         sk, err := mnemonic.ToPrivateKey(passphrase)
         if err != nil {
@@ -845,8 +845,8 @@ $ goal clerk rawsend --filename signed.txn
     }
     // utility funciton to setup connection to node
     func setupConnection()( algod.Client ){
-        const algodToken = "algod-token<PLACEHOLDER>"
-        const algodAddress = "algod-address<PLACEHOLDER>"
+        const algodToken = <algod-token>
+        const algodAddress = <algod-address>
         algodClient, err := algod.MakeClient(algodAddress, algodToken)
         if err != nil {
             fmt.Printf("failed to make algod client: %s\n", err)
@@ -870,7 +870,7 @@ $ goal clerk rawsend --filename signed.txn
         }
 
         // create transaction
-        toAddr := "transaction-receiver<PLACEHOLDER>"
+        toAddr := <transaction-receiver>
         genID := txParams.GenesisID
         tx, err := transaction.MakePaymentTxn(addr, toAddr, 1, 100000,
             txParams.LastRound, txParams.LastRound+100, nil, "", 
@@ -883,7 +883,7 @@ $ goal clerk rawsend --filename signed.txn
 		    Txn:  tx,
 	    }        
 
-        // save unsigned transction to file
+        // save unsigned Transaction to file
         err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
         if err == nil {
             fmt.Printf("Saved unsigned transaction to file\n")
@@ -947,7 +947,7 @@ $ goal clerk rawsend --filename signed.txn
         }
 
         // create transaction
-        toAddr := "transaction-receiver<PLACEHOLDER>"
+        toAddr := <transaction-receiver>
         genID := txParams.GenesisID
         tx, err := transaction.MakePaymentTxn(addr, toAddr, 1, 100000,
             txParams.LastRound, txParams.LastRound+100, nil, "", 
