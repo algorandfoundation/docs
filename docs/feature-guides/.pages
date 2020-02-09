@@ -4,7 +4,6 @@ arrange:
   - transactions.md
   - signatures.md
   - offline_transactions.md
-  - offline_multisig_transactions.md
   - asa.md
   - atomic_transfers.md
   - asc1
