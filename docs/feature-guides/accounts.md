@@ -123,10 +123,10 @@ $ kmd -d data/kmd-v<version>/ -t 3600
 Retrieve the kmd IP address and access token:
 
 ```zsh
-$ echo "kmd IP address: " `cat $ALGORAND_DATA/kmd.net`
+$ echo "kmd IP address: " `cat $ALGORAND_DATA/kmd-v<version>/kmd.net`
 kmd IP address:  [ip-address]:[port]
 
-$ echo "kmd token: " `cat $ALGORAND_DATA/kmd.token`
+$ echo "kmd token: " `cat $ALGORAND_DATA/kmd-v<version>/kmd.token`
 kmd token:  [token]
 ```
 #### Create a wallet and generate an account
