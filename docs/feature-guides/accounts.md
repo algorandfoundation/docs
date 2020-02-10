@@ -146,14 +146,14 @@ var walletid = null;
 var wallethandle = null;
 
 (async () => {
-    let walletid = (await kmdclient.createWallet("MyTestWallet3", "testpassword", "", "sqlite")).wallet.id;
-    console.log("Created wallet.", walletid);
+    let walletid = (await kmdclient.createWallet("MyTestWallet1", "testpassword", "", "sqlite")).wallet.id;
+    console.log("Created wallet:", walletid);
 
     let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-    console.log("Got wallet handle.", wallethandle);
+    console.log("Got wallet handle:", wallethandle);
 
     let address1 = (await kmdclient.generateKey(wallethandle)).address;
-    console.log("Created new account1.", address1);
+    console.log("Created new account:", address1);
 })().catch(e => {
     console.log(e);
 });
@@ -169,7 +169,7 @@ kmd_address = "http://" + "<kmd-address>"
 kcl = kmd.KMDClient(kmd_token, kmd_address)
 
 # create a wallet object
-wallet = Wallet("testwallet", "testpassword", kcl)
+wallet = Wallet("MyTestWallet1", "testpassword", kcl)
 
 # get wallet information
 info = wallet.info()
@@ -181,20 +181,67 @@ print("New account:", address)
 ```
 
 ```java tab="Java"
+package com.algorand.algosdk.example;
+
+import com.algorand.algosdk.kmd.client.ApiException;
 import com.algorand.algosdk.kmd.client.KmdClient;
 import com.algorand.algosdk.kmd.client.api.KmdApi;
 import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
+import com.algorand.algosdk.kmd.client.model.APIV1POSTWalletResponse;
+import com.algorand.algosdk.kmd.client.model.CreateWalletRequest;
+import com.algorand.algosdk.kmd.client.model.GenerateKeyRequest;
+import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
 
-public static void kmdApi() {
-    final String KMD_API_ADDR = <kmd-address>;
-    final String KMD_API_TOKEN = <kmd-token>;
 
-    KmdClient client = new KmdClient();
-    client.setBasePath(KMD_API_ADDR);
-    ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-    api_key.setApiKey(KMD_API_TOKEN);
+/**
+ * Hello world!
+ *
+ */
+public class GenWalletGenAcct 
+{
+    public static void main(String args[]) throws Exception {
+        //Get the values for the following two settings in the
+        //kmd.net and kmd.token files within the data directory 
+        //of your node.        
+        final String KMD_API_ADDR = "https://" + "<kmd-token>";
+        final String KMD_API_TOKEN = "<kmd-token>";
+
+        // Create a wallet with kmd rest api
+        KmdClient client = new KmdClient();
+        client.setBasePath(KMD_API_ADDR);
+        // Configure API key authorization: api_key
+        ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+        api_key.setApiKey(KMD_API_TOKEN);
         KmdApi kmdApiInstance = new KmdApi(client);
-	...
+
+        APIV1POSTWalletResponse wallet;
+        try {
+            //create the REST request
+            CreateWalletRequest req = new CreateWalletRequest()
+                    .walletName("MyTestWallet1")
+                    .walletPassword("testpassword")
+                    .walletDriverName("sqlite");
+            //create the wallet        
+            wallet = kmdApiInstance.createWallet(req);
+            String wallId = wallet.getWallet().getId();
+            //create REST request to get wallet token
+            InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+            walletHandleRequest.setWalletId(wallId);
+            walletHandleRequest.setWalletPassword("test");
+            //execute request to get the wallet token
+            String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
+            //create REST request to create new key with wallet token
+            GenerateKeyRequest genAcc = new GenerateKeyRequest();
+            genAcc.setWalletHandleToken(token);
+            //execute request to generate new key(account)
+            String newAccount = kmdApiInstance.generateKey(genAcc).getAddress();
+            System.out.println("New Account: " + newAccount);
+
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 ```
 
@@ -208,8 +255,8 @@ import (
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
-const kmdAddress = <kmd-address>
-const kmdToken = <kmd-token>
+const kmdAddress = "https://" + "<kmd-address>"
+const kmdToken = "<kmd-token>"
 
 func main() {
 	// Create a kmd client
@@ -221,7 +268,7 @@ func main() {
 	fmt.Println("Made a kmd client")
 
 	// Create the example wallet, if it doesn't already exist
-	cwResponse, err := kmdClient.CreateWallet("testwallet", "testpassword", kmd.DefaultWalletDriver, types.MasterDerivationKey{})
+	cwResponse, err := kmdClient.CreateWallet("MyTestWallet1", "testpassword", kmd.DefaultWalletDriver, types.MasterDerivationKey{})
 	if err != nil {
 		fmt.Printf("error creating wallet: %s\n", err)
 		return
@@ -248,7 +295,7 @@ func main() {
 		fmt.Printf("Error generating key: %s\n", err)
 		return
 	}
-	fmt.Printf("Generated address %s\n", genResponse.Address)
+	fmt.Printf("New Account: %s\n", genResponse.Address)
 }
 ```
 
