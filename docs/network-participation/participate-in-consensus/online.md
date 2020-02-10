@@ -124,6 +124,17 @@ func saveUnsignedTransaction() {
 $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=2000 --firstvalid=6002000 --lastvalid=6003000 --online=true --txfile=online.txn
 ```
 
+# Check that the node is participating
+
+At any time, you can validate whether your node is participating by `grep`-ing the `node.log` file in your data directory, looking for a `"VoteBroadcast"` messages where the `"Sender"` is your public key participation address.
+
+```
+$ grep 'VoteBroadcast' node.log
+...
+{"Context":"Agreement","Hash":"QJADVNJZDXYEQUPHITB6REFDGBY4AHBPPBIPVXLOPOASZA4T3PIA","ObjectPeriod":0,"ObjectRound":896659,"ObjectStep":2,"Period":0,"Round":0,"Sender":"3IE2GDYYSI56U53AQ6UUWRGAIGG5D4RHWLMCXJOPWQJA2ABF2X2A","Step":0,"Type":"VoteBroadcast","Weight":1,"WeightTotal":1,"file":"pseudonode.go","function":"github.com/algorand/go-algorand/agreement.pseudonodeVotesTask.execute","level":"info","line":344,"msg":"vote created for broadcast (weight 1, total weight 1)","time":"2019-05-10T18:38:54.137592-04:00"}
+...
+```
+
 **See also**
 
 - [Key Registration Transactions](../../feature-guides/transactions.md#key-registration-transaction)

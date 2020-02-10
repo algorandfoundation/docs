@@ -28,7 +28,7 @@ If an account registers itself online, it is important that its participation ke
 	If you keep your private keys in cold storage, its recommended that you generate and sign enough offline transactions to be able to take the account offline in case of emergencies. Learn more about generating transactions for future rounds in the [Transactions guide](../../feature-guides/transactions.md##sending-a-transaction-in-the-future). Learn how to create and authorize transactions offline in the [Authorizing Transactions Offline](../../feature-guides/offline_transactions.md) guide.
 
 ## Renew participation keys before they expire
-Participation keys are valid for a specific round range. Make sure to renew participation keys before they expire. Your account will not 
+Participation keys are valid for a specific round range. Make sure to renew participation keys or mark the account offline before the current participation key expires. Your account will _not_ automatically be marked offline.
 
 _Visit the [Renew Participation Keys section](./renew.md) for detailed instructions._
 

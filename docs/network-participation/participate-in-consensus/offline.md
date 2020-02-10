@@ -1,6 +1,6 @@
 title: Register Offline
 
-To mark an account **offline** send a `"keyreg"` transaction to the network authorized by the account to be marked offline. The signal to mark the sending account offline is the issuance of a `"type": "keyreg"` transaction that does not contain any participation key-related fields (i.e. they are all set to null values)
+To mark an account **offline** send a key registration transaction to the network authorized by the account to be marked offline. The signal to mark the sending account offline is the issuance of a `"type": "keyreg"` transaction that does not contain any participation key-related fields (i.e. they are all set to null values)
 
 !!! info "Important"
 	Just like with online keyreg transactions. The moment a key registration transaction is confirmed by the network it takes 320 rounds for the change to take effect. So, if a key registration is confirmed in round 5000, the account will stop participating at round 5320.
@@ -62,5 +62,6 @@ $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJH
 ```
 
 **See also**
+
 - [Key Registration Transactions](../../feature-guides/transactions.md#key-registration-transaction)
 - [Register account offline](../../feature-guides/transactions.md#register-account-offline)
