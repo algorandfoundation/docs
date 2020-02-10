@@ -163,8 +163,8 @@ var wallethandle = null;
 from algosdk import kmd
 from algosdk.wallet import Wallet
 
-kmd_token = <kmd-token>
-kmd_address = <kmd-address>
+kmd_token = "<kmd-token>"
+kmd_address = "http://" + "<kmd-address>"
 # create a kmd client
 kcl = kmd.KMDClient(kmd_token, kmd_address)
 
