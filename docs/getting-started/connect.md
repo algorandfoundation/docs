@@ -139,7 +139,7 @@ func main() {
 
 # Check node status and network version
 
-Call the _status_ and _version_ methods fron the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
+Call the _status_ and _version_ methods from the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
 
 ```javascript tab="JavaScript"
 ...
