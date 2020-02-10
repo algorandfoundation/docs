@@ -136,8 +136,8 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-const kmdtoken = <kmd-token>;
-const kmdserver = <kmd-address>;
+const kmdtoken = "<kmd-token>";
+const kmdserver = "<kmd-address>";
 const kmdport = <kmd-port>;
 
 const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
@@ -280,8 +280,8 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-const kmdtoken = <kmd-token>;
-const kmdserver = <kmd-address>;
+const kmdtoken = "<kmd-token>";
+const kmdserver = "<kmd-address>";
 const kmdport = <kmd-port>;
 
 const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
