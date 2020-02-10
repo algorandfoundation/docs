@@ -8,8 +8,8 @@ Below is a categorized list of projects that are using the Algorand blockchain a
 
 | Name| Description |
 |------|------|
-| <center>![](../imgs/goalseekericon.png)</center><center> <a href="https://goalseeker.purestake.io/algorand/mainnet" target="_blank">GoalSeeker</a></center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/) |
-| <center>![](../imgs/algoexplorer.png)</center><center> <a href="https://algoexplorer.io/" target="_blank">Algo Explorer</a></center> | Algoexplorer is a complete Algorand blockchain explorer created by [Rand Labs](https://randlabs.io/)|
+| <center>![](../imgs/goalseekericon.png)</center><center> <a href="https://goalseeker.purestake.io/algorand/mainnet" target="_blank">GoalSeeker</a></center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/). |
+| <center>![](../imgs/algoexplorer.png)</center><center> <a href="https://algoexplorer.io/" target="_blank">Algo Explorer</a></center> | Algoexplorer is a complete Algorand blockchain explorer created by [Rand Labs](https://randlabs.io/).|
 
 
 # Wallets
@@ -27,8 +27,8 @@ Below is a categorized list of projects that are using the Algorand blockchain a
 # SDKs
 | Name| Description |
 |------|------|
-| <center><a href="https://github.com/mraof/rust-algorand-sdk" target="_blank">Rust SDK</center></a> | RUST SDK |
-| <center><a href="https://github.com/RileyGe/dotnet-algorand-sdk" target="_blank">.Net SDK</a></center> | This libary is built with C# and provides Algorand 2.0 features and is compliant with .Net Standard 2.0
+| <center><a href="https://github.com/mraof/rust-algorand-sdk" target="_blank">Rust SDK</center></a> | RUST implementation of Algorand's REST API.|
+| <center><a href="https://github.com/RileyGe/dotnet-algorand-sdk" target="_blank">.Net SDK</a></center> | This libary is built with C# and provides Algorand 2.0 features and is compliant with .Net Standard 2.0.
 
 # API Wrappers
 | Name| Description |
@@ -39,7 +39,7 @@ Below is a categorized list of projects that are using the Algorand blockchain a
 | Name| Description |
 |------|------|
 | <center><a href="https://github.com/algorand/pyteal" target="_blank">PyTeal</a></center> | PyTeal is a Python language binding program for ASC1. PyTeal allows developer to express TEAL-based smart contract logic using Python. This dev tool abstracts TEAL and does type-checking at contraction time.|
-| <center><a href"https://github.com/algorand/tealviewer" target="_blank">sTEAL</a></center> | sTEAL is a tool written in (Racket) Scheme to help developers write TEAL templates and contracts. sTEAL allows developers to write an expression tree in Racket to represent a TEAL program. It then prints that tree into TEAL assembly. sTEAL supports a few rudimentary quality-of-life features, including variable-length arguments and templating |
+| <center><a href"https://github.com/algorand/tealviewer" target="_blank">sTEAL</a></center> | sTEAL is a tool written in (Racket) Scheme to help developers write TEAL templates and contracts. sTEAL allows developers to write an expression tree in Racket to represent a TEAL program. It then prints that tree into TEAL assembly. sTEAL supports a few rudimentary quality-of-life features, including variable-length arguments and templating. |
 | <center><a href"https://github.com/algorand/tealviewer" target="_blank">tealviewer</a></center> | tealviewer is a graphical tool for understanding how transaction parameters are checked by a given TEAL program.|
 
 
