@@ -34,7 +34,7 @@ Example:
 
 * Corollary to checking as many `txn` fields as possible: be strict with other transaction properties in a group.
 
-* Verify the `GroupSize' to make sure the size corresponds to the number of transactions the logic is expecting. 
+* Verify the `GroupSize` to make sure the size corresponds to the number of transactions the logic is expecting. 
 
 # Tips and Patterns
 In addition to following the guidelines, the following tips and patterns may also be useful. 
