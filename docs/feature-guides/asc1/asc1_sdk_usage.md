@@ -1,12 +1,13 @@
-title: ASC1 SDK Usage
-This guide covers using TEAL programs with contract acccounts or delegated signatures with the available SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. Algorand Smart Contract Templates are also available for officially supported TEAL programs for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. These templates can be used with specific SDK APIs that are detailed in the Templates documenation.<LINK>
+title: Using the SDKs
 
-Each SDK's install process is discussed in the SDK Reference documenation.<LINK>
+This guide covers using TEAL programs with contract accounts or delegated signatures with the available SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. Algorand Smart Contract Templates are also available for officially supported TEAL programs for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. These templates can be used with specific SDK APIs that are detailed in the [Templates](templates.md) documentation.
+
+Each SDK's install process is discussed in the [SDK Reference](../../reference-docs/sdks.md) documentation.
 
 Code snippets are abbreviated for conciseness and clarity. See the full code example for each SDK at the bottom of this guide.
 
 # Accessing TEAL program from SDKs
-Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The goal teal walkthrough documenation <LINK> explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or in hexadecimal format. The following example illustrates using shell commands to export the binary to hexidecimal or a base64 encoded string.
+Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](goal_teal_walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
 
 ``` bash
 //simple.teal contains int=0
@@ -39,9 +40,9 @@ byte[] program = {
 program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
 ```
 # Contract Account SDK usage
-ASC1 Contract accounts are used to allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the reciever of a transaction, these accounts function as an other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is appoved. The ASC1 Usage Modes documentation<LINK> explains ASC1 modes in more detail. 
+ASC1 Contract accounts are used to allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [ASC1 Usage Modes](modes.md) documentation explains ASC1 modes in more detail. 
 
-TEAL contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand transactions<Link>. The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a logic signature<LINK>. See Transaction documentaiton for details on setting up a payment transaction.<Link>
+TEAL contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand [transactions](../transactions.md). The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a [logic signature](modes.md#logic-signatures). See [Transaction](../transactions.md) documentation for details on setting up a payment transaction.
 
 Contract Accounts are created by compiling the TEAL logic. Once the contract account is created, it can be used as any other address. To send tokens or assets from the account the transaction must be signed by a Logic Signature. From an SDK standpoint, the following process should be used.
 
@@ -110,11 +111,11 @@ The following example illustrates signing a transaction with a created logic sig
 ```
 
 # Account Delegation SDK Usage
-ASC1 allows TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The ASC1 Usage Modes documentation<LINK> explains ASC1 modes in more detail. 
+ASC1 allows TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](modes.md) documentation explains ASC1 modes in more detail. 
 
-Delegated transactions are special transactions where the `sender` also signs the logic and the transaction is then signed with the logic signature<LINK>. I all other aspects the transaction functions like a standard transaction. See Transaction documentaiton for details on setting up a payment transaction.<Link>
+Delegated transactions are special transactions where the `sender` also signs the logic and the transaction is then signed with the [logic signature](modes.md#logic-signature). In all other aspects, the transaction functions as any other transaction. See [Transaction](../transactions.md) documentation for details on setting up a payment transaction.
 
-Delgated Logic Signatures require that the logic signature be signed from a specific account or a multi-signature account. The TEAL program is first loaded, then a Logic Signature is created and then the Logic Signature is signed by a specific account or multi-signaure account. The transaction is created as normal. The transaction is then signed with the Logic Signature. From an SDK standpoint, the following process should be used.
+Delegated Logic Signatures require that the logic signature be signed from a specific account or a multi-signature account. The TEAL program is first loaded, then a Logic Signature is created and then the Logic Signature is signed by a specific account or multi-signaure account. The transaction is created as normal. The transaction is then signed with the Logic Signature. From an SDK standpoint, the following process should be used.
 
 * Load the Program Bytes into the SDK.
 * Create a Logic Signature based on the program.
@@ -194,7 +195,7 @@ The following example illustrates signing a transaction with a created logic sig
 ```
 
 # Save Transaction Output for Debugging
-The goal command line tool provides functionallity to do a test run of a TEAL program using the `goal clerk dryun` command. This processes is described in the goal TEAL Walkthrough documenation<LINK>. From the SDK a logic signature transaction can be written to a file to be used with the `goal clerk dryrun` command. The following code details how this is done. The goal tab illustrates runn the dryrun on the generated file.
+The goal command-line tool provides functionality to do a test run of a TEAL program using the `goal clerk dryun` command. This process is described in the [goal TEAL Walkthrough(goal_teal_walkthrough.md)] documentation. From the SDK a logic signature transaction can be written to a file to be used with the `goal clerk dryrun` command. The following code details how this is done. The goal tab illustrates run the dryrun on the generated file.
 
 ```javascript tab="JavaScript"
     let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
@@ -250,7 +251,7 @@ REJECT
 
 
 # Passing Parameters using the SDKs
-The SDKs require that parameters to a TEAL program be in byte arrays. This byte array is passed to the method that creates the logic signature. Currently TEAL parameters must be either unsigned integers or binary strings. If comparing a constant string in TEAL, the constant within the TEAL program must be encoded in hex or base64. See the TEAL tab below for a simple example of comparing the string argument used in the other examples. SDK native language functions can be used to encode the parameters to the TEAL program correctly. The example below illustrates both a string parameter and an integer.
+The SDKs require that parameters to a TEAL program be in byte arrays. This byte array is passed to the method that creates the logic signature. Currently, TEAL parameters must be either unsigned integers or binary strings. If comparing a constant string in TEAL, the constant within the TEAL program must be encoded in hex or base64. See the TEAL tab below for a simple example of comparing the string argument used in the other examples. SDK native language functions can be used to encode the parameters to the TEAL program correctly. The example below illustrates both a string parameter and an integer.
 
 
 ```javascript tab="JavaScript"
