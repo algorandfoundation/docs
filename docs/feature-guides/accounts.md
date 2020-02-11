@@ -1,4 +1,4 @@
-title: Creating Accounts
+title: Accounts Overview
 
 This section is an overview of **Accounts** on Algorand, beginning with core terminology and a guide on how to interpret these terms in different contexts. It then elaborates on the different methods for creating accounts on Algorand using the available developer tools, including the SDKs, `goal`, kmd, and `algokey`.
 

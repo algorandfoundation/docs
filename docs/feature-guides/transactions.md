@@ -1,4 +1,4 @@
-title: Constructing Transactions
+title: Transaction Anatomy
 
 This section looks at how transactions are constructed, and in particular, how to _read and understand_ the underlying transaction composition after it has been created. To learn how to _create_ those same transactions visit the corresponding feature guide that is linked in each of the examples below. It is the hope that the combination of these guides will aid in developing a comprehensive understanding of how transactions work on Algorand. 
 
@@ -258,7 +258,7 @@ Here is an example of an opt-in transaction:
   }
 }
 ```
-The `"type": "axfer"` distinguishes this as an asset transfer transaction. The fields used in the transaction are the same as any other asset transfer. What distinguishes it as an opt-in transaction is in how those fields are specified and the sender account's asset holdings state prior to sending the transaction. In particular, the address `"QC7XT7...` is both the [sender](../reference-docs/transactions.md#sender) and [asset receiver](../reference-docs/transactions.md#assetreceiver) and it is assumed that the sender does not yet possess any of the desired asset identified with the [asset ID](../reference-docs/transactions.md#xferasset) `168103`. The asset amount is not specified in this example, which is equivalent to adding an [asset amount](.../reference-docs/transactions.md#assetreceiver) equal to 0 (`"aamt": 0`). This transaction is valid on TestNet between rounds 6631154 and 6632154.
+The `"type": "axfer"` distinguishes this as an asset transfer transaction. The fields used in the transaction are the same as any other asset transfer. What distinguishes it as an opt-in transaction is in how those fields are specified and the sender account's asset holdings state prior to sending the transaction. In particular, the address `"QC7XT7...` is both the [sender](../reference-docs/transactions.md#sender) and [asset receiver](../reference-docs/transactions.md#assetreceiver) and it is assumed that the sender does not yet possess any of the desired asset identified with the [asset ID](../reference-docs/transactions.md#xferasset) `168103`. The asset amount is not specified in this example, which is equivalent to adding an [asset amount](../reference-docs/transactions.md#assetreceiver) equal to 0 (`"aamt": 0`). This transaction is valid on TestNet between rounds 6631154 and 6632154.
 
 **Related How-To**
 

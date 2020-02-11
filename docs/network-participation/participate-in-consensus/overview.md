@@ -10,13 +10,13 @@ This section covers the procedure for registering an account to participate in t
 	- It is important to ensure that only the latest update of the participation key ever exists at any time.
 	- In the event of node migration, hardware swap, or other similar events, it is preferable to have your participation key offline for a few rounds than to have it present on multiple nodes at the same time.
 
-!!! info
-    Participation in consensus currently does not affect the amount of rewards accounts receive. The rewards are [based on the amount]((https://algorand.foundation/rewards-faq)) of stake an account has and are irrespective of whether the account is online or offline. Participation involves an account becoming eligible to help propose and vote on blocks that are written to the chain.
-
 # Important Concepts
 
 ## Online Participation
 In the context of this section, participation means participation in the Algorand consensus protocol. An account that participates in the Algorand consensus protocol is eligible and available to be selected to propose and vote on new blocks in the Algorand blockchain. Note that the likelihood that this account will be selected to propose and vote on blocks is proportional to its amount of stake. Read more about voting and block proposals in the [Algorand Consensus Protocol overview](../../algorand_consensus.md#the-algorand-consensus-protocol).
+
+!!! info
+    Participation in consensus currently does not affect the proportion of rewards an account receives. Rewards are [based on the amount]((https://algorand.foundation/rewards-faq)) of stake an account has, irrespective of whether the account is marked online or offline. 
 
 ## Online/Offline Status
 In order for an account to participate in consensus, it must first mark itself online. Marking an account online requires the account to have a valid participation key, which has been registered with the network by way of an [online key registration transaction](../../feature-guides/transactions.md#register-account-online), authorized by the participating account. Marking an account offline requires an [offline key registration transaction](../../feature-guides/transactions.md#register-account-offline) also authorized by the private key of the participating account.

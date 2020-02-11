@@ -1,3 +1,5 @@
+title: Node Files
+
 These files run as part of the Algorand node or are CLI utilities that will help to diagnose or interact with a currently running node. The primary files are described below.
 
 # goal

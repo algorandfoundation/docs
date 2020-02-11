@@ -9,4 +9,5 @@ arrange:
   - algorand-networks
   - transactions.md
   - node_files.md
+  - config.md  
 

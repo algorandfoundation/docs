@@ -1,8 +1,7 @@
-title: Working with Smart Contracts
+title: Smart Contracts
 arrange:
    - index.md
    - modes.md
    - teal_overview.md
    - goal_teal_walkthrough.md
    - asc1_sdk_usage.md
-   - templates.md
