@@ -702,15 +702,224 @@ Use this to retrieve the 25-word mnemonic for the account.
 	}
 ```
 
-[NEED CODE]
-
 #### Import an account
 Use these methods to import a 25-word account-level mnemonic.
 
 !!! warning
 	For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however keep in mind that an imported account can **not** be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
 
-[NEED CODE]
+```javascript tab="JavaScript"
+	const algosdk = require('algosdk');
+
+	const kmdtoken = <kmd-token>;
+	const kmdserver = "http://" + <kmd-address>;
+	const kmdport = <kmd-port>;
+	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
+
+	(async () => {
+		var walletid = null;
+		let wallets = (await kmdclient.listWallets()).wallets;
+		wallets.forEach(function (arrayItem) {
+			if( arrayItem.name === 'MyTestWallet2'){
+				walletid = arrayItem.id;
+			}
+		});
+		console.log("Got wallet id: ", walletid);
+		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
+		console.log("Got wallet handle.", wallethandle);
+		
+		let account = algosdk.generateAccount();
+		console.log("Account: ", account.addr);
+		let mn = algosdk.secretKeyToMnemonic(account.sk);
+		console.log("Account Mnemonic: ", mn);
+		let importedAccount = (await kmdclient.importKey(wallethandle, account.sk));
+		console.log("Account successfully imported: ", importedAccount);
+	})().catch(e => {
+		console.log(e.text);
+	})
+```
+
+```python tab="Python"
+	from algosdk import kmd, mnemonic
+
+	kmd_token = <kmd-token>
+	kmd_address = "http://" + <kmd-address>
+
+	# create a kmd client
+	kcl = kmd.KMDClient(params.kmd_token, params.kmd_address)
+
+	walletid = None
+	wallets = kcl.list_wallets()
+	for arrayitem in wallets:
+		if arrayitem.get("name") == "MyTestWallet2":
+			walletid = arrayitem.get("id")
+			break
+	print("Got Wallet ID:", walletid)
+
+	wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
+	print("Got Wallet Handle:", wallethandle)
+
+	private_key, address = account.generate_account()
+	print("Account:", address)
+
+	mn = mnemonic.from_private_key(private_key)
+	print("Mnemonic", mn)
+
+	importedaccount = kcl.import_key(wallethandle, private_key)
+	print("Account successfully imported: ", importedaccount)
+
+```
+
+```java tab="Java"
+	package com.algorand.algosdk.example;
+
+	import com.algorand.algosdk.account.Account;
+	import com.algorand.algosdk.kmd.client.ApiException;
+	import com.algorand.algosdk.kmd.client.KmdClient;
+	import com.algorand.algosdk.kmd.client.api.KmdApi;
+	import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
+	import com.algorand.algosdk.kmd.client.model.APIV1GETWalletsResponse;
+	import com.algorand.algosdk.kmd.client.model.APIV1Wallet;
+	import com.algorand.algosdk.kmd.client.model.APIV1POSTKeyImportResponse;
+	import com.algorand.algosdk.kmd.client.model.ImportKeyRequest;
+	import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
+	import com.algorand.algosdk.mnemonic.Mnemonic;
+	import com.algorand.algosdk.crypto.Address;
+
+
+	public class PracticeDocs2 {
+		public static void main(String args[]) throws Exception {
+			// Get the values for the following two settings in the
+			// kmd.net and kmd.token files within the data directory
+			// of your node.
+			final String KMD_API_ADDR = "https://" + "<kmd-address>";
+			final String KMD_API_TOKEN = "<kmd-token>";
+
+			// Create a wallet with kmd rest api
+			KmdClient client = new KmdClient();
+			client.setBasePath(KMD_API_ADDR);
+			// Configure API key authorization: api_key
+			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+			api_key.setApiKey(KMD_API_TOKEN);
+			KmdApi kmdApiInstance = new KmdApi(client);
+
+			APIV1GETWalletsResponse wallets;
+			String walletId = null;
+			try {
+				// Get all wallets from kmd
+				// Loop through them and find the one we
+				// are interested in them
+				wallets = kmdApiInstance.listWallets();
+				for (APIV1Wallet wal : wallets.getWallets()) {
+					System.out.println(wal.getName());
+					if (wal.getName().equals("MyTestWallet2")) {
+						walletId = wal.getId();
+						break;
+					}
+				}
+				if (walletId != null) {
+					System.out.println("Got Wallet Id: " + walletId);
+					// create REST request to get wallet token
+					InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+					walletHandleRequest.setWalletId(walletId);
+					walletHandleRequest.setWalletPassword("testpassword");
+					// execute request to get the wallet token
+					String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
+					System.out.println("Got wallet handle: " + token);
+					//create REST request to create new key with wallet token
+					// GenerateKeyRequest genAcc = new GenerateKeyRequest();
+					// genAcc.setWalletHandleToken(token);
+					
+					// generate account using algosdk
+					Account newAccount = new Account();
+					//Get the new account address
+					Address addr = newAccount.getAddress();
+					//Get the backup phrase
+					String backup = newAccount.toMnemonic();
+
+
+					System.out.println("Account Address: " + addr.toString());
+					System.out.println("Account Mnemonic: " + backup);
+
+					byte[] pk = Mnemonic.toKey(backup);
+
+					ImportKeyRequest impResponse = new ImportKeyRequest();
+					impResponse.setPrivateKey(pk);
+					impResponse.setWalletHandleToken(token);
+
+					APIV1POSTKeyImportResponse impRequest = kmdApiInstance.importKey(impResponse);
+					System.out.println("Account Successfully Imported: " + impRequest);    
+				}else{
+					System.out.println("Did not Find Wallet");
+				}
+			} catch (ApiException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+```
+
+```go tab="Go"
+	package main
+
+	import (
+		"fmt"
+
+		"github.com/algorand/go-algorand-sdk/client/kmd"
+		"github.com/algorand/go-algorand-sdk/crypto"
+		"github.com/algorand/go-algorand-sdk/mnemonic"
+	)
+
+	const kmdAddress = "https://" + "<kmd-address>"
+	const kmdToken = "<kmd-token>"
+
+	func main() {
+		// Create a kmd client
+		kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)
+		if err != nil {
+			fmt.Printf("failed to make kmd client: %s\n", err)
+			return
+		}
+
+		// Get the list of wallets
+		listResponse, err := kmdClient.ListWallets()
+		if err != nil {
+			fmt.Printf("error listing wallets: %s\n", err)
+			return
+		}
+
+		// Find our wallet name in the list
+		var exampleWalletID string
+		for _, wallet := range listResponse.Wallets {
+			if wallet.Name == "MyTestWallet2" {
+				fmt.Printf("Got Wallet '%s' with ID: %s\n", wallet.Name, wallet.ID)
+				exampleWalletID = wallet.ID
+			}
+		}
+
+		// Get a wallet handle
+		initResponse, err := kmdClient.InitWalletHandle(exampleWalletID, "testpassword")
+		if err != nil {
+			fmt.Printf("Error initializing wallet handle: %s\n", err)
+			return
+		}
+
+		// Extract the wallet handle
+		exampleWalletHandleToken := initResponse.WalletHandleToken
+
+		account := crypto.GenerateAccount()
+		fmt.Println("Account Address: ", account.Address)
+		mn, err := mnemonic.FromPrivateKey(account.PrivateKey)
+		if err != nil {
+			fmt.Printf("Error getting backup phrase: %s\n", err)
+			return
+		}
+		fmt.Printf("Account Mnemonic: %s\n", mn)
+		importedAccount, err := kmdClient.ImportKey(exampleWalletHandleToken, account.PrivateKey)
+		fmt.Println("Account Sucessfully Imported: ", importedAccount)
+	}
+
+```
 
 ## Standalone 
 
@@ -735,64 +944,64 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 ### How to generate a standalone account
 
 ```javascript tab="JavaScript"
-const algosdk = require('algosdk');
+	const algosdk = require('algosdk');
 
-function generateAlgorandKeyPair() {
-	var account = algosdk.generateAccount();
-	var passphrase = algosdk.secretKeyToMnemonic(account.sk);
-	console.log( "My address: " + account.addr );
-	console.log( "My passphrase: " + passphrase );
+	function generateAlgorandKeyPair() {
+		var account = algosdk.generateAccount();
+		var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+		console.log( "My address: " + account.addr );
+		console.log( "My passphrase: " + passphrase );
 }
 ```
 
 ```python tab="Python"
-from algosdk import account, mnemonic
+	from algosdk import account, mnemonic
 
-def generate_algorand_keypair():
-	private_key, address = account.generate_account()
-	print("My address: {}".format(address))
-	print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
+	def generate_algorand_keypair():
+		private_key, address = account.generate_account()
+		print("My address: {}".format(address))
+		print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 ```
 
 ```java tab="Java"
-import com.algorand.algosdk.account.Account;	
+	import com.algorand.algosdk.account.Account;	
 
-public class GenerateAlgorandKeyPair {
-	public static void main(String args[]) {
-		Account myAccount = new Account();
-        System.out.println("My Address: " + myAccount.getAddress());
-		System.out.println("My Passphrase: " + myAccount.toMnemonic());
+	public class GenerateAlgorandKeyPair {
+		public static void main(String args[]) {
+			Account myAccount = new Account();
+			System.out.println("My Address: " + myAccount.getAddress());
+			System.out.println("My Passphrase: " + myAccount.toMnemonic());
+		}
 	}
-}
 ```
 
 ```go tab="Go"
-import (
-	"fmt"
+	import (
+		"fmt"
 
-	"github.com/algorand/go-algorand-sdk/crypto"
-	"github.com/algorand/go-algorand-sdk/mnemonic"
-)
+		"github.com/algorand/go-algorand-sdk/crypto"
+		"github.com/algorand/go-algorand-sdk/mnemonic"
+	)
 
-func main() {
-	account := crypto.GenerateAccount()
-	passphrase, err := mnemonic.FromPrivateKey(account.PrivateKey)
+	func main() {
+		account := crypto.GenerateAccount()
+		passphrase, err := mnemonic.FromPrivateKey(account.PrivateKey)
 
-	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
-	} else {
-		fmt.Printf("My address: %s\n", account.Address)
-		fmt.Printf("My passphrase: %s\n", passphrase)
+		if err != nil {
+			fmt.Printf("Error creating transaction: %s\n", err)
+		} else {
+			fmt.Printf("My address: %s\n", account.Address)
+			fmt.Printf("My passphrase: %s\n", passphrase)
+		}
 	}
-}
 ```
 
 ```text tab="goal"
-$ goal account new
-Created new account with address [ADDRESS]
+	$ goal account new
+	Created new account with address [ADDRESS]
 
-$ goal account export -a address<PLACEHOLDER>
-Exported key for account [ADDRESS]: [PASSPHRASE]
+	$ goal account export -a address<PLACEHOLDER>
+	Exported key for account [ADDRESS]: [PASSPHRASE]
 ```
 
 ```bash tab="algokey"
@@ -834,129 +1043,129 @@ The following code shows how to generate a multisignature account composed of th
 	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](signatures.md#multisignatures).
 
 ```javascript tab="JavaScript"
-const algosdk = require('algosdk');
+	const algosdk = require('algosdk');
 
-(async() => {
-    //create an account
-    var account1 = algosdk.generateAccount();
-    console.log(account1.addr);
-    //create an account
-    var account2 = algosdk.generateAccount();
-    console.log(account2.addr);
-    //create an account
-    var account3 = algosdk.generateAccount();
-    console.log(account3.addr);
+	(async() => {
+		//create an account
+		var account1 = algosdk.generateAccount();
+		console.log(account1.addr);
+		//create an account
+		var account2 = algosdk.generateAccount();
+		console.log(account2.addr);
+		//create an account
+		var account3 = algosdk.generateAccount();
+		console.log(account3.addr);
 
-    //Setup teh parameters for the multisig account
-    const mparams = {
-        version: 1,
-        threshold: 2,
-        addrs: [
-            account1.addr,
-            account2.addr,
-            account3.addr,
-        ],
-    };
+		//Setup teh parameters for the multisig account
+		const mparams = {
+			version: 1,
+			threshold: 2,
+			addrs: [
+				account1.addr,
+				account2.addr,
+				account3.addr,
+			],
+		};
 
-    var multsigaddr = algosdk.multisigAddress(mparams);
-    console.log("Multisig Address: " + multsigaddr);
+		var multsigaddr = algosdk.multisigAddress(mparams);
+		console.log("Multisig Address: " + multsigaddr);
 
 ```
 
 ```python tab="Python"
-from algosdk import account, transaction
+	from algosdk import account, transaction
 
-# generate three accounts
-private_key_1, account_1 = account.generate_account()
-private_key_2, account_2 = account.generate_account()
-private_key_3, account_3 = account.generate_account()
-print("Account 1:", account_1)
-print("Account 2", account_2)
-print("Account 3:", account_3)
+	# generate three accounts
+	private_key_1, account_1 = account.generate_account()
+	private_key_2, account_2 = account.generate_account()
+	private_key_3, account_3 = account.generate_account()
+	print("Account 1:", account_1)
+	print("Account 2", account_2)
+	print("Account 3:", account_3)
 
-# create a multisig account
-version = 1  # multisig version
-threshold = 2  # how many signatures are necessary
-msig = transaction.Multisig(version, threshold, [account_1, account_2])
-print("Multisig Address: ", msig.address())
+	# create a multisig account
+	version = 1  # multisig version
+	threshold = 2  # how many signatures are necessary
+	msig = transaction.Multisig(version, threshold, [account_1, account_2])
+	print("Multisig Address: ", msig.address())
 ```
 
 ```java tab="Java"
-package com.algorand.algosdk.example;
+	package com.algorand.algosdk.example;
 
-import com.algorand.algosdk.account.Account;
-import com.algorand.algosdk.crypto.Digest;
-import com.algorand.algosdk.crypto.Ed25519PublicKey;
-import com.algorand.algosdk.crypto.MultisigAddress;
+	import com.algorand.algosdk.account.Account;
+	import com.algorand.algosdk.crypto.Digest;
+	import com.algorand.algosdk.crypto.Ed25519PublicKey;
+	import com.algorand.algosdk.crypto.MultisigAddress;
 
-import java.util.ArrayList;
-import java.util.List;
+	import java.util.ArrayList;
+	import java.util.List;
 
-public class MultisigAccount {
+	public class MultisigAccount {
 
-    public static void main(String args[]) throws Exception {
+		public static void main(String args[]) throws Exception {
 
-        Account acct1 = new Account();
-        Account acct2 = new Account();
-        Account acct3 = new Account();
-        System.out.println("Account 1 Address: " + acct1.getAddress());
-        System.out.println("Account 2 Address: " + acct2.getAddress());
-        System.out.println("Account 3 Address: " + acct3.getAddress());
-        
-        List<Ed25519PublicKey> publicKeys = new ArrayList<>();
-        publicKeys.add(acct1.getEd25519PublicKey());
-        publicKeys.add(acct2.getEd25519PublicKey());
-        publicKeys.add(acct3.getEd25519PublicKey());
-         
-        MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
+			Account acct1 = new Account();
+			Account acct2 = new Account();
+			Account acct3 = new Account();
+			System.out.println("Account 1 Address: " + acct1.getAddress());
+			System.out.println("Account 2 Address: " + acct2.getAddress());
+			System.out.println("Account 3 Address: " + acct3.getAddress());
+			
+			List<Ed25519PublicKey> publicKeys = new ArrayList<>();
+			publicKeys.add(acct1.getEd25519PublicKey());
+			publicKeys.add(acct2.getEd25519PublicKey());
+			publicKeys.add(acct3.getEd25519PublicKey());
+			
+			MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
 
-        System.out.println("Multisig Address: " + msig.toString());
+			System.out.println("Multisig Address: " + msig.toString());
 
-    }
-}
+		}
+	}
 ```
 
 ```go tab="Go"
-package main
+	package main
 
-import (
-	"fmt"
+	import (
+		"fmt"
 
-	"github.com/algorand/go-algorand-sdk/crypto"
-	"github.com/algorand/go-algorand-sdk/types"
-)
+		"github.com/algorand/go-algorand-sdk/crypto"
+		"github.com/algorand/go-algorand-sdk/types"
+	)
 
-func main() {
-	// Generate Accounts
-	acct1 := crypto.GenerateAccount()
-	acct2 := crypto.GenerateAccount()
-	acct3 := crypto.GenerateAccount()
+	func main() {
+		// Generate Accounts
+		acct1 := crypto.GenerateAccount()
+		acct2 := crypto.GenerateAccount()
+		acct3 := crypto.GenerateAccount()
 
-	// Decode the account addresses
-	addr1, _ := types.DecodeAddress(acct1.Address.String())
-	addr2, _ := types.DecodeAddress(acct2.Address.String())
-	addr3, _ := types.DecodeAddress(acct3.Address.String())
+		// Decode the account addresses
+		addr1, _ := types.DecodeAddress(acct1.Address.String())
+		addr2, _ := types.DecodeAddress(acct2.Address.String())
+		addr3, _ := types.DecodeAddress(acct3.Address.String())
 
-	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
-		addr1,
-		addr2,
-		addr3,
-	})
-	if err != nil {
-		panic("invalid multisig parameters")
-	}
+		ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+			addr1,
+			addr2,
+			addr3,
+		})
+		if err != nil {
+			panic("invalid multisig parameters")
+		}
 
-	fmt.Printf("Multisig address %s \n", ma.Address())
+		fmt.Printf("Multisig address %s \n", ma.Address())
 
 ```
 
 ```zsh tab="goal"
-$ ADDRESS1=$(goal account new | awk '{ print $6 }')
-$ ADDRESS2=$(goal account new | awk '{ print $6 }')
-$ ADDRESS3=$(goal account new | awk '{ print $6 }')
+	$ ADDRESS1=$(goal account new | awk '{ print $6 }')
+	$ ADDRESS2=$(goal account new | awk '{ print $6 }')
+	$ ADDRESS3=$(goal account new | awk '{ print $6 }')
 
-$ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
-Created new account with address [MULTISIG_ADDRESS]
+	$ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
+	Created new account with address [MULTISIG_ADDRESS]
 ```
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
