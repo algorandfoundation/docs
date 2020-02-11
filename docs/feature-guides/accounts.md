@@ -6,7 +6,7 @@ This section is an overview of **Accounts** on Algorand, beginning with core ter
 # Terminology
 ## Keys and Addresses
 
-Algorand keys use Ed25519 high-speed, high security elliptic-curve signatures. They are produced through standard, open-source cryptographic libraries packaged with each of the SDKs. The creation algorithm takes a random value as input and outputs two 32-byte arrays, representing a public key and its associated private key. These are also referred to as a public/private key pair. These keys perform the important cryptographic functions like signing data and verifying signatures. 
+Algorand keys use Ed25519 high-speed, high-security elliptic-curve signatures. They are produced through standard, open-source cryptographic libraries packaged with each of the SDKs. The creation algorithm takes a random value as input and outputs two 32-byte arrays, representing a public key and its associated private key. These are also referred to as a public/private key pair. These keys perform important cryptographic functions like signing data and verifying signatures. 
 
 <center> ![Key Generation](../imgs/accounts-0.png) </center>
 <center>*Public/Private Key Generation* </center>
@@ -16,7 +16,7 @@ For reasons that include the need to make the keys human-readable and robust to 
 
 ### Transformation: Public Key to Algorand Address
 
-The **public key** is transformed into a public Algorand address<LINK TO GLOSSARY>, by adding a 4-byte checksum to the end of the public key and then encoding it in base32. The result is what both the developer and end user recognize as an **Algorand address**. The address is 58 characters long.
+The **public key** is transformed into a public Algorand address, by adding a 4-byte checksum to the end of the public key and then encoding it in base32. The result is what both the developer and end-user recognize as an **Algorand address**. The address is 58 characters long.
 
 <center> ![Algorand Address](../imgs/accounts-1.png) </center>
 <center>*Public Key to Algorand Address* </center>
@@ -41,7 +41,7 @@ This representation is called the private key **mnemonic**. You may also see it 
 <center>*Private Key Mnemonic* </center>
 
 !!! info
-	Both the base64 representation of a private key, and the private key mnemonic are considered **private keys**. It is important to disambiguate in contexts where the representation is important. 
+	Both the base64 representation of a private key and the private key mnemonic are considered **private keys**. It is important to disambiguate in contexts where the representation is important. 
 
 ## Wallets
 
@@ -69,11 +69,11 @@ Creating an Algorand address from a public key, is not the only way. A valid add
 
 ### Special Accounts
 
-There are two accounts that carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
+Two accounts carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
 
-_MainNet [FeeSink](../algorand-networks/mainnet.md#feesink-address) and [RewardsPool](../algorand-networks/mainnet.md#rewardspool-address) addresses_
+_MainNet [FeeSink](../reference-docs/algorand-networks/mainnet.md#feesink-address) and [RewardsPool](../reference-docs/algorand-networks/mainnet.md#rewardspool-address) addresses_
 
-_TestNet [FeeSink](../algorand-networks/testnet.md#feesink-address) and [RewardsPool](../algorand-networks/testnet.md#rewardspool-address) addresses_
+_TestNet [FeeSink](../reference-docs/algorand-networks/testnet.md#feesink-address) and [RewardsPool](../reference-docs/algorand-networks/testnet.md#rewardspool-address) addresses_
 
 ## A note about term usage in these docs
 Even in these docs, use of these terms may be inconsistent. At times this is a deliberate style choice to ensure clarity around a broader concept. Sometimes it is to emphasize the inherent pairing of the public and private portions of a key. (e.g. In code examples, it is sometimes clearer to name variables as such to emphasize the connection between these two entities). Other times it is to abstract away from complexity related to generating an account on Algorand. For example, code samples may use terms like "generateAccount" to generate a private key and Algorand address. There is an underlying assumption that this pair will be used as an Algorand account even though on generation it is not yet represented on the blockchain and therefore is not yet technically an Algorand account.
@@ -131,7 +131,7 @@ kmd token:  [token]
 ```
 #### Create a wallet and generate an account
 
-Create a new wallet and generate an account. In the SDKs, connect to kmd through a kmd client then create a new wallet. With the wallet handle generate an account. 
+Create a new wallet and generate an account. In the SDKs, connect to kmd through a kmd client then create a new wallet. With the wallet handle, generate an account. 
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
@@ -419,7 +419,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 Use these methods to import a 25-word account-level mnemonic.
 
 !!! warning
-	For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however keep in mind that an imported account can **not** be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
+	For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however, keep in mind that an imported account can **not** be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
 
 [NEED CODE]
 
