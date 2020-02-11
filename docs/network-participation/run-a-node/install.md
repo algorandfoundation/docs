@@ -1,4 +1,4 @@
-title: Installing a node
+title: Install a Node
 # Overview
 This guide explains how to install the Algorand Node software on Linux Distributions and Mac OS. When installing on Linux, three methods are covered: *RPM installs*, *Debian installs* and *Other Linux Distributions*. The *Other Linux Distributions* method has been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 3) and allows manually setting data directories and requires manual updates. The *RPM* and *Debian* installs use fixed directories and automatically update.
 

@@ -10,4 +10,4 @@ arrange:
   - transactions.md
   - node_files.md
   - config.md  
-
+  - config_relay.md

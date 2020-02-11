@@ -1,4 +1,4 @@
-title: Authorization and Signatures
+title: Transaction Authorization
 
 In [Transaction Anatomy](./transactions.md), you learned how transactions are composed. In this section you will learn how to authorize them. 
 
