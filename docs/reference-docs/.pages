@@ -1,13 +1,8 @@
 title: Reference Docs
 arrange:
-  - goal
-  - kmd.md
-  - algokey
+  - algorand-networks
+  - cli
   - sdks.md
   - rest-apis
   - teal
-  - algorand-networks
   - transactions.md
-  - node_files.md
-  - config.md  
-  - config_relay.md

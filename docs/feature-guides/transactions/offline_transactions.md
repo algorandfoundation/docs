@@ -1,4 +1,4 @@
-title: Offline Procedures
+title: Offline Authorization
 
 This section explains how to authorize transactions with private keys that are kept **offline**. In particular, this guide shows how to create and save transactions to a file that can then be transferred to an offline device for signing. To learn how to construct and authorize transactions in general visit the [Constructing Transactions](./transactions.md) and [Authorizing Transactions](./signatures.md) guides, respectively.
 

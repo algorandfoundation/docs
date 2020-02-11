@@ -1,9 +1,7 @@
 title: Explore Features
 arrange:
   - accounts.md
-  - transactions.md
-  - signatures.md
-  - offline_transactions.md
+  - transactions
   - asa.md
   - atomic_transfers.md
   - asc1
