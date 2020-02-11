@@ -10,8 +10,8 @@ This section covers the procedure for registering an account to participate in t
 	- It is important to ensure that only the latest update of the participation key ever exists at any time.
 	- In the event of node migration, hardware swap, or other similar events, it is preferable to have your participation key offline for a few rounds than to have it present on multiple nodes at the same time.
 
-!!! tip
-	Participation in consensus currently has no reflection in the rewards and account can collect. The rewards are [based on the amount](https://algorand.foundation/rewards-faq) of stake an account has and are irrespective of whether the account is online or offline. Participation involves an account becoming eligible to help propose and vote on blocks that are written to the chain.
+!!! info
+    Participation in consensus currently does not affect the amount of rewards accounts receive. The rewards are [based on the amount]((https://algorand.foundation/rewards-faq)) of stake an account has and are irrespective of whether the account is online or offline. Participation involves an account becoming eligible to help propose and vote on blocks that are written to the chain.
 
 # Important Concepts
 
