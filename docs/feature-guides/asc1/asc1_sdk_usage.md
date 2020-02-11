@@ -1,6 +1,6 @@
 title: Using the SDKs
 
-This guide covers using TEAL programs with contract accounts or delegated signatures with the available SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. Algorand Smart Contract Templates are also available for officially supported TEAL programs for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. These templates can be used with specific SDK APIs that are detailed in the [Templates](templates.md) documentation.
+This guide covers using TEAL programs with contract accounts or delegated signatures with the available SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. Algorand Smart Contract Templates are also available for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. Developer documentation describing the process for using these templates will be available soon.
 
 Each SDK's install process is discussed in the [SDK Reference](../../reference-docs/sdks.md) documentation.
 

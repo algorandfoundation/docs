@@ -10,7 +10,7 @@ To learn more about the TEAL language specification see the [TEAL Specification 
 
 To compile and use TEAL programs using `goal`, see [A Contract Walkthrough](goal_teal_walkthrough.md). 
 
-To start working with TEAL with the SDKs, visitt the [Using the SDKs](asc1_sdk_usage.md) section.
+To start working with TEAL with the SDKs, visit the [Using the SDKs](asc1_sdk_usage.md) section.
 
 
 
