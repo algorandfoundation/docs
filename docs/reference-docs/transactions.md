@@ -59,14 +59,14 @@ Object Name: (`AssetParams`)
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="creator">Creator</a>| _required on creation_ |Address|`"creator"`|The address for the account that creates the asset. This is the address where the parameters for this asset can be foundn, and also the address where unwanted asset units can be sent to be destroyed.|
+|<a name="creator">Creator</a>| _required on creation_ |Address|`"creator"`|The address for the account that creates the asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent to be destroyed.|
 |<a name="total">Total</a>|_required on creation_|uint64|`"total"`| The total number of base units of the asset to create. This number cannot be changed.|
 |<a name="decimals">Decimals</a>|_required on creation_|uint32|`"decimals"`| The number of digits to use after the decimal point when displaying the asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths. |
 |<a name="defaultfrozen">DefaultFrozen</a>|_required on creation_|bool|`"defaultfrozen"`| True to freeze holdings for this asset by default. |
 |<a name="unitname">UnitName</a>|_optional_|string|`"unitname"`| The name of a unit of this asset. Supplied on creation. Examples: USDT |
 |<a name="assetname">AssetName</a>|_optional_|string|`"assetname"`| The name of the asset. Supplied on creation. Examples: Tether|
 |<a name="url">URL</a>|_optional_|string|`"url"`| Specifies a URL where more information about the asset can be retrieved. Max size is 32 bytes. |
-|<a name="metadatahash">URL</a>|_optional_|[]byte|`"metadatahash"`| This field is intended to be a 32-byte hash of some metadata that is relevant to your asset and/or asset holders. The format of this metadata is up to the application. This field can _only_ be specified upon creation. An example might be the hash of some certificate that acknowledges the digitized asset as the official representation of a particular real-world asset.  |
+|<a name="metadatahash">MetaDataHash</a>|_optional_|[]byte|`"metadatahash"`| This field is intended to be a 32-byte hash of some metadata that is relevant to your asset and/or asset holders. The format of this metadata is up to the application. This field can _only_ be specified upon creation. An example might be the hash of some certificate that acknowledges the digitized asset as the official representation of a particular real-world asset.  |
 |<a name="manageraddr">ManagerAddr</a>|_optional_|Address|`"managerkey"`| The address of the account who can manage the configuration of the asset and destroy it. |
 |<a name="reserveaddr">ReserveAddr</a>|_optional_|Address|`"reserveaddr"`| The address of the account that holds the reserve (non-minted) units of the asset. This address has no specific authority in the protocol itself. It is used in the case where you want to signal to holders of your asset that the non-minted units of the asset reside in an account that is different from the default [creator](#creator) account. |
 |<a name="freezeaddr">FreezeAddr</a>|_optional_|Address|`"freezeaddr"`| The address of the account used to freeze holdings of this asset. If empty, freeziingn is not permitted. |
