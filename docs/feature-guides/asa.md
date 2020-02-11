@@ -57,7 +57,7 @@ Specifying a reserve account signifies that non-minted assets will reside in tha
 
 [**Freeze Address**](../reference-docs/transactions.md#freezeaddr)
 
-The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to investigate suspected criminal activity or to blacklist certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks). 
+The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to restrict liquidation of company stock, to investigate suspected criminal activity or to blacklist certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks). 
 
 !!! tip
     Set this address to `""` if you want to prove to asset holders that the asset can never be frozen.
@@ -83,8 +83,8 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
     let addr = recoveredAccount1.addr; 
     let defaultFrozen = false;
     let totalIssuance = 100; 
-    let unitName = "<unit-name>"; 
-    let assetName = "<asset-name>"; 
+    let unitName = <unit-name>; 
+    let assetName = <asset-name>; 
     let assetURL = "http://someurl"; 
     let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d"; 
     let manager = recoveredAccount2.addr; 
@@ -117,8 +117,8 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
         "total": 1000,
         "decimals": 0,
         "default_frozen": False,
-        "unit_name": "LATINUM",
-        "asset_name": "latinum",
+        "unit_name": <unit-name>,
+        "asset_name": <asset-name>,
         "manager": accounts[1]['pk'],
         "reserve": accounts[1]['pk'],
         "freeze": accounts[1]['pk'],
@@ -149,42 +149,42 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 ```
 
 ``` java tab="Java"  
-       // Create the Asset:
-        BigInteger assetTotal = BigInteger.valueOf(10000);
-        boolean defaultFrozen = false;
-        String unitName = "LTRCEX1";
-        String  assetName = "ltrc-teset";
-        String url = "http://this.test.com";
-        String assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
-        Address manager  = acct2.getAddress();
-        Address reserve = acct2.getAddress();
-        Address freeze = acct2.getAddress();
-        Address clawback = acct2.getAddress();
-        Integer decimals = 0;
-        Transaction tx = Transaction.createAssetCreateTransaction(acct1.getAddress(), 
-            BigInteger.valueOf( 1000 ), cp.firstRound, cp.lastRound, null, cp.genID, 
-            cp.genHash, assetTotal, decimals, defaultFrozen, unitName, assetName, url, 
-            assetMetadataHash.getBytes(), manager, reserve, freeze, clawback);
-        // Update the fee as per what the BlockChain is suggesting
-        Account.setFeeByFeePerByte(tx, cp.fee);
+    // Create the Asset:
+    BigInteger assetTotal = BigInteger.valueOf(10000);
+    boolean defaultFrozen = false;
+    String unitName = <unit-name>;
+    String  assetName = <asset-name>;
+    String url = "http://this.test.com";
+    String assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
+    Address manager  = acct2.getAddress();
+    Address reserve = acct2.getAddress();
+    Address freeze = acct2.getAddress();
+    Address clawback = acct2.getAddress();
+    Integer decimals = 0;
+    Transaction tx = Transaction.createAssetCreateTransaction(acct1.getAddress(), 
+        BigInteger.valueOf( 1000 ), cp.firstRound, cp.lastRound, null, cp.genID, 
+        cp.genHash, assetTotal, decimals, defaultFrozen, unitName, assetName, url, 
+        assetMetadataHash.getBytes(), manager, reserve, freeze, clawback);
+    // Update the fee as per what the BlockChain is suggesting
+    Account.setFeeByFeePerByte(tx, cp.fee);
 
-        // Sign the Transaction with creator account
-        SignedTransaction signedTx = acct1.signTransaction(tx);
-        BigInteger assetID = null;
-        try{
-            TransactionID id = ex.submitTransaction( signedTx );
-            System.out.println( "Transaction ID: " + id );
-            ex.waitForConfirmation( signedTx.transactionID);
-            // Now that the transaction is confirmed we can get the assetID
-            com.algorand.algosdk.algod.client.model.Transaction ptx = 
-                algodApiInstance.pendingTransactionInformation(id.getTxId());
-            assetID = ptx.getTxresults().getCreatedasset();
+    // Sign the Transaction with creator account
+    SignedTransaction signedTx = acct1.signTransaction(tx);
+    BigInteger assetID = null;
+    try{
+        TransactionID id = ex.submitTransaction( signedTx );
+        System.out.println( "Transaction ID: " + id );
+        ex.waitForConfirmation( signedTx.transactionID);
+        // Now that the transaction is confirmed we can get the assetID
+        com.algorand.algosdk.algod.client.model.Transaction ptx = 
+            algodApiInstance.pendingTransactionInformation(id.getTxId());
+        assetID = ptx.getTxresults().getCreatedasset();
 
-        } catch (Exception e){
-            e.printStackTrace();
-            return;
-        }
-        System.out.println( "AssetID = " +  assetID);
+    } catch (Exception e){
+        e.printStackTrace();
+        return;
+    }
+    System.out.println( "AssetID = " +  assetID);
 ```
 
 ``` go tab="Go"  
@@ -1128,8 +1128,8 @@ Clawback address: <clawback-address>
 
     //Retrieve the token, server and port values for your installation in the algod.net
     //and algod.token files within the data directory
-    const token = "<algod-address>";
-    const server = "<algod-token>";
+    const token = <algod-token>;
+    const server = <algod-address>;
     const port = <port-number>;
 
     // Structure for changing blockchain params
@@ -1163,9 +1163,9 @@ Clawback address: <clawback-address>
     };
 
     //Recover accounts used in example
-    var account1_mnemonic ="<your-25-word-mnemonic>";    
-    var account2_mnemonic ="<your-25-word-mnemonic>";    
-    var account3_mnemonic ="<your-25-word-mnemonic>";
+    var account1_mnemonic =<your-25-word-mnemonic>;    
+    var account2_mnemonic =<your-25-word-mnemonic>;    
+    var account3_mnemonic =<your-25-word-mnemonic>;
     var recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
     var recoveredAccount2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
     var recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
@@ -1187,8 +1187,8 @@ Clawback address: <clawback-address>
         let addr = recoveredAccount1.addr; 
         let defaultFrozen = false;
         let totalIssuance = 100; 
-        let unitName = "<asset-unit-name>"; 
-        let assetName = "<asset-name>"; 
+        let unitName = <unit-name>; 
+        let assetName = <asset-name>; 
         let assetURL = "http://someurl"; 
         let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d"; 
         let manager = recoveredAccount2.addr; 
@@ -1385,9 +1385,9 @@ Clawback address: <clawback-address>
 
     # Shown for demonstration purposes. NEVER reveal secret mnemonics in practice. 
     # Change these values if you want to use different accounts.
-    mnemonic1 = "<25-word-passphrase>"
-    mnemonic2 = "<25-word-passphrase>"
-    mnemonic3 = "<25-word-passphrase>"
+    mnemonic1 = <25-word-passphrase>
+    mnemonic2 = <25-word-passphrase>
+    mnemonic3 = <25-word-passphrase>
 
     # For ease of reference, add account public and private keys to 
     # an accounts dict.
@@ -1400,8 +1400,8 @@ Clawback address: <clawback-address>
         counter += 1
 
     # Specify your node address and token. This must be updated.
-    algod_address = "<algod-address>"
-    algod_token = "<algod-token>"
+    algod_address = <algod-address>
+    algod_token = <algod-token>
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
     # Get network params for transaction
@@ -1435,8 +1435,8 @@ Clawback address: <clawback-address>
         "total": 1000,
         "decimals": 0,
         "default_frozen": False,
-        "unit_name": "LATINUM",
-        "asset_name": "latinum",
+        "unit_name": <unit-name>,
+        "asset_name": <asset-name>,
         "manager": accounts[1]['pk'],
         "reserve": accounts[1]['pk'],
         "freeze": accounts[1]['pk'],
@@ -1663,8 +1663,8 @@ Clawback address: <clawback-address>
         // utility function to connect to a node
         private AlgodApi connectToNetwork(){
 
-            final String ALGOD_API_ADDR = "<algod-address>";
-            final String ALGOD_API_TOKEN = "<algod-token>";
+            final String ALGOD_API_ADDR = <algod-address>;
+            final String ALGOD_API_TOKEN = <algod-token>;
 
             AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
             ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
@@ -1746,7 +1746,9 @@ Clawback address: <clawback-address>
 
             // recover example accounts
             
-            final String account1_mnemonic = <your-25-word-mnemonic>             final String account2_mnemonic = <your-25-word-mnemonic>             final String account3_mnemonic = <your-25-word-mnemonic>                    
+            final String account1_mnemonic = <your-25-word-mnemonic>             
+            final String account2_mnemonic = <your-25-word-mnemonic>             
+            final String account3_mnemonic = <your-25-word-mnemonic>                    
             Account acct1  = new Account(account1_mnemonic); 
             Account acct2  = new Account(account2_mnemonic);
             Account acct3  = new Account(account3_mnemonic);                           
@@ -1762,8 +1764,8 @@ Clawback address: <clawback-address>
             // Create the Asset:
             BigInteger assetTotal = BigInteger.valueOf(10000);
             boolean defaultFrozen = false;
-            String unitName = "LTRCEX1";
-            String  assetName = "ltrc-teset";
+            String unitName = <unit-name>;
+            String  assetName = <asset-name>;
             String url = "http://this.test.com";
             String assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
             Address manager  = acct2.getAddress();
@@ -2001,8 +2003,8 @@ Clawback address: <clawback-address>
         "github.com/algorand/go-algorand-sdk/mnemonic"
         "github.com/algorand/go-algorand-sdk/crypto"
     )
-    const algodAddress = "<algod-address>"
-    const algodToken = "<algod-token>"
+    const algodAddress = <algod-address>
+    const algodToken = <algod-token>
 
 
     var txHeaders = append([]*algod.Header{}, &algod.Header{"Content-Type", "application/json"})
@@ -2014,9 +2016,9 @@ Clawback address: <clawback-address>
         	2: "<account1-address>",
         	3: "<account1-address>",
         }
-        mnemonic1 = "<your-25-word-mnemonic>"
-        mnemonic2 = "<your-25-word-mnemonic>"
-        mnemonic3 = "<your-25-word-mnemonic>"
+        mnemonic1 := <your-25-word-mnemonic>
+        mnemonic2 := <your-25-word-mnemonic>
+        mnemonic3 := <your-25-word-mnemonic>
         mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
         var sks = make(map[int][]byte) 
         for i, m := range mnemonics {
@@ -2091,8 +2093,8 @@ Clawback address: <clawback-address>
         // Create an asset
         // Set parameters for asset creation transaction
         creator := pks[1]
-        assetName := "latinum"
-        unitName := "latinum"
+        assetName := <asset-name>
+        unitName := <unit-name>
         assetURL := "https://path/to/my/asset/details"
         assetMetadataHash := "thisIsSomeLength32HashCommitment"
         defaultFrozen := false

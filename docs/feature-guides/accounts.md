@@ -123,10 +123,10 @@ $ kmd -d data/kmd-v<version>/ -t 3600
 Retrieve the kmd IP address and access token:
 
 ```zsh
-$ echo "kmd IP address: " `cat $ALGORAND_DATA/kmd.net`
+$ echo "kmd IP address: " `cat $ALGORAND_DATA/kmd-v<version>/kmd.net`
 kmd IP address:  [ip-address]:[port]
 
-$ echo "kmd token: " `cat $ALGORAND_DATA/kmd.token`
+$ echo "kmd token: " `cat $ALGORAND_DATA/kmd-v<version>/kmd.token`
 kmd token:  [token]
 ```
 #### Create a wallet and generate an account
@@ -146,16 +146,16 @@ var walletid = null;
 var wallethandle = null;
 
 (async () => {
-    let walletid = (await kmdclient.createWallet("MyTestWallet3", "testpassword", "", "sqlite")).wallet.id;
-    console.log("Created wallet.", walletid);
+	let walletid = (await kmdclient.createWallet("MyTestWallet1", "testpassword", "", "sqlite")).wallet.id;
+	console.log("Created wallet:", walletid);
 
-    let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-    console.log("Got wallet handle.", wallethandle);
+	let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
+	console.log("Got wallet handle:", wallethandle);
 
-    let address1 = (await kmdclient.generateKey(wallethandle)).address;
-    console.log("Created new account1.", address1);
+	let address1 = (await kmdclient.generateKey(wallethandle)).address;
+	console.log("Created new account:", address1);
 })().catch(e => {
-    console.log(e);
+	console.log(e);
 });
 ```
 
@@ -169,7 +169,7 @@ kmd_address = <kmd-address>
 kcl = kmd.KMDClient(kmd_token, kmd_address)
 
 # create a wallet object
-wallet = Wallet("testwallet", "testpassword", kcl)
+wallet = Wallet("MyTestWallet1", "testpassword", kcl)
 
 # get wallet information
 info = wallet.info()
@@ -181,20 +181,61 @@ print("New account:", address)
 ```
 
 ```java tab="Java"
+package com.algorand.algosdk.example;
+
+import com.algorand.algosdk.kmd.client.ApiException;
 import com.algorand.algosdk.kmd.client.KmdClient;
 import com.algorand.algosdk.kmd.client.api.KmdApi;
 import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
+import com.algorand.algosdk.kmd.client.model.APIV1POSTWalletResponse;
+import com.algorand.algosdk.kmd.client.model.CreateWalletRequest;
+import com.algorand.algosdk.kmd.client.model.GenerateKeyRequest;
+import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
 
-public static void kmdApi() {
-    final String KMD_API_ADDR = <kmd-address>;
-    final String KMD_API_TOKEN = <kmd-token>;
+public class GenWalletGenAcct 
+{
+	public static void main(String args[]) throws Exception {
+		//Get the values for the following two settings in the
+		//kmd.net and kmd.token files within the data directory 
+		//of your node.        
+		final String KMD_API_ADDR = "<kmd-address>";
+		final String KMD_API_TOKEN = "<kmd-token>";
 
-    KmdClient client = new KmdClient();
-    client.setBasePath(KMD_API_ADDR);
-    ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-    api_key.setApiKey(KMD_API_TOKEN);
-        KmdApi kmdApiInstance = new KmdApi(client);
-	...
+		// Create a wallet with kmd rest api
+		KmdClient client = new KmdClient();
+		client.setBasePath(KMD_API_ADDR);
+		// Configure API key authorization: api_key
+		ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+		api_key.setApiKey(KMD_API_TOKEN);
+		KmdApi kmdApiInstance = new KmdApi(client);
+
+		APIV1POSTWalletResponse wallet;
+		try {
+			//create the REST request
+			CreateWalletRequest req = new CreateWalletRequest()
+					.walletName("MyTestWallet1")
+					.walletPassword("testpassword")
+					.walletDriverName("sqlite");
+			//create the wallet        
+			wallet = kmdApiInstance.createWallet(req);
+			String wallId = wallet.getWallet().getId();
+			//create REST request to get wallet token
+			InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+			walletHandleRequest.setWalletId(wallId);
+			walletHandleRequest.setWalletPassword("test");
+			//execute request to get the wallet token
+			String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
+			//create REST request to create new key with wallet token
+			GenerateKeyRequest genAcc = new GenerateKeyRequest();
+			genAcc.setWalletHandleToken(token);
+			//execute request to generate new key(account)
+			String newAccount = kmdApiInstance.generateKey(genAcc).getAddress();
+			System.out.println("New Account: " + newAccount);
+
+		} catch (ApiException e) {
+			e.printStackTrace();
+		}
+	}
 }
 ```
 
@@ -208,8 +249,8 @@ import (
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
-const kmdAddress = <kmd-address>
-const kmdToken = <kmd-token>
+const kmdAddress = "<kmd-address>"
+const kmdToken = "<kmd-token>"
 
 func main() {
 	// Create a kmd client
@@ -221,7 +262,7 @@ func main() {
 	fmt.Println("Made a kmd client")
 
 	// Create the example wallet, if it doesn't already exist
-	cwResponse, err := kmdClient.CreateWallet("testwallet", "testpassword", kmd.DefaultWalletDriver, types.MasterDerivationKey{})
+	cwResponse, err := kmdClient.CreateWallet("MyTestWallet1", "testpassword", kmd.DefaultWalletDriver, types.MasterDerivationKey{})
 	if err != nil {
 		fmt.Printf("error creating wallet: %s\n", err)
 		return
@@ -248,7 +289,7 @@ func main() {
 		fmt.Printf("Error generating key: %s\n", err)
 		return
 	}
-	fmt.Printf("Generated address %s\n", genResponse.Address)
+	fmt.Printf("New Account: %s\n", genResponse.Address)
 }
 ```
 
@@ -290,16 +331,19 @@ var walletid = null;
 var wallethandle = null;
 
 (async () => {
-    let walletid = (await kmdclient.createWallet("MyTestWallet3", "testpassword", "", "sqlite")).wallet.id;
-    console.log("Created wallet.", walletid);
+	let mn = <wallet-menmonic>
+	let mdk =  (await algosdk.mnemonicToMasterDerivationKey(mn));
+	console.log(mdk);
+	let walletid = (await kmdclient.createWallet("MyTestWallet2", "testpassword", mdk)).wallet.id;
+	console.log("Created wallet: ", walletid);
 
-    let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-    console.log("Got wallet handle.", wallethandle);
+	let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
+	console.log("Got wallet handle: ", wallethandle);
 
-    let address1 = (await kmdclient.generateKey(wallethandle)).address;
-    console.log("Created new account1.", address1);
+	let rec_addr = (await kmdclient.generateKey(wallethandle)).address;
+	console.log("Recovered account: ", rec_addr);
 })().catch(e => {
-    console.log(e);
+	console.log(e);
 });
 ```
 
@@ -317,22 +361,79 @@ backup = <wallet-mnemonic>
 mdk = mnemonic.to_master_derivation_key(backup)
 
 # recover the wallet by passing mdk when creating a wallet
-new_wallet = kcl.create_wallet("testwallet", "testpassword", master_deriv_key=mdk)
-print("Recovered Wallet:", new_wallet)
+new_wallet = kcl.create_wallet("MyTestWallet2", "testpassword", master_deriv_key=mdk)
 
 walletid = new_wallet.get("id")
-print(walletid)
+print("Created Wallet: ", walletid)
 
 wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
-accounts = kcl.list_keys(wallethandle)
-print("Accounts:", accounts)
+print("Got wallet handle:", wallethandle)
 
-address = kcl.generate_key(wallethandle)
-print("Recovered account:", address)
+rec_addr = kcl.generate_key(wallethandle)
+print("Recovered account:", rec_addr)
 ```
 
 ```java tab="Java"
+package com.algorand.algosdk.example;
 
+import com.algorand.algosdk.kmd.client.ApiException;
+import com.algorand.algosdk.kmd.client.KmdClient;
+import com.algorand.algosdk.kmd.client.api.KmdApi;
+import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
+import com.algorand.algosdk.kmd.client.model.APIV1POSTWalletResponse;
+import com.algorand.algosdk.kmd.client.model.CreateWalletRequest;
+import com.algorand.algosdk.kmd.client.model.GenerateKeyRequest;
+import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
+import com.algorand.algosdk.mnemonic.Mnemonic;
+
+public class RecoverWalletAcct {
+	public static void main(String args[]) throws Exception {
+		//Get the values for the following two settings in the
+		//kmd.net and kmd.token files within the data directory 
+		//of your node.        
+		final String KMD_API_ADDR = "<kmd-address>";
+		final String KMD_API_TOKEN = "<kmd-token>";
+		final String BACKUP_PHRASE = <wallet-mnemonic>;
+		// Create a wallet with kmd rest api
+		KmdClient client = new KmdClient();
+		client.setBasePath(KMD_API_ADDR);
+		// Configure API key authorization: api_key
+		ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+		api_key.setApiKey(KMD_API_TOKEN);
+		KmdApi kmdApiInstance = new KmdApi(client);
+		byte[] mkd = Mnemonic.toKey(BACKUP_PHRASE);
+		APIV1POSTWalletResponse wallet;
+		try {
+			//create the REST request
+			CreateWalletRequest req = new CreateWalletRequest()
+					.walletName("MyTestWallet2")
+					.walletPassword("testpassword")
+					.masterDerivationKey(mkd)
+					.walletDriverName("sqlite");
+			//create the wallet        
+			wallet = kmdApiInstance.createWallet(req);
+			// begin process to generate account
+			String wallId = wallet.getWallet().getId();
+			System.out.println("Created Wallet: " + wallId);
+			//create REST request to get wallet token
+			InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+			walletHandleRequest.setWalletId(wallId);
+			walletHandleRequest.setWalletPassword("testpassword");
+			//execute request to get the wallet token
+			String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
+			System.out.println("Got wallet handle: " + token);
+			//create REST request to create new key with wallet token
+			GenerateKeyRequest genAcc = new GenerateKeyRequest();
+			genAcc.setWalletHandleToken(token);
+			//execute request to generate new key(account)
+			String recAccount = kmdApiInstance.generateKey(genAcc).getAddress();
+			System.out.println("Recovered Account: " + recAccount);
+
+		} catch (ApiException e) {
+			e.printStackTrace();
+		}
+	}
+}
 ```
 
 ```go tab="Go"
@@ -346,8 +447,8 @@ import (
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
-const kmdAddress = <kmd-address>
-const kmdToken = <kmd-token>
+const kmdAddress = "<kmd-address>"
+const kmdToken = "<kmd-token>"
 
 func main() {
 	// Create a kmd client
@@ -356,7 +457,7 @@ func main() {
 		fmt.Printf("failed to make kmd client: %s\n", err)
 		return
 	}
-	backupPhrase := <wallet-mnemonic>
+	backupPhrase := <wallet-menmonic>
 	keyBytes, err := mnemonic.ToKey(backupPhrase)
 	if err != nil {
 		fmt.Printf("failed to get key: %s\n", err)
@@ -365,7 +466,7 @@ func main() {
 
 	var mdk types.MasterDerivationKey
 	copy(mdk[:], keyBytes)
-	cwResponse, err := kmdClient.CreateWallet("testwallet", "testpassword", kmd.DefaultWalletDriver, mdk)
+	cwResponse, err := kmdClient.CreateWallet("MyTestWallet2", "testpassword", kmd.DefaultWalletDriver, mdk)
 	if err != nil {
 		fmt.Printf("error creating wallet: %s\n", err)
 		return
@@ -385,6 +486,7 @@ func main() {
 
 	// Extract the wallet handle
 	exampleWalletHandleToken := initResponse.WalletHandleToken
+	fmt.Printf("Got wallet handle: '%s'\n", exampleWalletHandleToken)
 
 	// Generate a new address from the wallet handle
 	genResponse, err := kmdClient.GenerateKey(exampleWalletHandleToken)
@@ -413,7 +515,191 @@ Created new account with address [RECOVERED_ADDRESS]
 #### Export an account
 Use this to retrieve the 25-word mnemonic for the account.
 
-[NEED CODE]
+```javascript tab="JavaScript"
+const algosdk = require('algosdk');
+
+const kmdtoken = <kmd-token>;
+const kmdaddress = <kmd-address>;
+const kmdclient = new algosdk.Kmd(kmdtoken, kmdaddress);
+
+(async () => {
+	var walletid = null;
+	let wallets = (await kmdclient.listWallets()).wallets;
+	wallets.forEach(function (arrayItem) {
+		if( arrayItem.name === 'MyTestWallet2'){
+			walletid = arrayItem.id;
+		}
+	});
+	let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
+	let accountKey = (await kmdclient.exportKey(wallethandle, "testpassword", <account address> ));
+	let mn = (await algosdk.secretKeyToMnemonic(accountKey.private_key));
+	console.log("Account Mnemonic: ", mn);
+})().catch(e => {
+	console.log(e.text);
+})
+```
+
+```python tab="Python"
+from algosdk import kmd, mnemonic
+from algosdk.wallet import Wallet
+
+kmd_token = <kmd-token>
+kmd_address = <kmd-address>
+
+# create a kmd client
+kcl = kmd.KMDClient(kmd_token, kmd_address)
+
+walletid = None
+wallets = kcl.list_wallets()
+for arrayitem in wallets:
+	if arrayitem.get("name") == "MyTestWallet2":
+		walletid = arrayitem.get("id")
+		break
+
+wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
+accountkey = kcl.export_key(wallethandle, "testpassword", <account address> )
+mn = mnemonic.from_private_key(accountkey)
+print("Account Mnemonic: ", mn)
+```
+
+```java tab="Java"
+package com.algorand.algosdk.example;
+
+import com.algorand.algosdk.kmd.client.ApiException;
+import com.algorand.algosdk.kmd.client.KmdClient;
+import com.algorand.algosdk.kmd.client.api.KmdApi;
+import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
+import com.algorand.algosdk.kmd.client.model.APIV1POSTKeyExportResponse;
+import com.algorand.algosdk.kmd.client.model.APIV1GETWalletsResponse;
+import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
+import com.algorand.algosdk.kmd.client.model.ExportKeyRequest;
+import com.algorand.algosdk.mnemonic.Mnemonic;
+
+import org.bouncycastle.util.Arrays;
+
+import com.algorand.algosdk.kmd.client.model.APIV1Wallet;
+
+public class ExportAccount {
+	public static void main(String args[]) throws Exception {
+		//Get the values for the following two settings in the
+		//kmd.net and kmd.token files within the data directory 
+		//of your node.        
+		final String KMD_API_ADDR = "<kmd-address>";
+		final String KMD_API_TOKEN = "<kmd-token>";
+
+		// Create a wallet with kmd rest api
+		KmdClient client = new KmdClient();
+		client.setBasePath(KMD_API_ADDR);
+		// Configure API key authorization: api_key
+		ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+		api_key.setApiKey(KMD_API_TOKEN);
+		KmdApi kmdApiInstance = new KmdApi(client);
+
+		APIV1GETWalletsResponse wallets;
+		String walletId = null;
+		try {
+			// Get all wallets from kmd
+			// Loop through them and find the one we
+			// are interested in them
+			wallets = kmdApiInstance.listWallets();
+			for (APIV1Wallet wal : wallets.getWallets()) {
+				System.out.println(wal.getName());
+				if (wal.getName().equals("MyTestWallet2")) {
+					walletId = wal.getId();
+					break;
+				}
+			}
+			if (walletId != null) {
+				// create REST request to get wallet token
+				InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+				walletHandleRequest.setWalletId(walletId);
+				walletHandleRequest.setWalletPassword("test");
+				// execute request to get the wallet token
+				String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();            
+				ExportKeyRequest expRequest = new ExportKeyRequest();
+				expRequest.setAddress(<account address>);
+				expRequest.setWalletHandleToken(token);
+				expRequest.walletPassword("test");
+
+				APIV1POSTKeyExportResponse expResponse = kmdApiInstance.exportKey(expRequest);
+				byte [] expResponseSlice = Arrays.copyOfRange(expResponse.getPrivateKey(), 0, 32);
+				System.out.println("This is the expResponse: " + expResponse);
+				System.out.println("This is the expResponseSlice: " + expResponseSlice);
+				String mnem = Mnemonic.fromKey(expResponseSlice);
+			
+				System.out.println("Backup Phrase = " + mnem);
+
+			}else{
+				System.out.println("Did not Find Wallet");
+			}
+		} catch (ApiException e) {
+			e.printStackTrace();
+		}
+	}
+}
+```
+
+```go tab="Go"
+package main
+
+import (
+	"fmt"
+
+	"github.com/algorand/go-algorand-sdk/client/kmd"
+	"github.com/algorand/go-algorand-sdk/mnemonic"
+)
+
+// These constants represent the kmd REST endpoint and the corresponding API
+// token. You can retrieve these from the `kmd.net` and `kmd.token` files in
+// the kmd data directory.
+const kmdAddress = "<kmd-address>"
+const kmdToken = "<kmd-token>"
+
+func main() {
+	// Create a kmd client
+	kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)
+	if err != nil {
+		fmt.Printf("failed to make kmd client: %s\n", err)
+		return
+	}
+
+	// Get the list of wallets
+	listResponse, err := kmdClient.ListWallets()
+	if err != nil {
+		fmt.Printf("error listing wallets: %s\n", err)
+		return
+	}
+
+	// Find our wallet name in the list
+	var exampleWalletID string
+	for _, wallet := range listResponse.Wallets {
+		if wallet.Name == "MyTestWallet2" {
+			exampleWalletID = wallet.ID
+		}
+	}
+
+	// Get a wallet handle
+	initResponse, err := kmdClient.InitWalletHandle(exampleWalletID, "testpassword")
+	if err != nil {
+		fmt.Printf("Error initializing wallet handle: %s\n", err)
+		return
+	}
+
+	// Extract the wallet handle
+	exampleWalletHandleToken := initResponse.WalletHandleToken
+	// Extract the account sk
+	accountKeyResponse, err := kmdClient.ExportKey(exampleWalletHandleToken, "testpassword", <account address)
+	accountKey := accountKeyResponse.PrivateKey
+	// Convert sk to mnemonic
+	mn, err := mnemonic.FromPrivateKey(accountKey)
+	if err != nil {
+		fmt.Printf("Error getting backup phrase: %s\n", err)
+		return
+	}
+	fmt.Printf("Account Mnemonic: %v ", mn)
+
+}
+```
 
 #### Import an account
 Use these methods to import a 25-word account-level mnemonic.
@@ -421,7 +707,216 @@ Use these methods to import a 25-word account-level mnemonic.
 !!! warning
 	For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however, keep in mind that an imported account can **not** be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
 
-[NEED CODE]
+```javascript tab="JavaScript"
+const algosdk = require('algosdk');
+
+const kmdtoken = <kmd-token>;
+const kmdserver = <kmd-address>;
+const kmdport = <kmd-port>;
+const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
+
+(async () => {
+	var walletid = null;
+	let wallets = (await kmdclient.listWallets()).wallets;
+	wallets.forEach(function (arrayItem) {
+		if( arrayItem.name === 'MyTestWallet2'){
+			walletid = arrayItem.id;
+		}
+	});
+	console.log("Got wallet id: ", walletid);
+	let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
+	console.log("Got wallet handle.", wallethandle);
+	
+	let account = algosdk.generateAccount();
+	console.log("Account: ", account.addr);
+	let mn = algosdk.secretKeyToMnemonic(account.sk);
+	console.log("Account Mnemonic: ", mn);
+	let importedAccount = (await kmdclient.importKey(wallethandle, account.sk));
+	console.log("Account successfully imported: ", importedAccount);
+})().catch(e => {
+	console.log(e.text);
+})
+```
+
+```python tab="Python"
+from algosdk import kmd, mnemonic
+
+kmd_token = <kmd-token>
+kmd_address = "http://" + <kmd-address>
+
+# create a kmd client
+kcl = kmd.KMDClient(params.kmd_token, params.kmd_address)
+
+walletid = None
+wallets = kcl.list_wallets()
+for arrayitem in wallets:
+	if arrayitem.get("name") == "MyTestWallet2":
+		walletid = arrayitem.get("id")
+		break
+print("Got Wallet ID:", walletid)
+
+wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
+print("Got Wallet Handle:", wallethandle)
+
+private_key, address = account.generate_account()
+print("Account:", address)
+
+mn = mnemonic.from_private_key(private_key)
+print("Mnemonic", mn)
+
+importedaccount = kcl.import_key(wallethandle, private_key)
+print("Account successfully imported: ", importedaccount)
+```
+
+```java tab="Java"
+package com.algorand.algosdk.example;
+
+import com.algorand.algosdk.account.Account;
+import com.algorand.algosdk.kmd.client.ApiException;
+import com.algorand.algosdk.kmd.client.KmdClient;
+import com.algorand.algosdk.kmd.client.api.KmdApi;
+import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
+import com.algorand.algosdk.kmd.client.model.APIV1GETWalletsResponse;
+import com.algorand.algosdk.kmd.client.model.APIV1Wallet;
+import com.algorand.algosdk.kmd.client.model.APIV1POSTKeyImportResponse;
+import com.algorand.algosdk.kmd.client.model.ImportKeyRequest;
+import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
+import com.algorand.algosdk.mnemonic.Mnemonic;
+import com.algorand.algosdk.crypto.Address;
+
+
+public class ImportAcct {
+	public static void main(String args[]) throws Exception {
+		// Get the values for the following two settings in the
+		// kmd.net and kmd.token files within the data directory
+		// of your node.
+		final String KMD_API_ADDR = "<kmd-address>";
+		final String KMD_API_TOKEN = "<kmd-token>";
+
+		// Create a wallet with kmd rest api
+		KmdClient client = new KmdClient();
+		client.setBasePath(KMD_API_ADDR);
+		// Configure API key authorization: api_key
+		ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+		api_key.setApiKey(KMD_API_TOKEN);
+		KmdApi kmdApiInstance = new KmdApi(client);
+
+		APIV1GETWalletsResponse wallets;
+		String walletId = null;
+		try {
+			// Get all wallets from kmd
+			// Loop through them and find the one we
+			// are interested in them
+			wallets = kmdApiInstance.listWallets();
+			for (APIV1Wallet wal : wallets.getWallets()) {
+				System.out.println(wal.getName());
+				if (wal.getName().equals("MyTestWallet2")) {
+					walletId = wal.getId();
+					break;
+				}
+			}
+			if (walletId != null) {
+				System.out.println("Got Wallet Id: " + walletId);
+				// create REST request to get wallet token
+				InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+				walletHandleRequest.setWalletId(walletId);
+				walletHandleRequest.setWalletPassword("testpassword");
+				// execute request to get the wallet token
+				String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
+				System.out.println("Got wallet handle: " + token);
+				//create REST request to create new key with wallet token
+				// GenerateKeyRequest genAcc = new GenerateKeyRequest();
+				// genAcc.setWalletHandleToken(token);
+				
+				// generate account using algosdk
+				Account newAccount = new Account();
+				//Get the new account address
+				Address addr = newAccount.getAddress();
+				//Get the backup phrase
+				String backup = newAccount.toMnemonic();
+
+
+				System.out.println("Account Address: " + addr.toString());
+				System.out.println("Account Mnemonic: " + backup);
+
+				byte[] pk = Mnemonic.toKey(backup);
+
+				ImportKeyRequest impResponse = new ImportKeyRequest();
+				impResponse.setPrivateKey(pk);
+				impResponse.setWalletHandleToken(token);
+
+				APIV1POSTKeyImportResponse impRequest = kmdApiInstance.importKey(impResponse);
+				System.out.println("Account Successfully Imported: " + impRequest);    
+			}else{
+				System.out.println("Did not Find Wallet");
+			}
+		} catch (ApiException e) {
+			e.printStackTrace();
+		}
+	}
+}
+```
+
+```go tab="Go"
+package main
+
+import (
+	"fmt"
+
+	"github.com/algorand/go-algorand-sdk/client/kmd"
+	"github.com/algorand/go-algorand-sdk/crypto"
+	"github.com/algorand/go-algorand-sdk/mnemonic"
+)
+
+const kmdAddress = "<kmd-address>"
+const kmdToken = "<kmd-token>"
+
+func main() {
+	// Create a kmd client
+	kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)
+	if err != nil {
+		fmt.Printf("failed to make kmd client: %s\n", err)
+		return
+	}
+
+	// Get the list of wallets
+	listResponse, err := kmdClient.ListWallets()
+	if err != nil {
+		fmt.Printf("error listing wallets: %s\n", err)
+		return
+	}
+
+	// Find our wallet name in the list
+	var exampleWalletID string
+	for _, wallet := range listResponse.Wallets {
+		if wallet.Name == "MyTestWallet2" {
+			fmt.Printf("Got Wallet '%s' with ID: %s\n", wallet.Name, wallet.ID)
+			exampleWalletID = wallet.ID
+		}
+	}
+
+	// Get a wallet handle
+	initResponse, err := kmdClient.InitWalletHandle(exampleWalletID, "testpassword")
+	if err != nil {
+		fmt.Printf("Error initializing wallet handle: %s\n", err)
+		return
+	}
+
+	// Extract the wallet handle
+	exampleWalletHandleToken := initResponse.WalletHandleToken
+
+	account := crypto.GenerateAccount()
+	fmt.Println("Account Address: ", account.Address)
+	mn, err := mnemonic.FromPrivateKey(account.PrivateKey)
+	if err != nil {
+		fmt.Printf("Error getting backup phrase: %s\n", err)
+		return
+	}
+	fmt.Printf("Account Mnemonic: %s\n", mn)
+	importedAccount, err := kmdClient.ImportKey(exampleWalletHandleToken, account.PrivateKey)
+	fmt.Println("Account Sucessfully Imported: ", importedAccount)
+}
+```
 
 ## Standalone 
 
@@ -471,7 +966,7 @@ import com.algorand.algosdk.account.Account;
 public class GenerateAlgorandKeyPair {
 	public static void main(String args[]) {
 		Account myAccount = new Account();
-        System.out.println("My Address: " + myAccount.getAddress());
+		System.out.println("My Address: " + myAccount.getAddress());
 		System.out.println("My Passphrase: " + myAccount.toMnemonic());
 	}
 }
@@ -499,11 +994,11 @@ func main() {
 ```
 
 ```text tab="goal"
-$ goal account new
-Created new account with address [ADDRESS]
+	$ goal account new
+	Created new account with address [ADDRESS]
 
-$ goal account export -a address<PLACEHOLDER>
-Exported key for account [ADDRESS]: [PASSPHRASE]
+	$ goal account export -a address<PLACEHOLDER>
+	Exported key for account [ADDRESS]: [PASSPHRASE]
 ```
 
 ```bash tab="algokey"
@@ -547,7 +1042,6 @@ The following code shows how to generate a multisignature account composed of th
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-(async() => {
     //create an account
     var account1 = algosdk.generateAccount();
     console.log(account1.addr);
@@ -558,7 +1052,7 @@ const algosdk = require('algosdk');
     var account3 = algosdk.generateAccount();
     console.log(account3.addr);
 
-    //Setup teh parameters for the multisig account
+    //Setup the parameters for the multisig account
     const mparams = {
         version: 1,
         threshold: 2,
@@ -568,10 +1062,9 @@ const algosdk = require('algosdk');
             account3.addr,
         ],
     };
-
+    //create multisig account
     var multsigaddr = algosdk.multisigAddress(mparams);
     console.log("Multisig Address: " + multsigaddr);
-
 ```
 
 ```python tab="Python"
@@ -605,25 +1098,25 @@ import java.util.List;
 
 public class MultisigAccount {
 
-    public static void main(String args[]) throws Exception {
+	public static void main(String args[]) throws Exception {
 
-        Account acct1 = new Account();
-        Account acct2 = new Account();
-        Account acct3 = new Account();
-        System.out.println("Account 1 Address: " + acct1.getAddress());
-        System.out.println("Account 2 Address: " + acct2.getAddress());
-        System.out.println("Account 3 Address: " + acct3.getAddress());
-        
-        List<Ed25519PublicKey> publicKeys = new ArrayList<>();
-        publicKeys.add(acct1.getEd25519PublicKey());
-        publicKeys.add(acct2.getEd25519PublicKey());
-        publicKeys.add(acct3.getEd25519PublicKey());
-         
-        MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
+		Account acct1 = new Account();
+		Account acct2 = new Account();
+		Account acct3 = new Account();
+		System.out.println("Account 1 Address: " + acct1.getAddress());
+		System.out.println("Account 2 Address: " + acct2.getAddress());
+		System.out.println("Account 3 Address: " + acct3.getAddress());
+		
+		List<Ed25519PublicKey> publicKeys = new ArrayList<>();
+		publicKeys.add(acct1.getEd25519PublicKey());
+		publicKeys.add(acct2.getEd25519PublicKey());
+		publicKeys.add(acct3.getEd25519PublicKey());
+		
+		MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
 
-        System.out.println("Multisig Address: " + msig.toString());
+		System.out.println("Multisig Address: " + msig.toString());
 
-    }
+	}
 }
 ```
 
@@ -658,16 +1151,15 @@ func main() {
 	}
 
 	fmt.Printf("Multisig address %s \n", ma.Address())
-
 ```
 
 ```zsh tab="goal"
-$ ADDRESS1=$(goal account new | awk '{ print $6 }')
-$ ADDRESS2=$(goal account new | awk '{ print $6 }')
-$ ADDRESS3=$(goal account new | awk '{ print $6 }')
+	$ ADDRESS1=$(goal account new | awk '{ print $6 }')
+	$ ADDRESS2=$(goal account new | awk '{ print $6 }')
+	$ ADDRESS3=$(goal account new | awk '{ print $6 }')
 
-$ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
-Created new account with address [MULTISIG_ADDRESS]
+	$ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
+	Created new account with address [MULTISIG_ADDRESS]
 ```
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
