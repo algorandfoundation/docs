@@ -70,7 +70,7 @@ Object Name: (`AssetParams`)
 |<a name="manageraddr">ManagerAddr</a>|_optional_|Address|`"managerkey"`| The address of the account who can manage the configuration of the asset and destroy it. |
 |<a name="reserveaddr">ReserveAddr</a>|_optional_|Address|`"reserveaddr"`| The address of the account that holds the reserve (non-minted) units of the asset. This address has no specific authority in the protocol itself. It is used in the case where you want to signal to holders of your asset that the non-minted units of the asset reside in an account that is different from the default [creator](#creator) account. |
 |<a name="freezeaddr">FreezeAddr</a>|_optional_|Address|`"freezeaddr"`| The address of the account used to freeze holdings of this asset. If empty, freeziingn is not permitted. |
-|<a name="clawbackaddr">ManagerAddr</a>|_optional_|Address|`"clawbackaddr"`| The address of the account who can clawback holdings of  this asset. If empty, clawback is not permitted. |
+|<a name="clawbackaddr">ClawbackAddr</a>|_optional_|Address|`"clawbackaddr"`| The address of the account who can clawback holdings of  this asset. If empty, clawback is not permitted. |
 
 # Asset Transfer Transaction 
 Transaction Object Type: `AssetTransferTx`

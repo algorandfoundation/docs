@@ -1,4 +1,4 @@
-title: Constructing Transactions
+title: Transaction Anatomy
 
 This section looks at how transactions are constructed, and in particular, how to _read and understand_ the underlying transaction composition after it has been created. To learn how to _create_ those same transactions visit the corresponding feature guide that is linked in each of the examples below. It is the hope that the combination of these guides will aid in developing a comprehensive understanding of how transactions work on Algorand. 
 
