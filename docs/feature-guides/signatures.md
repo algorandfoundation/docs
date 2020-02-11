@@ -1,8 +1,8 @@
 title: Authorization and Signatures
 
-In [Transaction Anatomy](./transactions.md), you learned how transactions are composed. In thise section you will learn how to authorize them. 
+In [Transaction Anatomy](./transactions.md), you learned how transactions are composed. In this section you will learn how to authorize them. 
 
-Before a transaction is sent to the network, it must first be authorized by the [sender](../reference-docs/transactions.md#sender). Authorization occurs through the addition of a **signature** to the transaction object. Specifically, a transaction object, when signed, is wrapped in a [`SignedTxn`](./reference-docs/transactions.md#signed-transaction) object that includes the [transaction](../reference-docs/transactions.md#txn) and a type of [signature](../reference-docs/transactions.md#sig). 
+Before a transaction is sent to the network, it must first be authorized by the [sender](../reference-docs/transactions.md#sender). Authorization occurs through the addition of a **signature** to the transaction object. Specifically, a transaction object, when signed, is wrapped in a [`SignedTxn`](../reference-docs/transactions.md#signed-transaction) object that includes the [transaction](../reference-docs/transactions.md#txn) and a type of [signature](../reference-docs/transactions.md#sig). 
 
 There are three types of signatures:
 

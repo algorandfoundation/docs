@@ -8,21 +8,21 @@ Below is a categorized list of projects that are using the Algorand blockchain a
 
 | Name| Description |
 |------|------|
-| <center>![](../imgs/goalseekericon.png)</center><center> <a href="https://goalseeker.purestake.io/algorand/mainnet" target="_blank">GoalSeeker</a></center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/). |
-| <center>![](../imgs/algoexplorer.png)</center><center> <a href="https://algoexplorer.io/" target="_blank">Algo Explorer</a></center> | Algoexplorer is a complete Algorand blockchain explorer created by [Rand Labs](https://randlabs.io/).|
+| <center>![](./imgs/goalseekericon.png)</center><center> <a href="https://goalseeker.purestake.io/algorand/mainnet" target="_blank">GoalSeeker</a></center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/). |
+| <center>![](./imgs/algoexplorer.png)</center><center> <a href="https://algoexplorer.io/" target="_blank">Algo Explorer</a></center> | Algoexplorer is a complete Algorand blockchain explorer created by [Rand Labs](https://randlabs.io/).|
 
 
 # Wallets
 
 | Name| Description |
 |------|------|
-| <center>![](../imgs/myalgoicon.png)</center><center> <a href="https://wallet.myalgo.com/" target="_blank">My Algo</a></center> | My Algo provides an interface to interact with the Algorand Blockchain created by [Rand Labs](https://randlabs.io/)|
+| <center>![](./imgs/myalgoicon.png)</center><center> <a href="https://wallet.myalgo.com/" target="_blank">My Algo</a></center> | My Algo provides an interface to interact with the Algorand Blockchain created by [Rand Labs](https://randlabs.io/)|
 | <center><a href="https://github.com/RileyGe/algo-wallet" target="_blank">Algo Wallet</a></center> | A cross platform wallet built using the [Avalonia](https://avaloniaui.net/) UI. This wallets can be used on Windows, MacOS and Lunix and the Avaloni UI provides experimental support for iOS and Android. The library is Open Sourced (GNU) and is built in C#.|
 
 # API Services
 | Name| Description |
 |------|------|
-<center>![](../imgs/purestakelogo.png)</center><center> <a href="https://www.purestake.com/blog/algorand-rest-api-purestake/" target="_blank">PureStake API Service</a></center> | PureStake's API service makes it easy to quickly get up-and-running on the Algorand network. The service builds upon PureStake’s existing infrastructure platform to provide developers with easy-to-use access to native Algorand REST APIs. |
+<center>![](./imgs/purestakelogo.png)</center><center> <a href="https://www.purestake.com/blog/algorand-rest-api-purestake/" target="_blank">PureStake API Service</a></center> | PureStake's API service makes it easy to quickly get up-and-running on the Algorand network. The service builds upon PureStake’s existing infrastructure platform to provide developers with easy-to-use access to native Algorand REST APIs. |
 
 # SDKs
 | Name| Description |
