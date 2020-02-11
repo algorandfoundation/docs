@@ -57,7 +57,7 @@ Specifying a reserve account signifies that non-minted assets will reside in tha
 
 [**Freeze Address**](../reference-docs/transactions.md#freezeaddr)
 
-The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to investigate suspected criminal activity or to blacklist certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks). 
+The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to restrict liquidation of company stock, to investigate suspected criminal activity or to blacklist certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks). 
 
 !!! tip
     Set this address to `""` if you want to prove to asset holders that the asset can never be frozen.
@@ -2014,9 +2014,9 @@ Clawback address: <clawback-address>
         	2: "<account1-address>",
         	3: "<account1-address>",
         }
-        mnemonic1 = "<your-25-word-mnemonic>"
-        mnemonic2 = "<your-25-word-mnemonic>"
-        mnemonic3 = "<your-25-word-mnemonic>"
+        mnemonic1 := "<your-25-word-mnemonic>"
+        mnemonic2 := "<your-25-word-mnemonic>"
+        mnemonic3 := "<your-25-word-mnemonic>"
         mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
         var sks = make(map[int][]byte) 
         for i, m := range mnemonics {
