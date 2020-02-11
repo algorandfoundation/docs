@@ -1,63 +1,90 @@
-title: Creating Assets
-
-REVIEW IN PROGRESS
+title: Working with Assets
 
 The Algorand protocol supports the creation of on-chain assets that benefit from the same security, compatibility, speed and ease of use as the Algo. The official name for assets on Algorand is **Algorand Standard Assets (ASA)**.
 
-Examples of assets you can represent include stablecoins, loyalty points, system credits, and in-game points, just to name a few. You can also represent single, unique assets like a deed for a house, collectable items, unique parts on a supply chain, and countless more. 
+With Algorand Standard Assets you can represent stablecoins, loyalty points, system credits, and in-game points, just to name a few examples. You can also represent single, unique assets like a deed for a house, collectable items, unique parts on a supply chain, etc. There is also optional functionality to place transfer restrictions on an asset that help support securities, compliance, and certification use cases.
 
 !!! info
-    Assets that represent many of the same type, like a stablecoin, may be referred to as **fungible assets**. Single, unique assets are referred to as **non-fungible assets**.
-
-Finally, assets can be configured with certain restrictions that help support securities, compliance, and certification use cases. 
-
-# Asset Requirements
-A single Algorand account is permitted to create up to 1000 assets. For every asset and account creates or owns, its minimum balance is increased by 0.1 Algos. Before a new asset can be transfered to a specific account the receiver must option in to receive the asset. This process is described below in Receiving an Asset. If any transaction is issued that would violate the maximum number of assets for an account or not meet the minimum balance requirements, the transaction will fail.
-
-# Asset Parameters
-The type of asset that is created will depend on the parameters that are passed during asset creation or configuration. The primary Asset parameters are listed below. Once set these parameters can never be changed.
+    Assets that represent many of the same type, like a stablecoin, may be referred to as **fungible assets**. Single, unique assets are referred to as **non-fungible assets**. 
 
 
-* The creator address specifies the address of the asset creator. The transaction to create the asset must be signed by this account.
-* The name parameter represents the name of the entire asset. This is a string containing up to 32 characters. For example, a currency name may be used as the asset name. 
-* The unitname parameter is used to give a specific name to a unit of the asset. This is an up to eight character name for the asset. If a currency was referenced for the name, the unitname may contain is ISO code or symbol.
-* The defaultfrozen parameter specifies whether the asset is initially frozen, meaning transactions in this asset are currently not allowed for any account until unfrozen by the asset freeze account. More details on freezing and unfreezing an asset are shown below.
-* The total property specifies the maximum amount of this specific asset type. This number can not be changed once the asset is created. For non-fungible assets, this total will be most likely be one, where fungible assets will have much larger total counts. 
-* The decimals parameter specifies the divisibility of an asset. A value of 0 represents an asset that is not divisible, while a value of 1 represents an asset that is divisible into tenths and so on, i.e, the number of digits to display after the decimal place when displaying the asset. This value must be between 0 and 19. 
-* The assetmetadatab64 property allows an optional hash commitment of some sort relating to the asset. You could use it to specify specific asset details like title deed location, court record, or specification location. 
-* The asseturl parameter provides an option to reference a link that includes more details of the asset off-chain. 
+This section begins with an [overview](#assets-overview) of the asset implementation on Algorand including a review of all [asset parameters](#asset-parameters). This is followed by [how-tos](#asset-functions) in the SDKs and `goal` for all on-chain asset functions.
 
-Each Asset also has a set of addresses that are associated with the Asset that allow additional functionality.
+# Assets Overview
 
- |Address| **Description** | **Required** | **Note** | 
-:-- |:-------------:| :-------------: | :-------------: | 
-**Manager**  | Address of the manager of the asset | Yes | Can be set to blank 
-**Reserve**  | Address of the reserve account of the asset | Yes | Can be set to blank
-**Freeze** | Address of the freeze account for the asset | Yes | Can be set to blank
-**Clawback**  | Address of the clawback account for the asset | Yes | Can be set to blank
+Here are several things to be aware of before getting started with assets.
 
-These addresses represent the only properites of an asset that can be changed after creation. They can also be locked for the life of the asset as described below.
+- A single Algorand account is permitted to create up to 1000 assets. 
+- For every asset an account creates or owns, its minimum balance is increased by 0.1 Algos (100,000 microAlgos). 
+- Before a new asset can be transferred to a specific account the receiver must opt-in to receive the asset. This process is described below in [Receiving an Asset](#receiving-an-asset). 
+- If any transaction is issued that would violate the maximum number of assets for an account or not meet the minimum balance requirements, the transaction will fail.
 
-* Manager Address - The manager account is the only account that can manipulate the configuration or deletion of an asset. An asset can only be deleted if the entire asset supply is returned to the creator address. 
-* Reserve Address - The reserve account can be used to act as a primary reserve account for minting. By default the assets are created in the creator account. If the reserve account is used as a reserve all tokens must be transfered from the creator to the reserve account. This also requires the reserve account to be setup to recieve the new asset. See Receiving an Asset described below.
-* Freeze Address - The freeze account is the only account that is allowed to freeze or unfreeze specific accounts.  When an account is frozen it cannot send or receive transactions for that asset.
-* Clawback Address - The clawback address is an account that is allowed to take assets from any account and give them to another account.
+## Asset Parameters
+The type of asset that is created will depend on the parameters that are passed during asset creation and sometimes during asset re-configuration. View the full list of asset parameters in the [Asset Parameters Reference](../reference-docs/transactions.md#asset-parameters).
+
+### Immutable Asset Parameters
+
+These eight parameters can *only* be specified when an asset is created.  
+
+- [Creator](../reference-docs/transactions.md#creator) (*required*)
+- [AssetName](../reference-docs/transactions.md#assetname) (*optional, but recommended*)
+- [UnitName](../reference-docs/transactions.md#unitname) (*optional, but recommended*)
+- [Total](../reference-docs/transactions.md#total) (*required*)
+- [Decimals](../reference-docs/transactions.md#decimals) (*required*)
+- [DefaultFrozen](../reference-docs/transactions.md#defaultfrozen) (*required*)
+- [URL](../reference-docs/transactions.md#url) (*optional*)
+- [MetaDataHash](../reference-docs/transactions.md#metadatahash) (*optional*)
+
+### Mutable Asset Parameters
+There are four parameters that correspond to addresses that can authorize specific functionality for an asset. These addresses must be specified on creation but they can also be modified after creation. Alternatively, these addresses can be set as empty strings, which will irrevocably lock the function that they would have had authority over. 
+
+Here are the four address types.
+
+[**Manager Address**](../reference-docs/transactions.md#manageraddr)
+
+The manager account is the only account that can authorize transactions to [re-configure](#modifying-an-asset) or [destroy](#destroying-an-asset) an asset. 
+
+!!! warning
+    Never set this address to empty if you want to be able to re-configure or destroy the asset.
+
+[**Reserve Address**](../reference-docs/transactions.md#reserveaddr)
+
+Specifying a reserve account signifies that non-minted assets will reside in that account instead of the default creator account. Assets transferred from this account are "minted" units of the asset. If you specify a new reserve address, you must make sure the new account has opted in to the asset and then issue a transaction to transfer all assets to the new reserve.
+
+!!! warning 
+    The reserve account has no functional authority in the protocol. It is purely informational. 
+
+
+[**Freeze Address**](../reference-docs/transactions.md#freezeaddr)
+
+The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to investigate suspected criminal activity or to blacklist certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks). 
+
+!!! tip
+    Set this address to `""` if you want to prove to asset holders that the asset can never be frozen.
+
+[**Clawback Address**](../reference-docs/transactions.md#clawbackaddr)
+
+The clawback address represents an account that is allowed to transfer assets from and to any asset holder (assuming they have opted-in).  Use this if you need the option to revoke assets from an account (like if they breach certain contractual obligations tied to holding the asset). In traditional finance, this sort of transaction is referred to as a clawback.
+
+!!! tip
+    Set this address to `""` if you want to ensure to asset holders that assets can never be revoked.
 
 If any of these four addresses is set to `""` that address will be cleared and can never be reset for the life of the asset. This will also effectively disable the feature of that address. For example setting the freeze address to `""` will prevent the asset from ever being frozen.
 
-Fungible assets will have asset totals of more than one, where non-fungilbe tokens will usually have a count of one. For restricted assets the proper feeze, clawback and manager accounts will be set, where if they are unrestricted these addresses will be set to `""` forever preventing any modification to ownership of the asset.
+# Asset Functions
 
+## Creating an Asset
+**Transaction Authorizer**: Any account with sufficient Algo balance
 
-# Creating an Asset
-Assets can be created using either the SDKs or `goal`. When using the SDKs all creation parameters can be supplied. With `goal`, managing the various addresses associated with the asset must be done after executing an asset creation. See Modifying an Asset in the next section for more details on changing addesses for the asset.
+Create assets using either the SDKs or `goal`. When using the SDKs supply all creation parameters. With `goal`, managing the various addresses associated with the asset must be done after executing an asset creation. See Modifying an Asset in the next section for more details on changing addresses for the asset.
 
 ``` javascript tab="JavaScript" 
 
     let addr = recoveredAccount1.addr; 
     let defaultFrozen = false;
     let totalIssuance = 100; 
-    let unitName = "<var>unit-name</var>"; 
-    let assetName = "<var>asset-name</var>"; 
+    let unitName = "<unit-name>"; 
+    let assetName = "<asset-name>"; 
     let assetURL = "http://someurl"; 
     let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d"; 
     let manager = recoveredAccount2.addr; 
@@ -219,12 +246,20 @@ Assets can be created using either the SDKs or `goal`. When using the SDKs all c
 	assetInfo, err := algodClient.AssetInformation(assetID, txHeaders...)
 ```
 
-``` goal tab="Goal"  
-goal asset create --creator <var>address</var> --total 1000 --unitname <var>unit-name</var> --asseturl "https://path/to/my/asset/details" --decimals 0   -d data
+``` goal tab="goal"  
+goal asset create --creator <address> --total 1000 --unitname <unit-name> --asseturl "https://path/to/my/asset/details" --decimals 0   -d data
 ```
 
-# Modifying an Asset
-After an asset has been created only the manager, reserve, freeze and reserve accounts can be changed. All other parametes are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must sting the transaction.
+**See also**
+
+- [Anatomy of an Asset Creation Transaction](./transactions.md#create-an-asset)
+
+
+## Modifying an Asset
+
+**Authorized by**: [Asset Manager Account](../reference-docs/transactions.md#manageraddr)
+
+After an asset has been created only the manager, reserve, freeze and reserve accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
 
 ``` javascript tab="JavaScript"
     // change the manager for the asset
@@ -340,12 +375,20 @@ After an asset has been created only the manager, reserve, freeze and reserve ac
 	PrettyPrint(assetInfo)
 ```
 
-``` goal tab="Goal"  
-goal asset config  --manager <var>address</var> --new-reserve <var>address</var> --assetid <var>asset-id</var> -d data 
+``` goal tab="goal"  
+goal asset config  --manager <address> --new-reserve <address> --assetid <asset-id> -d data 
 ```
 
-# Receiving an Asset
-Before any account can receive a created asset it must option in to receiving it. This requires a transaction and the account minimum rises by 0.1 Algo. The account optioning in to receiving the asset type must send this transaction to themselves. This involves setting the sender and receiver of the transaction to be the same address. The following code illustrates this transaction.
+**See also**
+
+- [Anatomy of an Asset Reconfiguration Transaction](./transactions.md#reconfigure-an-asset)
+
+
+## Receiving an Asset
+
+**Authorized by**: The account opting in
+
+Before an account can receive a specific asset it must opt-in to receive it. An opt-in transaction places an asset holding of 0 into the account increases its minimum balance by 100,000 microAlgos. An opt-in transaction is simply an asset transfer with an amount of 0, both to and from the account opting in. The following code illustrates this transaction.
 
 ``` javascript tab="JavaScript"  
     // Opting in to an Asset:
@@ -477,12 +520,19 @@ Before any account can receive a created asset it must option in to receiving it
 	PrettyPrint(act.Assets[assetID])
 ```
 
-``` goal tab="Goal"  
-goal asset send -a 0 --asset <var>asset-name</var>  -f <var>opt-in-account</var> -t <var>opt-in-account</var> --creator <var>asset-creator</var>  -d data
+``` goal tab="goal"  
+goal asset send -a 0 --asset <asset-name>  -f <opt-in-account> -t <opt-in-account> --creator <asset-creator>  -d data
 ```
 
-# Transferring an Asset
-Assets can be transferred between accounts that have optioned into receiving the asset and function similar to standard payment transactions that are signed by the sender account.
+**See also**
+
+- [Structure of an Asset Opt-In Transaction](./transactions.md#opt-in-to-an-asset)
+
+## Transferring an Asset
+
+**Authorized by**: The account that holds the asset to be transferred.
+
+Assets can be transferred between accounts that have opted-in to receiving the asset. These are analagous to standard payment transactions but for Algorand Standard Assets. 
 
 ``` javascript tab="JavaScript"  
     // Transfer New Asset:
@@ -603,12 +653,19 @@ Assets can be transferred between accounts that have optioned into receiving the
 	PrettyPrint(act.Assets[assetID])
 ```
 
-``` goal tab="Goal"  
-goal asset send -a <var>asset-amount</var> --asset <var>asset-name</var> -f <var>asset-sender</var> -t <var>asset-receiver</var> --creator <var>asset-creator</var> -d data
+``` goal tab="goal"  
+goal asset send -a <asset-amount> --asset <asset-name> -f <asset-sender> -t <asset-receiver> --creator <asset-creator> -d data
 ```
 
-# Freezing an Asset
-Assets configured with a freeze account can be frozen. If the freeze address is ever set to `""` by the asset manager, this capability is removed from the asset. Freezing an asset for an account prevents that account from either receiving or sending the specific asset. Freezing or unfreezing and asset for an account requires a transaction that is signed by the freeze account. The code below illustrates the freeze transaction.
+**See also**
+
+- [Anatomy of an Asset Transfer Transaction](./transactions.md#transfer-an-asset)
+
+## Freezing an Asset
+
+**Authorized by**: [Asset Freeze Address](../reference-docs/transactions.md#freezeaddr)
+
+Freezing or unfreezing an asset for an account requires a transaction that is signed by the freeze account. The code below illustrates the freeze transaction.
 
 ``` javascript tab="JavaScript"  
     // The asset was created and 
@@ -726,12 +783,19 @@ Assets configured with a freeze account can be frozen. If the freeze address is 
 	PrettyPrint(act.Assets[assetID])
 ```
 
-``` goal tab="Goal"  
-goal asset freeze --freezer <var>asset-freeze-account</var> --freeze=true --account <var>account-to-freeze</var> --creator <var>asset-creator</var> --asset <var>asset-name</var> -d data
+``` goal tab="goal"  
+goal asset freeze --freezer <asset-freeze-account> --freeze=true --account <account-to-freeze> --creator <asset-creator> --asset <asset-name> -d data
 ```
 
-# Revoking an Asset
-Assets configured with a clawback account can be revoked. If the clawback address is ever set to `""` by the asset manager, this capability is removed from the asset. Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires a transaction that is signed by the clawback account which also specifies the ammount of the asset to revoke. The code below illustrates the clawback transaction.
+**See also**
+
+- [Anatomy of an Asset Freeze Transaction](./transactions.md#freeze-an-asset)
+
+## Revoking an Asset
+
+**Authorized by**: [Asset Clawback Address](../reference-docs/transactions.md#clawbackaddr)
+
+Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires specifying an asset sender (the revoke target account) and an asset receiver (the account to transfer the funds back to). The code below illustrates the clawback transaction.
 
 ``` javascript tab="JavaScript"  
     // Revoke and Asset:
@@ -862,12 +926,19 @@ Assets configured with a clawback account can be revoked. If the clawback addres
 	PrettyPrint(act.Assets[assetID])
 ```
 
-``` goal tab="Goal"  
-goal asset send -a <var>amount-to-revoke</var> --asset <var>asset-name</var> -f <var>address-of-revoke-target</var> -t <var>address-to-send-assets-to</var> --clawback <var>clawback-address</var> --creator <var>creator-address</var> -d data
+``` goal tab="goal"  
+goal asset send -a <amount-to-revoke> --asset <asset-name> -f <address-of-revoke-target> -t <address-to-send-assets-to> --clawback <clawback-address> --creator <creator-address> -d data
 ```
 
-# Destroying an Asset
-Created assets can be destroyed only by the asset manager account. All of the assets must be owned by the creator of the asset before the asset can be deleted. Deleting an asset requires a transaction that is signed by the manager as shown below.
+**See also**
+
+- [Anatomy of an Asset Clawback Transaction](./transactions.md#revoke-an-asset)
+
+## Destroying an Asset
+
+**Authorized by**: [Asset Manager](../reference-docs/transactions.md#manageraddr)
+
+Created assets can be destroyed only by the asset manager account. All of the assets must be owned by the creator of the asset before the asset can be deleted. 
 
 ``` javascript tab="JavaScript"  
     // Destroy and Asset:
@@ -998,12 +1069,16 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	}
 ```
 
-``` goal tab="Goal"  
-goal asset destroy --creator <var>creator-address</var> --manager <var>asset-manager-address</var> --asset <var>asset-name</var> -d data 
+``` goal tab="goal"  
+goal asset destroy --creator <creator-address> --manager <asset-manager-address> --asset <asset-name> -d data 
 ```
 
-# Get Asset Configuration Information
-An asset's configuration information can be retreived from the network using the SDKs or `goal`. Additional details are also added to the accounts that own the specific asset and can be listed with standard account information calls.
+**See also**
+
+- [Anatomy of the Asset Destroy Transaction](transactions.md#destroy-an-asset)
+
+# Retrieve Asset Information
+Retrieve an asset's configuration information from the network using the SDKs or `goal`. Additional details are also added to the accounts that own the specific asset and can be listed with standard account information calls.
 
 ``` javascript tab="JavaScript"
     //Get the asset information for anasset
@@ -1029,10 +1104,10 @@ An asset's configuration information can be retreived from the network using the
     PrettyPrint(assetInfo)
 ```
 
-``` goal tab="Goal"  
-goal asset info --creator <var>creator-address</var> --asset unitname  -d ~/node/data -w testwall
-Asset ID:         <var>created-asset-id</var>
-Creator:          <var>creator-address</var>
+``` goal tab="goal"  
+goal asset info --creator <creator-address> --asset unitname  -d ~/node/data -w testwall
+Asset ID:         <created-asset-id>
+Creator:          <creator-address>
 Asset name:       testtoken
 Unit name:        unitname
 Maximum issue:    12 unitname
@@ -1040,22 +1115,22 @@ Reserve amount:   12 unitname
 Issued:           0 unitname
 Decimals:         0
 Default frozen:   false
-Manager address:  <var>creator-address</var>
-Reserve address:  <var>reserve-address</var>
-Freeze address:   <var>freeze-address</var>
-Clawback address: <var>clawback-address</var>
+Manager address:  <creator-address>
+Reserve address:  <reserve-address>
+Freeze address:   <freeze-address>
+Clawback address: <clawback-address>
 ```
 
-??? example "Complete Example = Asset Options"
+??? example "Complete Example - Asset Options"
     
     ```javascript tab="JavaScript"
     const algosdk = require('algosdk');
 
     //Retrieve the token, server and port values for your installation in the algod.net
     //and algod.token files within the data directory
-    const token = "<var>algod-address</var>";
-    const server = "<var>algod-token</var>";
-    const port = <var>port-number</var>;
+    const token = "<algod-address>";
+    const server = "<algod-token>";
+    const port = <port-number>;
 
     // Structure for changing blockchain params
     var cp = {
@@ -1088,9 +1163,9 @@ Clawback address: <var>clawback-address</var>
     };
 
     //Recover accounts used in example
-    var account1_mnemonic ="<var>your-25-word-mnemonic</var>";    
-    var account2_mnemonic ="<var>your-25-word-mnemonic</var>";    
-    var account3_mnemonic ="<var>your-25-word-mnemonic</var>";
+    var account1_mnemonic ="<your-25-word-mnemonic>";    
+    var account2_mnemonic ="<your-25-word-mnemonic>";    
+    var account3_mnemonic ="<your-25-word-mnemonic>";
     var recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
     var recoveredAccount2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
     var recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
@@ -1112,8 +1187,8 @@ Clawback address: <var>clawback-address</var>
         let addr = recoveredAccount1.addr; 
         let defaultFrozen = false;
         let totalIssuance = 100; 
-        let unitName = "<var>asset-unit-name</var>"; 
-        let assetName = "<var>asset-name</var>"; 
+        let unitName = "<asset-unit-name>"; 
+        let assetName = "<asset-name>"; 
         let assetURL = "http://someurl"; 
         let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d"; 
         let manager = recoveredAccount2.addr; 
@@ -1310,9 +1385,9 @@ Clawback address: <var>clawback-address</var>
 
     # Shown for demonstration purposes. NEVER reveal secret mnemonics in practice. 
     # Change these values if you want to use different accounts.
-    mnemonic1 = "<var>25-word-passphrase</var>"
-    mnemonic2 = "<var>25-word-passphrase</var>"
-    mnemonic3 = "<var>25-word-passphrase</var>"
+    mnemonic1 = "<25-word-passphrase>"
+    mnemonic2 = "<25-word-passphrase>"
+    mnemonic3 = "<25-word-passphrase>"
 
     # For ease of reference, add account public and private keys to 
     # an accounts dict.
@@ -1325,8 +1400,8 @@ Clawback address: <var>clawback-address</var>
         counter += 1
 
     # Specify your node address and token. This must be updated.
-    algod_address = "<var>algod-address</var>"
-    algod_token = "<var>algod-token</var>"
+    algod_address = "<algod-address>"
+    algod_token = "<algod-token>"
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
     # Get network params for transaction
@@ -1588,8 +1663,8 @@ Clawback address: <var>clawback-address</var>
         // utility function to connect to a node
         private AlgodApi connectToNetwork(){
 
-            final String ALGOD_API_ADDR = "<var>algod-address</var>";
-            final String ALGOD_API_TOKEN = "<var>algod-token</var>";
+            final String ALGOD_API_ADDR = "<algod-address>";
+            final String ALGOD_API_TOKEN = "<algod-token>";
 
             AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
             ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
@@ -1671,7 +1746,7 @@ Clawback address: <var>clawback-address</var>
 
             // recover example accounts
             
-            final String account1_mnemonic = <var>your-25-word-mnemonic</var>             final String account2_mnemonic = <var>your-25-word-mnemonic</var>             final String account3_mnemonic = <var>your-25-word-mnemonic</var>                    
+            final String account1_mnemonic = <your-25-word-mnemonic>             final String account2_mnemonic = <your-25-word-mnemonic>             final String account3_mnemonic = <your-25-word-mnemonic>                    
             Account acct1  = new Account(account1_mnemonic); 
             Account acct2  = new Account(account2_mnemonic);
             Account acct3  = new Account(account3_mnemonic);                           
@@ -1926,8 +2001,8 @@ Clawback address: <var>clawback-address</var>
         "github.com/algorand/go-algorand-sdk/mnemonic"
         "github.com/algorand/go-algorand-sdk/crypto"
     )
-    const algodAddress = "<var>algod-address</var>"
-    const algodToken = "<var>algod-token</var>"
+    const algodAddress = "<algod-address>"
+    const algodToken = "<algod-token>"
 
 
     var txHeaders = append([]*algod.Header{}, &algod.Header{"Content-Type", "application/json"})
@@ -1935,13 +2010,13 @@ Clawback address: <var>clawback-address</var>
     // Accounts to be used through examples
     func loadAccounts() (map[int][]byte, map[int]string){
         var pks = map[int]string {
-        	1: "<var>account1-address</var>",
-        	2: "<var>account1-address</var>",
-        	3: "<var>account1-address</var>",
+        	1: "<account1-address>",
+        	2: "<account1-address>",
+        	3: "<account1-address>",
         }
-        mnemonic1 = "<var>your-25-word-mnemonic</var>"
-        mnemonic2 = "<var>your-25-word-mnemonic</var>"
-        mnemonic3 = "<var>your-25-word-mnemonic</var>"
+        mnemonic1 = "<your-25-word-mnemonic>"
+        mnemonic2 = "<your-25-word-mnemonic>"
+        mnemonic3 = "<your-25-word-mnemonic>"
         mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
         var sks = make(map[int][]byte) 
         for i, m := range mnemonics {

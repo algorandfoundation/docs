@@ -1,15 +1,17 @@
 title: Overview
 
-This section covers the procedure for registering an account to participate in the Algorand Consensus Protocol. It begins with a description of important concepts and best practices prior to getting started. 
+This section covers the procedure for registering an account to participate in the Algorand Consensus Protocol. It begins with a description of important concepts and best practices before getting started. 
 
 !!! tldr
 	- Accounts participate in the Algorand consensus protocol by generating a valid participation key and then registering that key online with a special online registration transaction.
 	- Accounts mark themselves online by submitting an [online key registration transaction](../../feature-guides/transactions.md#register-account-online) for a valid participation key.
 	- Accounts mark themselves offline by submitting an [offline key registration transaction](../../feature-guides/transactions.md#register-account-offline). 
-	- It is important to mark your account offline if it is not actually participating. Not doing so is bad network behavior and will decrease the honest/dishonest user ratio that underpins the liveness of the agreement protocol.
+	- It is important to mark your account offline if it is not participating. Not doing so is bad network behavior and will decrease the honest/dishonest user ratio that underpins the liveness of the agreement protocol.
 	- It is important to ensure that only the latest update of the participation key ever exists at any time.
 	- In the event of node migration, hardware swap, or other similar events, it is preferable to have your participation key offline for a few rounds than to have it present on multiple nodes at the same time.
 
+!!! info
+    Participation in consensus currently does not affect the amount of rewards accounts receive. The rewards are [based on the amount]((https://algorand.foundation/rewards-faq)) of stake an account has and are irrespective of whether the account is online or offline. Participation involves an account becoming eligible to help propose and vote on blocks that are written to the chain.
 
 # Important Concepts
 
@@ -22,10 +24,10 @@ In order for an account to participate in consensus, it must first mark itself o
 # Guidelines for a Healthy Network
 
 ## Ensure that Online Accounts are Participating
-If an account registers itself online, it is important that its participation key actually is online. _A participation key is online if there is a single fully-synchronized node on the Algorand network that has that key in its ledger directory._ You should always mark an account offline if it is not actually available to participate, since the network uses the online/offline status of an account to calculate block vote thresholds. If you are marked online but you are not actually participating, you would be considered a dishonest user and will negatively impact the voting threshold. Furthermore, if your node experiences issues you are not able to solve promptly, it is recommended that you register the account offline as soon as possible.
+If an account registers itself online, it is important that its participation key is online. _A participation key is online if there is a single fully-synchronized node on the Algorand network that has that key in its ledger directory._ You should always mark an account offline if it is not actually available to participate, since the network uses the online/offline status of an account to calculate block vote thresholds. If you are marked online but you are not participating, you would be considered a dishonest user and will negatively impact the voting threshold. Furthermore, if your node experiences issues you are not able to solve promptly, it is recommended that you register the account offline as soon as possible.
 
 !!! tip
-	If you keep your private keys in cold storage, its recommended that you generate and sign enough offline transactions to be able to take the account offline in case of emergencies. Learn more about generating transactions for future rounds in the [Transactions guide](../../feature-guides/transactions.md##sending-a-transaction-in-the-future). Learn how to create and authorize transactions offline in the [Authorizing Transactions Offline](../../feature-guides/offline_transactions.md) guide.
+	If you keep your private keys in cold storage, it is recommended that you generate and sign enough offline transactions to be able to take the account offline in case of emergencies. Learn more about generating transactions for future rounds in the [Transactions guide](../../feature-guides/transactions.md##sending-a-transaction-in-the-future). Learn how to create and authorize transactions offline in the [Authorizing Transactions Offline](../../feature-guides/offline_transactions.md) guide.
 
 ## Renew participation keys before they expire
 Participation keys are valid for a specific round range. Make sure to renew participation keys or mark the account offline before the current participation key expires. Your account will _not_ automatically be marked offline.
