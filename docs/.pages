@@ -1,7 +1,7 @@
 arrange:
   - index.md
-  - feature-guides
   - getting-started
+  - feature-guides
   - network-participation
   - reference-docs
   - algorand_consensus.md
