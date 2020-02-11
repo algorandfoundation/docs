@@ -10,7 +10,7 @@ The same methodology described here can also be used to work with [LogicSignatur
 # Unsigned Transaction File Operations
 Algorand SDK's and `goal` support writing and reading both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.
 
-Unsigned transactions require the transaction object to be created before to a file.
+Unsigned transactions require the transaction object to be created before writing to a file.
 
 
 ``` javascript tab="JavaScript"
@@ -786,10 +786,10 @@ $ goal clerk rawsend --filename signed.txn
         }
 
     }
-
     ```
 
     ```go tab="Go"
+    
     package main
 
     import (
@@ -1005,7 +1005,7 @@ $ goal clerk rawsend --filename signed.txn
 
     }    
     ```
-    
+
 ??? example "Complete Example = Saving Signed and Unsigned Multisig Transactions to a File"
     
     ```javascript tab="JavaScript"
