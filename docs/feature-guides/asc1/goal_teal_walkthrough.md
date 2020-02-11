@@ -47,7 +47,7 @@ REJECT
 
 In this example, the logic returns false and the transaction fails.
 # Compiling TEAL Options
-Compiling a teal program using the `goal clerk compile` coand writes the binary raw bytes to a file with the same name as the source file with a `.tok` extension. Specifying the `-n` option will compile the TEAL program but not write out the binary. The console will display the compiled TEAL's address.
+Compiling a teal program using the `goal clerk compile` compiles and writes the binary raw bytes to a file with the same name as the source file with a `.tok` extension. Specifying the `-n` option will compile the TEAL program but not write out the binary. The console will display the compiled TEAL's address.
 
 ```
 $ goal clerk compile -n simple.teal
@@ -65,7 +65,7 @@ $ goal clerk compile -D /tmp/mytealbinary.tealc
 intcblock 0
 intc_0
 ```
-In the above examples, the TEAL program is compiled and can be used as a contract account as discussed in the [Usage Modes](modes.md) documentation. To use TEAL for account [delegation](modes.md#delegated-account), the program must be signed by an account or a multi-signature account. This can be done with goal using the `-s` option. If a default account is assigned the following would produce a LogicSig file.
+In the above examples, the TEAL program is compiled and can be used as a contract account as discussed in the [Usage Modes](modes.md) documentation. To use TEAL for account [delegation](modes.md#delegated-account), the program must be signed by an account or a multi-signature account. This can be done with goal using the `-s` option. If a default account is assigned, the following would produce a LogicSig file.
 ```
 goal clerk compile  simple.teal -o /tmp/simple.lsig -s -d ~/node/data
 ```
@@ -124,7 +124,7 @@ LogicSig: {
 }
 ```
 # Passing Parameters to TEAL with Goal
-Parameters can be passed to a TEAL program using `goal`. The parameters must be passed as base64 encoded strings. In most cases, this requires that properly encode the strings. For example, to pass “mystringargument” to a TEAL program, the argument can be encoded using an `echo` command with base64.
+Parameters can be passed to a TEAL program using `goal`. The parameters must be passed as base64 encoded strings. For example, to pass “mystringargument” to a TEAL program, the argument can be encoded using an `echo` command with base64.
 ```
 $ echo -n mystringargument | base64
 bXlzdHJpbmdhcmd1bWVudA==
