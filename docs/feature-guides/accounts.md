@@ -137,7 +137,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	const algosdk = require('algosdk');
 
 	const kmdtoken = <kmd-token>;
-	const kmdserver = "http://" + <kmd-address>;
+	const kmdserver = <kmd-address>;
 	const kmdport = <kmd-port>;
 
 	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
@@ -164,7 +164,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	from algosdk.wallet import Wallet
 
 	kmd_token = <kmd-token>
-	kmd_address = "http://" + <kmd-address>
+	kmd_address = <kmd-address>
 	# create a kmd client
 	kcl = kmd.KMDClient(kmd_token, kmd_address)
 
@@ -198,7 +198,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 			//Get the values for the following two settings in the
 			//kmd.net and kmd.token files within the data directory 
 			//of your node.        
-			final String KMD_API_ADDR = "https://" + "<kmd-address>";
+			final String KMD_API_ADDR = "<kmd-address>";
 			final String KMD_API_TOKEN = "<kmd-token>";
 
 			// Create a wallet with kmd rest api
@@ -250,7 +250,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 		"github.com/algorand/go-algorand-sdk/types"
 	)
 
-	const kmdAddress = "https://" + "<kmd-address>"
+	const kmdAddress = "<kmd-address>"
 	const kmdToken = "<kmd-token>"
 
 	func main() {
@@ -323,7 +323,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	const algosdk = require('algosdk');
 
 	const kmdtoken = <kmd-token>;
-	const kmdserver = "http://" + <kmd-address>;
+	const kmdserver = <kmd-address>;
 	const kmdport = <kmd-port>;
 
 	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
@@ -352,7 +352,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	from algosdk import kmd, mnemonic
 
 	kmd_token = <kmd-token>
-	kmd_address = "http://" + <kmd-address>
+	kmd_address = <kmd-address>
 
 	# create a kmd client
 	kcl = kmd.KMDClient(kmd_token, kmd_address)
@@ -392,7 +392,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 			//Get the values for the following two settings in the
 			//kmd.net and kmd.token files within the data directory 
 			//of your node.        
-			final String KMD_API_ADDR = "https://" + "<kmd-address>";
+			final String KMD_API_ADDR = "<kmd-address>";
 			final String KMD_API_TOKEN = "<kmd-token>";
 			final String BACKUP_PHRASE = <wallet-mnemonic>;
 			// Create a wallet with kmd rest api
@@ -448,7 +448,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 		"github.com/algorand/go-algorand-sdk/types"
 	)
 
-	const kmdAddress = "https://" + "<kmd-address>"
+	const kmdAddress = "<kmd-address>"
 	const kmdToken = "<kmd-token>"
 
 	func main() {
@@ -520,8 +520,8 @@ Use this to retrieve the 25-word mnemonic for the account.
 	const algosdk = require('algosdk');
 
 	const kmdtoken = <kmd-token>;
-	const kmdsaddress = "http://" + <kmd-address>;
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdsaddress);
+	const kmdaddress = <kmd-address>;
+	const kmdclient = new algosdk.Kmd(kmdtoken, kmdaddress);
 
 	(async () => {
 		var walletid = null;
@@ -545,7 +545,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	from algosdk.wallet import Wallet
 
 	kmd_token = <kmd-token>
-	kmd_address = "http://" + <kmd-address>
+	kmd_address = <kmd-address>
 
 	# create a kmd client
 	kcl = kmd.KMDClient(kmd_token, kmd_address)
@@ -585,7 +585,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 			//Get the values for the following two settings in the
 			//kmd.net and kmd.token files within the data directory 
 			//of your node.        
-			final String KMD_API_ADDR = "https://" + "<kmd-address>";
+			final String KMD_API_ADDR = "<kmd-address>";
 			final String KMD_API_TOKEN = "<kmd-token>";
 
 			// Create a wallet with kmd rest api
@@ -653,7 +653,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	// These constants represent the kmd REST endpoint and the corresponding API
 	// token. You can retrieve these from the `kmd.net` and `kmd.token` files in
 	// the kmd data directory.
-	const kmdAddress = "https://" + "<kmd-address>"
+	const kmdAddress = "<kmd-address>"
 	const kmdToken = "<kmd-token>"
 
 	func main() {
@@ -712,7 +712,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	const algosdk = require('algosdk');
 
 	const kmdtoken = <kmd-token>;
-	const kmdserver = "http://" + <kmd-address>;
+	const kmdserver = <kmd-address>;
 	const kmdport = <kmd-port>;
 	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 
@@ -787,12 +787,12 @@ Use these methods to import a 25-word account-level mnemonic.
 	import com.algorand.algosdk.crypto.Address;
 
 
-	public class PracticeDocs2 {
+	public class ImportAcct {
 		public static void main(String args[]) throws Exception {
 			// Get the values for the following two settings in the
 			// kmd.net and kmd.token files within the data directory
 			// of your node.
-			final String KMD_API_ADDR = "https://" + "<kmd-address>";
+			final String KMD_API_ADDR = "<kmd-address>";
 			final String KMD_API_TOKEN = "<kmd-token>";
 
 			// Create a wallet with kmd rest api
@@ -870,7 +870,7 @@ Use these methods to import a 25-word account-level mnemonic.
 		"github.com/algorand/go-algorand-sdk/mnemonic"
 	)
 
-	const kmdAddress = "https://" + "<kmd-address>"
+	const kmdAddress = "<kmd-address>"
 	const kmdToken = "<kmd-token>"
 
 	func main() {
