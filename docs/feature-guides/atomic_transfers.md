@@ -269,8 +269,8 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
     var client = null;
     async function setupClient() {
         if( client == null){
-            const ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            const ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
+            const ALGOD_API_ADDR = <algod-address>;
+            const ALGOD_API_TOKEN = <algod-token>;
             const port = port-number<PLACEHOLDER>;
             let algodClient = new algosdk.Algod(token, server, port);
             client = algodClient;
@@ -281,13 +281,13 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
     }
     // recover first account
     function recoverAccount1(){
-        const passphrase ="your-25-word-mnemonic<PLACEHOLDER>";
+        const passphrase = <25-word-passphrase>;
         let myAccount = algosdk.mnemonicToSecretKey(passphrase);
         return myAccount;
     }
     // recover second account
     function recoverAccount2(){
-        const passphrase ="your-25-word-mnemonic<PLACEHOLDER>";
+        const passphrase = <25-word-passphrase>;
         let myAccount = algosdk.mnemonicToSecretKey(passphrase);
         return myAccount;
     }
@@ -308,7 +308,7 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
 
         try{
             // receiver
-            const receiver = "transaction-receiver-address<PLACEHOLDER>"
+            const receiver = <transaction-receiver-address>"
             // sample show account A to C
             // B to A 
             // grouped
@@ -380,8 +380,8 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
 
     # utility to connect to node
     def connect_to_network():
-        algod_address = "algod-address<PLACEHOLDER>"
-        algod_token = "algod-token<PLACEHOLDER>"
+        algod_address = <algod-address>
+        algod_token = <algod-token>
         algod_client = algod.AlgodClient(algod_token, algod_address)
         return algod_client
 
@@ -400,17 +400,17 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
     def group_transactions() :
         
         # recover a account    
-        passphrase = "25-word-passphrase<PLACEHOLDER>"
-        pk_account_a = mnemonic.to_private_key(passphrase)
+        passphrase1 = <25-word-passphrase>
+        pk_account_a = mnemonic.to_private_key(passphrase1)
         account_a = account.address_from_private_key(pk_account_a)
 
         # recover b account
-        passphrase2 = "25-word-passphrase<PLACEHOLDER>"
+        passphrase2 = <25-word-passphrase>
         pk_account_b = mnemonic.to_private_key(passphrase2)
         account_b = account.address_from_private_key(pk_account_b)
 
         # recover c account
-        passphrase = "25-word-passphrase<PLACEHOLDER>"
+        passphrase3 = <25-word-passphrase>
         pk_account_c = mnemonic.to_private_key(passphrase3)
         account_c = account.address_from_private_key(pk_account_c)
 
@@ -486,8 +486,8 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
         // utility function to connect to a node
         private AlgodApi connectToNetwork(){
 
-            final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
+            final String ALGOD_API_ADDR = <algod-address>;
+            final String ALGOD_API_TOKEN = <algod-token>;
 
             AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
             ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
@@ -552,9 +552,9 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
 
             if( algodApiInstance == null ) connectToNetwork();;
 
-            final String account1_mnemonic = "25-word-passphrase<PLACEHOLDER>";
-            final String account2_mnemonic = "25-word-passphrase<PLACEHOLDER>";
-            final String account3_mnemonic = "25-word-passphrase<PLACEHOLDER>";
+            final String account1_mnemonic = <25-word-passphrase>;
+            final String account2_mnemonic = <25-word-passphrase>;
+            final String account3_mnemonic = <25-word-passphrase>;
             // recover account A, B, C
             Account acctA  = new Account(account1_mnemonic); 
             Account acctB  = new Account(account2_mnemonic);
@@ -630,8 +630,8 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
         "github.com/algorand/go-algorand-sdk/types"
     )
 
-    const algodToken = "algod-token<PLACEHOLDER>"
-    const algodAddress = "algod-address<PLACEHOLDER>"
+    const algodToken = <algod-token>
+    const algodAddress = <algod-address>
 
     // Function that waits for a given txId to be confirmed by the network
     func waitForConfirmation(algodClient algod.Client, txID string) {
@@ -684,9 +684,9 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
         }
 
         // declare account mnemonics for later consumption for private key conversion
-        const mnemonic1 = "25-word-passphrase<PLACEHOLDER>";
-        const mnemonic2 = "25-word-passphrase<PLACEHOLDER>";
-        const mnemonic3 = "25-word-passphrase<PLACEHOLDER>";
+        const mnemonic1 = <25-word-passphrase>;
+        const mnemonic2 = <25-word-passphrase>;
+        const mnemonic3 = <25-word-passphrase>;
 
         // convert mnemonic1 and mnemonic2 using the mnemonic.ToPrivateKey() helper function
         sk1, err := mnemonic.ToPrivateKey(mnemonic1)
