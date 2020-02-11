@@ -16,7 +16,7 @@ Below is a categorized list of projects that are using the Algorand blockchain a
 
 | Name| Description |
 |------|------|
-| <center>![](./imgs/myalgoicon.png)</center><center> <a href="https://wallet.myalgo.com/" target="_blank">My Algo</a></center> | My Algo provides an interface to interact with the Algorand Blockchain created by [Rand Labs](https://randlabs.io/)|
+| <center>![](./imgs/myalgo.png)</center><center> <a href="https://wallet.myalgo.com/" target="_blank">My Algo</a></center> | My Algo provides an interface to interact with the Algorand Blockchain created by [Rand Labs](https://randlabs.io/)|
 | <center><a href="https://github.com/RileyGe/algo-wallet" target="_blank">Algo Wallet</a></center> | A cross platform wallet built using the [Avalonia](https://avaloniaui.net/) UI. This wallets can be used on Windows, MacOS and Lunix and the Avaloni UI provides experimental support for iOS and Android. The library is Open Sourced (GNU) and is built in C#.|
 
 # API Services
