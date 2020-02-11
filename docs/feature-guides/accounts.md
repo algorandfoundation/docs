@@ -91,7 +91,7 @@ Even in these docs, use of these terms may be inconsistent. At times this is a d
 
 ## Wallet-derived (kmd)
 
-The Key Management Daemon is a process that runs on [Algorand nodes](../reference-docs/node_files.md#kmd), so if you are using a [third-party API service](../getting-started/setup.md#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs also connect to kmd through a REST endpoint and access token. 
+The Key Management Daemon is a process that runs on [Algorand nodes](../reference-docs/artifacts.md#kmd), so if you are using a [third-party API service](../getting-started/setup.md#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs also connect to kmd through a REST endpoint and access token. 
 
 **Reasons you might want to use kmd**
 

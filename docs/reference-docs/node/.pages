@@ -1,5 +1,5 @@
 title: Node Reference 
 arrange:
-  - node_files.md
+  - artifacts.md
   - config.md
-  - config_relay.md
+  - relay.md
