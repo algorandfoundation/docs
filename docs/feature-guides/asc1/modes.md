@@ -1,8 +1,9 @@
 title: Modes of Use
 
-TEAL code has two basic usage scenarios; as a contract account or as a delegated signature. These modes are used to approve transactions in different ways which are described below. Both modes make use of Logic Signatures.
+TEAL code has two basic usage scenarios; as a [**contract account**](#contract-account) or as a [**delegated signature**](#delegated-approval). These modes are used to approve transactions in different ways which are described below. Both modes make use of Logic Signatures.
+
 # Logic Signatures
-Logic Signatures referenced as LogicSig, are structures that contain the following four parts.
+Logic Signatures, referenced as LogicSig, are structures that contain the following four parts.
 
 
 <center>![Logic Signature Structure](../../imgs/modes-0.png)</center>
