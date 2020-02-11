@@ -33,8 +33,7 @@ import com.algorand.algosdk.algod.client.AlgodClient;
 import com.algorand.algosdk.algod.client.api.AlgodApi;
 import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
 
-public class GettingStartedExample 
-{
+public class ConnectToNetwork {
     public static void main(String args[]) throws Exception {
         
         final String ALGOD_API_ADDR = <algod-address>;
@@ -105,7 +104,7 @@ import com.algorand.algosdk.algod.client.AlgodClient;
 import com.algorand.algosdk.algod.client.api.AlgodApi;
 import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
 
-public class GettingStartedExample {
+public class ConnectToNetwork {
 	public static void main(String[] args) {
 
 		final String ALGOD_API_ADDR = <algod-address>;
@@ -139,7 +138,7 @@ func main() {
 
 # Check node status and network version
 
-Call the _status_ and _version_ methods fron the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
+Call the _status_ and _version_ methods from the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
 
 ```javascript tab="JavaScript"
 ...
@@ -159,6 +158,7 @@ Call the _status_ and _version_ methods fron the algod client to check the detai
 ```
 
 ```java tab="Java"
+
 	...
         try {
             NodeStatus status = algodApiInstance.getStatus();
@@ -335,6 +335,37 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 	main()
 	```
 
+	```java tab="Java"
+	import com.algorand.algosdk.algod.client.AlgodClient;
+	import com.algorand.algosdk.algod.client.api.AlgodApi;
+	import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
+	import com.algorand.algosdk.algod.client.model.*;
+
+	public class ConnectToNetwork { 
+		public static void main(String args[]) throws Exception {
+			
+			final String ALGOD_API_ADDR = <algod-address>;
+			final String ALGOD_API_TOKEN = <algod-token>;
+
+			//Create an instance of the algod API client
+			AlgodClient client = (AlgodClient) new AlgodClient()
+			client.setBasePath(ALGOD_API_ADDR);
+			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
+			api_key.setApiKey(ALGOD_API_TOKEN);
+			AlgodApi algodApiInstance = new AlgodApi(client); 
+			try {
+				NodeStatus status = algodApiInstance.getStatus();
+				Version version = algodApiInstance.getVersion();
+				System.out.println("Algorand network status: " + status);
+				System.out.println("Algorand network version: " + version);
+			} catch (ApiException e) {
+				System.err.println("Exception when calling algod#getStatus or algod#getVersion");
+				e.printStackTrace();
+			}
+		}
+	}
+	```
+
 ??? example "Complete Example - Connect to the Network with API Service"
 
 	```python tab="Python"
@@ -373,26 +404,24 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 	import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
 	import com.algorand.algosdk.algod.client.model.*;
 
-	public class MyApp {
+	public class ConnectToNetwork {
 
 		public static void main(String args[]) throws Exception {
 
-			// Initialize an algod client
 			final String ALGOD_API_ADDR = <algod-address>;
-			final String ALGOD_API_TOKEN = <algod-token>;
+			final String ALGOD_API_KEY = <service-api-key>;
 
-			//Create an instance of the algod API client
-			AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
-			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-			api_key.setApiKey(ALGOD_API_TOKEN);
+			AlgodClient client = new AlgodClient();
+			client.setBasePath(ALGOD_API_ADDR);
+			client.addDefaultHeader("X-API-Key", ALGOD_API_KEY);
 			AlgodApi algodApiInstance = new AlgodApi(client);
-
-			        // Get the latest Block
 			try {
 				NodeStatus status = algodApiInstance.getStatus();
+				Version version = algodApiInstance.getVersion();
 				System.out.println("Algorand network status: " + status);
+				System.out.println("Algorand network version: " + version);
 			} catch (ApiException e) {
-				System.err.println("Exception when calling algod#getStatus");
+				System.err.println("Exception when calling algod#getStatus or algod#getVersion");
 				e.printStackTrace();
 			}
 		}

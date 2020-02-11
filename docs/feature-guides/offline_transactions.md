@@ -10,7 +10,7 @@ The same methodology described here can also be used to work with [LogicSignatur
 # Unsigned Transaction File Operations
 Algorand SDK's and `goal` support writing and reading both signed and unsigned transactions to a file. Examples of these scenarios are shown in the following code snippets.
 
-Unsigned transactions require the transaction object to be created before writting to a file.
+Unsigned transactions require the transaction object to be created before writing to a file.
 
 
 ``` javascript tab="JavaScript"
@@ -786,10 +786,10 @@ $ goal clerk rawsend --filename signed.txn
         }
 
     }
-
     ```
 
     ```go tab="Go"
+    
     package main
 
     import (
@@ -1005,12 +1005,14 @@ $ goal clerk rawsend --filename signed.txn
 
     }    
     ```
+
 ??? example "Complete Example = Saving Signed and Unsigned Multisig Transactions to a File"
     
     ```javascript tab="JavaScript"
     const algosdk = require('algosdk');
     const fs = require('fs');
     var client = null;
+
     // make connection to node
     async function setupClient() {
         if (client == null) {
@@ -1024,8 +1026,8 @@ $ goal clerk rawsend --filename signed.txn
         }
         return client;
     }
-    // recover acccounts for example
 
+    // recover acccounts for example
     function recoverAccount1() {
         const passphrase = <your-25-word-mnemonic>;
         let myAccount = algosdk.mnemonicToSecretKey(passphrase);   
@@ -1057,7 +1059,6 @@ $ goal clerk rawsend --filename signed.txn
     };
 
     async function writeSignedMultisigTransctionToFile() {
-
         try {
             let algodClient = await setupClient();
             let myAccount1 = await recoverAccount1();
@@ -1101,6 +1102,7 @@ $ goal clerk rawsend --filename signed.txn
             console.log(e);
         }
     };
+
     async function readSignedMultisigTransctionFromFile() {
         try {
             let algodClient = await setupClient();
@@ -1147,6 +1149,7 @@ $ goal clerk rawsend --filename signed.txn
             let txparams = await algodClient.getTransactionParams();
             let msa = algosdk.multisigAddress(params);
             console.log("My multisig address is: %s", msa)
+
             // BREAK HERE here and add algos from the testnet dispenser to the multisig account if 0 balance
             // CPZ3OU3QDH2565PNDN7HY5UF7IIC7EUYSHDPVAZ3MDE3WKGOVWE7HQNVL4
             // send from msa to Account 3
@@ -1168,6 +1171,7 @@ $ goal clerk rawsend --filename signed.txn
             console.log(e);
         }
     };
+    
     async function readUnsignedMultisigTransctionFromFile() {
         try {
             let algodClient = await setupClient();
@@ -1236,28 +1240,13 @@ $ goal clerk rawsend --filename signed.txn
                     algod_client.status().get('lastRound') + 1)
 
     def write_unsigned():
+        
         # setup none connection
         algod_client = connect_to_network()
-        # generate three new accounts if desired
-        # private_key_1, account_1 = account.generate_account()
-        # private_key_2, account_2 = account.generate_account()
-        # private_key_3, account_3 = account.generate_account()
-        # print("Account 1:", account_1)
-        # mnemonic1 = mnemonic.from_private_key(private_key_1)
-        # print("Mnemonic 1 = ", mnemonic1)
-        # print("Account 2:", account_2)
-        # mnemonic2 = mnemonic.from_private_key(private_key_2)
-        # print("Mnemonic 2 = ", mnemonic2)
-        # print("Account 3:", account_3)
-        # mnemonic3 = mnemonic.from_private_key(private_key_3)
-        # print("Mnemonic 3 = ", mnemonic3)
-        # input("Please go to: https://bank.testnet.algorand.network/ to fund your new accounts." +
-        #       '\n' + "Press Enter to continue...")
-
-        # or use existing accounts
         mnemonic1 = <25-word-passphrase>
         mnemonic2 = <25-word-passphrase>
         mnemonic3 = <25-word-passphrase>
+        
         # For ease of reference, add account public and private keys to
         # an accounts dict.
         accounts = {}
@@ -1286,20 +1275,24 @@ $ goal clerk rawsend --filename signed.txn
         print(msig.address())
         input("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account." +
             '\n' + "Press Enter to continue...")
+        
         # get suggested parameters
         params = algod_client.suggested_params()
         gen = params["genesisID"]
         gh = params["genesishashb64"]
         last_round = params["lastRound"]
         fee = params["fee"]
+        
         # create a transaction
         sender = msig.address()
         amount = 1000000
         txn = transaction.PaymentTxn(
             sender, fee, last_round, last_round + 1000, gh, accounts[3]['pk'], amount)
         print(msig.address())
+        
         # create a MultisigTransaction object
         mtx = transaction.MultisigTransaction(txn, msig)
+        
         # write to file
         dir_path = os.path.dirname(os.path.realpath(__file__))
         transaction.write_to_file(
@@ -1308,23 +1301,6 @@ $ goal clerk rawsend --filename signed.txn
     def read_unsigned():
         # setup node connection
         algod_client = connect_to_network()
-        # generate three new accounts if desired
-        # private_key_1, account_1 = account.generate_account()
-        # private_key_2, account_2 = account.generate_account()
-        # private_key_3, account_3 = account.generate_account()
-        # print("Account 1:", account_1)
-        # mnemonic1 = mnemonic.from_private_key(private_key_1)
-        # print("Mnemonic 1 = ", mnemonic1)
-        # print("Account 2:", account_2)
-        # mnemonic2 = mnemonic.from_private_key(private_key_2)
-        # print("Mnemonic 2 = ", mnemonic2)
-        # print("Account 3:", account_3)
-        # mnemonic3 = mnemonic.from_private_key(private_key_3)
-        # print("Mnemonic 3 = ", mnemonic3)
-        # input("Please go to: https://bank.testnet.algorand.network/ to fund your new accounts." +
-        #       '\n' + "Press Enter to continue...")
-
-        # or use existing accounts
         mnemonic1 = <25-word-passphrase>
         mnemonic2 = <25-word-passphrase>
         mnemonic3 = <25-word-passphrase>
@@ -1342,42 +1318,31 @@ $ goal clerk rawsend --filename signed.txn
         print("Account 1 address: {}".format(accounts[1]['pk']))
         print("Account 2 address: {}".format(accounts[2]['pk']))
         print("Account 3 address: {}".format(accounts[3]['pk']))
+        
         # read from file
         dir_path = os.path.dirname(os.path.realpath(__file__))
         msigs = transaction.retrieve_from_file(dir_path + "/unsigned.mtx")
         mtx = msigs[0]
+        
         # sign the transaction
         mtx.sign(accounts[1]['sk'])
         mtx.sign(accounts[2]['sk'])
+        
         # print encoded transaction
         print(encoding.msgpack_encode(mtx))
+        
         # send the transaction
         transaction_id = algod_client.send_raw_transaction(encoding.msgpack_encode(mtx))
         print("\nTransaction was sent!")
         print("Transaction ID: " + transaction_id + "\n")
+        
         # wait for confirmation
         wait_for_confirmation(algod_client, transaction_id)
 
     def write_signed():
+        
         # setup connection to node
         algod_client = connect_to_network()
-        # generate three new accounts if desired
-        # private_key_1, account_1 = account.generate_account()
-        # private_key_2, account_2 = account.generate_account()
-        # private_key_3, account_3 = account.generate_account()
-        # print("Account 1:", account_1)
-        # mnemonic1 = mnemonic.from_private_key(private_key_1)
-        # print("Mnemonic 1 = ", mnemonic1)
-        # print("Account 2:", account_2)
-        # mnemonic2 = mnemonic.from_private_key(private_key_2)
-        # print("Mnemonic 2 = ", mnemonic2)
-        # print("Account 3:", account_3)
-        # mnemonic3 = mnemonic.from_private_key(private_key_3)
-        # print("Mnemonic 3 = ", mnemonic3)
-        # input("Please go to: https://bank.testnet.algorand.network/ to fund your new accounts." +
-        #       '\n' + "Press Enter to continue...")
-
-        # or use existing accounts
         mnemonic1 = <25-word-passphrase>
         mnemonic2 = <25-word-passphrase>
         mnemonic3 = <25-word-passphrase>
@@ -1418,19 +1383,24 @@ $ goal clerk rawsend --filename signed.txn
         gh = params["genesishashb64"]
         last_round = params["lastRound"]
         fee = params["fee"]
+        
         # create a transaction
         sender = msig.address()
         amount = 1000000
         txn = transaction.PaymentTxn(
             sender, fee, last_round, last_round + 1000, gh, accounts[3]['pk'], amount)
         print(msig.address())
+        
         # create a MultisigTransaction object
         mtx = transaction.MultisigTransaction(txn, msig)
+        
         # sign the transaction
         mtx.sign(accounts[1]['sk'])
         mtx.sign(accounts[2]['sk'])
+        
         # print encoded transaction
         print(encoding.msgpack_encode(mtx))
+        
         # write to file
         dir_path = os.path.dirname(os.path.realpath(__file__))
         transaction.write_to_file(
@@ -1440,10 +1410,12 @@ $ goal clerk rawsend --filename signed.txn
     def read_signed():
         # set up connection to node
         algod_client = connect_to_network()
+        
         # read from file
         dir_path = os.path.dirname(os.path.realpath(__file__))
         msigs = transaction.retrieve_from_file(dir_path + "/signed.mtx")
         mtx = msigs[0]
+        
         # send the transaction
         transaction_id = algod_client.send_raw_transaction(encoding.msgpack_encode(mtx))
         print("\nTransaction was sent!")
@@ -1508,10 +1480,12 @@ $ goal clerk rawsend --filename signed.txn
                 connectToNetwork();
             while (true) {
                 try {
+                   
                     // Check the pending tranactions
                     com.algorand.algosdk.algod.client.model.Transaction pendingInfo = algodApiInstance
                             .pendingTransactionInformation(txID);
                     if (pendingInfo.getRound() != null && pendingInfo.getRound().longValue() > 0) {
+                        
                         // Got the completed Transaction
                         System.out.println("Transaction " + pendingInfo.getTx() + " confirmed in round "
                                 + pendingInfo.getRound().longValue());
@@ -1532,19 +1506,7 @@ $ goal clerk rawsend --filename signed.txn
             if (algodApiInstance == null)
                 connectToNetwork();
             try {
-                // create new accounts or...
-                // Account acct1 = new Account();
-                // Account acct2 = new Account();
-                // Account acct3 = new Account();
-                // System.out.println("Account 1 Address: " + acct1.getAddress());
-                // System.out.println("Account 2 Address: " + acct2.getAddress());
-                // System.out.println("Account 3 Address: " + acct3.getAddress());
-                // System.out.println("Account 1 Mnemonic: " + acct1.toMnemonic());
-                // System.out.println("Account 2 Mnemonic: " + acct2.toMnemonic());
-                // System.out.println("Account 3 Mnemonic: " + acct3.toMnemonic());
-                // Please go to: https://bank.testnet.algorand.network/ to fund your accounts.
 
-                // ... or recover accounts
                 final String account1_mnemonic = <your-25-word-mnemonic>;
                 final String account2_mnemonic = <your-25-word-mnemonic>;
                 final String account3_mnemonic = <your-25-word-mnemonic>;
@@ -1557,6 +1519,7 @@ $ goal clerk rawsend --filename signed.txn
                 publicKeys.add(acct1.getEd25519PublicKey());
                 publicKeys.add(acct2.getEd25519PublicKey());
                 publicKeys.add(acct3.getEd25519PublicKey());
+                
                 // Please go to: https://bank.testnet.algorand.network/ to fund your accounts.
                 MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
                 System.out.println("Multisig Address: " + msig.toString());
@@ -1568,10 +1531,6 @@ $ goal clerk rawsend --filename signed.txn
                 System.out.println("Multisig Address: " + decodedMultisig.toString());
 
                 msig = decodedMultisig;
-
-                // final String DEST_ADDR = <transaction-reciever>;
-                // final String SRC_ADDR = <transaction-sender>;
-
                 final String DEST_ADDR <transaction-reciever>;
                 final Address SRC_ADDR = msig.toAddress();
 
@@ -1594,6 +1553,7 @@ $ goal clerk rawsend --filename signed.txn
                 // NOTE: save as signed even though it has not been
                 SignedTransaction stx = new SignedTransaction();
                 stx.tx = tx;
+                
                 // Save transaction to a file
                 Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(stx));
                 System.out.println("Transaction written to a file");
@@ -1616,7 +1576,6 @@ $ goal clerk rawsend --filename signed.txn
                 final Account acct3 = new Account(account3_mnemonic);
 
                 // read transaction from file
-
                 SignedTransaction decodedTransaction = Encoder
                         .decodeFromMsgPack(Files.readAllBytes(Paths.get("./unsigned.txn")), SignedTransaction.class);
                 System.out.println("Signed transaction with txid: " + decodedTransaction.tx.txID());
@@ -1633,7 +1592,6 @@ $ goal clerk rawsend --filename signed.txn
                 Transaction tx1 = decodedTransaction.tx;
 
                 SignedTransaction signedTransaction = acct1.signMultisigTransaction(msig, tx1);
-
                 SignedTransaction signedTrx2 = acct2.appendMultisigTransaction(msig, signedTransaction);
 
                 // save signed transaction to a file
@@ -1651,6 +1609,7 @@ $ goal clerk rawsend --filename signed.txn
                 try {
                     // sign transaction
                     byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTrx2);
+                   
                     // submit the encoded transaction to the network
                     TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
                     System.out.println("Successfully sent multisig: " + id);
@@ -1672,17 +1631,6 @@ $ goal clerk rawsend --filename signed.txn
                 connectToNetwork();
             try {
 
-                // Account acct1 = new Account();
-                // Account acct2 = new Account();
-                // Account acct3 = new Account();
-                // System.out.println("Account 1 Address: " + acct1.getAddress());
-                // System.out.println("Account 2 Address: " + acct2.getAddress());
-                // System.out.println("Account 3 Address: " + acct3.getAddress());
-                // System.out.println("Account 1 Mnemonic: " + acct1.toMnemonic());
-                // System.out.println("Account 2 Mnemonic: " + acct2.toMnemonic());
-                // System.out.println("Account 3 Mnemonic: " + acct3.toMnemonic());
-                // Please go to: https://bank.testnet.algorand.network/ to fund your accounts.
-
                 final String account1_mnemonic = <your-25-word-mnemonic>;
                 final String account2_mnemonic = <your-25-word-mnemonic>;
                 final String account3_mnemonic = <your-25-word-mnemonic>;
@@ -1695,6 +1643,7 @@ $ goal clerk rawsend --filename signed.txn
                 publicKeys.add(acct1.getEd25519PublicKey());
                 publicKeys.add(acct2.getEd25519PublicKey());
                 publicKeys.add(acct3.getEd25519PublicKey());
+                
                 // Please go to: https://bank.testnet.algorand.network/ to fund your accounts.
                 MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
                 System.out.println("Multisig Address: " + msig.toString());
@@ -1704,10 +1653,8 @@ $ goal clerk rawsend --filename signed.txn
 
                 MultisigAddress decodedMultisig = Encoder.decodeFromMsgPack(Files.readAllBytes(Paths.get("./unsigned.msig")), MultisigAddress.class);
                 System.out.println("Multisig Address: " + decodedMultisig.toString());
-
                 msig = decodedMultisig;
 
-                // final String DEST_ADDR = 
                 final String DEST_ADDR = <transaction-reciever>;
                 final Address SRC_ADDR = msig.toAddress();
 
@@ -1726,7 +1673,6 @@ $ goal clerk rawsend --filename signed.txn
                         genId, genesisHash);
 
                 System.out.println("Unsigned transaction with txid: " + tx.txID());
-
                 SignedTransaction signedTransaction = acct1.signMultisigTransaction(msig, tx);
 
                 SignedTransaction signedTrx2 = acct2.appendMultisigTransaction(msig, signedTransaction);
@@ -1815,39 +1761,6 @@ $ goal clerk rawsend --filename signed.txn
         }
     }
 
-    // createAccounts
-    func createAccounts() {
-        account1 := crypto.GenerateAccount()
-        account2 := crypto.GenerateAccount()
-        account3 := crypto.GenerateAccount()
-        address1 := account1.Address.String()
-        address2 := account2.Address.String()
-        address3 := account3.Address.String()
-
-        mnemonic1, err := mnemonic.FromPrivateKey(account1.PrivateKey)
-        if err != nil {
-            return
-        }
-        mnemonic2, err := mnemonic.FromPrivateKey(account2.PrivateKey)
-        if err != nil {
-            return
-        }
-        mnemonic3, err := mnemonic.FromPrivateKey(account3.PrivateKey)
-        if err != nil {
-            return
-        }
-        fmt.Printf("1 : \"%s\"\n", address1)
-        fmt.Printf("2 : \"%s\"\n", address2)
-        fmt.Printf("3 : \"%s\"\n", address3)
-        fmt.Printf("")
-        fmt.Printf("Copy off accounts above and add TestNet Algo funds using the TestNet Dispenser at https://bank.testnet.algorand.network/\n")
-        fmt.Printf("Copy off the following mnemonic code for use in Step 1B\n")
-        fmt.Printf("\n")
-        fmt.Printf("mnemonic1 := \"%s\"\n", mnemonic1)
-        fmt.Printf("mnemonic2 := \"%s\"\n", mnemonic2)
-        fmt.Printf("mnemonic3 := \"%s\"\n", mnemonic3)
-
-    }
 
     // Accounts to be used through examples
     func recoverAccounts() (map[int][]byte, map[int]string) {
@@ -1891,8 +1804,8 @@ $ goal clerk rawsend --filename signed.txn
 
     // utility funciton to setup connection to node
     func setupConnection() algod.Client {
-        // const algodToken = <algod-token>
-        // const algodAddress = <algod-address>
+        const algodToken = <algod-token>
+        const algodAddress = <algod-address>
         algodClient, err := algod.MakeClient(algodAddress, algodToken)
         if err != nil {
             fmt.Printf("failed to make algod client: %s\n", err)
@@ -1906,7 +1819,6 @@ $ goal clerk rawsend --filename signed.txn
         algodClient := setupConnection()
 
         // recover account for example
-        //addr, _ := recoverAccounts();
         sks, pks := recoverAccounts()
         PrettyPrint(sks)
         // get network suggested parameters
@@ -1932,7 +1844,6 @@ $ goal clerk rawsend --filename signed.txn
         // wait for Enter Key
         // this does not return if debugging in go in vscode. known issue
         // comment out this line after adding funds to the account, uncomment if loading for the fist time
-        // or just set a break point here and add funds
         // fmt.Scanln()
         // send from multisig to account 3
         txn, err := transaction.MakePaymentTxn(
@@ -1950,6 +1861,7 @@ $ goal clerk rawsend --filename signed.txn
         unsignedTx := types.SignedTxn{
             Txn: txn,
         }
+        
         // save unsigned transction to file
         err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
         if err != nil {
@@ -1963,17 +1875,13 @@ $ goal clerk rawsend --filename signed.txn
             fmt.Printf("Failed in saving ma to file, error %s\n", err)
             return
         }
-
         fmt.Printf("Saved ma to file\n")
-
         return
-
     }
     func readUnsignedMultisigTransaction() {
 
         // setup connection
         algodClient := setupConnection()
-
         // read unsigned transaction from file
         dat, err := ioutil.ReadFile("./unsigned.txn")
         if err != nil {
@@ -1984,27 +1892,21 @@ $ goal clerk rawsend --filename signed.txn
         var unsignedTxn types.Transaction
 
         msgpack.Decode(dat, &unsignedTxRaw)
-
         unsignedTxn = unsignedTxRaw.Txn
-
         // recover account and sign transaction
         sks, pks := recoverAccounts()
         addr := pks[1]
         fmt.Printf("Address is: %s\n", addr)
-
         msgpack.Decode(dat, &unsignedTxRaw)
         unsignedTxn = unsignedTxRaw.Txn
-
         // read ma from file
         datma, err := ioutil.ReadFile("./ma.txn")
         if err != nil {
             fmt.Printf("Error reading ma from file: %s\n", err)
             return
         }
-
         var ma crypto.MultisigAccount
         msgpack.Decode(datma, &ma)
-
         txid, txBytes, err := crypto.SignMultisigTransaction(sks[1], ma, unsignedTxn)
         if err != nil {
             panic("could not sign multisig transaction")
@@ -2027,11 +1929,9 @@ $ goal clerk rawsend --filename signed.txn
             fmt.Printf("Failed to create payment transaction: %v\n", err)
             return
         }
-
         fmt.Printf("Transaction ID: %s\n", sendResponse.TxID)
         waitForConfirmation(algodClient, sendResponse.TxID)
         return
-
     }
 
     func saveSignedMultisigTransaction() {
@@ -2040,7 +1940,6 @@ $ goal clerk rawsend --filename signed.txn
         algodClient := setupConnection()
 
         // recover account for example
-        //addr, _ := recoverAccounts();
         sks, pks := recoverAccounts()
         PrettyPrint(sks)
         // get network suggested parameters
@@ -2066,7 +1965,6 @@ $ goal clerk rawsend --filename signed.txn
         // wait for Enter Key
         // this does not return if debugging in go in vscode. known issue
         // comment out this line after adding funds to the account, uncomment if loading for the fist time
-        // or just set a break point here and add funds
         // fmt.Scanln()
         // send from multisig to account 3
         txn, err := transaction.MakePaymentTxn(
@@ -2094,9 +1992,6 @@ $ goal clerk rawsend --filename signed.txn
             panic("could not append signature to multisig transaction")
         }
         fmt.Printf("Made 2-out-of-3 multisig transaction with TxID %s: %x\n", txid, twoOfThreeTxBytes)
-
-        // otherTxBytes := ... // generate another raw multisig transaction somehow
-        // txid, mergedTxBytes, err := crypto.MergeMultisigTransactions(twoOfThreeTxBytes, otherTxBytes)
 
         //Save the signed transaction to file
         err = ioutil.WriteFile("./signed.stxn", twoOfThreeTxBytes, 0644)
@@ -2134,10 +2029,6 @@ $ goal clerk rawsend --filename signed.txn
     }
 
     func main() {
-
-        createAccounts()
-        //Copy off accounts above and add TestNet Algo funds using the
-        //TestNet Dispenser at https://bank.testnet.algorand.network/
 
         saveUnsignedMultisigTransaction()
         readUnsignedMultisigTransaction()

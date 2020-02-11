@@ -49,9 +49,9 @@ There are three recommended ways to obtain an algod **REST endpoint IP address**
 
 This method is recommended if you plan to use _only_ the SDKs or the algod RESTful interface, and want to get connected as fast as possible.
 
-A third-party service runs a node and provides access to that node through their own API keys. On signup, the service provides you with an algod address and an API key which will replace your algod token.
+A third-party service runs a node and provides access to that node through its own API keys. On signup, the service provides you with an algod address and an API key which will replace your algod token.
 
-[See the list of known API services on the Community Projects page.](../community.md#algorand-api-services)
+[See the list of known API services on the Community Projects page.](../community.md#api-services)
 
 ## 2. Use Docker Sandbox
 
@@ -61,11 +61,11 @@ This method is recommended if you need access to all developer tools including `
 [Visit this Github link for Sandbox setup instructions.](https://github.com/algorand/sandbox)
 
 !!! warning
-	Bootstrapping from a snapshot bypasses the normal node catchup procedure that cryptographically verifies the whole history of the blockchain - a procedure that is imperative to maintaining a healthy network. Therefore, this method is *only* recommended in the context of early stage application development to avoid catchup wait times and get started quickly. It should *never* be used to run a node in production or participate in consensus. Make sure that you migrate your application to a node that has undergone full catchup prior to launching your application in production.
+	Bootstrapping from a snapshot bypasses the normal node catchup procedure that cryptographically verifies the whole history of the blockchain - a procedure that is imperative to maintaining a healthy network. Therefore, this method is *only* recommended in the context of early-stage application development to avoid catchup wait times and get started quickly. It should *never* be used to run a node in production or participate in consensus. Make sure that you migrate your application to a node that has undergone full catchup prior to launching your application in production.
 
 ## 3. Run your own node
 
-This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This is the recommended follow-on to [option 2](#2-use-docker-sandbox) prior to launching an application on MainNet. This method gives you full control of your node and its configuration. 
+This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This is the recommended follow-on to [option 2](#2-use-docker-sandbox) before launching an application on MainNet. This method gives you full control of your node and its configuration. 
 
 [Read the docs to setup and run a node.](../network-participation/run-a-node/install.md)
 
