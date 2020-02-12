@@ -1,6 +1,6 @@
 title: Algorand Node Types
 
-The Algorand network is comprised of two distinct types of nodes, **relay nodes**, and **non-relay nodes**. Relay nodes are primarily used for communication routing to a set of connected non-relay nodes. Relay nodes communicate with other relay nodes and route blocks to to all connected non-relay nodes. Non-relay nodes only connect to relay nodes and can also participate in consensus. Non-relay nodes may connect to several relay nodes but never connect to another non-relay node.
+The Algorand network is comprised of two distinct types of nodes, **relay nodes**, and **non-relay nodes**. Relay nodes are primarily used for communication routing to a set of connected non-relay nodes. Relay nodes communicate with other relay nodes and route blocks to all connected non-relay nodes. Non-relay nodes only connect to relay nodes and can also participate in consensus. Non-relay nodes may connect to several relay nodes but never connect to another non-relay node.
 
 In addition to the two node types, nodes can be configured to be [**archival**](#archival-mode) and [**indexed**](#indexer-mode). Archival nodes store the entire ledger and if the indexer is turned on, the search range via the API REST endpoint is increased. These additional configuration options are described below.
 
@@ -19,14 +19,14 @@ Classifying a node as a participation node is not a configuration parameter but 
  The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. Visit the [Node Configuration](../../reference/node/config.md) guide for details on configuring your node. 
  
 !!! warning
-     Setting a node to run in archival mode will increase the disk space requirements for the node. For example, after 36 hours, the TestNet archival ledger was 212.5MB,whereas the non-archival ledger was 9MB.
+     Setting a node to run in archival mode will increase the disk space requirements for the node. For example, after 36 hours, the TestNet archival ledger was 212.5MB, whereas the non-archival ledger was 9MB.
  
 
 !!! info
     Relay nodes are always set to Archival mode. Non-relay nodes have the option to run in either configuration.
 
 # Indexer Mode
-All transaction searching by default is limited to a 1000 round range. If a node is configured in archival mode, an addtional configuration option can be used to turn on a node indexer tand remove this restriction. With the indexer turned on, searching for specific transactions will be quicker. Two additional REST calls are also made available for more refined searching. 
+All transaction searching by default is limited to a 1000 round range. If a node is configured in archival mode, an additional configuration option can be used to turn on a node indexer and remove this restriction. With the indexer turned on, searching for specific transactions will be quicker. Two additional REST calls are also made available for more refined searching. 
 
 The two Additional REST calls are:
 
