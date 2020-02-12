@@ -42,6 +42,7 @@ Below is a categorized list of projects that are using the Algorand blockchain a
 | <center>[sTEAL](https://github.com/derbear/steal)</center> | sTEAL is a tool written in (Racket) Scheme to help developers write TEAL templates and contracts. sTEAL allows developers to write an expression tree in Racket to represent a TEAL program. It then prints that tree into TEAL assembly. sTEAL supports a few rudimentary quality-of-life features, including variable-length arguments and templating. |
 | <center>[tealviewer](https://github.com/algorand/tealviewer)</center> | tealviewer is a graphical tool for understanding how transaction parameters are checked by a given TEAL program.|
 | <center>[MessagePack Debugger](https://github.com/algorand/messagepack-debugger)</center> | View and compare messagepack encoded objects. |
+| <center>[Tealang](https://github.com/pzbitskiy/tealang)</center> | C-like high-level language for ASC-1 with type safety, functions and packages/imports. The compiler generates TEAL or binary without using the goal clerk compiler. |
 
 
 # Framework Components
