@@ -5,21 +5,21 @@ title: Algorand Developer Docs
 <div class="homepage-cards">
   <div class="homepage-card">
     <span class="rocket-icon"></span>
-    <a href="./getting-started/setup/" class="card-title">Start Building</a>
+    <a href="./build-apps/setup/" class="card-title">Start Building</a>
     <div class="card-description">
     Learn how to setup your environment and send your first transaction.
     </div>
   </div>
   <div class="homepage-card">
     <span class="checklist-icon"></span>
-    <a href="./feature-guides/accounts/" class="card-title">Explore Features</a>
+    <a href="./features/accounts/" class="card-title">Explore Features</a>
     <div class="card-description">
     In-depth explanations and how-tos for core Algorand features.
     </div>
   </div>
   <div class="homepage-card">
     <span class="folder-file-icon"></span>
-    <a href="./reference-docs/goal/goal/" class="card-title">Reference Docs</a>
+    <a href="./reference/cli/goal/goal/" class="card-title">Reference Docs</a>
     <div class="card-description">
     Learn commands and syntax for specific developer tools.
     </div>
@@ -31,14 +31,14 @@ title: Algorand Developer Docs
 <div class="homepage-cards">
   <div class="homepage-card">
     <span class="server-icon"></span>
-    <a href="../docs/network-participation/run-a-node/types/" class="card-title">Run a Node</a>
+    <a href="./run-a-node/setup/types/" class="card-title">Run a Node</a>
     <div class="card-description">
     Install, configure, and run a node.
     </div>
   </div>
   <div class="homepage-card">
     <span class="multiple-users-network-icon"></span>
-    <a href="./network-participation/participate-in-consensus/overview/" class="card-title">Participate in Consensus</a>
+    <a href="./run-a-node/participate/" class="card-title">Participate in Consensus</a>
     <div class="card-description">
     Register accounts to participate in Algorand consensus.
     </div>
