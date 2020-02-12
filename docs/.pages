@@ -1,9 +1,9 @@
 arrange:
   - index.md
-  - getting-started
-  - feature-guides
-  - network-participation
-  - reference-docs
+  - build-apps
+  - features
+  - run-a-node
+  - reference
   - algorand_consensus.md
   - community.md
 
