@@ -10,7 +10,7 @@ Instantiate an **algod** client with your preferred SDK.
 ```JavaScript tab=
 const algosdk = require('algosdk');
 
-async function gettingStartedExample() {
+async function connectToNetwork() {
 
 	const server = <algod-address>;
 	const port = <port-number>;
@@ -75,7 +75,7 @@ If you are using a third-party service, use the API key header instead when inst
 ```JavaScript tab=
 const algosdk = require("algosdk");
 
-async function gettingStartedExample() {
+async function connectToNetwork() {
 
 	const server = <algod-address>;
 	const port = "";
@@ -318,6 +318,25 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 
 ??? example "Complete Example - Connect to the Network"
 
+	```javascript tab="JavaScript"
+	const algosdk = require('algosdk');
+
+	async function ConnectToNetwork() {
+
+		const token = <algod-token>;
+		const server = <algod-address>;
+		const port = <port>;
+
+		let algodClient = new algosdk.Algod(token, server, port);
+
+		let status = await algodClient.status();
+		console.log("Algorand network status: %o", status);
+
+		let version = await algodClient.versions();
+		console.log("Algorand protocol version: %o", version)
+	}
+	```
+
 	```python tab="Python"
 	import json
 	from algosdk import algod
@@ -368,7 +387,72 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 	}
 	```
 
+	```go tab="Go"
+	package main
+
+	import (
+		"encoding/json"
+		"fmt"
+
+		"github.com/algorand/go-algorand-sdk/client/algod"
+	)
+
+	const algodAddress = <algod-address>
+	const algodToken = <algod-token>
+
+	func main() {
+
+		algodClient, err := algod.MakeClient(algodAddress, algodToken)
+		if err != nil {
+			return
+		}
+
+		status, err := algodClient.Status()
+		if err != nil {
+			fmt.Printf("Error getting status: %s\n", err)
+			return
+		}
+		statusJSON, err := json.MarshalIndent(status, "", "\t")
+		if err != nil {
+			fmt.Printf("Can not marshall status data: %s\n", err)
+		}
+		fmt.Printf("%s\n", statusJSON)
+
+		version, err := algodClient.Versions()
+		if err != nil {
+			fmt.Printf("Error getting versions: %s\n", err)
+			return
+		}
+		versionJSON, err := json.MarshalIndent(version, "", "\t")
+		if err != nil {
+			fmt.Printf("Can not marshall version data: %s\n", err)
+		}
+		fmt.Printf("%s\n", versionJSON)
+	}
+	```
+
 ??? example "Complete Example - Connect to the Network with API Service"
+
+	```javascript tab="JavaScript"
+	const algosdk = require('algosdk');
+
+	async function ConnectToNetwork() {
+
+		const server = <algod-address>;
+		const port = "";
+		const token = {
+			'X-API-Key': <service-api-key>
+		};
+
+		let algodClient = new algosdk.Algod(token, server, port);
+
+		let status = await algodClient.status();
+		console.log("Algorand network status: %o", status);
+
+		let version = await algodClient.versions();
+		console.log("Algorand protocol version: %o", version)
+	}
+	```
 
 	```python tab="Python"
 	import json
@@ -429,5 +513,46 @@ Check that the `genesis_id` and the `genesis_hash_b64`, as shown in the REST res
 		}
 	}
 	```
+	
+	```go tab="Go"
+	package main
 
+	import (
+		"encoding/json"
+		"fmt"
+
+		"github.com/algorand/go-algorand-sdk/client/algod"
+	)
+
+	const algodAddress = <algod-address>
+	const apiKey = <your-api-key>
+
+	func main() {
+		var headers []*algod.Header
+		headers = append(headers, &algod.Header{"X-API-Key", apiKey})
+		algodClient, err := algod.MakeClientWithHeaders(algodAddress, "", headers)
+
+		status, err := algodClient.Status()
+		if err != nil {
+			fmt.Printf("Error getting status: %s\n", err)
+			return
+		}
+		statusJSON, err := json.MarshalIndent(status, "", "\t")
+		if err != nil {
+			fmt.Printf("Can not marshall status data: %s\n", err)
+		}
+		fmt.Printf("%s\n", statusJSON)
+
+		version, err := algodClient.Versions()
+		if err != nil {
+			fmt.Printf("Error getting versions: %s\n", err)
+			return
+		}
+		versionJSON, err := json.MarshalIndent(version, "", "\t")
+		if err != nil {
+			fmt.Printf("Can not marshall version data: %s\n", err)
+		}
+		fmt.Printf("%s\n", versionJSON)
+	}
+	```
 
