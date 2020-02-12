@@ -1,0 +1,5 @@
+title: Node Reference 
+arrange:
+  - artifacts.md
+  - config.md
+  - relay.md
