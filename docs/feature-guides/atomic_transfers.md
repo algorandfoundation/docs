@@ -308,14 +308,14 @@ goal clerk rawsend -f signout.tx -d data -w yourwallet
 
         try{
             // receiver
-            const receiver = <transaction-receiver-address>"
+            const receiver = <transaction-receiver-address>
             // sample show account A to C
             // B to A 
             // grouped
             let algodClient = await setupClient();
 
-            // Creat transactin A to C and write to a file
-            await writeUnsignedTransctionToFile();
+            // Creat transaction A to C and write to a file
+            await writeUnsignedTransactionToFile();
 
             // recover account
             // Account A

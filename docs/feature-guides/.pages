@@ -1,6 +1,6 @@
 title: Explore Features
 arrange:
-  - accounts.md
+  - accounts
   - transactions
   - asa.md
   - atomic_transfers.md
