@@ -456,8 +456,6 @@ Here are three example scenarios and how the round range may be calculated for e
 # Determining the Suggested Fee
 The minimum fee to send a transaction on Algorand is 1000 microAlgos. If blocks are not full, this fee is generally sufficient for the transaction to be prioritized into a block. The SDKs provide `suggestedFee` methods to help determine a fee likely to be accepted and committed. 
 
-[Need more explanation around how suggested fee works and how to use in SDKs.]
-
 # Setting First and Last Valid
 
 Unless you have specific security concerns or logical constraints embedded within a specific Algorand Smart Contract, it is generally recommended that you set your default range to the maximum, currently 1000. This will give you an ample window of validity time to submit your transaction. 
