@@ -4,25 +4,33 @@ title: Community Projects
 
 Below is a categorized list of projects that are using the Algorand blockchain and provide extended functionality for the community. These projects are primarily written by community members that are looking to expand the Algorand ecosystem. If you wish to help with one of these projects, connect with the individual teams!
 
+If you have a project you want featured on the community site, [reach out](mailto:developerfeedback@algorand.com) to us!
+
+# Developer Forums
+| Name| Description |
+|------|------|
+| <center>[![](./imgs/algoicon.png)](https://forum.algorand.org/)</center><center> [Developer Forums](https://forum.algorand.org/)</center> | Algorand Developer Forums. Need help implementing a solution on Algorand? Want to provide feedback? Want to connect with other Algorand developers? Check out Algorand’s developer forums! |
+
 # Block Explorers
 
 | Name| Description |
 |------|------|
-| <center>![](./imgs/goalseekericon.png)</center><center> [GoalSeeker](https://goalseeker.purestake.io/algorand/mainnet)</center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/). |
-| <center>![](./imgs/algoexplorer.png)</center><center> [Algo Explorer](https://algoexplorer.io/)</center> | Algoexplorer is a complete Algorand blockchain explorer created by [Rand Labs](https://randlabs.io/).|
+| <center>[![](./imgs/goalseekericon.png)](https://goalseeker.purestake.io/algorand/mainnet)</center><center> [GoalSeeker](https://goalseeker.purestake.io/algorand/mainnet)</center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/). |
+| <center>[![](./imgs/algoexplorer.png)](https://algoexplorer.io/)</center><center> [Algo Explorer](https://algoexplorer.io/)</center> | Algoexplorer allows you to explore and search the Algorand blockchain for transactions, addresses and assets. It also provides historical data, statistics, the staking rewards program and other activities taking place on Algorand. Created by [Rand Labs](https://randlabs.io/).|
 
 
 # Wallets
 
 | Name| Description |
 |------|------|
-| <center>![](./imgs/myalgo.png)</center><center> [My Algo](https://wallet.myalgo.com/)</center> | My Algo provides an interface to interact with the Algorand Blockchain created by [Rand Labs](https://randlabs.io/)|
+| <center>[![](./imgs/myalgo.png)](https://wallet.myalgo.com/)</center><center> [My Algo](https://wallet.myalgo.com/)</center> | My Algo provides a non-custodial interface to interact with the Algorand Blockchain. Created by [Rand Labs](https://randlabs.io/)|
 | <center>[Algo Wallet](https://github.com/RileyGe/algo-wallet)</center> | A cross platform wallet built using the [Avalonia](https://avaloniaui.net/) UI. This wallets can be used on Windows, MacOS and Lunix and the Avaloni UI provides experimental support for iOS and Android. The library is Open Sourced (GNU) and is built in C#.|
 
 # API Services
 | Name| Description |
 |------|------|
-<center>![](./imgs/purestakelogo.png)</center><center> [PureStake API Service](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center> | PureStake's API service makes it easy to quickly get up-and-running on the Algorand network. The service builds upon PureStake’s existing infrastructure platform to provide developers with easy-to-use access to native Algorand REST APIs. |
+<center>[![](./imgs/purestakelogo.png)](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center><center> [PureStake API Service](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center> | PureStake's API service makes it easy to quickly get up-and-running on the Algorand network. The service builds upon PureStake’s existing infrastructure platform to provide developers with easy-to-use access to native Algorand REST APIs. |
+
 
 # SDKs
 | Name| Description |

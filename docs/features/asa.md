@@ -252,7 +252,7 @@ goal asset create --creator <address> --total 1000 --unitname <unit-name> --asse
 
 **See also**
 
-- [Anatomy of an Asset Creation Transaction]./transactions/index.md#create-an-asset)
+- [Anatomy of an Asset Creation Transaction](./transactions/index.md#create-an-asset)
 
 
 ## Modifying an Asset
