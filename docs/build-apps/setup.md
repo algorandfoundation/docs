@@ -83,7 +83,7 @@ $ cat $ALGORAND_DATA/algod.token
 
 <center>*Side-by-Side Comparison*</center>
 
- || Use a third-party service | Bootstrap with s3 | Run your own node |
+ || Use a third-party service | Use Docker Sandbox | Run your own node |
 :-- |:-------------:| :-------------: | :-------------: |
 **Time**         | **Seconds** - Just signup| **Minutes** - Same as running a node with no catchup	| **Days** - need to wait for node to catchup
 **Trust**         | 1 party       | 1 party	| Yourself 
