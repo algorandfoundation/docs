@@ -1,5 +1,6 @@
 title: Transactions
 arrange:
   - index.md
+  - anatomy.md
   - signatures.md
   - offline_transactions.md

@@ -1,29 +1,11 @@
-title: Atomic Transfers
-
-In traditional finance, trading assets generally requires a trusted intermediary, like a bank or an exchange, to make sure that both sides receive what they agreed to. On the Algorand blockchain, this type of trade is implemented within the protocol as an **Atomic Transfer**. This simply means that transactions that are part of the transfer either all succeed or all fail. Atomic transfers allow complete strangers to trade assets without the need for a trusted intermediary, all while guaranteeing that each party will receive what they agreed to. 
-
-On Algorand, atomic transfers are implemented as irreducible batch operations, where a group of [transactions](./transactions/index.md) are submitted as a unit and all transactions in the batch either pass or fail. This also eliminates the need for more complex solutions like [hashed timelock contracts](https://en.bitcoinwiki.org/wiki/Hashed_Timelock_Contracts) that are implemented on other blockchains. An atomic transfer on Algorand is confirmed in less than 5 seconds, just like any other transaction. Transactions can contain Algos or Algorand Standard Assets and may also be governed by Algorand Smart Contracts. 
-
-# Use Cases
-
-Atomic transfers enable use cases such as:
-
-**Circular trades** - Alice pays Bob if and only if Bob pays Claire if and only if Claire pays Alice.
-
-**Group payments** - Everyone pays or no one pays.
-
-**Decentralized exchanges** - Trade one asset for another without going through a centralized exchange. 
-
-**Distributed payments** - Payments to multiple recipients. 
-
-# Process Overview
+title: How to use 
 
 To implement an atomic transfer, generate all of the transactions that will be involved in the transfer and then group those transactions together. The result of grouping is that each transaction is assigned the same group ID. Once the transactions contain the group ID, the transactions can be split up and sent to their respective senders to be authorized. A single party can then collect all the authorized transactions and submit them to the network together. 
 
 !!! info
     An individual account involved in an atomic transfer, can verify that all the correct transfers are involved by creating the same set of [unsigned] transactions and grouping them in the same order. The group ID is a hash of the group of transactions and should match if the configuration is the same.
 
-<center>![Atomic Transfer Flow](../imgs/atomic_transfers-1.png)</center>
+<center>![Atomic Transfer Flow](../../imgs/atomic_transfers-1.png)</center>
 <center>*Atomic Transfer Flow*</center>
 
 Below you will find examples for creating and sending group transactions to the network in each of the available SDKs and with `goal`. 
@@ -31,7 +13,7 @@ Below you will find examples for creating and sending group transactions to the 
 # Step-by-Step Guide
 
 ## Create transactions
-Create two or more (up to 16 total) unsigned transactions of any type. Read about transaction types in the [Transactions Overview](./transactions/index.md) section. 
+Create two or more (up to 16 total) unsigned transactions of any type. Read about transaction types in the [Transactions Overview](../transactions/index.md) section. 
 
 This could be done by a service or by each party involved in the transaction. For example, an asset exchange application can create the entire atomic transfer and allow individual parties to sign from their location.
 
@@ -103,7 +85,7 @@ At this point, these are just individual transactions. The next critical step is
 ## Combine transactions 
 Combining transactions just means concatenating them into a single file or ordering them in an array so that a group ID can then be assigned. 
 
-If using `goal`, the transaction files can be combined using an OS-level command such as `cat`. If using one of the SDKs, the application may store all the transactions individually or in an array. From the SDK it is also possible to read a transaction from a file created at an earlier time, which is described in the [Offline Transactions](./transactions/offline_transactions.md) documentation. See the complete example at the bottom of this page that details how transactions are combined in the SDKs. To combine transactions in `goal` use a similar method to the one below.
+If using `goal`, the transaction files can be combined using an OS-level command such as `cat`. If using one of the SDKs, the application may store all the transactions individually or in an array. From the SDK it is also possible to read a transaction from a file created at an earlier time, which is described in the [Offline Transactions](../transactions/offline_transactions.md) documentation. See the complete example at the bottom of this page that details how transactions are combined in the SDKs. To combine transactions in `goal` use a similar method to the one below.
 
 ``` goal tab="goal"
 cat unsignedtransaction1.tx unsignedtransaction2.tx > combinedtransactions.tx
@@ -112,7 +94,7 @@ cat unsignedtransaction1.tx unsignedtransaction2.tx > combinedtransactions.tx
 
 ## Group transactions
 
-The result of this step is what ultimately guarantees that a particular transaction belongs to a group and is not valid if sent alone (even if authorized). A group ID is calculated by hashing the contents of the combined transaction and assigning the resulting hash as a [group ID](../reference/transactions.md#group) to each transaction. This mechanism allows anyone to recreate all transactions and recalculate the group ID to verify that the contents are as agreed upon by all parties. 
+The result of this step is what ultimately guarantees that a particular transaction belongs to a group and is not valid if sent alone (even if authorized). A group ID is calculated by hashing the contents of the combined transaction and assigning the resulting hash as a [group ID](../../reference/transactions.md#group) to each transaction. This mechanism allows anyone to recreate all transactions and recalculate the group ID to verify that the contents are as agreed upon by all parties. 
 
 ``` javascript tab="JavaScript"
 	// Group both transactions
@@ -144,7 +126,7 @@ The result of this step is what ultimately guarantees that a particular transact
 goal clerk group -i yourwalletcombinedtransactions.tx -o groupedtransactions.tx -d data -w 
 ```
 
-At this point, transactions can be split and sent to individuals for authorization. See [Authorizing Transactions Offline](./transactions/offline_transactions.md#saving-unsigned-transactions-to-file) to learn how to create and save individual **unsigned** transactions to a file. This method can be used to distribute group transactions for signing.
+At this point, transactions can be split and sent to individuals for authorization. See [Authorizing Transactions Offline](../transactions/offline_transactions.md#saving-unsigned-transactions-to-file) to learn how to create and save individual **unsigned** transactions to a file. This method can be used to distribute group transactions for signing.
 
 ## Sign transactions
 With a group ID assigned, each transaction sender must authorize their respective transaction. All authorized transactions are then recombined before they are sent to the network.
