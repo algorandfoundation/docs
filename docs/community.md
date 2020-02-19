@@ -24,7 +24,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[![](./imgs/myalgo.png)](https://wallet.myalgo.com/)</center><center> [My Algo](https://wallet.myalgo.com/)</center> | My Algo provides a non-custodial interface to interact with the Algorand Blockchain. Created by [Rand Labs](https://randlabs.io/)|
-| <center>[Algo Wallet](https://github.com/RileyGe/algo-wallet)</center> | A cross platform wallet built using the [Avalonia](https://avaloniaui.net/) UI. This wallets can be used on Windows, MacOS and Lunix and the Avaloni UI provides experimental support for iOS and Android. The library is Open Sourced (GNU) and is built in C#.|
+
 
 # API Services
 | Name| Description |
