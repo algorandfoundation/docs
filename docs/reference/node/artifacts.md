@@ -3,7 +3,7 @@ title: Node Artifacts
 These files run as part of the Algorand node or are CLI utilities that will help to diagnose or interact with a currently running node. The primary files are described below.
 
 # goal
-Goal is the command line utility used to interact with the Algorand node. It communicates with algod and the kmd process to do things like: create an account, list the ledger, examine the status of the network, or create a transaction. Goal documentation is available in the [Goal](/docs/reference-docs/goal/goal/) guide.
+Goal is the command line utility used to interact with the Algorand node. It communicates with algod and the kmd process to do things like: create an account, list the ledger, examine the status of the network, or create a transaction. Goal documentation is available in the [Goal](../cli/goal/goal.md) guide.
 
 # algod
 Algod is the main Algorand process for handling the blockchain. Messages between nodes are processed, the protocol steps are executed, and the blocks are written to disk. The algod process also exposes a REST API server that developers can use to communicate with the node and the network. Algod uses the data directory for storage and configuration information.
@@ -15,7 +15,7 @@ Algoh is an optional hosting process for algod, whose use is encouraged to help 
 Kmd is the key management daemon. This process handles interacting with clients’ private keys for Algorand accounts. The process is responsible for generating and importing spending keys, signing transactions, and interacting with key storage mechanisms like hardware wallets. This process can also be executed on a separate machine, isolating the spending keys from the network. This process also uses a data directory for wallet configurations. In the default configuration, this will be in the data directory for algod but will contain its own folder labeled `kmd-version`. The kmd process also hosts a REST endpoint for integration.
 
 # algokey
-algokey is a command line utility for generating, exporting and importing keys. The tool can be used to sign single and multi-signature transactions as well. See [algokey](/docs/reference-docs/algokey/algokey/) documentation for more details.
+algokey is a command line utility for generating, exporting and importing keys. The tool can be used to sign single and multi-signature transactions as well. See [algokey](../cli/algokey/algokey.md) documentation for more details.
 
 # carpenter
 Carpenter is a debug tool that helps to visualize the protocol and how it is proceeding. The tool reads the node log file and formats the output. Generally, every entry displayed in the tool starts with the round number, with the period and step. Each line displayed in the tool will have a message that is relative to the step and will display when a proposal or a vote is accepted or rejected. When accepted votes are displayed, the number of votes is also included in parentheses. When the threshold for the vote is reached a message will be displayed letting the user know the next step in the protocol is about to start. Messages are color-coded by round and user.
