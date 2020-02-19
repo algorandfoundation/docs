@@ -5,14 +5,14 @@ title: Algorand Developer Docs
 <div class="homepage-cards">
   <div class="homepage-card">
     <span class="rocket-icon"></span>
-    <a href="./build-apps/setup/" class="card-title">Start Building</a>
+    <a href="./build-apps/" class="card-title">Start Building</a>
     <div class="card-description">
     Learn how to setup your environment and send your first transaction.
     </div>
   </div>
   <div class="homepage-card">
     <span class="checklist-icon"></span>
-    <a href="./features/accounts/" class="card-title">Explore Features</a>
+    <a href="./features/" class="card-title">Explore Features</a>
     <div class="card-description">
     In-depth explanations and how-tos for core Algorand features.
     </div>
