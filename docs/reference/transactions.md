@@ -92,7 +92,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="freezeaccount">FreezeAccount</a>| _required_ |Address|`"fadd"`|The address of the accoutn whose asset is being frozen or unfrozen.|
+|<a name="freezeaccount">FreezeAccount</a>| _required_ |Address|`"fadd"`|The address of the account whose asset is being frozen or unfrozen.|
 |<a name="freezeasset">FreezeAsset</a>|_required_|uint64|`"faid"`| The asset ID being frozen or unfrozen.|
 |<a name="assetfrozen">AssetFrozen</a>|_required_|bool|`"afrz"`| True to freeze the asset.|
 
