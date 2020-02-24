@@ -1,8 +1,7 @@
 title: Explore Features
 arrange:
-  - index.md
   - accounts
   - transactions
-  - asa
-  - atomic_transfers
+  - asa.md
+  - atomic_transfers.md
   - asc1

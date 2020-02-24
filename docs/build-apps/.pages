@@ -1,6 +1,5 @@
 title: Start Building
 arrange:
-  - index.md
   - setup.md
   - connect.md
   - hello_world.md
