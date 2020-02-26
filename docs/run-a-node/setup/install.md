@@ -102,7 +102,7 @@ These commands will install and configure `algod` as a service and place the alg
 This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
 
 # Installing with Other Linux Distros
-Nodes have been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 3). Other modern distros should work as well.
+Nodes have been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 1-4). Other modern distros should work as well.
 
 + Create a temporary folder to hold the install package and files.
 
@@ -111,12 +111,17 @@ mkdir ~/inst
 cd ~/inst
 ```
 
-Read how Algorand uses and stores your data [here](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/linux_amd64/README.md). Copy the installer from [Github](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/linux_amd64/install_master_linux-amd64.tar.gz). Optionally, the install file can verified [SHA](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/linux_amd64/install_master_linux-amd64.sha256).
-
-+ Unzip the package (make sure to use the appropriate filename):
+Read how Algorand uses and stores your data [here](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/linux_amd64/README.md). Copy the updater script from [Github](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/update.sh).
++ Download the updater script.
   
 ```
-tar -xf install_master_linux-amd64.tar.gz
+wget https://raw.githubusercontent.com/algorand/go-algorand-doc/master/downloads/installers/update.sh
+```  
+
++ Ensure that your system knows it's an executable file.
+  
+```
+chmod 544 update.sh
 ```  
 
 + Run the installer from within your installation directory.
