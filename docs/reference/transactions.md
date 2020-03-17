@@ -42,12 +42,13 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="votefirst">VoteFirst</a>|_required for online_|uint64|`"votefst"`|The first round that the *participation key* is valid. Not to be confused with the [FirstValid](#firstvalid) round of the keyreg transaction.|
 |<a name="votelast">VoteLast</a>|_required for online_|uint64|`"votelst"`|The last round that the *participation key* is valid. Not to be confused with the [LastValid](#lastvalid) round of the keyreg transaction.|
 |<a name="votekeydilution">VoteKeyDilution</a>|_required for online_|uint64|`"votekd"`|This is the dilution for the 2-level participation key. |
-|<a name="nonparticipation">Nonparticipation</a>|_optional_|bool|`"nonpart"`| All new Algorand accounts are participating by default. This means that they earn rewards. Mark an account nonparticipating by setting this value to `true` and this account will no longer earn rewards. It is unlikely that you will ever need to do this and exists mainly for economic-related functions on the network.|
 
 # Asset Configuration Transaction
 Transaction Object Type: `AssetConfigTx`
 
 Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is `"acfg"`.
+
+This is used to create, configure and destroy an asset depending on which fields are set.
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
@@ -59,18 +60,17 @@ Object Name: (`AssetParams`)
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="creator">Creator</a>| _required on creation_ |Address|`"creator"`|The address for the account that creates the asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent to be destroyed.|
-|<a name="total">Total</a>|_required on creation_|uint64|`"total"`| The total number of base units of the asset to create. This number cannot be changed.|
-|<a name="decimals">Decimals</a>|_required on creation_|uint32|`"decimals"`| The number of digits to use after the decimal point when displaying the asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths. |
-|<a name="defaultfrozen">DefaultFrozen</a>|_required on creation_|bool|`"defaultfrozen"`| True to freeze holdings for this asset by default. |
-|<a name="unitname">UnitName</a>|_optional_|string|`"unitname"`| The name of a unit of this asset. Supplied on creation. Example: USDT |
-|<a name="assetname">AssetName</a>|_optional_|string|`"assetname"`| The name of the asset. Supplied on creation. Example: Tether|
-|<a name="url">URL</a>|_optional_|string|`"url"`| Specifies a URL where more information about the asset can be retrieved. Max size is 32 bytes. |
-|<a name="metadatahash">MetaDataHash</a>|_optional_|[]byte|`"metadatahash"`| This field is intended to be a 32-byte hash of some metadata that is relevant to your asset and/or asset holders. The format of this metadata is up to the application. This field can _only_ be specified upon creation. An example might be the hash of some certificate that acknowledges the digitized asset as the official representation of a particular real-world asset.  |
-|<a name="manageraddr">ManagerAddr</a>|_optional_|Address|`"managerkey"`| The address of the account that can manage the configuration of the asset and destroy it. |
-|<a name="reserveaddr">ReserveAddr</a>|_optional_|Address|`"reserveaddr"`| The address of the account that holds the reserve (non-minted) units of the asset. This address has no specific authority in the protocol itself. It is used in the case where you want to signal to holders of your asset that the non-minted units of the asset reside in an account that is different from the default [creator](#creator) account. |
-|<a name="freezeaddr">FreezeAddr</a>|_optional_|Address|`"freezeaddr"`| The address of the account used to freeze holdings of this asset. If empty, freezing is not permitted. |
-|<a name="clawbackaddr">ClawbackAddr</a>|_optional_|Address|`"clawbackaddr"`| The address of the account that can clawback holdings of  this asset. If empty, clawback is not permitted. |
+|<a name="total">Total</a>|_required on creation_|uint64|`"t"`| The total number of base units of the asset to create. This number cannot be changed.|
+|<a name="decimals">Decimals</a>|_required on creation_|uint32|`"dc"`| The number of digits to use after the decimal point when displaying the asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths. |
+|<a name="defaultfrozen">DefaultFrozen</a>|_required on creation_|bool|`"df"`| True to freeze holdings for this asset by default. |
+|<a name="unitname">UnitName</a>|_optional_|string|`"un"`| The name of a unit of this asset. Supplied on creation. Example: USDT |
+|<a name="assetname">AssetName</a>|_optional_|string|`"an"`| The name of the asset. Supplied on creation. Example: Tether|
+|<a name="url">URL</a>|_optional_|string|`"au"`| Specifies a URL where more information about the asset can be retrieved. Max size is 32 bytes. |
+|<a name="metadatahash">MetaDataHash</a>|_optional_|[]byte|`"am"`| This field is intended to be a 32-byte hash of some metadata that is relevant to your asset and/or asset holders. The format of this metadata is up to the application. This field can _only_ be specified upon creation. An example might be the hash of some certificate that acknowledges the digitized asset as the official representation of a particular real-world asset.  |
+|<a name="manageraddr">ManagerAddr</a>|_optional_|Address|`"m"`| The address of the account that can manage the configuration of the asset and destroy it. |
+|<a name="reserveaddr">ReserveAddr</a>|_optional_|Address|`"r"`| The address of the account that holds the reserve (non-minted) units of the asset. This address has no specific authority in the protocol itself. It is used in the case where you want to signal to holders of your asset that the non-minted units of the asset reside in an account that is different from the default creator account (the sender). |
+|<a name="freezeaddr">FreezeAddr</a>|_optional_|Address|`"f"`| The address of the account used to freeze holdings of this asset. If empty, freezing is not permitted. |
+|<a name="clawbackaddr">ClawbackAddr</a>|_optional_|Address|`"c"`| The address of the account that can clawback holdings of  this asset. If empty, clawback is not permitted. |
 
 # Asset Transfer Transaction 
 Transaction Object Type: `AssetTransferTx`
@@ -83,7 +83,36 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred. A zero amount transferred to self allocates that asset in the account's Asset map.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`|The sender of the transfer. The regular [sender](#sender) field should be used and this one set to the zero value for regular transfers between accounts. If this value is nonzero, it indicates a clawback transaction where the [sender](#sender) is the asset's clawback address and the asset sender is the address from which the funds will be withdrawn.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
-|<a name="assetcloseto">AssetCloseTo</a>|_required_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance. 
+|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance. |
+
+# Asset Accept Transaction 
+Transaction Object Type: `AssetTransferTx`
+
+Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is `"axfer"`.
+
+This is a special form of an Asset Transfer Transaction.
+
+|Field|Required|Type|codec| Description|
+|---|---|---|---|---|
+|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to be transferred.|
+|<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The account which is allocating the asset to their account's Asset map.|
+|<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The account which is allocating the asset to their account's Asset map.|
+
+# Asset Clawback Transaction 
+Transaction Object Type: `AssetTransferTx`
+
+Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is `"axfer"`.
+
+This is a special form of an Asset Transfer Transaction.
+
+|Field|Required|Type|codec| Description|
+|---|---|---|---|---|
+|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The sender of this transaction must be the clawback account specified in the asset configuration.|
+|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to be transferred.|
+|<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred.|
+|<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The address from which the funds will be withdrawn.|
+|<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
+|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the entire asset holding balance from the AssetSender account. It will not remove the asset holding.|
 
 # Asset Freeze Transaction
 Transaction Object Type: `AssetFreezeTx`
