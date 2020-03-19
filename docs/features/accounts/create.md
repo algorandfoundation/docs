@@ -4,7 +4,8 @@ This section describes the three primary methods to create accounts on Algorand,
 
 The three primary ways to create accounts on Algorand are as [wallet-derived accounts](#wallet-derived-kmd) (using [kmd](../../reference/node/artifacts.md#kmd)), as [standalone](#standalone), or as [multisignature accounts](#multisignature) (which entails one of the prior methods).
 
-Note: Remember that accounts participating in transactions are required to maintain a minimum balance of 100,000 micro Algos. Prior to using a newly created account in transactions, make sure that it has a sufficient balance by transferring at least 100,000 micro Algos to it.  An initial transfer of under that amount will fail due to the minimum balance constraint.
+!!! info
+    Remember that accounts participating in transactions are required to maintain a minimum balance of 100,000 micro Algos. Prior to using a newly created account in transactions, make sure that it has a sufficient balance by transferring at least 100,000 micro Algos to it.  An initial transfer of under that amount will fail due to the minimum balance constraint.
 
 # Wallet-derived (kmd)
 
