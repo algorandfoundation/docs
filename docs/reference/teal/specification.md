@@ -83,7 +83,7 @@ For two-argument ops, `A` is the previous element on the stack and `B` is the la
 | `<=` | A less than or equal to B => {0 or 1} |
 | `>=` | A greater than or equal to B => {0 or 1} |
 | `&&` | A is not zero and B is not zero => {0 or 1} |
-| `\|\|` | A is not zero or B is not zero => {0 or 1} |
+| `||` | A is not zero or B is not zero => {0 or 1} |
 | `==` | A is equal to B => {0 or 1} |
 | `!=` | A is not equal to B => {0 or 1} |
 | `!` | X == 0 yields 1; else 0 |
@@ -91,7 +91,7 @@ For two-argument ops, `A` is the previous element on the stack and `B` is the la
 | `itob` | converts uint64 X to big endian bytes |
 | `btoi` | converts bytes X as big endian to uint64 |
 | `%` | A modulo B. Panic if B == 0. |
-| `\|` | A bitwise-or B |
+| `|` | A bitwise-or B |
 | `&` | A bitwise-and B |
 | `^` | A bitwise-xor B |
 | `~` | bitwise invert value X |
