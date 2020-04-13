@@ -6,7 +6,7 @@ This section is an overview of **Accounts** on Algorand. It reviews core termino
 # Terminology
 ## Keys and Addresses
 
-Algorand keys use Ed25519 high-speed, high-security elliptic-curve signatures. They are produced through standard, open-source cryptographic libraries packaged with each of the SDKs. The creation algorithm takes a random value as input and outputs two 32-byte arrays, representing a public key and its associated private key. These are also referred to as a public/private key pair. These keys perform important cryptographic functions like signing data and verifying signatures. 
+Algorand uses Ed25519 high-speed, high-security elliptic-curve signatures. The keys are produced through standard, open-source cryptographic libraries packaged with each of the SDKs. The key generation algorithm takes a random value as input and outputs two 32-byte arrays, representing a public key and its associated private key. These are also referred to as a public/private key pair. These keys perform important cryptographic functions like signing data and verifying signatures. 
 
 <center> ![Key Generation](../../imgs/accounts-0.png) </center>
 <center>*Public/Private Key Generation* </center>
@@ -16,7 +16,7 @@ For reasons that include the need to make the keys human-readable and robust to 
 
 ### Transformation: Public Key to Algorand Address
 
-The **public key** is transformed into a public Algorand address, by adding a 4-byte checksum to the end of the public key and then encoding it in base32. The result is what both the developer and end-user recognize as an **Algorand address**. The address is 58 characters long.
+The **public key** is transformed into an Algorand address, by adding a 4-byte checksum to the end of the public key and then encoding it in base32. The result is what both the developer and end-user recognize as an **Algorand address**. The address is 58 characters long.
 
 <center> ![Algorand Address](../../imgs/accounts-1.png) </center>
 <center>*Public Key to Algorand Address* </center>
@@ -45,14 +45,14 @@ This representation is called the private key **mnemonic**. You may also see it 
 
 ## Wallets
 
-Wallets, in the context of Algorand developer tools, refer to wallets generated and managed by the Key Management Daemon (kmd) process. A wallet stores a collection of keys. kmd stores collections of wallets and allows users to perform operations using the keys stored within these wallets. Wallets are associated with a master key, represented as a 25-word mnemonic, from which all accounts in that wallet are derived. This allows the owner of the wallet to only need to remember a single passphrase for all of their accounts. Wallets are stored encrypted on disk. 
+Wallets, in the context of Algorand developer tools, refer to wallets generated and managed by the Key Management Daemon (kmd) process. A wallet stores a collection of keys. kmd stores collections of wallets and allows users to perform operations using the keys stored within these wallets. Every wallet is associated with a master key, represented as a 25-word mnemonic, from which all accounts in that wallet are derived. This allows the owner of the wallet to only need to remember a single passphrase for all of their accounts. Wallets are stored encrypted on disk. 
 
 See [Wallet-derived (kmd)](./create.md#wallet-derived-kmd) accounts in the [Creation Methods](#creation-methods) section for more details.
 
 ## Accounts
 Accounts are entities on the Algorand blockchain associated with specific onchain data, like a balance. An Algorand Address is the identifier for an Algorand account. 
 
-After generating a private key and corresponding address, sending Algos to the address on Algorand will initialize its state on the Algorand blockchain and turn it into a true account. 
+After generating a private key and corresponding address, sending Algos to the address on Algorand will initialize its state on the Algorand blockchain. 
 
 <center> ![Account](../../imgs/accounts-4.png) </center>
 <center>*Initializing an Account* </center>
@@ -70,6 +70,8 @@ Creating an Algorand address from a public key, is not the only way. A valid add
 ### Special Accounts
 
 Two accounts carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
+
+In addition, for usability  purposes, no transaction can be sent to `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ`, an address that represents 0 bytes array.
 
 _MainNet [FeeSink](../../reference/algorand-networks/mainnet.md#feesink-address) and [RewardsPool](../../reference/algorand-networks/mainnet.md#rewardspool-address) addresses_
 
