@@ -54,7 +54,7 @@ tar -xf install_master_darwin-amd64.tar.gz
 When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node). 
 
 !!! info
-    To when installing the rel/beta release, specify the beta channel `-c beta`
+    When installing the `rel/beta` release, specify the beta channel `-c beta`
 
 # Installing with Debian
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
