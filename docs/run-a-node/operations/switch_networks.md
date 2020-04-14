@@ -65,8 +65,8 @@ sudo systemctl stop algorand@$(systemd-escape ${ALGORAND_DATA})
 sudo systemctl disable algorand@$(systemd-escape ${ALGORAND_DATA})
 ```
 
-# DNS Configuration for devnet and betanet
-For networks `devnet` and `betanet`, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory. 
+# DNS Configuration for betanet
+For the `betanet` network, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory. 
 First, if there is not a config.json, make a copy of the config.json.example file.  
 ```
 cp config.json.example config.json
@@ -79,4 +79,4 @@ with
 ``` 
 "DNSBootstrapID": "<network>.algodev.network",
 ```
-This modification to the `DNSBootstrapID` is only required for the `devnet` and `betanet` networks.
+This modification to the `DNSBootstrapID` is only required for the `betanet` network.

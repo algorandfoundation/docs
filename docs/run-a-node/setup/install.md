@@ -53,6 +53,8 @@ tar -xf install_master_darwin-amd64.tar.gz
 ```
 When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node). 
 
+!!! info
+    To when installing the rel/beta release, specify the beta channel `-c beta`
 
 # Installing with Debian
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
@@ -227,8 +229,8 @@ Add a line that looks like this (run update.sh every hour, on the half-hour, of 
 30 * * * * /home/user/node/update.sh -d /home/user/node/data >/home/user/node/update.log 2>&1
 ```
 
-# DNS Configuration for devnet and betanet
-For networks `devnet` and `betanet`, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory. 
+# DNS Configuration for betanet
+For the `betanet` network, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory. 
 First, if there is not a config.json, make a copy of the config.json.example file.  
 ```
 cp config.json.example config.json
@@ -241,4 +243,4 @@ with
 ``` 
 "DNSBootstrapID": "<network>.algodev.network",
 ```
-This modification to the `DNSBootstrapID` is only required for the `devnet` and `betanet` networks.
+This modification to the `DNSBootstrapID` is only required for the `betanet` network.
