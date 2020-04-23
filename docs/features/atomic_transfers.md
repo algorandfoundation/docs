@@ -54,10 +54,10 @@ The example below illustrates Account A sending a transaction to Account C and A
 
 ``` python tab="Python"  
     # create transaction1
-	txn1 = transaction.PaymentTxn(account_a, fee, last_round, last_round+100, gh, account_c, amount)
+	txn1 = transaction.PaymentTxn(account_a, fee, last_round, last_round+1000, gh, account_c, amount)
 
 	# create transaction2
-	txn2 = transaction.PaymentTxn(account_b, fee, last_round, last_round+100, gh, account_a, amount)
+	txn2 = transaction.PaymentTxn(account_b, fee, last_round, last_round+1000, gh, account_a, amount)
 ```
 
 ``` java tab="Java"
@@ -76,7 +76,7 @@ The example below illustrates Account A sending a transaction to Account C and A
 
 ``` go tab="Go"
 	tx1, err := transaction.MakePaymentTxn(account1, account3, 1, 100000,
-		txParams.LastRound, txParams.LastRound+100, nil, "", 
+		txParams.LastRound, txParams.LastRound+1000, nil, "", 
 		txParams.GenesisID, txParams.GenesisHash)
    	if err != nil {
 	   	fmt.Printf("Error creating transaction: %s\n", err)
@@ -84,7 +84,7 @@ The example below illustrates Account A sending a transaction to Account C and A
 	}
 	   
 	tx2, err := transaction.MakePaymentTxn(account2, account1, 1, 100000,
-		txParams.LastRound, txParams.LastRound+100, nil, "", 
+		txParams.LastRound, txParams.LastRound+1000, nil, "", 
 		txParams.GenesisID, txParams.GenesisHash)
    	if err != nil {
 	   	fmt.Printf("Error creating transaction: %s\n", err)

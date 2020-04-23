@@ -21,8 +21,8 @@ curl http://$(cat ~/node/data/kmd-v0.5/kmd.net)/swagger.json
 !!! info
     The kmd process is only automatically started when using `goal` commands that access the kmd. This process will also timeout after 60 seconds of being idle. If you require SDK access to the `kmd` you will need to manually start the process with `goal` using the command: `goal kmd start -d <data-dir>`.
 
-All `algod` REST methods and models are decribed in the `algod` [reference documentation](/reference-docs/rest-apis/algod/). 
-All `kmd` REST methods and models are decribed in the `kmd` [reference documentation](/reference-docs/rest-apis/kmd/). 
+All `algod` REST methods and models are decribed in the `algod` [reference documentation](./rest-apis/algod.md). 
+All `kmd` REST methods and models are decribed in the `kmd` [reference documentation](./rest-apis/kmd.md). 
 
 
 # Security Token

@@ -90,7 +90,7 @@ async function connectToNetwork() {
 ```
 
 ```Python tab=
-from algodsdk import algod
+from algosdk import algod
 
 algod_address = <algod-address>
 algod_token = ""
