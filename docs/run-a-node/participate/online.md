@@ -130,7 +130,7 @@ Use the appropriate [authorization method](../../features/transactions/signature
 !!! tip
     It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
 
-Once the transaction is signed, wait for the network to reach the transaction's first valid round and then [submit](../../build-apps/hello_world.md#submit-the-transaction) and [wait for confirmation](../../build-apps/hello_world.md#wait-for-confirmation). 
+[Verify that the participation key is in the node's ledger directory](../../run-a-node/participate/generate_keys.md#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../build-apps/hello_world.md#submit-the-transaction) the transaction and [wait for confirmation](../../build-apps/hello_world.md#wait-for-confirmation). 
 
 # Check that the node is participating
 
