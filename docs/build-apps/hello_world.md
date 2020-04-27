@@ -390,7 +390,7 @@ Transaction [TXID] committed in round [COMMITTED_ROUND]
 		const port = "";
 		const token = {
 			'X-API-Key': <service-api-key>,
-            'Content-Type': 'appliation/x-binary'
+            'Content-Type': 'application/x-binary'
 		};
 
 		let postAlgodClient = new algosdk.Algod(token, server, port);

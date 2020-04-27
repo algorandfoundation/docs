@@ -124,6 +124,14 @@ func saveUnsignedTransaction() {
 $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=2000 --firstvalid=6002000 --lastvalid=6003000 --online=true --txfile=online.txn
 ```
 
+# Authorize and Send the Transaction
+Use the appropriate [authorization method](../../features/transactions/signatures.md) to sign the transaction. 
+
+!!! tip
+    It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
+
+[Verify that the participation key is in the node's ledger directory](../../run-a-node/participate/generate_keys.md#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../build-apps/hello_world.md#submit-the-transaction) the transaction and [wait for confirmation](../../build-apps/hello_world.md#wait-for-confirmation). 
+
 # Check that the node is participating
 
 At any time, you can validate whether your node is participating by `grep`-ing the `node.log` file in your data directory, looking for a `"VoteBroadcast"` messages where the `"Sender"` is your public key participation address.

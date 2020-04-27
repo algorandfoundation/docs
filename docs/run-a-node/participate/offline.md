@@ -61,6 +61,14 @@ def write_unsigned():
 $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=1000 --firstvalid=7000000 --lastvalid=7001000 --online=false --txfile=offline.txn
 ```
 
+# Authorize and Send the Transaction
+Use the appropriate [authorization method](../../features/transactions/signatures.md) to sign the transaction. 
+
+!!! tip
+    It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
+
+Once the transaction is signed, wait for the network to reach the transaction's first valid round and then [submit](../../build-apps/hello_world.md#submit-the-transaction) and [wait for confirmation](../../build-apps/hello_world.md#wait-for-confirmation). 
+
 **See also**
 
 - [Key Registration Transactions](../../features/transactions/index.md#key-registration-transaction)
