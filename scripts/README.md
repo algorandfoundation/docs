@@ -9,3 +9,15 @@ mkdir ../docs/Reference-Docs/goal
 goal generate-docs ../docs/Reference-Docs/goal
 ./reformat.py -path ../docs/Reference-Docs/goal -cmd goal
 ```
+
+# convert_swagger.py
+
+Given a swagger specfile, generates a markdown file.
+Currently uses `swagger2markup`, with some post processing to make
+the markdown more pleasant with our mkdocs theme.
+
+```
+./convert_swagger.py -specfile ~/algorand/indexer/api/indexer.oas2.json  -target ../docs/reference/rest-apis/indexer.md
+./convert_swagger.py -specfile ~/go/src/github.com/algorand/go-algorand/daemon/kmd/api/swagger.json  -target ../docs/reference/rest-apis/kmd.md
+./convert_swagger.py -specfile ~/go/src/github.com/algorand/go-algorand/daemon/algod/api/algod.oas2.json  -target ../docs/reference/rest-apis/algod.md
+```
