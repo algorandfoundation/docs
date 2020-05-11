@@ -137,7 +137,7 @@ The example above also illustrates using the `--from-program` option. This optio
 
 Passing an integer to a TEAL program requires that it must be converted to a base64 encoded string as well when using `goal`. This can be done in many ways. The following example illustrates the conversion using a simple python command. 
 ``` python
-$ python3 -c "import base64;print(base64.b64encode((123).to_bytes(8,'big')))"
+$ python3 -c "import base64;print(base64.b64encode((123).to_bytes(8,'big')).decode('ascii'))"
 ```
 The example above converts the integer value of 123 to a base64 encoded string. TEAL currently does not support negative numbers. 
 

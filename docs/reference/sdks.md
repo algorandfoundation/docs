@@ -71,7 +71,7 @@ $ pip3 install [file name].
 
 The [GitHub repository](https://github.com/algorand/py-algorand-sdk) contains additional documentation and examples.
 
-See the Python SDK [reference documenation](https://py-algorand-sdk.readthedocs.io/en/latest/) for more information on methods.
+See the Python SDK [reference documentation](https://py-algorand-sdk.readthedocs.io/en/latest/) for more information on methods.
 
 # Java
 ## Installation
@@ -89,7 +89,7 @@ The Java SDK requires Java 7+ and Android minSdkVersion 16+.
 
 The [GitHub repository](https://github.com/algorand/java-algorand-sdk) contains additional documentation and examples.
 
-See the Java SDK [reference documenation](https://algorand.github.io/java-algorand-sdk/) for more information on packages and methods.
+See the Java SDK [reference documentation](https://algorand.github.io/java-algorand-sdk/) for more information on packages and methods.
 
 
 # Go
@@ -102,4 +102,4 @@ go get -u github.com/algorand/go-algorand-sdk/..
 
 The [GitHub repository](https://github.com/algorand/go-algorand-sdk) contains additional documentation and examples.
 
-See the Go SDK [reference documenation](https://godoc.org/github.com/algorand/go-algorand-sdk) for more information on packages and functions.
+See the Go SDK [reference documentation](https://pkg.go.dev/github.com/algorand/go-algorand-sdk) for more information on packages and functions.
