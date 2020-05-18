@@ -71,7 +71,7 @@ Creating an Algorand address from a public key, is not the only way. A valid add
 
 Two accounts carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
 
-In addition, for usability  purposes, no transaction can be sent to `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ`, an address that represents 0 bytes array.
+In addition, The ZeroAddress `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ` is an address that represents a blank byte array. It is used when you leave an address field in a transaction blank.
 
 _MainNet [FeeSink](../../reference/algorand-networks/mainnet.md#feesink-address) and [RewardsPool](../../reference/algorand-networks/mainnet.md#rewardspool-address) addresses_
 

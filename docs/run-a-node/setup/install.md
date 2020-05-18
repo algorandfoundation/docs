@@ -34,19 +34,23 @@ Verified on OSX v10.13.4 / High Sierra.
 + Create a temporary folder to hold the install package and files.
 
 ```
-mkdir ~/inst
-cd ~/inst
+mkdir ~/node
+cd ~/node
 ```
 
-Read how Algorand uses and stores your data [here](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/darwin_amd64/README.md). Copy the installer from [Github](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/darwin_amd64/install_master_darwin-amd64.tar.gz). Optionally, the install file can verified [SHA](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/darwin_amd64/install_master_darwin-amd64.sha256).
-
-+ Unzip the package (make sure to use the appropriate filename):
-
+Download the updater script.
+  
 ```
-tar -xf install_master_darwin-amd64.tar.gz
-```
+curl https://raw.githubusercontent.com/algorand/go-algorand-doc/master/downloads/installers/update.sh -O
+```  
 
-+ Run the installer from within the installation directory. 
++ Ensure that your system knows it's an executable file.
+  
+```
+chmod 544 update.sh
+```  
+
++ Run the installer from within your node directory.
 
 ```
 ./update.sh -i -c stable -p ~/node -d ~/node/data -n
@@ -109,12 +113,11 @@ Nodes have been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 1-4). 
 + Create a temporary folder to hold the install package and files.
 
 ```
-mkdir ~/inst
-cd ~/inst
+mkdir ~/node
+cd ~/node
 ```
 
-Read how Algorand uses and stores your data [here](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/linux_amd64/README.md). Copy the updater script from [Github](https://github.com/algorand/go-algorand-doc/blob/master/downloads/installers/update.sh).
-+ Download the updater script.
+Download the updater script.
   
 ```
 wget https://raw.githubusercontent.com/algorand/go-algorand-doc/master/downloads/installers/update.sh
@@ -126,7 +129,7 @@ wget https://raw.githubusercontent.com/algorand/go-algorand-doc/master/downloads
 chmod 544 update.sh
 ```  
 
-+ Run the installer from within your installation directory.
++ Run the installer from within your node directory.
 
 ```
 ./update.sh -i -c stable -p ~/node -d ~/node/data -n
