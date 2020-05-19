@@ -18,7 +18,7 @@ We work closely and tirelessly with the core Algorand Development Team to produc
 * Write clear prose and code to swiftly deliver new concepts to all developers.
 
 ## Types of Contributions
-As members of an open source project we welcome community contributions in the following ways.
+As members of an open source project we welcome community contributions in the following ways and we thank you in advance for your help!
 
 ### Fixing Errors or Inaccuracies
 The Algorand protocol and SDKs are constantly updated with new features that we do our best to stay ahead of, but sometimes portions of our documentation may become out of date. Sometimes we just make mistakes. If you come across typos, code errors, or information that is inaccurate, we encourage you to [log an issue](#how-to-file-an-issue) or correct it through a [pull request](#how-to-create-a-pull-request).
@@ -28,12 +28,12 @@ The Algorand protocol and SDKs are constantly updated with new features that we 
 ### Small Improvements for Clarity of Message
 We recognize that there may be a clearer way to explain a concept or write a snippet of code and we welcome contributions that can make these improvements on our behalf. 
 
-However, keep in mind that improvements can often be subjective and in order to keep capacity available for more critical documentation updates, we will not spend significant time discussing an improvement if the value add is not immediately apparent. We will reconsider these cases with the addition of more objective data points such as if a diverse representation of the developer community upvotes a particular issue or PR.  
+An improvement can sometimes be subjective, so it helps to include more objective data points such as having interest from a diverse representation of the developer community in the form of upvotes on the related issue or PR.  
 
 [**Issue Template**](https://github.com/algorand/docs/issues/new?assignees=&labels=&template=small-improvements-for-clarity-of-message.md&title=)
 
 ### Large Additions or Modifications
-The Algorand technical documentation is intimately tied to updates in [go-algorand](https://github.com/algorand/go-algorand), our SDKs, and other open source developer tools found [here](https://github.com/algorand). Strategic planning on how to present the information that accompanies feature updates within the context of the entire developer experience is the primary charter of the Algorand Docs team, and it may be difficult for a community member to acquire the same level of context. Therefore, we strongly encourage you to [log an issue](#how-to-file-an-issue) that falls under this category _before_ contributing through a pull request to avoid wasted effort on your part. Similar to the above section, we will prioritize handling cases that show significant interest or support from a diverse representation of the developer community through issue upvoting. 
+The Algorand technical documentation is intimately tied to updates in [go-algorand](https://github.com/algorand/go-algorand), our SDKs, and other open source developer tools found [here](https://github.com/algorand). It may be difficult to have all the context around the developer experience as a whole, so we strongly encourage you to [log an issue](#how-to-file-an-issue) _before_ creating a pull request so we can discuss and let the community weigh in. Similar to the above section, objective data points like issue upvoting from a significant and diverse representation of the developer community will help determine the priority-level for these proposals. 
 
 [**Issue Template**](https://github.com/algorand/docs/issues/new?assignees=&labels=&template=large-additions-or-modifications.md&title=)
 
@@ -41,7 +41,7 @@ The Algorand technical documentation is intimately tied to updates in [go-algora
 If you have a step-by-step guide for developers or sample application code, we encourage you to [submit it](https://developer.algorand.org/pages/submissions/) as a [Tutorial](https://developer.algorand.org/tutorials/) or [Solution](https://developer.algorand.org/solutions/), respectively, on the [Algorand Developer Portal](https://developer.algorand.org/). Tutorials and Solutions can be more personalized and do not follow the same [charter](#charter) and [tenets](#tenets) as the documentation. View the Style Guide for Tutorials and Solutions [here](https://developer.algorand.org/pages/style-guide).
 
 ### Community Projects
-Finally, if you developed a tool or application that would benefit members of the Algorand community, feel free to submit a PR updating the [Community Projects](./docs/community.md) page. Include the name of your project, a logo, and description under the appropriate Project category.  If your category does not exist, please suggest a header and we can update as needed through the PR process. 
+Finally, if you developed a tool or application that would benefit members of the Algorand community, feel free to submit a PR updating the [Community Projects](./docs/community.md) page. Include the name of your project, a logo, and a description under the appropriate Project category.  If your category does not exist, please suggest a header and we can update as needed through the PR process. 
 
 The Community page is displayed [here](https://developer.algorand.org/docs/community/) in production.
 
