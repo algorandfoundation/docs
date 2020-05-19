@@ -1,106 +1,11 @@
 site_name: Algorand Developer Docs
 
-#nav:
-#- Learn:
-#    - Intro to Blockchain: 'learn/blockchain101.md'
-#    - Algorand Consensus Protocol: 'learn/algorand_consensus.md'
-#- Getting Started:
-#    - Workspace Setup: 'getting-started/setup.md'
-#    - Connect to the Network: 'getting-started/connect.md'
-#    - Your First Transaction: 'getting-started/tutorial.md'
-#- Feature Guides:
-#    - Accounts: 'features/accounts.md'
-#    - Transactions: 'features/transactions.md'
-#    - Signatures: 'features/signatures.md'
-#    - Offline Transactions: 'features/offline_transactions'
-#    - Algorand Standard Assets (ASA): 
-#        - ASA Intro: 'features/asa/index.md'
-#        - ASA Flows: 'features/asa/flows.md'
-#        - ASA Types: 'features/asa/types.md'
-#    - Atomic Transfers: 'features/atomic_transfers.md'
-#    - Algorand Smart Contracts (ASC1): 
-#        - ASC1 Intro: 'features/asc1/index.md'
-#        - Usage Modes: 'features/asc1/modes.md'
-#        - Teal Overview: 'features/asc1/teal_overview.md'
-#        - Goal TEAL Walkthrough: 'features/asc1/goal_teal_walkthrough.md'
-#        - ASC1 SDK Usage: 'features/asc1/asc1_sdk_usage.md'
-#        - Certified Templates: 'features/asc1/templates.md'
-#- Network Participation:
-#    - Run a Node:
-#        - Node Types: 'node/types.md'
-#        - Installation: 'node/install.md'
-#        - Node Configurations: 'node/config.md'
-#    - Common Node Operations:
-#        - Switch Networks: 'node/switch_networks.md'
-#        - Catchup: 'node/catchup.md'
-#        - Check Status: 'node/status.md'
-#    - Participate in Consensus:
-#        - Guidelines & Best Practices: 'participate/guidelines.md'
-#        - Generate a Participation Key: 'participate/generate_keys.md'
-#        - Register Online: 'participate/online.md'
-#        - Register Offline: 'participate/offline.md'
-#        - Renew Participation Keys: 'participate/renew.md'
-#
-#- Algorand Networks:
-#    - MainNet: 'networks/mainnet.md'
-#    - TestNet: 'networks/testnet.md'
-#    - BetaNet: 'networks/betanet.md'
-#
-#- Reference Docs:
-#    - Transaction Execution Approval Language (TEAL):
-#        - TEAL Opcodes: 'reference/teal/opcodes.md'
-#        - TEAL Templates:
-#            - Delegate KeyReg: 'reference/teal/templates/delegate_keyreg.md'
-#            - Dynamic Fee: 'reference/teal/templates/dynamic_fee.md'
-#            - HTLC: 'reference/teal/templates/htlc.md'
-#            - Limit Order A: 'reference/teal/templates/limit_ordera.md'
-#            - Split Payments: 'reference/teal/templates/split.md'
-#        - TEAL Guidelines: 'reference/teal/guidelines.md'
-#    - goal:
-#      - account: 'reference/goal/account.md'
-#      - asset: 'reference/goal/asset.md'
-#      - clerk: 'reference/goal/clerk.md'
-#    - kmd:
-#      - start: 'reference/kmd/start.md'
-#      - stop: 'reference/kmd/stop.md'
-#    - algokey:
-#      - export: 'reference/algokey/export.md'
-#      - generate: 'reference/algokey/generate.md'
-#      - help: 'reference/algokey/help.md'
-#    - SDKs:
-#      - Go: 'reference/sdks/go.md'
-#      - Java: 'reference/sdks/java.md'
-#      - JavaScript: 'reference/sdks/javascript.md'
-#      - Python: 'reference/sdks/python.md'
-#    - REST APIs:
-#      - algod Paths: 'reference/rest/algod_rest_paths.md'
-#      - algod Models: 'reference/rest/algod_rest_models.md'
-#      - kmd Paths: 'reference/rest/kmd_rest_paths.md'
-#      - kmd Models: 'reference/rest/kmd_rest_models.md'
-#    - Glossary: 'reference/glossary.md'
-#- Community Projects: 'community.md'
-#- About:
-#    - License: 'about/license.md'
-#    - Release Notes: 'about/release_notes.md'
-#
-### TO BE REMOVED PRIOR TO LAUNCH
-#- New Content Categories:
-#  - Solutions:
-#    - Example: 'solutions/example.md'
-#  - Tutorials:
-#    - Example: 'tutorials/example.md'
-#  - Articles:
-#    - Example: 'articles/example.md'
-#    - Sandbox: 'articles/sandbox_article.md'
-#  - News:
-#    - Example: 'news/example.md'
-
 theme: 
     name: material
     font: Lato
     palette:
-      primary: 'deep purple'
-      accent: 'purple'
+      primary: '#000000'
+      accent: '#5662DB'
 
 markdown_extensions:
   - admonition
