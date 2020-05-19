@@ -1,37 +1,12 @@
-# Algorand Documentation Website
+# Algorand Developer Documentation (Official)
 
-## Setup
-
-- `pip install -r requirements.txt`
+This is the official repository for the [Algorand Developer Documentation](https://developer.algorand.org/docs/) hosted on the [Algorand Developer Portal](https://developer.algorand.org/).
 
 ## Contributing
-For more information about how to contribute documentation see the mkdocs documentation:
-http://www.mkdocs.org/user-guide/writing-your-docs/
+Learn how you can contribute in our [Guide to Contributing](./CONTRIBUTING.md).
 
-#### Navigation Bar
-Because we have so many generated documents, we aren't able to use the default mkdocs.yml navigation bar, instead we're using [MkDocs Awesome Pages Plugin](https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin).
+## License
 
-This allows you to do a few things, but the most important thing to know is how to set the order of pages in the navigation bar. Each docs directory may contain an optional **.pages** file, for example [here is the one in the root directory](docs/.pages). You can specify directories or markdownfiles. If the navigation bar should have a different title than the directory, the **.pages** file can also include a title, [as shown here](docs/Reference-Docs/teal/.pages).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Testing
-
-```
-mkdocs serve
-```
-
-## Deploying
-
-```
-mkdocs gh-deploy
-```
-
-## Generated Docs
-
-There are some tools to help with this in the **scripts** directory.
-
-- goal (go cli, spf/cobra)
-- algokey (go cli, spf/cobra)
-- kmd (swagger, ???)
-- algod (swagger, ???)
-
-
+The documentation is licensed under an MIT license. See [LICENSE file](./LICENSE.md) for details.
