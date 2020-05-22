@@ -250,6 +250,8 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 goal asset create --creator <address> --total 1000 --unitname <unit-name> --asseturl "https://path/to/my/asset/details" --decimals 0   -d data
 ```
 
+[See complete code...](#complete-code-example)
+
 **See also**
 
 - [Anatomy of an Asset Creation Transaction](./transactions/index.md#create-an-asset)
@@ -378,6 +380,8 @@ After an asset has been created only the manager, reserve, freeze and reserve ac
 ``` goal tab="goal"  
 goal asset config  --manager <address> --new-reserve <address> --assetid <asset-id> -d data 
 ```
+
+[See complete code...](#complete-code-example)
 
 **See also**
 
@@ -524,6 +528,8 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 goal asset send -a 0 --asset <asset-name>  -f <opt-in-account> -t <opt-in-account> --creator <asset-creator>  -d data
 ```
 
+[See complete code...](#complete-code-example)
+
 **See also**
 
 - [Structure of an Asset Opt-In Transaction](./transactions/index.md#opt-in-to-an-asset)
@@ -657,6 +663,8 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 goal asset send -a <asset-amount> --asset <asset-name> -f <asset-sender> -t <asset-receiver> --creator <asset-creator> -d data
 ```
 
+[See complete code...](#complete-code-example)
+
 **See also**
 
 - [Anatomy of an Asset Transfer Transaction](./transactions/index.md#transfer-an-asset)
@@ -786,6 +794,8 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 ``` goal tab="goal"  
 goal asset freeze --freezer <asset-freeze-account> --freeze=true --account <account-to-freeze> --creator <asset-creator> --asset <asset-name> -d data
 ```
+
+[See complete code...](#complete-code-example)
 
 **See also**
 
@@ -930,6 +940,8 @@ Revoking an asset for an account removes a specific number of the asset from the
 goal asset send -a <amount-to-revoke> --asset <asset-name> -f <address-of-revoke-target> -t <address-to-send-assets-to> --clawback <clawback-address> --creator <creator-address> -d data
 ```
 
+[See complete code...](#complete-code-example)
+
 **See also**
 
 - [Anatomy of an Asset Clawback Transaction](./transactions/index.md#revoke-an-asset)
@@ -1073,6 +1085,8 @@ Created assets can be destroyed only by the asset manager account. All of the as
 goal asset destroy --creator <creator-address> --manager <asset-manager-address> --asset <asset-name> -d data 
 ```
 
+[See complete code...](#complete-code-example)
+
 **See also**
 
 - [Anatomy of the Asset Destroy Transaction](./transactions/index.md#destroy-an-asset)
@@ -1120,6 +1134,8 @@ Reserve address:  <reserve-address>
 Freeze address:   <freeze-address>
 Clawback address: <clawback-address>
 ```
+
+# Complete Code Example
 
 ??? example "Complete Example - Asset Options"
     
