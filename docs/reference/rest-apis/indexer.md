@@ -4,8 +4,34 @@ title: indexer
 <a name="paths"></a>
 ## Paths
 
+<a name="makehealthcheck"></a>
+### GET /health
+Returns 200 if healthy.
+```
+GET /health
+```
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[HealthCheck](#healthcheck)|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* common
+
+
 <a name="searchforaccounts"></a>
-### GET /accounts
+### GET /v2/accounts
 
 **Description**
 Search for accounts.
@@ -55,7 +81,7 @@ Search for accounts.
 
 
 <a name="lookupaccountbyid"></a>
-### GET /accounts/{account-id}
+### GET /v2/accounts/{account-id}
 
 **Description**
 Lookup account information.
@@ -100,7 +126,7 @@ Lookup account information.
 
 
 <a name="lookupaccounttransactions"></a>
-### GET /accounts/{account-id}/transactions
+### GET /v2/accounts/{account-id}/transactions
 
 **Description**
 Lookup account transactions.
@@ -159,7 +185,7 @@ Lookup account transactions.
 
 
 <a name="searchforassets"></a>
-### GET /assets
+### GET /v2/assets
 
 **Description**
 Search for assets.
@@ -209,7 +235,7 @@ Search for assets.
 
 
 <a name="lookupassetbyid"></a>
-### GET /assets/{asset-id}
+### GET /v2/assets/{asset-id}
 
 **Description**
 Lookup asset information.
@@ -253,7 +279,7 @@ Lookup asset information.
 
 
 <a name="lookupassetbalances"></a>
-### GET /assets/{asset-id}/balances
+### GET /v2/assets/{asset-id}/balances
 
 **Description**
 Lookup the list of accounts who hold this asset
@@ -303,7 +329,7 @@ Lookup the list of accounts who hold this asset
 
 
 <a name="lookupassettransactions"></a>
-### GET /assets/{asset-id}/transactions
+### GET /v2/assets/{asset-id}/transactions
 
 **Description**
 Lookup transactions for an asset.
@@ -364,7 +390,7 @@ Lookup transactions for an asset.
 
 
 <a name="lookupblock"></a>
-### GET /blocks/{round-number}
+### GET /v2/blocks/{round-number}
 
 **Description**
 Lookup block.
@@ -400,7 +426,7 @@ Lookup block.
 
 
 <a name="searchfortransactions"></a>
-### GET /transactions
+### GET /v2/transactions
 
 **Description**
 Search for transactions.
@@ -629,7 +655,18 @@ An error response with optional data field.
 
 |Name|Schema|
 |---|---|
-|**data**  <br>*optional*|string|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+<a name="healthcheck"></a>
+### HealthCheck
+A health check response.
+
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
 |**message**  <br>*required*|string|
 
 
