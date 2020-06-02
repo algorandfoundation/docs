@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-title: indexer
-=======
 title: indexer
 ---
 
@@ -824,4 +821,3 @@ crypto/multisig.go : MultisigSig
 
 
 
->>>>>>> Update with latest specfiles.
