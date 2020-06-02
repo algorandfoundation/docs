@@ -1,5 +1,4 @@
-title: SDKs
-# Overview
+title: Overview
 Algorand provides supported SDKs for JavaScript, Python, Java and Go. These SDKs offer both standalone and node connected functionality. The node connected functionallity is  designed to use the REST endpoints, described below, for the primary Algorand node processes. The stand alone functions offer capabilities for offline or limited connected operation. These offline functions include the ability to work with accounts that are not managed by by Algorand key management daemon(`kmd`) and to work with transctions. This includes creation, signing and appending signatures to transactions. Support is also provided for multisignatures and logic signatures.
 
 Examples of using the SDKs are provided throughout the developer website. Additional examples are also provided within the individual repository locations. Additional developer reference documentation is described below.

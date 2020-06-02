@@ -2,7 +2,7 @@ title: Reference Docs
 arrange:
   - algorand-networks
   - cli
-  - sdks.md
+  - sdks
   - rest-apis
   - teal
   - transactions.md
