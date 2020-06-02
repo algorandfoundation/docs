@@ -13,7 +13,7 @@ Enable/diable and configure Algorand metric collection
 
 
 Collection of commands configure metric collection of an Algorand node instance.
-
+Without any commands or flags, calls 'metric status'.
 
 
 ```

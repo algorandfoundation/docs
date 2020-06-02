@@ -17,7 +17,7 @@ diagcfg is the CLI for interacting with an Algorand node's logging behavior. It 
 
 ```
 
-diagcfg [flags]
+diagcfg [command] [flags]
 
 ```
 

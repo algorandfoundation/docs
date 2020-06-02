@@ -11,7 +11,7 @@ Enable/diable and configure Algorand remote logging
 ### Synopsis
 
 
-With no commands or flags, displays status of node's telemetry reporting. Commands allow configuration of a node's remote logging.
+Without any commands or flags, displays status of node's telemetry reporting. Commands allow configuration of a node's remote logging.
 
 
 

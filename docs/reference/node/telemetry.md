@@ -33,7 +33,7 @@ An Algorand node host can configure their node’s telemetry before running it b
 
 #Config File Location
 
-The file named ‘logging.config’ informs the initial configuration of a node’s telemetry. There will typically be at least two logging.config files on a machine running a node: one for each node the machine is running, stored in that node’s data directory, and a global config file stored in ~/.algorand/. The latter location is accessed through the config/config.go:GetConfigFilePath() function.
+The file named ‘logging.config’ informs the initial configuration of a node’s telemetry. There will typically be at least two logging.config files on a machine running a node: one for each node the machine is running, stored in that node’s data directory, and a global config file stored in ~/.algorand/. The latter location is accessed through the config/config.go:GetConfigFilePath() function, which normally gets called after a failure to find a local config file.
 
 This global file is generally only accessed, by logging/telemetry.go:ReadTelemetryConfigOrDefault(), or created, by logging/telemetry.go:EnsureTelemetryConfig(), when a node-specific config file cannot be found (i.e. when called by “algoh”, “algod”, or the deprecated “goal logging” commands), via logging/telemetry.go:EnsureTelemetryConfig().
 
