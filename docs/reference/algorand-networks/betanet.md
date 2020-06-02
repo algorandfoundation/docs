@@ -1,10 +1,10 @@
 title: BetaNet
 
 # Version
-`v2.0.13.beta`
+`v2.0.14.beta`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.0.13-beta
+https://github.com/algorand/go-algorand/releases/tag/v2.0.14-beta
 
 # Genesis ID
 `betanet-v1.0`
