@@ -1282,6 +1282,7 @@ APIV1POSTTransactionSignRequest is the request for `POST /v1/transaction/sign`
 
 |Name|Description|Schema|
 |---|---|---|
+|**public_key**  <br>*optional*||[PublicKey](#publickey)|
 |**transaction**  <br>*optional*|**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**wallet_handle_token**  <br>*optional*||string|
 |**wallet_password**  <br>*optional*||string|
