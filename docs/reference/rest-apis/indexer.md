@@ -4,8 +4,34 @@ title: indexer
 <a name="paths"></a>
 ## Paths
 
+<a name="makehealthcheck"></a>
+### GET /health
+Returns 200 if healthy.
+```
+GET /health
+```
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[HealthCheck](#healthcheck)|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* common
+
+
 <a name="searchforaccounts"></a>
-### GET /accounts
+### GET /v2/accounts
 
 **Description**
 Search for accounts.
@@ -16,6 +42,7 @@ Search for accounts.
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
+|**Query**|**auth-addr**  <br>*optional*|Include accounts configured to use this spending key.|string|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
@@ -55,7 +82,7 @@ Search for accounts.
 
 
 <a name="lookupaccountbyid"></a>
-### GET /accounts/{account-id}
+### GET /v2/accounts/{account-id}
 
 **Description**
 Lookup account information.
@@ -100,7 +127,7 @@ Lookup account information.
 
 
 <a name="lookupaccounttransactions"></a>
-### GET /accounts/{account-id}/transactions
+### GET /v2/accounts/{account-id}/transactions
 
 **Description**
 Lookup account transactions.
@@ -121,6 +148,7 @@ Lookup account transactions.
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
+|**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
@@ -159,7 +187,7 @@ Lookup account transactions.
 
 
 <a name="searchforassets"></a>
-### GET /assets
+### GET /v2/assets
 
 **Description**
 Search for assets.
@@ -209,7 +237,7 @@ Search for assets.
 
 
 <a name="lookupassetbyid"></a>
-### GET /assets/{asset-id}
+### GET /v2/assets/{asset-id}
 
 **Description**
 Lookup asset information.
@@ -253,7 +281,7 @@ Lookup asset information.
 
 
 <a name="lookupassetbalances"></a>
-### GET /assets/{asset-id}/balances
+### GET /v2/assets/{asset-id}/balances
 
 **Description**
 Lookup the list of accounts who hold this asset
@@ -303,7 +331,7 @@ Lookup the list of accounts who hold this asset
 
 
 <a name="lookupassettransactions"></a>
-### GET /assets/{asset-id}/transactions
+### GET /v2/assets/{asset-id}/transactions
 
 **Description**
 Lookup transactions for an asset.
@@ -326,6 +354,7 @@ Lookup transactions for an asset.
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
+|**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
@@ -364,7 +393,7 @@ Lookup transactions for an asset.
 
 
 <a name="lookupblock"></a>
-### GET /blocks/{round-number}
+### GET /v2/blocks/{round-number}
 
 **Description**
 Lookup block.
@@ -400,7 +429,7 @@ Lookup block.
 
 
 <a name="searchfortransactions"></a>
-### GET /transactions
+### GET /v2/transactions
 
 **Description**
 Search for transactions.
@@ -423,6 +452,7 @@ Search for transactions.
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
+|**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
@@ -480,6 +510,7 @@ data/basics/userBalance.go : AccountData
 |**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer|
 |**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer|
 |**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
+|**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
 |**created-assets**  <br>*optional*|\[apar\] parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
 |**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
@@ -629,7 +660,18 @@ An error response with optional data field.
 
 |Name|Schema|
 |---|---|
-|**data**  <br>*optional*|string|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+<a name="healthcheck"></a>
+### HealthCheck
+A health check response.
+
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
 |**message**  <br>*required*|string|
 
 
@@ -659,6 +701,7 @@ data/transactions/transaction.go : Transaction
 |**asset-config-transaction**  <br>*optional*||[TransactionAssetConfig](#transactionassetconfig)|
 |**asset-freeze-transaction**  <br>*optional*||[TransactionAssetFreeze](#transactionassetfreeze)|
 |**asset-transfer-transaction**  <br>*optional*||[TransactionAssetTransfer](#transactionassettransfer)|
+|**auth-addr**  <br>*optional*|\[sgnr\] The address used to sign the transaction. This is used for rekeyed accounts to indicate that the sender address did not sign the transaction.|string|
 |**close-rewards**  <br>*optional*|\[rc\] rewards applied to close-remainder-to account.|integer|
 |**closing-amount**  <br>*optional*|\[ca\] closing amount for transaction.|integer|
 |**confirmed-round**  <br>*optional*|Round when the transaction was confirmed.|integer|
@@ -676,6 +719,7 @@ data/transactions/transaction.go : Transaction
 |**note**  <br>*optional*|\[note\] Free form data.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**payment-transaction**  <br>*optional*||[TransactionPayment](#transactionpayment)|
 |**receiver-rewards**  <br>*optional*|\[rr\] rewards applied to receiver account.|integer|
+|**rekey-to**  <br>*optional*|\[rekey\] when included in a valid transaction, the accounts auth addr will be updated with this value and future signatures must be signed with the key represented by this address.|string|
 |**round-time**  <br>*optional*|Time when the block this transaction is in was confirmed.|integer|
 |**sender**  <br>*required*|\[snd\] Sender's address.|string|
 |**sender-rewards**  <br>*optional*|\[rs\] rewards applied to sender account.|integer|
