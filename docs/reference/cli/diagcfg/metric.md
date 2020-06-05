@@ -4,7 +4,7 @@ title: diagcfg metric
 
 
 
-Enable/diable and configure Algorand metric collection
+Enable/diable and configure Algorand metric collection, as indicated in the config.json file
 
 
 
@@ -30,21 +30,13 @@ diagcfg metric [command] [flags]
 
 ```
 
-  disable                Disable metric collection on node
+  disable                Disable metric collection on node, setting the the EnableMetricReporting field in config.json to true
 
-  enable                 Enable metric collection on node
+  enable                 Enable metric collection on node, setting the the EnableMetricReporting field in config.json to false
 
-  status                 Print the node's metric status. Same functionality as the bare 'diagcfg metric' command
-
-```
-
-## Flags
-```
-
-  -e, --externalHostName string   External host name, such as relay-us-ea-3.algodev.network; will default to external IP Address if not specified
+  status                 Print the node's metric status, as indicated by teh EnableMetricReporting field in config.json.
 
 ```
-
 
 
 ### Options inherited from parent commands
