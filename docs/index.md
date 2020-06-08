@@ -12,7 +12,7 @@ title: Algorand Developer Docs
   </div>
   <div class="homepage-card">
     <span class="checklist-icon"></span>
-    <a href="./features/accounts/" class="card-title">Explore Features</a>
+    <a href="./features/" class="card-title">Explore Features</a>
     <div class="card-description">
     In-depth explanations and how-tos for core Algorand features.
     </div>
