@@ -19,7 +19,7 @@ title: Algorand Developer Docs
   </div>
   <div class="homepage-card">
     <span class="folder-file-icon"></span>
-    <a href="./reference/cli/goal/goal/" class="card-title">Reference Docs</a>
+    <a href="./reference/" class="card-title">Reference Docs</a>
     <div class="card-description">
     Learn commands and syntax for specific developer tools.
     </div>
