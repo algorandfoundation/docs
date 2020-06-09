@@ -4,7 +4,7 @@ title: goal node start
 
 
 
-Init the specified Algorand node.
+Initialize the specified Algorand node.
 
 
 
@@ -12,7 +12,7 @@ Init the specified Algorand node.
 
 
 
-Init the specified Algorand node.
+Initialize the specified Algorand node.
 
 
 

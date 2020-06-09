@@ -459,7 +459,7 @@ There are two primary ways to set the fee for a transaction.
 
 ## Suggested Fee
 
-The SDK provides a method to get the [**suggested fee** per byte (`fee`)](../../reference/rest-apis/algod.md#transactionfee) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
+The SDK provides a method to get the [**suggested fee** per byte (`fee`)](../../reference/rest-apis/algod/v1.md#transactionfee) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
 
 For larger transactions (> 1 KB in size), the resulting total fee will be greater than the network minimum, which in certain network conditions, may be more than you need to pay to get the transaction processed into the blockchain quickly. In particular, when blocks have enough room for all transactions, the minimum transaction fee will generally suffice. In this network scenario, set the fee (per byte) to 0 if you want to ensure that the minimum fee is chosen instead. 
 

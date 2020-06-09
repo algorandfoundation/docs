@@ -44,6 +44,8 @@ goal clerk sign -i INFILE -o OUTFILE [flags]
 
   -P, --proto string       consensus protocol version id string
 
+  -S, --signer string      Address of key to sign with, if different from transaction "from" address due to rekeying
+
 ```
 
 

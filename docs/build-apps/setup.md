@@ -8,7 +8,7 @@ Building an application on Algorand means that your application, directly or ind
 A program connects to the Algorand blockchain through an **algod** client. The algod client requires a valid **algod REST endpoint IP address** and **algod token** from an Algorand node that is connected to the network you plan to interact with. 
 
 # Available tools
-Algorand officially supports four SDKs for developing applications on Algorand: [Javascript](../reference/sdks.md#javascript), [Java](../reference/sdks.md#java), [Python](../reference/sdks.md#python), and [Go](../reference/sdks.md#go). 
+Algorand officially supports four SDKs for developing applications on Algorand: [Javascript](../reference/sdks/index.md#javascript), [Java](../reference/sdks/index.md#java), [Python](../reference/sdks/index.md#python), and [Go](../reference/sdks/index.md#go). 
 
 There are also three command-line utilities packaged with Algorand node software: [`goal`](../reference/cli/goal/goal.md), [`kmd`](../reference/cli/kmd.md), and [`algokey`](../reference/cli/algokey/algokey.md).
 
@@ -94,7 +94,7 @@ $ cat $ALGORAND_DATA/algod.token
 **Production Ready**| ✅ | ❌ | ✅
 
 # Install your preferred SDK
-Install your preferred SDK by following the setup instructions in the [SDK reference docs](../reference/sdks.md).
+Install your preferred SDK by following the setup instructions in the [SDK reference docs](../reference/sdks/index.md).
 
 # Other Setup Tips
 

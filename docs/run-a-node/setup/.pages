@@ -2,3 +2,4 @@ title: Installation Guide
 arrange:
   - types.md
   - install.md
+  - indexer.md
