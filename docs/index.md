@@ -1,5 +1,7 @@
 title: Algorand Developer Docs
 
+Sections marked with 🔷 indicate a feature that is currently available on BetaNet only. Visit the [BetaNet What's New section](./reference/algorand-networks/betanet.md#whats-new) for more information.
+
 ## Application Developers
 
 <div class="homepage-cards">
