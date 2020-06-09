@@ -567,8 +567,8 @@ This call contains many parameters to refine the search for specific values. The
 | max-round | [Search Transactions for a Specific Account - Round Range](#round-range) |
 | min-round | [Search Transactions for a Specific Account - Round Range](#round-range) |
 | round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| currency-greater-than | [Search Transactions for a Specific Account - Currency](/#currency) |
-| currency-less-than | [Search Transactions for a Specific Account - Currency](/#currency) |
+| currency-greater-than | [Search Transactions for a Specific Account - Currency](#currency) |
+| currency-less-than | [Search Transactions for a Specific Account - Currency](#currency) |
 | tx-type | [Search Transactions for a Specific Account - Transaction Type](#transaction-type) |
 | sig- type | [Search Transactions for a Specific Account - Signature Type](#signature-type) |
 | tx-id | [Search Transactions for a Specific Account - Transaction ID](#signature-type) |
@@ -576,10 +576,3 @@ This call contains many parameters to refine the search for specific values. The
 Similar to asset searches this method supports searching based on address and role as well.
 
 This call also supports [Paginated Results](#paginated-results) and [Note Field Searching](#note-field-searching).
-
-
-
-
-
-
->>>>>>> jason
