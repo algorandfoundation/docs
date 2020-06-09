@@ -16,9 +16,9 @@ List of available commands for three official Algorand CLIs that are included as
 
 Overview, installation guides, and documentation for the four Algorand SDKs. Also includes a migration guide for developers moving from algod v1 to v2 (recommended).
 
-[SDKs Overview](./sdks.md)
+[SDKs Overview](sdks/index.md)
 
-[JavaScript](./sdks.md#javascript) - [Python](./sdks.md#python) - [Java](./sdks.md#java) - [Go](./sdks.md#go) 
+[JavaScript](sdks/index.md#javascript) - [Python](sdks/index.md#python) - [Java](sdks/index.md#java) - [Go](sdks/index.md#go) 
 
 [V2 Migration Guide](./sdks/migration.md) 🔷 🆕
 
@@ -41,7 +41,7 @@ The language specification, a list of available opcodes, and guidelines for use 
 
 An index of the structure and fields of Algorand Transactions.
 
-[Common Fields](./transactions.md#common-fields) - [Payment](./transaction.md#payment-transaction) - [Key Registration](./transaction.md#key-registration-transaction) - [Asset Configuration](./transactions.md#asset-configuration-transaction) - [Asset Transfer](./transactions.md#asset-transfer-transaction) - [Asset Opt-In](./transactions.md#asset-accept-transaction) - [Asset Clawback](./transactions.md#asset-clawback-transaction) - [Asset Freeze](#./transactions.md#asset-freeze) - [Signed](./transactions.md#signed-transaction)
+[Common Fields](./transactions.md#common-fields) - [Payment](transactions.md#payment-transaction) - [Key Registration](transactions.md#key-registration-transaction) - [Asset Configuration](./transactions.md#asset-configuration-transaction) - [Asset Transfer](./transactions.md#asset-transfer-transaction) - [Asset Opt-In](./transactions.md#asset-accept-transaction) - [Asset Clawback](./transactions.md#asset-clawback-transaction) - [Asset Freeze](#./transactions.md#asset-freeze) - [Signed](./transactions.md#signed-transaction)
 
 # Node Reference
 

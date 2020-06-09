@@ -7,7 +7,7 @@ The V2 Indexer is network agnostic, meaning it can point at BetaNet, TestNet, or
 
 The source code for the Indexer is provided on [github](https://github.com/algorand/indexer).
 
-For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide. See [Indexer README](https://www.postgresql.org/) for more details on running the Indexer.
+For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide. See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
 
 # Indexer V2
 To Install the new follow the instructions below. The Indexer binaries are available on [github](https://github.com/algorand/indexer/releases).
@@ -98,14 +98,14 @@ The two Additional REST calls are:
 /v1/transaction/{txid}
 ```
 This call allows quickly locating a transaction using the txid
-See [REST API Reference](../../reference/rest-apis/algod.md#get-v1transactiontxid) for more details.
+See [REST API Reference](../../reference/rest-apis/algod/v1.md#get-v1transactiontxid) for more details.
 
 ```
 /v1/account/{account}/transactions?fromDate=YYYY-MM-DD&toDate=YYYY-MM-DD) 
 ```
 
 This call allows locating all transactions within a date range. Date parameters support RFC3339 (ie 2006-01-02T15:04:05Z07:00).
-See [REST API Reference](../../reference/rest-apis/algod.md#get-v1accountaddresstransactions) for more details.
+See [REST API Reference](../../reference/rest-apis/algod/v1.md#get-v1accountaddresstransactions) for more details.
 
 To turn on indexing for a node, the `isIndexerActive` configuration parameter must be set to `true`. The [Node Configuration](../../reference/node/config.md) guide describes setting node configuration properties.
 
