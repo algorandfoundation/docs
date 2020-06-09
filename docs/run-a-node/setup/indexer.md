@@ -1,4 +1,4 @@
-title: Install the Indexer
+title: Install the Indexer 🆕
 
 # Indexer Mode V2
 [TO DO]

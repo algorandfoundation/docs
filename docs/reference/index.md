@@ -3,7 +3,9 @@ title: Section Index
 # Algorand Networks
 Find information about each of Algorand's public networks, including the genesis hash and ID, the current software version, and dispenser information for TestNet and BetaNet.
 
-[MainNet](./algorand-networks/mainnet.md) - [TestNet](./algorand-networks/testnet.md) - [BetaNet](./algorand-networks/betanet.md)
+[Overview](./algorand-networks/index.md) - Landing page with overview of the three networks.
+
+[MainNet](./algorand-networks/mainnet.md) - [TestNet](./algorand-networks/testnet.md) - [BetaNet](./algorand-networks/betanet.md) 🔷
 
 # Command Line Interface Tools (CLI Tools)
 List of available commands for three official Algorand CLIs that are included as part of node install packages.
@@ -18,13 +20,13 @@ Overview, installation guides, and documentation for the four Algorand SDKs. Als
 
 [JavaScript](./sdks.md#javascript) - [Python](./sdks.md#python) - [Java](./sdks.md#java) - [Go](./sdks.md#go) 
 
-[V2 Migration Guide](./sdks/migration.md)
+[V2 Migration Guide](./sdks/migration.md) 🔷 🆕
 
 # REST APIs
 
 List of available paths and models for **algod**, **kmd**, and **indexer**.
 
-[algod v2](./rest-apis/algod/v2.md) - [algod v1](./rest-apis/algod/v1.md) - [kmd](./rest-apis/kmd.md) - [indexer](./rest-apis/indexer.md)
+[algod v2](./rest-apis/algod/v2.md) 🔷 🆕 - [algod v1](./rest-apis/algod/v1.md) - [kmd](./rest-apis/kmd.md) - [indexer](./rest-apis/indexer.md) 🆕
 
 # Smart Contracts (TEAL)
 

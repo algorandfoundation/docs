@@ -49,6 +49,6 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 [Using the SDKS](./asc1/sdks.md) - Smart Contract functionality from within the SDKs.
 
 
-# Searching the Blockchain
+# Searching the Blockchain 🆕
 
 [Overview](./indexer.md) - How to use Indexer v2 functionality to efficiently query data on the blockchain.
