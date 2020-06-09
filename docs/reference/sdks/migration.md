@@ -1,4 +1,4 @@
-title: API V2 Migration Guide
+title: API V2 Migration Guide 🔷 🆕
 
 In June 2020, Algorand introduced the V2 API for `algod` and deprecated the V1 API. Both APIs remain functional to allow developers time to transition their application code to the fully supported V2 endpoints. Simultaneously, Algorand introduced `algorand-indexer` with only a V2 API. Use this guide to update your preferred SDK for V2 client support and then transition your application to use V2 clients for `algod` and `algorand-indexer` where applicable.
 
