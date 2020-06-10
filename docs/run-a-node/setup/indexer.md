@@ -18,7 +18,7 @@ To Install the new Indexer follow the instructions below. The Indexer binaries a
 ## Download the Indexer Binaries
 Download the Indexer binaries for specific operating system.
 
-* Linux binaries ([AMD64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM32](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm_2.0.0.tar.bz2))
+* Linux binaries ([AMD64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_amd64_2.0.0.tar.bz2), [ARM64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM32](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm_2.0.0.tar.bz2))
 * [Mac](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_darwin_amd64_2.0.0.tar.bz2) binaries.
   
 ## Extract the binaries to a specific directory
