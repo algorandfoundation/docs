@@ -21,13 +21,14 @@ Download the Indexer binaries for specific operating system.
 * Linux binaries ([AMD64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM32](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm_2.0.0.tar.bz2))
 * [Mac](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_darwin_amd64_2.0.0.tar.bz2) binaries.
   
-## Extract the binaries to a specific directory. 
+## Extract the binaries to a specific directory
 The binary can be placed in any directory you choose. In these instructions, an indexer folder is used which is located in the current user's home directory.
 
 ```bash
 $ mkdir ~/indexer
 $ cd /path/to/download-dir
 $ tar -xf <your-os-tarfile> -C ~/indexer
+$ cd ~/indexer/<tarfile-name>
 ```
 
 ## Run the Indexer
