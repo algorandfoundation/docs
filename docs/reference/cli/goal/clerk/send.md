@@ -62,6 +62,8 @@ goal clerk send [flags]
 
   -o, --out string                  Dump an unsigned tx to the given file. In order to dump a signed transaction, pass -s
 
+      --rekey-to string             Rekey account to the given authorization address. (Future transactions from this account will need to be signed with the new key.)
+
   -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
 
   -t, --to string                   Address to send to money to (required)

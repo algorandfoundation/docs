@@ -1,5 +1,7 @@
 title: Algorand Developer Docs
 
+Sections marked with 🔷 indicate a feature that is currently available on BetaNet only. Visit the [BetaNet What's New section](./reference/algorand-networks/betanet.md#whats-new) for more information.
+
 ## Application Developers
 
 <div class="homepage-cards">
@@ -12,14 +14,14 @@ title: Algorand Developer Docs
   </div>
   <div class="homepage-card">
     <span class="checklist-icon"></span>
-    <a href="./features/accounts/" class="card-title">Explore Features</a>
+    <a href="./features/" class="card-title">Explore Features</a>
     <div class="card-description">
     In-depth explanations and how-tos for core Algorand features.
     </div>
   </div>
   <div class="homepage-card">
     <span class="folder-file-icon"></span>
-    <a href="./reference/cli/goal/goal/" class="card-title">Reference Docs</a>
+    <a href="./reference/" class="card-title">Reference Docs</a>
     <div class="card-description">
     Learn commands and syntax for specific developer tools.
     </div>

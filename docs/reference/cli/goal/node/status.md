@@ -30,7 +30,9 @@ goal node status [flags]
 
 ```
 
-  -h, --help   help for status
+  -h, --help         help for status
+
+  -w, --watch uint   Time (in milliseconds) between two successive status updates
 
 ```
 

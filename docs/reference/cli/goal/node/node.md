@@ -61,7 +61,7 @@ goal node [flags]
 * [goal node lastround](../lastround/)	 - Print the last round number
 * [goal node pendingtxns](../pendingtxns/)	 - Get a snapshot of current pending transactions on this node
 * [goal node restart](../restart/)	 - Stop, and then start, the specified Algorand node.
-* [goal node start](../start/)	 - Init the specified Algorand node.
+* [goal node start](../start/)	 - Initialize the specified Algorand node.
 * [goal node status](../status/)	 - Get the current node status
 * [goal node stop](../stop/)	 - stop the specified Algorand node.
 * [goal node wait](../wait/)	 - Waits for the node to make progress
