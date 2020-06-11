@@ -1,4 +1,4 @@
-# SearchAssets.py
+# accounts_assetid.py
 import json
 # requires Python SDK version 1.3 or higher
 from algosdk.v2client import indexer
@@ -6,7 +6,7 @@ from algosdk.v2client import indexer
 # instantiate indexer client
 myindexer = indexer.IndexerClient(indexer_token="", indexer_address="http://localhost:8980")
 
-response = myindexer.search_assets(
-    asset_id=2044572)
+response = myindexer.accounts(
+    asset_id=312769)
+print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
 
-print("Asset Info: " + json.dumps(response, indent=2, sort_keys=True))

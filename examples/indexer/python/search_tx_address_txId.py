@@ -1,4 +1,4 @@
-# SearchTxAddresstxntype.py
+# search_tx_address_txId.py
 import json
 # requires Python SDK version 1.3 or higher
 from algosdk.v2client import indexer
@@ -7,8 +7,8 @@ from algosdk.v2client import indexer
 myindexer = indexer.IndexerClient(indexer_token="", indexer_address="http://localhost:8980")
 
 response = myindexer.search_transactions_by_address(
-    address="SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-    txn_type="acfg")
+    address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4",
+    txid="QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA")
 
-print("txn_type: acfg = " +
+print("txid: QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA = " +
       json.dumps(response, indent=2, sort_keys=True))

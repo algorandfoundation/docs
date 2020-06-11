@@ -1,4 +1,4 @@
-# SearchTxAddresssigtype.py
+# search_tx_address_sigtype.py
 import json
 # requires Python SDK version 1.3 or higher
 from algosdk.v2client import indexer
