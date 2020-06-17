@@ -1,5 +1,16 @@
 title: TestNet
 
+# What's New
+**algod v2** was deployed to TestNet on June 16, 2020. Visit the new docs to get started:
+
+- [Connect with the v2 Client](../../build-apps/connect.md)
+- [Your First Transaction](../../build-apps/hello_world.md)
+- [v2 SDK Migration Guide](../sdks/migration.md)
+- [v2 REST API](../rest-apis/algod/v2.md)
+- [Indexer V2 Feature Guide](../../features/indexer.md)
+- [Installing the Indexer](../../run-a-node/setup/indexer.md)
+- [Indexer REST API](../rest-apis/indexer.md)
+  
 # Version
 `v2.0.7.stable`
 
