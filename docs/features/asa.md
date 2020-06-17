@@ -10,6 +10,9 @@ With Algorand Standard Assets you can represent stablecoins, loyalty points, sys
 
 This section begins with an [overview](#assets-overview) of the asset implementation on Algorand including a review of all [asset parameters](#asset-parameters). This is followed by [how-tos](#asset-functions) in the SDKs and `goal` for all on-chain asset functions.
 
+!!! info
+    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+
 # Assets Overview
 
 Here are several things to be aware of before getting started with assets.
@@ -79,31 +82,54 @@ If any of these four addresses is set to `""` that address will be cleared and c
 Create assets using either the SDKs or `goal`. When using the SDKs supply all creation parameters. With `goal`, managing the various addresses associated with the asset must be done after executing an asset creation. See Modifying an Asset in the next section for more details on changing addresses for the asset.
 
 ``` javascript tab="JavaScript" 
-
-    let addr = recoveredAccount1.addr; 
+    let note = undefined; // arbitrary data to be stored in the transaction; here, none is stored
+    // Asset creation specific parameters
+    // The following parameters are asset specific
+    // Throughout the example these will be re-used. 
+    // We will also change the manager later in the example
+    let addr = recoveredAccount1.addr;
+    // Whether user accounts will need to be unfrozen before transacting    
     let defaultFrozen = false;
-    let totalIssuance = 100; 
-    let unitName = <unit-name>; 
-    let assetName = <asset-name>; 
-    let assetURL = "http://someurl"; 
-    let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d"; 
-    let manager = recoveredAccount2.addr; 
-    let reserve = recoveredAccount2.addr;
-    let freeze = recoveredAccount2.addr; 
-    let clawback = recoveredAccount2.addr; 
+    // integer number of decimals for asset unit calculation
     let decimals = 0;
+    // total number of this asset available for circulation   
+    let totalIssuance = 1000;
+    // Used to display asset units to user    
+    let unitName = "LATINUM";
+    // Friendly name of the asset    
+    let assetName = "latinum";
+    // Optional string pointing to a URL relating to the asset
+    let assetURL = "http://someurl";
+    // Optional hash commitment of some sort relating to the asset. 32 character length.
+    let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
+    // The following parameters are the only ones
+    // that can be changed, and they have to be changed
+    // by the current manager
+    // Specified address can change reserve, freeze, clawback, and manager
+    let manager = recoveredAccount2.addr;
+    // Specified address is considered the asset reserve
+    // (it has no special privileges, this is only informational)
+    let reserve = recoveredAccount2.addr;
+    // Specified address can freeze or unfreeze user asset holdings 
+    let freeze = recoveredAccount2.addr;
+    // Specified address can revoke user asset holdings and send 
+    // them to other addresses    
+    let clawback = recoveredAccount2.addr;
 
     // signing and sending "txn" allows "addr" to create an asset
-    let txn = algosdk.makeAssetCreateTxn(addr, cp.fee, cp.firstRound, cp.lastRound, note,
-        cp.genHash, cp.genID, totalIssuance, decimals, defaultFrozen, manager, reserve, freeze, clawback,
-        unitName, assetName, assetURL, assetMetadataHash);
+    let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(addr, note,
+         totalIssuance, decimals, defaultFrozen, manager, reserve, freeze,
+        clawback, unitName, assetName, assetURL, assetMetadataHash, params);
 
     let rawSignedTxn = txn.signTxn(recoveredAccount1.sk)
-    let tx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let tx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + tx.txId);
+    let assetID = null;
+    // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, tx.txId);
-    let ptx = await algodclient.pendingTransactionInformation(tx.txId);
-    let assetID = ptx.txresults.createdasset;
+    // Get the new asset's information from the creator account
+    let ptx = await algodclient.pendingTransactionInformation(tx.txId).do();
+    assetID = ptx["asset-index"];
 ```
 
 ``` python tab="Python"  
@@ -264,25 +290,24 @@ goal asset create --creator <address> --total 1000 --unitname <unit-name> --asse
 After an asset has been created only the manager, reserve, freeze and reserve accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
 
 ``` javascript tab="JavaScript"
-    // change the manager for the asset
+    // Asset configuration specific parameters
+    // all other values are the same so we leave 
+    // Them set.
+    // specified address can change reserve, freeze, clawback, and manager
     manager = recoveredAccount1.addr;
-
     // Note that the change has to come from the existing manager
-    let ctxn = algosdk.makeAssetConfigTxn(recoveredAccount2.addr, cp.fee, 
-        cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID,
-        assetID, manager, reserve, freeze, clawback);
-
+    let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(recoveredAccount2.addr, note, 
+        assetID, manager, reserve, freeze, clawback, params);
     // This transaction must be signed by the current manager
     rawSignedTxn = ctxn.signTxn(recoveredAccount2.sk)
-    let ctx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let ctx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + ctx.txId);
     // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, ctx.txId);
- 
-    //Get the asset information for the newly changed asset
-    let assetInfo = await algodclient.assetInformation(assetID);
-    //The manager should now be the same as the creator
-    console.log(assetInfo);  
+    // Get the asset information for the newly changed asset
+    // use indexer or utiltiy function for Account info
+    // The manager should now be the same as the creator
+    await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
 ```
 
 ``` python tab="Python"  
@@ -395,32 +420,35 @@ goal asset config  --manager <address> --new-reserve <address> --assetid <asset-
 Before an account can receive a specific asset it must opt-in to receive it. An opt-in transaction places an asset holding of 0 into the account increases its minimum balance by 100,000 microAlgos. An opt-in transaction is simply an asset transfer with an amount of 0, both to and from the account opting in. The following code illustrates this transaction.
 
 ``` javascript tab="JavaScript"  
-    // Opting in to an Asset:
-    // Transaction from and sender must be the same
+
+    // Opting in to transact with the new asset
+    // Allow accounts that want recieve the new asset
+    // Have to opt in. To do this they send an asset transfer
+    // of the new asset to themseleves 
+    // In this example we are setting up the 3rd recovered account to 
+    // receive the new asset
     let sender = recoveredAccount3.addr;
     let recipient = sender;
+    // We set revocationTarget to undefined as 
+    // This is not a clawback operation
     let revocationTarget = undefined;
+    // CloseReaminerTo is set to undefined as
+    // we are not closing out an asset
     let closeRemainderTo = undefined;
-    // We are sending 0 of new assets
+    // We are sending 0 assets
     amount = 0;
-
-    // update changing transaction parameters
-    await getChangingParms(algodclient);
-
-    // signing and sending "txn" allows sender to begin accepting asset specified by assetid
-    let opttxn = algosdk.makeAssetTransferTxn(sender, recipient, closeRemainderTo, revocationTarget,
-        cp.fee, amount, cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID, assetID);
-
+    // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
+    let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+         amount, note, assetID, params);
     // Must be signed by the account wishing to opt in to the asset    
     rawSignedTxn = opttxn.signTxn(recoveredAccount3.sk);
-    let opttx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let opttx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + opttx.txId);
     // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, opttx.txId);
-
-    // the new asset listed in the account information
-    act = await algodclient.accountInformation(recoveredAccount3.addr);
-    console.log("Account Information for: " + JSON.stringify(act.assets));
+    //You should now see the new asset listed in the account information
+    console.log("Account 3 = " + recoveredAccount3.addr);
+    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 ```
 
 ``` python tab="Python"  
@@ -542,31 +570,29 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 
 ``` javascript tab="JavaScript"  
     // Transfer New Asset:
+    // Now that account3 can recieve the new tokens 
+    // we can tranfer tokens in from the creator
+    // to account3
     sender = recoveredAccount1.addr;
     recipient = recoveredAccount3.addr;
     revocationTarget = undefined;
     closeRemainderTo = undefined;
-    // amount of the asset to transfer
+    //Amount of the asset to transfer
     amount = 10;
 
-    // update changing transaction parameters
-    await getChangingParms(algodclient);
-
-    // signing and sending "txn"
-    let xtxn = algosdk.makeAssetTransferTxn(sender, recipient, 
-        closeRemainderTo, revocationTarget,cp.fee, amount, 
-        cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID, assetID);
+    // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
+    let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+         amount,  note, assetID, params);
     // Must be signed by the account sending the asset  
     rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
-    let xtx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let xtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + xtx.txId);
-    
     // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, xtx.txId);
 
-    // 10 assets listed in the account information
-    act = await algodclient.accountInformation(recoveredAccount3.addr);
-    console.log("Account Information for: " + JSON.stringify(act.assets));
+    // You should now see the 10 assets listed in the account information
+    console.log("Account 3 = " + recoveredAccount3.addr);
+    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 ```
 
 ``` python tab="Python"  
@@ -676,29 +702,30 @@ goal asset send -a <asset-amount> --asset <asset-name> -f <asset-sender> -t <ass
 Freezing or unfreezing an asset for an account requires a transaction that is signed by the freeze account. The code below illustrates the freeze transaction.
 
 ``` javascript tab="JavaScript"  
-    // The asset was created and 
-    // configured to allow freezing an account
+    // The asset was created and configured to allow freezing an account
+    // If the freeze address is set "", it will no longer be possible to do this.
+    // In this example we will now freeze account3 from transacting with the 
+    // The newly created asset. 
+    // The freeze transaction is sent from the freeze acount
+    // Which in this example is account2 
     from = recoveredAccount2.addr;
     freezeTarget = recoveredAccount3.addr;
     freezeState = true;
 
-    // update changing transaction parameters
-    await getChangingParms(algodclient);
-
     // The freeze transaction needs to be signed by the freeze account
-    let ftxn = algosdk.makeAssetFreezeTxn(from, cp.fee, 
-        cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID,
-        assetID, freezeTarget, freezeState)
-  
+    let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(from, note,
+        assetID, freezeTarget, freezeState, params)
+
+    // Must be signed by the freeze account   
     rawSignedTxn = ftxn.signTxn(recoveredAccount2.sk)
-    let ftx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let ftx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + ftx.txId);
     // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, ftx.txId);
 
-    // the asset is frozen listed in the account information
-    act = await algodclient.accountInformation(recoveredAccount3.addr);
-    console.log("Account Information for: " + JSON.stringify(act.assets));
+    // You should now see the asset is frozen listed in the account information
+    console.log("Account 3 = " + recoveredAccount3.addr);
+    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 ```
 
 ``` python tab="Python"  
@@ -808,34 +835,36 @@ goal asset freeze --freezer <asset-freeze-account> --freeze=true --account <acco
 Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires specifying an asset sender (the revoke target account) and an asset receiver (the account to transfer the funds back to). The code below illustrates the clawback transaction.
 
 ``` javascript tab="JavaScript"  
-    // Revoke and Asset:
-    // sender must be clawback
-    sender = recoveredAccount2.addr;
+    // The asset was also created with the ability for it to be revoked by 
+    // the clawbackaddress. If the asset was created or configured by the manager
+    // to not allow this by setting the clawbackaddress to "" then this would 
+    // not be possible.
+    // We will now clawback the 10 assets in account3. account2
+    // is the clawbackaccount and must sign the transaction
+    // The sender will be be the clawback adress.
+    // the recipient will also be be the creator in this case
+    // that is account3
+       sender = recoveredAccount2.addr;
     recipient = recoveredAccount1.addr;
     revocationTarget = recoveredAccount3.addr;
     closeRemainderTo = undefined;
-    // amount of asset to revoke
     amount = 10;
-   
-    // update changing transaction parameters
-    await getChangingParms(algodclient);
-
-    // signing and sending from clawback address
-    let rtxn = algosdk.makeAssetTransferTxn(sender, 
-        recipient, closeRemainderTo, revocationTarget,
-        cp.fee, amount, cp.firstRound, cp.lastRound, 
-        note, cp.genHash, cp.genID, assetID);
+    // signing and sending "txn" will send "amount" assets from "revocationTarget" to "recipient",
+    // if and only if sender == clawback manager for this asset
+    
+    let rtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+       amount, note, assetID, params);
     // Must be signed by the account that is the clawback address    
     rawSignedTxn = rtxn.signTxn(recoveredAccount2.sk)
-    let rtx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let rtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + rtx.txId);
     // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, rtx.txId);
 
-    // 0 assets listed in the account information
-    console.log("Asset ID: " + assetID);
-    act = await algodclient.accountInformation(recoveredAccount3.addr);
-    console.log("Account Information for: " + JSON.stringify(act.assets));
+    // You should now see 0 assets listed in the account information
+    // for the third account
+    console.log("Account 3 = " + recoveredAccount3.addr);
+    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 ```
 
 ``` python tab="Python"  
@@ -953,32 +982,31 @@ goal asset send -a <amount-to-revoke> --asset <asset-name> -f <address-of-revoke
 Created assets can be destroyed only by the asset manager account. All of the assets must be owned by the creator of the asset before the asset can be deleted. 
 
 ``` javascript tab="JavaScript"  
-    // Destroy and Asset:
     // All of the created assets should now be back in the creators
     // Account so we can delete the asset.
-    await getChangingParms(algodclient);
-
-
-    // The address for the from field 
-    // must be the manager account
+    // If this is not the case the asset deletion will fail
+   // The address for the from field must be the manager account
+    // Which is currently the creator addr1
     addr = recoveredAccount1.addr;
-
+    note = undefined;
     // if all assets are held by the asset creator,
-    // the asset creator can sign and issue "txn" 
-    // to remove the asset from the ledger. 
-    let dtxn = algosdk.makeAssetDestroyTxn(addr, cp.fee,
-         cp.firstRound, cp.lastRound, note, cp.genHash,
-        cp.genID, assetID);
-    // The transaction must be signed by the manager
+    // the asset creator can sign and issue "txn" to remove the asset from the ledger. 
+    let dtxn = algosdk.makeAssetDestroyTxnWithSuggestedParams(addr, note, assetID, params);
+    // The transaction must be signed by the manager which 
+    // is currently set to account1
     rawSignedTxn = dtxn.signTxn(recoveredAccount1.sk)
-    let dtx = (await algodclient.sendRawTransaction(rawSignedTxn));
+    let dtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
     console.log("Transaction : " + dtx.txId);
     // wait for transaction to be confirmed
     await waitForConfirmation(algodclient, dtx.txId);
 
-    // asset is not shown in account information    
-    act = await algodclient.accountInformation(recoveredAccount3.addr);
-    console.log("Account Information for: " + JSON.stringify(act.assets));
+    // The account3 and account1 should no longer contain the asset as it has been destroyed
+    console.log("Asset ID: " + assetID);
+    console.log("Account 1 = " + recoveredAccount1.addr);
+    await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
+    await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
+    console.log("Account 3 = " + recoveredAccount3.addr);
+    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID); 
 ```
 
 ``` python tab="Python"  
@@ -1095,9 +1123,45 @@ goal asset destroy --creator <creator-address> --manager <asset-manager-address>
 Retrieve an asset's configuration information from the network using the SDKs or `goal`. Additional details are also added to the accounts that own the specific asset and can be listed with standard account information calls.
 
 ``` javascript tab="JavaScript"
-    //Get the asset information for anasset
-    let assetInfo = await algodclient.assetInformation(assetID);
-    console.log(assetInfo);
+// Function used to print created asset for account and assetid
+const printCreatedAsset = async function (algodclient, account, assetid) {
+    // note: if you have an indexer instance available it is easier to just use this
+    //     let accountInfo = await indexerClient.searchAccounts()
+    //    .assetID(assetIndex).do();
+    // and in the loop below use this to extract the asset for a particular account
+    // accountInfo['accounts'][idx][account]);
+    let accountInfo = await algodclient.accountInformation(account).do();
+    for (idx = 0; idx < accountInfo['created-assets'].length; idx++) {
+        let scrutinizedAsset = accountInfo['created-assets'][idx];
+        if (scrutinizedAsset['index'] == assetid) {
+            console.log("AssetID = " + scrutinizedAsset['index']);
+            let myparms = JSON.stringify(scrutinizedAsset['params'], undefined, 2);
+            console.log("parms = " + myparms);
+            break;
+        }
+    }
+};
+// Function used to print asset holding for account and assetid
+const printAssetHolding = async function (algodclient, account, assetid) {
+    // note: if you have an indexer instance available it is easier to just use this
+    //     let accountInfo = await indexerClient.searchAccounts()
+    //    .assetID(assetIndex).do();
+    // and in the loop below use this to extract the asset for a particular account
+    // accountInfo['accounts'][idx][account]);
+    let accountInfo = await algodclient.accountInformation(account).do();
+    for (idx = 0; idx < accountInfo['assets'].length; idx++) {
+        let scrutinizedAsset = accountInfo['assets'][idx];
+        if (scrutinizedAsset['asset-id'] == assetid) {
+            let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+            console.log("assetholdinginfo = " + myassetholding);
+            break;
+        }
+    }
+};
+...
+    await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
+    await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
+
 ```
 
 ```python tab="Python"
@@ -1141,47 +1205,81 @@ Clawback address: <clawback-address>
     
     ```javascript tab="JavaScript"
     const algosdk = require('algosdk');
+    // Retrieve the token, server and port values for your installation in the 
+    // algod.net and algod.token files within the data directory
 
-    //Retrieve the token, server and port values for your installation in the algod.net
-    //and algod.token files within the data directory
-    const token = <algod-token>;
-    const server = <algod-address>;
-    const port = <port-number>;
+    // UPDATE THESE VALUES
+    // const token = "TOKEN";
+    // const server = "SERVER";
+    // const port = PORT;
 
-    // Structure for changing blockchain params
-    var cp = {
-        fee: 0, 
-        firstRound: 0,  
-        lastRound: 0, 
-        genID: "",
-        genHash: ""    
-    }
-    //Utility function to update params from blockchain
-    var getChangingParms = async function( algodclient ) {
-        let params = await algodclient.getTransactionParams();
-        cp.firstRound = params.lastRound;
-        cp.lastRound = cp.firstRound + parseInt(1000);
-        let sfee = await algodclient.suggestedFee();
-        cp.fee = sfee.fee;
-        cp.genID = params.genesisID;
-        cp.genHash = params.genesishashb64;
-    }
+    // sandbox
+    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    const server = "http://localhost";
+    const port = 4001;
+
+
     // Function used to wait for a tx confirmation
-    var waitForConfirmation = async function(algodclient, txId) {
+    const waitForConfirmation = async function (algodclient, txId) {
+        let response = await algodclient.status().do();
+        let lastround = response["last-round"];
         while (true) {
-            b3 = await algodclient.pendingTransactionInformation(txId);
-            if (b3.round != null && b3.round > 0) {
+            const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+            if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
                 //Got the completed Transaction
-                console.log("Transaction " + b3.tx + " confirmed in round " + b3.round);
+                console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+                break;
+            }
+            lastround++;
+            await algodclient.statusAfterBlock(lastround).do();
+        }
+    };
+
+
+    // Function used to print created asset for account and assetid
+    const printCreatedAsset = async function (algodclient, account, assetid) {
+        // note: if you have an indexer instance available it is easier to just use this
+        //     let accountInfo = await indexerClient.searchAccounts()
+        //    .assetID(assetIndex).do();
+        // and in the loop below use this to extract the asset for a particular account
+        // accountInfo['accounts'][idx][account]);
+        let accountInfo = await algodclient.accountInformation(account).do();
+        for (idx = 0; idx < accountInfo['created-assets'].length; idx++) {
+            let scrutinizedAsset = accountInfo['created-assets'][idx];
+            if (scrutinizedAsset['index'] == assetid) {
+                console.log("AssetID = " + scrutinizedAsset['index']);
+                let myparms = JSON.stringify(scrutinizedAsset['params'], undefined, 2);
+                console.log("parms = " + myparms);
+                break;
+            }
+        }
+    };
+    // Function used to print asset holding for account and assetid
+    const printAssetHolding = async function (algodclient, account, assetid) {
+        // note: if you have an indexer instance available it is easier to just use this
+        //     let accountInfo = await indexerClient.searchAccounts()
+        //    .assetID(assetIndex).do();
+        // and in the loop below use this to extract the asset for a particular account
+        // accountInfo['accounts'][idx][account]);
+        let accountInfo = await algodclient.accountInformation(account).do();
+        for (idx = 0; idx < accountInfo['assets'].length; idx++) {
+            let scrutinizedAsset = accountInfo['assets'][idx];
+            if (scrutinizedAsset['asset-id'] == assetid) {
+                let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+                console.log("assetholdinginfo = " + myassetholding);
                 break;
             }
         }
     };
 
-    //Recover accounts used in example
-    var account1_mnemonic =<your-25-word-mnemonic>;    
-    var account2_mnemonic =<your-25-word-mnemonic>;    
-    var account3_mnemonic =<your-25-word-mnemonic>;
+
+    // Recover accounts
+    // paste in mnemonic phrases here for each account
+
+    var account1_mnemonic = "<25-word-passphrase>";
+    var account2_mnemonic = "<25-word-passphrase>";
+    var account3_mnemonic = "<25-word-passphrase>";
+
     var recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
     var recoveredAccount2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
     var recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
@@ -1189,209 +1287,318 @@ Clawback address: <clawback-address>
     console.log(recoveredAccount2.addr);
     console.log(recoveredAccount3.addr);
 
+    // Instantiate the algod wrapper
 
-    //instantiate the algod wrapper
-    let algodclient = new algosdk.Algod(token, server, port);
-    //submit the transaction
-    (async() => {
-        
+        let algodclient = new algosdk.Algodv2(token, server, port);
+
+
+    (async () => {
         // Asset Creation:
-        await getChangingParms(algodclient);
-        let note = undefined; 
+        // The first transaciton is to create a new asset
+        // These parameters will be required before every 
+        // Transaction
+        // We will account for changing transaction parameters
+        // before every transaction in this example
+        let params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
+        console.log(params);
+        let note = undefined; // arbitrary data to be stored in the transaction; here, none is stored
 
-        // create the asset
-        let addr = recoveredAccount1.addr; 
+        // Asset creation specific parameters
+        // The following parameters are asset specific
+        // Throughout the example these will be re-used. 
+        // We will also change the manager later in the example
+        let addr = recoveredAccount1.addr;
+        // Whether user accounts will need to be unfrozen before transacting    
         let defaultFrozen = false;
-        let totalIssuance = 100; 
-        let unitName = <unit-name>; 
-        let assetName = <asset-name>; 
-        let assetURL = "http://someurl"; 
-        let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d"; 
-        let manager = recoveredAccount2.addr; 
-        let reserve = recoveredAccount2.addr;
-        let freeze = recoveredAccount2.addr; 
-        let clawback = recoveredAccount2.addr; 
+        // integer number of decimals for asset unit calculation
         let decimals = 0;
+        // total number of this asset available for circulation   
+        let totalIssuance = 1000;
+        // Used to display asset units to user    
+        let unitName = "LATINUM";
+        // Friendly name of the asset    
+        let assetName = "latinum";
+        // Optional string pointing to a URL relating to the asset
+        let assetURL = "http://someurl";
+        // Optional hash commitment of some sort relating to the asset. 32 character length.
+        let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
+        // The following parameters are the only ones
+        // that can be changed, and they have to be changed
+        // by the current manager
+        // Specified address can change reserve, freeze, clawback, and manager
+        let manager = recoveredAccount2.addr;
+        // Specified address is considered the asset reserve
+        // (it has no special privileges, this is only informational)
+        let reserve = recoveredAccount2.addr;
+        // Specified address can freeze or unfreeze user asset holdings 
+        let freeze = recoveredAccount2.addr;
+        // Specified address can revoke user asset holdings and send 
+        // them to other addresses    
+        let clawback = recoveredAccount2.addr;
 
         // signing and sending "txn" allows "addr" to create an asset
-        let txn = algosdk.makeAssetCreateTxn(addr, cp.fee, cp.firstRound, cp.lastRound, note,
-            cp.genHash, cp.genID, totalIssuance, decimals, defaultFrozen, manager, reserve, freeze, clawback,
-            unitName, assetName, assetURL, assetMetadataHash);
+        let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(addr, note,
+            totalIssuance, decimals, defaultFrozen, manager, reserve, freeze,
+            clawback, unitName, assetName, assetURL, assetMetadataHash, params);
 
         let rawSignedTxn = txn.signTxn(recoveredAccount1.sk)
-        let tx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let tx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + tx.txId);
-
-        // wait for transaction to be confirmed and get the assetid
+        let assetID = null;
+        // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, tx.txId);
-        let ptx = await algodclient.pendingTransactionInformation(tx.txId);
-        console.log( ptx.txresults.createdasset );
-        let assetID = ptx.txresults.createdasset;
-
+        // Get the new asset's information from the creator account
+        let ptx = await algodclient.pendingTransactionInformation(tx.txId).do();
+        assetID = ptx["asset-index"];
+        // console.log("AssetID = " + assetID);
+        
+        await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
+        await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
 
         // Change Asset Configuration:
-        // update network parameters
-        await getChangingParms(algodclient);
+        // Change the manager using an asset configuration transaction
 
+        // First update changing transaction parameters
+        // We will account for changing transaction parameters
+        // before every transaction in this example
+        
+        params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
         // Asset configuration specific parameters
-        // change the manager for the asset
+        // all other values are the same so we leave 
+        // Them set.
+        // specified address can change reserve, freeze, clawback, and manager
         manager = recoveredAccount1.addr;
 
         // Note that the change has to come from the existing manager
-        let ctxn = algosdk.makeAssetConfigTxn(recoveredAccount2.addr, cp.fee, 
-            cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID,
-            assetID, manager, reserve, freeze, clawback);
+        let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(recoveredAccount2.addr, note, 
+            assetID, manager, reserve, freeze, clawback, params);
 
         // This transaction must be signed by the current manager
         rawSignedTxn = ctxn.signTxn(recoveredAccount2.sk)
-        let ctx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let ctx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + ctx.txId);
         // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, ctx.txId);
+
+        // Get the asset information for the newly changed asset
+        // use indexer or utiltiy function for Account info
     
-        //Get the asset information for the newly changed asset
-        let assetInfo = await algodclient.assetInformation(assetID);
-        console.log(assetInfo);
+        // The manager should now be the same as the creator
+        await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
+    
 
         // Opting in to an Asset:
-        // Transaction from and sender must be the same
+        // Opting in to transact with the new asset
+        // Allow accounts that want recieve the new asset
+        // Have to opt in. To do this they send an asset transfer
+        // of the new asset to themseleves 
+        // In this example we are setting up the 3rd recovered account to 
+        // receive the new asset
         let sender = recoveredAccount3.addr;
         let recipient = sender;
+        // We set revocationTarget to undefined as 
+        // This is not a clawback operation
         let revocationTarget = undefined;
+        // CloseReaminerTo is set to undefined as
+        // we are not closing out an asset
         let closeRemainderTo = undefined;
-        // We are sending 0 of new assets
+        // We are sending 0 assets
         amount = 0;
 
-        // update changing transaction parameters
-        await getChangingParms(algodclient);
-
-        // signing and sending "txn" allows sender to begin accepting asset specified by assetid
-        let opttxn = algosdk.makeAssetTransferTxn(sender, recipient, closeRemainderTo, revocationTarget,
-            cp.fee, amount, cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID, assetID);
+        // First update changing transaction parameters
+        // We will account for changing transaction parameters
+        // before every transaction in this example
+        params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
+        // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
+        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+            amount, note, assetID, params);
 
         // Must be signed by the account wishing to opt in to the asset    
         rawSignedTxn = opttxn.signTxn(recoveredAccount3.sk);
-        let opttx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let opttx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + opttx.txId);
         // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, opttx.txId);
 
-        // the new asset listed in the account information
-        act = await algodclient.accountInformation(recoveredAccount3.addr);
-        console.log("Account Information for: " + JSON.stringify(act.assets));
+        //You should now see the new asset listed in the account information
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
         // Transfer New Asset:
+        // Now that account3 can recieve the new tokens 
+        // we can tranfer tokens in from the creator
+        // to account3
+
         sender = recoveredAccount1.addr;
         recipient = recoveredAccount3.addr;
         revocationTarget = undefined;
         closeRemainderTo = undefined;
-        // amount of the asset to transfer
+        //Amount of the asset to transfer
         amount = 10;
 
-        // update changing transaction parameters
-        await getChangingParms(algodclient);
+        // First update changing transaction parameters
+        // We will account for changing transaction parameters
+        // before every transaction in this example
 
+        params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
         // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
-        let xtxn = algosdk.makeAssetTransferTxn(sender, recipient, 
-            closeRemainderTo, revocationTarget,cp.fee, amount, 
-            cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID, assetID);
+        let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+            amount,  note, assetID, params);
         // Must be signed by the account sending the asset  
         rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
-        let xtx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let xtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + xtx.txId);
-        
         // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, xtx.txId);
 
-        // 10 assets listed in the account information
-        act = await algodclient.accountInformation(recoveredAccount3.addr);
-        console.log("Account Information for: " + JSON.stringify(act.assets));
+        // You should now see the 10 assets listed in the account information
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
-        // The asset was created and 
-        // configured to allow freezing an account
+
+        // freeze asset
+
+        // The asset was created and configured to allow freezing an account
+        // If the freeze address is set "", it will no longer be possible to do this.
+        // In this example we will now freeze account3 from transacting with the 
+        // The newly created asset. 
+        // The freeze transaction is sent from the freeze acount
+        // Which in this example is account2 
         from = recoveredAccount2.addr;
         freezeTarget = recoveredAccount3.addr;
         freezeState = true;
 
-        // update changing transaction parameters
-        await getChangingParms(algodclient);
+        // First update changing transaction parameters
+        // We will account for changing transaction parameters
+        // before every transaction in this example
+        // await getChangingParms(algodclient);
+        params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
 
         // The freeze transaction needs to be signed by the freeze account
-        let ftxn = algosdk.makeAssetFreezeTxn(from, cp.fee, 
-            cp.firstRound, cp.lastRound, note, cp.genHash, cp.genID,
-            assetID, freezeTarget, freezeState)
-    
+        let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(from, note,
+            assetID, freezeTarget, freezeState, params)
+
+        // Must be signed by the freeze account   
         rawSignedTxn = ftxn.signTxn(recoveredAccount2.sk)
-        let ftx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let ftx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + ftx.txId);
         // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, ftx.txId);
 
-        // the asset is frozen listed in the account information
-        act = await algodclient.accountInformation(recoveredAccount3.addr);
-        console.log("Account Information for: " + JSON.stringify(act.assets));
+        // You should now see the asset is frozen listed in the account information
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
-        // Revoke and Asset:
-        // sender must be clawback
+        // Revoke an Asset:
+        // The asset was also created with the ability for it to be revoked by 
+        // the clawbackaddress. If the asset was created or configured by the manager
+        // to not allow this by setting the clawbackaddress to "" then this would 
+        // not be possible.
+        // We will now clawback the 10 assets in account3. account2
+        // is the clawbackaccount and must sign the transaction
+        // The sender will be be the clawback adress.
+        // the recipient will also be be the creator in this case
+        // that is account3
+
         sender = recoveredAccount2.addr;
         recipient = recoveredAccount1.addr;
         revocationTarget = recoveredAccount3.addr;
         closeRemainderTo = undefined;
-        // amount of asset to revoke
         amount = 10;
-    
-        // update changing transaction parameters
-        await getChangingParms(algodclient);
 
-        // signing and sending from clawback address
-        let rtxn = algosdk.makeAssetTransferTxn(sender, 
-            recipient, closeRemainderTo, revocationTarget,
-            cp.fee, amount, cp.firstRound, cp.lastRound, 
-            note, cp.genHash, cp.genID, assetID);
+        // First update changing transaction parameters
+        // We will account for changing transaction parameters
+        // before every transaction in this example
+        params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
+        // signing and sending "txn" will send "amount" assets from "revocationTarget" to "recipient",
+        // if and only if sender == clawback manager for this asset
+        
+
+        let rtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+        amount, note, assetID, params);
         // Must be signed by the account that is the clawback address    
         rawSignedTxn = rtxn.signTxn(recoveredAccount2.sk)
-        let rtx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let rtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + rtx.txId);
         // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, rtx.txId);
 
-        // 0 assets listed in the account information
-        console.log("Asset ID: " + assetID);
-        act = await algodclient.accountInformation(recoveredAccount3.addr);
-        console.log("Account Information for: " + JSON.stringify(act.assets));
+        // You should now see 0 assets listed in the account information
+        // for the third account
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
+    
 
         // Destroy and Asset:
         // All of the created assets should now be back in the creators
         // Account so we can delete the asset.
-        await getChangingParms(algodclient);
+        // If this is not the case the asset deletion will fail
 
+        // First update changing transaction parameters
+        // We will account for changing transaction parameters
+        // before every transaction in this example
 
-        // The address for the from field 
-        // must be the manager account
+        params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
+
+        // The address for the from field must be the manager account
+        // Which is currently the creator addr1
         addr = recoveredAccount1.addr;
-
+        note = undefined;
         // if all assets are held by the asset creator,
-        // the asset creator can sign and issue "txn" 
-        // to remove the asset from the ledger. 
-        let dtxn = algosdk.makeAssetDestroyTxn(addr, cp.fee,
-            cp.firstRound, cp.lastRound, note, cp.genHash,
-            cp.genID, assetID);
-        // The transaction must be signed by the manager
+        // the asset creator can sign and issue "txn" to remove the asset from the ledger. 
+        let dtxn = algosdk.makeAssetDestroyTxnWithSuggestedParams(addr, note, assetID, params);
+        // The transaction must be signed by the manager which 
+        // is currently set to account1
         rawSignedTxn = dtxn.signTxn(recoveredAccount1.sk)
-        let dtx = (await algodclient.sendRawTransaction(rawSignedTxn));
+        let dtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + dtx.txId);
         // wait for transaction to be confirmed
         await waitForConfirmation(algodclient, dtx.txId);
 
-        // asset is not shown in account information    
-        act = await algodclient.accountInformation(recoveredAccount3.addr);
-        console.log("Account Information for: " + JSON.stringify(act.assets));
+        // The account3 and account1 should no longer contain the asset as it has been destroyed
+        console.log("Asset ID: " + assetID);
+        console.log("Account 1 = " + recoveredAccount1.addr);
+        await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
+        await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);  
+
+        
+        // Notice that although the asset was destroyed, the asset id and associated 
+        // metadata still exists in account holdings for Account 3. 
+        // When you destroy an asset, the global parameters associated with that asset
+        // (manager addresses, name, etc.) are deleted from the creator's balance record (Account 1).
+        // However, holdings are not deleted automatically -- users still need to close out of the deleted asset.
+        // This is necessary for technical reasons because we currently can't have a single transaction touch potentially 
+        // thousands of accounts (all the holdings that would need to be deleted).
 
 
     })().catch(e => {
         console.log(e);
         console.trace();
     });
+
     ```
 
     ```python tab="Python"
