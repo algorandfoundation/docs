@@ -5,12 +5,22 @@ This section is a getting started guide for developers looking to build applicat
 # What does it mean to build on Algorand?
 Building an application on Algorand means that your application, directly or indirectly, reads from or writes to the Algorand blockchain. Writing to the Algorand blockchain is synonymous with issuing a transaction that will later be confirmed within a block. Reading from the blockchain means reading back transactions that have been confirmed within prior blocks.
 
-A program connects to the Algorand blockchain through an **algod** client. The algod client requires a valid **algod REST endpoint IP address** and **algod token** from an Algorand node that is connected to the network you plan to interact with. 
+The following is a brief primer on some terms and relationships of the components that comprise the Algorand development environment. Figure 1. below illustrates these components and how they fit together. 
+
+![Figure 1. Algorand Developer Environment](../imgs/algo_dev_stack.png "Algorand Development Environment")
+
+The Algorand blockchain is a distributed system of **nodes** each maintaining their **local state** based on validating the history of blocks and the transactions therein. State data is maintained by the consensus protocol which is implemented within the `algod` daemon, often referred to as the node software. As a developer, this is most likely the base layer for your applications.
+
+An application connects to the Algorand blockchain through an **algod** client. The algod client requires a valid **algod REST endpoint IP address** and **algod token** from an Algorand node that is connected to the network you plan to interact with. 
 
 # Available tools
-Algorand officially supports four SDKs for developing applications on Algorand: [Javascript](../reference/sdks/index.md#javascript), [Java](../reference/sdks/index.md#java), [Python](../reference/sdks/index.md#python), and [Go](../reference/sdks/index.md#go). 
+## Software Development Kits (SDK)
 
-There are also three command-line utilities packaged with Algorand node software: [`goal`](../reference/cli/goal/goal.md), [`kmd`](../reference/cli/kmd.md), and [`algokey`](../reference/cli/algokey/algokey.md).
+Algorand officially supports four SDKs for developing applications: [Javascript](../reference/sdks/index.md#javascript), [Java](../reference/sdks/index.md#java), [Python](../reference/sdks/index.md#python), and [Go](../reference/sdks/index.md#go). Additionally, [Community Provided SDKs](./community/#sdks) expand the development reach. 
+
+## Command Line Interface (CLI) Tools 
+
+Algorand provides three command-line utilities packaged with Algorand node software: [`goal`](../reference/cli/goal/goal.md), [`kmd`](../reference/cli/kmd.md), and [`algokey`](../reference/cli/algokey/algokey.md).
 
 `goal` is the primary tool for operating a node and it also contains functionality to manage keys, sign and send transactions, create assets, and perform many of the same or similar functions that are available in the SDKs. Although not required to build an application, developers who run nodes may find it useful to achieve some level of fluency in `goal` as a complementary tool during testing and validation. `goal` _is_ required to setup more advanced testing environments using private networks.
 
@@ -18,14 +28,18 @@ There are also three command-line utilities packaged with Algorand node software
 
 There are also REST APIs available for both **algod** and **kmd** processes.
 
+## Indexer
+
+Algorand provides a standalone daemon [algorand-indexer](../features/indexer.md) that reads committed blocks from the Algorand blockchain and maintains a local database of transactions and accounts that are searchable and indexed. A [REST API](../reference/rest-apis/indexer.md) is available which enables application developers to perform rich and efficient queries on accounts, transactions, assets, and so forth.
+
 # Choosing a network
-There are three **public** Algorand Networks paired with the functionality to create **private** networks using any protocol version. 
+There are three **public** [Algorand Networks](../reference/algorand-networks/index.md) paired with the functionality to [create **private** networks](https://developer.algorand.org/tutorials/create-private-network/) using any protocol version. 
 
 [**MainNet**](../reference/algorand-networks/mainnet.md) is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. [**TestNet**](../reference/algorand-networks/testnet.md) mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  [**BetaNet**](../reference/algorand-networks/betanet.md) is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common.
 
  
 ## Recommended Use
-If your application depends on features currently available on MainNet, use TestNet as your public testing network. If your application depends on features only available on BetaNet, use BetaNet as your public testing network. In all cases, use private networks, as needed, for greater control and isolation of your development environment.
+If your application depends on features currently available on MainNet, use TestNet as your public testing network. If your application depends on features only available on BetaNet, use BetaNet as your public testing network. In all cases, use private networks, as needed, for greater control and isolation of your development environment. Learn more about feature availability on each of the networks in the [Network Reference](../reference/algorand-networks/index.md) section. Sections in these docs marked with 🔷 indicate a feature available on BetaNet only.
 
 If you are not sure which network to start with, TestNet is usually a good option as it allows you to develop against live features without risking real assets. Switching networks later will be trivial.
 

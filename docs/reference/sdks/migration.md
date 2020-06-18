@@ -1,4 +1,4 @@
-title: API V2 Migration Guide 🔷 🆕
+title: API V2 Migration Guide 🆕
 
 In June 2020, Algorand introduced the V2 API for `algod` and deprecated the V1 API. Both APIs remain functional to allow developers time to transition their application code to the fully supported V2 endpoints. Simultaneously, Algorand introduced `algorand-indexer` with only a V2 API. Use this guide to update your preferred SDK for V2 client support and then transition your application to use V2 clients for `algod` and `algorand-indexer` where applicable.
 
@@ -49,21 +49,6 @@ npm list algosdk
             ```
         </td>
     </tr>
-    <!--tr>
-        <td>
-            kmd
-        </td>
-        <td>
-            ```javascript
-            const algosdk = require('algosdk');
-            ```
-        </td>
-        <td>
-            ```javascript
-            // not implemented, continue using V1
-            ```
-        </td>
-    </tr-->
     <tr>
         <td>
             indexer
@@ -97,16 +82,6 @@ npm list algosdk
             ```
         </td>
     </tr>
-    <!--tr>
-        <td>
-            kmd
-        </td>
-        <td>
-            ```javascript
-            let kmdClient = new algosdk.Kmd(kmd_token, kmd_server, kmd_port);
-            ```
-        </td>
-    </tr-->
     <tr>
         <td>
             indexer
@@ -118,6 +93,9 @@ npm list algosdk
         </td>
     </tr>
 </table>
+
+!!! info
+    The JavaScript SDK V2 clients implements a new pattern when calling REST methods. Each will append `.do()` to the method call. Example: `let status = (await algodclient.status().do());`
 
 ## Python
 
@@ -159,21 +137,6 @@ pip3 list | grep "py-algorand-sdk"
             ```
         </td>
     </tr>
-    <!--tr>
-        <td>
-            kmd
-        </td>
-        <td>
-            ```python
-            from algosdk import kmd # unchanged
-            ```
-        </td>
-        <td>
-            ```python
-            # not implemented, use V1
-            ```
-        </td>
-    </tr-->
     <tr>
         <td>
             indexer
@@ -227,7 +190,7 @@ Maven:
 <dependency>
     <groupId>com.algorand</groupId>
     <artifactId>algosdk</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
 </dependency>
 ```
 ### Supported Clients by Version
@@ -235,7 +198,7 @@ Maven:
 | SDK Version | Supported V1 APIs | Supported V2 APIs |
 | ----------- | -------------------- | -------------------- |
 | thru java-algorand-sdk 1.3.1 | `algod`, `kmd`       | n/a                  |
-| from java-algorand-sdk 1.4.0 | `kmd`                | `algod`, `algorand-indexer` |
+| from java-algorand-sdk 1.4.1 | `kmd`                | `algod`, `algorand-indexer` |
 
 
 ### Supported Library Imports
@@ -251,37 +214,16 @@ Maven:
         </td>
         <td>
             ```java
-           :
             import com.algorand.algosdk.algod.client.AlgodClient;
-            import com.algorand.algosdk.algod.client.ApiException;
-            import com.algorand.algosdk.algod.client.api.AlgodApi;
+            import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
             ```
         </td>
         <td>
             ```java
-           :
             import com.algorand.algosdk.v2.client.common.AlgodClient;
             ```
         </td>
     </tr>
-    <!--tr>
-        <td>
-            kmd
-        </td>
-        <td>
-            ```java
-           :
-            import com.algorand.algosdk.kmd.client.KmdClient;
-            import com.algorand.algosdk.kmd.client.ApiException;
-            import com.algorand.algosdk.kmd.client.api.KmdApi;
-            ```
-        </td>
-        <td>
-            ```java
-            // not implemented, use V1
-            ```
-        </td>
-    </tr-->
     <tr>
         <td>
             indexer
@@ -293,8 +235,7 @@ Maven:
         </td>
         <td>
             ```java
-            // new:
-            import com.algorand.algosdk.v2.client.common.IndexerClient;
+            import com.algorand.algosdk.v2.client.common.IndexerClient; // new
             ```
         </td>
     </tr>
@@ -312,7 +253,7 @@ Maven:
         </td>
         <td>
             ```java
-            let algodClient = new algosdk.Algodv2(algod_token, algod_server, algod_port);
+            AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
             ```
         </td>
     </tr>
@@ -322,11 +263,14 @@ Maven:
         </td>
         <td>
             ```java
-            let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port); // new
+            IndexerClient indexerClient = (AlgodClient) new IndexerClient(INDEXER_API_ADDR, INDEXER_PORT);
             ```
         </td>
     </tr>
 </table>
+
+!!! info
+    The Java SDK V2 clients implements a new pattern when calling REST methods. Each will append `.execute()` to the method call. Example: `Long lastRound = client.GetStatus().execute().body().lastRound;`
 
 ## Go
 
@@ -341,7 +285,7 @@ make build
 | SDK Version | Supported V1 APIs | Supported V2 APIs |
 | ----------- | -------------------- | -------------------- |
 | thru go-algorand-sdk 1.3.0 | `algod`, `kmd`       | n/a                  |
-| from go-algorand-sdk 1.4.0 | `kmd`                | `algod`, `algorand-indexer` |
+| from go-algorand-sdk 1.4.2 | `kmd`                | `algod`, `algorand-indexer` |
 
 
 ### Supported Library Imports
@@ -370,23 +314,6 @@ make build
             ```
         </td>
     </tr>
-    <!--tr>
-        <td>
-            kmd
-        </td>
-        <td>
-            ```go
-            import ( 
-                "github.com/algorand/go-algorand-sdk/client/kmd" 
-            )
-            ```
-        </td>
-        <td>
-            ```go
-            // not implemented, use V1
-            ```
-        </td>
-    </tr-->
     <tr>
         <td>
             indexer
@@ -433,6 +360,9 @@ make build
         </td>
     </tr>
 </table>
+
+!!! info
+    The Go SDK V2 clients implements a new pattern when calling REST methods. Each will append `.Do(context.Background())` to the method call. Example: `status, err := client.Status().Do(context.Background())`
 
 # kmd Client Instantiations<a name="kmd-instantiations"></a>
 <table>

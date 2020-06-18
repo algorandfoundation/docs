@@ -1,16 +1,16 @@
 title: Install the Indexer 🆕
 
-The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgeSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the REST APIs for searching the database and another Indexer to be responsible for loading the ledger data.
+The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgeSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../reference/rest-apis/indexer.md) for searching the database and another Indexer to be responsible for loading the ledger data.
 
 
 The V2 Indexer is network agnostic, meaning it can point at BetaNet, TestNet, or MainNet. 
 
 The source code for the Indexer is provided on [github](https://github.com/algorand/indexer).
 
-For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide. See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
+For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide and the [REST API Indexer reference](../../reference/rest-apis/indexer.md). See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
 
 # Indexer V2
-To Install the new follow the instructions below. The Indexer binaries are available on [github](https://github.com/algorand/indexer/releases).
+To Install the new Indexer follow the instructions below. The Indexer binaries are available on [github](https://github.com/algorand/indexer/releases).
 
 !!! info
     Additional install methods will be available in the near future.
@@ -18,16 +18,17 @@ To Install the new follow the instructions below. The Indexer binaries are avail
 ## Download the Indexer Binaries
 Download the Indexer binaries for specific operating system.
 
-* Linux binaries ([AMD64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM32](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm_2.0.0.tar.bz2))
+* Linux binaries ([AMD64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_amd64_2.0.0.tar.bz2), [ARM64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM32](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm_2.0.0.tar.bz2))
 * [Mac](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_darwin_amd64_2.0.0.tar.bz2) binaries.
   
-## Extract the binaries to a specific directory. 
-The location does not matter. In these instructions, an indexer folder is used which is located in the current accounts home directory.
+## Extract the binaries to a specific directory
+The binary can be placed in any directory you choose. In these instructions, an indexer folder is used which is located in the current user's home directory.
 
 ```bash
 $ mkdir ~/indexer
-$ cd /location-of-downloaded-tar
+$ cd /path/to/download-dir
 $ tar -xf <your-os-tarfile> -C ~/indexer
+$ cd ~/indexer/<tarfile-name>
 ```
 
 ## Run the Indexer
@@ -64,17 +65,17 @@ Global Flags:
 To start the Indexer as a reader (ie not connecting to an Algorand node), supply the the `--postgres` or `-P` option when running the indexer. The value should be a valid connection string for a postgres database.
 
 ```bash
-$ ./algorand-indexer daemon -P “host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable”  --no-algod
+$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable"  --no-algod
 ```
 
 To start the Indexer so it populates the PostgreSQL database, supply the Algorand Archival node connection details. This can be done by either specifying the data directory (`--algod`), if the node is on the same machine as the Indexer, or by supplying the algod network host and port string (`--algod-net`) and the proper API token (`--token`). The database needs to be created and running prior to starting the Indexer.
 
 ```bash
 # start with local data directory
-$ ./algorand-indexer daemon -P “host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable” --algod=~/node/data
+$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod=~/node/data
 
 # start with networked Algorand node
-$ ./algorand-indexer daemon -P “host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable” --algod-net="http://[your-host]:[your-port]" ---algod-token="[your-api-token]
+$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" ---algod-token="[your-api-token]
 
 ```
 

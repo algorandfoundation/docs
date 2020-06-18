@@ -6,6 +6,11 @@ Follow the guide below to send your first transaction on Algorand and familiariz
 
 Code snippets are abbreviated for conciseness and clarity. See the full code example for each SDK at the bottom of this guide.
 
+!!! info
+    The examples in this section have been updated to the v2 API, which was launched to MainNet on June 16, 2020. Visit the [v2 Migration Guide](../reference/sdks/migration.md) for information on how to migrate your code from v1. 
+
+    Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/start_building](https://github.com/algorand/docs/tree/master/examples/start_building) and for [download](https://github.com/algorand/docs/blob/master/examples/start_building/start_building.zip?raw=true) (.zip).
+
 # Create an account
 In order to send a transaction, you first need an [account](../features/accounts/index.md#accounts) on Algorand. Create an account by generating an Algorand public/private key pair and then funding the public address with Algos on your chosen network. 
 
@@ -18,12 +23,10 @@ In order to send a transaction, you first need an [account](../features/accounts
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-function generateAlgorandKeyPair() {
-	var account = algosdk.generateAccount();
-	var passphrase = algosdk.secretKeyToMnemonic(account.sk);
-	console.log( "My address: " + account.addr );
-	console.log( "My passphrase: " + passphrase );
-}
+var account = algosdk.generateAccount();
+var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+console.log( "My address: " + account.addr );
+console.log( "My passphrase: " + passphrase );
 ```
 
 ```python tab="Python"
@@ -38,13 +41,9 @@ def generate_algorand_keypair():
 ```java tab="Java"
 import com.algorand.algosdk.account.Account;	
 
-public class GenerateAlgorandKeyPair {
-	public static void main(String args[]) {
-		Account myAccount = new Account();
-        System.out.println("My Address: " + myAccount.getAddress());
-		System.out.println("My Passphrase: " + myAccount.toMnemonic());
-	}
-}
+Account myAccount = new Account();
+System.out.println("My Address: " + myAccount.getAddress());
+System.out.println("My Passphrase: " + myAccount.toMnemonic());
 ```
 
 ```go tab="Go"
@@ -82,71 +81,121 @@ Private key mnemonic: [PASSPHRASE]
 Public key: [ADDRESS]
 ```
 
+_Learn more about [Creating Accounts on Algorand](../features/accounts/create.md)._
+
 ## Add funds
 For [TestNet](../../reference/algorand-networks/testnet/#faucet) and [BetaNet](../../reference/algorand-networks/betanet/#faucet), copy and paste the public portion of your key pair in the corresponding faucet prompt and click "Submit". A `200` response means the transaction went through and your balance increased by 100,000,000 microAlgos (i.e. 100 Algos).
 
 !!! info
 	Amounts are returned in microAlgos - the base unit for Algos. Micro denotes a unit x 10^-6. Therefore, 1 Algo equals 1,000,000 microAlgos.
 
+## Connect your client
+
+Each SDK provides a client which must instantiate prior to making calls to the API endpoints. You must provide values for `<algod-address>`, `<port>` and `<algod-token>`. The CLI tools implement the client natively. 
+
+_Learn more about [Connecting to a Node](connect.md)._
+
+```JavaScript tab=
+const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const algodServer = "http://localhost";
+const algodPort = 4001;
+
+let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+```
+
+```Python tab=
+from algosdk.v2client import algod
+
+algod_address = "http://localhost:4001"
+algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+algod_client = algod.AlgodClient(algod_token, algod_address)
+```
+
+```Java tab=
+import com.algorand.algosdk.v2.client.common.AlgodClient;
+import com.algorand.algosdk.v2.client.common.Client;
+
+final String ALGOD_API_ADDR = "localhost";
+final Integer ALGOD_PORT = 4001;
+final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+```
+
+```Go tab=
+package main
+
+import (
+	"github.com/algorand/go-algorand-sdk/client/v2/algod" 
+)
+
+const algodAddress = "http://localhost:4001"
+const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+func main() {
+	algodClient, err := algod.MakeClient(algodAddress, algodToken)
+	if err != nil {
+        fmt.Printf("Issue with creating algod client: %s\n", err)
+        return
+	}
+}
+```
+
 ## Check your balance
 
 Check your balance to confirm the added funds.
 
 ```javascript tab="JavaScript"
-...
-	const passphrase = <25-word-mnemonic>;
+
+	const passphrase = "Your 25-word mnemonic generated and displayed above";
+
 	let myAccount = algosdk.mnemonicToSecretKey(passphrase)
 	console.log("My address: %s", myAccount.addr)
 
-	let accountInfo = await algodClient.accountInformation(myAccount.addr);
-    console.log("Account balance: %d microAlgos", accountInfo.amount)
-...
+    let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
+    console.log("Account balance: %d microAlgos", accountInfo.amount);
 ```
 
 ```python tab="Python"
-...
-	passphrase = <25-word-mnemonic>
-	private_key = mnemonic.to_private_key(passphrase)
-	my_address = mnemonic.to_public_key(passphrase)
-	print("My address: {}".format(my_address))
+passphrase = "Your 25-word mnemonic generated and displayed above"
 
-	account_info = algod_client.account_info(my_address)
-	print("Account balance: {} microAlgos".format(account_info.get('amount')))
-...
+private_key = mnemonic.to_private_key(passphrase)
+my_address = mnemonic.to_public_key(passphrase)
+print("My address: {}".format(my_address))
+
+account_info = algod_client.account_info(my_address)
+print("Account balance: {} microAlgos".format(account_info.get('amount')))
 ```
 
 ```java tab="Java"
-...
-    final String PASSPHRASE = <25-word-mnemonic>;
-    com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
-    String myAddress = myAccount.getAddress().toString();
-    System.out.println("My Address: " + myAddress);
+final String PASSPHRASE = "Your 25-word mnemonic generated and displayed above";
+String myAddress = myAccount.getAddress().toString();
 
-    Account accountInfo = algodApiInstance.accountInformation(myAddress);
-    System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.getAmount()));
-...
+com.algorand.algosdk.v2.client.model.Account accountInfo = client.AccountInformation(myAccount.getAddress()).execute().body();
+
+System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
 ```
 
 ```go tab="Go"
-...
-	passphrase := <25-word-mnemonic>
-	privateKey, err := mnemonic.ToPrivateKey(passphrase)
-	if err != nil {
-		fmt.Printf("Issue with mnemonic conversion: %s\n", err)
-	}
+passphrase := "Your 25-word mnemonic generated and displayed above"
+privateKey, err := mnemonic.ToPrivateKey(passphrase)
+if err != nil {
+    fmt.Printf("Issue with mnemonic conversion: %s\n", err)
+    return
+}
 
-	var myAddress types.Address
-	publicKey := privateKey.Public()
-	cpk := publicKey.(ed25519.PublicKey)
-	copy(myAddress[:], cpk[:])
-	fmt.Printf("My address: %s\n", myAddress.String())
+var myAddress types.Address
+publicKey := privateKey.Public()
+cpk := publicKey.(ed25519.PublicKey)
+copy(myAddress[:], cpk[:])
+fmt.Printf("My address: %s\n", myAddress.String())
 
-	accountInfo, err := algodClient.AccountInformation(myAddress.String())
-	if err != nil {
-		fmt.Printf("Error getting account info: %s\n", err)
-	}
-    fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
-...
+accountInfo, err := algodClient.AccountInformation(myAddress.String()).Do(context.Background())
+if err != nil {
+    fmt.Printf("Error getting account info: %s\n", err)
+    return
+}
+fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
 ```
 
 ```bash tab="cURL"
@@ -160,108 +209,74 @@ $ goal account balance -a <my-address>
 [AMOUNT] microAlgos
 ```
 
-_Learn more about [Creating Accounts on Algorand](../features/accounts/create.md)._
-
 # Construct the transaction
 
 Create a transaction to send 1 Algo from your account to the TestNet faucet address (`GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A`) with the note "Hello World".
 
-Transactions require a certain minimum set of parameters to be valid. Mandatory fields include the **round validity range**, the **fee**, and the **genesis hash** for the network the transaction is valid for. Read all about Transaction types, fields, and configurations in the Transactions Feature Guide. For now, construct a payment transaction as follows. Use the _suggested parameters_ methods to initialize network-related 
+Transactions require a certain minimum set of parameters to be valid. Mandatory fields include the **round validity range**, the **fee**, and the **genesis hash** for the network the transaction is valid for. Read all about Transaction types, fields, and configurations in the [Transactions Feature Guide](../features/transactions/index.md). For now, construct a payment transaction as follows. Use the _suggested parameters_ methods to initialize network-related 
 fields. 
 
 ```javascript tab="JavaScript"
-...
-	let params = await algodClient.getTransactionParams();
-	let note = algosdk.encodeObj("Hello World");
-	let txn = {
-		"from": myAccount.addr,
-		"to": receiver,
-		"fee": params.minFee,
-		"amount": 1000000,
-		"firstRound": params.lastRound,
-		"lastRound": params.lastRound + 1000,
-		"note": note,
-		"genesisID": params.genesisID,
-		"genesisHash": params.genesishashb64
-	};
-...
+let params = await algodClient.getTransactionParams().do();
+// comment out the next two lines to use suggested fee
+params.fee = 1000;
+params.flatFee = true;
+const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
+let note = algosdk.encodeObj("Hello World");
+
+let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
 ```
 
 ```python tab="Python"
-...
-	params = algod_client.suggested_params()
-	note = "Hello World".encode()
-	receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
+params = algod_client.suggested_params()
+# comment out the next two (2) lines to use suggested fees
+params.flat_fee = True
+params.fee = 1000
+receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
+note = "Hello World".encode()
 
-	data = {
-		"sender": my_address,
-		"receiver": receiver,
-		"fee": params.get('minFee'),
-		"flat_fee": True,
-		"amt": 1000000,
-		"first": params.get('lastRound'),
-		"last": params.get('lastRound') + 1000,
-		"note": note,
-		"gen": params.get('genesisID'),
-		"gh": params.get('genesishashb64')
-	}
-	
-	txn = transaction.PaymentTxn(**data)
-...
+unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
 ```
 
 ```java tab="Java"
-...
-final RECEIVER = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
-...
-BigInteger fee;
-String genesisID;
-Digest genesisHash;
-BigInteger firstValidRound;
-fee = BigInteger.valueOf(1000);
-try {
-    TransactionParams params = algodApiInstance.transactionParams();
-    genesisHash = new Digest(params.getGenesishashb64());
-    genesisID = params.getGenesisID();
-    System.out.println("Minimum Fee: " + fee);
-    firstValidRound = params.getLastRound();
-    System.out.println("Current Round: " + firstValidRound);
-} catch (ApiException e) {
-    throw new RuntimeException("Could not get params", e);
-}
-BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
-BigInteger lastValidRound = firstValidRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
+// Construct the transaction
+final String RECEIVER = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
 String note = "Hello World";
-Transaction txn = new Transaction(myAccount.getAddress(), fee, firstValidRound,
-        lastValidRound, note.getBytes(), amount, new Address(RECEIVER),
-        genesisID, genesisHash);
-...
+TransactionParametersResponse params = client.TransactionParams().execute().body();
+Transaction txn = Transaction.PaymentTransactionBuilder()
+.sender(myAddress)
+.note(note.getBytes())
+.amount(100000)
+.receiver(new Address(RECEIVER))
+.suggestedParams(params)
+.build();
 ```
 
 ```go tab="Go"
-...
-	txParams, err := algodClient.SuggestedParams()
-	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
-    }
-    
-	fromAddr := myAddress
-	toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-	var amount uint64 = 10000000
-	var minFee uint64 = 1000
-	note := []byte("Hello World")
-	genID := txParams.GenesisID
-	genHash := txParams.GenesisHash
-	firstValidRound := txParams.LastRound
-	lastValidRound := firstValidRound + 1000
+txParams, err := algodClient.SuggestedParams().Do(context.Background())
+if err != nil {
+    fmt.Printf("Error getting suggested tx params: %s\n", err)
+    return
+}
+// comment out the next two (2) lines to use suggested fees
+txParams.FlatFee = true
+txParams.Fee = 1000
 
-	txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr.String(), toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
-		return
-    }
-...
+fromAddr := myAddress.String()
+toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
+var amount uint64 = 1000000
+var minFee uint64 = 1000
+note := []byte("Hello World")
+genID := txParams.GenesisID
+genHash := txParams.GenesisHash
+firstValidRound := uint64(txParams.FirstRoundValid)
+lastValidRound := uint64(txParams.LastRoundValid)
+
+txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
+if err != nil {
+    fmt.Printf("Error creating transaction: %s\n", err)
+    return
+}
 ```
 
 ```bash tab="goal"
@@ -277,37 +292,27 @@ _Learn more about the [Structure of Transactions on Algorand](../features/transa
 Sign the transaction with your private key. This creates a new signed transaction object in the SDKs. Retrieve the transaction ID of the signed transaction.
 
 ```javascript tab="JavaScript"
-...
-	let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-	let txId = signedTxn.txID;
-    console.log("Signed transaction with txId: %s", txId);
-...
+let signedTxn = txn.signTxn(myAccount.sk);
+let txId = txn.txID().toString();
+console.log("Signed transaction with txID: %s", txId);
 ```
 
 ```python tab="Python"
-...
-	signed_txn = txn.sign(private_key)
-	txid = signed_txn.transaction.get_txid()
-	print("Signed transaction with txID: {}".format(txid))
-...
+signed_txn = unsigned_txn.sign(mnemonic.to_private_key(passphrase))
 ```
 
 ```java tab="Java"
-...
-    SignedTransaction signedTx = myAccount.signTransaction(txn);
-    System.out.println("Signed transaction with txId: " + signedTx.transactionID);
-...
+SignedTransaction signedTxn = myAccount.signTransaction(txn);
+System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
 ```
 
 ```go tab="Go"
-...
-	txId, bytes, err := crypto.SignTransaction(privateKey, txn)
-	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
-	}
-    fmt.Printf("Signed txid: %s\n", txId)
-...
+txID, signedTxn, err := crypto.SignTransaction(privateKey, txn)
+if err != nil {
+    fmt.Printf("Failed to sign transaction: %s\n", err)
+    return
+}
+fmt.Printf("Signed txid: %s\n", txID)
 ```
 
 ```bash tab="goal"
@@ -323,38 +328,27 @@ _Learn more about [Authorizing Transactions on Algorand](../features/transaction
 Send the signed transaction to the network with your algod client. 
 
 ```javascript tab="JavaScript"
-...
-    await postAlgodClient.sendRawTransaction(signedTxn.blob)
-...
+await algodClient.sendRawTransaction(signedTxn).do();
 ```
 
 ```python tab="Python"
-...
-	algod_client.send_transaction(signed_txn)
-...
+txid = algod_client.send_transaction(signed_txn)
+print("Successfully sent transaction with txID: {}".format(txid)
 ```
 
 ```java tab="Java"
-...
-try {
-    byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
-    TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
-    System.out.println("Successfully sent tx with ID: " + id);
-} catch (ApiException e) {
-    System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-}
-...
+byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+System.out.println("Successfully sent tx with ID: " + id);
 ```
 
 ```go tab="Go"
-...
-	sendResponse, err := algodClient.SendRawTransaction(bytes)
-	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
-	}
-    fmt.Printf("Submitted transaction %s\n", sendResponse.TxID)
-...
+sendResponse, err := algodClient.SendRawTransaction(signedTxn).Do(context.Background())
+if err != nil {
+    fmt.Printf("failed to send transaction: %s\n", err)
+    return
+}
+fmt.Printf("Submitted transaction %s\n", sendResponse)
 ```
 
 ```bash tab="cURL"
@@ -378,39 +372,6 @@ Transaction [TXID] still pending as of round [LAST_ROUND]
 Transaction [TXID] committed in round [COMMITTED_ROUND]
 ```
 
-!!! Info
-    If you are using a third-party service, it may require you to specify a `Content-Type` header when you send transactions to the network. Set the `Content-Type` to `application/x-binary` and add it as a header to the algod client or the specific request that sends the transaction.
-    
-    ```JavaScript tab=
-	const algosdk = require("algosdk");
-
-	async function gettingStartedExample() {
-
-		const server = <algod-address>;
-		const port = "";
-		const token = {
-			'X-API-Key': <service-api-key>,
-            'Content-Type': 'application/x-binary'
-		};
-
-		let postAlgodClient = new algosdk.Algod(token, server, port);
-		...
-	}
-
-	```
-
-	```Python tab=
-    ...
-	algod_client.send_transaction(signed_txn, headers={'content-type': 'application/x-binary'})
-    ...
-	```
-
-	```Go tab=
-    ...
-        txHeaders := append([]*algod.Header{}, &algod.Header{"Content-Type", "application/x-binary"})
-        sendResponse, err := algodClient.SendRawTransaction(bytes, txHeaders...)
-    ...
-	```
 
 # Wait for confirmation
 
@@ -420,82 +381,86 @@ Successfully submitting your transaction to the network does not necessarily mea
     On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced, on average, every 5 seconds. This means that transactions are confirmed, on average, in **5 seconds**! Read more about the [Algorand's Consensus Protocol](../algorand_consensus.md) and how it achieves such high confirmation speeds and immediate transaction finality.
 
 ```javascript tab="JavaScript"
-...
-// function used to wait for a tx confirmation
-var waitForConfirmation = async function(algodclient, txId) {
+const waitForConfirmation = async function (algodclient, txId) {
+    let status = (await algodclient.status().do());
+    let lastRound = status["last-round"];
     while (true) {
-		let lastround = (await algodclient.status()).lastRound;
-        let pendingInfo = await algodclient.pendingTransactionInformation(txId);
-        if (pendingInfo.round != null && pendingInfo.round > 0) {
+        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
             //Got the completed Transaction
-            console.log("Transaction " + pendingInfo.tx + " confirmed in round " + pendingInfo.round);
+            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
             break;
         }
-        await algodclient.statusAfterBlock(lastround + 1);
+        lastRound++;
+        await algodclient.statusAfterBlock(lastRound).do();
     }
 };
-...
 ```
 
 ```python tab="Python"
-# utility for waiting on a transaction confirmation
-def wait_for_confirmation( algod_client, txid ):
-    while True:
-        txinfo = algod_client.pending_transaction_info(txid)
-        if txinfo.get('round') and txinfo.get('round') > 0:
-            print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('round')))
-            break
-        else:
-            print("Waiting for confirmation...")
-            algod_client.status_after_block(algod_client.status().get('lastRound') +1)
+def wait_for_confirmation(client, txid):
+	"""
+	Utility function to wait until the transaction is
+	confirmed before proceeding.
+	"""
+	last_round = client.status().get('last-round')
+	txinfo = client.pending_transaction_info(txid)
+	while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
+		print("Waiting for confirmation")
+		last_round += 1
+		client.status_after_block(last_round)
+		txinfo = client.pending_transaction_info(txid)
+	print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
+	return txinfo
 ```
 
 ```java tab="Java"
-...
-    // utility function to wait on a transaction to be confirmed    
-    public void waitForConfirmation( String txID ) throws Exception{
-        if( algodApiInstance == null ) connectToNetwork();
-        while(true) {
-            try {
-                //Check the pending tranactions
-                com.algorand.algosdk.algod.client.model.Transaction pendingInfo = algodApiInstance.pendingTransactionInformation(txID);
-                if (pendingInfo.getRound() != null && pendingInfo.getRound().longValue() > 0) {
-                    //Got the completed Transaction
-                    System.out.println("Transaction " + pendingInfo.getTx() + " confirmed in round " + pendingInfo.getRound().longValue());
-                    break;
-                } 
-                algodApiInstance.waitForBlock(BigInteger.valueOf( algodApiInstance.getStatus().getLastRound().longValue() +1 ) );
-            } catch (Exception e) {
-                throw( e );
-            }
+// utility function to wait on a transaction to be confirmed    
+public void waitForConfirmation( String txID ) throws Exception{
+    if( client == null ) this.client = connectToNetwork();
+    Long lastRound = client.GetStatus().execute().body().lastRound;
+    while(true) {
+        try {
+            //Check the pending tranactions
+            Response<PendingTransactionResponse> pendingInfo = client.PendingTransactionInformation(txID).execute();
+            if (pendingInfo.body().confirmedRound != null && pendingInfo.body().confirmedRound > 0) {
+                //Got the completed Transaction
+                System.out.println("Transaction " + txID + " confirmed in round " + pendingInfo.body().confirmedRound);
+                break;
+            } 
+            lastRound++;
+            client.WaitForBlock(lastRound).execute();
+        } catch (Exception e) {
+            throw( e );
         }
     }
-...
+}
 ```
 
 ```go tab="Go"
-...
 // Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(algodClient algod.Client, txID string) {
+func waitForConfirmation(txID string, client *algod.Client) {
+	status, err := client.Status().Do(context.Background())
+	if err != nil {
+		fmt.Printf("error getting algod status: %s\n", err)
+		return
+	}
+	lastRound := status.LastRound
 	for {
-		pt, err := algodClient.PendingTransactionInformation(txID)
+		pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
 		if err != nil {
-			fmt.Printf("waiting for confirmation... (pool error, if any): %s\n", err)
-			continue
-		}
-		if pt.ConfirmedRound > 0 {
-			fmt.Printf("Transaction "+pt.TxID+" confirmed in round %d\n", pt.ConfirmedRound)
-			break
-		}
-		nodeStatus, err := algodClient.Status()
-		if err != nil {
-			fmt.Printf("error getting algod status: %s\n", err)
+			fmt.Printf("error getting pending transaction: %s\n", err)
 			return
 		}
-		algodClient.StatusAfterBlock( nodeStatus.LastRound + 1)
+		if pt.ConfirmedRound > 0 {
+			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
+			break
+		}
+		fmt.Printf("waiting for confirmation\n")
+		lastRound++
+		status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
 	}
 }
-...
 ```
 
 ```bash tab="cURL"
@@ -525,52 +490,35 @@ Read your transaction back from the blockchain.
     Although you can read any transaction on the blockchain, only archival nodes store the whole history. By default, most nodes store only the last 1000 rounds and the APIs return errors when calling for information from earlier rounds. If you need to access data further back, make sure your algod client is connected to an archival, indexer node. Read more about node configurations in the Network Participation Guide or reach out to your service provider to understand how their node is configured. 
 
 ```javascript tab="JavaScript"
-...
-try {
-	let confirmedTxn = await algodClient.transactionInformation(myAccount.addr, txId);
-	console.log("Transaction information: %o", confirmedTxn);
-	console.log("Decoded note: %s", algosdk.decodeObj(confirmedTxn.note));
-} catch(e) {
-	console.log(e.response.text);
-}
-...
+let confirmedTxn = await algodClient.pendingTransactionInformation(txId).do();
+console.log("Transaction information: %o", confirmedTxn.txn.txn);
+console.log("Decoded note: %s", algosdk.decodeObj(confirmedTxn.txn.txn.note));
 ```
 
 ```python tab="Python"
-...
-	confirmed_txn = algod_client.transaction_info(my_address, txid)
-	print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
-	print("Decoded note: {}".format(base64.b64decode(confirmed_txn.get('noteb64')).decode()))
-...
+confirmed_txn = algod_client.pending_transaction_info(txid)
+print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
+print("Decoded note: {}".format(base64.b64decode(confirmed_txn["txn"]["txn"]["note"]).decode()))
 ```
 
 ```java tab="Java"
-...
-    try {
-        com.algorand.algosdk.algod.client.model.Transaction confirmedTxn =
-                algodApiInstance.transactionInformation(RECEIVER, signedTxn.transactionID);
-        System.out.println("Transaction information (with notes): " + confirmedTxn.toString());
-        System.out.println("Decoded note: " + new String(confirmedTxn.getNoteb64()));
-    } catch (ApiException e) {
-        System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
-    }
-...
+PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+System.out.println("Transaction information (with notes): " + pTrx.toString());
+System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
 ```
 
 ```go tab="Go"
-...
-	confirmedTxn, err := algodClient.TransactionInformation(myAddress.String(), txId)
-	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txId)
-		return
-	}
-	txnJSON, err := json.MarshalIndent(confirmedTxn, "", "\t")
-	if err != nil {
-		fmt.Printf("Can not marshall txn data: %s\n", err)
-	}
-	fmt.Printf("Transaction information: %s\n", txnJSON)
-    fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Note))
-...
+confirmedTxn, stxn, err := algodClient.PendingTransactionInformation(txID).Do(context.Background())
+if err != nil {
+    fmt.Printf("Error retrieving transaction %s\n", txID)
+    return
+}
+txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
+if err != nil {
+    fmt.Printf("Can not marshall txn data: %s\n", err)
+}
+fmt.Printf("Transaction information: %s\n", txnJSON)
+fmt.Printf("Decoded note: %s\n", string(stxn.Txn.Note))
 ```
 
 ```bash tab="cURL"
@@ -581,419 +529,6 @@ curl -i -X GET \
 
 Notice above the pattern of constructing a transaction, authorizing it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
 
-??? example "Complete Example - Sending a Payment Transaction"
-    
-    ```javascript tab="JavaScript"
-    const algosdk = require('algosdk');
+!!! info
+    Example code snippets were provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/start_building](https://github.com/algorand/docs/tree/master/examples/start_building) and for [download](https://github.com/algorand/docs/blob/master/examples/start_building/start_building.zip?raw=true) (.zip).
 
-    // function used to wait for a tx confirmation
-    var waitForConfirmation = async function(algodclient, txId) {
-        while (true) {
-            let lastround = (await algodclient.status()).lastRound;
-            let pendingInfo = await algodclient.pendingTransactionInformation(txId);
-            if (pendingInfo.round != null && pendingInfo.round > 0) {
-                //Got the completed Transaction
-                console.log("Transaction " + pendingInfo.tx + " confirmed in round " + pendingInfo.round);
-                break;
-            }
-            await algodclient.statusAfterBlock(lastround + 1);
-        }
-    };
-
-    async function gettingStartedExample() {
-
-        try{
-            const token = <algod-token>;
-            const server = <algod-address>;
-            const port = <port>;        
-
-            let algodClient = new algosdk.Algod(token, server, port);
-
-            const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";    
-            const passphrase = <your-25-word-mnemonic>;
-
-            let myAccount = algosdk.mnemonicToSecretKey(passphrase)
-            console.log("My address: %s", myAccount.addr)
-
-            let accountInfo = await algodClient.accountInformation(myAccount.addr);
-            console.log("Account balance: %d microAlgos", accountInfo.amount)
-
-            let params = await algodClient.getTransactionParams();
-            console.log(params);
-
-            let note = algosdk.encodeObj("Hello World");
-
-            let txn = {
-                "from": myAccount.addr,
-                "to": receiver,
-                "fee": params.minFee,
-                "flatFee": true,
-                "amount": 1000000,
-                "firstRound": params.lastRound,
-                "lastRound": params.lastRound + 1000,
-                "note": note,
-                "genesisID": params.genesisID,
-                "genesisHash": params.genesishashb64
-            };
-
-            let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-            let txId = signedTxn.txID;
-            console.log("Signed transaction with txID: %s", txId);
-
-            await algodClient.sendRawTransaction(signedTxn.blob)
-
-            // Wait for confirmation
-            await waitForConfirmation(algodClient, txId);
-        }catch (err){
-            console.log("err", err);  
-        }
-    };
-    gettingStartedExample();
-    ```
-
-    ```python tab="Python"
-    import json
-    import time
-    import base64
-    from algosdk import algod
-    from algosdk import mnemonic
-    from algosdk import transaction
-
-    # utility for waiting on a transaction confirmation
-    def wait_for_confirmation( algod_client, txid ):
-        while True:
-            txinfo = algod_client.pending_transaction_info(txid)
-            if txinfo.get('round') and txinfo.get('round') > 0:
-                print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('round')))
-                break
-            else:
-                print("Waiting for confirmation...")
-                algod_client.status_after_block(algod_client.status().get('lastRound') +1)
-
-    def gettingStartedExample():
-        algod_address = <algod-address>
-        algod_token = <algod-token>
-        algod_client = algod.AlgodClient(algod_token, algod_address)
-
-        passphrase = <25-word-mnemonic>
-
-        private_key = mnemonic.to_private_key(passphrase)
-        my_address = mnemonic.to_public_key(passphrase)
-        print("My address: {}".format(my_address))
-
-        account_info = algod_client.account_info(my_address)
-        print("Account balance: {} microAlgos".format(account_info.get('amount')))
-
-        params = algod_client.suggested_params()
-        note = "Hello World".encode()
-        receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-
-        data = {
-            "sender": my_address,
-            "receiver": receiver,
-            "fee": params.get('minFee'),
-            "flat_fee": True,
-            "amt": 1000000,
-            "first": params.get('lastRound'),
-            "last": params.get('lastRound') + 1000,
-            "note": note,
-            "gen": params.get('genesisID'),
-            "gh": params.get('genesishashb64')
-        }
-
-        txn = transaction.PaymentTxn(**data)
-        signed_txn = txn.sign(private_key)
-        txid = signed_txn.transaction.get_txid()
-        print("Signed transaction with txID: {}".format(txid))
-
-        algod_client.send_transaction(signed_txn)
-
-        # wait for confirmation
-        wait_for_confirmation( algod_client, txid) 
-
-        # Read the transction
-        try:
-            confirmed_txn = algod_client.transaction_info(my_address, txid)
-        except Exception as err:
-            print(err)
-        print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
-        print("Decoded note: {}".format(base64.b64decode(confirmed_txn.get('noteb64')).decode()))
-        
-
-    gettingStartedExample()
-    ```
-
-    ```java tab="Java"
-    package com.algorand.javatest;
-
-    import java.math.BigInteger;
-
-    import java.util.concurrent.TimeUnit;
-
-    import com.algorand.algosdk.account.Account;
-    import com.algorand.algosdk.algod.client.AlgodClient;
-    import com.algorand.algosdk.algod.client.ApiException;
-    import com.algorand.algosdk.algod.client.api.AlgodApi;
-    import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
-    import com.algorand.algosdk.algod.client.model.*;
-    import com.algorand.algosdk.crypto.Address;
-    import com.algorand.algosdk.crypto.Digest;
-    import com.algorand.algosdk.transaction.Transaction;
-    import com.algorand.algosdk.transaction.SignedTransaction;
-    import com.algorand.algosdk.util.Encoder;
-
-    public class Tutorial {
-        public AlgodApi algodApiInstance = null;
-        // utility function to connect to a node
-        private AlgodApi connectToNetwork(){
-
-            // Initialize an algod client
-            final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
-            AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
-            ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-            api_key.setApiKey(ALGOD_API_TOKEN);
-            algodApiInstance = new AlgodApi(client);   
-            return algodApiInstance;
-        }
-        // utility function to wait on a transaction to be confirmed    
-        public void waitForConfirmation( String txID ) throws Exception{
-            if( algodApiInstance == null ) connectToNetwork();
-            while(true) {
-                try {
-                    //Check the pending tranactions
-                    com.algorand.algosdk.algod.client.model.Transaction pendingInfo = algodApiInstance.pendingTransactionInformation(txID);
-                    if (pendingInfo.getRound() != null && pendingInfo.getRound().longValue() > 0) {
-                        //Got the completed Transaction
-                        System.out.println("Transaction " + pendingInfo.getTx() + " confirmed in round " + pendingInfo.getRound().longValue());
-                        break;
-                    } 
-                    algodApiInstance.waitForBlock(BigInteger.valueOf( algodApiInstance.getStatus().getLastRound().longValue() +1 ) );
-                } catch (Exception e) {
-                    throw( e );
-                }
-            }
-        }
-
-        public void gettingStartedExample() throws Exception {
-
-            if( algodApiInstance == null ) connectToNetwork();
-
-            // Import your private key mnemonic and address
-            final String PASSPHRASE = <25-word-mnemonic>;
-            com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
-            System.out.println("My Address: " + myAccount.getAddress());
-
-            String myAddress = myAccount.getAddress().toString();
-            com.algorand.algosdk.algod.client.model.Account accountInfo = 
-                algodApiInstance.accountInformation(myAddress);
-            System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.getAmount()));
-
-            // Construct the transaction
-            final String RECEIVER = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
-            BigInteger fee;
-            String genesisID;
-            Digest genesisHash;
-            BigInteger firstValidRound;
-            fee = BigInteger.valueOf(1000);
-            try {
-                TransactionParams params = algodApiInstance.transactionParams();
-                genesisHash = new Digest(params.getGenesishashb64());
-                genesisID = params.getGenesisID();
-                System.out.println("Minimum Fee: " + fee);
-                firstValidRound = params.getLastRound();
-                System.out.println("Current Round: " + firstValidRound);
-            } catch (ApiException e) {
-                throw new RuntimeException("Could not get params", e);
-            }
-            BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
-            BigInteger lastValidRound = firstValidRound.add(BigInteger.valueOf(1000)); // 1000 is the max tx window
-            String note = "Hello World";
-
-
-            Transaction txn = new Transaction(myAccount.getAddress(), fee, firstValidRound,
-                    lastValidRound, note.getBytes(), amount, new Address(RECEIVER),
-                    genesisID, genesisHash);
-
-            // Sign the transaction
-            SignedTransaction signedTxn = myAccount.signTransaction(txn);
-            System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
-
-            // Submit the transaction to the network
-            try {
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-                TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
-                System.out.println("Successfully sent tx with ID: " + id);
-
-                // Wait for transaction confirmation
-                waitForConfirmation(id.getTxId());
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-            }
-
-
-            //Read the transaction from the blockchain
-            try {
-                com.algorand.algosdk.algod.client.model.Transaction confirmedTxn =
-                        algodApiInstance.transactionInformation(RECEIVER, signedTxn.transactionID);
-                System.out.println("Transaction information (with notes): " + confirmedTxn.toString());
-                System.out.println("Decoded note: " + new String(confirmedTxn.getNoteb64()));
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#transactionInformation: " + e.getCode());
-            }
-        }
-
-        public static void main(String args[]) throws Exception {
-            Tutorial t = new Tutorial();
-            t.gettingStartedExample();
-        }
-    }
-    ```
-
-    ```go tab="Go"
-    package main
-
-    import (
-
-        "encoding/json"
-        "fmt"
-        
-        "golang.org/x/crypto/ed25519"
-
-        "github.com/algorand/go-algorand-sdk/client/algod"
-        "github.com/algorand/go-algorand-sdk/crypto"
-        "github.com/algorand/go-algorand-sdk/mnemonic"
-        "github.com/algorand/go-algorand-sdk/transaction"
-        "github.com/algorand/go-algorand-sdk/types"
-    )
-
-    const algodAddress = <algod-address>
-    const algodToken = <algod-tokenn>
-    // Function that waits for a given txId to be confirmed by the network
-    func waitForConfirmation(algodClient algod.Client, txID string) {
-        for {
-            pt, err := algodClient.PendingTransactionInformation(txID)
-            if err != nil {
-                fmt.Printf("waiting for confirmation... (pool error, if any): %s\n", err)
-                continue
-            }
-            if pt.ConfirmedRound > 0 {
-                fmt.Printf("Transaction "+pt.TxID+" confirmed in round %d\n", pt.ConfirmedRound)
-                break
-            }
-            nodeStatus, err := algodClient.Status()
-            if err != nil {
-                fmt.Printf("error getting algod status: %s\n", err)
-                return
-            }
-            algodClient.StatusAfterBlock( nodeStatus.LastRound + 1)
-        }
-    }
-
-
-    func main() {
-
-        algodClient, err := algod.MakeClient(algodAddress, algodToken)
-        if err != nil {
-            return
-        }
-
-        passphrase := <25-word-mnemonic>
-        
-        privateKey, err := mnemonic.ToPrivateKey(passphrase)
-        if err != nil {
-            fmt.Printf("Issue with mnemonic conversion: %s\n", err)
-        }
-
-        var myAddress types.Address
-        publicKey := privateKey.Public()
-        cpk := publicKey.(ed25519.PublicKey)
-        copy(myAddress[:], cpk[:])
-        fmt.Printf("My address: %s\n", myAddress.String())
-
-        // Check account balance
-        accountInfo, err := algodClient.AccountInformation(myAddress.String())
-        if err != nil {
-            fmt.Printf("Error getting account info: %s\n", err)
-        }
-        fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
-
-        // Construct the transaction
-        txParams, err := algodClient.SuggestedParams()
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-
-        fromAddr := myAddress
-        toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        var amount uint64 = 10000000
-        var minFee uint64 = 1000
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := txParams.LastRound
-        lastValidRound := firstValidRound + 1000
-
-        txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr.String(), toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-
-        // Sign the transaction
-        txId, bytes, err := crypto.SignTransaction(privateKey, txn)
-        if err != nil {
-            fmt.Printf("Failed to sign transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Signed txid: %s\n", txId)
-
-        // Submit the transaction
-
-        sendResponse, err := algodClient.SendRawTransaction(bytes)
-        if err != nil {
-            fmt.Printf("failed to send transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Submitted transaction %s\n", sendResponse.TxID)
-
-        // Wait for confirmation
-        waitForConfirmation(algodClient, sendResponse.TxID)
-
-        // Read confirmed transaction from block
-        confirmedTxn, err := algodClient.TransactionInformation(myAddress.String(), txId)
-        if err != nil {
-            fmt.Printf("Error retrieving transaction %s\n", txId)
-            return
-        }
-        txnJSON, err := json.MarshalIndent(confirmedTxn, "", "\t")
-        if err != nil {
-            fmt.Printf("Can not marshall txn data: %s\n", err)
-        }
-        fmt.Printf("Transaction information: %s\n", txnJSON)
-        fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Note))
-    }
-    ```
-
-    ```bash tab="goal"
-    #!/usr/bin/bash
-
-    $ goal account balance -a <my-address>
-    [AMOUNT] microAlgos
-
-    $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World" --out="hello-world.txn"
-
-    $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
-
-    $ goal clerk rawsend --filename="hello-world.stxn"
-    Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
-    Transaction [TXID] still pending as of round [LAST_ROUND]
-    Transaction [TXID] committed in round [COMMITTED_ROUND]
-
-    # Or construct, sign, and submit in one line
-     $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --note="Hello World"
-     Sent 1000000 MicroAlgos from account [ADDRESS] to address GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A, transaction ID: [TXID]. Fee set to 1000
-     Transaction [TXID] still pending as of round [LAST_ROUND]
-     Transaction [TXID] committed in round [COMMITTED_ROUND]
-    ``` 

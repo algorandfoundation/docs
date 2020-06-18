@@ -20,13 +20,13 @@ Overview, installation guides, and documentation for the four Algorand SDKs. Als
 
 [JavaScript](sdks/index.md#javascript) - [Python](sdks/index.md#python) - [Java](sdks/index.md#java) - [Go](sdks/index.md#go) 
 
-[V2 Migration Guide](./sdks/migration.md) 🔷 🆕
+[V2 Migration Guide](./sdks/migration.md) 🆕
 
 # REST APIs
 
 List of available paths and models for **algod**, **kmd**, and **indexer**.
 
-[algod v2](./rest-apis/algod/v2.md) 🔷 🆕 - [algod v1](./rest-apis/algod/v1.md) - [kmd](./rest-apis/kmd.md) - [indexer](./rest-apis/indexer.md) 🆕
+[algod v2](./rest-apis/algod/v2.md) 🆕 - [algod v1](./rest-apis/algod/v1.md) - [kmd](./rest-apis/kmd.md) - [indexer](./rest-apis/indexer.md) 🆕
 
 # Smart Contracts (TEAL)
 
