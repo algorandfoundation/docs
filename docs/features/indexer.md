@@ -1,4 +1,4 @@
-title: Searching the Blockchain 🆕
+title: Searching the Blockchain (Indexer V2) 🆕
 
 This guide explains how to search the Algorand Blockchain using the V2 Indexer. This Indexer is no longer part of the Algorand node and requires a separate binary download. See the [Indexer Install Guide](../run-a-node/setup/indexer.md) for instructions on installing and configuring the new Indexer.
 

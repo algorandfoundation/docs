@@ -11,7 +11,7 @@ Algorand has three public networks: [**MainNet**](mainnet.md), [**TestNet**](tes
 
 Each network page, contains the following information:
 
-- **What's New** ([B](./betanet.md#whats-new))- An optional section where new features are highlighted with links to accompanying documentation.
+- **What's New** ([M](./mainnet.md#whats-new), [T](./testnet.md#whats-new), [B](./betanet.md#whats-new))- An optional section where new features are highlighted with links to accompanying documentation.
 - **Version** ([M](./mainnet.md#version), [T](./testnet.md#version), [B](./betanet.md#version)) - The latest protocol software version.  Should match `goal -v` or `GET /versions` [build version](../rest-apis/algod/v1.md#buildversion).
 - **Release Version** ([M](./mainnet.md#release-version), [T](./testnet.md#release-version), [B](./betanet.md#release-version)) - A link to the official release notes where you can view all the latest changes.
 - **Genesis ID** ([M](./mainnet.md#genesis-id), [T](./testnet.md#genesis-id), [B](./betanet.md#genesis-id)) - A human-readable identifier for the network. This should not be used as a unique identifier.
