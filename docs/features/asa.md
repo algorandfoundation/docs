@@ -133,45 +133,56 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 ```
 
 ``` python tab="Python"  
-    # Configure fields for creating the asset.
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "total": 1000,
-        "decimals": 0,
-        "default_frozen": False,
-        "unit_name": <unit-name>,
-        "asset_name": <asset-name>,
-        "manager": accounts[1]['pk'],
-        "reserve": accounts[1]['pk'],
-        "freeze": accounts[1]['pk'],
-        "clawback": accounts[1]['pk'],
-        "url": "https://path/to/my/asset/details",
-        "flat_fee": True
-    }
+# CREATE ASSET
+# Get network params for transactions before every transaction.
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
 
-    # Construct Asset Creation transaction
-    txn = transaction.AssetConfigTxn(**data)
+# Account 1 creates an asset called latinum and
+# sets Account 2 as the manager, reserve, freeze, and clawback address.
+# Asset Creation transaction
 
-    # Sign with secret key of creator
-    stxn = txn.sign(accounts[1]['sk'])
+txn = future.transaction.AssetConfigTxn(
+    sender=accounts[1]['pk'],
+    sp=params,
+    total=1000,
+    default_frozen=False,
+    unit_name="LATINUM",
+    asset_name="latinum",
+    manager=accounts[2]['pk'],
+    reserve=accounts[2]['pk'],
+    freeze=accounts[2]['pk'],
+    clawback=accounts[2]['pk'],
+    url="https://path/to/my/asset/details", 
+    decimals=0)
+# Sign with secret key of creator
+stxn = txn.sign(accounts[1]['sk'])
 
-    print("Asset Creation")
-    # Send the transaction to the network and retrieve the txid.
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    # Retrieve the asset ID of the newly created asset by first
-    # ensuring that the creation transaction was confirmed,
-    # then pulling account info of the creator and grabbing the 
-    # asset with the max asset ID. 
-    # Wait for the transaction to be confirmed
-    txinfo = wait_for_confirmation(txid)
-    print(txinfo.keys())
-    print(txinfo)
-    asset_id = txinfo["txresults"]["createdasset"]
-    account_info = algod_client.account_info(accounts[1]['pk'])
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(txid)
+
+# Retrieve the asset ID of the newly created asset by first
+# ensuring that the creation transaction was confirmed,
+# then grabbing the asset id from the transaction.
+
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client,txid)
+
+try:
+    # Pull account info for the creator
+    # account_info = algod_client.account_info(accounts[1]['pk'])
+    # get asset_id from tx
+    # Get the new asset's information from the creator account
+    ptx = algod_client.pending_transaction_info(txid)
+    asset_id = ptx["asset-index"]
+    printCreatedAsset(algod_client, accounts[1]['pk'], asset_id)
+    printAssetHolding(algod_client, accounts[1]['pk'], asset_id)
+except Exception as e:
+    print(e)
+
 ```
 
 ``` java tab="Java"  
@@ -311,35 +322,31 @@ After an asset has been created only the manager, reserve, freeze and reserve ac
 ```
 
 ``` python tab="Python"  
-    # Update manager address.
-    # Keep reserve, freeze, and clawback address same as before, i.e. account 1
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "index": asset_id,
-        "manager": accounts[2]['pk'],
-        "reserve": accounts[1]['pk'],
-        "freeze": accounts[1]['pk'],
-        "clawback": accounts[1]['pk'],
-        "flat_fee": True
-    }
-    txn = transaction.AssetConfigTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    print("Asset Modification")
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
+asset_id = <your assetid>
 
-    # Wait for the transaction to be confirmed
-    pendinginfo = algod_client.pending_transaction_info(txid)
-    while pendinginfo['round'] == 0:
-        pendinginfo = algod_client.pending_transaction_info(txid)
+# CHANGE MANAGER
 
-    # Check asset info to view change in management.
-    asset_info = algod_client.asset_info(asset_id)
-    print(json.dumps(asset_info, indent=4))
+# The current manager(Account 2) issues an asset configuration transaction that assigns Account 1 as the new manager.
+# Keep reserve, freeze, and clawback address same as before, i.e. account 2
+
+txn = future.transaction.AssetConfigTxn(
+    sender=accounts[2]['pk'],
+    sp=params,
+    index=asset_id,
+    manager=accounts[1]['pk'],
+    reserve=accounts[2]['pk'],
+    freeze=accounts[2]['pk'],
+    clawback=accounts[2]['pk'])
+# sign by the current manager - Account 2
+stxn = txn.sign(accounts[2]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+
+# Check asset info to view change in management. manager should now be account 1
+printCreatedAsset(algod_client, accounts[1]['pk'], asset_id)
 ```
 
 ``` java tab="Java"  
@@ -452,37 +459,36 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 ```
 
 ``` python tab="Python"  
-    # Check if asset_id is in account 2's asset holdings prior to opt-in
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    holding = None
-    if 'assets' in account_info:
-        holding = account_info['assets'].get(str(asset_id))
+asset_id = <your assetid>
 
-    if not holding:
-        # Get latest network parameters
-        data = {
-            "sender": accounts[2]['pk'],
-            "fee": min_fee,
-            "first": first,
-            "last": last,
-            "gh": gh,
-            "receiver": accounts[2]["pk"],
-            "amt": 0,
-            "index": asset_id,
-            "flat_fee": True
-        }
-        print("Asset Option In")
-        # Use the AssetTransferTxn class to transfer assets
-        txn = transaction.AssetTransferTxn(**data)
-        stxn = txn.sign(accounts[2]['sk'])
-        txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-        print(txid)
-        # Wait for the transaction to be confirmed
-        wait_for_confirmation(txid)
-        # Now check the asset holding for that account. 
-        # This should now show a holding with a balance of 0.
-        account_info = algod_client.account_info(accounts[2]['pk'])
-        print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+# OPT-IN
+
+accountInfo = algod_client.account_info(accounts[3]['pk'])
+holding = None
+idx = 0
+for myaccountInfo in accountInfo['assets']:
+    scrutinizedAsset = accountInfo['assets'][idx]
+    idx = idx + 1
+    if (scrutinizedAsset['asset-id'] == asset_id):
+        holding = True
+        break
+
+if not holding:
+    # Use the AssetTransferTxn class to transfer assets and opt-in
+    txn = future.transaction.AssetTransferTxn(
+        sender=accounts[3]['pk'],
+        sp=params,
+        receiver=accounts[3]["pk"],
+        amt=0,
+        index=asset_id)
+    stxn = txn.sign(accounts[3]['sk'])
+    txid = algod_client.send_transaction(stxn)
+    print(txid)
+    # Wait for the transaction to be confirmed
+    wait_for_confirmation(algod_client, txid)
+    # Now check the asset holding for that account.
+    # This should now show a holding with a balance of 0.
+    printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
 ```
 
 ``` java tab="Java"  
@@ -596,28 +602,24 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 ```
 
 ``` python tab="Python"  
-    # send 10 
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "receiver": accounts[2]["pk"],
-        "amt": 10,
-        "index": asset_id,
-        "flat_fee": True
-    }
-    print("Asset Transfer")
-    txn = transaction.AssetTransferTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
-    # The balance should now be 10.
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+asset_id = <your assetid>
+
+# TRANSFER ASSET
+
+# transfer asset of 10 from account 1 to account 3
+txn = future.transaction.AssetTransferTxn(
+    sender=accounts[1]['pk'],
+    sp=params,
+    receiver=accounts[3]["pk"],
+    amt=10,
+    index=asset_id)
+stxn = txn.sign(accounts[1]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+# The balance should now be 10.
+printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
 ```
 
 ``` java tab="Java"  
@@ -729,28 +731,25 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 ```
 
 ``` python tab="Python"  
-    # Freezing an Asset
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "index": asset_id,
-        "target": accounts[2]['pk'],
-        "new_freeze_state": True,
-        "flat_fee": True
-    }
-    print("Asset Freeze")
-    txn = transaction.AssetFreezeTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
-    # The balance should now be 10.
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+asset_id = <Your assetid>
+
+# FREEZE ASSET
+
+# The freeze address (Account 2) freezes Account 3's latinum holdings.
+txn = future.transaction.AssetFreezeTxn(
+    sender=accounts[2]['pk'],
+    sp=params,
+    index=asset_id,
+    target=accounts[3]["pk"],
+    new_freeze_state=True
+)
+stxn = txn.sign(accounts[2]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+# The balance should now be 10 with frozen set to true.
+printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
 ```
 
 ``` java tab="Java"  
@@ -868,32 +867,34 @@ Revoking an asset for an account removes a specific number of the asset from the
 ```
 
 ``` python tab="Python"  
-    # Revoking an Asset
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "receiver": accounts[1]["pk"],
-        "amt": 10,
-        "index": asset_id,
-        "revocation_target": accounts[2]['pk'],
-        "flat_fee": True
-    }
-    print("Asset Revoke")
-    txn = transaction.AssetTransferTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
-    # The balance of account 2 should now be 0.
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
-    # The balance of account 1 should increase by 10 to 1000.
-    account_info = algod_client.account_info(accounts[1]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+asset_id = <your assetid>
+
+# REVOKE ASSET
+
+# The clawback address (Account 2) revokes 10 latinum from Account 3 and places it back with Account 1.
+
+# Must be signed by the account that is the Asset's clawback address
+txn = future.transaction.AssetTransferTxn(
+    sender=accounts[2]['pk'],
+    sp=params,
+    receiver=accounts[1]["pk"],
+    amt=10,
+    index=asset_id,
+    revocation_target=accounts[3]['pk']
+)
+stxn = txn.sign(accounts[2]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+# The balance of account 3 should now be 0.
+# account_info = algod_client.account_info(accounts[3]['pk'])
+print("Account 3")
+printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
+
+# The balance of account 1 should increase by 10 to 1000.
+print("Account 1")
+printAssetHolding(algod_client, accounts[1]['pk'], asset_id)
 ```
 
 ``` java tab="Java"  
@@ -1010,36 +1011,39 @@ Created assets can be destroyed only by the asset manager account. All of the as
 ```
 
 ``` python tab="Python"  
-    # Destroy Asset
-    data = {
-        "sender": accounts[2]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "index": asset_id,
-        "flat_fee": True,
-        "strict_empty_address_check": False
-    }
-    print("Destroying Asset")
-    # Construct Asset Creation transaction
-    txn = transaction.AssetConfigTxn(**data)
+asset_id = <Your assetid>
 
-    # Sign with secret key of creator
-    stxn = txn.sign(accounts[2]['sk'])
+# DESTROY ASSET
+# With all assets back in the creator's account,
+# the manager (Account 1) destroys the asset.
 
-    # Send the transaction to the network and retrieve the txid.
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
+# Asset destroy transaction
+txn = future.transaction.AssetConfigTxn(
+    sender=accounts[1]['pk'],
+    sp=params,
+    index=asset_id,
+    strict_empty_address_check=False
+)
 
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
+# Sign with secret key of creator
+stxn = txn.sign(accounts[1]['sk'])
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
 
-    # This should raise an exception since the asset was deleted.
-    try:
-        asset_info = algod_client.asset_info(asset_id)
-    except Exception as e:
-        print(e)
+# Asset was deleted.
+try:
+    print("Account 3 must do a transaction for an amount of 0, ")
+    print("with a close_assets_to to the creator account, to clear it from its accountholdings")
+    print("For Account 1, nothing should print after this as the asset is destroyed on the creator account")
+
+    printAssetHolding(algod_client, accounts[1]['pk'], asset_id)
+    printCreatedAsset(algod_client, accounts[1]['pk'], asset_id)
+    # asset_info = algod_client.asset_info(asset_id)
+except Exception as e:
+    print(e)
 ```
 
 ``` java tab="Java"  
@@ -1165,9 +1169,35 @@ const printAssetHolding = async function (algodclient, account, assetid) {
 ```
 
 ```python tab="Python"
-    # Check asset info.
-    asset_info = algod_client.asset_info(asset_id)
-    print(json.dumps(asset_info, indent=4))
+#   Utility function used to print created asset for account and assetid
+def printCreatedAsset(algodclient, account, assetid):    
+    # note: if you have an indexer instance available it is easier to just use this
+    # response = myindexer.accounts(asset_id = assetid)
+    # then use 'accountInfo['created-assets'][0] to get info on the created asset
+    accountInfo = algodclient.account_info(account)
+    idx = 0;
+    for myaccountInfo in accountInfo['created-assets']:
+        scrutinizedAsset = accountInfo['created-assets'][idx]
+        idx = idx + 1       
+        if (scrutinizedAsset['index'] == assetid):
+            print("Asset ID: {}".format(scrutinizedAsset['index']))
+            print(json.dumps(myaccountInfo['params'], indent=4))
+            break
+
+#   Utility function used to print asset holding for account and assetid
+def printAssetHolding(algodclient, account, assetid):
+    # note: if you have an indexer instance available it is easier to just use this
+    # response = myindexer.accounts(asset_id = assetid)
+    # then loop thru the accounts returned and match the account you are looking for
+    accountInfo = algodclient.account_info(account)
+    idx = 0
+    for myaccountInfo in accountInfo['assets']:
+        scrutinizedAsset = accountInfo['assets'][idx]
+        idx = idx + 1        
+        if (scrutinizedAsset['asset-id'] == assetid):
+            print("Asset ID: {}".format(scrutinizedAsset['asset-id']))
+            print(json.dumps(scrutinizedAsset, indent=4))
+            break
 ```
 
 ```java tab="Java"
@@ -1602,256 +1632,421 @@ Clawback address: <clawback-address>
     ```
 
     ```python tab="Python"
-    import json
-    import time
-    from algosdk import account, algod, mnemonic, transaction
+   import json
+from algosdk import account, mnemonic, transaction, future
+from algosdk.v2client import algod
 
-    # Shown for demonstration purposes. NEVER reveal secret mnemonics in practice. 
-    # Change these values if you want to use different accounts.
-    mnemonic1 = <25-word-passphrase>
-    mnemonic2 = <25-word-passphrase>
-    mnemonic3 = <25-word-passphrase>
+# Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+# Change these values with your mnemonics
+# mnemonic1 = "PASTE your phrase for account 1"
+# mnemonic2 = "PASTE your phrase for account 2"
+# mnemonic3 = "PASTE your phrase for account 3"
 
-    # For ease of reference, add account public and private keys to 
-    # an accounts dict.
-    accounts = {}
-    counter = 1
-    for m in [mnemonic1, mnemonic2, mnemonic3]:
-        accounts[counter] = {}
-        accounts[counter]['pk'] = mnemonic.to_public_key(m)
-        accounts[counter]['sk'] = mnemonic.to_private_key(m)
-        counter += 1
-
-    # Specify your node address and token. This must be updated.
-    algod_address = <algod-address>
-    algod_token = <algod-token>
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-
-    # Get network params for transaction
-    params = algod_client.suggested_params()
-    first = params.get("lastRound")
-    last = first + 1000
-    gen = params.get("genesisID")
-    gh = params.get("genesishashb64")
-    min_fee = params.get("minFee")
-
-    # utility for waiting on a transaction confirmation
-    def wait_for_confirmation(  txid ):
-        while True:
-            txinfo = algod_client.pending_transaction_info(txid)
-            if txinfo.get('round') and txinfo.get('round') > 0:
-                print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('round')))
-                break
-            else:
-                print("Waiting for confirmation...")
-                algod_client.status_after_block(algod_client.status().get('lastRound') +1)
-
-        return txinfo
-                
-    # Configure fields for creating the asset.
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "total": 1000,
-        "decimals": 0,
-        "default_frozen": False,
-        "unit_name": <unit-name>,
-        "asset_name": <asset-name>,
-        "manager": accounts[1]['pk'],
-        "reserve": accounts[1]['pk'],
-        "freeze": accounts[1]['pk'],
-        "clawback": accounts[1]['pk'],
-        "url": "https://path/to/my/asset/details",
-        "flat_fee": True
-    }
-
-    # Construct Asset Creation transaction
-    txn = transaction.AssetConfigTxn(**data)
-
-    # Sign with secret key of creator
-    stxn = txn.sign(accounts[1]['sk'])
-
-    print("Asset Creation")
-    # Send the transaction to the network and retrieve the txid.
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    # Retrieve the asset ID of the newly created asset by first
-    # ensuring that the creation transaction was confirmed,
-    # then pulling account info of the creator and grabbing the 
-    # asset with the max asset ID. 
-    # Wait for the transaction to be confirmed
-    txinfo = wait_for_confirmation(txid)
-    print(txinfo.keys())
-    print(txinfo)
-    asset_id = txinfo["txresults"]["createdasset"]
-    account_info = algod_client.account_info(accounts[1]['pk'])
+mnemonic1 = "canal enact luggage spring similar zoo couple stomach shoe laptop middle wonder eager monitor weather number heavy skirt siren purity spell maze warfare ability ten"
+mnemonic2 = "beauty nurse season autumn curve slice cry strategy frozen spy panic hobby strong goose employ review love fee pride enlist friend enroll clip ability runway"
+mnemonic3 = "picnic bright know ticket purity pluck stumble destroy ugly tuna luggage quote frame loan wealth edge carpet drift cinnamon resemble shrimp grain dynamic absorb edge"
 
 
-    # Update manager address.
-    # Keep reserve, freeze, and clawback address same as before, i.e. account 1
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "index": asset_id,
-        "manager": accounts[2]['pk'],
-        "reserve": accounts[1]['pk'],
-        "freeze": accounts[1]['pk'],
-        "clawback": accounts[1]['pk'],
-        "flat_fee": True
-    }
-    txn = transaction.AssetConfigTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    print("Asset Modification")
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
+# For ease of reference, add account public and private keys to
+# an accounts dict.
+accounts = {}
+counter = 1
+for m in [mnemonic1, mnemonic2, mnemonic3]:
+    accounts[counter] = {}
+    accounts[counter]['pk'] = mnemonic.to_public_key(m)
+    accounts[counter]['sk'] = mnemonic.to_private_key(m)
+    counter += 1
+
+# Specify your node address and token. This must be updated.
+# algod_address = ""  # ADD ADDRESS
+# algod_token = ""  # ADD TOKEN
+
+algod_address = "http://localhost:4001"
+algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+# Initialize an algod client
+algod_client = algod.AlgodClient(algod_token=algod_token, algod_address=algod_address)
+
+#   Utility function to wait for a transaction to be confirmed by network
+def wait_for_confirmation(algod_client, txid):
+   last_round = algod_client.status().get('last-round')
+   while True:
+       txinfo = algod_client.pending_transaction_info(txid)
+       if txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0:
+           print("Transaction {} confirmed in round {}.".format(
+               txid, txinfo.get('confirmed-round')))
+           break
+       else:
+           print("Waiting for confirmation...")
+           last_round += 1
+           algod_client.status_after_block(last_round)
+
+#   Utility function used to print created asset for account and assetid
+def printCreatedAsset(algodclient, account, assetid):    
+    # note: if you have an indexer instance available it is easier to just use this
+    # response = myindexer.accounts(asset_id = assetid)
+    # then use 'accountInfo['created-assets'][0] to get info on the created asset
+    accountInfo = algodclient.account_info(account)
+    idx = 0;
+    for myaccountInfo in accountInfo['created-assets']:
+        scrutinizedAsset = accountInfo['created-assets'][idx]
+        idx = idx + 1       
+        if (scrutinizedAsset['index'] == assetid):
+            print("Asset ID: {}".format(scrutinizedAsset['index']))
+            print(json.dumps(myaccountInfo['params'], indent=4))
+            break
+
+#   Utility function used to print asset holding for account and assetid
+def printAssetHolding(algodclient, account, assetid):
+    # note: if you have an indexer instance available it is easier to just use this
+    # response = myindexer.accounts(asset_id = assetid)
+    # then loop thru the accounts returned and match the account you are looking for
+    accountInfo = algodclient.account_info(account)
+    idx = 0
+    for myaccountInfo in accountInfo['assets']:
+        scrutinizedAsset = accountInfo['assets'][idx]
+        idx = idx + 1        
+        if (scrutinizedAsset['asset-id'] == assetid):
+            print("Asset ID: {}".format(scrutinizedAsset['asset-id']))
+            print(json.dumps(scrutinizedAsset, indent=4))
+            break
+
+print("Account 1 address: {}".format(accounts[1]['pk']))
+print("Account 2 address: {}".format(accounts[2]['pk']))
+print("Account 3 address: {}".format(accounts[3]['pk']))
+
+# your terminal output should look similar to the following
+# Account 1 address: ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ
+# Account 2 address: AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4
+# Account 3 address: IWR4CLLCN2TIVX2QPVVKVR5ER5OZGMWAV5QB2UIPYMPKBPLJZX4C37C4AA
+
+# CREATE ASSET
+# Get network params for transactions before every transaction.
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+
+# Account 1 creates an asset called latinum and
+# sets Account 2 as the manager, reserve, freeze, and clawback address.
+# Asset Creation transaction
+
+txn = future.transaction.AssetConfigTxn(
+    sender=accounts[1]['pk'],
+    sp=params,
+    total=1000,
+    default_frozen=False,
+    unit_name="LATINUM",
+    asset_name="latinum",
+    manager=accounts[2]['pk'],
+    reserve=accounts[2]['pk'],
+    freeze=accounts[2]['pk'],
+    clawback=accounts[2]['pk'],
+    url="https://path/to/my/asset/details", 
+    decimals=0)
+# Sign with secret key of creator
+stxn = txn.sign(accounts[1]['sk'])
+
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(txid)
+
+# Retrieve the asset ID of the newly created asset by first
+# ensuring that the creation transaction was confirmed,
+# then grabbing the asset id from the transaction.
+
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client,txid)
+
+try:
+    # Pull account info for the creator
+    # account_info = algod_client.account_info(accounts[1]['pk'])
+    # get asset_id from tx
+    # Get the new asset's information from the creator account
+    ptx = algod_client.pending_transaction_info(txid)
+    asset_id = ptx["asset-index"]
+    printCreatedAsset(algod_client, accounts[1]['pk'], asset_id)
+    printAssetHolding(algod_client, accounts[1]['pk'], asset_id)
+except Exception as e:
+    print(e)
+
+# terminal output should be similar to below
+# Transaction WVG5HSCU7OIMFHLQGMPJF3NZ56A6FE3DMFUNBUKH73ZUMIU3N3HA confirmed in round 3982822.
+# Waiting for confirmation...
+# Transaction DDDNZWERVG54J32PLCJQENLC5FAFIFYY6ZSYRY25C3J26TJKJ5IA confirmed in round 3982906.
+# Asset ID: 2653870
+# {
+#     "clawback": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "decimals": 0,
+#     "default-frozen": false,
+#     "freeze": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "manager": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "metadata-hash": "MTZlZmFhMzkyNGE2ZmQ5ZDNhNDgyNDc5OWE0YWM2NWQ=",
+#     "name": "latinum",
+#     "reserve": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "total": 1000,
+#     "unit-name": "LATINUM",
+#     "url": "https://path/to/my/asset/details"
+# }
+# Asset ID: 2653870
+# {
+#     "amount": 1000,
+#     "asset-id": 2653870,
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "is-frozen": false
+# }
+
+
+# CHANGE MANAGER
+
+# The current manager(Account 2) issues an asset configuration transaction that assigns Account 1 as the new manager.
+# Keep reserve, freeze, and clawback address same as before, i.e. account 2
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+
+# asset_id = 328952;
+
+txn = future.transaction.AssetConfigTxn(
+    sender=accounts[2]['pk'],
+    sp=params,
+    index=asset_id, 
+    manager=accounts[1]['pk'],
+    reserve=accounts[2]['pk'],
+    freeze=accounts[2]['pk'],
+    clawback=accounts[2]['pk'])
+# sign by the current manager - Account 2
+stxn = txn.sign(accounts[2]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+
+# Check asset info to view change in management. manager should now be account 1
+printCreatedAsset(algod_client, accounts[1]['pk'], asset_id)
+# terminal output should be similar to...
+# Transaction Y7EYBJNFP7YPGCV7ZD47PMJZHXB2PRT3SZ534M7BZE7G55IMPKUA confirmed in round 3982910.
+# Asset ID: 2653870
+# {
+#     "clawback": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "decimals": 0,
+#     "default-frozen": false,
+#     "freeze": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "manager": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "metadata-hash": "MTZlZmFhMzkyNGE2ZmQ5ZDNhNDgyNDc5OWE0YWM2NWQ=",
+#     "name": "latinum",
+#     "reserve": "AK6Q33PDO4RJZQPHEMODC6PUE5AR2UD4FBU6TNEJOU4UR4KC6XL5PWW5K4",
+#     "total": 1000,
+#     "unit-name": "LATINUM",
+#     "url": "https://path/to/my/asset/details"
+# }
+
+# OPT-IN
+
+# Check if asset_id is in account 3's asset holdings prior
+# to opt-in
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+
+accountInfo = algod_client.account_info(accounts[3]['pk'])
+holding = None
+idx = 0
+for myaccountInfo in accountInfo['assets']:
+    scrutinizedAsset = accountInfo['assets'][idx]
+    idx = idx + 1    
+    if (scrutinizedAsset['asset-id'] == asset_id):
+        holding = True
+        break
+
+if not holding:
+
+    # Use the AssetTransferTxn class to transfer assets and opt-in
+    txn = future.transaction.AssetTransferTxn(
+        sender=accounts[3]['pk'],
+        sp=params,
+        receiver=accounts[3]["pk"],
+        amt=0,
+        index=asset_id)
+    stxn = txn.sign(accounts[3]['sk'])
+    txid = algod_client.send_transaction(stxn)
     print(txid)
-
     # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
+    wait_for_confirmation(algod_client, txid)
+    # Now check the asset holding for that account.
+    # This should now show a holding with a balance of 0.
+    printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
 
-    # Check asset info to view change in management.
-    asset_info = algod_client.asset_info(asset_id)
-    print(json.dumps(asset_info, indent=4))
+# terminal output should look similar to this...
 
-    # Check if asset_id is in account 2's asset holdings prior to opt-in
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    holding = None
-    if 'assets' in account_info:
-        holding = account_info['assets'].get(str(asset_id))
+# Transaction ACYWQVRO6XKQNIHHGH7PDIPKPGURES6YA7OCI654PTR75RKTL4FA confirmed in round 3982915.
+# Asset ID: 2653870
+# {
+#     "amount": 0,
+#     "asset-id": 2653870,
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "is-frozen": false
+# }
 
-    if not holding:
-        # Get latest network parameters
-        data = {
-            "sender": accounts[2]['pk'],
-            "fee": min_fee,
-            "first": first,
-            "last": last,
-            "gh": gh,
-            "receiver": accounts[2]["pk"],
-            "amt": 0,
-            "index": asset_id,
-            "flat_fee": True
-        }
-        print("Asset Option In")
-        # Use the AssetTransferTxn class to transfer assets
-        txn = transaction.AssetTransferTxn(**data)
-        stxn = txn.sign(accounts[2]['sk'])
-        txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-        print(txid)
-        # Wait for the transaction to be confirmed
-        wait_for_confirmation(txid)
-        # Now check the asset holding for that account. 
-        # This should now show a holding with a balance of 0.
-        account_info = algod_client.account_info(accounts[2]['pk'])
-        print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+# TRANSFER ASSET
 
-    # send 10 
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "receiver": accounts[2]["pk"],
-        "amt": 10,
-        "index": asset_id,
-        "flat_fee": True
-    }
-    print("Asset Transfer")
-    txn = transaction.AssetTransferTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
-    # The balance should now be 10.
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+# transfer asset of 10 from account 1 to account 3
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+txn = future.transaction.AssetTransferTxn(
+    sender=accounts[1]['pk'],
+    sp=params,
+    receiver=accounts[3]["pk"],
+    amt=10,
+    index=asset_id)
+stxn = txn.sign(accounts[1]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+# The balance should now be 10.
+printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
 
-    # Freezing an Asset
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "index": asset_id,
-        "target": accounts[2]['pk'],
-        "new_freeze_state": True,
-        "flat_fee": True
-    }
-    print("Asset Freeze")
-    txn = transaction.AssetFreezeTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
-    # The balance should now be 10.
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+# terminal output should look similar to this...
+# Transaction AYL3FKK6IUWRV2RRCWFBZYO3STX2D74XML6HFWH4EELSDLMLUCCQ confirmed in round 3982920.
+# Asset ID: 2653870
+# {
+#     "amount": 10,
+#     "asset-id": 2653870,
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "is-frozen": false
+# }
 
-    # Revoking an Asset
-    data = {
-        "sender": accounts[1]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "receiver": accounts[1]["pk"],
-        "amt": 10,
-        "index": asset_id,
-        "revocation_target": accounts[2]['pk'],
-        "flat_fee": True
-    }
-    print("Asset Revoke")
-    txn = transaction.AssetTransferTxn(**data)
-    stxn = txn.sign(accounts[1]['sk'])
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
-    # The balance of account 2 should now be 0.
-    account_info = algod_client.account_info(accounts[2]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
-    # The balance of account 1 should increase by 10 to 1000.
-    account_info = algod_client.account_info(accounts[1]['pk'])
-    print(json.dumps(account_info['assets'][str(asset_id)], indent=4))
+# FREEZE ASSET
 
-    # Destroy Asset
-    data = {
-        "sender": accounts[2]['pk'],
-        "fee": min_fee,
-        "first": first,
-        "last": last,
-        "gh": gh,
-        "index": asset_id,
-        "flat_fee": True,
-        "strict_empty_address_check": False
-    }
-    print("Destroying Asset")
-    # Construct Asset Creation transaction
-    txn = transaction.AssetConfigTxn(**data)
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+# The freeze address (Account 2) freezes Account 3's latinum holdings.
 
-    # Sign with secret key of creator
-    stxn = txn.sign(accounts[2]['sk'])
+txn = future.transaction.AssetFreezeTxn(
+    sender=accounts[2]['pk'],
+    sp=params,
+    index=asset_id,
+    target=accounts[3]["pk"],
+    new_freeze_state=True   
+    )
+stxn = txn.sign(accounts[2]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+# The balance should now be 10 with frozen set to true.
+printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
 
-    # Send the transaction to the network and retrieve the txid.
-    txid = algod_client.send_transaction(stxn, headers={'content-type': 'application/x-binary'})
-    print(txid)
+# Terminal output should look similar to this wih a frozen value of true...
+# Transaction 5NFHUQ4GEQMT4EFPMIIBTHNOX4LS5GQLZRKCKCA2GAUVAS4PAGJQ confirmed in round 3982928.
+# Asset ID: 2653870
+# {
+#     "amount": 10,
+#     "asset-id": 2653870,
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "is-frozen": true
+# }
 
-    # Wait for the transaction to be confirmed
-    wait_for_confirmation(txid)
+# REVOKE ASSET
 
-    # This should raise an exception since the asset was deleted.
-    try:
-        asset_info = algod_client.asset_info(asset_id)
-    except Exception as e:
-        print(e)    
+# The clawback address (Account 2) revokes 10 latinum from Account 3 and places it back with Account 1.
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+
+# Must be signed by the account that is the Asset's clawback address
+txn = future.transaction.AssetTransferTxn(
+    sender=accounts[2]['pk'],
+    sp=params,
+    receiver=accounts[1]["pk"],
+    amt=10,
+    index=asset_id,
+    revocation_target=accounts[3]['pk']
+    )
+stxn = txn.sign(accounts[2]['sk'])
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+# The balance of account 3 should now be 0.
+# account_info = algod_client.account_info(accounts[3]['pk'])
+print("Account 3")
+printAssetHolding(algod_client, accounts[3]['pk'], asset_id)
+
+# The balance of account 1 should increase by 10 to 1000.
+print("Account 1")
+printAssetHolding(algod_client, accounts[1]['pk'], asset_id)
+
+# Terminal output should be similar to...
+# Transaction 4UFNTECSEBAGJT52XLIBM7BQXHBTXUHLZ2U4M4XTZUAVE4VLKURQ confirmed in round 3982932.
+# Account 3
+# Asset ID: 2653870
+# {
+#     "amount": 0,
+#     "asset-id": 2653870,
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "is-frozen": true
+# }
+# Account 1
+# Asset ID: 2653870
+# {
+#     "amount": 1000,
+#     "asset-id": 2653870,
+#     "creator": "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ",
+#     "is-frozen": false
+# }
+
+# DESTROY ASSET
+# With all assets back in the creator's account,
+# the manager (Account 1) destroys the asset.
+params = algod_client.suggested_params()
+# comment these two lines if you want to use suggested params
+params.fee = 1000
+params.flat_fee = True
+
+# Asset destroy transaction
+txn = future.transaction.AssetConfigTxn(
+    sender=accounts[1]['pk'],
+    sp=params,
+    index=asset_id,
+    strict_empty_address_check=False
+    )
+
+# Sign with secret key of creator
+stxn = txn.sign(accounts[1]['sk'])
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(txid)
+# Wait for the transaction to be confirmed
+wait_for_confirmation(algod_client, txid)
+
+# Asset was deleted.
+try:
+    print("Account 3 must do a transaction for an amount of 0, " )
+    print("with a close_assets_to to the creator account, to clear it from its accountholdings")
+    print("For Account 1, nothing should print after this as the asset is destroyed on the creator account")
+   
+    printAssetHolding(algod_client, accounts[1]['pk'], asset_id)
+    printCreatedAsset(algod_client, accounts[1]['pk'], asset_id)
+    # asset_info = algod_client.asset_info(asset_id)
+except Exception as e:
+    print(e)
+
+# Transaction C7BOB7ZNVIJ477LEAIJYDNXIIFZTY7ETTB3QEV3GWRJ7BGOZMSGA confirmed in round 3983117.
+# Account 3 must do a transaction for an amount of 0,
+# with a close_assets_to to the creator account, to clear it from its accountholdings
+# For Account 1, nothing should print after this if the asset is destroyed on the creator account
 
     ```
 
