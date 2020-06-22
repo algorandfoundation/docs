@@ -116,7 +116,6 @@ console.log(recoveredAccount3.addr);
     params.flatFee = true;
     console.log(params);
     let note = undefined; // arbitrary data to be stored in the transaction; here, none is stored
-
     // Asset creation specific parameters
     // The following parameters are asset specific
     // Throughout the example these will be re-used. 
@@ -256,6 +255,15 @@ console.log(recoveredAccount3.addr);
     // of the new asset to themseleves 
     // In this example we are setting up the 3rd recovered account to 
     // receive the new asset
+
+    // First update changing transaction parameters
+    // We will account for changing transaction parameters
+    // before every transaction in this example
+    params = await algodclient.getTransactionParams().do();
+    //comment out the next two lines to use suggested fee
+    params.fee = 1000;
+    params.flatFee = true;
+
     let sender = recoveredAccount3.addr;
     let recipient = sender;
     // We set revocationTarget to undefined as 
@@ -267,13 +275,7 @@ console.log(recoveredAccount3.addr);
     // We are sending 0 assets
     amount = 0;
 
-    // First update changing transaction parameters
-    // We will account for changing transaction parameters
-    // before every transaction in this example
-    params = await algodclient.getTransactionParams().do();
-    //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+
     // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
     let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
          amount, note, assetID, params);
@@ -303,15 +305,6 @@ console.log(recoveredAccount3.addr);
     // Now that account3 can recieve the new tokens 
     // we can tranfer tokens in from the creator
     // to account3
-
-
-    sender = recoveredAccount1.addr;
-    recipient = recoveredAccount3.addr;
-    revocationTarget = undefined;
-    closeRemainderTo = undefined;
-    //Amount of the asset to transfer
-    amount = 10;
-
     // First update changing transaction parameters
     // We will account for changing transaction parameters
     // before every transaction in this example
@@ -320,6 +313,14 @@ console.log(recoveredAccount3.addr);
     //comment out the next two lines to use suggested fee
     params.fee = 1000;
     params.flatFee = true;
+
+    sender = recoveredAccount1.addr;
+    recipient = recoveredAccount3.addr;
+    revocationTarget = undefined;
+    closeRemainderTo = undefined;
+    //Amount of the asset to transfer
+    amount = 10;
+
     // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
     let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
          amount,  note, assetID, params);
@@ -358,9 +359,6 @@ console.log(recoveredAccount3.addr);
     // The newly created asset. 
     // The freeze transaction is sent from the freeze acount
     // Which in this example is account2 
-    from = recoveredAccount2.addr;
-    freezeTarget = recoveredAccount3.addr;
-    freezeState = true;
 
     // First update changing transaction parameters
     // We will account for changing transaction parameters
@@ -370,6 +368,10 @@ console.log(recoveredAccount3.addr);
     //comment out the next two lines to use suggested fee
     params.fee = 1000;
     params.flatFee = true;
+
+    from = recoveredAccount2.addr;
+    freezeTarget = recoveredAccount3.addr;
+    freezeState = true;
 
     // The freeze transaction needs to be signed by the freeze account
     let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(from, note,
@@ -411,23 +413,22 @@ console.log(recoveredAccount3.addr);
     // The sender will be be the clawback adress.
     // the recipient will also be be the creator in this case
     // that is account3
-    sender = recoveredAccount2.addr;
-    recipient = recoveredAccount1.addr;
-    revocationTarget = recoveredAccount3.addr;
-    closeRemainderTo = undefined;
-    amount = 10;
-
     // First update changing transaction parameters
     // We will account for changing transaction parameters
     // before every transaction in this example
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
     params.fee = 1000;
-    params.flatFee = true;
+    params.flatFee = true;   
+    
+    sender = recoveredAccount2.addr;
+    recipient = recoveredAccount1.addr;
+    revocationTarget = recoveredAccount3.addr;
+    closeRemainderTo = undefined;
+    amount = 10;
     // signing and sending "txn" will send "amount" assets from "revocationTarget" to "recipient",
     // if and only if sender == clawback manager for this asset
     
-
     let rtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
        amount, note, assetID, params);
     // Must be signed by the account that is the clawback address    
