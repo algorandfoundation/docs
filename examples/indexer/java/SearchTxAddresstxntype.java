@@ -1,6 +1,6 @@
 // SearchTxAddresstxntype.java
 // requires java-algorand-sdk 1.4.0 or higher (see pom.xml)
-package com.algorand.SearchTxAddresstxntype;
+package com.algorand.javatest.indexer;
 
 import com.algorand.algosdk.v2.client.common.IndexerClient;
 import com.algorand.algosdk.v2.client.model.Enums.TxType;
