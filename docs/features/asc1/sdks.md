@@ -4,13 +4,15 @@ This guide covers using TEAL programs with contract accounts or delegated signat
 
 Each SDK's install process is discussed in the [SDK Reference](../../reference/sdks/index.md) documentation.
 
-Code snippets are abbreviated for conciseness and clarity. See the full code example for each SDK at the bottom of this guide.
+!!! info
+    The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
+
 
 # Accessing TEAL program from SDKs
 Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](./goal_teal_walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
 
 ``` bash
-//simple.teal contains int=0
+//simple.teal contains int 0
 //hexdump 
 $ hexdump -C simple.teal.tok
 00000000  01 20 01 00 22                                    |. .."|
@@ -314,6 +316,9 @@ int 123
 ==
 ```
 
+
+
+
 ??? example "Complete Example = Contract Account"
     
     ```javascript tab="JavaScript"
@@ -552,274 +557,7 @@ int 123
 
     }
     ```
-
-??? example "Complete Example = Account Delegation"
-    
-    ```javascript tab="JavaScript"
-    const algosdk = require('algosdk');
-
-    const token = "algod-token"<PLACEHOLDER>;
-    const server = "algod-address"<PLACEHOLDER>;
-    const port = algod-port<PLACEHOLDER>;
-
-    // import your private key mnemonic and address
-    let PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
-    var myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
-    console.log("My Address: " + myAccount.addr);
-
-    // create an algod client
-    let algodclient = new algosdk.Algod(token, server, port);
-    (async() => {
-
-        // get suggested parameters
-        let params = await algodclient.getTransactionParams();
-        let endRound = params.lastRound + parseInt(1000);
-        let fee = await algodclient.suggestedFee();
-
-        // create logic sig
-        // b64 example "ASABACI="
-        let program = new Uint8Array(Buffer.from("base64-encoded-program"<PLACEHOLDER>, "base64"));
-        let lsig = algosdk.makeLogicSig(program);
-
-        // sign the logic signature with an account sk
-        lsig.sign(myAccount.sk);
-
-        // create a transaction
-        let txn = {
-            "from": myAccount.addr,
-            "to": "receiver-address"<PLACEHOLDER>,
-            "fee": params.fee,
-            "amount": amount<PLACEHOLDER>,
-            "firstRound": params.lastRound,
-            "lastRound": endRound,
-            "genesisID": params.genesisID,
-            "genesisHash": params.genesishashb64
-        };
-    
-        // Create the LogicSigTransaction with contract account LogicSig 
-        let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
-
-        // send raw LogicSigTransaction to network    
-        let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob));
-        console.log("Transaction : " + tx.txId);
-    })().catch(e => {
-        console.log(e);
-    });
-    ```
-
-    ```python tab="Python"
-    from algosdk import algod, transaction, account, mnemonic
-    
-    try:
-
-        # create logic sig
-        # hex example b"\x01\x20\x01\x00\x22" 
-        program = b"hex-encoded-program"  
-        lsig = transaction.LogicSig(program)
-        sender = lsig.address()
-
-        #Recover the account that is wanting to delegate signature
-        passphrase = "25-word-mnemonic<PLACEHOLDER>";
-        sk = mnemonic.to_private_key(passphrase)
-        addr = account.address_from_private_key(sk)
-        print( "Address of Sender/Delgator: " + addr )
-
-        # sign the logic signature with an account sk
-        lsig.sign(sk)
-
-        # create an algod client
-        algod_token = "algod-token"<PLACEHOLDER>
-        algod_address = "algod-address"<PLACEHOLDER>
-        receiver = "receiver-address"<PLACEHOLDER>
-        acl = algod.AlgodClient(algod_token, algod_address)
-
-        # get suggested parameters
-        params = acl.suggested_params()
-        gen = params["genesisID"]
-        gh = params["genesishashb64"]
-        last_round = params["lastRound"]
-        fee = params["fee"]
-        amount = amount<PLACEHOLDER>
-        closeremainderto = None
-
-        # create a transaction
-        txn = transaction.PaymentTxn(addr, fee, last_round, last_round+100, gh, receiver, amount, closeremainderto)
-        # Create the LogicSigTransaction with contract account LogicSig
-        lstx = transaction.LogicSigTransaction(txn, lsig)
-
-        # send raw LogicSigTransaction to network
-        txid = acl.send_transaction(lstx)
-        print("Transaction ID: " + txid )
-    except Exception as e:
-        print(e)    
-    ```
-
-    ```java tab="Java"
-    package com.algorand.algosdk.teal;
-
-    import java.math.BigInteger;
-    import java.util.ArrayList;
-
-    import com.algorand.algosdk.account.Account;
-    import com.algorand.algosdk.algod.client.AlgodClient;
-    import com.algorand.algosdk.algod.client.ApiException;
-    import com.algorand.algosdk.algod.client.api.AlgodApi;
-    import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
-    import com.algorand.algosdk.algod.client.model.TransactionID;
-    import com.algorand.algosdk.algod.client.model.TransactionParams;
-    import com.algorand.algosdk.crypto.Address;
-    import com.algorand.algosdk.crypto.Digest;
-    import com.algorand.algosdk.crypto.LogicsigSignature;
-    import com.algorand.algosdk.transaction.SignedTransaction;
-    import com.algorand.algosdk.transaction.Transaction;
-    import com.algorand.algosdk.util.Encoder;
-
-    public class SubmitTealDelegate 
-    {
-        public static void main(final String args[]) throws Exception {
-            // Initialize an algod client
-            final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
-            final String ALGOD_API_TOKEN = "algod-token"<PLACEHOLDER>;
-
-            //Create an instance of the algod API client
-            AlgodClient client = (AlgodClient) new AlgodClient().setBasePath(ALGOD_API_ADDR);
-            ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-            api_key.setApiKey(ALGOD_API_TOKEN);
-            AlgodApi algodApiInstance = new AlgodApi(client);
-
-            // import your private key mnemonic and address
-            final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
-            Account src = new Account(SRC_ACCOUNT);
-            // Set the reciever
-            final String DEST_ADDR = "receiver-address"<PLACEHOLDER>;
-
-            // get suggested parameters
-            BigInteger suggestedFeePerByte = BigInteger.valueOf(1);
-            BigInteger firstRound = BigInteger.valueOf(301);
-            String genId = null;
-            Digest genesisHash = null;
-            try {
-                // Get suggested parameters from the node
-                TransactionParams params = algodApiInstance.transactionParams();
-                suggestedFeePerByte = params.getFee();
-                firstRound = params.getLastRound();
-                genId = params.getGenesisID();
-                genesisHash = new Digest(params.getGenesishashb64());
-
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#transactionParams");
-                e.printStackTrace();
-            }
-
-            // create logic sig
-            // hex example 0x01, 0x20, 0x01, 0x00, 0x22
-            byte[] program = {
-                hex-encoded-program<PLACEHOLDER>
-                };
-            LogicsigSignature lsig = new LogicsigSignature(program, teal_args);        
-
-            // sign the logic signature with an account sk
-            src.signLogicsig(lsig);
-
-            // create a transaction
-            BigInteger amount = BigInteger.valueOf(amount<PLACEHOLDER>);
-            BigInteger lastRound = firstRound.add(BigInteger.valueOf(1000)); 
-            Transaction tx = new Transaction(src.getAddress(), new Address(DEST_ADDR), BigInteger.valueOf(1000), amount, firstRound, lastRound, genId, genesisHash);
-
-            try {
-                // create the LogicSigTransaction with contract account LogicSig
-                SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
-                
-                // send raw LogicSigTransaction to network
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
-                TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
-                System.out.println("Successfully sent tx with id: " + id);
-
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-            }
-
-        }
-    }
-    ```
-
-    ```go tab="Go"
-    package main
-
-    import (
-        "fmt"
-        "encoding/base64"
-
-        "github.com/algorand/go-algorand-sdk/client/algod"
-        "github.com/algorand/go-algorand-sdk/crypto"
-        "github.com/algorand/go-algorand-sdk/mnemonic"
-        "github.com/algorand/go-algorand-sdk/transaction"
-        "github.com/algorand/go-algorand-sdk/types"
-    )
-
-    func main() {
-
-        const algodToken = "algod-token"<PLACEHOLDER>
-        const algodAddress = "algod-address"<PLACEHOLDER>
+!!! info
+    The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
 
 
-        // Get private key for sender address
-        PASSPHRASE := "25-word-mnemonic<PLACEHOLDER>"
-        sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
-        pk := sk.Public()
-        var a types.Address
-        cpk := pk.(ed25519.PublicKey)
-        copy(a[:], cpk[:])
-        fmt.Printf("Address: %s\n", a.String())	
-        sender := a.String()
-
-        // Create logic signature
-        // example base64 encoded program "ASABACI="
-        var ma crypto.MultisigAccount
-        program, err :=  base64.StdEncoding.DecodeString("base64-encoded-program"<PLACEHOLDER>)
-        var args [][]byte
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
-        addr := crypto.LogicSigAddress(lsig).String()
-        fmt.Printf("Escrow Address: %s\n" , addr )
-        
-
-        // Create an algod client
-        algodClient, err := algod.MakeClient(algodAddress, algodToken)
-        if err != nil {
-            fmt.Printf("failed to make algod client: %s\n", err)
-            return
-        }	
-        // Get suggested params for the transaction
-        txParams, err := algodClient.SuggestedParams()
-        if err != nil {
-                fmt.Printf("error getting suggested tx params: %s\n", err)
-                return
-        }
-
-        // Make transaction
-        const receiver = "transaction-receiver"<PLACEHOLDER>
-        const fee = fee<PLACEHOLDER>
-        const amount = amount<PLACEHOLDER>
-        var note []byte	
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        tx, err := transaction.MakePaymentTxnWithFlatFee(
-            sender.String(), receiver, fee, amount, txParams.LastRound, (txParams.LastRound + 1000),
-            note, "", genID, genHash )
-
-        txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
-        if err != nil {
-            fmt.Printf("Signing failed with %v", err)
-            return
-        }
-        fmt.Printf("Signed tx: %v\n", txid)
-
-        // Submit the raw transaction as normal
-        transactionID, err := algodClient.SendRawTransaction(stx)
-        if err != nil {
-            fmt.Printf("Sending failed with %v\n", err)
-        }
-        fmt.Printf("Transaction ID: %v\n", transactionID)
-
-    }
-    ```
