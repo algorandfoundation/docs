@@ -29,7 +29,7 @@ try:
     # algod_address = "algod-address" < PLACEHOLDER >
     # receiver = "receiver-address" < PLACEHOLDER >
     algod_client = algod.AlgodClient(algod_token, algod_address)
-    
+
     # create logic sig
     # program = b"hex-encoded-program"
     # b"\x01\x20\x01\x00\x22 is `int 0`
@@ -38,6 +38,14 @@ try:
 
     # program = b"hex-encoded-program"
     lsig = LogicSig(program)
+    # string parameter
+    # arg_str = "my string"
+    # arg1 = arg_str.encode()
+    # lsig = transaction.LogicSig(program, args=[arg1])
+    # integer parameter
+    # arg1 = (123).to_bytes(8, 'big')
+    # lsig = transaction.LogicSig(program, args=[arg1])
+
     sender = lsig.address()
 
     #Recover the account that is wanting to delegate signature
@@ -68,7 +76,7 @@ try:
         addr, params, receiver, amount, closeremainderto)
     # Create the LogicSigTransaction with contract account LogicSig
     lstx = transaction.LogicSigTransaction(txn, lsig)
-
+    # transaction.write_to_file([lstx], "simple.stxn")
     # send raw LogicSigTransaction to network
     print("This transaction is expected to fail as it is int 0 , always false")
     txid = algod_client.send_transaction(lstx)

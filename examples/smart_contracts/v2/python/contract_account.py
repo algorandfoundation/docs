@@ -40,6 +40,15 @@ try:
     # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
     program = b"\x01\x20\x01\x00\x22"
     lsig = LogicSig(program)
+   
+    # string parameter
+    # arg_str = "my string"
+    # arg1 = arg_str.encode()
+    # lsig = transaction.LogicSig(program, args=[arg1])
+    # integer parameter
+    # arg1 = (123).to_bytes(8, 'big')
+    # lsig = transaction.LogicSig(program, args=[arg1])
+
     sender = lsig.address()
 
     # get suggested parameters
@@ -60,6 +69,7 @@ try:
 
     # Create the LogicSigTransaction with contract account LogicSig
     lstx = transaction.LogicSigTransaction(txn, lsig)
+    # transaction.write_to_file([lstx], "simple.stxn")
 
     # send raw LogicSigTransaction to network
     print("This transaction is expected to fail as it is int 0 , always false")

@@ -7,6 +7,8 @@ const algosdk = require('algosdk');
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
+// Import the filesystem module 
+const fs = require('fs'); 
 
 // Function used to wait for a tx confirmation
 const waitForConfirmation = async function (algodclient, txId) {
@@ -40,7 +42,14 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
     // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
     let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
+
     let lsig = algosdk.makeLogicSig(program);
+    //string parameter
+    // let args = ["my string"];
+    // let lsig = algosdk.makeLogicSig(program, args);
+    //integer parameter
+    // let args = [[123]];
+    // let lsig = algosdk.makeLogicSig(program, args);
 
     // create a transaction
     let txn = {
@@ -61,6 +70,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
 
     // send raw LogicSigTransaction to network
+    // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
     console.log("Transaction : " + tx.txId);   
     await waitForConfirmation(algodclient, tx.txId);

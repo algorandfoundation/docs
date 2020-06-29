@@ -15,6 +15,10 @@ import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import org.json.JSONObject;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class AccountDeligation {
     // Utility function to update changing block parameters
@@ -71,6 +75,20 @@ public class AccountDeligation {
         // hex example 0x01, 0x20, 0x01, 0x00, 0x22 int 0 returns false, so rawTransaction will fail below
         byte[] program = { 0x01, 0x20, 0x01, 0x00, 0x22 };
         LogicsigSignature lsig = new LogicsigSignature(program, null);
+        
+        // string parameter
+        // ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+        // String orig = "my string";
+        // teal_args.add(orig.getBytes());
+        // LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
+
+        // integer parameter
+        // ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+        // byte[] arg1 = { 123 };
+        // teal_args.add(arg1);
+        // LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
+
+
         System.out.println("lsig address: " + lsig.toAddress());
         // sign the logic signature with an account sk
         src.signLogicsig(lsig);
@@ -92,6 +110,17 @@ public class AccountDeligation {
 
             // send raw LogicSigTransaction to network
             byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
+            // logic signature transaction can be written to a file
+            // try {
+            //     String FILEPATH = "./simple.stxn";
+            //     File file = new File(FILEPATH);
+            //     OutputStream os = new FileOutputStream(file);
+            //     os.write(encodedTxBytes);
+            //     os.close();
+            // } catch (Exception e) {
+            //     System.out.println("Exception: " + e);
+            // }
+
             Response<PostTransactionsResponse> rp = client.RawTransaction().rawtxn(encodedTxBytes).execute();
             String id = null;
             if (rp.body() != null) {
@@ -99,6 +128,7 @@ public class AccountDeligation {
             } else {
                 System.out.println(rp.message());
             }
+           
             // Wait for transaction confirmation
             waitForConfirmation(id);
             System.out.println("Successfully sent tx with id: " + id);

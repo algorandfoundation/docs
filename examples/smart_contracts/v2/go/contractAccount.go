@@ -5,6 +5,8 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/json"
+	// "encoding/binary"
+	// "os"
 	"fmt"
 
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
@@ -53,6 +55,19 @@ func main() {
 	program, err := base64.StdEncoding.DecodeString("ASABACI=")
 	var args [][]byte
 	lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+
+	// string parameter
+	// args := make([][]byte, 1)
+	// args[0] = []byte("my string")
+    // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+    
+    // integer parameter
+    // args := make([][]byte, 1)
+	// var buf [8]byte
+	// binary.BigEndian.PutUint64(buf[:], 123)
+	// args[0] = buf[:]
+    // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+
 	addr := crypto.LogicSigAddress(lsig).String()
 	fmt.Printf("Escrow Address: %s\n", addr)
 
@@ -94,7 +109,17 @@ func main() {
 		return
 	}
 	fmt.Printf("Signed tx: %v\n", txID)
+	// logic signature transaction can be written to a file
+	// f, err := os.Create("simple.stxn")
 
+	// defer f.Close()
+	// if _, err := f.Write(stx); err != nil {
+	//     // handle
+	// }
+	// if err := f.Sync(); err != nil {
+	//     // handle
+	// }
+		
 	// Submit the raw transaction to network
 	fmt.Printf("expected to fail with int 0 program, always false %s\n", err)
 	transactionID, err := algodClient.SendRawTransaction(stx).Do(context.Background())

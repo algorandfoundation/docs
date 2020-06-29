@@ -4,6 +4,8 @@ const algosdk = require('algosdk');
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
+// Import the filesystem module 
+const fs = require('fs'); 
     
 // const token = "algod-token"<PLACEHOLDER>;
 // const server = "algod-address"<PLACEHOLDER>;
@@ -52,7 +54,15 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
 
     let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
+ 
     let lsig = algosdk.makeLogicSig(program);
+    //string parameter
+    // let args = ["my string"];
+    // let lsig = algosdk.makeLogicSig(program, args);
+    //integer parameter
+    // let args = [[123]];
+    // let lsig = algosdk.makeLogicSig(program, args);
+
 
     // sign the logic signature with an account sk
     lsig.sign(myAccount.sk);
@@ -73,7 +83,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
     // Create the LogicSigTransaction with contract account LogicSig 
     let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
-
+    // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
     // send raw LogicSigTransaction to network    
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
     console.log("Transaction : " + tx.txId);    
