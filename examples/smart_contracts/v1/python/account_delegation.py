@@ -19,7 +19,7 @@ try:
     # passphrase = "25-word-mnemonic<PLACEHOLDER>"
     sk = mnemonic.to_private_key(passphrase)
     addr = account.address_from_private_key(sk)
-    print("Address of Sender/Delgator: " + addr)
+    print("Address of Sender/Delegator: " + addr)
 
     # sign the logic signature with an account sk
     lsig.sign(sk)
@@ -48,7 +48,7 @@ try:
         addr, fee, last_round, last_round+100, gh, receiver, amount, closeremainderto)
     # Create the LogicSigTransaction with contract account LogicSig
     lstx = transaction.LogicSigTransaction(txn, lsig)
-    print("This transaction is expected to fail as it is int 0 , alwasy false")
+    print("This transaction is expected to fail as it is int 0 , always false")
     # send raw LogicSigTransaction to network
     txid = acl.send_transaction(lstx)
     print("Transaction ID: " + txid)

@@ -111,7 +111,7 @@ func main() {
 	}
 	txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
 	if err != nil {
-		fmt.Printf("Can not marshall txn data: %s\n", err)
+		fmt.Printf("Cannot marshal txn data: %s\n", err)
 	}
 	fmt.Printf("Transaction information: %s\n", txnJSON)
 	fmt.Printf("Decoded note: %s\n", string(stxn.Txn.Note))

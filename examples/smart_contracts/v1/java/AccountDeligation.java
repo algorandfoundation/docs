@@ -22,10 +22,6 @@ public class AccountDeligation {
 
     public static void main(final String args[]) throws Exception {
         // Initialize an algod client
-        // hackathon
-        // final String ALGOD_API_ADDR = "http://hackathon.algodev.network:9100";
-        // final String ALGOD_API_TOKEN = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
-
         // your own node
         // final String ALGOD_API_ADDR = "http://127.0.0.1:8080";
         // final String ALGOD_API_TOKEN = "your token in your node/data/algod.token
@@ -50,7 +46,7 @@ public class AccountDeligation {
         // import your private key mnemonic and address
         final String SRC_ACCOUNT = "buzz genre work meat fame favorite rookie stay tennis demand panic busy hedgehog snow morning acquire ball grain grape member blur armor foil ability seminar";
         Account src = new Account(SRC_ACCOUNT);
-        // Set the reciever
+        // Set the receiver
         final String DEST_ADDR = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
 
         // get suggested parameters
@@ -71,8 +67,12 @@ public class AccountDeligation {
             e.printStackTrace();
         }
 
-        // create logic sig
+
+        // create logic sig int 0
         // hex example 0x01, 0x20, 0x01, 0x00, 0x22
+        // byte[] program = {
+        // hex-encoded-program<PLACEHOLDER>
+        // };
         byte[] program = {
             0x01, 0x20, 0x01, 0x00, 0x22  // int 0, returns false, so rawTransaction will fail below
         };

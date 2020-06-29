@@ -22,6 +22,18 @@ def wait_for_confirmation(client, txid):
 
 try:
 
+
+
+    # create an algod client
+    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
+    algod_address = "http://localhost:4001" 
+ 
+
+    # algod_token = "algod-token" < PLACEHOLDER >
+    # algod_address = "algod-address" < PLACEHOLDER >
+    # receiver = "receiver-address" < PLACEHOLDER >
+
+    algod_client = algod.AlgodClient(algod_token, algod_address)
     # create logic sig
     # program = b"hex-encoded-program"
     # b"\x01\x20\x01\x00\x22 is `int 0`
@@ -29,17 +41,6 @@ try:
     program = b"\x01\x20\x01\x00\x22"
     lsig = LogicSig(program)
     sender = lsig.address()
-
-    # create an algod client
-    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
-    algod_address = "http://localhost:4001" 
-    receiver = "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ" 
-
-    # algod_token = "algod-token" < PLACEHOLDER >
-    # algod_address = "algod-address" < PLACEHOLDER >
-    # receiver = "receiver-address" < PLACEHOLDER >
-
-    algod_client = algod.AlgodClient(algod_token, algod_address)
 
     # get suggested parameters
     params = algod_client.suggested_params()
@@ -51,6 +52,7 @@ try:
 
     amount = 10000 
     closeremainderto = None
+    receiver = "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ" 
 
     # create a transaction
     txn = PaymentTxn(
@@ -60,7 +62,7 @@ try:
     lstx = transaction.LogicSigTransaction(txn, lsig)
 
     # send raw LogicSigTransaction to network
-    print("This transaction is expected to fail as it is int 0 , alwasy false")
+    print("This transaction is expected to fail as it is int 0 , always false")
     txid = algod_client.send_transaction(lstx)
     print("Transaction ID: " + txid)    
     wait_for_confirmation(algod_client, txid) 

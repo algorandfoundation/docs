@@ -23,10 +23,7 @@ public class ContractAccount
         // Initialize an algod client
         // final String ALGOD_API_ADDR = "algod-address"<PLACEHOLDER>;
         // final String ALGOD_API_TOKEN = "algod-token"<PLACEHOLDER>;
-        //
-        // final String ALGOD_API_ADDR = "http://hackathon.algodev.network:9100";
-        // final String ALGOD_API_TOKEN = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
-
+        
         // your own node
         // final String ALGOD_API_ADDR = "http://127.0.0.1:8080";
         // final String ALGOD_API_TOKEN = "your token in your node/data/algod.token
@@ -48,7 +45,7 @@ public class ContractAccount
         api_key.setApiKey(ALGOD_API_TOKEN);
         AlgodApi algodApiInstance = new AlgodApi(client);
 
-        // Set the reciever
+        // Set the receiver
         final String DEST_ADDR = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
 
 
@@ -70,7 +67,7 @@ public class ContractAccount
             e.printStackTrace();
         }
 
-        // create logic sig
+        // create logic sig int 0
         // hex example 0x01, 0x20, 0x01, 0x00, 0x22
         // byte[] program = {
         //     hex-encoded-program<PLACEHOLDER>

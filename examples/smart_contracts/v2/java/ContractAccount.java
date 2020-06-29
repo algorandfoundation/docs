@@ -39,7 +39,7 @@ public class ContractAccount {
         Long lastRound = client.GetStatus().execute().body().lastRound;
         while (true) {
             try {
-                // Check the pending tranactions
+                // Check the pending transactions
                 Response<PendingTransactionResponse> pendingInfo = client.PendingTransactionInformation(txID).execute();
                 if (pendingInfo.body().confirmedRound != null && pendingInfo.body().confirmedRound > 0) {
                     // Got the completed Transaction
@@ -61,13 +61,12 @@ public class ContractAccount {
             this.client = connectToNetwork();
         // import your private key mnemonic and address
         
-        // Set the reciever
+        // Set the receiver
         final String RECEIVER = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
         // create logic sig
         // hex example 0x01, 0x20, 0x01, 0x00, 0x22 int 0 returns false, so rawTransaction will fail below
-        byte[] program = { 0x01, 0x20, 0x01, 0x01, 0x22 };
-       
-       
+        byte[] program = { 0x01, 0x20, 0x01, 0x00, 0x22 };
+             
         LogicsigSignature lsig = new LogicsigSignature(program, null);
         System.out.println("lsig address: " + lsig.toAddress());
         TransactionParametersResponse params = client.TransactionParams().execute().body();
