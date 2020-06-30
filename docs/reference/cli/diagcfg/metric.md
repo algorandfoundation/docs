@@ -4,7 +4,7 @@ title: diagcfg metric
 
 
 
-Enable/diable and configure Algorand metric collection, as indicated in the config.json file
+Enable/disable and configure Algorand metric collection, as indicated in the config.json file
 
 
 
@@ -57,7 +57,4 @@ diagcfg metric [command] [flags]
 
 
 * [diagcfg](../../diagcfg/diagcfg/)	 - CLI for interacting with Algorand logging.
-
-
-
 

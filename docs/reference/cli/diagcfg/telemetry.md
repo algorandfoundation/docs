@@ -4,7 +4,7 @@ title: diagcfg telemetry
 
 
 
-Enable/diable and configure Algorand remote logging
+Enable/disable and configure Algorand remote logging
 
 
 

@@ -1,4 +1,4 @@
-title: Telemetry
+title: logging.config
 
 #Initialization
 
