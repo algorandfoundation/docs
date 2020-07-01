@@ -55,6 +55,7 @@ goal node [flags]
 
 
 * [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
+* [goal node catchup](../catchup/)	 - Catchup the Algorand node to a specific catchpoint
 * [goal node clone](../clone/)	 - Clone the specified node to create another node
 * [goal node create](../create/)	 - Create a node at the desired data directory for the desired network.
 * [goal node generatetoken](../generatetoken/)	 - Generate and install a new API token.

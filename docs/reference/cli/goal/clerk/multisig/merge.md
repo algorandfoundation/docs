@@ -18,7 +18,7 @@ Combine multiple partially-signed multisig transactions, and write out transacti
 
 ```
 
-goal clerk multisig merge -o MERGEDTXFILE TXFILE1 TXFILE2 ... [flags]
+goal clerk multisig merge -o [merged transaction file] [input file 1] [input file 2]... [flags]
 
 ```
 
