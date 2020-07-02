@@ -90,3 +90,4 @@ The `kmd` process configuration parameters are shown in the table below.
 |------|------|------|
 | address | Configures the address the node listens to for REST API calls. Specify an IP and port or just port. For example, 127.0.0.1:0 will listen on a random port on the localhost | 127.0.0.1:0 |
 | allowed_origins | Configures the whitelist for allowed domains which can access the kmd process. Specify an array of urls that will be white listed. ie {“allowed_origins”: [“https://othersite1.com“, “https://othersite2.com”]} | |
+| session_lifetime_secs | Number of seconds for session expirations.| 60 |
