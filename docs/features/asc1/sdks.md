@@ -2,7 +2,7 @@ title: Using the SDKs
 
 This guide covers using TEAL programs with contract accounts or delegated signatures using V2 SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. [Algorand Smart Contract Templates](https://github.com/algorand/go-algorand/tree/master/tools/teal/templates) are also available for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. Developer tutorial documentation describing the process for using these templates are as follows:
 
-Hash-Lock Contracts Tutorials:
+Hash-Lock Contracts Tutorials (V1):
 
 [Python](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-python/), 
 [Java](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-java/), 
@@ -10,11 +10,11 @@ Hash-Lock Contracts Tutorials:
 [GO](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-go/), and 
 [PyTeal](https://developer.algorand.org/tutorials/hash-time-lock-contract-pyteal/)
 
-Split Contract Tutorials:
+Split Contract Tutorials (V1):
 
 [Python](https://developer.algorand.org/tutorials/split-contract-template-python/),  [Java](https://developer.algorand.org/tutorials/split-contract-template-java/),  [JavaScript](https://developer.algorand.org/tutorials/split-contract-template-javascript/), and [Go](https://developer.algorand.org/tutorials/split-contract-template-go/) 
 
-Limit Order Tutorials:
+Limit Order Tutorials (V1):
 
 [Python](https://developer.algorand.org/tutorials/limitorder-contract-python/),  [Java](https://developer.algorand.org/tutorials/limitorder-contract-java/),  [JavaScript](https://developer.algorand.org/tutorials/limitorder-contract-javascript/), and [Go](https://developer.algorand.org/tutorials/limitorder-contract-go/) 
 
