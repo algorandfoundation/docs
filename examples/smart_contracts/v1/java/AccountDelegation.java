@@ -17,7 +17,7 @@ import com.algorand.algosdk.transaction.SignedTransaction;
 import com.algorand.algosdk.transaction.Transaction;
 import com.algorand.algosdk.util.Encoder;
 
-public class AccountDeligation {
+public class AccountDelegation {
     // Utility function to update changing block parameters
 
     public static void main(final String args[]) throws Exception {

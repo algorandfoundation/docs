@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-public class AccountDeligation {
+public class AccountDelegation {
     // Utility function to update changing block parameters
     public AlgodClient client = null;
 
@@ -146,7 +146,7 @@ public class AccountDeligation {
 
     public static void main(final String args[]) throws Exception {
 
-        AccountDeligation t = new AccountDeligation();
+        AccountDelegation t = new AccountDelegation();
         t.accountDelegationExample();
 
     }
