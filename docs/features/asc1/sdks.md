@@ -1,15 +1,32 @@
 title: Using the SDKs
 
-This guide covers using TEAL programs with contract accounts or delegated signatures with the available SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. Algorand Smart Contract Templates are also available for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. Developer documentation describing the process for using these templates will be available soon.
+This guide covers using TEAL programs with contract accounts or delegated signatures using V2 SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. [Algorand Smart Contract Templates](https://github.com/algorand/go-algorand/tree/master/tools/teal/templates) are also available for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. Developer tutorial documentation describing the process for using these templates are as follows:
 
-Each SDK's install process is discussed in the [SDK Reference](../../reference/sdks/index.md) documentation.
+Hash-Lock Contracts Tutorials:
+
+[Python](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-python/), 
+[Java](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-java/), 
+[JavaScript](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-javascript/), 
+[GO](https://developer.algorand.org/tutorials/hash-time-lock-contract-template-go/), and 
+[PyTeal](https://developer.algorand.org/tutorials/hash-time-lock-contract-pyteal/)
+
+Split Contract Tutorials:
+
+[Python](https://developer.algorand.org/tutorials/split-contract-template-python/),  [Java](https://developer.algorand.org/tutorials/split-contract-template-java/),  [JavaScript](https://developer.algorand.org/tutorials/split-contract-template-javascript/), and [Go](https://developer.algorand.org/tutorials/split-contract-template-go/) 
+
+Limit Order Tutorials:
+
+[Python](https://developer.algorand.org/tutorials/limitorder-contract-python/),  [Java](https://developer.algorand.org/tutorials/limitorder-contract-java/),  [JavaScript](https://developer.algorand.org/tutorials/limitorder-contract-javascript/), and [Go](https://developer.algorand.org/tutorials/limitorder-contract-go/) 
+
+
+Each SDK's install process is discussed in the [SDK Reference](../../reference/sdks/index.md) documentation. Also, see this [Migration guide from V1 to V2](https://developer.algorand.org/docs/reference/sdks/migration/)
 
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
 
 
 # Accessing TEAL program from SDKs
-Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](./goal_teal_walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
+Before a TEAL program can be used in the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](./goal_teal_walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
 
 ``` bash
 //simple.teal contains int 0
