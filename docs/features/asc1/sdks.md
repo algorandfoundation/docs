@@ -80,31 +80,31 @@ The following example illustrates signing a transaction with a created logic sig
 ```javascript tab="JavaScript"
 // get suggested parameters
 let params = await algodclient.getTransactionParams().do();
-// comment out the next two lines to use suggested fee 
+// comment out the next two lines to use suggested fee
 params.fee = 1000;
 params.flatFee = true;
 console.log(params);
+// create logic sig
+// b64 example "ASABACI=" is `int 0`
+// see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
+let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
+// let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
 
-let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
 let lsig = algosdk.makeLogicSig(program);
 
 // create a transaction
-let txn = {
-    "from": lsig.address(),
-    "to": "receiver-address" < PLACEHOLDER >,
-    "fee": params.fee,
-    "flatFee": params.flatFee,
-    "amount": amount < PLACEHOLDER >,
-    "firstRound": params.firstRound,
-    "lastRound": params.lastRound,
-    "genesisID": params.genesisID,
-    "genesisHash": params.genesisHash
-};
+let sender = lsig.address();
+let receiver = "< PLACEHOLDER >";
+let amount = 10000;
+let closeToRemaninder = undefined;
+let note = undefined;
+let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
 
 // Create the LogicSigTransaction with contract account LogicSig 
-let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
 
 // send raw LogicSigTransaction to network
+
 let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
 console.log("Transaction : " + tx.txId);   
 await waitForConfirmation(algodclient, tx.txId);
@@ -298,27 +298,29 @@ let params = await algodclient.getTransactionParams().do();
 params.fee = 1000;
 params.flatFee = true;
 console.log(params);
-let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
+// create logic sig
+
+// b64 example "ASABACI=" is `int 0`
+// see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
+let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
+
+// let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
+
 let lsig = algosdk.makeLogicSig(program);
 
 // sign the logic signature with an account sk
 lsig.sign(myAccount.sk);
 
 // create a transaction
-let txn = {
-    "from": myAccount.addr,
-    "to": "receiver-address" < PLACEHOLDER >,
-    "fee": params.fee,
-    "flatFee": params.flatFee,
-    "amount": amount < PLACEHOLDER >,    
-    "firstRound": params.firstRound,
-    "lastRound": params.lastRound,
-    "genesisID": params.genesisID,
-    "genesisHash": params.genesisHash
-};
+let sender = myAccount.addr;
+let receiver = "< PLACEHOLDER >";
+let amount = 10000;
+let closeToRemaninder = undefined;
+let note = undefined;
+let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
 
-// Create the LogicSigTransaction with contract account LogicSig 
-let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+// Create the LogicSigTransaction with contract account LogicSig
+let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
 
 // send raw LogicSigTransaction to network    
 let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());

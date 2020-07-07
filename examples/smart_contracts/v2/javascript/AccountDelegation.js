@@ -37,7 +37,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
 (async () => {
 
-    // // get suggested parameters
+    // get suggested parameters
     // let params = await algodclient.getTransactionParams().do();
     // let endRound = params.lastRound + parseInt(1000);
     // let fee = await algodclient.suggestedFee();
@@ -63,26 +63,19 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // let args = [[123]];
     // let lsig = algosdk.makeLogicSig(program, args);
 
-
     // sign the logic signature with an account sk
     lsig.sign(myAccount.sk);
-
+    
     // create a transaction
-    let txn = {
-        "from": myAccount.addr,
-        // "to": "receiver-address" < PLACEHOLDER >,
-        "to": "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y",
-        "fee": params.fee,
-        "flatFee": params.flatFee,
-        "amount": 10000,
-        "firstRound": params.firstRound,
-        "lastRound": params.lastRound,
-        "genesisID": params.genesisID,
-        "genesisHash": params.genesisHash
-    };
+    let sender = myAccount.addr;
+    let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
+    let amount = 10000;
+    let closeToRemaninder = undefined;
+    let note = undefined;
+    let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
 
-    // Create the LogicSigTransaction with contract account LogicSig 
-    let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+    // Create the LogicSigTransaction with contract account LogicSig
+    let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
     // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
     // send raw LogicSigTransaction to network    
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
@@ -90,5 +83,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     await waitForConfirmation(algodclient, tx.txId);
 
 })().catch(e => {
+    console.log(e.body.message);
+    console.log("rejected by logic expecgted for int 0");
     console.log(e);
 });

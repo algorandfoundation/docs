@@ -52,22 +52,15 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // let lsig = algosdk.makeLogicSig(program, args);
 
     // create a transaction
-    let txn = {
-        "from": lsig.address(),
-        // "to": "receiver-address" < PLACEHOLDER >,
-        "to": "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y",
-        "fee": params.fee,
-        "flatFee": params.flatFee,
-        // "amount": amount < PLACEHOLDER >,
-        "amount": 10000,
-        "firstRound": params.firstRound,
-        "lastRound": params.lastRound,
-        "genesisID": params.genesisID,
-        "genesisHash": params.genesisHash
-    };
+    let sender = lsig.address();
+    let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
+    let amount = 10000;
+    let closeToRemaninder = undefined;
+    let note = undefined;
+    let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
 
     // Create the LogicSigTransaction with contract account LogicSig 
-    let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
+    let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
 
     // send raw LogicSigTransaction to network
     // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
@@ -76,5 +69,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     await waitForConfirmation(algodclient, tx.txId);
 
 })().catch(e => {
+    console.log(e.body.message);
+    console.log("rejected by logic expecgted for int 0");
     console.log(e);
 });
