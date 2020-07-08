@@ -472,7 +472,7 @@ Every transaction has the ability to add up to a 1kb note in the note field. Sev
 * `/assets/{asset-id}/transactions` - Search for a prefix for a specific Asset Id.
 * `/transactions` - Search all Transactions for a specific transaction note field prefix.
 
-To search for a specific prefix use the `note-prefix` parameter. The value needs to be base64 encoded to return results. For example, if the contents of the note field started with the string “showing prefix searches”, encoding the beginning of that sentence using python like the following:
+To search for a specific prefix use the `note-prefix` parameter. For the Javascript and direct REST API, the value needs to be base64 encoded to return results. (The other SDKs perform the base64 encoding for you.) For example, if the contents of the note field started with the string “showing prefix searches”, encoding the beginning of that sentence using python like the following:
 
 ``` bash
 $ python3 -c "import base64;print(base64.b64encode('showing prefix'.encode()))"
@@ -498,11 +498,10 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 # /indexer/python/search_transactions_note.py
 
 import base64
-encodednote = base64.b64encode('showing prefix'.encode())
-decodednote = base64.b64decode(encodednote)
+note_prefix = 'showing prefix'.encode()
 
 response = myindexer.search_transactions(
-    note_prefix=decodednote)
+    note_prefix=note_prefix)
 
 print("note_prefix = " +
       json.dumps(response, indent=2, sort_keys=True))
@@ -513,10 +512,10 @@ print("note_prefix = " +
     public static void main(String args[]) throws Exception {
         SearchTransactionsNote ex = new SearchTransactionsNote();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        byte[] encodednote = Encoder.decodeFromBase64("c2hvd2luZyBwcmVmaXg="); // "showing prefix"
+        byte[] notePrefix = "showing prefix".getBytes();
         String response = indexerClientInstance
                 .searchForTransactions()
-                .notePrefix(encodednote).execute().toString();
+                .notePrefix(notePrefix).execute().toString();
         JSONObject jsonObj = new JSONObject(response.toString());
         System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
     }
@@ -524,12 +523,10 @@ print("note_prefix = " +
 
 ```go tab="Go"
 // Parameters
-var minAmount uint64 = 10
-var data = "showing prefix"
-var encodedNote = base64.StdEncoding.EncodeToString([]byte(data))
+var notePrefix = "showing prefix"
 
 // Query
-result, err := indexerClient.SearchForTransactions().NotePrefix([]byte(data)).Do(context.Background())
+result, err := indexerClient.SearchForTransactions().NotePrefix([]byte(notePrefix)).Do(context.Background())
 
 // Print results
 JSON, err := json.MarshalIndent(result, "", "\t")
