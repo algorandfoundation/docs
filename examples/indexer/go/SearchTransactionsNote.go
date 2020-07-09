@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 
@@ -15,8 +14,10 @@ const indexerToken = ""
 
 // query parameters
 var minAmount uint64 = 10
-var data = "showing prefix"
-var encodedNote = base64.StdEncoding.EncodeToString([]byte(data))
+// var data = "showing prefix"
+// var encodedNote = base64.StdEncoding.EncodeToString([]byte(data))
+var notePrefix = "showing prefix"
+
 
 func main() {
 
@@ -27,7 +28,7 @@ func main() {
 	}
 
 	// Query
-	result, err := indexerClient.SearchForTransactions().NotePrefix([]byte(data)).Do(context.Background())
+	result, err := indexerClient.SearchForTransactions().NotePrefix([]byte(notePrefix)).Do(context.Background())
 
 	// Print the results
 	JSON, err := json.MarshalIndent(result, "", "\t")
