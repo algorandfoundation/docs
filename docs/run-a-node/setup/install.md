@@ -17,7 +17,7 @@ export ALGORAND_DATA=/var/lib/algorand
 ```
 
 !!! info
-    When installing with the *Debian* or *RPM* packages, `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. See [REST Endpoints](../../reference/sdks.md#rest-endpoints) for more details.
+    When installing with the *Debian* or *RPM* packages, `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. See [REST Endpoints](../../reference/sdks/index.md#rest-endpoints) for more details.
  
 
 # Installation Overview

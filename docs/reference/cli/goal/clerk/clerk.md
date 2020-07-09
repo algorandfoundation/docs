@@ -66,6 +66,7 @@ goal clerk [flags]
 * [goal clerk send](../send/)	 - Send money to an address
 * [goal clerk sign](../sign/)	 - Sign a transaction file
 * [goal clerk split](../split/)	 - Split a file containing many transactions into one transaction per file
+* [goal clerk tealsign](../tealsign/)	 - Sign data to be verified in a TEAL program
 
 
 
