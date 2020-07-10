@@ -216,7 +216,7 @@ Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ```
 # Sync Node Network using Fast Catchup 
 
-Fast Catchup is a new feature and will rapidly update your node using snapshots. A new command on goal node is now available for catchup. The entire process should sync your node in minutes rather than hours or days. As an example, the results for a BetaNet fast catchup, at the time of writing this, was a couple minutes to get to the sync point and a few more minutes to sync the remaining blocks since the snapshot. The total blocks synced was around 4.2 million and it finished syncing in under 6 minutes. Actual sync times may vary depending on the number of accounts, number of blocks and the network.  Here are the links to get the most recent catchup point snapshot per network. The results  include a round to catchup to and the provided catchpoint. Paste into the `goal node catchup` command.
+Fast Catchup is a new feature and will rapidly update a node using catchpoint  snapshots. A new command on goal node is now available for catchup. The entire process should sync a node in minutes rather than hours or days. As an example, the results for a BetaNet fast catchup, at the time of writing this, was a couple minutes to get to the sync point and a few more minutes to sync the remaining blocks since the snapshot. The total blocks synced was around 4.2 million blocks and it finished syncing in under 6 minutes. Actual sync times may vary depending on the number of accounts, number of blocks and the network.  Here are the links to get the most recent catchup point snapshot per network. The results  include a round to catchup to and the provided catchpoint. Paste into the `goal node catchup` command.
 
 BetaNet
 https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/betanet/latest.catchpoint
@@ -276,7 +276,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 `./goal node status -d ~/node/datafastcatchup -w 1000`
 
-5) You will notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. Once you see the Sync Time of 0, the node is synced and if fully usable. 
+5) Notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. **Once there is a Sync Time of 0, the node is synced and if fully usable. **
 
 ```
 Last committed block: 4431453
