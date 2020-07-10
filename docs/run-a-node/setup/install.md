@@ -195,7 +195,7 @@ The node can be manually stopped by runnning:
 
 
 # Sync Node with Network
-When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. See the section below a Fast Catchup option. The status can be checked by running the following goal command:
+When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. See the section below a [Fast Catchup](#sync-node-network-using-fast-catchup) option. The status can be checked by running the following goal command:
 
 ```
 ./goal node status -d data
