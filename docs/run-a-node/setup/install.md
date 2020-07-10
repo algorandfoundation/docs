@@ -195,7 +195,7 @@ The node can be manually stopped by runnning:
 
 
 # Sync Node with Network
-When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. The status can be checked by running the following goal command:
+When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. See the section below a Fast Catchup option. The status can be checked by running the following goal command:
 
 ```
 ./goal node status -d data
@@ -214,6 +214,83 @@ Next consensus protocol supported: true
 Genesis ID: testnet-v1.0
 Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ```
+# Sync Node Network using Fast Catchup 
+
+Fast Catchup is a new feature and will rapidly update your node using snapshots. A new command on goal node is now available for catchup. The entire process should sync your node in minutes rather than hours or days. As an example, the results for a BetaNet fast catchup, at the time of writing this, was a couple minutes to get to the sync point and a few more minutes to sync the remaining blocks since the snapshot. The total blocks synced was around 4.2 million and it finished syncing in under 6 minutes. Actual sync times may vary depending on the number of accounts, number of blocks and the network.  Here are the links to get the most recent catchup point snapshot per network. The results  include a round to catchup to and the provided catchpoint. Paste into the `goal node catchup` command.
+
+BetaNet
+https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/betanet/latest.catchpoint
+
+TestNet
+https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/testnet/latest.catchpoint
+
+MainNet
+https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/mainnet/latest.catchpoint
+
+The results will look similar to this:
+`4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
+
+Steps:
+
+1) Start the node, if not started already, and run a status.
+
+`./goal node start -d ~/node/datafastcatchup`
+
+`./goal node status -d ~/node/datafastcatchup`
+
+Results should look something like this...
+
+```
+Last committed block: 308
+Time since last block: 0.0s
+Sync Time: 6.5s
+Last consensus protocol: https://github.com/algorand/spec/tree/a26ed78ed8f834e2b9ccb6eb7d3ee9f629a6e622
+Next consensus protocol: https://github.com/algorand/spec/tree/a26ed78ed8f834e2b9ccb6eb7d3ee9f629a6e622
+Round for next consensus protocol: 309
+Next consensus protocol supported: true
+Last Catchpoint: 
+Genesis ID: betanet-v1.0
+Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
+```
+2) Use the sync point captured above and paste into the catchup option
+
+`./goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d ~/node/datafastcatchup`
+
+3) Run another status and results should look something like this showing a Catchpoint status:
+`./goal node status -d ~/node/datafastcatchup`
+
+Results should show 5 Catchpoint status lines for Catchpoint, total accounts, accounts processed, total blocks , downloaded blocks.
+
+```
+Last committed block: 4453
+Sync Time: 15.8s
+Catchpoint: 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA
+Catchpoint total accounts: 1146
+Catchpoint accounts processed: 1146
+Catchpoint total blocks: 1000
+Catchpoint downloaded blocks: 81
+Genesis ID: betanet-v1.0
+Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
+```
+4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch. 
+
+`./goal node status -d ~/node/datafastcatchup -w 1000`
+
+5) You will notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. Once you see the Sync Time of 0, the node is synced and if fully usable. 
+
+```
+Last committed block: 4431453
+Time since last block: 3.9s
+Sync Time: 0.0s
+Last consensus protocol: https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f
+Next consensus protocol: https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f
+Round for next consensus protocol: 4431454
+Next consensus protocol supported: true
+Last Catchpoint: 4430000#UAQPNY32LP3K5ARGFUQEFTBGELI5ZAQOMBGE7YL5ZFXL2MXWTO2A
+Genesis ID: betanet-v1.0
+Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
+```
+
 
 # Updating Node
 The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`. 
@@ -231,6 +308,7 @@ Add a line that looks like this (run update.sh every hour, on the half-hour, of 
 ```
 30 * * * * /home/user/node/update.sh -d /home/user/node/data >/home/user/node/update.log 2>&1
 ```
+
 
 # DNS Configuration for betanet
 For the `betanet` network, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory. 
