@@ -74,15 +74,15 @@ func main() {
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return
-	}	
-    fmt.Print("Account 2: ")
+	}
+	fmt.Print("Account 2: ")
 	PrettyPrint(act)
 	act, err = algodClient.AccountInformation(account3.Address.String()).Do(context.Background())
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return
 	}
-    fmt.Print("Account 3: ")
+	fmt.Print("Account 3: ")
 	PrettyPrint(act)
 }
 
