@@ -18,7 +18,7 @@ Sign the passed transaction file, which may contain one or more transactions. If
 
 ```
 
-goal clerk sign -i INFILE -o OUTFILE [flags]
+goal clerk sign -i [input file] -o [output file] [flags]
 
 ```
 
