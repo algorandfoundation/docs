@@ -47,7 +47,7 @@ $ curl "localhost:4001/v2/accounts/2OOTR3IDG57QCHTCFWHMN6YEEQUMGHCT3HIBMPH5A3VQC
 Response:
 Notice the account object lacks the _auth-addr_ field. The (sk) for _address_ is the implicit (aa) for an initial account.
 
-```json 
+```json hl_lines="2"
 {
     "address": "2OOTR3IDG57QCHTCFWHMN6YEEQUMGHCT3HIBMPH5A3VQCDZG5GK7DIKDXI",
     "amount": 5000020000000000,
@@ -66,7 +66,6 @@ Notice the account object lacks the _auth-addr_ field. The (sk) for _address_ is
     "round": 1602,
     "status": "Offline"
 }
-TODO: highlight="2"
 ```
 
 #### Authorized Account
@@ -76,7 +75,7 @@ Next, modify your code slightly to display results for this account `YQP5SHSZOGO
 Response:
 Notice the _auth-addr_ field is populated, which means any transactions from `YQP5SHSZOGOUUXIXMBM445HM5N67SCV3XZQ7TXNFOTLC7ZY5QW24DHBDOY` must now be signed by `2OOTR3IDG57QCHTCFWHMN6YEEQUMGHCT3HIBMPH5A3VQCDZG5GK7DIKDXI` to become authorized. 
 
-```json 
+```json hl_lines="2 11"
 {
     "address": "YQP5SHSZOGOUUXIXMBM445HM5N67SCV3XZQ7TXNFOTLC7ZY5QW24DHBDOY",
     "amount": 5000020000000000,
@@ -96,7 +95,6 @@ Notice the _auth-addr_ field is populated, which means any transactions from `YQ
     "round": 1602,
     "status": "Offline"
 }
-TODO: highlight="2,11"
 ```
 
 #### rekey-to Event
