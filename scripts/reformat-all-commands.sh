@@ -25,6 +25,9 @@ INDEXER_SRC=$2
 # REST INDEXER
 ./convert_swagger.py -target ../docs/reference/rest-apis/indexer.md -specfile $INDEXER_SRC/api/indexer.oas2.json 
 
+# OPCODES
+cp $GO_ALGORAND_SRC/data/transactions/logic/TEAL_opcodes.md ../docs/reference/teal/opcodes.md
+
 # CLEANUP
 rm swagger2markup-cli.jar
 rm swagger2markup.properties
