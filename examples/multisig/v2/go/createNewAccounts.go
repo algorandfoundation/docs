@@ -1,14 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"context"
 	json "encoding/json"
-	"fmt"
-
-
-	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
+	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 )
 
 // const algodAddress = "Your Address"
@@ -76,15 +74,15 @@ func main() {
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return
-	}
-	fmt.Print("Account 2: ")
+	}	
+    fmt.Print("Account 2: ")
 	PrettyPrint(act)
 	act, err = algodClient.AccountInformation(account3.Address.String()).Do(context.Background())
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return
 	}
-	fmt.Print("Account 3: ")
+    fmt.Print("Account 3: ")
 	PrettyPrint(act)
 }
 
@@ -107,7 +105,7 @@ func main() {
 // 	"amountwithoutpendingrewards": 100000000,
 // 	"rewards": 0,
 // 	"status": "Offline"
-// }
+// } 
 // Account 2: {
 // 	"round": 5985502,
 // 	"address": "TVIGQH4QAUQR6FBYFLKVPYUSAVYAKWF7TUL5FM3XVX47755ZHNRMCKISRI",
@@ -116,7 +114,7 @@ func main() {
 // 	"amountwithoutpendingrewards": 100000000,
 // 	"rewards": 0,
 // 	"status": "Offline"
-// }
+// } 
 // Account 3: {
 // 	"round": 5985502,
 // 	"address": "R6VFJ6E4XXSE5VX4FBMREU67AQETJHKH34OV3HXL4VBIXSUX4UHEHA65QQ",
@@ -125,4 +123,4 @@ func main() {
 // 	"amountwithoutpendingrewards": 100000000,
 // 	"rewards": 0,
 // 	"status": "Offline"
-// }
+// } 

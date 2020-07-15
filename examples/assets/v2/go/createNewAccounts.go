@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	"context"
 	json "encoding/json"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
-	"github.com/algorand/go-algorand-sdk/client/algod"
+	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 )
 
 // const algodAddress = "Your Address"
@@ -13,7 +14,7 @@ import (
 
 const algodAddress = "http://localhost:4001"
 const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-var txHeaders = append([]*algod.Header{}, &algod.Header{"Content-Type", "application/json"})
+//var txHeaders = append([]*algod.Header{}, &algod.Header{"Content-Type", "application/json"})
 
 // PrettyPrint prints Go structs
 func PrettyPrint(data interface{}) {
@@ -63,21 +64,21 @@ func main() {
 	if err != nil {
 		return
 	}
-	act, err := algodClient.AccountInformation(account1.Address.String(), txHeaders...)
+	act, err := algodClient.AccountInformation(account1.Address.String()).Do(context.Background())
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return
 	}
 	fmt.Print("Account 1: ")
 	PrettyPrint(act)
-	act, err = algodClient.AccountInformation(account2.Address.String(), txHeaders...)
+	act, err = algodClient.AccountInformation(account2.Address.String()).Do(context.Background())
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return
 	}	
     fmt.Print("Account 2: ")
 	PrettyPrint(act)
-	act, err = algodClient.AccountInformation(account3.Address.String(), txHeaders...)
+	act, err = algodClient.AccountInformation(account3.Address.String()).Do(context.Background())
 	if err != nil {
 		fmt.Printf("failed to get account information: %s\n", err)
 		return

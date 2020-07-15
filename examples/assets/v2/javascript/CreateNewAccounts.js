@@ -53,16 +53,16 @@ const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 const server = "http://localhost";
 const port = 4001;
 // Instantiate the algod wrapper
-let algodclient = new algosdk.Algod(token, server, port);
+let algodclient = new algosdk.Algodv2(token, server, port);
 
 (async () => {
-    let account_info = (await algodclient.accountInformation(recoveredAccount1.addr));
+    let account_info = (await algodclient.accountInformation(recoveredAccount1.addr).do());
     let acct_string = JSON.stringify(account_info);
     console.log("Account 1 Info: " + acct_string);
-    account_info = (await algodclient.accountInformation(recoveredAccount2.addr));
+    account_info = (await algodclient.accountInformation(recoveredAccount2.addr).do());
     acct_string = JSON.stringify(account_info);
     console.log("Account 2 Info: " + acct_string);
-    account_info = (await algodclient.accountInformation(recoveredAccount3.addr));
+    account_info = (await algodclient.accountInformation(recoveredAccount3.addr).do());
     acct_string = JSON.stringify(account_info);
     console.log("Account 3 Info: " + acct_string);
 })().catch(e => {

@@ -1,4 +1,4 @@
-package com.algorand.javatest.multisig.v2;
+package com.algorand.javatest.multisig;
 
 import java.io.Console;
 import java.io.IOException;
@@ -119,7 +119,7 @@ public class Multisig {
         publicKeys.add(act2.getEd25519PublicKey());
         publicKeys.add(act3.getEd25519PublicKey());
 
-        // Instantiate the the Multisig Accout
+        // Instantiate the Multisig Account
         MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
 
         System.out.println("Multisignature Address: " + msa.toString());

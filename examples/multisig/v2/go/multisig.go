@@ -6,13 +6,16 @@ import (
 	"fmt"
 	json "encoding/json"
 	// "io/ioutil"
-
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/transaction"
 	"github.com/algorand/go-algorand-sdk/types"
 )
+
+// UPDATE THESE VALUES
+// const algodAddress = "Your ADDRESS"
+// const algodToken = "Your TOKEN"
 
 // sandbox
 const algodAddress = "http://localhost:4001"
@@ -24,9 +27,9 @@ func loadAccounts() (map[int][]byte, map[int]string) {
 	// Change these values to use the accounts created previously.
 
 	// Paste in mnemonic phrases for all three accounts
-	// mnemonic1 := "PASTE your phrase for account 1"
-	// mnemonic2 := "PASTE your phrase for account 2"
-	// mnemonic3 := "PASTE your phrase for account 3"
+	// mnemonic1 := "PASTE phrase for account 1"
+	// mnemonic2 := "PASTE phrase for account 2"
+	// mnemonic3 := "PASTE phrase for account 3"
 
 	mnemonic1 := "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry"
 	mnemonic2 := "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only"
@@ -183,7 +186,5 @@ func main() {
 		return
 	}
 	fmt.Printf("Transaction ID: %s\n", sendResponse)
-	
-
 }
 

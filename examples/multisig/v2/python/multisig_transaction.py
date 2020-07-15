@@ -4,10 +4,10 @@ from algosdk import account, encoding, mnemonic
 from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
 
 
-# Change these values with your mnemonics
-# mnemonic1 = "PASTE your phrase for account 1"
-# mnemonic2 = "PASTE your phrase for account 2"
-# mnemonic3 = "PASTE your phrase for account 3"
+# Change these values with mnemonics
+# mnemonic1 = "PASTE phrase for account 1"
+# mnemonic2 = "PASTE phrase for account 2"
+# mnemonic3 = "PASTE phrase for account 3"
 
 mnemonic1 = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry"
 mnemonic2 = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only"
@@ -42,10 +42,20 @@ def wait_for_confirmation(client, txid):
         txid, txinfo.get('confirmed-round')))
     return txinfo
 
+
+# create a multisig account
+version = 1  # multisig version
+threshold = 2  # how many signatures are necessary
+msig = Multisig(version, threshold, [account_1, account_2])
+print("Multisig Address: ", msig.address())
+print("Please go to: https://bank.testnet.algorand.network/ to fund multisig account.", msig.address())
+input("Please go to: https://bank.testnet.algorand.network/ to fund multisig account." + '\n' + "Press Enter to continue...")
+
 # Specify your node address and token. This must be updated.
 # algod_address = ""  # ADD ADDRESS
 # algod_token = ""  # ADD TOKEN
 
+# sandbox
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
@@ -57,13 +67,6 @@ params = algod_client.suggested_params()
 # comment out the next two (2) lines to use suggested fees
 params.flat_fee = True
 params.fee = 1000
-
-# create a multisig account
-version = 1  # multisig version
-threshold = 2  # how many signatures are necessary
-msig = Multisig(version, threshold, [account_1, account_2])
-print("Multisig Address: ", msig.address())
-input("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account." + '\n' + "Press Enter to continue...")
 
 # get suggested parameters
 params = algod_client.suggested_params()

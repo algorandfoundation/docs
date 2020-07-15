@@ -1,7 +1,7 @@
 const algosdk = require('algosdk');
-// In order to do this ASA tutorial, we will need to generate 3 accounts
-// once created copy off the values which we will past into the TutorialASA code
-// once created sucessfully, you will need to add funds to all three
+// Generate 3 accounts.
+// Once created, copy off the mnemonic and address values to paste into test code that uses accounts
+// Once created sucessfully, add funds to all three
 // The Algorand TestNet Dispenser is located here: 
 // https://bank.testnet.algorand.network/
 var acct = null;
@@ -53,16 +53,16 @@ const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 const server = "http://localhost";
 const port = 4001;
 // Instantiate the algod wrapper
-let algodclient = new algosdk.Algod(token, server, port);
+let algodclient = new algosdk.Algodv2(token, server, port);
 
 (async () => {
-    let account_info = (await algodclient.accountInformation(recoveredAccount1.addr));
+    let account_info = (await algodclient.accountInformation(recoveredAccount1.addr).do());
     let acct_string = JSON.stringify(account_info);
     console.log("Account 1 Info: " + acct_string);
-    account_info = (await algodclient.accountInformation(recoveredAccount2.addr));
+    account_info = (await algodclient.accountInformation(recoveredAccount2.addr).do());
     acct_string = JSON.stringify(account_info);
     console.log("Account 2 Info: " + acct_string);
-    account_info = (await algodclient.accountInformation(recoveredAccount3.addr));
+    account_info = (await algodclient.accountInformation(recoveredAccount3.addr).do());
     acct_string = JSON.stringify(account_info);
     console.log("Account 3 Info: " + acct_string);
 })().catch(e => {

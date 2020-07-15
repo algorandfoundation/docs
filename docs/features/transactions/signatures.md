@@ -131,116 +131,193 @@ Extend the example from the [Multisignature Account](../accounts/create.md#multi
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
+// function used to wait for a tx confirmation
+const waitForConfirmation = async function (algodclient, txId) {
+let status = (await algodclient.status().do());
+let lastRound = status["last-round"];
+while (true) {
+    const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+    if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+        //Got the completed Transaction
+        console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+        break;
+    }
+    lastRound++;
+    await algodclient.statusAfterBlock(lastRound).do();
+}
+};
+// enter token, server, and port
 const token = <algod-token>;
 const server = <algod-address>;
 const port = <algod-port>;
+// sandbox
+// const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+// const server = "http://localhost";
+// const port = 4001;
 
 const keypress = async() => {
-    process.stdin.setRawMode(true)
-    return new Promise(resolve => process.stdin.once('data', () => {
-        process.stdin.setRawMode(false)
-        resolve()
-    }))
+process.stdin.setRawMode(true)
+return new Promise(resolve => process.stdin.once('data', () => {
+            process.stdin.setRawMode(false)
+    resolve()
+}))
 }
 
 (async() => {
-    //create an account
-    var account1 = algosdk.generateAccount();
-    console.log(account1.addr);
-    //create an account
-    var account2 = algosdk.generateAccount();
-    console.log(account2.addr);
-    //create an account
-    var account3 = algosdk.generateAccount();
-    console.log(account3.addr);
+// recover accounts
+// paste in mnemonic phrases here for each account
 
-    //Setup teh parameters for the multisig account
-    const mparams = {
-        version: 1,
-        threshold: 2,
-        addrs: [
-            account1.addr,
-            account2.addr,
-            account3.addr,
-        ],
-    };
+// var account1_mnemonic = "PASTE phrase for account 1";
+// var account2_mnemonic = "PASTE phrase for account 2";
+// var account3_mnemonic = "PASTE phrase for account 3"
 
-    var multsigaddr = algosdk.multisigAddress(mparams);
-    console.log("Multisig Address: " + multsigaddr);
-    //Pause execution to allow using the dispenser on testnet to put tokens in account
-    console.log('Make sure address above has tokens using the dispenser');
-    await keypress();
-    try {
-        let algodclient = new algosdk.Algod(token, server, port);
+var account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
+var account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
+var account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
+console.log(account1.addr);
+console.log(account2.addr);
+console.log(account3.addr);
 
-        //Get the relevant params from the algod
-        let params = await algodclient.getTransactionParams();
-        let endRound = params.lastRound + parseInt(1000);
-        //example of how to write an object into the notefield
+// Setup the parameters for the multisig account
+const mparams = {
+    version: 1,
+    threshold: 2,
+    addrs: [
+        account1.addr,
+        account2.addr,
+        account3.addr,
+    ],
+};
 
-        //create a transaction
-        let txn = {
-            "from": multsigaddr,
-            "to": "7GBK5IJCWFPRWENNUEZI3K4CSE5KDIRSR55KWTSDDOBH3E3JJCKGCSFDGQ",
-            "fee": params.fee,
-            "amount": 200000,
-            "firstRound": params.lastRound,
-            "lastRound": endRound,
-            "genesisID": params.genesisID,
-            "genesisHash": params.genesishashb64,
-            "note": new Uint8Array(0)
-        };
-        //Sign wiith first signature
-        let rawSignedTxn = algosdk.signMultisigTransaction(txn, mparams, account1.sk).blob;
-        //sign with second account
-        let twosigs = algosdk.appendSignMultisigTransaction(rawSignedTxn, mparams, account2.sk).blob;
-        //submit the transaction
-        let tx = (await algodclient.sendRawTransaction(twosigs));
-        console.log("Transaction : " + tx.txId);
+var multsigaddr = algosdk.multisigAddress(mparams);
+console.log("Multisig Address: " + multsigaddr);
+// Pause execution to allow using the dispenser on testnet to put tokens in account
+console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
+await keypress();
+try {
+    let algodclient = new algosdk.Algodv2(token, server, port);
 
-    } catch (err) {
-        console.log(err);
-    }
+    // Get the relevant params from the algod
+    let params = await algodclient.getTransactionParams().do();
+    // comment out the next two lines to use suggested fee
+    params.fee = 1000;
+    params.flatFee = true;
+
+    //create a transaction
+    const receiver = account3.addr;
+    let note = algosdk.encodeObj("Hello World");
+    
+    let txn = algosdk.makePaymentTxnWithSuggestedParams(multsigaddr, receiver, 1000000, undefined, note, params);       
+    let txId = txn.txID().toString();
+    // Sign with first signature
+    // At the time of writing this, there is a V2 js sdk bug - signMultisigTransaction - 
+    // Error: The transaction sender address and multisig preimage do not match - 
+    // Workaround use V1
+    // https://github.com/algorand/js-algorand-sdk/issues/188
+    let rawSignedTxn = algosdk.signMultisigTransaction(txn, mparams, account1.sk).blob;
+    // sign with second account
+    let twosigs = algosdk.appendSignMultisigTransaction(rawSignedTxn, mparams, account2.sk).blob;
+    // submit the transaction
+    await algodclient.sendRawTransaction(twosigs).do();
+    // Wait for confirmation
+    await waitForConfirmation(algodclient, txId);
+
+    // Read the transaction from the blockchain
+    let confirmedTxn = await algodClient.pendingTransactionInformation(txId).do();
+    console.log("Transaction information: %o", confirmedTxn.txn.txn);      
+    console.log("Decoded note: %s", algosdk.decodeObj(confirmedTxn.txn.txn.note));
+
+} catch (err) {
+            console.log(err.message);
+}
 })().then(process.exit)
 ```
 
 ```python tab="Python"
-from algosdk import account, transaction, algod, encoding
+import json
+from algosdk.v2client import algod
+from algosdk import account, encoding, mnemonic
+from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
 
-algod_token = <algod_token>
-algod_address = <algod_address>
-acl = algod.AlgodClient(algod_token, algod_address)
 
-# generate three accounts
-private_key_1, account_1 = account.generate_account()
-private_key_2, account_2 = account.generate_account()
-private_key_3, account_3 = account.generate_account()
-print("Account 1:", account_1)
-print("Account 2", account_2)
-print("Account 3:", account_3)
+# Change these values with mnemonics
+# mnemonic1 = "PASTE phrase for account 1"
+# mnemonic2 = "PASTE phrase for account 2"
+# mnemonic3 = "PASTE phrase for account 3"
+
+mnemonic1 = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry"
+mnemonic2 = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only"
+mnemonic3 = "mirror zone together remind rural impose balcony position minimum quick manage climb quit draft lion device pluck rug siege robust spirit fine luggage ability actual"
+
+# For ease of reference, add account public and private keys to
+# an accounts dict.
+
+private_key_1 = mnemonic.to_private_key(mnemonic1)
+account_1 = mnemonic.to_public_key(mnemonic1)
+
+private_key_2 = mnemonic.to_private_key(mnemonic2)
+account_2 = mnemonic.to_public_key(mnemonic2)
+
+private_key_3 = mnemonic.to_private_key(mnemonic3)
+account_3 = mnemonic.to_public_key(mnemonic3)
+
+
+def wait_for_confirmation(client, txid):
+    """
+    Utility function to wait until the transaction is
+    confirmed before proceeding.
+    """
+    last_round = client.status().get('last-round')
+    txinfo = client.pending_transaction_info(txid)
+    while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
+        print("Waiting for confirmation")
+        last_round += 1
+        client.status_after_block(last_round)
+        txinfo = client.pending_transaction_info(txid)
+    print("Transaction {} confirmed in round {}.".format(
+        txid, txinfo.get('confirmed-round')))
+    return txinfo
+
 
 # create a multisig account
 version = 1  # multisig version
 threshold = 2  # how many signatures are necessary
-msig = transaction.Multisig(version, threshold, [account_1, account_2])
+msig = Multisig(version, threshold, [account_1, account_2])
 print("Multisig Address: ", msig.address())
-input("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account." + '\n' + "Press Enter to continue...")
+input("Please go to: https://bank.testnet.algorand.network/ to fund multisig account." + '\n' + "Press Enter to continue...")
+
+# Specify your node address and token. This must be updated.
+algod_address = ""  # ADD ADDRESS
+algod_token = ""  # ADD TOKEN
+
+# sandbox
+# algod_address = "http://localhost:4001"
+# algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+# Initialize an algod client
+algod_client = algod.AlgodClient(algod_token, algod_address)
+
+# Get network params for transactions.
+params = algod_client.suggested_params()
+# comment out the next two (2) lines to use suggested fees
+params.flat_fee = True
+params.fee = 1000
 
 # get suggested parameters
-params = acl.suggested_params()
-gen = params["genesisID"]
-gh = params["genesishashb64"]
-last_round = params["lastRound"]
-fee = params["fee"]
+params = algod_client.suggested_params()
+# comment out the next two (2) lines to use suggested fees
+params.flat_fee = True
+params.fee = 1000
 
 # create a transaction
 sender = msig.address()
-recipient = "4CXXFP3SJJW63HGEQD4OPSDPPIYDW7BXCVP4DQZG7T33Z3BXTOA4UMEDM4"
+recipient = account_3
 amount = 10000
-txn = transaction.PaymentTxn(sender, fee, last_round, last_round+100, gh, recipient, amount)
+note = "Hello Multisig".encode()
+txn = PaymentTxn(sender, params, recipient, amount, None, note, None)
 
 # create a SignedTransaction object
-mtx = transaction.MultisigTransaction(txn, msig)
+mtx = MultisigTransaction(txn, msig)
 
 # sign the transaction
 mtx.sign(private_key_1)
@@ -250,151 +327,158 @@ mtx.sign(private_key_2)
 print(encoding.msgpack_encode(mtx))
 
 # send the transaction
-transaction_id = acl.send_raw_transaction(encoding.msgpack_encode(mtx))
+transaction_id = algod_client.send_raw_transaction(
+    encoding.msgpack_encode(mtx))
+wait_for_confirmation(algod_client, transaction_id)
 print("\nTransaction was sent!")
 print("Transaction ID: " + transaction_id + "\n")
 ```
 
 ```java tab="Java"
-package com.algorand.algosdk.example;
+package com.algorand.javatest.multisig.v2;
 
-import com.algorand.algosdk.algod.client.AlgodClient;
-import com.algorand.algosdk.algod.client.ApiException;
-import com.algorand.algosdk.algod.client.api.AlgodApi;
-import com.algorand.algosdk.algod.client.auth.ApiKeyAuth;
-import com.algorand.algosdk.account.Account;
-import com.algorand.algosdk.crypto.Address;
-import com.algorand.algosdk.algod.client.model.TransactionParams;
-import com.algorand.algosdk.crypto.Digest;
-import com.algorand.algosdk.crypto.Ed25519PublicKey;
-import com.algorand.algosdk.algod.client.model.TransactionID;
-import com.algorand.algosdk.transaction.Transaction;
-import com.algorand.algosdk.util.Encoder;
-
-
-
-import com.algorand.algosdk.crypto.MultisigAddress;
-import com.algorand.algosdk.transaction.SignedTransaction;
-
-
-import java.io.ByteArrayOutputStream;
+import java.io.Console;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultisigAccount {
+import com.algorand.algosdk.account.Account;
+import com.algorand.algosdk.v2.client.common.AlgodClient;
+import com.algorand.algosdk.v2.client.common.Response;
+import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
+import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
+import com.algorand.algosdk.algod.client.ApiException;
+import com.algorand.algosdk.crypto.Address;
+import com.algorand.algosdk.crypto.Ed25519PublicKey;
+import com.algorand.algosdk.crypto.MultisigAddress;
+import com.algorand.algosdk.transaction.SignedTransaction;
+import com.algorand.algosdk.transaction.Transaction;
+import com.algorand.algosdk.util.Encoder;
 
-    // Inline class to handle changing block parameters
-    // Throughout the example
-    static class ChangingBlockParms {
-        public BigInteger fee; 
-        public BigInteger firstRound;  
-        public BigInteger lastRound; 
-        public String genID;
-        public Digest genHash;
-        public ChangingBlockParms() {
-            this.fee = BigInteger.valueOf(0);
-            this.firstRound = BigInteger.valueOf(0);
-            this.lastRound = BigInteger.valueOf(0);
-            this.genID = "";
-            this.genHash = null;
-        }
-    };
+/**
+* Test Multisignature
+*
+*/
+public class Multisig {
 
-    // Utility function to update changing block parameters 
-    public static ChangingBlockParms getChangingParms(AlgodApi algodApiInstance) throws Exception{
-        ChangingBlockParms cp = new MultisigAccount.ChangingBlockParms(); 
-        try {
-            TransactionParams params = algodApiInstance.transactionParams();
-            cp.fee = params.getFee();
-            cp.firstRound = params.getLastRound();
-            cp.lastRound = cp.firstRound.add(BigInteger.valueOf(1000));
-            cp.genID = params.getGenesisID();
-            cp.genHash = new Digest(params.getGenesishashb64());
-
-        } catch (ApiException e) {
-           throw( e );
-        }
-        return( cp );
+public AlgodClient client = null;
+public static void waitForEnter(String message) {
+    Console c = System.console();
+    if (c != null) {
+        // printf-like arguments
+        if (message != null)
+            c.format(message);
+        c.format("\nPress ENTER to proceed.\n");
+        c.readLine();
     }
+}
 
-    // Utility function for sending a raw signed transaction to the network
-    public static TransactionID submitTransaction(AlgodApi algodApiInstance, SignedTransaction signedTx ) throws Exception{
+// utility function to connect to a node
+private AlgodClient connectToNetwork() {
+
+    // Initialize an algod client
+    final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
+    final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
+    final Integer ALGOD_PORT = "port<PLACEHOLDER>";
+ 
+    // sandbox
+    // final String ALGOD_API_ADDR = "localhost";
+    // final Integer ALGOD_PORT = 4001;
+    // final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+    return client;
+
+}
+
+// utility function to wait on a transaction to be confirmed
+public void waitForConfirmation(String txID) throws Exception {
+    if (client == null)
+        this.client = connectToNetwork();
+    Long lastRound = client.GetStatus().execute().body().lastRound;
+    while (true) {
         try {
-            // Msgpack encode the signed transaction
-            byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTx);
-            TransactionID id = algodApiInstance.rawTransaction(encodedTxBytes);
-            return( id );
-        } catch (ApiException e) {
-            throw( e );
-        }
-    }
-    public static void main(String args[]) throws Exception {
-        final String ALGOD_API_ADDR = "http://localhost:8080";
-        final String ALGOD_API_TOKEN = "a967f42b017cd4c5c95a633e87b5ff14226ae60609e174bf5832722631946e13";
-
-        AlgodClient client = new AlgodClient();
-        client.setBasePath(ALGOD_API_ADDR);
-        ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-        api_key.setApiKey(ALGOD_API_TOKEN);
-
-        AlgodApi algodApiInstance = new AlgodApi(client);
-
-        Account acct1 = new Account();
-        Account acct2 = new Account();
-        Account acct3 = new Account();
-        System.out.println("Account 1 Address: " + acct1.getAddress());
-        System.out.println("Account 2 Address: " + acct2.getAddress());
-        System.out.println("Account 3 Address: " + acct3.getAddress());
-
-        ChangingBlockParms cp = null;
-        try {
-            cp = getChangingParms(algodApiInstance);
-        } catch (ApiException e) {
-            e.printStackTrace();
-            return;
-        }        	
-        try {
-            cp = getChangingParms(algodApiInstance);
-        } catch (ApiException e) {
-            e.printStackTrace();
-            return;
-        }
-        
-        List<Ed25519PublicKey> publicKeys = new ArrayList<>();
-        publicKeys.add(acct1.getEd25519PublicKey());
-        publicKeys.add(acct2.getEd25519PublicKey());
-        publicKeys.add(acct3.getEd25519PublicKey());
-         
-        MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
-
-        final String toAddr = "WICXIYCKG672UGFCCUPBAJ7UYZ2X7GZCNBLSAPBXW7M6DZJ5YY6SCXML4A";
-
-        Transaction tx1 = new Transaction(msig.toAddress(), new Address(toAddr), 1000, cp.firstRound.intValue(), cp.lastRound.intValue(), cp.genID, cp.genHash);
-
-        System.out.println("Multisig Address: " + msig.toString());
-        
-        SignedTransaction signedTransaction = acct1.signMultisigTransaction(msig, tx1);
-       
-        SignedTransaction signedTrx2 = acct2.appendMultisigTransaction(msig, signedTransaction);
-
-        System.err.println("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account. \n" + msig.toAddress());
-        System.in.read();
-
-        try {
-            ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream( );
-            byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTrx2);
-            byteOutputStream.write(encodedTxBytes);
-
-            byte stxBytes[] = byteOutputStream.toByteArray();
-                        
-            TransactionID id = algodApiInstance.rawTransaction(stxBytes);
-            System.out.println("Successfully sent tx group with first tx id: " + id);
-            } catch (ApiException e) {
-                // This is generally expected, but should give us an informative error message.
-                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
+            // Check the pending tranactions
+            Response<PendingTransactionResponse> pendingInfo = client.PendingTransactionInformation(txID).execute();
+            if (pendingInfo.body().confirmedRound != null && pendingInfo.body().confirmedRound > 0) {
+                // Got the completed Transaction
+                System.out.println(
+                        "Transaction " + txID + " confirmed in round " + pendingInfo.body().confirmedRound);
+                break;
+            }
+            lastRound++;
+            client.WaitForBlock(lastRound).execute();
+        } catch (Exception e) {
+            throw (e);
         }
     }
+}
+
+public void multisigExample() throws Exception {
+    if (client == null)
+        this.client = connectToNetwork();
+
+    // final String account1_mnemonic = <var>your-25-word-mnemonic</var>
+    // final String account2_mnemonic = <var>your-25-word-mnemonic</var>
+    // final String account3_mnemonic = <var>your-25-word-mnemonic</var>
+
+    Account act1 = new Account(account1_mnemonic);
+    Account act2 = new Account(account2_mnemonic);
+    Account act3 = new Account(account3_mnemonic);
+    System.out.println("Account1: " + act1.getAddress());
+    System.out.println("Account2: " + act2.getAddress());
+    System.out.println("Account3: " + act3.getAddress());
+
+    final String DEST_ADDR = act3.getAddress().toString();
+
+    // List for Pks for multisig account
+    List<Ed25519PublicKey> publicKeys = new ArrayList<>();
+    publicKeys.add(act1.getEd25519PublicKey());
+    publicKeys.add(act2.getEd25519PublicKey());
+    publicKeys.add(act3.getEd25519PublicKey());
+
+    // Instantiate the Multisig Account
+    MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
+
+    System.out.println("Multisignature Address: " + msa.toString());
+    waitForEnter("Use TestNet Dispenser to add funds, wait for the transaction to be finalized and press enter");
+
+    // setup transaction   
+    try {
+        TransactionParametersResponse params = client.TransactionParams().execute().body();            
+        BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
+        // add some notes to the transaction
+        byte[] notes = "These are some notes encoded in some way!".getBytes();
+        // Setup Transaction
+        Address sender = new Address(msa.toString());
+
+        Transaction tx = Transaction.PaymentTransactionBuilder()
+                .sender(sender)
+                .amount(amount)
+                .receiver(DEST_ADDR)
+                .note(notes)
+                .suggestedParams(params).build();
+        // Sign the Transaction for two accounts
+        SignedTransaction signedTx = act1.signMultisigTransaction(msa, tx);
+        SignedTransaction completeTx = act2.appendMultisigTransaction(msa, signedTx);
+        // Msgpack encode the signed transaction
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(completeTx);
+        // send the transaction to the network           
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+        // Wait for transaction confirmation
+        waitForConfirmation(id);         
+        System.out.println("Successfully sent tx with id: " + id);
+    } catch (ApiException e) {
+        // This is generally expected, but should give us an informative error message.
+        System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
+    }
+}
+
+public static void main(String args[]) throws Exception {
+    Multisig t = new Multisig();
+    t.multisigExample();
+}
 }
 ```
 
@@ -402,96 +486,187 @@ public class MultisigAccount {
 package main
 
 import (
+	"context"
+	"crypto/ed25519"
 	"fmt"
-
-	"github.com/algorand/go-algorand-sdk/client/algod"
+	json "encoding/json"
+	// "io/ioutil"
+	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/crypto"
+	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/transaction"
 	"github.com/algorand/go-algorand-sdk/types"
 )
+// UPDATE THESE VALUES
+const algodAddress = "Your ADDRESS"
+const algodToken = "Your TOKEN"
 
-// Change these values for your own algod.token and algod.net values
-const algodAddress = "http://127.0.0.1:8080"
-const algodToken = "a967f42b017cd4c5c95a633e87b5ff14226ae60609e174bf5832722631946e13"
+// sandbox
+// const algodAddress = "http://localhost:4001"
+// const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+// Accounts to be used through examples
+func loadAccounts() (map[int][]byte, map[int]string) {
+	// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+	// Change these values to use the accounts created previously.
+
+	// Paste in mnemonic phrases for all three accounts
+	// mnemonic1 := "PASTE phrase for account 1"
+	// mnemonic2 := "PASTE phrase for account 2"
+	// mnemonic3 := "PASTE phrase for account 3"
+
+
+	mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
+	pks := map[int]string{1: "", 2: "", 3: ""}
+	var sks = make(map[int][]byte)
+
+	for i, m := range mnemonics {
+		var err error
+		sk, err := mnemonic.ToPrivateKey(m)
+		sks[i+1] = sk
+		if err != nil {
+			fmt.Printf("Issue with account %d private key conversion.", i+1)
+		}
+		// derive public address from Secret Key.
+		pk := sk.Public()
+		var a types.Address
+		cpk := pk.(ed25519.PublicKey)
+		copy(a[:], cpk[:])
+		pks[i+1] = a.String()
+		fmt.Printf("Loaded Key %d: %s\n", i+1, pks[i+1])
+	}
+	return sks, pks
+}
+
+// Function that waits for a given txId to be confirmed by the network
+func waitForConfirmation(txID string, client *algod.Client) {
+    status, err := client.Status().Do(context.Background())
+    if err != nil {
+        fmt.Printf("error getting algod status: %s\n", err)
+        return
+    }
+    lastRound := status.LastRound
+    for {
+        pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+        if err != nil {
+            fmt.Printf("error getting pending transaction: %s\n", err)
+            return
+        }
+        if pt.ConfirmedRound > 0 {
+            fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
+            break
+        }
+        fmt.Printf("waiting for confirmation\n")
+        lastRound++
+        status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
+    }
+}
+
+// PrettyPrint prints Go structs
+func PrettyPrint(data interface{}) {
+	var p []byte
+	//    var err := error
+	p, err := json.MarshalIndent(data, "", "\t")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s \n", p)
+}
 
 func main() {
 
-	// Initialize an algodClient
+    // Initialize an algodClient
 	algodClient, err := algod.MakeClient(algodAddress, algodToken)
 	if err != nil {
-		fmt.Printf("failed to make algod client: %v\n", err)
 		return
 	}
-
-	txParams, err := algodClient.SuggestedParams()
+	// Get network-related transaction parameters and assign
+	txParams, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		fmt.Printf("error getting suggested tx params: %s\n", err)
 		return
 	}
+	// comment out the next two (2) lines to use suggested fees
+	txParams.FlatFee = true
+	txParams.Fee = 1000
+	// Get pre-defined set of keys for example
+	sks, pks := loadAccounts()
 
-	// Generate Accounts
-	acct1 := crypto.GenerateAccount()
-	acct2 := crypto.GenerateAccount()
-	acct3 := crypto.GenerateAccount()
 
-	// Decode the account addresses
-	addr1, _ := types.DecodeAddress(acct1.Address.String())
-	addr2, _ := types.DecodeAddress(acct2.Address.String())
-	addr3, _ := types.DecodeAddress(acct3.Address.String())
-
+	addr1, _ := types.DecodeAddress(pks[1])
+	addr2, _ := types.DecodeAddress(pks[2])
+	addr3, _ := types.DecodeAddress(pks[3])		
+	
 	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
 		addr1,
 		addr2,
 		addr3,
 	})
+
 	if err != nil {
 		panic("invalid multisig parameters")
 	}
 
-	// declare txn parameters
-	fee := txParams.Fee
-	firstRound := txParams.LastRound
-	lastRound := txParams.LastRound + 1000
-	genesisID := txParams.GenesisID     // replace me
-	genesisHash := txParams.GenesisHash // replace me
-	const amount1 = 2000
-	const amount2 = 1500
-	var note []byte
-	closeRemainderTo := ""
-
 	fromAddr, _ := ma.Address()
-	toAddr := "WICXIYCKG672UGFCCUPBAJ7UYZ2X7GZCNBLSAPBXW7M6DZJ5YY6SCXML4A"
-
-	// Create the transaction
-	txn, err := transaction.MakePaymentTxn(fromAddr.String(), toAddr, fee, amount1, firstRound, lastRound, note, closeRemainderTo, genesisID, genesisHash)
-
-	// First signature on PST
-	txid, preStxBytes, err := crypto.SignMultisigTransaction(acct1.PrivateKey, ma, txn)
-	if err != nil {
-		panic("could not sign multisig transaction")
-	}
-	fmt.Printf("Made partially-signed multisig transaction with TxID %s \n", txid)
-
-	// Second signature on PST
-	txid2, stxBytes, err := crypto.AppendMultisigTransaction(acct2.PrivateKey, ma, preStxBytes)
-	if err != nil {
-		panic("could not sign multisig transaction")
-	}
-	fmt.Printf("Made partially-signed multisig transaction with TxID %s \n", txid2)
-
 	// Print multisig account
-	fmt.Printf("Here is your multisig address : %s \n", fromAddr.String())
+    fmt.Printf("Here is your multisig address : %s \n", fromAddr.String())
+    fmt.Println("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account.")
+//	fmt.Scanln() // wait for Enter Key
 
-	fmt.Println("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account.")
-	fmt.Scanln() // wait for Enter Key
+    toAddr := addr3.String()
+    var amount uint64 = 10000
+    note := []byte("Hello World")
+    genID := txParams.GenesisID
+    genHash := txParams.GenesisHash
+    firstValidRound := uint64(txParams.FirstRoundValid)
+    lastValidRound := uint64(txParams.LastRoundValid)
+	var minFee uint64 = 1000
+	txn, err := transaction.MakePaymentTxn(
+		fromAddr.String(),
+		toAddr,
+		minFee,     // fee per byte
+		amount,  // amount
+		firstValidRound, // first valid round
+		lastValidRound, // last valid round
+		note,    // note
+		"",     // closeRemainderTo
+		genID,     // genesisHash
+		genHash,     // genesisHash
+	)
 
-	// Send transaction to the network
-	sendResponse, err := algodClient.SendRawTransaction(stxBytes)
+	txid, txBytes, err := crypto.SignMultisigTransaction(sks[1], ma, txn)
 	if err != nil {
-		fmt.Printf("Failed to create payment transaction: %v\n", err)
+		println(err.Error)
+		panic("could not sign multisig transaction")
+	}
+	fmt.Printf("Made partially-signed multisig transaction with TxID %s: %x\n", txid, txBytes)
+	// ioutil.WriteFile("./arbitrary_file.tx", txBytes, 0644)
+	// readTxBytes, _ := ioutil.ReadFile("./arbitrary_file.tx")
+	// txid, twoOfThreeTxBytes, err := crypto.AppendMultisigTransaction(sks[2], ma, readTxBytes)
+	txid, twoOfThreeTxBytes, err := crypto.AppendMultisigTransaction(sks[2], ma, txBytes)
+
+	if err != nil {
+		panic("could not append signature to multisig transaction")
+	}
+	fmt.Printf("Appended bytes %x\n", twoOfThreeTxBytes)
+
+    fmt.Printf("Made 2-out-of-3 multisig transaction with TxID %s: %x\n", txid, twoOfThreeTxBytes)
+
+
+	// Merge additional raw, partially-signed multisig transactions:
+
+	// otherTxBytes := ... // generate another raw multisig transaction somehow
+	// txid, mergedTxBytes, err := crypto.MergeMultisigTransactions(twoOfThreeTxBytes, otherTxBytes)
+
+	// Broadcast the transaction to the network
+	sendResponse, err := algodClient.SendRawTransaction(twoOfThreeTxBytes).Do(context.Background())
+	waitForConfirmation(txid, algodClient)
+	if err != nil {
+		fmt.Printf("failed to send transaction: %s\n", err)
 		return
 	}
-	fmt.Printf("Transaction ID: %s\n", sendResponse.TxID)
+	fmt.Printf("Transaction ID: %s\n", sendResponse)
 }
 ```
 
@@ -514,6 +689,9 @@ $ algokey multisig --txfile=multisig2.txn --outfile=multisig2.stxn -m <25-word-m
 
 # Use goal to merge the the *.stxn files.
 ```
+
+!!! info
+    Example multisignature code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
 
 # Logic Signatures
 

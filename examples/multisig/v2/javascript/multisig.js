@@ -16,6 +16,7 @@ const waitForConfirmation = async function (algodclient, txId) {
         await algodclient.statusAfterBlock(lastRound).do();
     }
 };
+// enter token, server, and port
 // const token = <algod-token>;
 // const server = <algod-address>;
 // const port = <algod-port>;
@@ -33,21 +34,12 @@ const keypress = async() => {
 }
 
 (async() => {
-    // create an account
-    // var account1 = algosdk.generateAccount();
-    // console.log(account1.addr);
-    // //create an account
-    // var account2 = algosdk.generateAccount();
-    // console.log(account2.addr);
-    // //create an account
-    // var account3 = algosdk.generateAccount();
-    // console.log(account3.addr);
-    // Recover accounts
+    // recover accounts
     // paste in mnemonic phrases here for each account
 
-    // var account1_mnemonic = "PASTE your phrase for account 1";
-    // var account2_mnemonic = "PASTE your phrase for account 2";
-    // var account3_mnemonic = "PASTE your phrase for account 3"
+    // var account1_mnemonic = "PASTE phrase for account 1";
+    // var account2_mnemonic = "PASTE phrase for account 2";
+    // var account3_mnemonic = "PASTE phrase for account 3"
 
     var account1_mnemonic = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry";
     var account2_mnemonic = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only";
@@ -61,9 +53,9 @@ const keypress = async() => {
     console.log(account2.addr);
     console.log(account3.addr);
 
-    //Setup teh parameters for the multisig account
+    // Setup the parameters for the multisig account
     const mparams = {
-                version: 1,
+        version: 1,
         threshold: 2,
         addrs: [
             account1.addr,
@@ -75,39 +67,53 @@ const keypress = async() => {
     var multsigaddr = algosdk.multisigAddress(mparams);
     console.log("Multisig Address: " + multsigaddr);
     //Pause execution to allow using the dispenser on testnet to put tokens in account
-    console.log('Make sure address above has tokens using the dispenser');
-   // await keypress();
+    console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
+    // await keypress();
     try {
-        let algodclient = new algosdk.Algod(token, server, port);
+        let algodclient = new algosdk.Algodv2(token, server, port);
 
-        //Get the relevant params from the algod
-        let params = await algodclient.getTransactionParams();
-        let endRound = params.lastRound + parseInt(1000);
-        //example of how to write an object into the notefield
+        // Get the relevant params from the algod
+        let params = await algodclient.getTransactionParams().do();
+        // comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
 
         //create a transaction
-        let txn = {
-            "from": multsigaddr,
-            "to": account3.addr,
-            "fee": params.fee,
-            "amount": 200000,
-            "firstRound": params.lastRound,
-            "lastRound": endRound,
-            "genesisID": params.genesisID,
-            "genesisHash": params.genesishashb64,
-            "note": new Uint8Array(0)
-        };
-        //Sign wiith first signature
+        // let txn = {
+        //     "from": multsigaddr,
+        //     "to": account3.addr,
+        //     "fee": params.fee,
+        //     "amount": 200000,
+        //     "firstRound": params.firstRound,
+        //     "lastRound": params.lastRound,
+        //     "genesisID": params.genesisID,
+        //     "genesisHash": params.genesisHash,
+        //     "note": new Uint8Array(0)
+        // };
+        const receiver = account3.addr;
+        let note = algosdk.encodeObj("Hello World");
+        
+        let txn = algosdk.makePaymentTxnWithSuggestedParams(multsigaddr, receiver, 1000000, undefined, note, params);       
+        let txId = txn.txID().toString();
+        // Sign with first signature
+        // At the time of writing this, there is a V2 js sdk bug - signMultisigTransaction - 
+        // Error: The transaction sender address and multisig preimage do not match
+        // Workaround use V1
+        // https://github.com/algorand/js-algorand-sdk/issues/188
         let rawSignedTxn = algosdk.signMultisigTransaction(txn, mparams, account1.sk).blob;
         //sign with second account
         let twosigs = algosdk.appendSignMultisigTransaction(rawSignedTxn, mparams, account2.sk).blob;
         //submit the transaction
-        let tx = (await algodclient.sendRawTransaction(twosigs));
+        await algodclient.sendRawTransaction(twosigs).do();
         // Wait for confirmation
-        await waitForConfirmation(algodclient, tx.txId);
-        console.log("Transaction : " + tx.txId);
+        await waitForConfirmation(algodclient, txId);
+
+        // Read the transaction from the blockchain
+        let confirmedTxn = await algodClient.pendingTransactionInformation(txId).do();
+        console.log("Transaction information: %o", confirmedTxn.txn.txn);      
+        console.log("Decoded note: %s", algosdk.decodeObj(confirmedTxn.txn.txn.note));
 
     } catch (err) {
-                console.log(err);
+                console.log(err.message);
     }
 })().then(process.exit)

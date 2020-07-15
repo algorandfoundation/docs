@@ -1,4 +1,4 @@
-package com.algorand.javatest.multisig.v1;
+package com.algorand.javatest.multisig;
 import com.algorand.algosdk.account.Account;
 
 public class CreateAccounts
