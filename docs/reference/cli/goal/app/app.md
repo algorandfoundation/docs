@@ -78,6 +78,7 @@ goal app [flags]
 * [goal app closeout](../closeout/)	 - Close out of an application
 * [goal app create](../create/)	 - Create an application
 * [goal app delete](../delete/)	 - Delete an application
+* [goal app info](../info/)	 - Look up current parameters for an application
 * [goal app interact](../interact/interact/)	 - Interact with an application
 * [goal app optin](../optin/)	 - Opt in to an application
 * [goal app read](../read/)	 - Read local or global state for an application

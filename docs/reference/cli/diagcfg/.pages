@@ -1,6 +1,3 @@
 title: diagcfg
 arrange:
  - diagcfg.md
- - metric.md
- - telemetry.md
- 
