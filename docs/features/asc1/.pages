@@ -5,3 +5,4 @@ arrange:
    - stateless
    - teal 
    - debugging.md
+   - teal_test.md

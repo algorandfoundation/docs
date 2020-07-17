@@ -19,5 +19,5 @@ TEAL is an assembly-like language and is processed with a stack machine. The pri
 TEAL provides access to many opcodes which operate on the stack values. Smart contracts have access to arguments, global variables, balances, Algorand ASAs, and grouped transaction properties. Some opcodes are only available to a specific contract type (stateful or stateless). These opcodes are marked in the opcode documentation with a mode field that is set to either Application (stateful contract) or Signature (stateless contract). 
 
 The TEAL language is fully described in the [TEAL Specification](../../reference/teal/specification.md) and the [TEAL Overview](teal/index.md) guide walks through the general operation of TEAL. Algorand provides a debugger, to debug smart contracts as well. To learn more about debugging a smart contract, see the [debugging smart contracts](debugging.md) documentation.
- 
 
+To learn how to write tests for TEAL smart contracts, refer to the [Testing TEAL programs](teal_test.md) document.
