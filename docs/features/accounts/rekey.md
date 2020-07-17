@@ -13,7 +13,7 @@ The [account overview](https://staging.new-dev-site.algorand.org/docs/features/a
 
 ### Introducing Authorized Address
 
-The account object includes a field _auth-addr_ which, when populated, defines the authorized address (aa) to sign transactions from this account. Initially, the _auth-addr_ field is implicitly set to the account's _address_ field and the only valid (aa) is the (sk) created during account generation. To conserve resources, the _auth-addr_ field is only stored and displayed when an authorized `rekey-to` transaction is confirmed by the network. 
+The balance record of every account includes the _auth-addr_ field which, when populated, defines the authorized address (aa) to sign transactions from this account. Initially, the _auth-addr_ field is implicitly set to the account's _address_ field and the only valid (aa) is the (sk) created during account generation. To conserve resources, the _auth-addr_ field is only stored and displayed when an authorized `rekey-to` transaction is confirmed by the network. 
 
 TODO: Figure 1. Insert drawing of account object which includes the terms and relationships noted above.
 
@@ -118,14 +118,15 @@ The _auth-addr_ may be specified as a distinct address, MultiSig address or Logi
 
 ### Potential Use Cases
 
-## Scenario 1
+## Scenario 1 - Rekey to Single Address
 
-### Send from Initial Account
+### Generate New Account
 
-
-### Rekey to Authorized Account
+### Rekey to Single Address
 
 #### TEST: Send from Initial Account
+
+### Send from Authorized Account (Single Address)
 
 ### Generate Unsigned Transaction
 
@@ -133,10 +134,30 @@ The _auth-addr_ may be specified as a distinct address, MultiSig address or Logi
 
 ### Broadcast Signed Transaction
 
-## Scenario 2
+## Scenario 2 - Remove Authorized Account
 
-### Change Address with Secret Key to MultiSig
+### Load Existing Account with AuthAddr Set
 
-## Scenario 3
+### Rekey to This Account Address
 
-### Change Key for MultiSig Address
+### Send from This Account
+
+## Scenario 3 - Rekey to MultiSig Address
+
+### Generate Two New Accounts
+
+### Generate New MultiSig Account
+
+### Rekey to MultiSig Address
+
+### Generate Unsigned Transaction
+
+### Sign using MultiSig Component Accounts
+
+### Broadcast Signed Transaction
+
+## Scenario 4 - Update MultiSig Membership
+
+
+
+
