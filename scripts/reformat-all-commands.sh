@@ -13,6 +13,9 @@ INDEXER_SRC=$2
 # CLI KMD
 ./reformat.py -doc-dir ../docs/reference/cli/kmd/ -cmd ~/go/bin/kmd
 
+# CLI DIAGCFG
+# TODO: ./reformat.py -doc-dir ../docs/reference/cli/diagcfg/ -cmd ~/go/bin/diagcfg
+
 # REST KMD
 ./convert_swagger.py -target ../docs/reference/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
 
