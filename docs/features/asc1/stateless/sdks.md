@@ -8,8 +8,174 @@ Each SDK's install process is discussed in the [SDK Reference](../../../referenc
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
 
 
-# Accessing TEAL program from SDKs
-Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](../teal/walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
+# Compiling TEAL program from SDKs
+Before a TEAL program can be used, it must be compiled. SDKs provide this capability. If using the `goal` tool see the [goal TEAL walkthrough](../teal/walkthrough.md) documentation for this process.  Most of the SDKs support the bytes encoded in base64 or hexadecimal format. All of the examples in this section use a file called `sample.teal` which contains one line of TEAL code, `int 0` . This will always return `false`. 
+
+```javascript tab="JavaScript"
+const algosdk = require('algosdk');
+const token = "algod-token"<PLACEHOLDER>;
+const server = "algod-address"<PLACEHOLDER>;
+const port = algod - port<PLACEHOLDER>;
+
+// Import the filesystem module 
+const fs = require('fs');
+// create v2 client
+let algodclient = new algosdk.Algodv2(token, server, port);
+
+(async () => {
+    // Read file for Teal code - int 0
+    let data = fs.readFileSync('sample.teal');
+    // Compile teal
+    let results = await algodclient.compile(data).do();
+    // Print results
+    console.log("Hash = " + results['hash']);
+    console.log("Result = " + results['result']);   
+})().catch(e => {
+    console.log(e.body.message);
+    console.log(e);
+});
+```
+
+```python tab="Python"
+# compile teal code
+from algosdk import transaction, account, mnemonic
+from algosdk.v2client import algod
+from algosdk.future.transaction import PaymentTxn, LogicSig
+import os
+
+def load_resource(res):
+    """load teal file"""
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(dir_path, res)
+    with open(path, "rb") as fin:
+        data = fin.read()
+    return data
+
+try:
+
+    # create an algod client
+    # algod_token = "algod-token" < PLACEHOLDER >
+    # algod_address = "algod-address" < PLACEHOLDER >
+    algod_client = algod.AlgodClient(algod_token, algod_address)
+
+    # int 0 - sample.teal
+    myprogram = "sample.teal"
+    # read teal program
+    data = load_resource(myprogram)
+    source = data.decode('utf-8')
+    # compile teal program
+    response = algod_client.compile(source)
+    # print(response)
+    print ("Response Result = ",response['result'])
+    print("Response Hash = ",response['hash'])
+except Exception as e:
+    print(e)
+
+# results should look similar to this:
+# Response Result = ASABACI =
+# Response Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+```
+
+```java tab="Java"
+package com.algorand.javatest.smart_contracts;
+
+import com.algorand.algosdk.v2.client.common.AlgodClient;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import com.algorand.algosdk.v2.client.model.CompileResponse;
+
+public class CompileTeal {
+// Utility function to update changing block parameters
+public AlgodClient client = null;
+
+// utility function to connect to a node
+private AlgodClient connectToNetwork() {
+
+    // Initialize an algod client
+    final Integer ALGOD_PORT = algod-port<PLACEHOLDER>;
+    final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
+    final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
+    AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+    return client;
+}
+
+public void compileTealSource() throws Exception {
+    // Initialize an algod client
+    if (client == null)
+        this.client = connectToNetwork();
+
+    // read file - int 0
+    byte[] data = Files.readAllBytes(Paths.get("./sample.teal"));
+    // compile
+    CompileResponse response = client.TealCompile().source(data).execute().body();
+    // print results
+    System.out.println("response: " + response);
+    System.out.println("Hash: " + response.hash); 
+    System.out.println("Result: " + response.result); 
+}
+
+public static void main(final String args[]) throws Exception {
+    CompileTeal t = new CompileTeal();
+    t.compileTealSource();
+}
+
+}
+// Output should look similar to this... 
+// response:
+// {"hash":"KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE","result":"ASABACI="}
+// Hash: KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE 
+// Result: ASABACI=
+```
+
+```go tab="Go"
+package main
+
+import (
+
+	"context"
+	"io/ioutil"
+	"log"
+	"fmt"
+	"os"
+	"github.com/algorand/go-algorand-sdk/client/v2/algod"
+)
+
+func main() {
+
+	// const algodToken = "algod-token<PLACEHOLDER>"
+	// const algodAddress = "algod-address<PLACEHOLDER>"
+
+	// Create an algod client
+	algodClient, err := algod.MakeClient(algodAddress, algodToken)
+	if err != nil {
+		fmt.Printf("failed to read teal file: %s\n", err)
+		return
+	}
+	// int 0 in sample.teal
+	file, err := os.Open("./sample.teal")
+    if err != nil {
+        log.Fatal(err)
+    }    
+	defer file.Close()
+	tealFile, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Printf("failed to teal file: %s\n", err)
+		return}
+    // compile teal program
+	response, err := algodClient.TealCompile(tealFile).Do(context.Background())
+    // print response	
+	fmt.Printf("Hash = %s\n", response.Hash)
+	fmt.Printf("Result = %s\n", response.Result)
+}
+// results should look similar to
+// Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+// Result = ASABACI=
+```
+
+Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. 
+
+The converted binary bytes are used in the SDKs as shown below. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
+
 
 ``` bash
 //simple.teal contains int 0
