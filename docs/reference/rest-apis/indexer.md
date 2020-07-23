@@ -152,7 +152,7 @@ Lookup account transactions.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -199,6 +199,8 @@ Search for applications
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 
 
 **Responses**
@@ -447,7 +449,7 @@ Lookup transactions for an asset.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -546,7 +548,7 @@ Search for transactions.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -600,7 +602,7 @@ data/basics/userBalance.go : AccountData
 |**address**  <br>*required*|the account public key|string|
 |**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer|
 |**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer|
-|**apps-local-state**  <br>*optional*|\[appl\] applications local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalStates](#applicationlocalstates) > array|
+|**apps-local-state**  <br>*optional*|\[appl\] applications local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalState](#applicationlocalstate) > array|
 |**apps-total-schema**  <br>*optional*|\[tsch\] stores the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
 |**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
 |**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
@@ -647,19 +649,9 @@ Stores local state associated with an application.
 
 |Name|Description|Schema|
 |---|---|---|
-|**key-value**  <br>*required*|\[tkv\] storage.|[TealKeyValueStore](#tealkeyvaluestore)|
+|**id**  <br>*required*|The application which this local state is for.|integer|
+|**key-value**  <br>*optional*|\[tkv\] storage.|[TealKeyValueStore](#tealkeyvaluestore)|
 |**schema**  <br>*required*|\[hsch\] schema.|[ApplicationStateSchema](#applicationstateschema)|
-
-
-<a name="applicationlocalstates"></a>
-### ApplicationLocalStates
-Pair of application index and application local state
-
-
-|Name|Schema|
-|---|---|
-|**id**  <br>*required*|integer|
-|**state**  <br>*required*|[ApplicationLocalState](#applicationlocalstate)|
 
 
 <a name="applicationparams"></a>
@@ -936,7 +928,7 @@ data/transactions/transaction.go : Transaction
 |**sender**  <br>*required*|\[snd\] Sender's address.|string|
 |**sender-rewards**  <br>*optional*|\[rs\] rewards applied to sender account.|integer|
 |**signature**  <br>*required*||[TransactionSignature](#transactionsignature)|
-|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction|enum (pay, keyreg, acfg, axfer, afrz)|
+|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl)|
 
 
 <a name="transactionapplication"></a>
