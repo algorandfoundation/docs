@@ -30,43 +30,47 @@ goal asset send [flags]
 
 ```
 
-  -a, --amount uint        The amount to be transferred (required), in base units of the asset.
+  -a, --amount uint                 The amount to be transferred (required), in base units of the asset.
 
-      --asset string       Unit name of the asset being transferred
+      --asset string                Unit name of the asset being transferred
 
-      --assetid uint       ID of the asset being transferred
+      --assetid uint                ID of the asset being transferred
 
-      --clawback string    Address to issue a clawback transaction from (defaults to no clawback)
+      --clawback string             Address to issue a clawback transaction from (defaults to no clawback)
 
-  -c, --close-to string    Close asset account and send remainder to this address
+  -c, --close-to string             Close asset account and send remainder to this address
 
-      --creator string     Account address for asset creator
+      --creator string              Account address for asset creator
 
-      --fee uint           The transaction fee (automatically determined by default), in microAlgos
+      --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
-      --firstvalid uint    The first round where the transaction may be committed to the ledger
+      --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
-  -f, --from string        Account address to send the money from (if not specified, uses default account)
+      --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
-  -h, --help               help for send
+      --firstvalid uint             The first round where the transaction may be committed to the ledger
 
-      --lastvalid uint     The last round where the transaction may be committed to the ledger
+  -f, --from string                 Account address to send the money from (if not specified, uses default account)
 
-  -x, --lease string       Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
+  -h, --help                        help for send
 
-  -N, --no-wait            Don't wait for transaction to commit
+      --lastvalid uint              The last round where the transaction may be committed to the ledger
 
-  -n, --note string        Note text (ignored if --noteb64 used also)
+  -x, --lease string                Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
 
-      --noteb64 string     Note (URL-base64 encoded)
+  -N, --no-wait                     Don't wait for transaction to commit
 
-  -o, --out string         Write transaction to this file
+  -n, --note string                 Note text (ignored if --noteb64 used also)
 
-  -s, --sign               Use with -o to indicate that the dumped transaction should be signed
+      --noteb64 string              Note (URL-base64 encoded)
 
-  -t, --to string          Address to send to money to (required)
+  -o, --out string                  Write transaction to this file
 
-      --validrounds uint   The number of rounds for which the transaction will be valid
+  -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
+
+  -t, --to string                   Address to send to money to (required)
+
+      --validrounds uint            The number of rounds for which the transaction will be valid
 
 ```
 

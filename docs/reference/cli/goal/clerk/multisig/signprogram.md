@@ -18,7 +18,7 @@ Start a multisig LogicSig, or add a signature to an existing multisig, for a giv
 
 ```
 
-goal clerk multisig signprogram -t TXFILE -a ADDR [flags]
+goal clerk multisig signprogram -t [transaction file] -a [address] [flags]
 
 ```
 

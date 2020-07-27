@@ -18,7 +18,7 @@ Start a multisig, or add a signature to an existing multisig, for a given transa
 
 ```
 
-goal clerk multisig sign -t TXFILE -a ADDR [flags]
+goal clerk multisig sign -t [transaction file] -a [address] [flags]
 
 ```
 

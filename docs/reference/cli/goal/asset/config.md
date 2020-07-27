@@ -30,43 +30,47 @@ goal asset config [flags]
 
 ```
 
-      --asset string          Unit name of asset to configure
+      --asset string                Unit name of asset to configure
 
-      --assetid uint          Asset ID to configure
+      --assetid uint                Asset ID to configure
 
-      --creator string        Account address for asset to configure
+      --creator string              Account address for asset to configure
 
-      --fee uint              The transaction fee (automatically determined by default), in microAlgos
+      --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
-      --firstvalid uint       The first round where the transaction may be committed to the ledger
+      --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
-  -h, --help                  help for config
+      --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
-      --lastvalid uint        The last round where the transaction may be committed to the ledger
+      --firstvalid uint             The first round where the transaction may be committed to the ledger
 
-  -x, --lease string          Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
+  -h, --help                        help for config
 
-      --manager string        Manager account to issue the config transaction (defaults to creator)
+      --lastvalid uint              The last round where the transaction may be committed to the ledger
 
-      --new-clawback string   New clawback address
+  -x, --lease string                Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
 
-      --new-freezer string    New freeze address
+      --manager string              Manager account to issue the config transaction (defaults to creator)
 
-      --new-manager string    New manager address
+      --new-clawback string         New clawback address
 
-      --new-reserve string    New reserve address
+      --new-freezer string          New freeze address
 
-  -N, --no-wait               Don't wait for transaction to commit
+      --new-manager string          New manager address
 
-  -n, --note string           Note text (ignored if --noteb64 used also)
+      --new-reserve string          New reserve address
 
-      --noteb64 string        Note (URL-base64 encoded)
+  -N, --no-wait                     Don't wait for transaction to commit
 
-  -o, --out string            Write transaction to this file
+  -n, --note string                 Note text (ignored if --noteb64 used also)
 
-  -s, --sign                  Use with -o to indicate that the dumped transaction should be signed
+      --noteb64 string              Note (URL-base64 encoded)
 
-      --validrounds uint      The number of rounds for which the transaction will be valid
+  -o, --out string                  Write transaction to this file
+
+  -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
+
+      --validrounds uint            The number of rounds for which the transaction will be valid
 
 ```
 
