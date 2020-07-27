@@ -3,9 +3,9 @@ title: The Smart Contract Language
 <center><iframe width="560" height="315" src="https://www.youtube.com/embed/OWFRP9McBmk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 <center>*ASC1 Overview*</center>
 
-TEAL is an assembly-like language and is processed with a stack machine. The language is a non-turing-complete language that does not support looping but does support forward branches. TEAL programs are processed one line at a time that push and pop values from the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and some flow control functions like `bnz` for branching. See [TEAL Specification Reference](../../reference/teal/specification.md) for more details.
+TEAL is an assembly-like language and is processed with a stack machine. The language is a non-turing-complete language that does not support looping but does support forward branches. TEAL programs are processed one line at a time that push and pop values from the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and some flow control functions like `bnz` for branching. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more details.
 
-<center>![TEAL Architecture](../../imgs/teal_overview-1.png)</center>
+<center>![TEAL Architecture](../../../imgs/teal_overview-1.png)</center>
 <center>*TEAL Architecture Overview*</center>
 
 # Getting Transaction Properties
@@ -13,46 +13,46 @@ The primary purpose of a TEAL program is to return either true or false. When th
 
 Program line number 1:
 
-<center>![Transaction Properties](../../imgs/teal_overview-2.png)</center>
+<center>![Transaction Properties](../../../imgs/teal_overview-2.png)</center>
 <center>*Getting Transaction Properties*</center>
 
-The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's reciever use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../reference/teal/specification.md) for more transaction properties.
+The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's reciever use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
 
 # Pseudo Opcodes
 The TEAL specification provides several pseudo opcodes for convenience.  For example, the second line in the program below uses the `addr` pseudo opcode.
 
-<center>![Pseudo Opcodes](../../imgs/teal_overview-3.png)</center>
+<center>![Pseudo Opcodes](../../../imgs/teal_overview-3.png)</center>
 <center>*Pseudo Opcodes*</center>
 
-The `addr` pseudo opcode converts Algorand addresses to a byte constant and pushes the result to the stack. See [TEAL Specification Reference](../../reference/teal/specification.md) for additional pseudo opcodes.
+The `addr` pseudo opcode converts Algorand addresses to a byte constant and pushes the result to the stack. See [TEAL Specification Reference](../../../reference/teal/specification.md) for additional pseudo opcodes.
 
 # Operators
-TEAL provides operators to work with data that is on the stack. For example, the `==` operator evaluates if the last two values on the stack are equal and pushes either a 1 or 0 depending on the result. The number of values used by an operator will depend on the operator. The [TEAL Opcodes](../../reference/teal/opcodes.md) documentation explains arguments and return values. See [TEAL Specification Reference](../../reference/teal/specification.md) for a list of all operators.
+TEAL provides operators to work with data that is on the stack. For example, the `==` operator evaluates if the last two values on the stack are equal and pushes either a 1 or 0 depending on the result. The number of values used by an operator will depend on the operator. The [TEAL Opcodes](../../../reference/teal/opcodes.md) documentation explains arguments and return values. See [TEAL Specification Reference](../../../reference/teal/specification.md) for a list of all operators.
 
-<center>![Operators](../../imgs/teal_overview-4.png)</center>
+<center>![Operators](../../../imgs/teal_overview-4.png)</center>
 <center>*Operators*</center>
 
 # Argument Passing
 TEAL supports program arguments. The diagram below illustrates an example of logic that is loading a parameter on to the stack. 
 
-<center>![Arguments](../../imgs/teal_overview-5.png)</center>
+<center>![Arguments](../../../imgs/teal_overview-5.png)</center>
 <center>*Arguments*</center>
 
-All argument parameters to a TEAL program are byte arrays. The order that parameters are passed in is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. If you are using the `goal` command-line tool, the parameters must be passed as base64 encoded strings. See the parameter section within the [ASC1 SDK usage](sdks.md) documentation and the [Goal Teal Walkthrough](goal_teal_walkthrough.md) documentation for more details on parameters.
+All argument parameters to a TEAL program are byte arrays. The order that parameters are passed in is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. If you are using the `goal` command-line tool, the parameters must be passed as base64 encoded strings. See the parameter section within the [ASC1 SDK usage](../stateless/sdks.md) documentation and the [Goal Teal Walkthrough](../teal/walkthrough.md) documentation for more details on parameters.
 
 # Storing and Loading from Scratchspace
 TEAL provides a scratch space as a way of temporarily storing values for use later in your code. The diagram below illustrates a small TEAL program that loads 12 onto the stack and then duplicates it. These values are multiplied together and result (144) is pushed to the top of the stack. The store command stores the value in the scratch space 1 slot.
 
-<center>![Storing Values](../../imgs/teal_overview-6.png)</center>
+<center>![Storing Values](../../../imgs/teal_overview-6.png)</center>
 <center>*Storing Values*</center>
 
 The load command is used to retrieve a value from the scratch space as illustrated in the diagram below. Note that this operation does not clear the scratch space slot, which allows a stored value to be loaded many times if necessary.
 
-<center>![Loading Values](../../imgs/teal_overview-7.png)</center>
+<center>![Loading Values](../../../imgs/teal_overview-7.png)</center>
 <center>*Loading Values*</center>
 
 # Operational Cost of TEAL Opcodes
-TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. For optimal performance TEAL programs are also limited in opcode cost. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents it's opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 7) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. TEAL programs are limited to 20000 for total opcode cost of all program operators. The [TEAL Opcodes](../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
+TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. For optimal performance TEAL programs are also limited in opcode cost. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents it's opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 7) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. TEAL programs are limited to 20000 for total opcode cost of all program operators. The [TEAL Opcodes](../../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
 
 # Example Walkthrough of a TEAL Program
 The example covered in this tutorial is for an contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.

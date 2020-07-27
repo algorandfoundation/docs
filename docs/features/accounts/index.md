@@ -65,7 +65,7 @@ Every account on Algorand must have a minimum balance of 100,000 microAlgos. If 
 By default, Algorand accounts are set to **offline**. An **online** account is one that participates in Algorand consensus. For an account to go online, it must generate a participation key and send a special key registration transaction. Read more about how to register an account online in the [Network Participation](../../run-a-node/participate/index.md) section.
 
 ### Other Account Types
-Creating an Algorand address from a public key, is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authorize spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](../asc1/modes.md) section. Multisignature accounts are described [below](./create.md#multisignature).
+Creating an Algorand address from a public key, is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authorize spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](../asc1/stateless/modes.md) section. Multisignature accounts are described [below](./create.md#multisignature).
 
 ### Special Accounts
 

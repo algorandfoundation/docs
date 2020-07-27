@@ -2,14 +2,14 @@ title: Using the SDKs
 
 This guide covers using TEAL programs with contract accounts or delegated signatures with the available SDKs. The methods covered in this documentation are used for custom TEAL code and provide general access to any TEAL program. Algorand Smart Contract Templates are also available for common use case functionality like Hash Time-Lock Contracts, Split Payments, Limit Orders, etc. Developer documentation describing the process for using these templates will be available soon.
 
-Each SDK's install process is discussed in the [SDK Reference](../../reference/sdks/index.md) documentation.
+Each SDK's install process is discussed in the [SDK Reference](../../../reference/sdks/index.md) documentation.
 
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
 
 
 # Accessing TEAL program from SDKs
-Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](./goal_teal_walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
+Before a TEAL program can be used is the SDKs, it must be compiled using the `goal` tool. The [goal TEAL walkthrough](../teal/walkthrough.md) documentation explains this process. Once a TEAL program is compiled, the bytes of the program can be retrieved in various ways. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. The following example illustrates using shell commands to export the binary to hexadecimal or a base64 encoded string.
 
 ``` bash
 //simple.teal contains int 0
@@ -44,7 +44,7 @@ program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
 # Contract Account SDK usage
 ASC1 Contract accounts are used to allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [ASC1 Usage Modes](./modes.md) documentation explains ASC1 modes in more detail. 
 
-TEAL contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand [transactions](../transactions/index.md). The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a [logic signature](./modes.md#logic-signatures). See [Transaction](../transactions/index.md) documentation for details on setting up a payment transaction.
+TEAL contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand [transactions](../../transactions/index.md). The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a [logic signature](./modes.md#logic-signatures). See [Transaction](../../transactions/index.md) documentation for details on setting up a payment transaction.
 
 Contract Accounts are created by compiling the TEAL logic. Once the contract account is created, it can be used as any other address. To send tokens or assets from the account the transaction must be signed by a Logic Signature. From an SDK standpoint, the following process should be used.
 
@@ -55,7 +55,7 @@ Contract Accounts are created by compiling the TEAL logic. Once the contract acc
 * Sign the Transaction with the Logic Signature.
 * Send the Transaction to the network.
 
-<center>![Transaction From Contract Account](../../imgs/asc1_sdk_usage-1.png)</center>
+<center>![Transaction From Contract Account](../../../imgs/asc1_sdk_usage-1.png)</center>
 <center>*Transaction From Contract Account*</center>
 
 The following example illustrates signing a transaction with a created logic signature.
@@ -256,7 +256,7 @@ await waitForConfirmation(algodclient, tx.txId);
 # Account Delegation SDK Usage
 ASC1 allows TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](./modes.md) documentation explains ASC1 modes in more detail. 
 
-Delegated transactions are special transactions where the `sender` also signs the logic and the transaction is then signed with the [logic signature](./modes.md#logic-signature). In all other aspects, the transaction functions as any other transaction. See [Transaction](../transactions/index.md) documentation for details on setting up a payment transaction.
+Delegated transactions are special transactions where the `sender` also signs the logic and the transaction is then signed with the [logic signature](./modes.md#logic-signature). In all other aspects, the transaction functions as any other transaction. See [Transaction](../../transactions/index.md) documentation for details on setting up a payment transaction.
 
 Delegated Logic Signatures require that the logic signature be signed from a specific account or a multi-signature account. The TEAL program is first loaded, then a Logic Signature is created and then the Logic Signature is signed by a specific account or multi-signature account. The transaction is created as normal. The transaction is then signed with the Logic Signature. From an SDK standpoint, the following process should be used.
 
@@ -268,7 +268,7 @@ Delegated Logic Signatures require that the logic signature be signed from a spe
 * Sign the Transaction with the Logic Signature.
 * Send the Transaction to the network.
 
-<center>![Delegated Signature Transaction](../../imgs/asc1_sdk_usage-2.png)</center>
+<center>![Delegated Signature Transaction](../../../imgs/asc1_sdk_usage-2.png)</center>
 <center>*Delegated Signature Transactiont*</center>
 
 The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.

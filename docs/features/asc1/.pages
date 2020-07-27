@@ -1,7 +1,7 @@
 title: Smart Contracts
 arrange:
    - index.md
-   - modes.md
-   - teal_overview.md
-   - goal_teal_walkthrough.md
-   - sdks.md
+   - stateful
+   - stateless
+   - teal 
+   - build.md
