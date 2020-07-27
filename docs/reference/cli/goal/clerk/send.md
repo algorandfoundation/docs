@@ -36,6 +36,10 @@ goal clerk send [flags]
 
   -c, --close-to string             Close account and send remainder to this address
 
+      --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
+
+      --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
+
       --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
       --firstvalid uint             The first round where the transaction may be committed to the ledger
@@ -60,15 +64,15 @@ goal clerk send [flags]
 
       --noteb64 string              Note (URL-base64 encoded)
 
-  -o, --out string                  Dump an unsigned tx to the given file. In order to dump a signed transaction, pass -s
+  -o, --out string                  Write transaction to this file
 
-      --rekey-to string             Rekey account to the given authorization address. (Future transactions from this account will need to be signed with the new key.)
+      --rekey-to string             Rekey account to the given spending key/address. (Future transactions from this account will need to be signed with the new key.)
 
   -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
 
   -t, --to string                   Address to send to money to (required)
 
-  -v, --validrounds uint            The validity period for the transaction, used to calculate lastvalid
+      --validrounds uint            The number of rounds for which the transaction will be valid
 
 ```
 

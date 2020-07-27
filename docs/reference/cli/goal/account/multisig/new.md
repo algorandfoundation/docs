@@ -18,7 +18,7 @@ Create a new multisig account from a list of existing non-multisig addresses
 
 ```
 
-goal account multisig new [addr1 addr2 ...] [flags]
+goal account multisig new [address 1] [address 2]... [flags]
 
 ```
 
