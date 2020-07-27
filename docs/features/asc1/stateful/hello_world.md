@@ -1,11 +1,11 @@
 title: Your First Stateful Smart Contract
 
-Use the guide below to deploy a "hello world" Algorand application using [stateful TEAL](TODO:). This requires [setting up your workspace](https://developer.algorand.org/docs/build-apps/setup) and [connecting to a node](https://developer.algorand.org/docs/build-apps/connect/). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
+Use the guide below to deploy a "hello world" Algorand application using [stateful TEAL](/features/asc1/stateful/). This requires [setting up your workspace](/build-apps/setup/) and [connecting to a node](/build-apps/connect/). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
 
 This is a very basic application which implements a counter. Each time the application is called, the counter value is incremented. 
 
 !!! Info
-	Algorand implements both “Stateful” and “Stateless” applications, sometimes referred to as version 1 and version 2 programs respectively. Both are smart contracts and use the [TEAL Language](https://developer.algorand.org/docs/features/asc1/teal_overview/) but the available [OpCodes](https://developer.algorand.org/docs/reference/teal/opcodes/) vary by version. This guide covers only stateful applications.
+	Algorand implements both “Stateful” and “Stateless” applications, sometimes referred to as version 1 and version 2 programs respectively. Both are smart contracts and use the [TEAL Language](/features/asc1/teal/) but the available [OpCodes](/reference/teal/opcodes/) vary by version. This guide covers only stateful applications.
 
 ## Stateful Application Overview
 
