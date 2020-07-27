@@ -1,4 +1,4 @@
-package com.algorand.javatest.smart_contracts.v2;
+package com.algorand.javatest.smart_contracts;
 
 import com.algorand.algosdk.account.Account;
 import com.algorand.algosdk.algod.client.ApiException;

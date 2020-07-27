@@ -4,9 +4,11 @@ import (
 	"context"
 	"crypto/ed25519"
 	"encoding/base64"
-	"encoding/json"
-	// "encoding/binary"
-	// "os"
+	"encoding/binary"
+	// "encoding/json"
+	"io/ioutil"
+	"log"
+	"os"
 	"fmt"
 
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
@@ -45,38 +47,58 @@ func main() {
 	// sandbox
 	const algodAddress = "http://localhost:4001"
 	const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
-	// Create logic signature
-	// example base64 encoded program "ASABACI=" int 0
-	var sk ed25519.PrivateKey
-	var ma crypto.MultisigAccount
-	// program, err :=  base64.StdEncoding.DecodeString("base64-encoded-program<PLACEHOLDER>")
-
-	program, err := base64.StdEncoding.DecodeString("ASABACI=")
-	var args [][]byte
-	lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
-
-	// string parameter
-	// args := make([][]byte, 1)
-	// args[0] = []byte("my string")
-    // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
-    
-    // integer parameter
-    // args := make([][]byte, 1)
-	// var buf [8]byte
-	// binary.BigEndian.PutUint64(buf[:], 123)
-	// args[0] = buf[:]
-    // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
-
-	addr := crypto.LogicSigAddress(lsig).String()
-	fmt.Printf("Escrow Address: %s\n", addr)
-
 	// Create an algod client
 	algodClient, err := algod.MakeClient(algodAddress, algodToken)
 	if err != nil {
 		fmt.Printf("failed to make algod client: %s\n", err)
 		return
 	}
+	// Create logic signature
+	var sk ed25519.PrivateKey
+    var ma crypto.MultisigAccount
+
+    // samplearg.teal  ... This code is meant for learning purposes only
+    // It should not be used in production
+    // arg_0
+    // btoi
+    // int 123
+    // == 
+    file, err := os.Open("./samplearg.teal")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    defer file.Close()
+    tealFile, err := ioutil.ReadAll(file)
+    if err != nil {
+        fmt.Printf("failed to read file: %s\n", err)
+		return}
+		
+    response, err := algodClient.TealCompile(tealFile).Do(context.Background())
+    fmt.Printf("Hash = %s\n", response.Hash)
+    fmt.Printf("Result = %s\n", response.Result)
+    
+    program, err :=  base64.StdEncoding.DecodeString(response.Result)	
+    // if no args use these two lines
+    // var args [][]byte
+    // lsig, err := crypto.MakeLogicSig(program, args, sk, m a)
+
+    // string parameter
+    // args := make([][]byte, 1)
+    // args[0] = []byte("my string")
+    // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+    
+    // integer args parameter
+    args := make([][]byte, 1)
+    var buf [8]byte
+    binary.BigEndian.PutUint64(buf[:], 123)
+    args[0] = buf[:]
+    lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+
+    addr := crypto.LogicSigAddress(lsig).String()
+	fmt.Printf("Escrow Address: %s\n" , addr )
+
+
 	// Get suggested params for the transaction
 	txParams, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
@@ -121,23 +143,13 @@ func main() {
 	// }
 		
 	// Submit the raw transaction to network
-	fmt.Printf("expected to fail with int 0 program, always false %s\n", err)
+
 	transactionID, err := algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		fmt.Printf("Sending failed with %v\n", err)
 	}
-	fmt.Printf("Transaction ID: %v\n", transactionID)
+    // Wait for transaction to be confirmed
+    waitForConfirmation(txID, algodClient)
+    fmt.Printf("Transaction ID: %v\n", transactionID)
 
-	// Read transaction
-	confirmedTxn, stxn, err := algodClient.PendingTransactionInformation(txID).Do(context.Background())
-	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
-		return
-	}
-	txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
-	if err != nil {
-		fmt.Printf("Cannot marshal txn data: %s\n", err)
-	}
-	fmt.Printf("Transaction information: %s\n", txnJSON)
-	fmt.Printf("Decoded note: %s\n", string(stxn.Txn.Note))
 }

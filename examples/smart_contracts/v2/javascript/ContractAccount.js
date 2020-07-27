@@ -38,18 +38,32 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     params.flatFee = true;
     console.log(params);
     // create logic sig
-    // b64 example "ASABACI=" is `int 0`
+    // samplearg.teal
+    // This code is meant for learning purposes only
+    // It should not be used in production
+    // arg_0
+    // btoi
+    // int 123
+    // ==
     // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
     // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
-    let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
+    var fs = require('fs'),
+        path = require('path'),
+        filePath = path.join(__dirname, 'samplearg.teal');
+    let data = fs.readFileSync(filePath);
+    let results = await algodclient.compile(data).do();
+    console.log("Hash = " + results.hash);
+    console.log("Result = " + results.result);
+    let program = new Uint8Array(Buffer.from(results.result, "base64"));
+    // Use this if no args
+    // let lsig = algosdk.makeLogicSig(program);
 
-    let lsig = algosdk.makeLogicSig(program);
-    //string parameter
+    // String parameter
     // let args = ["my string"];
     // let lsig = algosdk.makeLogicSig(program, args);
-    //integer parameter
-    // let args = [[123]];
-    // let lsig = algosdk.makeLogicSig(program, args);
+    // Integer parameter
+    let args = [[123]];
+    let lsig = algosdk.makeLogicSig(program, args);
 
     // create a transaction
     let sender = lsig.address();
@@ -70,6 +84,5 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
 })().catch(e => {
     console.log(e.body.message);
-    console.log("rejected by logic expecgted for int 0");
     console.log(e);
 });
