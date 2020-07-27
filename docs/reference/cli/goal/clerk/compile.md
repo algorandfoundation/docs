@@ -18,7 +18,7 @@ Reads a TEAL contract program and compiles it to binary output and contract addr
 
 ```
 
-goal clerk compile [flags]
+goal clerk compile [input file 1] [input file 2]... [flags]
 
 ```
 

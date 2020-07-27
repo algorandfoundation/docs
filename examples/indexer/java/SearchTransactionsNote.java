@@ -8,21 +8,20 @@ import com.algorand.algosdk.util.Encoder;
 
 public class SearchTransactionsNote {
     public Client indexerInstance = null;
+
     // utility function to connect to a node
-    private Client connectToNetwork(){
+    private Client connectToNetwork() {
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 8980;       
-        IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
+        final int INDEXER_API_PORT = 8980;
+        IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT);
         return indexerClient;
     }
     public static void main(String args[]) throws Exception {
         SearchTransactionsNote ex = new SearchTransactionsNote();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        byte[] encodednote = Encoder.decodeFromBase64("c2hvd2luZyBwcmVmaXg="); // "showing prefix"
-        String response = indexerClientInstance
-                .searchForTransactions()
-                .notePrefix(encodednote).execute().toString();
+        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+        byte[] notePrefix = "showing prefix".getBytes();
+        String response = indexerClientInstance.searchForTransactions().notePrefix(notePrefix).execute().toString();
         JSONObject jsonObj = new JSONObject(response.toString());
         System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
     }
- }
+}

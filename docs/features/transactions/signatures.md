@@ -517,11 +517,11 @@ $ algokey multisig --txfile=multisig2.txn --outfile=multisig2.stxn -m <25-word-m
 
 # Logic Signatures
 
-Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../asc1/modes.md#contract-account) or from a [Delegated Account](../asc1/modes.md#delegated-account).
+Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../asc1/stateless/modes.md#contract-account) or from a [Delegated Account](../asc1/stateless/modes.md#delegated-account).
 
-A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](.,/asc1/modes/#logic-signatures).
+A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../asc1/stateless/modes/#logic-signatures).
 
 **Related How-To**
 
-- [Use LogicSigs with the SDKs](../asc1/sdks.md)
-- [Attach a LogicSig with `goal`](../asc1/goal_teal_walkthrough.md)
+- [Use LogicSigs with the SDKs](../asc1/stateless/sdks.md)
+- [Attach a LogicSig with `goal`](../asc1/teal/walkthrough.md)
