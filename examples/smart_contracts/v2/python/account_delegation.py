@@ -42,6 +42,7 @@ try:
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
     myprogram = "samplearg.teal"
+    # myprogram = "< PLACEHOLDER >"
     # Read TEAL program
     data = load_resource(myprogram)
     source = data.decode('utf-8')
@@ -75,21 +76,14 @@ try:
     print(program)
     print(len(program) * 8)
 
-    # string parameter
-    # arg_str = "my string"
-    # arg1 = arg_str.encode()
-    # lsig = transaction.LogicSig(program, args=[arg1])
-
     # integer parameter
     # arg1 = (123).to_bytes(8, 'big')
     # lsig = transaction.LogicSig(program, args=[arg1])
-
-    # program = b"hex-encoded-program"
-    # for example, b"\x01\x20\x01\x00\x22 is `int 0`
     # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
     
     # Create arg to pass if TEAL program requires an arg,
     # if not, omit args param
+    # string parameter
     arg1 = (123).to_bytes(8, 'big')
     lsig = LogicSig(program, args=[arg1])
     sender = lsig.address()

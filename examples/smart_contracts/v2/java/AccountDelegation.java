@@ -1,7 +1,6 @@
 package com.algorand.javatest.smart_contracts;
 
 import com.algorand.algosdk.account.Account;
-//import com.algorand.algosdk.algod.client.AlgodClient;
 import com.algorand.algosdk.algod.client.ApiException;
 
 import com.algorand.algosdk.crypto.Address;
@@ -33,9 +32,14 @@ public class AccountDelegation {
     private AlgodClient connectToNetwork() {
 
         // Initialize an algod client
+        // sandbox
         final String ALGOD_API_ADDR = "localhost";
         final Integer ALGOD_PORT = 4001;
         final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        // final String ALGOD_API_ADDR = "< PLACEHOLDER >";
+        // final Integer ALGOD_PORT = < PLACEHOLDER >;
+        // final String ALGOD_API_TOKEN = "< PLACEHOLDER >";
 
         AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
         return client;
@@ -72,10 +76,13 @@ public class AccountDelegation {
         // import your private key mnemonic and address
         
         final String SRC_ACCOUNT = "buzz genre work meat fame favorite rookie stay tennis demand panic busy hedgehog snow morning acquire ball grain grape member blur armor foil ability seminar";
+        // final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
  
         Account src = new Account(SRC_ACCOUNT);
         // Set the receiver
         final String RECEIVER = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
+        // final String RECEIVER = "<PLACEHOLDER>";
+
         // Read program from file samplearg.teal
         // This code is meant for learning purposes only
         // It should not be used in production
@@ -84,6 +91,8 @@ public class AccountDelegation {
         // int 123
         // ==
         byte[] source = Files.readAllBytes(Paths.get("./samplearg.teal"));
+        // byte[] source = Files.readAllBytes(Paths.get("<PLACEHOLDER>"));
+
         // compile
         CompileResponse response = client.TealCompile().source(source).execute().body();
         // print results
@@ -138,17 +147,10 @@ public class AccountDelegation {
             // } catch (Exception e) {
             //     System.out.println("Exception: " + e);
             // }
-
-            Response<PostTransactionsResponse> rp = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-            String id = null;
-            if (rp.body() != null) {
-                id = rp.body().txId;
-            } else {
-                System.out.println(rp.message());
-            }
-           
+            String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
             // Wait for transaction confirmation
             waitForConfirmation(id);
+
             System.out.println("Successfully sent tx with id: " + id);
             // Read the transaction
             PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();

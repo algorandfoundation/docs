@@ -63,7 +63,8 @@ func main() {
     // btoi
     // int 123
     // == 
-    file, err := os.Open("./samplearg.teal")
+	file, err := os.Open("./samplearg.teal")
+	// file, err := os.Open("<PLACEHOLDER>")
     if err != nil {
         log.Fatal(err)
     }
@@ -81,7 +82,7 @@ func main() {
     program, err :=  base64.StdEncoding.DecodeString(response.Result)	
     // if no args use these two lines
     // var args [][]byte
-    // lsig, err := crypto.MakeLogicSig(program, args, sk, m a)
+    // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
 
     // string parameter
     // args := make([][]byte, 1)
@@ -97,7 +98,6 @@ func main() {
 
     addr := crypto.LogicSigAddress(lsig).String()
 	fmt.Printf("Escrow Address: %s\n" , addr )
-
 
 	// Get suggested params for the transaction
 	txParams, err := algodClient.SuggestedParams().Do(context.Background())
@@ -151,5 +151,4 @@ func main() {
     // Wait for transaction to be confirmed
     waitForConfirmation(txID, algodClient)
     fmt.Printf("Transaction ID: %v\n", transactionID)
-
 }

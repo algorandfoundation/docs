@@ -43,12 +43,11 @@ func waitForConfirmation(txID string, client *algod.Client) {
 }
 
 func main() {
-
-    // const algodToken = "algod-token"<PLACEHOLDER>
-    // const algodAddress = "algod-address"<PLACEHOLDER>
     // sandbox
     const algodAddress = "http://localhost:4001"
     const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    // const algodToken = "algod-token"<PLACEHOLDER>
+    // const algodAddress = "algod-address"<PLACEHOLDER>
     // Create an algod client
     algodClient, err := algod.MakeClient(algodAddress, algodToken)
     if err != nil {
@@ -75,6 +74,7 @@ func main() {
     // btoi
     // int 123
     // == 
+    // file, err := os.Open("<PLACEHOLDER>")
     file, err := os.Open("./samplearg.teal")
     if err != nil {
         log.Fatal(err)
@@ -163,6 +163,4 @@ func main() {
     // Wait for transaction to be confirmed
     waitForConfirmation(txID, algodClient)
     fmt.Printf("Transaction ID: %v\n", transactionID)
-
-
     }

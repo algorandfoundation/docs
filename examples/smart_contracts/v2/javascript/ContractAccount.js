@@ -46,7 +46,6 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // int 123
     // ==
     // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-    // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
     var fs = require('fs'),
         path = require('path'),
         filePath = path.join(__dirname, 'samplearg.teal');
@@ -54,6 +53,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     let results = await algodclient.compile(data).do();
     console.log("Hash = " + results.hash);
     console.log("Result = " + results.result);
+    // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
     let program = new Uint8Array(Buffer.from(results.result, "base64"));
     // Use this if no args
     // let lsig = algosdk.makeLogicSig(program);
@@ -64,9 +64,11 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // Integer parameter
     let args = [[123]];
     let lsig = algosdk.makeLogicSig(program, args);
+    console.log("lsig : " + lsig.address());   
 
     // create a transaction
     let sender = lsig.address();
+    // let receiver = "< PLACEHOLDER >";
     let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
     let amount = 10000;
     let closeToRemaninder = undefined;
