@@ -4,4 +4,5 @@ arrange:
    - stateful
    - stateless
    - teal 
+   - build.md
    - debugging.md
