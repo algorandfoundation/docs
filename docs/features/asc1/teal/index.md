@@ -1,12 +1,19 @@
 title: The Smart Contract Language
 
-<center><iframe width="560" height="315" src="https://www.youtube.com/embed/OWFRP9McBmk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
-<center>*ASC1 Overview*</center>
+Stateless and stateful smart contracts are written in Transaction Execution Approval Langauge (TEAL). These contracts can be written directly or with Python using the [PyTeal library](pyteal.md).
 
 TEAL is an assembly-like language and is processed with a stack machine. The language is a non-turing-complete language that does not support looping but does support forward branches. TEAL programs are processed one line at a time that push and pop values from the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and some flow control functions like `bnz` for branching. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more details.
 
+Some of the opcodes in TEAL are only valid for a specific contract type. These are denoted in the [TEAL Opcodes](../../../reference/teal/opcodes.md) documentation with a `Mode` attribute. This attribute will be set to `Signature` for stateless smart contracts and `Application` for stateful smart contracts. For example, reading account assets or Algo balances is only available in stateful smart contracts. Using the `ed25519verify` opcode for signature verification is only available in stateless smart contracts. 
+
 <center>![TEAL Architecture](../../../imgs/teal_overview-1.png)</center>
 <center>*TEAL Architecture Overview*</center>
+
+!!! warning
+    When writing smart contracts, make sure to follow [TEAL guidelines](../../../reference/teal/guidelines.md). This is very important in order to prevent smart contracts from being compromised.
+
+# TEAL Versions
+Currently Algorand supports version 1 and version 2 of TEAL. When writing TEAL Version 2 contracts make sure to add `#pragma version 2` as the first line of the program. If this line does not exists, the protocol will treat the contract as a version 1 contract. If upgrading a contract to version 2 it is important to verify you are checking the `RekeyTo` property of all transactions that are attached to the contract. See the [TEAL guidelines](../../../reference/teal/guidelines.md) for more suggestions to help prevent a contract from being compromised. 
 
 # Getting Transaction Properties
 The primary purpose of a TEAL program is to return either true or false. When the program completes if there is a non-zero value on the stack then it returns true and if a zero value or the stack is empty it will return false. If the stack has more than one value the program also returns false. The following diagram illustrates how the stack machine processes the program.
@@ -16,7 +23,7 @@ Program line number 1:
 <center>![Transaction Properties](../../../imgs/teal_overview-2.png)</center>
 <center>*Getting Transaction Properties*</center>
 
-The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's reciever use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
+The program uses the `txn` opcode to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's reciever use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
 
 # Pseudo Opcodes
 The TEAL specification provides several pseudo opcodes for convenience.  For example, the second line in the program below uses the `addr` pseudo opcode.
@@ -33,12 +40,14 @@ TEAL provides operators to work with data that is on the stack. For example, the
 <center>*Operators*</center>
 
 # Argument Passing
-TEAL supports program arguments. The diagram below illustrates an example of logic that is loading a parameter on to the stack. 
+TEAL supports program arguments. Stateless and stateful smart contracts handle these parameters with different opcodes. For information on passing parameters to stateful smart contracts, see the stateful smart contract [Overview](../stateful/index.md) documentation. Passing parameters to a stateless smart contract is explained in the stateless smart contract [SDK Usage](../stateless/sdks/#passing-parameters-using-the-sdks) documentation. The [Goal Teal Walkthrough](../stateless/walkthrough.md) documentation explains a simple example of passing a parameter to a stateless smart contract with the `goal` command-line tool. 
+
+The diagram below shows an example of logic that is loading a parameter on to the stack within a stateless smart contract. 
 
 <center>![Arguments](../../../imgs/teal_overview-5.png)</center>
 <center>*Arguments*</center>
 
-All argument parameters to a TEAL program are byte arrays. The order that parameters are passed in is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. If you are using the `goal` command-line tool, the parameters must be passed as base64 encoded strings. See the parameter section within the [ASC1 SDK usage](../stateless/sdks.md) documentation and the [Goal Teal Walkthrough](../teal/walkthrough.md) documentation for more details on parameters.
+All argument parameters to a TEAL program are byte arrays. The order that parameters are passed in is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. If you are using the `goal` command-line tool, the parameters must be passed as base64 encoded strings.
 
 # Storing and Loading from Scratchspace
 TEAL provides a scratch space as a way of temporarily storing values for use later in your code. The diagram below illustrates a small TEAL program that loads 12 onto the stack and then duplicates it. These values are multiplied together and result (144) is pushed to the top of the stack. The store command stores the value in the scratch space 1 slot.
@@ -52,15 +61,15 @@ The load command is used to retrieve a value from the scratch space as illustrat
 <center>*Loading Values*</center>
 
 # Operational Cost of TEAL Opcodes
-TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. For optimal performance TEAL programs are also limited in opcode cost. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents it's opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 7) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. TEAL programs are limited to 20000 for total opcode cost of all program operators. The [TEAL Opcodes](../../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
+Stateless TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Stateful smart contracts are limited in size to 1kb for either the approval or clear programs. For optimal performance TEAL programs are also limited in opcode cost. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents it's opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 7) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. Stateless TEAL programs are limited to 20000 for total opcode cost of all program operators. Stateful TEAL programs are limited to 700 for each of the programs associated with the contract. The [TEAL Opcodes](../../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
 
 # Example Walkthrough of a TEAL Program
-The example covered in this tutorial is for an contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
+The example covered in this tutorial is for a stateless contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
 
-The example uses two address (addr1 and addr2). The variables have the values of addr1 = `RFGEHKTFSLPIEGZYNVYALM6J4LJX4RPWERDWYS2PFKNVDWW3NG7MECQTJY` and addr2 = `SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y`.  The variable addr1 represents the creator of the contact account and funds it. The variable addr2 is the intended recipient of the funds, but only if addr2 supplies a proper secret key and the transaction must be submitted within a time limit (represented with a number of blocks). If addr2 does not submit the transaction in time or can’t supply the proper secret key, addr1 can submit the transaction and retrieve all the tokens. The transaction fee for the transaction is limited to no more than 1 algo. The pseudo-code for this example is represented with the following logic:
+The example uses two addresses (addr1 and addr2). The variables have the values of addr1 = `RFGEHKTFSLPIEGZYNVYALM6J4LJX4RPWERDWYS2PFKNVDWW3NG7MECQTJY` and addr2 = `SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y`.  The variable addr1 represents the creator of the contact account and funds it. The variable addr2 is the intended recipient of the funds, but only if addr2 supplies a proper secret key and the transaction must be submitted within a time limit (represented with a number of blocks). If addr2 does not submit the transaction in time or can’t supply the proper secret key, addr1 can submit the transaction and retrieve all the tokens. The transaction fee for the transaction is limited to no more than 1 algo and this must not be a rekey transaction. The pseudo-code for this example is represented with the following logic:
 
 ``` go
-((addr2 and secret) || (addr1 and timeout)) && (ok fee)
+((addr2 and secret) || (addr1 and timeout)) && (ok fee and !rekey)
 ```
 
 The example uses the `CloseRemainderTo` field to close out the account and move all funds to either addr1 or addr2 on a successful transaction.
@@ -186,7 +195,7 @@ This completes the second clause. Clause 1 and 2 are ORed together.
 // and pops the two values and pushes a 0 or 1 
 || 
 ```
-The third clause is responsible for verifying that the transaction fee is below 1 Algo. This is an important check to prevent an account from being cleared by an errant transaction fee requirement.
+The third clause is responsible for verifying that the transaction fee is below 1 Algo and that no rekey operation is happening. This is an important check to prevent an account from being cleared by an errant transaction fee requirement or assigned to a new private key.
 
 ```go
 
@@ -199,9 +208,21 @@ txn Fee
 int 1000000 
 
 // The < operator is used to pop those last two values and replace with a 
-// 0 or 1. This just verifies that the fee is not greater than 1 algo
-// At this point there will be two values on the stack 
+// 0 or 1. This just verifies that the fee is not greater than 1 algo 
 <
+
+// Next the transaction RekeyTo property is pushed on to the stack.
+txn RekeyTo
+
+// The global zero address is then pushed onto the stack. 
+global ZeroAddress
+
+// the == operator will replace the last two fields with a 0 or a 1. If the value is 1, this is not a rekey transaction. This is a very important check for stateless smart contracts.
+==
+
+// next the && operator is used to AND the two conditions in the third clause.
+// At this point there will be two values on the stack
+&&
 ```
 The && is the final operator used in this example. This ANDs the third clause with the result of the OR operation between the first and second clauses.
 
@@ -248,6 +269,9 @@ int 67240
 txn Fee
 int 1000000
 <
+txn RekeyTo
+global ZeroAddress
+==
 &&
-
+&&
 ```

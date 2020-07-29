@@ -1,6 +1,6 @@
 title: TEAL
 arrange:
     - index.md
-    - walkthrough.md
-    - debugging.md
+    - pyteal.md
+ 
     
