@@ -47,13 +47,13 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 [Modes of Use - Delegated Approval](./asc1/stateless/modes.md#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
 
-[Using the SDKS](./asc1/stateless/sdks.md) - Smart Contract functionality from within the SDKs.
+[Using the SDKS](./asc1/stateless/sdks.md) - Stateless Smart Contract functionality from within the SDKs.
 
 [The Smart Contract Language](./asc1/teal/index.md) - Learn all about TEAL, the language of Smart Contracts.
 
-[Contract Walkthrough](./asc1/teal/walkthrough.md) - A simple command-line walkthrough of creating a simple smart contract.
+[Contract Walkthrough](./asc1/stateless/walkthrough.md) - A simple command-line walkthrough of creating stateless smart contracts.
 
-[Debugging TEAL](./asc1/teal/debugging.md) - Tools and methods for debugging TEAL code.
+[Debugging TEAL](./asc1/debugging.md) - Tools and methods for debugging TEAL code.
 
 
 
