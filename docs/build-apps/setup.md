@@ -16,7 +16,7 @@ An application connects to the Algorand blockchain through an **algod** client. 
 # Available tools
 ## Software Development Kits (SDK)
 
-Algorand officially supports four SDKs for developing applications: [Javascript](../reference/sdks/index.md#javascript), [Java](../reference/sdks/index.md#java), [Python](../reference/sdks/index.md#python), and [Go](../reference/sdks/index.md#go). Additionally, [Community Provided SDKs](./community/#sdks) expand the development reach. 
+Algorand officially supports four SDKs for developing applications: [Javascript](../reference/sdks/index.md#javascript), [Java](../reference/sdks/index.md#java), [Python](../reference/sdks/index.md#python), and [Go](../reference/sdks/index.md#go). Additionally, [Community Provided SDKs](../../community/#sdks) expand the development reach. 
 
 ## Command Line Interface (CLI) Tools 
 
