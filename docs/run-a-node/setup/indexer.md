@@ -10,17 +10,12 @@ The source code for the Indexer is provided on [github](https://github.com/algor
 For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide and the [REST API Indexer reference](../../reference/rest-apis/indexer.md). See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
 
 # Indexer V2
+## Download the Indexer Binaries
 To Install the new Indexer follow the instructions below. The Indexer binaries are available on [github](https://github.com/algorand/indexer/releases).
 
 !!! info
     Additional install methods will be available in the near future.
 
-## Download the Indexer Binaries
-Download the Indexer binaries for specific operating system.
-
-* Linux binaries ([AMD64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_amd64_2.0.0.tar.bz2), [ARM64](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm64_2.0.0.tar.bz2), [ARM32](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_linux_arm_2.0.0.tar.bz2))
-* [Mac](https://github.com/algorand/indexer/releases/download/2.0.0/algorand-indexer_darwin_amd64_2.0.0.tar.bz2) binaries.
-  
 ## Extract the binaries to a specific directory
 The binary can be placed in any directory you choose. In these instructions, an indexer folder is used which is located in the current user's home directory.
 
