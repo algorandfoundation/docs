@@ -23,7 +23,7 @@ Program line number 1:
 <center>![Transaction Properties](../../../imgs/teal_overview-2.png)</center>
 <center>*Getting Transaction Properties*</center>
 
-The program uses the `txn` opcode to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's reciever use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
+The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn`. The number of transactions in a grouped transaction is available in the global variable `Group Size`. To get the first transaction's receiver use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
 
 # Pseudo Opcodes
 The TEAL specification provides several pseudo opcodes for convenience.  For example, the second line in the program below uses the `addr` pseudo opcode.

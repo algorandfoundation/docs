@@ -187,7 +187,7 @@ This will start the node and it can be verified by running:
 pgrep algod
 ```
 
-The node can be manually stopped by runnning:
+The node can be manually stopped by running:
 
 ```
 ./goal node stop -d data
