@@ -58,7 +58,7 @@ Use `systemctl` to enable the process and start it.
 sudo systemctl enable algorand@$(systemd-escape ${ALGORAND_DATA})
 sudo systemctl start algorand@$(systemd-escape ${ALGORAND_DATA})
 ```
-The process can be disabled or stoped using `systemctl` commands.
+The process can be disabled or stopped using `systemctl` commands.
 
 ```
 sudo systemctl stop algorand@$(systemd-escape ${ALGORAND_DATA})

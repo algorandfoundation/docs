@@ -57,7 +57,7 @@ Global Flags:
   -P, --postgres string     connection string for postgres database
 ```
 
-To start the Indexer as a reader (ie not connecting to an Algorand node), supply the the `--postgres` or `-P` option when running the indexer. The value should be a valid connection string for a postgres database.
+To start the Indexer as a reader (ie not connecting to an Algorand node), supply the `--postgres` or `-P` option when running the indexer. The value should be a valid connection string for a postgres database.
 
 ```bash
 $ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable"  --no-algod
