@@ -2,7 +2,7 @@ Title: Rekeying
 
 ## Overview
 
-Rekeying is a powerful protocol feature which enables an Algorand account holder to maintain a static public address while dynamically rotating the authoritative private spending key(s). This is accomplished by issuing a "rekey-to transaction" which sets the _authorized address_ field within the account object. Future transaction authorization using the account's public address must be provided by the spending key(s) associated with the _authorized address_ which may be a single key address, MultiSig address or LogicSig program address. Key management is an important concept to understand and Algorand provide tools to accomplish relevant tasks securely. 
+Rekeying is a powerful protocol feature which enables an Algorand account holder to maintain a static public address while dynamically rotating the authoritative private spending key(s). This is accomplished by issuing a "rekey-to transaction" which sets the _authorized address_ field within the account object. Future transaction authorization using the account's public address must be provided by the spending key(s) associated with the _authorized address_ which may be a single key address, MultiSig address or LogicSig program address. Key management is an important concept to understand and Algorand provides tools to accomplish relevant tasks securely. 
 
 !!! Info
     The term "spending key(s)" is used throughout this document to signify that generally either a single key or a set of keys from a MultiSig account may authorize from a given public address. The address itself cannot distinguish how many spending keys are specifically required.
@@ -11,7 +11,7 @@ Rekeying is a powerful protocol feature which enables an Algorand account holder
 
 The [account overview](/features/accounts/#keys-and-addresses) page introduces _keys_, _addresses_ and _accounts_. During initial account generation, a public key and corresponding private spending key are created and used to derive the Algorand address. This public address is commonly displayed within wallet software and remains static for each account. When you receive Algos or other assets, they will be sent to your public Algorand address. When you send from your account, the transaction must be authorized using the appropriate private spending key(s).  
 
-### Introducing Authorized Address
+### Authorized Addresses
 
 The _balance record_ of every account includes the "auth-addr" field which, when populated, defines the required _authorized address_ to be evaluated during transaction validation. Initially, the "auth-addr" field is implicitly set to the account's "address" field and the only valid _private spending key_ is the one created during account generation. To conserve resources, the "auth-addr" field is only stored and displayed after an authorized _rekey-to transaction_ is confirmed by the network. 
 
@@ -67,21 +67,21 @@ The _rekey-to transaction_ workflow is as follows:
 
 #### Construct Transaction
 
-The following commands will construct an unsigned transaction file `rekey.utxn` and inspect the contents:
+The following commands will construct an unsigned transaction file `rekey.txn` and inspect the contents:
 
 ```bash tab="goal"
 $ goal clerk send --from L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU \
                   --to L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU \
                   --amount 0 \
                   --rekey-to NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU \
-                  --out rekey.utxn
-$ goal clerk inspect rekey.utxn
+                  --out rekey.txn
+$ goal clerk inspect rekey.txn
 ```
 
 Response:
 
 ```json hl_lines="11"
-rekey.utxn[0]
+rekey.txn[0]
 {
   "txn": {
     "fee": 1000,
@@ -210,7 +210,7 @@ Sending from the _authorized address_ of Account "A" requires:
 First, construct an unsigned transaction using `goal` with the `--outfile` flag to write the unsigned transction to a file:
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-single.utxn
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-single.txn
 ```
 
 #### Sign Using Authorized Address
@@ -218,7 +218,7 @@ $ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-single.ut
 Next, locate the wallet containing the _private spending key_ for Account "B". The `goal clerk sign` command provides the flag `--signer` which allows specifying the proper required _authorized address_ `$ADDR_B`. Notice the `infile` flag reads in the unsigned transaction file from above and the `--outfile` flag writes the signed transaction to a separate file.
 
 ```bash tab="goal"
-$ goal clerk sign --signer $ADDR_B --infile send-single.utxn --outfile send-single.stxn
+$ goal clerk sign --signer $ADDR_B --infile send-single.txn --outfile send-single.stxn
 ```
 
 #### TEST: Send with Auth B
@@ -260,7 +260,7 @@ $ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1
 ### Sign Rekey Transaction
 
 ```bash tab="goal"
-$ goal clerk sign --signer $ADDR_B --infile rekey-multisig.utxn --outfile rekey-multisig.stxn
+$ goal clerk sign --signer $ADDR_B --infile rekey-multisig.txn --outfile rekey-multisig.stxn
 ```
 
 ### Send and Confirm Rekey to MultiSig
@@ -290,22 +290,12 @@ Use the established pattern:
 - Confirm transaction
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-multisig-bct1.utxn
-$ goal clerk sign --signer $ADDR_C --infile send-multisig-bct1.utxn --outfile send-multisig-bct1.stxn
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-multisig-bct1.txn
+$ goal clerk sign --signer $ADDR_C --infile send-multisig-bct1.txn --outfile send-multisig-bct1.stxn
 $ goal clerk rawsend --filename send-multisig-bct1.stxn
 ```
 
 This transaction will succeed as _private spending key_ for `$ADDR_C` provided the authorization and meets the threshold requirement for the MultiSig account.
-
-## 3 - Update MultiSig Membership
-
-## 4 - Remove Authorized Address
-
-### Load Existing Account with AuthAddr Set
-
-### Rekey to This Account Address
-
-### Send from This Account
 
 
 
