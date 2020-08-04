@@ -144,10 +144,10 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-| <a name="">Application ID</a>| _required_| uint64| `"apid"`| |
-| <a name="">OnComplete</a>| _required_| uint64| `"apan"`| |
-| <a name="">App Arguments</a>| _optional_| byte[]| `"apaa"`| |
-| <a name="">Accounts</a>| _optional_| Address| `"apat"`| |
-| <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| |
+| <a name="">Application ID</a>| _required_| uint64| `"apid"`| ID of the application being configured or empty if creating.|
+| <a name="">OnComplete</a>| _required_| uint64| `"apan"`| Defines what additional actions occur with the transaction. See the [OnComplete](http://127.0.0.1:8000/reference/teal/specification/#oncomplete) section of the TEAL spec for details.|
+| <a name="">App Arguments</a>| _optional_| byte[]| `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|
+| <a name="">Accounts</a>| _optional_| Address| `"apat"`| List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|
+| <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 
 
