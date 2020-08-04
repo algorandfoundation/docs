@@ -44,9 +44,9 @@ Each program may read both the _global_ and _local_ state storage locations for 
 Both global and local data are stored as _key/value pairs_, where the _key_ is bytes and the _value_ may be either a `bytes` or `uint64`.
 
 ```json tab="Data Structure Template"
-{ “key”: {
-	“type”: <1 || 2>,
-	“value”: <[]byte || uint64>
+{ "key": {
+	"type": <1 || 2>,
+	"value": <[]byte || uint64>
 	}
 }
 ```
@@ -77,7 +77,6 @@ Writing data is restricted to _global_ storage of the "called" program and the _
 Create a new file named `approval_program.teal` and add the following code:
 
 ```teal
-// define stateful TEAL version
 #pragma version 2
 
 // read global state
@@ -185,10 +184,10 @@ Transaction L7A7HHCLWV3KBUHKMSVEVBMRPWRLHTXEUVYVVLFKWUDOWJEAWLTQ committed in ro
 Created app with app index 33
 ```
 
-Application ID 33 was created above. Check yours using:
+Application ID **33** was created above. Check yours using:
 
 ```bash
-goal account dump --address $ADDR_CREATOR
+$ goal account dump --address $ADDR_CREATOR
 ```
 Results:
 ```json
@@ -203,17 +202,7 @@ Results:
         "counter": {
           "tt": 2,
           "ui": 1
-        }
-      },
-      "gsch": {
-        "nui": 1
-      }
-    }
-  },
-  "ebase": 6516,
-  "tsch": {
-    "nui": 1
-  }
+        [...]
 }
 ```
 
@@ -221,6 +210,26 @@ Notice the "appp" section has "33" which is the application ID found within the 
 ```bash
 export APP_ID=<your_app_id>
 ```
+
+Another way to view information about an application is with the following `goal` command:
+```bash
+$ goal app info --app-id $APP_ID
+```
+
+Results:
+
+```bash
+Application ID:        33
+Creator:               WJ4ZVEUUWRGR6PFOFR6XK3B5BQ4ZNHFVLNOPBZS53DE7AJJB6B7IBXQ3OQ
+Approval hash:         W6L5UMEQICBJJ5QZAN3YMXISJWK3I6SHTOYMTA3EQS6FZBXHMTJV3SXZUA
+Clear hash:            YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA
+Max global byteslices: 0
+Max global integers:   1
+Max local byteslices:  0
+Max local integers:    0
+```
+
+Notice the values for the _Max_ state storage locations match those specified when the app was created above. These values may not be altered after creation. 
 
 ## Application Calls
 
