@@ -9,13 +9,13 @@ Rekeying is a powerful protocol feature which enables an Algorand account holder
 
 ### Account Review
 
-The [account overview](/features/accounts/#keys-and-addresses) page introduced _keys_, _addresses_ and _accounts_. During initial account generation, a public key and corresponding private spending key are created and used to derive the Algorand address. This public address is commonly displayed within wallet software and remains static for each account. When you receive Algos or other assets, they will be sent to your public Algorand address. When you send from your account, the transaction must be authorized using the appropriate private spending key(s).  
+The [account overview](/features/accounts/#keys-and-addresses) page introduces _keys_, _addresses_ and _accounts_. During initial account generation, a public key and corresponding private spending key are created and used to derive the Algorand address. This public address is commonly displayed within wallet software and remains static for each account. When you receive Algos or other assets, they will be sent to your public Algorand address. When you send from your account, the transaction must be authorized using the appropriate private spending key(s).  
 
 ### Introducing Authorized Address
 
-The _balance record_ of every account includes the "auth-addr" field which, when populated, defines the _authorized address_ allowed to sign transactions from this account. Initially, the "auth-addr" field is implicitly set to the account's "address" field and the only valid private spending key is the one created during account generation. To conserve resources, the "auth-addr" field is only stored and displayed after an authorized _rekey-to transaction_ is confirmed by the network. 
+The _balance record_ of every account includes the "auth-addr" field which, when populated, defines the required _authorized address_ to be evaluated during transaction validation. Initially, the "auth-addr" field is implicitly set to the account's "address" field and the only valid _private spending key_ is the one created during account generation. To conserve resources, the "auth-addr" field is only stored and displayed after an authorized _rekey-to transaction_ is confirmed by the network. 
 
-Conceptually illustrated in the image below, a _standard_ account uses the private spending key of its public address for authorizations. A _rekeyed_ account defines the _authorized address_ which referencing a distinct address and thus requires the private spending key(s) thereof to authorize future transactions.
+Conceptually illustrated in the image below, a "standard" account uses its _private spending key_ to authorize from its _public address_. A "rekeyed" account defines the _authorized address_ which references a distinct "foreign" address and thus requires the _private spending key(s)_ thereof to authorize future transactions.
 
 ![Accounts](/imgs/accounts.png)
 
@@ -33,7 +33,7 @@ Response:
 {
   "addr": "NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU",
   "algo": 100000,
-  "ebase": 7003
+  [...]
 }
 ```
 Notice the response includes the "addr" field which is the public address. Implicitly, only the spending key associated with this address may authorize transactions for this account.
@@ -49,7 +49,7 @@ Response:
   "addr": "L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU",
   "algo": 100000,
   "spend": "NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU",
-  "ebase": 7004
+  [...]
 }
 ```
 
@@ -57,9 +57,9 @@ This response includes the addition of the "spend" field. This is the "auth-addr
 
 ### Rekey-to Transaction
 
-A _rekey-to transaction_ is a `payment` type transaction which includes the `rekey-to` parameter set to a well-formed Algorand address. Authorization for this transaction must be provided by the existing _authorized account_. As shown in the first example account above, the _authorized address_ is implicitly the "addr" field of this account even though the "auth-addr" field is not explicitly defined. Only the private spending key of this "addr" address may be used to authorize a _rekey-to transaction_.
+A _rekey-to transaction_ is a `payment` type transaction which includes the `rekey-to` parameter set to a well-formed Algorand address. Authorization for this transaction must be provided by the existing _authorized address_. As shown in the first example account above, the _authorized address_ is implicitly the "addr" field of this account even though the "auth-addr" field is not explicitly defined. Only the private spending key of this "addr" address may be used to authorize a _rekey-to transaction_.
 
-The _rekey-to_ transaction workflow is as follows: 
+The _rekey-to transaction_ workflow is as follows: 
 
 - Construct a payment transaction which specifies an _address_ for the `rekey-to` parameter
 - Add required signature(s) from the **current** _authorized address_
@@ -102,35 +102,38 @@ Construction of the _rekey-to transaction_ includes the `rekey-to` parameter and
 
 #### Add Authorized Signature(s) 
 
-Adding the **current** authorized signatures to a _rekey-to transaction_ is requirement prior to sending it to the network for confirmation. In this case, the "snd" field defines the _authorized account_. Examples below will demonstrate the commands in detail and allow you to _rekey_ accounts in various scenarios. 
+Adding the **current** authorized signature(s) to a _rekey-to transaction_ is required prior to sending to the network for confirmation. The "snd" field provides the address to the _account object_ where the "auth-addr" field is defined. 
+
+!!! Info
+    Examples provided below demonstrate the commands in detail and allow you to _rekey_ accounts in various scenarios. 
 
 #### Send and Confirm
 
-Once all of the required signatures are gathered into a single signed transaction, it may be sent to the network for confirmation. The result for this example is:
+Once all of the required signatures are gathered into a single signed transaction, it may be sent to the network for confirmation. The result for the sample account is:
 
 ```json hl_lines="4"
 {
   "addr": "L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU",
   "algo": 100000,
   "spend": "NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU",
-  "ebase": 7004
+  [...]
 }
 ```
 
 ### Conclusion
 
-The result of a confirmed _rekey-to transaction_ will be the "auth-addr" field of the _account object_ is defined, modified or removed. Defining or modifying means only the spending key(s) of the corresponding _authorized address_ may authorize future transactions for this public address. Removing the "auth-addr" field is really an explicit assignment _authorized address_ back to the "addr" field of the _account object_ (observed implicitly because the field is not displayed). 
+The result of a confirmed _rekey-to transaction_ will be the "auth-addr" field of the _account object_ is defined, modified or removed. Defining or modifying means only the _private spending key(s)_ of the corresponding _authorized address_ may authorize future transactions for this _public address_. Removing the "auth-addr" field is really an explicit assignment of the _authorized address_ back to the "addr" field of the _account object_ (observed implicitly because the field is not displayed). 
 
-The "auth-addr" may be specified within a _rekey-to transaction_ as a distinct address representing a single key address, MultiSig address or LogicSig address to provide maximum flexibility in key management options. The defined _authorized address_ may be nested as well.
+The "auth-addr" may be specified within a _rekey-to transaction_ as a distinct foreign address representing a single key address, MultiSig address or LogicSig program address to provide maximum flexibility in key management options. 
 
 !!! Warning
-    The protocol does not validate control of the spending key(s) for the _auth-addr_ defined within the rekey-to transaction. This is by design and affords additional privacy features to the new _authorized address_. It is incumbent upon the user to ensure proper key management practices.
+    The protocol does not validate control of the required spending key(s) associated with the _authorized address_ defined by `--rekey-to` parameter when the _rekey-to transaction_ is sent. This is by design and affords additional privacy features to the new _authorized address_. It is incumbent upon the user to ensure proper key management practices and `--rekey-to` assignments.
 
+
+## Use Case Scenarios
 
 !!! Info
     Below are a series of potential use cases for rekeying various accounts. 
-
-## Use Case Scenario
 
 ## 1 - Rekey to Single Address
 
