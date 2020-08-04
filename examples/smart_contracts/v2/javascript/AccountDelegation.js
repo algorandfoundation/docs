@@ -1,18 +1,15 @@
 const algosdk = require('algosdk');
-
+// const token = "<algod-token>";
+// const server = "<algod-address>";
+// const port = <algod-port>;
 // sandbox
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
 // Import the filesystem module 
 const fs = require('fs'); 
-    
-// const token = "algod-token"<PLACEHOLDER>;
-// const server = "algod-address"<PLACEHOLDER>;
-// const port = algod - port<PLACEHOLDER>;
-
-// import your private key mnemonic and address
-// let PASSPHRASE = "25-word-mnemonic<PLACEHOLDER>";
+// import your private key mnemonic
+// let PASSPHRASE = "<25-word-mnemonic>";
 let PASSPHRASE = "awake used crawl list cruel harvest useful flag essay speed glad salmon camp sudden ride symptom test kind version together project inquiry diet abandon budget";
 
 var myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
@@ -37,38 +34,48 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
 (async () => {
 
-    // get suggested parameters
-    // let params = await algodclient.getTransactionParams().do();
-    // let endRound = params.lastRound + parseInt(1000);
-    // let fee = await algodclient.suggestedFee();
-    // get suggested parameters
+    // get suggested parameter
     let params = await algodclient.getTransactionParams().do();
     // comment out the next two lines to use suggested fee 
     params.fee = 1000;
     params.flatFee = true;
     console.log(params);
     // create logic sig
-
-    // b64 example "ASABACI=" is `int 0`
+    // samplearg.teal
+    // This code is meant for learning purposes only
+    // It should not be used in production
+    // arg_0
+    // btoi
+    // int 123
+    // ==
     // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-    // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
+    var fs = require('fs'),
+        path = require('path'),
+        filePath = path.join(__dirname, 'samplearg.teal');
+    // filePath = path.join(__dirname, <'fileName'>);
+    let data = fs.readFileSync(filePath);
+    let results = await algodclient.compile(data).do();
+    console.log("Hash = " + results.hash);
+    console.log("Result = " + results.result);
+    // let program = new Uint8Array(Buffer.from(<"base64-encoded-program">, "base64"));
+    let program = new Uint8Array(Buffer.from(results.result, "base64"));
+    // Use this if no args
+    // let lsig = algosdk.makeLogicSig(program);
 
-    let program = new Uint8Array(Buffer.from("ASABACI=" , "base64"));
- 
-    let lsig = algosdk.makeLogicSig(program);
-    //string parameter
-    // let args = ["my string"];
+    // String parameter
+    // let args = ["<my string>"];
     // let lsig = algosdk.makeLogicSig(program, args);
-    //integer parameter
-    // let args = [[123]];
-    // let lsig = algosdk.makeLogicSig(program, args);
+    // Integer parameter
+    let args = [[123]];
+    let lsig = algosdk.makeLogicSig(program, args);
 
     // sign the logic signature with an account sk
     lsig.sign(myAccount.sk);
     
-    // create a transaction
+    // Setup a transaction
     let sender = myAccount.addr;
     let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
+    // let receiver = "<receiver-address>"";
     let amount = 10000;
     let closeToRemaninder = undefined;
     let note = undefined;
@@ -84,6 +91,5 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
 })().catch(e => {
     console.log(e.body.message);
-    console.log("rejected by logic expecgted for int 0");
     console.log(e);
 });

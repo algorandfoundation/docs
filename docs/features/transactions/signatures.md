@@ -524,4 +524,4 @@ A full explanation of Logic Signatures can be found in the [Algorand Smart Contr
 **Related How-To**
 
 - [Use LogicSigs with the SDKs](../asc1/stateless/sdks.md)
-- [Attach a LogicSig with `goal`](../asc1/teal/walkthrough.md)
+- [Attach a LogicSig with `goal`](../asc1/stateless/walkthrough.md)
