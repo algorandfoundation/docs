@@ -232,6 +232,8 @@ This will succeed, sending the 1000 microAlgos from `$ADDR_A` to `$ADDR_B` using
 
 The second scenario _rekeys_ a single key account with _public address_ "A" to a MultiSig address "BC_T1". This scenario reuses both Accounts "A" and "B", adds a third Account "C" and creates a MultiSig Account "BC_T1" comprised of addresses "B" and "C" with a threshold of 1. The result will be the _private spending key_ for `$ADDR_B` or `$ADDR_C` may authorize transaction from `$ADDR_A`.
 
+![Rekey-to MultiSig Address](/imgs/rekey-single-multisig.png)
+
 ### Generate Additional Account
 
 Follow the same procedure as above to generate a third account for use as "C".
