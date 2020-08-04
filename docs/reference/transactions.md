@@ -144,10 +144,10 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-| <a name="">Application ID</a>| _required| uint64| `"apid"`| |
-| <a name="">OnComplete</a>| _required | | `"apan"`| |
-| <a name="">App Arguments</a>| _optional| byte[]| `"apaa"`| |
-| <a name="">Accounts</a>| _optional| Address| `"apat"`| |
-| <a name="">Foreign Apps</a>| _optional| Address| `"apfa"`| |
+| <a name="">Application ID</a>| _required_| uint64| `"apid"`| |
+| <a name="">OnComplete</a>| _required_| uint64| `"apan"`| |
+| <a name="">App Arguments</a>| _optional_| byte[]| `"apaa"`| |
+| <a name="">Accounts</a>| _optional_| Address| `"apat"`| |
+| <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| |
 
 
