@@ -4,7 +4,7 @@ title: goal node create
 
 
 
-Create a node at the desired data directory for the desired network.
+Create a node at the desired data directory for the desired network
 
 
 
@@ -12,7 +12,7 @@ Create a node at the desired data directory for the desired network.
 
 
 
-Create a node at the desired data directory for the desired network.
+Create a node at the desired data directory for the desired network
 
 
 

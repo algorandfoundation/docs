@@ -4,7 +4,7 @@ title: goal kmd stop
 
 
 
-Stop the kmd process if it is running.
+Stop the kmd process if it is running
 
 
 
@@ -12,7 +12,7 @@ Stop the kmd process if it is running.
 
 
 
-Stop the kmd process if it is running.
+Stop the kmd process if it is running
 
 
 

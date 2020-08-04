@@ -48,7 +48,8 @@ algokey multisig [flags]
 
 
 
-* [algokey](../../algokey/algokey/)	 - CLI for managing Algorand keys
+* [algokey](../../../algokey/algokey/)	 - CLI for managing Algorand keys
+* [algokey multisig append-auth-addr](../append-auth-addr/)	 - Adds the necessary fields to a transaction that is sent from an account that was rekeyed to a multisig account
 
 
 

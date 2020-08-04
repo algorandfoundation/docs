@@ -54,7 +54,7 @@ goal ledger supply [flags]
 
 
 
-* [goal ledger](../../ledger/ledger/)	 - Access ledger-related details.
+* [goal ledger](../../ledger/ledger/)	 - Access ledger-related details
 
 
 

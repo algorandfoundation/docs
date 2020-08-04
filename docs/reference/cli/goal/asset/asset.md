@@ -56,7 +56,7 @@ goal asset [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
 * [goal asset config](../config/)	 - Configure an asset
 * [goal asset create](../create/)	 - Create an asset
 * [goal asset destroy](../destroy/)	 - Destroy an asset

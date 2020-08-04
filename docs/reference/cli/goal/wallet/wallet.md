@@ -4,7 +4,7 @@ title: goal wallet
 
 
 
-Manage wallets: encrypted collections of Algorand account keys.
+Manage wallets: encrypted collections of Algorand account keys
 
 
 
@@ -12,7 +12,7 @@ Manage wallets: encrypted collections of Algorand account keys.
 
 
 
-Manage wallets: encrypted collections of Algorand account keys.
+Manage wallets: encrypted collections of Algorand account keys
 
 
 
@@ -56,9 +56,9 @@ goal wallet [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
-* [goal wallet list](../list/)	 - List wallets managed by kmd.
-* [goal wallet new](../new/)	 - Create a new wallet.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
+* [goal wallet list](../list/)	 - List wallets managed by kmd
+* [goal wallet new](../new/)	 - Create a new wallet
 
 
 

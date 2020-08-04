@@ -4,7 +4,7 @@ title: goal logging disable
 
 
 
-Disable Algorand remote logging.
+Disable Algorand remote logging
 
 
 
@@ -12,7 +12,7 @@ Disable Algorand remote logging.
 
 
 
-Disable Algorand remote logging.
+Disable Algorand remote logging
 
 
 

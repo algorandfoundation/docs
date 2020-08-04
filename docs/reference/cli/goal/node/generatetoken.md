@@ -4,7 +4,7 @@ title: goal node generatetoken
 
 
 
-Generate and install a new API token.
+Generate and install a new API token
 
 
 
@@ -12,7 +12,7 @@ Generate and install a new API token.
 
 
 
-Generate and install a new API token.
+Generate and install a new API token
 
 
 

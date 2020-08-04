@@ -4,7 +4,7 @@ title: goal ledger
 
 
 
-Access ledger-related details.
+Access ledger-related details
 
 
 
@@ -12,7 +12,7 @@ Access ledger-related details.
 
 
 
-Access ledger-related details.
+Access ledger-related details
 
 
 
@@ -54,7 +54,7 @@ goal ledger [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
 * [goal ledger block](../block/)	 - Dump a block to a file or stdout
 * [goal ledger supply](../supply/)	 - Show ledger token supply
 
