@@ -1,5 +1,4 @@
--e title: Specification
-# Opcodes
+title: TEAL Opcodes
 
 Ops have a 'cost' of 1 unless otherwise specified.
 

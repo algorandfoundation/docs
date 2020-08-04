@@ -13,7 +13,7 @@ Algorand provides standard payment transactions using its native token, the Algo
 
 To build a payment-based application, a firm understanding of how to construct and submit a transaction with either the command-line tools or one of Algorand’s SDKs (Python, JavaScript, Java, Go) is required. The [start building](https://developer.algorand.org/docs/build-apps/setup/) section of the developer portal covers the basic operation of submitting [your first transaction](https://developer.algorand.org/docs/build-apps/hello_world/) to the blockchain. Additionally, the [transaction guide](../features/transactions/index.md) describes the various transaction types available on Algorand.
 
-<center>![Payment-Based Applications](../../../imgs/app-1.jpg)</center>
+<center>![Payment-Based Applications](../imgs/app-1.jpg)</center>
 
 
 # Tokenizing Assets or Creating Your Own Coin
@@ -21,28 +21,28 @@ Asset-based applications can support a diverse set of use cases, but by definiti
 
 Algorand Standard Assets are the underlying technology that support these applications on Algorand and are deployed at Layer-1 through a simple transaction (no contract code is required). Assets can be traded like the Algo -  Algorand’s native token. They are also highly configurable, providing capabilities for minting, freezing, and revoking tokens.  For more information on building and deploying asset-based applications see the [Algorand Standard Assets](../features/asa.md) feature guide.
 
-<center>![Tokenizing Assets or Creating Your Own Coin](../../../imgs/app-2.jpg)</center>
+<center>![Tokenizing Assets or Creating Your Own Coin](../imgs/app-2.jpg)</center>
 
 # Applications that Require Guaranteed Exchange of Assets or Currency
 Trading assets between two or more parties requires trust that the other party will hold up their end of the deal. To mitigate this risk, we often use a trusted intermediary, like a bank, to foster and guarantee the exchange. This centralized bank often comes with high fees and slow transfer times, especially for international transfers. On the Algorand blockchain, the guaranteed trade of two or more assets is simplified into a simple technological innovation that does not require trust of the other party or a centralized intermediary. It is called an **atomic transfer**. 
 
 Atomic transfers on Algorand are built at Layer-1 and are simply transactions that have been grouped (up to 16 transactions can belong to a group) and sent to the network together. If any transaction fails, all will fail. Atomic transfers can be used with any type of Algorand transaction, including payments, Asset transfers, smart contract calls, etc. See the [Atomic Transfers](../features/atomic_transfers.md) feature guide for more details.
 
-<center>![Applications that Require Guaranteed Exchange of Assets or Currency](../../../imgs/app-3.jpg)</center>
+<center>![Applications that Require Guaranteed Exchange of Assets or Currency](../imgs/app-3.jpg)</center>
 
 # Applications that Require Access to Historical Data
 Most applications that utilize the blockchain require some knowledge of historical transaction data. This could be a simple order number search or a complex banking application that requires a detailed accounting record of historical balances. For applications that heavily rely on this functionality, searching the blockchain for specific data has been traditionally slow and very limited in capabilities, usually requiring developers to create their own optimized data stores. 
 
 Algorand solves this problem by providing a new tool called the indexer, whose primary purpose is to provide fast, efficient, and useful search capabilities across data on the Algorand blockchain. The indexer is implemented as a Postgres database, queryable through a REST API and wrapped by each of the Algorand SDKs. Some of its features include the ability to search the note field of transactions, assets, and applications. Searches can be filtered on time ranges, specified as either rounds or clock time, and the data is returned as paginated result sets allowing for ease of data handling. For more information, see the [Searching the Blockchain](../features/indexer.md) feature guide.
 
-<center>![Applications that Require Access to Historical Data](../../../imgs/app-4.jpg)</center>
+<center>![Applications that Require Access to Historical Data](../imgs/app-4.jpg)</center>
 
 # Applications with Transaction-Level Metadata
 Many applications require registering extra data with each transaction. For example, an order processing application may require tagging each transaction with a company order number. A food supply chain application may require items in transit to emit temperature data to the blockchain as a way to offer transparent quality control for their customers. 
 
 On Algorand, adding arbitrary data to a transaction is accomplished with an optional [note field](https://developer.algorand.org/docs/reference/transactions/#common-fields-header-and-type) that is available for any transaction type and can include up to 1 KB of data. Combine this with Algorand’s [indexer](#applications-that-require-access-to-historical-data) to be able to efficiently access historical records of note field data on the blockchain. For more information on writing data into the note field, search the tutorials section of the Developer Portal or learn how to write “Hello World” in the note field with [Your First Transaction](https://developer.algorand.org/docs/build-apps/hello_world/).
 
-<center>![Applications with Transaction-Level Metadata](../../../imgs/app-5.jpg)</center>
+<center>![Applications with Transaction-Level Metadata](../imgs/app-5.jpg)</center>
 
 # Escrow Account-Based Applications
 In traditional finance, an escrow account is one in which funds are kept locked up until some predetermined event occurs or some set of conditions have been fulfilled. An example of an escrow-based application is if Alice needs a loan, and her lender Bob provides it on the condition that she puts another asset aside in an escrow account that Bob can claim if Alice is unable to pay him back (a collateralized loan). The funds can be released in either of two conditions: 1) Alice does not pay back the loan after an expiration period and Bob can claim Alice’s asset or 2) Alice does pay back the loan prior to the expiration period and Alice can reclaim her asset from the escrow account.  The event or condition that “unlocks” the funds, in traditional finance, is usually governed by a centralized, trusted intermediary, like a bank, and therefore is subject to high fees and transfer friction. 
@@ -53,14 +53,14 @@ This is an example of a traditional escrow use case, but the technology enables 
 
 Stateless smart contracts are highly efficient logic programs, because they do not live on the blockchain but instead are evaluated at the time when the transaction involving the contract account is submitted. They are written in an assembly-like language, unique to Algorand, called the Transaction Execution Approval Language (TEAL), which is compiled into a valid Algorand address unique to that code. Algos or Assets can be sent to the new address freely. The program’s logic then determines when and how the Algos or Assets leave the escrow.  This is one way to use stateless smart contracts on Algorand. The other way is with [delegated spending authority](#applications-that-delegate-spending-authority) described below. For more information see the [Stateless Smart Contract](../features/asc1/stateless/index.md) documentation. We will talk about another mode of use for Stateless Smart Contracts in the following section. 
 
-<center>![Escrow Account-Based Applications](../../../imgs/app-6.jpg)</center>
+<center>![Escrow Account-Based Applications](../imgs/app-6.jpg)</center>
 
 # Applications that Delegate Spending Authority
 An application that uses delegated spending authority allows a third-party to withdraw funds if specific conditions are fulfilled. Billpay applications are a type of application that utilize delegate spending technology. For example, Alice may login to her banking application and allow her cable company to withdraw funds from her account on a monthly basis, up to 100 USD, automatically. Another example of delegated spending is within an auction-style application. IN this case, an item is placed for sale and if the reserve is met, the item is automatically sold at the conclusion of the sale.
 
 On Algorand, this application is realized through [Stateless Smart Contract](../features/asc1/stateless/index.md) technology. Stateless smart contracts are highly efficient logic programs, because they do not live on the blockchain but instead are evaluated at the time when the transaction involving the contract is submitted. They are written in an assembly-like language, unique to Algorand, called the Transaction Execution Approval Language (TEAL). With delegated authority, the logic is signed by the owner of the account from which the funds will be withdrawn, and is attached to a transaction as a signature. This is one way to use stateless smart contracts on Algorand. The other way is with [escrow contract accounts](#escrow-account-based-applications) described above. The signed logic can then be used to approve transactions from the specific account as long as the conditions of the logic are met. For more information on delegating authority see the [Stateless Smart Contract](../features/asc1/stateless/index.md) documentation.
 
-<center>![Applications that Delegate Spending Authority](../../../imgs/app-7.jpg)</center>
+<center>![Applications that Delegate Spending Authority](../imgs/app-7.jpg)</center>
 
 # Unique Global or User-Based Variable Applications
 These types of applications require customizable global and local variables to keep track of application and user state.  For example, a voting application requires a list of candidates to vote for, with their current vote total and users who cast a vote prevent double-voting. In this example, the vote total is stored globally and a user is marked locally as having voted. An auction application may list items globally and individual bids may be stored locally. 
@@ -69,7 +69,7 @@ Stateful Smart Contracts are Algorand’s technology for creating applications w
 
 In the case of a voting application, a vote is just a specialized transaction where the stateful smart contract increments the vote count for the candidate of choice by the user and also marks the user’s account as having voted (stored as a value in the user’s local state). For more information see the [Stateful Smart Contract](../features/asc1/stateful/index.md) guide.
 
-<center>![Unique Global or User-Based Variable Applications](../../../imgs/app-8.jpg)</center>
+<center>![Unique Global or User-Based Variable Applications](../imgs/app-8.jpg)</center>
 
 # Combination Applications
 Applications will rarely just rely on one piece of technology to solve a problem. This is no different on Algorand, where any of the features described above can be composed together in multiple ways to create sophisticated, production-ready applications. The remainder of this guide illustrates several examples of how the technologies described above can be combined to solve complex real-world problems.
@@ -82,14 +82,14 @@ Relatedly, the stateful smart contract can encode restrictions on the donation, 
 ## Using Assets With Stateful Smart Contracts
 Similar to grouping stateful smart contracts with payment transactions, applications can also group asset transactions with stateful smart contracts. For example, this technology is useful to implement a permissioned voting application where the permission to vote is denoted through a voting token (as an [Algorand Standard Asset](../features/asa.md)) provided by a government authority. In order to vote, this token must be spent at the same time a call to the voting smart contract is made. 
 
-<center>![Using Assets With Stateful Smart Contracts](../../../imgs/app-9.jpg)</center>
+<center>![Using Assets With Stateful Smart Contracts](../imgs/app-9.jpg)</center>
 
 In this example, the vote token is spent with an asset transfer transaction instead of a payment transaction. If either the vote call or asset transfer transaction fails they both fail due to the atomic operation. This pattern uses [Stateful Smart Contracts](../features/asc1/stateful/index.md), [Atomic Transfers](../features/atomic_transfers.md), and [Assets](../features/asa.md).
 
 ## Using Stateful and Stateless Smart Contracts
 Stateful and Stateless smart contracts provide significantly different capabilities and they can be combined to produce highly sophisticated new solutions to solve real-world problems. For example, a crowdfunding application may use an escrow account (stateless smart contract) to hold donations until the end of its fund drive, which operates through an application (stateful smart contract). The logic in the paired stateless and stateful contracts will ensure that if the fund goal is met, the fund will be awarded to the receiver but if the fund goal is not met, the donations will be dispersed back to the original donors. This example uses [Stateful and Stateless Smart Contracts](../features/asc1/index.md) in addition to [payment transactions](#payment-based-applications) and [atomic transfers](../features/atomic_transfers.md).
 
-<center>![Using Stateful and Stateless Smart Contracts](../../../imgs/app-10.jpg)</center>
+<center>![Using Stateful and Stateless Smart Contracts](../imgs/app-10.jpg)</center>
 
 # Conclusion
 The combination of Assets, Atomic Transfers, Stateful Smart Contracts, and Stateless Smart Contracts as innovative new layer-1 technologies, in their various combinations, have endless potential to generate new solutions to old and new problems alike. As a final example, imagine having the ability to enforce that any sale of a particular asset requires a 5% commission back to the creator or perhaps to some government entity as a type of tax. This condition is difficult to enforce outside of blockchain, since we must rely solely on the honesty of sellers and buyers and our legal institutions. On Algorand, we can bolster this with smart contract logic that ensures this to be the case. Specifically, I can create an asset, frozen by default, that can only be transferred when grouped with a complementary set of transactions that will ensure that a commission payment is also sent (this condition is enforced through stateful and stateless smart contract logic). We will save the details of this implementation for another time, but this example is meant to show the power of these Layer-1 features to solve existing problems in new ways. 
