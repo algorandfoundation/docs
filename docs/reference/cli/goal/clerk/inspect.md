@@ -18,7 +18,7 @@ Loads a transaction file, attempts to decode the transaction, and displays the d
 
 ```
 
-goal clerk inspect [flags]
+goal clerk inspect [input file 1] [input file 2]... [flags]
 
 ```
 

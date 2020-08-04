@@ -47,6 +47,7 @@ goal [flags]
 
 
 * [goal account](../account/account/)	 - Control and manage Algorand accounts
+* [goal app](../app/app/)	 - Manage applications
 * [goal asset](../asset/asset/)	 - Manage assets
 * [goal clerk](../clerk/clerk/)	 - Provides the tools to control transactions 
 * [goal completion](../completion/completion/)	 - Shell completion helper.

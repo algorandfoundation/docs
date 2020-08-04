@@ -59,6 +59,7 @@ goal clerk [flags]
 * [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
 * [goal clerk compile](../compile/)	 - compile a contract program
 * [goal clerk dryrun](../dryrun/)	 - test a program offline
+* [goal clerk dryrun-remote](../dryrun-remote/)	 - test a program with algod's dryrun REST endpoint
 * [goal clerk group](../group/)	 - Group transactions together
 * [goal clerk inspect](../inspect/)	 - print a transaction file
 * [goal clerk multisig](../multisig/multisig/)	 - Provides tools working with multisig transactions 

@@ -1,4 +1,4 @@
-title: indexer 🆕
+title: indexer
 ---
 
 <a name="paths"></a>
@@ -41,6 +41,7 @@ Search for accounts.
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
+|**Query**|**application-id**  <br>*optional*|Application ID|integer|
 |**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
 |**Query**|**auth-addr**  <br>*optional*|Include accounts configured to use this spending key.|string|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
@@ -151,7 +152,7 @@ Lookup account transactions.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -169,6 +170,97 @@ Lookup account transactions.
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
 |**transactions**  <br>*required*||< [Transaction](#transaction) > array|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
+<a name="searchforapplications"></a>
+### GET /v2/applications
+
+**Description**
+Search for applications
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#searchforapplications-response-200)|
+
+<a name="searchforapplications-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**applications**  <br>*required*||< [Application](#application) > array|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* search
+
+
+<a name="lookupapplicationbyid"></a>
+### GET /v2/applications/{application-id}
+
+**Description**
+Lookup application.
+
+
+**Parameters**
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**application-id**  <br>*required*|integer|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookupapplicationbyid-response-200)|
+
+<a name="lookupapplicationbyid-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**application**  <br>*optional*||[Application](#application)|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
 
 
 **Consumes**
@@ -357,7 +449,7 @@ Lookup transactions for an asset.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -442,6 +534,7 @@ Search for transactions.
 |**Query**|**address**  <br>*optional*|Only include transactions with this address in one of the transaction fields.|string|
 |**Query**|**address-role**  <br>*optional*|Combine with the address parameter to define what type of address to search for.|enum (sender, receiver, freeze-target)|
 |**Query**|**after-time**  <br>*optional*|Include results after the given time. Must be an RFC 3339 formatted string.|string (date-time)|
+|**Query**|**application-id**  <br>*optional*|Application ID|integer|
 |**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
 |**Query**|**before-time**  <br>*optional*|Include results before the given time. Must be an RFC 3339 formatted string.|string (date-time)|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
@@ -455,7 +548,7 @@ Search for transactions.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -509,8 +602,11 @@ data/basics/userBalance.go : AccountData
 |**address**  <br>*required*|the account public key|string|
 |**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer|
 |**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer|
+|**apps-local-state**  <br>*optional*|\[appl\] applications local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalState](#applicationlocalstate) > array|
+|**apps-total-schema**  <br>*optional*|\[tsch\] stores the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
 |**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
 |**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
+|**created-apps**  <br>*optional*|\[appp\] parameters of applications created by this account including app global data.<br><br>Note: the raw account uses `map[int] -> AppParams` for this type.|< [Application](#application) > array|
 |**created-assets**  <br>*optional*|\[apar\] parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
 |**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
@@ -533,6 +629,55 @@ AccountParticipation describes the parameters used by this account in consensus 
 |**vote-key-dilution**  <br>*required*|\[voteKD\] Number of subkeys in each batch of participation keys.|integer|
 |**vote-last-valid**  <br>*required*|\[voteLst\] Last round for which this participation is valid.|integer|
 |**vote-participation-key**  <br>*required*|\[vote\] root participation public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="application"></a>
+### Application
+Application index and its parameters
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**id**  <br>*required*|\[appidx\] application index.|integer|
+|**params**  <br>*required*|\[appparams\] application parameters.|[ApplicationParams](#applicationparams)|
+
+
+<a name="applicationlocalstate"></a>
+### ApplicationLocalState
+Stores local state associated with an application.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**id**  <br>*required*|The application which this local state is for.|integer|
+|**key-value**  <br>*optional*|\[tkv\] storage.|[TealKeyValueStore](#tealkeyvaluestore)|
+|**schema**  <br>*required*|\[hsch\] schema.|[ApplicationStateSchema](#applicationstateschema)|
+
+
+<a name="applicationparams"></a>
+### ApplicationParams
+Stores the global information associated with an application.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**approval-program**  <br>*required*|\[approv\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**clear-state-program**  <br>*required*|\[clearp\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**creator**  <br>*optional*|The address that created this application. This is the address where the parameters and global state for this application can be found.|string|
+|**global-state**  <br>*optional*|[\gs\] global schema|[TealKeyValueStore](#tealkeyvaluestore)|
+|**global-state-schema**  <br>*optional*|[\lsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
+|**local-state-schema**  <br>*optional*|[\lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
+
+
+<a name="applicationstateschema"></a>
+### ApplicationStateSchema
+Specifies maximums on the number of each type that may be stored.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**num-byte-slice**  <br>*required*|\[nbs\] num of byte slices.|integer|
+|**num-uint**  <br>*required*|\[nui\] num of uints.|integer|
 
 
 <a name="asset"></a>
@@ -687,6 +832,63 @@ A simplified version of AssetHolding
 |**is-frozen**  <br>*required*|boolean|
 
 
+<a name="oncompletion"></a>
+### OnCompletion
+\[apan\] defines the what additional actions occur with the transaction.
+
+Valid types:
+* noop
+* optin
+* closeout
+* clear
+* update
+* update
+* delete
+
+*Type* : enum (noop, optin, closeout, clear, update, delete)
+
+
+<a name="stateschema"></a>
+### StateSchema
+Represents a \[apls\] local-state or \[apgs\] global-state schema. These schemas determine how much storage may be used in a local-state or global-state for an application. The more space used, the larger minimum balance must be maintained in the account holding the data.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**num-byte-slice**  <br>*required*|Maximum number of TEAL byte slices that may be stored in the key/value store.|integer|
+|**num-uint**  <br>*required*|Maximum number of TEAL uints that may be stored in the key/value store.|integer|
+
+
+<a name="tealkeyvalue"></a>
+### TealKeyValue
+Represents a key-value pair in an application store.
+
+
+|Name|Schema|
+|---|---|
+|**key**  <br>*required*|string|
+|**value**  <br>*required*|[TealValue](#tealvalue)|
+
+
+<a name="tealkeyvaluestore"></a>
+### TealKeyValueStore
+Represents a key-value store for use in an application.
+
+*Type* : < [TealKeyValue](#tealkeyvalue) > array
+
+
+<a name="tealvalue"></a>
+### TealValue
+Represents a TEAL value.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**bytes**  <br>*required*|\[tb\] bytes value.|string|
+|**type**  <br>*required*|\[tt\] value type.|integer|
+|**uint**  <br>*required*|\[ui\] uint value.|integer|
+
+
 <a name="transaction"></a>
 ### Transaction
 Contains all fields common to all transactions and serves as an envelope to all transactions type.
@@ -698,6 +900,7 @@ data/transactions/transaction.go : Transaction
 
 |Name|Description|Schema|
 |---|---|---|
+|**application-transaction**  <br>*optional*||[TransactionApplication](#transactionapplication)|
 |**asset-config-transaction**  <br>*optional*||[TransactionAssetConfig](#transactionassetconfig)|
 |**asset-freeze-transaction**  <br>*optional*||[TransactionAssetFreeze](#transactionassetfreeze)|
 |**asset-transfer-transaction**  <br>*optional*||[TransactionAssetTransfer](#transactionassettransfer)|
@@ -705,6 +908,7 @@ data/transactions/transaction.go : Transaction
 |**close-rewards**  <br>*optional*|\[rc\] rewards applied to close-remainder-to account.|integer|
 |**closing-amount**  <br>*optional*|\[ca\] closing amount for transaction.|integer|
 |**confirmed-round**  <br>*optional*|Round when the transaction was confirmed.|integer|
+|**created-application-index**  <br>*optional*|Specifies an application index (ID) if an application was created with this transaction.|integer|
 |**created-asset-index**  <br>*optional*|Specifies an asset index (ID) if an asset was created with this transaction.|integer|
 |**fee**  <br>*required*|\[fee\] Transaction fee.|integer|
 |**first-valid**  <br>*required*|\[fv\] First valid round for this transaction.|integer|
@@ -724,7 +928,28 @@ data/transactions/transaction.go : Transaction
 |**sender**  <br>*required*|\[snd\] Sender's address.|string|
 |**sender-rewards**  <br>*optional*|\[rs\] rewards applied to sender account.|integer|
 |**signature**  <br>*required*||[TransactionSignature](#transactionsignature)|
-|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction|enum (pay, keyreg, acfg, axfer, afrz)|
+|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl)|
+
+
+<a name="transactionapplication"></a>
+### TransactionApplication
+Fields for application transactions.
+
+Definition:
+data/transactions/application.go : ApplicationCallTxnFields
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**accounts**  <br>*optional*|\[apat\] List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|< string > array|
+|**application-args**  <br>*optional*|\[apaa\] transaction specific arguments accessed from the application's approval-program and clear-state-program.|< string > array|
+|**application-id**  <br>*required*|\[apid\] ID of the application being configured or empty if creating.|integer|
+|**approval-program**  <br>*optional*|\[apap\] Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**clear-state-program**  <br>*optional*|\[apsu\] Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**foreign-apps**  <br>*optional*|\[apfa\] Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|< integer > array|
+|**global-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
+|**local-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
+|**on-completion**  <br>*required*||[OnCompletion](#oncompletion)|
 
 
 <a name="transactionassetconfig"></a>

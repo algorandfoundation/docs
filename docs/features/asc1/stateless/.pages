@@ -1,0 +1,6 @@
+title: Stateless Smart Contracts
+arrange:
+    - index.md
+    - modes.md
+    - sdks.md
+    - walkthrough.md
