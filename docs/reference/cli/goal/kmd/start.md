@@ -4,7 +4,7 @@ title: goal kmd start
 
 
 
-Start the kmd process, or restart it with an updated timeout.
+Start the kmd process, or restart it with an updated timeout
 
 
 
@@ -12,7 +12,7 @@ Start the kmd process, or restart it with an updated timeout.
 
 
 
-Start the kmd process, or restart it with an updated timeout.
+Start the kmd process, or restart it with an updated timeout
 
 
 

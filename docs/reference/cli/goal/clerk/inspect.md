@@ -4,7 +4,7 @@ title: goal clerk inspect
 
 
 
-print a transaction file
+Print a transaction file
 
 
 

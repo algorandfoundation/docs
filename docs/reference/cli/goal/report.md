@@ -54,7 +54,7 @@ goal report [flags]
 
 
 
-* [goal](../../goal/goal/)	 - CLI for interacting with Algorand.
+* [goal](../../goal/goal/)	 - CLI for interacting with Algorand
 
 
 

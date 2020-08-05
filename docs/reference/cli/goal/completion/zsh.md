@@ -4,7 +4,7 @@ title: goal completion zsh
 
 
 
-Generate zsh completion commands.
+Generate zsh completion commands
 
 
 
@@ -12,7 +12,7 @@ Generate zsh completion commands.
 
 
 
-Generate zsh completion commands.
+Generate zsh completion commands
 
 
 
@@ -54,7 +54,7 @@ goal completion zsh [flags]
 
 
 
-* [goal completion](../../completion/completion/)	 - Shell completion helper.
+* [goal completion](../../completion/completion/)	 - Shell completion helper
 
 
 

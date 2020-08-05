@@ -54,9 +54,9 @@ goal kmd [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
-* [goal kmd start](../start/)	 - Start the kmd process, or restart it with an updated timeout.
-* [goal kmd stop](../stop/)	 - Stop the kmd process if it is running.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
+* [goal kmd start](../start/)	 - Start the kmd process, or restart it with an updated timeout
+* [goal kmd stop](../stop/)	 - Stop the kmd process if it is running
 
 
 

@@ -62,7 +62,7 @@ goal ledger block [round number] [flags]
 
 
 
-* [goal ledger](../../ledger/ledger/)	 - Access ledger-related details.
+* [goal ledger](../../ledger/ledger/)	 - Access ledger-related details
 
 
 

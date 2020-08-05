@@ -4,7 +4,7 @@ title: goal
 
 
 
-CLI for interacting with Algorand.
+CLI for interacting with Algorand
 
 
 
@@ -50,17 +50,17 @@ goal [flags]
 * [goal app](../app/app/)	 - Manage applications
 * [goal asset](../asset/asset/)	 - Manage assets
 * [goal clerk](../clerk/clerk/)	 - Provides the tools to control transactions 
-* [goal completion](../completion/completion/)	 - Shell completion helper.
+* [goal completion](../completion/completion/)	 - Shell completion helper
 * [goal kmd](../kmd/kmd/)	 - Interact with kmd, the key management daemon
-* [goal ledger](../ledger/ledger/)	 - Access ledger-related details.
-* [goal license](../license/)	 - Display license information.
+* [goal ledger](../ledger/ledger/)	 - Access ledger-related details
+* [goal license](../license/)	 - Display license information
 * [goal logging](../logging/logging/)	 - Control and manage Algorand logging
 * [goal network](../network/network/)	 - Create and manage private, multi-node, locally-hosted networks
 * [goal node](../node/node/)	 - Manage a specified algorand node
 * [goal protocols](../protocols/)	 - 
 * [goal report](../report/)	 - 
-* [goal version](../version/).
-* [goal wallet](../wallet/wallet/)	 - Manage wallets: encrypted collections of Algorand account keys.
+* [goal version](../version/)
+* [goal wallet](../wallet/wallet/)	 - Manage wallets: encrypted collections of Algorand account keys
 
 
 

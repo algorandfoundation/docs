@@ -4,7 +4,7 @@ title: goal version
 
 
 
-The current version of the Algorand daemon (algod).
+The current version of the Algorand daemon (algod)
 
 
 
@@ -12,7 +12,7 @@ The current version of the Algorand daemon (algod).
 
 
 
-The current version of the Algorand daemon (algod).
+The current version of the Algorand daemon (algod)
 
 
 
@@ -56,7 +56,7 @@ goal version [flags]
 
 
 
-* [goal](../../goal/goal/)	 - CLI for interacting with Algorand.
+* [goal](../../goal/goal/)	 - CLI for interacting with Algorand
 
 
 

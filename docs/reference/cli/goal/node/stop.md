@@ -4,7 +4,7 @@ title: goal node stop
 
 
 
-stop the specified Algorand node.
+Stop the specified Algorand node
 
 
 
@@ -12,7 +12,7 @@ stop the specified Algorand node.
 
 
 
-stop the specified Algorand node.
+Stop the specified Algorand node
 
 
 

@@ -4,7 +4,7 @@ title: goal node restart
 
 
 
-Stop, and then start, the specified Algorand node.
+Stop, and then start, the specified Algorand node
 
 
 
@@ -12,7 +12,7 @@ Stop, and then start, the specified Algorand node.
 
 
 
-Stop, and then start, the specified Algorand node.
+Stop, and then start, the specified Algorand node
 
 
 

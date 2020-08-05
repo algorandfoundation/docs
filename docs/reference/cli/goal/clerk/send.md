@@ -58,6 +58,10 @@ goal clerk send [flags]
 
   -L, --logic-sig string            LogicSig to apply to transaction
 
+      --msig-params string          Multisig pre image parameters - [threshold] [Address 1] [Address 2] ...
+
+                                    Used to add the necessary fields in case the account was rekeyed to a multisig account
+
   -N, --no-wait                     Don't wait for transaction to commit
 
   -n, --note string                 Note text (ignored if --noteb64 used also)

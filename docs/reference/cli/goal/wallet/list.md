@@ -4,7 +4,7 @@ title: goal wallet list
 
 
 
-List wallets managed by kmd.
+List wallets managed by kmd
 
 
 
@@ -12,7 +12,7 @@ List wallets managed by kmd.
 
 
 
-List wallets managed by kmd.
+List wallets managed by kmd
 
 
 
@@ -54,7 +54,7 @@ goal wallet list [flags]
 
 
 
-* [goal wallet](../../wallet/wallet/)	 - Manage wallets: encrypted collections of Algorand account keys.
+* [goal wallet](../../wallet/wallet/)	 - Manage wallets: encrypted collections of Algorand account keys
 
 
 

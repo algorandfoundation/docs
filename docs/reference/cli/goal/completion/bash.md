@@ -4,7 +4,7 @@ title: goal completion bash
 
 
 
-Generate bash completion commands.
+Generate bash completion commands
 
 
 
@@ -12,7 +12,7 @@ Generate bash completion commands.
 
 
 
-Generate bash completion commands.
+Generate bash completion commands
 
 
 
@@ -54,7 +54,7 @@ goal completion bash [flags]
 
 
 
-* [goal completion](../../completion/completion/)	 - Shell completion helper.
+* [goal completion](../../completion/completion/)	 - Shell completion helper
 
 
 

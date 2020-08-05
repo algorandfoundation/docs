@@ -4,7 +4,7 @@ title: goal network stop
 
 
 
-Stop a deployed private network.
+Stop a deployed private network
 
 
 
@@ -12,7 +12,7 @@ Stop a deployed private network.
 
 
 
-Stop a deployed private network.
+Stop a deployed private network
 
 
 

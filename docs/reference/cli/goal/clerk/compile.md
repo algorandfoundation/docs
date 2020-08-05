@@ -4,7 +4,7 @@ title: goal clerk compile
 
 
 
-compile a contract program
+Compile a contract program
 
 
 

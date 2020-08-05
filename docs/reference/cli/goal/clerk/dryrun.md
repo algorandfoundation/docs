@@ -4,7 +4,7 @@ title: goal clerk dryrun
 
 
 
-test a program offline
+Test a program offline
 
 
 

@@ -4,7 +4,7 @@ title: goal clerk dryrun-remote
 
 
 
-test a program with algod's dryrun REST endpoint
+Test a program with algod's dryrun REST endpoint
 
 
 
