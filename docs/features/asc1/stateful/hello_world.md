@@ -1,15 +1,15 @@
 title: Your First Application
 
-Use the guide below to deploy a "hello world" Algorand application, a [stateful smart contract](/features/asc1/#stateful-smart-contracts) using the [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/). This requires [setting up your workspace](/build-apps/setup/) and [connecting to a node](/build-apps/connect/). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
+Use the guide below to deploy a "hello world" Algorand application, a [stateful smart contract](../index.md#stateful-smart-contracts) using the [Transaction Execution Approval Language (TEAL)](../teal/index.md). This requires [setting up your workspace](../../../build-apps/setup.md) and [connecting to a node](../../../build-apps/connect.md). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
 
 This is a very basic application which implements a counter. Each time the application is called, the counter value is incremented. 
 
 !!! Info
-	[Algorand Smart Contracts](http://127.0.0.1:8000/features/asc1/) (ASC1) are deployed as either “Stateful” and “Stateless” programs. Both use the [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/) but the available [OpCodes](/reference/teal/opcodes/) and therefore their function vary by type. This guide covers only [stateful smart contracts](/features/asc1/#stateful-smart-contracts); learn more about [stateless smart contracts](/features/asc1/#stateful-smart-contracts).
+	[Algorand Smart Contracts](../index.md)) (ASC1) are deployed as either “Stateful” and “Stateless” programs. Both use the [Transaction Execution Approval Language (TEAL)](../teal/index.md) but the available [OpCodes](../../../reference/teal/opcodes.md) and therefore their function vary by type. This guide covers only [stateful smart contracts](../index.md#stateful-smart-contracts); learn more about [stateless smart contracts](../index.md#stateless-smart-contracts).
 
 ## Stateful Application Primer
 
-The [Overview](/features/asc1/stateful/) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started. The term “stateful” means the application is able to store information or “maintain state” within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/) defines the available [OpCodes](/reference/teal/opcodes/) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
+The [Overview](./index.md) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started. The term “stateful” means the application is able to store information or “maintain state” within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](../teal/index.md) defines the available [OpCodes](../../../reference/teal/opcodes.md) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
 
 ## Application Components
 
@@ -37,7 +37,7 @@ Each program may read from and write to _local_ storage within the account objec
 
 #### External
 
-Each program may read both the _global_ and _local_ state storage locations for limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract](/features/asc1/stateful/) documentation.
+Each program may read both the _global_ and _local_ state storage locations for limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract](./index.md) documentation.
 
 ### State Data
 
