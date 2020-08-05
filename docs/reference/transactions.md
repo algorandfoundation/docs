@@ -152,15 +152,15 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
-| <a name="">Application Global Storage</a>| _optional_| GlobalStateSchema| `"apgs"`| Contains <a href="#application-storage">Global Ints</a> and <a href="#application-global-storage">Global Byteslices</a>.|
-| <a name="">Application Local Storage</a>| _optional_| LocalStateSchema| `"apls"`| Contains <a href="#application-storage">Local Ints</a> and <a href="#application-global-storage">Local Byteslices</a>.|
+| <a name="">Application Global Storage</a>| _optional_| GlobalStateSchema| `"apgs"`| See <a href="#application-storage">Application Storage</a> for all available fields.|
+| <a name="">Application Local Storage</a>| _optional_| LocalStateSchema| `"apls"`| See <a href="#application-storage">Application Storage</a> for all available fields.|
 
 ## Application Storage
+Object Name: (GlobalStateSchema || LocalStateSchema)
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-| <a name="">Global Ints</a>| _optional_| uint64| `"nui"`| Maximum number of integer values that may be stored in the global key/value store. Immutable.|
-| <a name="">Global Byteslices</a>| _optional_| uint64| `"nbs"`| Maximum number of byte slices that may be stored in the global key/value store. Immutable.|
-| <a name="">Local Ints</a>| _optional_| uint64| `"nui"`| Maximum number of integer values that may be stored in local (per-account) key/value stores for this app. Immutable.|
-| <a name="">Local Byteslices</a>| _optional_| uint64| `"nbs"`| Maximum number of byte slices that may be stored in local (per-account) key/value stores for this app. Immutable.|
+| <a name="">Ints</a>| _optional_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global || local] key/value store. Immutable.|
+| <a name="">Byteslices</a>| _optional_| uint64| `"nbs"`| Maximum number of byte slices that may be stored in the global/local key/value store. Immutable.|
+
 
