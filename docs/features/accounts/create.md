@@ -858,146 +858,57 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 ### How to generate a standalone account
 
-The following examples generate three accounts. Three accounts may be desirable when testing out [Algorand Standard Assets](https://developer.algorand.org/docs/features/asa/) management functions as well as [Multisignature](https://developer.algorand.org/docs/features/accounts/create/#multisignature) thresholds.
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
-// Generate 3 accounts.
-// Once created, copy off the mnemonic and address values to paste into test code that uses accounts
-// Once created sucessfully, add funds to all three
-// The Algorand TestNet Dispenser is located here: 
-// https://bank.testnet.algorand.network/
-var acct = null;
 
-acct = algosdk.generateAccount();
-
-account1 = acct.addr;
-console.log("Account 1 = " + account1);
-var account1_mnemonic = algosdk.secretKeyToMnemonic(acct.sk);
-console.log("Account Mnemonic 1 = "+ account1_mnemonic);
-var recoveredAccount1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
-var isValid = algosdk.isValidAddress(recoveredAccount1.addr);
-console.log("Is this a valid address: " + isValid);
-console.log("Account created. Save off Mnemonic and address");
-
-
-acct = algosdk.generateAccount();
-
-account2 = acct.addr;
-console.log("Account 2 = " + account2);
-var account2_mnemonic = algosdk.secretKeyToMnemonic(acct.sk);
-console.log("Account Mnemonic 2 = " +account2_mnemonic);
-var recoveredAccount2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
-var isValid = algosdk.isValidAddress(recoveredAccount2.addr);
-console.log("Is this a valid address: " + isValid);
-console.log("Account created. Save off Mnemonic and address");
-
-acct = algosdk.generateAccount();
-
-account3 = acct.addr;
-console.log("Account 3 = " + account3);
-var account3_mnemonic = algosdk.secretKeyToMnemonic(acct.sk);
-console.log("Account Mnemonic 3 = " +account3_mnemonic);
-var recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
-var isValid = algosdk.isValidAddress(recoveredAccount3.addr);
-console.log("Is this a valid address: " + isValid);
-console.log("Account created. Save off Mnemonic and address");
-console.log("");
-console.log("Add funds to all of these accounts using the TestNet Dispenser at https://bank.testnet.algorand.network/ ");
+function generateAlgorandKeyPair() {
+    var account = algosdk.generateAccount();
+    var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+    console.log( "My address: " + account.addr );
+    console.log( "My passphrase: " + passphrase );
+}
 ```
 
 ```python tab="Python"
 from algosdk import account, mnemonic
 
-acct = account.generate_account()
-address1 = acct[1]
-print("Account 1")
-print(address1)
-mnemonic1 = mnemonic.from_private_key(acct[0])
-
-print("Account 2")
-acct = account.generate_account()
-address2 = acct[1]
-print(address2)
-mnemonic2 = mnemonic.from_private_key(acct[0])
-
-print("Account 3")
-acct = account.generate_account()
-address3 = acct[1]
-print(address3)
-mnemonic3 = mnemonic.from_private_key(acct[0])
-print ("")
-print("Copy off accounts above and add TestNet Algo funds using the TestNet Dispenser at https://bank.testnet.algorand.network/")
+def generate_algorand_keypair():
+    private_key, address = account.generate_account()
+    print("My address: {}".format(address))
+    print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 ```
 
 ```java tab="Java"
-package com.algorand.javatest.multisig.v2;
-import com.algorand.algosdk.account.Account;
+import com.algorand.algosdk.account.Account;    
 
-public class CreateAccounts
- {
-     public static void main(String args[]) throws Exception {
-     try {
-        Account myAccount1 = new Account();
-        System.out.println("My Address1: " + myAccount1.getAddress());
-        System.out.println("My Passphrase1: " + myAccount1.toMnemonic());
-        Account myAccount2 = new Account();
-        System.out.println("My Address2: " + myAccount2.getAddress());
-        System.out.println("My Passphrase2: " + myAccount2.toMnemonic());
-        Account myAccount3 = new Account();
-        System.out.println("My Address3: " + myAccount3.getAddress());
-        System.out.println("My Passphrase3: " + myAccount3.toMnemonic());
-        // Copy off accounts and mnemonics    
-        // Dispense TestNet Algos to each account: https://bank.testnet.algorand.network/
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        return;
-    }
+public class GenerateAlgorandKeyPair {
+    public static void main(String args[]) {
+        Account myAccount = new Account();
+        System.out.println("My Address: " + myAccount.getAddress());
+        System.out.println("My Passphrase: " + myAccount.toMnemonic());
     }
 }
 ```
 
 ```go tab="Go"
-package main
-
 import (
-	"fmt"
-	"github.com/algorand/go-algorand-sdk/crypto"
-	"github.com/algorand/go-algorand-sdk/mnemonic"
+    "fmt"
 
+    "github.com/algorand/go-algorand-sdk/crypto"
+    "github.com/algorand/go-algorand-sdk/mnemonic"
 )
 
 func main() {
-	account1 := crypto.GenerateAccount()
-	account2 := crypto.GenerateAccount()
-	account3 := crypto.GenerateAccount()
-	address1 := account1.Address.String()
-	address2 := account2.Address.String()
-	address3 := account3.Address.String()
+    account := crypto.GenerateAccount()
+    passphrase, err := mnemonic.FromPrivateKey(account.PrivateKey)
 
-	mnemonic1, err := mnemonic.FromPrivateKey(account1.PrivateKey)
-	if err != nil {
-		return
-	}
-	mnemonic2, err := mnemonic.FromPrivateKey(account2.PrivateKey)
-	if err != nil {
-		return
-	}
-	mnemonic3, err := mnemonic.FromPrivateKey(account3.PrivateKey)
-	if err != nil {
-		return
-	}
-	fmt.Printf("1 : \"%s\"\n", address1)
-	fmt.Printf("2 : \"%s\"\n", address2)
-	fmt.Printf("3 : \"%s\"\n", address3)
-	fmt.Printf("")
-	fmt.Printf("Copy off accounts above and add TestNet Algo funds using the TestNet Dispenser at https://bank.testnet.algorand.network/\n")
-	fmt.Printf("Copy off the following mnemonic code for future tutorial use\n")
-	fmt.Printf("\n")
-	fmt.Printf("mnemonic1 := \"%s\"\n", mnemonic1)
-	fmt.Printf("mnemonic2 := \"%s\"\n", mnemonic2)
-	fmt.Printf("mnemonic3 := \"%s\"\n", mnemonic3)
+    if err != nil {
+        fmt.Printf("Error creating transaction: %s\n", err)
+    } else {
+        fmt.Printf("My address: %s\n", account.Address)
+        fmt.Printf("My passphrase: %s\n", passphrase)
+    }
 }
 ```
 
@@ -1042,7 +953,7 @@ Multisignature accounts can also be used to create cryptographically secure gove
 Multisignature accounts trade off convenience for security. Every transaction requires multiple signatures which can be overly complex for a scenario where security or governance is not critical. 
 
 ## How to generate a multisignature account
-The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the addresses in the code samples below to recreate a specific multisignature address.
+The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the mnemonics in the code samples below to recreate a specific multisignature address or create [new accounts](#how-to-generate-a-standalone-account).
 
 !!! tip
 	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](../transactions/signatures.md#multisignatures).
@@ -1089,9 +1000,9 @@ from algosdk.future.transaction import Multisig
 # Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 # Change these values to use the accounts created previously.
 # Change these values with mnemonics
-# mnemonic1 = "PASTE phrase for account 1"
-# mnemonic2 = "PASTE phrase for account 2"
-# mnemonic3 = "PASTE phrase for account 3"
+mnemonic1 = "PASTE phrase for account 1"
+mnemonic2 = "PASTE phrase for account 2"
+mnemonic3 = "PASTE phrase for account 3"
 
 private_key_1 = mnemonic.to_private_key(mnemonic1)
 account_1 = mnemonic.to_public_key(mnemonic1)
@@ -1123,9 +1034,9 @@ public class MultisigAccount {
     public void multisigExample() throws Exception {
 		// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 		// Change these values to use the accounts created previously.
-        // final String account1_mnemonic = <var>your-25-word-mnemonic</var>
-        // final String account2_mnemonic = <var>your-25-word-mnemonic</var>
-        // final String account3_mnemonic = <var>your-25-word-mnemonic</var>
+        final String account1_mnemonic = <var>your-25-word-mnemonic</var>
+        final String account2_mnemonic = <var>your-25-word-mnemonic</var>
+        final String account3_mnemonic = <var>your-25-word-mnemonic</var>
 
         Account act1 = new Account(account1_mnemonic);
         Account act2 = new Account(account2_mnemonic);

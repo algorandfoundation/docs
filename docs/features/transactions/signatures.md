@@ -167,9 +167,9 @@ return new Promise(resolve => process.stdin.once('data', () => {
 // recover accounts
 // paste in mnemonic phrases here for each account
 
-// var account1_mnemonic = "PASTE phrase for account 1";
-// var account2_mnemonic = "PASTE phrase for account 2";
-// var account3_mnemonic = "PASTE phrase for account 3"
+var account1_mnemonic = "PASTE phrase for account 1";
+var account2_mnemonic = "PASTE phrase for account 2";
+var account3_mnemonic = "PASTE phrase for account 3"
 
 var account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
 var account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
@@ -241,13 +241,10 @@ from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
 
 
 # Change these values with mnemonics
-# mnemonic1 = "PASTE phrase for account 1"
-# mnemonic2 = "PASTE phrase for account 2"
-# mnemonic3 = "PASTE phrase for account 3"
+mnemonic1 = "PASTE phrase for account 1"
+mnemonic2 = "PASTE phrase for account 2"
+mnemonic3 = "PASTE phrase for account 3"
 
-mnemonic1 = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry"
-mnemonic2 = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only"
-mnemonic3 = "mirror zone together remind rural impose balcony position minimum quick manage climb quit draft lion device pluck rug siege robust spirit fine luggage ability actual"
 
 # For ease of reference, add account public and private keys to
 # an accounts dict.
@@ -419,9 +416,9 @@ public void multisigExample() throws Exception {
     if (client == null)
         this.client = connectToNetwork();
 
-    // final String account1_mnemonic = <var>your-25-word-mnemonic</var>
-    // final String account2_mnemonic = <var>your-25-word-mnemonic</var>
-    // final String account3_mnemonic = <var>your-25-word-mnemonic</var>
+    final String account1_mnemonic = <var>your-25-word-mnemonic</var>
+    final String account2_mnemonic = <var>your-25-word-mnemonic</var>
+    final String account3_mnemonic = <var>your-25-word-mnemonic</var>
 
     Account act1 = new Account(account1_mnemonic);
     Account act2 = new Account(account2_mnemonic);
@@ -511,9 +508,9 @@ func loadAccounts() (map[int][]byte, map[int]string) {
 	// Change these values to use the accounts created previously.
 
 	// Paste in mnemonic phrases for all three accounts
-	// mnemonic1 := "PASTE phrase for account 1"
-	// mnemonic2 := "PASTE phrase for account 2"
-	// mnemonic3 := "PASTE phrase for account 3"
+	mnemonic1 := "PASTE phrase for account 1"
+	mnemonic2 := "PASTE phrase for account 2"
+	mnemonic3 := "PASTE phrase for account 3"
 
 
 	mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
