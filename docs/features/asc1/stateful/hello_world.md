@@ -7,9 +7,9 @@ This is a very basic application which implements a counter. Each time the appli
 !!! Info
 	[Algorand Smart Contracts](http://127.0.0.1:8000/features/asc1/) (ASC1) are deployed as either “Stateful” and “Stateless” programs. Both use the [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/) but the available [OpCodes](/reference/teal/opcodes/) and therefore their function vary by type. This guide covers only [stateful smart contracts](/features/asc1/#stateful-smart-contracts); learn more about [stateless smart contracts](/features/asc1/#stateful-smart-contracts).
 
-## Stateful Application Overview
+## Stateful Application Primer
 
-Before diving into the code, it’s important to first understand the components of an Algorand application. The term “stateful” means the application is able to store information or “maintain state” within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/) defines the available [OpCodes](/reference/teal/opcodes/) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
+The [Overview](/features/asc1/stateful/) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started. The term “stateful” means the application is able to store information or “maintain state” within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/) defines the available [OpCodes](/reference/teal/opcodes/) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
 
 ## Application Components
 
@@ -65,7 +65,7 @@ TEAL provides OpCodes allowing the program to _get_ (read) and _put_ (write) dat
 Programs may implicitly read their own _global_ storage and the _local_ storage of the account submitting the _application call transaction_. 
 
 #### get_external
-Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of up to four _external_ programs. Additionally, programs may read from _local_ storage of up to two _external_ accounts.
+Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of up to two (2) _external_ programs. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts.
 
 #### put
 Writing data is restricted to _global_ storage of the "called" program and the _local_ storage of the "calling" account, both specified within the _application call transaction_ (note: _external_ locations may only be read from).
