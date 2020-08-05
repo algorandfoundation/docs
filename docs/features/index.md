@@ -6,7 +6,9 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 [Overview](./accounts/index.md) - Learn all about Algorand accounts, keys, wallets, and addresses.
 
-[Creation Methods](./accounts/create.md) -How to create standalone accounts, wallet-derived (kmd) accounts, or multisignature accounts.
+[Creation Methods](./accounts/create.md) - How to create standalone accounts, wallet-derived (kmd) accounts, or multisignature accounts.
+
+[Rekeying](./accounts/rekey.md) - Learn how to change the private spending key of an Algorand address.
 
 # Transactions
 
