@@ -152,10 +152,10 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
-| <a name="">Global Ints</a>| _optional_| Address| `"apgs"`| Maximum number of integer values that may be stored in the global key/value store. Immutable.|
-| <a name="">Global Byteslices</a>| _optional_| Address| `"apgs"`| Maximum number of byte slices that may be stored in the global key/value store. Immutable.|
-| <a name="">Local Ints</a>| _optional_| Address| `"apls"`| Maximum number of integer values that may be stored in local (per-account) key/value stores for this app. Immutable.|
-| <a name="">Local Byteslices</a>| _optional_| Address| `"apls"`| Maximum number of byte slices that may be stored in local (per-account) key/value stores for this app. Immutable.|
+| <a name="">Global Ints</a>| _optional_| uint64| `"apgs"`| Maximum number of integer values that may be stored in the global key/value store. Immutable.|
+| <a name="">Global Byteslices</a>| _optional_| uint64| `"apgs"`| Maximum number of byte slices that may be stored in the global key/value store. Immutable.|
+| <a name="">Local Ints</a>| _optional_| uint64| `"apls"`| Maximum number of integer values that may be stored in local (per-account) key/value stores for this app. Immutable.|
+| <a name="">Local Byteslices</a>| _optional_| uint64| `"apls"`| Maximum number of byte slices that may be stored in local (per-account) key/value stores for this app. Immutable.|
 
 
 
