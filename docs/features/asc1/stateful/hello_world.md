@@ -1,4 +1,4 @@
-title: Your First Application, a Stateful Smart Contract
+title: Your First Application
 
 Use the guide below to deploy a "hello world" Algorand application, a [stateful smart contract](/features/asc1/#stateful-smart-contracts) using the [Transaction Execution Approval Language (TEAL)](/features/asc1/teal/). This requires [setting up your workspace](/build-apps/setup/) and [connecting to a node](/build-apps/connect/). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
 
