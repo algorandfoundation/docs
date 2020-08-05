@@ -58,7 +58,7 @@ This is used to create, configure and destroy an asset depending on which fields
 |[AssetParams](#asset-parameters) |_required, except on destroy_|[AssetParams](#asset-parameters)|`"apar"`| See AssetParams table for all available fields.|
 
 ## Asset Parameters
-Object Name: (`AssetParams`)
+Object Name: `AssetParams`
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
@@ -142,13 +142,13 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
-| <a name="">Application Global Storage</a>| _optional_, see <a href=#application-storage>Application Storage</a>| GlobalStateSchema| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#application-storage>StateSchema</a> object.|
-| <a name="">Application Local Storage</a>| _optional_, see <a href=#application-storage>Application Storage</a>| LocalStateSchema| `"apls"`| Holds the maximum number of local state values defined within a <a href=#application-storage>StateSchema</a> object.|
+| <a name="">GlobalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
+| <a name="">LocalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apls"`| Holds the maximum number of local state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
 
-## Application Storage
-Object Name: (StateSchema)
+## Storage State Schema
+Object Name: `StateSchema`
 
-The _StateSchema_ object is only required for the `create` application call transaction. The _StateSchema_ object must be fully populated for both the _GlobalStateSchema_ and _LocalStateSchema_ objects.  
+The `StateSchema` object is only required for the create application call transaction. The `StateSchema` object must be fully populated for both the `GlobalStateSchema` and `LocalStateSchema` objects.  
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
