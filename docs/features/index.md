@@ -36,7 +36,7 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 [Smart Contract Overview](./asc1/index.md) - An overview of Smart Contracts on Algorand, including Stateful and Stateless versions.
 
-[Stateful Smart Contracts](./asc1/stateful/index.md) - An overview of Stateful Smart Contracts.
+[Stateful Smart Contracts](./asc1/stateful/index.md) 🔷 - An overview of Stateful Smart Contracts.
 
 
 [Stateless Smart Contracts](./asc1/stateless/index.md) - An overview of Stateless Smart Contracts. 
@@ -58,6 +58,6 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 
 
-# Searching the Blockchain (Indexer V2) 🆕
+# Searching the Blockchain (Indexer V2)
 
 [Overview](./indexer.md) - How to use Indexer v2 functionality to efficiently query data on the blockchain.
