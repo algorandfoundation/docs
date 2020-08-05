@@ -1,11 +1,11 @@
 title: Smart Contract Debugging
 
-# Writing logic signature transaction for Debugging
-The SDKs and goal command-line tool provide functionality to do a test run of a TEAL program. The goal command-line tool can be used with [stateless smart contracts.(/stateless/walkthrough.md)] 
+# Writing Logic Signature Transaction for Debugging
+The SDKs and `goal` command-line tool provide functionality to do a test run of a TEAL program. The `goal` command-line tool can be used with [stateless smart contracts.](stateless/walkthrough.md) 
 
-TEAL programs can be written with any editor and are compiled using the goal command-line tool or [SDK](stateless/sdks.md). They can also be built using python with the [PyTeal](https://github.com/algorand/pyteal) Library. 
+TEAL programs can be written with any editor and are compiled using the goal command-line tool or [SDK](stateless/sdks.md). They can also be built using python with the [PyTeal](teal/pyteal.md) Library. 
 
-The command-line tool provides the ability to use these compiled programs within transactions. The `goal clerk dryrun` command is described in the [goal TEAL Walkthrough](/stateless/walkthrough.md) documentation. From the SDK a logic signature transaction can be written to a file to be used with the `goal clerk dryrun` command. The following code details how this is done. The goal tab illustrates run the `dryrun` on the generated file.
+The command-line tool provides the ability to use these compiled programs within transactions. The `goal clerk dryrun` command is described in the [goal TEAL Walkthrough](stateless/walkthrough.md) documentation. From the SDK a logic signature transaction can be written to a file to be used with the `goal clerk dryrun` command. The following code details how this is done. The goal tab illustrates run the `dryrun` on the generated file.
 
 
 ```javascript tab="JavaScript"
@@ -51,7 +51,7 @@ The command-line tool provides the ability to use these compiled programs within
     }    
 ```
 
-```text tab="Goal"
+```text tab="goal"
 $ goal clerk dryrun -t simple.stxn
 tx[0] cost=2 trace:
   1 intcblock => <empty stack>
@@ -61,12 +61,13 @@ REJECT
 ```
 
 
-# Using dryrun for Debugging a TEAL Program
-When using the goal command-line tool, the `-o` option is used to write a signed transaction out to a file and the transaction will not be submitted to the network. This allows testing of the TEAL logic with the `goal clerk dryrun` command which shows how the TEAL is processed and approved or rejected.
+# Using Dryrun for Debugging a TEAL Program
+When using the `goal` command-line tool, the `-o` option is used to write a signed transaction out to a file and the transaction will not be submitted to the network. This allows testing of the TEAL logic with the `goal clerk dryrun` command which shows how the TEAL is processed and approved or rejected.
 
 SDK supports debugging with dryrun using source or the compiled TEAL program. The dryrun response includes disassembly, logic sig messages w PASS/REJECT, a sig trace, app call messages and app call trace.  
 
 ```javascript tab="JavaScript"
+// dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
 async function dryrunDebugging(lsig, txn, data) {
     if (data == null)
     {
@@ -177,6 +178,7 @@ async function dryrunDebugging(lsig, txn, data) {
 ```
 
 ```python tab="Python"
+# dryrun_debug returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
 # dryrun source if provided, else dryrun compiled
 def dryrun_debug(lstx, mysource):
     sources = []
@@ -272,6 +274,7 @@ def dryrun_debug(lstx, mysource):
 ```
 
 ```java tab="Java"
+// getDryrun returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
 private Response<DryrunResponse> getDryrunResponse(SignedTransaction stxn, byte[] source)
         throws Exception{
     List<DryrunSource> sources = new ArrayList<DryrunSource>();
@@ -487,7 +490,7 @@ func dryrunDebugging(lsig types.LogicSig, args [][]byte,tealFile []byte, client 
 // }   
 ```
 
-```text tab="Goal"
+```text tab="goal"
 $ goal clerk send -f C3MKH24QL3GHSD5CDQ47ZNQZMNZRX4MUTV6LVPAXMWAXMIISYSOWPGH674 -a 1000000 -t STF6TH6PKINM4CDIQHNSC7QEA4DM5OJKKSACAPWGTG776NWSQOMAYVGOQE -L mydelegatedsig.lsig -d ~/node/data -o out.stxn
 $ goal clerk dryrun -t out.stxn
 tx[0] cost=2 trace:
