@@ -127,16 +127,6 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="freezeasset">FreezeAsset</a>|_required_|uint64|`"faid"`| The asset ID being frozen or unfrozen.|
 |<a name="assetfrozen">AssetFrozen</a>|_required_|bool|`"afrz"`| True to freeze the asset.|
 
-# Signed Transaction
-Transaction Object Type: `SignedTxn`
-
-|Field|Required|Type|codec| Description|
-|---|---|---|---|---|
-|<a name="sig">Sig</a>| _required, if no other sig specified_ |crypto.Signature|`"sig"`||
-|<a name="msig">Msig</a>|_required, if no other sig specified_|crypto.MultisigSig|`"msig"`||
-|<a name="lsig">LogicSig</a>|_required, if no other sig specified_|LogicSig|`"lsig"`| |
-|<a name="txn">Transaction</a>|_required_|Transaction|`"txn"`| [`PaymentTx`](#payment-transaction), [`KeyRegistrationTx`](#key-registration-transaction), [`AssetConfigTx`](#asset-configuration-transaction), [`AssetTransferTx`](#asset-transfer-transaction), [`AssetFreezeTx`](#asset-freeze-transaction) or ['ApplicationCallTx'](#application-call-transaction)
-
 # Application Call Transaction
 Transaction Object Type: `ApplicationCallTx`
 
@@ -165,4 +155,12 @@ The _StateSchema_ object is only required for the `create` application call tran
 | <a name="">Number Ints</a>| _required_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] application key/value store. Immutable.|
 | <a name="">Number Byteslices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
 
+# Signed Transaction
+Transaction Object Type: `SignedTxn`
 
+|Field|Required|Type|codec| Description|
+|---|---|---|---|---|
+|<a name="sig">Sig</a>| _required, if no other sig specified_ |crypto.Signature|`"sig"`||
+|<a name="msig">Msig</a>|_required, if no other sig specified_|crypto.MultisigSig|`"msig"`||
+|<a name="lsig">LogicSig</a>|_required, if no other sig specified_|LogicSig|`"lsig"`| |
+|<a name="txn">Transaction</a>|_required_|Transaction|`"txn"`| [`PaymentTx`](#payment-transaction), [`KeyRegistrationTx`](#key-registration-transaction), [`AssetConfigTx`](#asset-configuration-transaction), [`AssetTransferTx`](#asset-transfer-transaction), [`AssetFreezeTx`](#asset-freeze-transaction) or [`ApplicationCallTx`](#application-call-transaction)
