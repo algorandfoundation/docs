@@ -152,8 +152,8 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
-| <a name="">Application Global Storage</a>| _optional_| struct| `"apgs"`| Contains <a href="#application-storage">Global Ints</a> and <a href="#application-global-storage">Global Byteslices</a>.|
-| <a name="">Application Local Storage</a>| _optional_| struct| `"apls"`| Contains <a href="#application-storage">Local Ints</a> and <a href="#application-global-storage">Local Byteslices</a>.|
+| <a name="">Application Global Storage</a>| _optional_| GlobalStateSchema| `"apgs"`| Contains <a href="#application-storage">Global Ints</a> and <a href="#application-global-storage">Global Byteslices</a>.|
+| <a name="">Application Local Storage</a>| _optional_| LocalStateSchema| `"apls"`| Contains <a href="#application-storage">Local Ints</a> and <a href="#application-global-storage">Local Byteslices</a>.|
 
 ## Application Storage
 
