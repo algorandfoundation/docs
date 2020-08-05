@@ -1,7 +1,6 @@
-package com.algorand.javatest.smart_contracts.v2;
+package com.algorand.javatest.smart_contracts;
 
 import com.algorand.algosdk.account.Account;
-//import com.algorand.algosdk.algod.client.AlgodClient;
 import com.algorand.algosdk.algod.client.ApiException;
 
 import com.algorand.algosdk.crypto.Address;
@@ -14,11 +13,16 @@ import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
+import java.util.Base64;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import com.algorand.algosdk.v2.client.model.CompileResponse;
 
 public class AccountDelegation {
     // Utility function to update changing block parameters
@@ -28,9 +32,14 @@ public class AccountDelegation {
     private AlgodClient connectToNetwork() {
 
         // Initialize an algod client
+        // sandbox
         final String ALGOD_API_ADDR = "localhost";
         final Integer ALGOD_PORT = 4001;
         final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        // final String ALGOD_API_ADDR = "<algod-address>";
+        // final Integer ALGOD_PORT = <algod-port>;
+        // final String ALGOD_API_TOKEN = "<algod-token>";
 
         AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
         return client;
@@ -67,14 +76,32 @@ public class AccountDelegation {
         // import your private key mnemonic and address
         
         final String SRC_ACCOUNT = "buzz genre work meat fame favorite rookie stay tennis demand panic busy hedgehog snow morning acquire ball grain grape member blur armor foil ability seminar";
+        // final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
  
         Account src = new Account(SRC_ACCOUNT);
         // Set the receiver
         final String RECEIVER = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
+        // final String RECEIVER = "<receiver-address>";
+
+        // Read program from file samplearg.teal
+        // This code is meant for learning purposes only
+        // It should not be used in production
+        // arg_0
+        // btoi
+        // int 123
+        // ==
+        byte[] source = Files.readAllBytes(Paths.get("./samplearg.teal"));
+        // byte[] source = Files.readAllBytes(Paths.get("<filename>"));
+
+        // compile
+        CompileResponse response = client.TealCompile().source(source).execute().body();
+        // print results
+        System.out.println("response: " + response);
+        System.out.println("Hash: " + response.hash);
+        System.out.println("Result: " + response.result);
+        byte[] program = Base64.getDecoder().decode(response.result.toString());
+
         // create logic sig
-        // hex example 0x01, 0x20, 0x01, 0x00, 0x22 int 0 returns false, so rawTransaction will fail below
-        byte[] program = { 0x01, 0x20, 0x01, 0x00, 0x22 };
-        LogicsigSignature lsig = new LogicsigSignature(program, null);
         
         // string parameter
         // ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
@@ -83,13 +110,13 @@ public class AccountDelegation {
         // LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
 
         // integer parameter
-        // ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-        // byte[] arg1 = { 123 };
-        // teal_args.add(arg1);
-        // LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
+        ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+        byte[] arg1 = { 123 };
+        teal_args.add(arg1);
+        LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
+        //    For no args, use null as second param
+        //    LogicsigSignature lsig = new LogicsigSignature(program, null);
 
-
-        System.out.println("lsig address: " + lsig.toAddress());
         // sign the logic signature with an account sk
         src.signLogicsig(lsig);
         TransactionParametersResponse params = client.TransactionParams().execute().body();
@@ -120,17 +147,10 @@ public class AccountDelegation {
             // } catch (Exception e) {
             //     System.out.println("Exception: " + e);
             // }
-
-            Response<PostTransactionsResponse> rp = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-            String id = null;
-            if (rp.body() != null) {
-                id = rp.body().txId;
-            } else {
-                System.out.println(rp.message());
-            }
-           
+            String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
             // Wait for transaction confirmation
             waitForConfirmation(id);
+
             System.out.println("Successfully sent tx with id: " + id);
             // Read the transaction
             PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();

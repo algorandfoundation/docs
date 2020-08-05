@@ -73,6 +73,7 @@ goal app [flags]
 
 
 * [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
 * [goal app call](../call/)	 - Call an application
 * [goal app clear](../clear/)	 - Clear out an application's state in your account
 * [goal app closeout](../closeout/)	 - Close out of an application

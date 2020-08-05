@@ -34,19 +34,28 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 # Smart Contracts
 
-[Introduction](./asc1/index.md) - An overview of stateless Algorand Smart Contracts (ASC1)
+[Smart Contract Overview](./asc1/index.md) - An overview of Smart Contracts on Algorand, including Stateful and Stateless versions.
 
-[Logic Signatures](./asc1/modes.md#logic-signatures) - The authorization method for transactions that use Smart Contracts.
+[Stateful Smart Contracts](./asc1/stateful/index.md) - An overview of Stateful Smart Contracts.
 
-[Modes of Use - Contract Account](./asc1/modes.md#contract-account) - How to use a Smart Contract as its own Algorand account.
 
-[Modes of Use - Delegated Approval](./asc1/modes.md#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
+[Stateless Smart Contracts](./asc1/stateless/index.md) - An overview of Stateless Smart Contracts. 
 
-[The Smart Contract Language](./asc1/teal_overview.md) - Learn all about TEAL, the language of Smart Contracts.
+[Logic Signatures](./asc1/stateless/modes.md#logic-signatures) - The authorization method for transactions that use Smart Contracts.
 
-[A Contract Walkthrough](./asc1/goal_teal_walkthrough.md) - A simple command-line walkthrough of creating a simple smart contract.
+[Modes of Use - Contract Account](./asc1/stateless/modes.md#contract-account) - How to use a Smart Contract as its own Algorand account.
 
-[Using the SDKS](./asc1/sdks.md) - Smart Contract functionality from within the SDKs.
+[Modes of Use - Delegated Approval](./asc1/stateless/modes.md#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
+
+[Using the SDKS](./asc1/stateless/sdks.md) - Stateless Smart Contract functionality from within the SDKs.
+
+[The Smart Contract Language](./asc1/teal/index.md) - Learn all about TEAL, the language of Smart Contracts.
+
+[Contract Walkthrough](./asc1/stateless/walkthrough.md) - A simple command-line walkthrough of creating stateless smart contracts.
+
+[Debugging TEAL](./asc1/debugging.md) - Tools and methods for debugging TEAL code.
+
+
 
 
 # Searching the Blockchain (Indexer V2) 🆕

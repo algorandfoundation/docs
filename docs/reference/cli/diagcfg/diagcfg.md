@@ -4,7 +4,7 @@ title: diagcfg
 
 
 
-CLI for interacting with Algorand logging configuration.
+
 
 
 
@@ -12,26 +12,26 @@ CLI for interacting with Algorand logging configuration.
 
 
 
-diagcfg is the CLI for interacting with an Algorand node's logging behavior. It replaces the deprecated 'goal logging' command tree.
 
-
-```
-
-diagcfg [command] [flags]
-
-```
-
-
-
-### Persistent Flags
 
 
 
 ```
 
-  -h, --help                  help for diagcfg commands and flags
+diagcfg [flags]
 
-  -d, --dataDir string        Data directory for the node
+```
+
+
+
+### Options
+
+
+
+```
+
+  -h, --help   help for diagcfg
+
 ```
 
 
@@ -40,7 +40,8 @@ diagcfg [command] [flags]
 
 
 
-* [diagcfg metric](../metric/)	 - manage metric collection on node
-* [diagcfg telemetry](../telemetry/)	 - manage Algorand remote logging of node debugging info
+* [diagcfg metric](../metric/metric/)	 - Control and manage Algorand metrics
+* [diagcfg telemetry](../telemetry/telemetry/)	 - Control and manage Algorand logging
+
 
 
