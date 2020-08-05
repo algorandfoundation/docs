@@ -45,11 +45,9 @@ public class DryrunDebugging {
         // Initialize an algod client
         // sandbox
         final String ALGOD_API_ADDR = "localhost";
-        // final Integer ALGOD_PORT = 4001;
-        // final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        final Integer ALGOD_PORT = 54746;
-        final String ALGOD_API_TOKEN = "6b3a2ae3896f23be0a1f0cdd083b6d6d046fbeb594a3ce31f2963b717f74ad43";
-
+        final Integer ALGOD_PORT = 4001;
+        final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+ 
         // final String ALGOD_API_ADDR = "<algod-address>";
         // final Integer ALGOD_PORT = <algod-port>;
         // final String ALGOD_API_TOKEN = "<algod-token>";

@@ -45,10 +45,9 @@ def dryrun_debug(lstx, mysource):
 try:
 
     # Create an algod client
-    # algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    # algod_address = "http://localhost:4001"
-    algod_token = "6b3a2ae3896f23be0a1f0cdd083b6d6d046fbeb594a3ce31f2963b717f74ad43"
-    algod_address = "http://127.0.0.1:54746"
+    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    algod_address = "http://localhost:4001"
+
     # algod_token = "<algod-token>"
     # algod_address = "<algod-address:port>"
     # receiver = "<receiver-address>"

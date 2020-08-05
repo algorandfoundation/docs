@@ -4,12 +4,12 @@ const algosdk = require('algosdk');
 // const server = "<algod-address>";
 // const port = <algod-port>;
 // sandbox
-// const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-// const server = "http://localhost";
-// const port = 4001;
-const token = "6b3a2ae3896f23be0a1f0cdd083b6d6d046fbeb594a3ce31f2963b717f74ad43"
-const server = "http://127.0.0.1"
-const port = 54746;
+const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const server = "http://localhost";
+const port = 4001;
+// const token = "6b3a2ae3896f23be0a1f0cdd083b6d6d046fbeb594a3ce31f2963b717f74ad43"
+// const server = "http://127.0.0.1"
+// const port = 54746;
 // Import the filesystem module 
 const fs = require('fs'); 
 // import your private key mnemonic
@@ -84,42 +84,23 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     let closeToRemaninder = undefined;
     let note = undefined;
     let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
+    
+    // source debugging
+    dryrunResponse = await dryrunDebugging(lsig, txn, data);
+    var textedJson = JSON.stringify(dryrunResponse, undefined, 4);
+    console.log("source Response ");  
+    console.log(textedJson);
 
+    // compile debugging
+    dryrunResponse = await dryrunDebugging(lsig, txn, null);
+    var textedJson = JSON.stringify(dryrunResponse, undefined, 4);
+    console.log("compile Response ");   
+    console.log(textedJson);
 
     // Create the LogicSigTransaction with contract account LogicSig
     let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
     // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
-    // send raw LogicSigTransaction to network    
-
-    let txns;
-    let sources;
-    let kind = "compiled"
-    switch (kind) {
-        case "compiled":
-            txns = [{
-                lsig: lsig,
-                txn: txn,
-            }];
-            break
-        case "source":
-            txns = [{
-                txn: txn,
-            }];
-            sources = [new algosdk.modelsv2.DryrunSource("lsig", data.toString("utf8"), 0)]
-            break
-        default:
-            throw Error(`kind ${kind} not in (source, compiled)`)
-    }
-
-    const dr = new algosdk.modelsv2.DryrunRequest({
-        txns: txns,
-        sources: sources,
-    })
-    dryrunResponse = await algodclient.dryrun(dr).do();
-    var textedJson = JSON.stringify(dryrunResponse, undefined, 4);
-    console.log(textedJson);
-
-    console.log("Response " + dryrunResponse);
+    // send raw LogicSigTransaction to network 
 
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
     console.log("Transaction : " + tx.txId);    
@@ -129,3 +110,112 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     console.log(e.message);
     console.log(e);
 });
+async function dryrunDebugging(lsig, txn, data) {
+    if (data == null)
+    {
+        //compile
+        txns = [{
+            lsig: lsig,
+            txn: txn,
+        }];        
+    }
+    else
+    {
+        // source
+        txns = [{
+            txn: txn,
+        }];
+        sources = [new algosdk.modelsv2.DryrunSource("lsig", data.toString("utf8"), 0)];
+    }
+
+
+    const dr = new algosdk.modelsv2.DryrunRequest({
+        txns: txns,
+        sources: sources,
+    });
+    dryrunResponse = await algodclient.dryrun(dr).do();
+    return dryrunResponse;
+}
+
+// output should look like this
+// {
+//     "error": "",
+//         "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
+//             "txns": [
+//                 {
+//                     "disassembly": [
+//                         "// version 1",
+//                         "intcblock 123",
+//                         "arg_0",
+//                         "btoi",
+//                         "intc_0",
+//                         "==",
+//                         ""
+//                     ],
+//                     "logic-sig-messages": [
+//                         "PASS"
+//                     ],
+//                     "logic-sig-trace": [
+//                         {
+//                             "line": 1,
+//                             "pc": 1,
+//                             "stack": []
+//                         },
+//                         {
+//                             "line": 2,
+//                             "pc": 4,
+//                             "stack": []
+//                         },
+//                         {
+//                             "line": 3,
+//                             "pc": 5,
+//                             "stack": [
+//                                 {
+//                                     "bytes": "ew==",
+//                                     "type": 1,
+//                                     "uint": 0
+//                                 }
+//                             ]
+//                         },
+//                         {
+//                             "line": 4,
+//                             "pc": 6,
+//                             "stack": [
+//                                 {
+//                                     "bytes": "",
+//                                     "type": 2,
+//                                     "uint": 123
+//                                 }
+//                             ]
+//                         },
+//                         {
+//                             "line": 5,
+//                             "pc": 7,
+//                             "stack": [
+//                                 {
+//                                     "bytes": "",
+//                                     "type": 2,
+//                                     "uint": 123
+//                                 },
+//                                 {
+//                                     "bytes": "",
+//                                     "type": 2,
+//                                     "uint": 123
+//                                 }
+//                             ]
+//                         },
+//                         {
+//                             "line": 6,
+//                             "pc": 8,
+//                             "stack": [
+//                                 {
+//                                     "bytes": "",
+//                                     "type": 2,
+//                                     "uint": 1
+//                                 }
+//                             ]
+//                         }
+//                     ]
+//                 }
+//             ]
+// }
