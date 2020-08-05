@@ -160,7 +160,7 @@ Object Name: (GlobalStateSchema || LocalStateSchema)
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-| <a name="">Ints</a>| _optional_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global || local] key/value store. Immutable.|
+| <a name="">Ints</a>| _optional_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] key/value store. Immutable.|
 | <a name="">Byteslices</a>| _optional_| uint64| `"nbs"`| Maximum number of byte slices that may be stored in the global/local key/value store. Immutable.|
 
 
