@@ -37,7 +37,7 @@ Each program may read from and write to _local_ storage within the account objec
 
 #### External
 
-Each program may read both the _global_ and _local_ state storage locations for limited number of other _external_ programs and accounts. However, the program is prohibited from writing to an _external_ state storage location.
+Each program may read both the _global_ and _local_ state storage locations for limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract](/features/asc1/stateful/) documentation.
 
 ### State Data
 
