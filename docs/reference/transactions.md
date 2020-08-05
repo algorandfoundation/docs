@@ -135,7 +135,7 @@ Transaction Object Type: `SignedTxn`
 |<a name="sig">Sig</a>| _required, if no other sig specified_ |crypto.Signature|`"sig"`||
 |<a name="msig">Msig</a>|_required, if no other sig specified_|crypto.MultisigSig|`"msig"`||
 |<a name="lsig">LogicSig</a>|_required, if no other sig specified_|LogicSig|`"lsig"`| |
-|<a name="txn">Transaction</a>|_required_|Transaction|`"txn"`| [`PaymentTx`](#payment-transaction), [`KeyRegistrationTx`](#key-registration-transaction), [`AssetConfigTx`](#asset-configuration-transaction), [`AssetTransferTx`](#asset-transfer-transaction), or [`AssetFreezeTx`](#asset-freeze-transaction)
+|<a name="txn">Transaction</a>|_required_|Transaction|`"txn"`| [`PaymentTx`](#payment-transaction), [`KeyRegistrationTx`](#key-registration-transaction), [`AssetConfigTx`](#asset-configuration-transaction), [`AssetTransferTx`](#asset-transfer-transaction), [`AssetFreezeTx`](#asset-freeze-transaction) or ['ApplicationCallTx'](#application-call-transaction)
 
 # Application Call Transaction
 Transaction Object Type: `ApplicationCallTx`
