@@ -1,23 +1,21 @@
 title: BetaNet 🔷
 # What's New
 
-**algod v2** was deployed to BetaNet on June 2, 2020. Visit the new docs to get started:
+**New Features Available on BetaNet!** 
 
-- [Connect with the v2 Client](../../build-apps/connect.md)
-- [Your First Transaction](../../build-apps/hello_world.md)
-- [v2 SDK Migration Guide](../sdks/migration.md)
-- [v2 REST API](../rest-apis/algod/v2.md)
-- [Indexer V2 Feature Guide](../../features/indexer.md)
-- [Installing the Indexer](../../run-a-node/setup/indexer.md)
-- [Indexer REST API](../rest-apis/indexer.md)
+Visit the new docs to get started:
+
+- [Stateful Smart Contracts](../../../features/asc1/stateful/)
+- [Rekeying Support](../../../features/accounts/rekey/)
+- [Fast Catchup](../../../run-a-node/setup/install/#sync-node-network-using-fast-catchup)
 
 🔷 = BetaNet availability only
 
 # Version
-`v2.0.15.beta`
+`v2.1.0.beta`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.0.15-beta
+https://github.com/algorand/go-algorand/releases/tag/v2.1.0-beta
 
 # Genesis ID
 `betanet-v1.0`

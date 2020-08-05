@@ -4,7 +4,7 @@ title: goal wallet new
 
 
 
-Create a new wallet.
+Create a new wallet
 
 
 
@@ -12,7 +12,7 @@ Create a new wallet.
 
 
 
-Create a new wallet.
+Create a new wallet
 
 
 
@@ -56,7 +56,7 @@ goal wallet new [wallet name] [flags]
 
 
 
-* [goal wallet](../../wallet/wallet/)	 - Manage wallets: encrypted collections of Algorand account keys.
+* [goal wallet](../../wallet/wallet/)	 - Manage wallets: encrypted collections of Algorand account keys
 
 
 

@@ -104,7 +104,7 @@ This is an example of an **online** key registration transaction.
   }
 }
 ```
-What distinguishes this as a key registration transaction is `"type": "keyreg"` and what distinguishes it as an _online_ key registration is the existence of the participation key-related fields, namely `"votekey"`, `"selkey"`, `"votekd"`, `"votefst"`, and `"votelst"`. The values for these fields are obtained by dumping the participation key info on the node where the participation key lives. The [sender](../../reference/transactions.md#sender) (`"EW64GC..."`) will pay a fee of `2000` microAlgos and its account state will change to `online` after this transaction is confirmed by the network. The transaction is valid between rounds 6002000 annd 6003000 on [TestNet](../../reference/algorand-networks/testnet.md).
+What distinguishes this as a key registration transaction is `"type": "keyreg"` and what distinguishes it as an _online_ key registration is the existence of the participation key-related fields, namely `"votekey"`, `"selkey"`, `"votekd"`, `"votefst"`, and `"votelst"`. The values for these fields are obtained by dumping the participation key info on the node where the participation key lives. The [sender](../../reference/transactions.md#sender) (`"EW64GC..."`) will pay a fee of `2000` microAlgos and its account state will change to `online` after this transaction is confirmed by the network. The transaction is valid between rounds 6002000 and 6003000 on [TestNet](../../reference/algorand-networks/testnet.md).
 
 **Related How-To**
 
@@ -282,7 +282,7 @@ Here is an example of an asset transfer transaction.
   }
 }
 ```
-An asset transfer transaction assumes that the asset receiver has already [opted-in](#opt-in-to-an-asset). The account represented by address `"EW64GC6..."` sends 1 million base units (or 10,000.00 units) of asset `168103` between rounds 7631196 annd 7632196 on TestNet. `"EW64GC6..."` pays a fee of 3000 microAlgos.
+An asset transfer transaction assumes that the asset receiver has already [opted-in](#opt-in-to-an-asset). The account represented by address `"EW64GC6..."` sends 1 million base units (or 10,000.00 units) of asset `168103` between rounds 7631196 and 7632196 on TestNet. `"EW64GC6..."` pays a fee of 3000 microAlgos.
 
 !!! tip
 	If you are displaying asset amounts to users, be sure to include the asset's `"decimal"` configuration for easier readability. 

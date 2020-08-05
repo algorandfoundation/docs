@@ -4,7 +4,7 @@ title: goal network restart
 
 
 
-Restart a deployed private network.
+Restart a deployed private network
 
 
 
@@ -12,7 +12,7 @@ Restart a deployed private network.
 
 
 
-Restart a deployed private network.
+Restart a deployed private network
 
 
 

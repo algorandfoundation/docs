@@ -13,17 +13,25 @@ INDEXER_SRC=$2
 # CLI KMD
 ./reformat.py -doc-dir ../docs/reference/cli/kmd/ -cmd ~/go/bin/kmd
 
+# CLI DIAGCFG
+./reformat.py -doc-dir ../docs/reference/cli/diagcfg/ -cmd ~/go/bin/diagcfg
+
 # REST KMD
 ./convert_swagger.py -target ../docs/reference/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
 
 # REST ALGOD V1
-./convert_swagger.py -target ../docs/reference/rest-apis/algod/v1.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/swagger.json -processors algod_specfile_processors
+#./convert_swagger.py -target ../docs/reference/rest-apis/algod/v1.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/swagger.json -processors algod_specfile_processors
 
 # REST ALGOD V2 (from algod.oas2.json)
 ./convert_swagger.py -target ../docs/reference/rest-apis/algod/v2.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/algod.oas2.json
 
 # REST INDEXER
 ./convert_swagger.py -target ../docs/reference/rest-apis/indexer.md -specfile $INDEXER_SRC/api/indexer.oas2.json 
+
+# TEAL
+echo -e "title: Specification\n$(cat $GO_ALGORAND_SRC/data/transactions/logic/TEAL_opcodes.md)" > $GO_ALGORAND_SRC/data/transactions/logic/TEAL_opcodes.md
+cp $GO_ALGORAND_SRC/data/transactions/logic/TEAL_opcodes.md ../docs/reference/teal/opcodes.md
+cp $GO_ALGORAND_SRC/data/transactions/logic/README.md ../docs/reference/teal/specification.md
 
 # CLEANUP
 rm swagger2markup-cli.jar

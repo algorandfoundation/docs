@@ -4,7 +4,7 @@ title: goal network status
 
 
 
-Prints status for all nodes in a deployed private network.
+Prints status for all nodes in a deployed private network
 
 
 
@@ -12,7 +12,7 @@ Prints status for all nodes in a deployed private network.
 
 
 
-Prints status for all nodes in a deployed private network.
+Prints status for all nodes in a deployed private network
 
 
 

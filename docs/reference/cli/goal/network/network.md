@@ -60,13 +60,13 @@ goal network [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
 * [goal network create](../create/)	 - Create a private named network from a template
 * [goal network delete](../delete/)	 - Stops and Deletes a deployed private network
-* [goal network restart](../restart/)	 - Restart a deployed private network.
+* [goal network restart](../restart/)	 - Restart a deployed private network
 * [goal network start](../start/)	 - Start a deployed private network
-* [goal network status](../status/)	 - Prints status for all nodes in a deployed private network.
-* [goal network stop](../stop/)	 - Stop a deployed private network.
+* [goal network status](../status/)	 - Prints status for all nodes in a deployed private network
+* [goal network stop](../stop/)	 - Stop a deployed private network
 
 
 

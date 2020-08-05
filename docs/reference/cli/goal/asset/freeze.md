@@ -30,39 +30,43 @@ goal asset freeze [flags]
 
 ```
 
-      --account string     Account address to freeze/unfreeze
+      --account string              Account address to freeze/unfreeze
 
-      --asset string       Unit name of the asset being frozen
+      --asset string                Unit name of the asset being frozen
 
-      --assetid uint       ID of the asset being frozen
+      --assetid uint                ID of the asset being frozen
 
-      --creator string     Account address for asset creator
+      --creator string              Account address for asset creator
 
-      --fee uint           The transaction fee (automatically determined by default), in microAlgos
+      --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
-      --firstvalid uint    The first round where the transaction may be committed to the ledger
+      --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
-      --freeze             Freeze or unfreeze
+      --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
-      --freezer string     Address to issue a freeze transaction from
+      --firstvalid uint             The first round where the transaction may be committed to the ledger
 
-  -h, --help               help for freeze
+      --freeze                      Freeze or unfreeze
 
-      --lastvalid uint     The last round where the transaction may be committed to the ledger
+      --freezer string              Address to issue a freeze transaction from
 
-  -x, --lease string       Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
+  -h, --help                        help for freeze
 
-  -N, --no-wait            Don't wait for transaction to commit
+      --lastvalid uint              The last round where the transaction may be committed to the ledger
 
-  -n, --note string        Note text (ignored if --noteb64 used also)
+  -x, --lease string                Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
 
-      --noteb64 string     Note (URL-base64 encoded)
+  -N, --no-wait                     Don't wait for transaction to commit
 
-  -o, --out string         Write transaction to this file
+  -n, --note string                 Note text (ignored if --noteb64 used also)
 
-  -s, --sign               Use with -o to indicate that the dumped transaction should be signed
+      --noteb64 string              Note (URL-base64 encoded)
 
-      --validrounds uint   The number of rounds for which the transaction will be valid
+  -o, --out string                  Write transaction to this file
+
+  -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
+
+      --validrounds uint            The number of rounds for which the transaction will be valid
 
 ```
 

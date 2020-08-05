@@ -30,35 +30,39 @@ goal asset destroy [flags]
 
 ```
 
-      --asset string       Unit name of asset to destroy
+      --asset string                Unit name of asset to destroy
 
-      --assetid uint       Asset ID to destroy
+      --assetid uint                Asset ID to destroy
 
-      --creator string     Account address for asset to destroy
+      --creator string              Account address for asset to destroy
 
-      --fee uint           The transaction fee (automatically determined by default), in microAlgos
+      --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
-      --firstvalid uint    The first round where the transaction may be committed to the ledger
+      --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
-  -h, --help               help for destroy
+      --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
-      --lastvalid uint     The last round where the transaction may be committed to the ledger
+      --firstvalid uint             The first round where the transaction may be committed to the ledger
 
-  -x, --lease string       Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
+  -h, --help                        help for destroy
 
-      --manager string     Manager account to issue the destroy transaction (defaults to creator)
+      --lastvalid uint              The last round where the transaction may be committed to the ledger
 
-  -N, --no-wait            Don't wait for transaction to commit
+  -x, --lease string                Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
 
-  -n, --note string        Note text (ignored if --noteb64 used also)
+      --manager string              Manager account to issue the destroy transaction (defaults to creator)
 
-      --noteb64 string     Note (URL-base64 encoded)
+  -N, --no-wait                     Don't wait for transaction to commit
 
-  -o, --out string         Write transaction to this file
+  -n, --note string                 Note text (ignored if --noteb64 used also)
 
-  -s, --sign               Use with -o to indicate that the dumped transaction should be signed
+      --noteb64 string              Note (URL-base64 encoded)
 
-      --validrounds uint   The number of rounds for which the transaction will be valid
+  -o, --out string                  Write transaction to this file
+
+  -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
+
+      --validrounds uint            The number of rounds for which the transaction will be valid
 
 ```
 

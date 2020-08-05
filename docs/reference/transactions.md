@@ -8,16 +8,17 @@ These fields are common to all transactions.
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that pays the fee and amount.|
 |<a name="fee">Fee</a>| _required_| uint64|`"fee"`|Paid by the sender to the FeeSink to prevent denial-of-service. The minimum fee on Algorand is currently 1000 microAlgos.|
 |<a name="firstvalid">FirstValid</a>| _required_ | uint64 | `"fv"`|The first round for when the transaction is valid. If the transaction is sent prior to this round it will be rejected by the network.|
-|<a name="lastvalid">LastValid</a>| _required_ | uint64 | `"lv"`|The ending round for which the transaction is valid. After this round, the transaction will be rejected by the network.|
-|<a name="note">Note</a>|_optional_|[]byte|`"note"`| Any data up to 1000 bytes. |
-|<a name="genesisid">GenesisID</a>|_optional_|string|`"gen"`| The human-readable string that identifies the network for the transaction. The genesis ID is found in the genesis block. See the genesis ID for [MainNet](./algorand-networks/mainnet.md#genesis-id), [TestNet](./algorand-networks/testnet.md#genesis_id), and [BetaNet](./algorand-networks/betanet.md#genesis-id). |
 |<a name="genesishash">GenesisHash</a>|_required_|[32]byte|`"gh"`|The hash of the genesis block of the network for which the transaction is valid. See the genesis hash for [MainNet](./algorand-networks/mainnet.md#genesis-hash), [TestNet](./algorand-networks/testnet.md#genesis-hash), and [BetaNet](./algorand-networks/betanet.md#genesis-hash).
+|<a name="lastvalid">LastValid</a>| _required_ | uint64 | `"lv"`|The ending round for which the transaction is valid. After this round, the transaction will be rejected by the network.|
+|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that pays the fee and amount.|
+|<a name="type">TxType</a>|_required_|string|`"type"`| Specifies the type of transaction. This value is automatically generated using any of the developer tools.|
+|<a name="genesisid">GenesisID</a>|_optional_|string|`"gen"`| The human-readable string that identifies the network for the transaction. The genesis ID is found in the genesis block. See the genesis ID for [MainNet](./algorand-networks/mainnet.md#genesis-id), [TestNet](./algorand-networks/testnet.md#genesis_id), and [BetaNet](./algorand-networks/betanet.md#genesis-id). |
 <a name="group">Group</a>|_optional_|[32]byte|`"grp"`|The group specifies that the transaction is part of a group and, if so, specifies the hash of the transaction group. Assign a group ID to a transaction through the workflow described in the [Atomic Transfers Guide](../features/atomic_transfers.md).|
 <a name="lease">Lease</a>|_optional_|[32]byte|`"lx"`|A lease enforces mutual exclusion of transactions. If this field is nonzero, then once the transaction is confirmed, it acquires the lease identified by the (Sender, Lease) pair of the transaction until the LastValid round passes. While this transaction possesses the lease, no other transaction specifying this lease can be confirmed.  A lease is often used in the context of Algorand Smart Contracts to prevent replay attacks. Read more about [Algorand Smart Contracts](../features/asc1/index.md) and see the Delegate [Key Registration TEAL template](./teal/templates/delegate_keyreg.md) for an example implementation of leases. Leases can also be used to safeguard against unintended duplicate spends. For example, if I send a transaction to the network and later realize my fee was too low, I could send another transaction with a higher fee, but the same lease value. This would ensure that only one of those transactions ends up getting confirmed during the validity period. |
-|<a name="type">TxType</a>|_required_|string|`"type"`| Specifies the type of transaction. This value is automatically generated using any of the developer tools.
+|<a name="note">Note</a>|_optional_|[]byte|`"note"`| Any data up to 1000 bytes. |
+|<a name="rekeyto">RekeyTo</a>|_optional_|Address|`"rekey"`| Specifies the authorized address. This address will be used to authorize all future transactions. Learn more about [Rekeying](/features/account/rekey/) accounts. |
 
 # Payment Transaction
 Transaction Object Type: `PaymentTx`
@@ -57,7 +58,7 @@ This is used to create, configure and destroy an asset depending on which fields
 |[AssetParams](#asset-parameters) |_required, except on destroy_|[AssetParams](#asset-parameters)|`"apar"`| See AssetParams table for all available fields.|
 
 ## Asset Parameters
-Object Name: (`AssetParams`)
+Object Name: `AssetParams`
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
@@ -126,6 +127,34 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="freezeasset">FreezeAsset</a>|_required_|uint64|`"faid"`| The asset ID being frozen or unfrozen.|
 |<a name="assetfrozen">AssetFrozen</a>|_required_|bool|`"afrz"`| True to freeze the asset.|
 
+# Application Call Transaction
+Transaction Object Type: `ApplicationCallTx`
+
+Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is `"appl"`.
+
+|Field|Required|Type|codec| Description|
+|---|---|---|---|---|
+| <a name="">Application ID</a>| _required_| uint64| `"apid"`| ID of the application being configured or empty if creating.|
+| <a name="">OnComplete</a>| _required_| uint64| `"apan"`| Defines what additional actions occur with the transaction. See the [OnComplete](http://127.0.0.1:8000/reference/teal/specification/#oncomplete) section of the TEAL spec for details.|
+| <a name="">Accounts</a>| _optional_| Address| `"apat"`| List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|
+| <a name="">Approval Program</a>| _optional_| Address| `"apap"`| Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.|
+| <a name="">App Arguments</a>| _optional_| byte[]| `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|
+| <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
+| <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
+| <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
+| <a name="">GlobalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
+| <a name="">LocalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apls"`| Holds the maximum number of local state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
+
+## Storage State Schema
+Object Name: `StateSchema`
+
+The `StateSchema` object is only required for the create application call transaction. The `StateSchema` object must be fully populated for both the `GlobalStateSchema` and `LocalStateSchema` objects.  
+
+|Field|Required|Type|codec| Description|
+|---|---|---|---|---|
+| <a name="">Number Ints</a>| _required_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] application key/value store. Immutable.|
+| <a name="">Number Byteslices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
+
 # Signed Transaction
 Transaction Object Type: `SignedTxn`
 
@@ -134,5 +163,4 @@ Transaction Object Type: `SignedTxn`
 |<a name="sig">Sig</a>| _required, if no other sig specified_ |crypto.Signature|`"sig"`||
 |<a name="msig">Msig</a>|_required, if no other sig specified_|crypto.MultisigSig|`"msig"`||
 |<a name="lsig">LogicSig</a>|_required, if no other sig specified_|LogicSig|`"lsig"`| |
-|<a name="txn">Transaction</a>|_required_|Transaction|`"txn"`| [`PaymentTx`](#payment-transaction), [`KeyRegistrationTx`](#key-registration-transaction), [`AssetConfigTx`](#asset-configuration-transaction), [`AssetTransferTx`](#asset-transfer-transaction), or [`AssetFreezeTx`](#asset-freeze-transaction)
-
+|<a name="txn">Transaction</a>|_required_|Transaction|`"txn"`| [`PaymentTx`](#payment-transaction), [`KeyRegistrationTx`](#key-registration-transaction), [`AssetConfigTx`](#asset-configuration-transaction), [`AssetTransferTx`](#asset-transfer-transaction), [`AssetFreezeTx`](#asset-freeze-transaction) or [`ApplicationCallTx`](#application-call-transaction)

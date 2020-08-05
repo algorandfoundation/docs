@@ -54,8 +54,8 @@ goal logging [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
-* [goal logging disable](../disable/)	 - Disable Algorand remote logging.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
+* [goal logging disable](../disable/)	 - Disable Algorand remote logging
 * [goal logging enable](../enable/)	 - Enable Algorand remote logging
 * [goal logging send](../send/)	 - Upload logs and debugging information for analysis
 

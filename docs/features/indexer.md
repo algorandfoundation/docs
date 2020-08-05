@@ -1,4 +1,4 @@
-title: Searching the Blockchain (Indexer V2) 🆕
+title: Searching the Blockchain (Indexer V2)
 
 This guide explains how to search the Algorand Blockchain using the V2 Indexer. This Indexer is no longer part of the Algorand node and requires a separate binary download. See the [Indexer Install Guide](../run-a-node/setup/indexer.md) for instructions on installing and configuring the new Indexer.
 
@@ -10,7 +10,7 @@ The primary purpose of this Indexer is to provide a REST API interface of API ca
 !!! info
     The Indexer DB takes up a fraction of disk space compared to the actual blockchain data with archival mode on. For example, 100 GB of blockchain data takes about 1 GB of data in the Indexer DB.
 
-The Indexer provides a set of REST API calls for searching blockchain Transactions, Accounts, Assets and Blocks. Each of these calls also provides several filter parameters to support refining searches. The latest Algorand native SDKs (Python, JavaScript, Go, and Java) provide similar functionality. Thes REST calls are based on the Open API specification and are described in the REST SDK reference documentation. 
+The Indexer provides a set of REST API calls for searching blockchain Transactions, Accounts, Assets and Blocks. Each of these calls also provides several filter parameters to support refining searches. The latest Algorand native SDKs (Python, JavaScript, Go, and Java) provide similar functionality. These REST calls are based on the Open API specification and are described in the REST SDK reference documentation. 
 
 !!! info
     Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/indexer](https://github.com/algorand/docs/tree/master/examples/indexer) and for [download](https://github.com/algorand/docs/blob/master/examples/indexer/indexer.zip?raw=true) (.zip).

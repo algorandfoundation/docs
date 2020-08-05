@@ -1053,6 +1053,11 @@ APIV1DELETEMultisigRequest is the request for `DELETE /v1/multisig`
 |**wallet_password**  <br>*optional*|string|
 
 
+<a name="digest"></a>
+### Digest
+*Type* : < integer (uint8) > array
+
+
 <a name="exportkeyrequest"></a>
 ### ExportKeyRequest
 APIV1POSTKeyExportRequest is the request for `POST /v1/key/export`
@@ -1242,6 +1247,7 @@ APIV1POSTMultisigTransactionSignRequest is the request for `POST /v1/multisig/si
 |---|---|---|
 |**partial_multisig**  <br>*optional*||[MultisigSig](#multisigsig)|
 |**public_key**  <br>*optional*||[PublicKey](#publickey)|
+|**signer**  <br>*optional*||[Digest](#digest)|
 |**transaction**  <br>*optional*|**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**wallet_handle_token**  <br>*optional*||string|
 |**wallet_password**  <br>*optional*||string|

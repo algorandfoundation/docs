@@ -4,7 +4,7 @@ title: goal completion
 
 
 
-Shell completion helper.
+Shell completion helper
 
 
 
@@ -12,7 +12,7 @@ Shell completion helper.
 
 
 
-Shell completion helper.
+Shell completion helper
 
 
 
@@ -54,9 +54,9 @@ goal completion [flags]
 
 
 
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
-* [goal completion bash](../bash/)	 - Generate bash completion commands.
-* [goal completion zsh](../zsh/)	 - Generate zsh completion commands.
+* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
+* [goal completion bash](../bash/)	 - Generate bash completion commands
+* [goal completion zsh](../zsh/)	 - Generate zsh completion commands
 
 
 
