@@ -152,15 +152,17 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
-| <a name="">Application Global Storage</a>| _optional_| GlobalStateSchema| `"apgs"`| See <a href="#application-storage">Application Storage</a> for all available fields.|
-| <a name="">Application Local Storage</a>| _optional_| LocalStateSchema| `"apls"`| See <a href="#application-storage">Application Storage</a> for all available fields.|
+| <a name="">Application Global Storage</a>| _optional_, see <a href=#application-storage>Application Storage</a>| GlobalStateSchema| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#application-storage>StateSchema</a> object.|
+| <a name="">Application Local Storage</a>| _optional_, see <a href=#application-storage>Application Storage</a>| LocalStateSchema| `"apls"`| Holds the maximum number of local state values defined within a <a href=#application-storage>StateSchema</a> object.|
 
 ## Application Storage
-Object Name: (GlobalStateSchema || LocalStateSchema)
+Object Name: (StateSchema)
+
+The _StateSchema_ object is only required for the `create` application call transaction. The _StateSchema_ object must be fully populated for both the _GlobalStateSchema_ and _LocalStateSchema_ objects.  
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-| <a name="">Ints</a>| _optional_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] key/value store. Immutable.|
-| <a name="">Byteslices</a>| _optional_| uint64| `"nbs"`| Maximum number of byte slices that may be stored in the global/local key/value store. Immutable.|
+| <a name="">Number Ints</a>| _required_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] application key/value store. Immutable.|
+| <a name="">Number Byteslices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
 
 
