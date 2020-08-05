@@ -1,68 +1,12 @@
 title: Smart Contract Debugging
 
-# Writing Logic Signature Transaction for Debugging
-The SDKs and `goal` command-line tool provide functionality to do a test run of a TEAL program. The `goal` command-line tool can be used with [stateless smart contracts.](stateless/walkthrough.md) 
-
-TEAL programs can be written with any editor and are compiled using the goal command-line tool or [SDK](stateless/sdks.md). They can also be built using python with the [PyTeal](teal/pyteal.md) Library. 
-
-The command-line tool provides the ability to use these compiled programs within transactions. The `goal clerk dryrun` command is described in the [goal TEAL Walkthrough](stateless/walkthrough.md) documentation. From the SDK a logic signature transaction can be written to a file to be used with the `goal clerk dryrun` command. The following code details how this is done. The goal tab illustrates run the `dryrun` on the generated file.
-
-
-```javascript tab="JavaScript"
-    let rawSignedTxn = algosdk.signLogicSigTransaction(txn, lsig);
-    fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
-```
-
-```python tab="Python"
-    logicsig_txn = transaction.LogicSigTransaction(txn, lsig)
-    transaction.write_to_file([logicsig_txn], "simple.stxn")
-```
-
-```java tab="Java"
-    SignedTransaction stx = Account.signLogicsigTransaction(lsig, tx);
-    byte[] outBytes = Encoder.encodeToMsgPack(stx);
-    try {
-        String FILEPATH = "./simple.stxn";
-        File file = new File(FILEPATH);
-        OutputStream os = new FileOutputStream(file);
-        os.write(outBytes);
-        os.close();
-    }
-    catch (Exception e) {
-        System.out.println("Exception: " + e);
-    }    
-```
-
-```go tab="Go"
-	txid, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
-	if err != nil {
-        ...
-    }
-    f, err := os.Create("simple.stxn")
-    if err != nil {
-        ...
-    }
-    defer f.Close()
-    if _, err := f.Write(stx); err != nil {
-        ...
-    }
-    if err := f.Sync(); err != nil {
-        ...
-    }    
-```
-
-```text tab="goal"
-$ goal clerk dryrun -t simple.stxn
-tx[0] cost=2 trace:
-  1 intcblock => <empty stack>
-  4 intc_0 => 0 0x0
-
-REJECT
-```
-
-
 # Using Dryrun for Debugging a TEAL Program
-When using the `goal` command-line tool, the `-o` option is used to write a signed transaction out to a file and the transaction will not be submitted to the network. This allows testing of the TEAL logic with the `goal clerk dryrun` command which shows how the TEAL is processed and approved or rejected.
+
+The SDKs and `goal` command-line tool provide the functionality to do a test run of a TEAL program. 
+
+TEAL programs can be written with any editor and are compiled using the `goal` command-line tool or [SDK](stateless/sdks.md). They can also be built using python with the [PyTeal](teal/pyteal.md) Library. The SDK and command-line tool provide the ability to use these compiled programs within transactions. 
+
+When using the `goal` command-line tool, the `-o` option is used to write a signed transaction out to a file and the transaction will not be submitted to the network. This allows testing of the TEAL logic with the `goal clerk dryrun` command which shows how the TEAL is processed, and approved or rejected.
 
 SDK supports debugging with dryrun using source or the compiled TEAL program. The dryrun response includes disassembly, logic sig messages w PASS/REJECT, a sig trace, app call messages and app call trace.  
 
