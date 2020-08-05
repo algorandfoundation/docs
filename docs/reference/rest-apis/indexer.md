@@ -1,4 +1,4 @@
-title: indexer 🆕
+title: indexer
 ---
 
 <a name="paths"></a>

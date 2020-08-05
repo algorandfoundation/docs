@@ -17,7 +17,7 @@ INDEXER_SRC=$2
 ./convert_swagger.py -target ../docs/reference/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
 
 # REST ALGOD V1
-./convert_swagger.py -target ../docs/reference/rest-apis/algod/v1.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/swagger.json -processors algod_specfile_processors
+#./convert_swagger.py -target ../docs/reference/rest-apis/algod/v1.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/swagger.json -processors algod_specfile_processors
 
 # REST ALGOD V2 (from algod.oas2.json)
 ./convert_swagger.py -target ../docs/reference/rest-apis/algod/v2.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/algod.oas2.json
