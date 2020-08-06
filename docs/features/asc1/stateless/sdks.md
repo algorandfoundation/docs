@@ -11,6 +11,30 @@ Each SDK's install process is discussed in the [SDK Reference](../../../referenc
 # Compiling TEAL program from SDKs
 Before a TEAL program can be used, it must be compiled. SDKs provide this capability. If using the `goal` tool see the [goal TEAL walkthrough](walkthrough.md)) documentation for this process.  The examples in this section read a file called `sample.teal` which contains one line of TEAL code, `int 0` . This will always return `false`. So, any transactions that use this TEAL file will fail. 
 
+
+To use the SDK compile command, the [config settings](https://developer.algorand.org/docs/reference/node/config/) may need to be modified to include a value of for `EnableDeveloperAPI` as `true`. The default is false. If using the [sandbox](https://developer.algorand.org/docs/build-apps/setup/#2-use-docker-sandbox), the following modification may be already made in `config.json` in the data directory. If [running your own node](https://developer.algorand.org/docs/build-apps/setup/#3-run-your-own-node), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
+
+```
+$ goal node stop -d data
+$ cd data
+$ cp config.json.example config.json
+```
+
+Then edit the config.json file and replace `false` on the line
+
+`"EnableDeveloperAPI": false,`
+
+with `true`
+
+`"EnableDeveloperAPI": true,`
+
+Restart the node.
+
+```
+$ goal node start -d data
+$ goal node status -d data
+```
+
 `sample.teal`
 ```
 // This code is meant for learning purposes only
