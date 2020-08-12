@@ -76,13 +76,13 @@ async function submitGroupTransactions(){
         let txgroup = algosdk.assignGroupID(txns);
 
         // Sign each transaction in the group 
-        signedTx1 = transaction1.signTxn( myAccountA.sk )
+        signedTx1 = transaction2.signTxn( myAccountA.sk )
         signedTx2 = transaction1.signTxn( myAccountB.sk )
     
         // Combine the signed transactions
         let signed = []
-        signed.push( signedTx1 )
-        signed.push( signedTx2 )
+        let signed.push( signedTx1 )
+        let signed.push( signedTx2 )
 
         let tx = (await algodClient.sendRawTransaction(signed).do());
         console.log("Transaction : " + tx.txId);
