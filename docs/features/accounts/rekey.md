@@ -24,7 +24,7 @@ Conceptually illustrated in the image below, a "standard" account uses its _priv
 Use the following code sample to view a _standard_ account on BetaNet:
 
 ```bash tab="goal"
-$ goal account dump --account NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU
+$ goal account dump --address NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU
 ```
 
 Response:
@@ -153,7 +153,7 @@ ADDR_B="LOWE5DE25WOXZB643JSNWPE6MGIJNBLRPU2RBAVUNI4ZU22E3N7PHYYHSY"
 View the initial _authorized address_ for Account A using `goal`:
 
 ```
-$ goal account dump --account $ADDR_A
+$ goal account dump --address $ADDR_A
 ```
 
 Response:
@@ -176,7 +176,7 @@ Account A intends to _rekey_ its _authorized address_ to `$ADDR_B` which is the 
 $ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_B
 ```
 
-Results of `goal account dump --account $ADDR_A` will now display:
+Results of `goal account dump --address $ADDR_A` will now display:
 
 ```json hl_lines="5"
 {
@@ -267,7 +267,7 @@ $ goal clerk sign --signer $ADDR_B --infile rekey-multisig.txn --outfile rekey-m
 
 ```bash tab="goal"
 $ goal clerk rawsend --filename rekey-multisig.stxn
-$ goal account dump --account $ADDR_A
+$ goal account dump --address $ADDR_A
 ```
 
 The _rekey transaction_ will confirm, resulting in the "spend" field update within the _account object_:
