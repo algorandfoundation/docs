@@ -82,7 +82,7 @@ To read from local or global state TEAL provides the `app_local_get`, `app_globa
 
 ```
 byte “MyGlobalKey”
-App_local_get
+app_global_get
 ```
 
 The following TEAL code reads the local state of the sender account for the specific call to the current smart contract.
