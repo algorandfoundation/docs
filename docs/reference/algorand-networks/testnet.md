@@ -12,10 +12,10 @@ title: TestNet
 - [Indexer REST API](../rest-apis/indexer.md)
   
 # Version
-`v2.0.8.stable`
+`v2.0.9.stable`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.0.8-stable
+https://github.com/algorand/go-algorand/releases/tag/v2.0.9-stable
 
 # Genesis ID
 `testnet-v1.0`

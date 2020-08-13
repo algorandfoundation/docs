@@ -82,7 +82,7 @@ To read from local or global state TEAL provides the `app_local_get`, `app_globa
 
 ```
 byte “MyGlobalKey”
-App_local_get
+app_global_get
 ```
 
 The following TEAL code reads the local state of the sender account for the specific call to the current smart contract.
@@ -382,7 +382,7 @@ int 1
 ==
 ```
 
-In the above example, the second transaction’s type is checked, where the `int 1` references a payment transaction. See the [opcodes](../../../reference/teal/opcodes.md)) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. If the TEAL program fails all transactions in the group will fail.
+In the above example, the second transaction’s type is checked, where the `int 1` references a payment transaction. See the [opcodes](../../../reference/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. If the TEAL program fails all transactions in the group will fail.
 
 # Using Assets in Smart Contracts
 Stateful contract applications can work in conjunction with Algorand Assets. In addition to normal asset transaction properties, such as asset amount, sender, and receiver, TEAL provides an opcode to interrogate an account’s asset balance and whether the asset is frozen. This opcode `asset_holding_get` can be used to retrieve an asset balance or check whether the asset is frozen for any account in the transaction accounts array.
