@@ -1811,6 +1811,372 @@ Results
 }
 ```
 
+# Search Applications 
+The `/applications` REST method is provided to allow searching all applications on the blockchain.
+
+This API call contains parameters to refine the search for specific values. It can retrieve specific applications or all applications from the blockchain and returns data associated with smart contract applications. The call supports searching based on a specific application id and provides limit and next parameters. 
+
+Parameters described below:
+
+| Parameter  | Description Link  |
+| ------------- | ------------- |
+| application-id | Search Applications for a Specific Application ID |
+| limit | Search Applications for a Maximum number of results to return. |
+| next | Search Applications for the next page of results. Use the next token provided by the previous results. |
+
+
+```javascript tab="JavaScript"
+(async () => {
+    let response = await indexerClient.searchForApplications().do();
+    console.log("Response: " + JSON.stringify(response, undefined, 2));
+})().catch(e => {
+    console.log(e.message);
+    console.trace();
+});
+// Response should look similar to this...
+//
+// Response: {
+//     "applications": [
+//         {
+//             "id": 20,
+//             "params": {
+//                 "approval-program": "ASABASI=",
+//                 "clear-state-program": "ASABASI=",
+//                 "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+//                 "global-state-schema": {
+//                     "num-byte-slice": 0,
+//                     "num-uint": 0
+//                 },
+//                 "local-state-schema": {
+//                     "num-byte-slice": 0,
+//                     "num-uint": 0
+//                 }
+//             }
+//         },
+//         {
+//             "id": 22,
+//             "params": {
+//                 "approval-program": null,
+//                 "clear-state-program": null,
+//                 "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+//                 "global-state-schema": {
+//                     "num-byte-slice": 0,
+//                     "num-uint": 0
+//                 },
+//                 "local-state-schema": {
+//                     "num-byte-slice": 0,
+//                     "num-uint": 0
+//                 }
+//             }
+//         },
+//         ...
+```
+
+```python tab="Python"
+response = myindexer.search_applications()
+
+print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
+
+# response should look similar to this...
+# Response Info: {
+# "applications": [
+#     {
+#         "id": 20,
+#         "params": {
+#             "approval-program": "ASABASI=",
+#             "clear-state-program": "ASABASI=",
+#             "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+#             "global-state-schema": {
+#                 "num-byte-slice": 0,
+#                 "num-uint": 0
+#             },
+#             "local-state-schema": {
+#                 "num-byte-slice": 0,
+#                 "num-uint": 0
+#             }
+#         }
+#     },
+#     {
+#         "id": 22,
+#         "params": {
+#             "approval-program": null,
+#             "clear-state-program": null,
+#             "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+#             "global-state-schema": {
+#                 "num-byte-slice": 0,
+#                 "num-uint": 0
+#             },
+#             "local-state-schema": {
+#                 "num-byte-slice": 0,
+#                 "num-uint": 0
+#             }
+#         }
+#     },
+#     ...
+```
+
+```java tab="Java"
+public static void main(String args[]) throws Exception {
+    SearchApplication ex = new SearchApplication();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+
+    String response = indexerClientInstance.searchForApplications().execute().toString();
+    JSONObject jsonObj = new JSONObject(response.toString());
+    System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
+}
+// response information should look similar to this...
+//  Response Info:
+//  {
+//   "next-token": "142",
+//   "current-round": 377,
+//   "applications": [
+//     {
+//       "id": 20,
+//       "params": {
+//         "clear-state-program": "ASABASI=",
+//         "global-state": [],
+//         "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+//         "local-state-schema": {
+//           "num-uint": 0,
+//           "num-byte-slice": 0
+//         },
+//         "approval-program": "ASABASI=",
+//         "global-state-schema": {
+//           "num-uint": 0,
+//           "num-byte-slice": 0
+//         }
+//       }
+//     },
+//     {
+//       "id": 22,
+//       "params": {
+//         "global-state": [],
+//         "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+//         "local-state-schema": {
+//           "num-uint": 0,
+//           "num-byte-slice": 0
+//         },
+//         "global-state-schema": {
+//           "num-uint": 0,
+//           "num-byte-slice": 0
+//         }
+//       }
+//     },
+//     ...
+```
+
+```go tab="Go"
+	// Search applications
+	result, err := indexerClient.SearchForApplications().Do(context.Background())
+
+	// Print the results
+	JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+// results should look similar to this...
+// {
+// 	"applications": [
+// 		{
+// 			"id": 20,
+// 			"params": {
+// 				"approval-program": "ASABASI=",
+// 				"clear-state-program": "ASABASI=",
+// 				"creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+// 				"global-state-schema": {},
+// 				"local-state-schema": {}
+// 			}
+// 		},
+// 		{
+// 			"id": 22,
+// 			"params": {
+// 				"creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+// 				"global-state-schema": {},
+// 				"local-state-schema": {}
+// 			}
+// 		},    
+```
+
+```bash tab="cURL"
+$ $ curl "localhost:8980/v2/applications" | json_pp
+// Results
+   "applications" : [
+      {
+         "id" : 20,
+         "params" : {
+            "clear-state-program" : "ASABASI=",
+            "approval-program" : "ASABASI=",
+            "creator" : "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+            "local-state-schema" : {
+               "num-uint" : 0,
+               "num-byte-slice" : 0
+            },
+            "global-state-schema" : {
+               "num-uint" : 0,
+               "num-byte-slice" : 0
+            }
+         }
+      },
+      {
+         "id" : 22,
+         "params" : {
+            "creator" : "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+            "global-state-schema" : {
+               "num-byte-slice" : 0,
+               "num-uint" : 0
+            },
+            "local-state-schema" : {
+               "num-byte-slice" : 0,
+               "num-uint" : 0
+            },
+            "clear-state-program" : null,
+            "approval-program" : null
+         }
+      },
+...
+      }
+   ],
+   "current-round" : 377,
+   "next-token" : "142"
+}
+```
+
+# Lookup Application
+The `/applications/{application-id}` REST method is provided to allow searching for a specific application on the blockchain. It returns data associated with the smart contract application. 
+
+```javascript tab="JavaScript"
+(async () => {
+    let response = await indexerClient.lookupApplications(59).do();
+    console.log("Response: " + JSON.stringify(response, undefined, 2));
+})().catch(e => {
+    console.log(e.message);
+    console.trace();
+});
+// Repsonse should look similar to this...
+// Response: {
+// "application": {
+//     "id": 59,
+//         "params": {
+//         "approval-program": "AiACAQAmAgNmb28DYmFyIihlQQAIKRJBAANCAAIjQyJD",
+//             "clear-state-program": "ASABASI=",
+//                 "creator": "7IROB3J2FTR7LYQA3QOUYSTKCQTSVJK4FTTC77KWSE5NMRATEZXP6TARPA",
+//                     "global-state-schema": {
+//             "num-byte-slice": 0,
+//                 "num-uint": 0
+//         },
+//         "local-state-schema": {
+//             "num-byte-slice": 0,
+//                 "num-uint": 0
+//         }
+//     }
+// },
+// "current-round": 377
+// }
+```
+
+```python tab="Python"
+response = myindexer.applications(20)
+
+print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
+
+# response should look similar to this...
+# Response Info: {
+#     "application": {
+#         "id": 20,
+#         "params": {
+#             "approval-program": "ASABASI=",
+#             "clear-state-program": "ASABASI=",
+#             "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+#             "global-state-schema": {
+#                 "num-byte-slice": 0,
+#                 "num-uint": 0
+#             },
+#             "local-state-schema": {
+#                 "num-byte-slice": 0,
+#                 "num-uint": 0
+#             }
+#         }
+#     },
+#     "current-round": 377
+# }
+```
+
+```java tab="Java"
+public static void main(String args[]) throws Exception {
+    LookupApplication ex = new LookupApplication();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long application_id = Long.valueOf(22);
+    String response = indexerClientInstance.lookupApplicationByID(application_id).execute().toString();
+    JSONObject jsonObj = new JSONObject(response.toString());
+    System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
+}
+// response information should look similar to this...
+//  Response Info:
+//  {
+//   "application": {
+//     "id": 22,
+//     "params": {
+//       "global-state": [],
+//       "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+//       "local-state-schema": {
+//         "num-uint": 0,
+//         "num-byte-slice": 0
+//       },
+//       "global-state-schema": {
+//         "num-uint": 0,
+//         "num-byte-slice": 0
+//       }
+//     }
+//   },
+//   "current-round": 377
+// }
+```
+
+```go tab="Go"
+    var applicationID uint64  = 22
+	// Lookup application
+	result, err := indexerClient.LookupApplicationByID(applicationID).Do(context.Background())
+
+	// Print the results
+	JSON, err := json.MarshalIndent(result, "", "\t")
+	fmt.Printf(string(JSON) + "\n")
+// results should look similar to this...
+// {
+// 	"application": {
+// 		"id": 22,
+// 		"params": {
+// 			"creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
+// 			"global-state-schema": {},
+// 			"local-state-schema": {}
+// 		}
+// 	},
+// 	"current-round": 377
+// }   
+```
+
+```bash tab="cURL"
+$ $ curl "localhost:8980/v2/applications/20" | json_pp
+// Results
+{
+   "application" : {
+      "id" : 20,
+      "params" : {
+         "local-state-schema" : {
+            "num-byte-slice" : 0,
+            "num-uint" : 0
+         },
+         "global-state-schema" : {
+            "num-uint" : 0,
+            "num-byte-slice" : 0
+         },
+         "clear-state-program" : "ASABASI=",
+         "creator" : "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
+         "approval-program" : "ASABASI="
+      }
+   },
+   "current-round" : 377
+}
+```
+
+
 # Search Transactions
 The `/transactions` REST method is provided to allow searching all transactions that have occurred on the blockchain.
 
