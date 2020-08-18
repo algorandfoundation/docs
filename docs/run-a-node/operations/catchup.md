@@ -1,9 +1,12 @@
 title: Catchup And Status
 
 # Catchup
-When first starting a node it will process all blocks in the blockchain, even if it does not store all blocks locally. The node does so to verify every block in the blockchain thereby checking the validity of the chain. The process can be time-consuming but is essential when running a trusted node. If interested in getting a build that provides quick access to begin development take a look at the [Docker Sandbox](../../../build-apps/setup/#2-use-docker-sandbox) or use a [Third-party](../../../build-apps/setup/#1-use-a-third-party-service) service. 
+When first starting a node it will process all blocks in the blockchain, even if it does not store all blocks locally. The node does so to verify every block in the blockchain thereby checking the validity of the chain. The process can be time-consuming but is essential when running a trusted node.  
 
 !!! info
+    If interested in getting a build that provides quick access to begin development take a look at [Fast Catchup](../../setup/install/#sync-node-network-using-fast-catchup),  [Docker Sandbox](../../../build-apps/setup/#2-use-docker-sandbox) or use a [Third-party](../../../build-apps/setup/#1-use-a-third-party-service) service. 
+
+!!! info    
     If a node is stopped it will stop processing blocks. Once the node is restarted, it will start processing blocks where it left off.
 
 # Node Status 
