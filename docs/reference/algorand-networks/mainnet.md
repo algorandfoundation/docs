@@ -12,10 +12,10 @@ title: MainNet
 - [Indexer REST API](../rest-apis/indexer.md)
   
 # Version
-`v2.0.9.stable`
+`v2.1.3.stable`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.0.9-stable
+https://github.com/algorand/go-algorand/releases/tag/v2.1.3-stable
 
 # Genesis ID
 `mainnet-v1.0`
