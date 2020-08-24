@@ -400,15 +400,14 @@ has_balance:
 
 This opcode takes two parameters. The first represents an index into the accounts array where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The second parameter is the Asset ID of the asset to examine. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
 
-It is also possible to get an Asset’s configuration information within a smart contract. This is done using the `asset_params_get` opcode. This opcode works similarly to the `asset_holding_get` opcode using the same two parameters for an account and Asset ID. 
+It is also possible to get an Asset’s configuration information within a smart contract, if the asset ID is passed with the transaction. This can be done with `goal` by supplying the `--foreign-asset` parameter. The value of the parameter should be the asset ID. Up to two assets can be supplied per transaction. To read the configuration the `asset_params_get` opcode must be used. This opcode should be supplied with one parameter, which is the index into the foreign assets array.
 
 ```
 int 0
-int 2
 asset_params_get AssetTotal
 ```
 
-The call will only return a value if the account specified is the creator of the Asset. The call also returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../../reference/teal/opcodes.md) documentation for more details on what additional parameters can be read.
+This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../../reference/teal/opcodes.md) documentation for more details on what additional parameters can be read.
 
 
 # Global Values in Smart Contracts
