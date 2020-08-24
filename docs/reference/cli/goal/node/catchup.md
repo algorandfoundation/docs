@@ -12,7 +12,7 @@ Catchup the Algorand node to a specific catchpoint
 
 
 
-Catchup allows making large jumps over round ranges without the need to incremently validate each individual round.
+Catchup allows making large jumps over round ranges without the need to incrementally validate each individual round.
 
 
 

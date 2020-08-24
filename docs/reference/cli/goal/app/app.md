@@ -46,6 +46,8 @@ goal app [flags]
 
       --foreign-app strings        Indexes of other apps whose global state is read in this transaction
 
+      --foreign-asset strings      Indexes of assets whose parameters are read in this transaction
+
   -h, --help                       help for app
 
   -w, --wallet string              Set the wallet to be used for the selected operation
@@ -73,7 +75,6 @@ goal app [flags]
 
 
 * [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
-* [goal](../../../goal/goal/)	 - CLI for interacting with Algorand.
 * [goal app call](../call/)	 - Call an application
 * [goal app clear](../clear/)	 - Clear out an application's state in your account
 * [goal app closeout](../closeout/)	 - Close out of an application
