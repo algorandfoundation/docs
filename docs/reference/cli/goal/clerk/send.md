@@ -58,7 +58,7 @@ goal clerk send [flags]
 
   -L, --logic-sig string            LogicSig to apply to transaction
 
-      --msig-params string          Multisig pre image parameters - [threshold] [Address 1] [Address 2] ...
+      --msig-params string          Multisig preimage parameters - [threshold] [Address 1] [Address 2] ...
 
                                     Used to add the necessary fields in case the account was rekeyed to a multisig account
 

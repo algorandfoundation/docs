@@ -631,6 +631,17 @@ AccountParticipation describes the parameters used by this account in consensus 
 |**vote-participation-key**  <br>*required*|\[vote\] root participation public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
+<a name="accountstatedelta"></a>
+### AccountStateDelta
+Application state delta.
+
+
+|Name|Schema|
+|---|---|
+|**address**  <br>*required*|string|
+|**delta**  <br>*required*|[StateDelta](#statedelta)|
+
+
 <a name="application"></a>
 ### Application
 Application index and its parameters
@@ -809,6 +820,29 @@ An error response with optional data field.
 |**message**  <br>*required*|string|
 
 
+<a name="evaldelta"></a>
+### EvalDelta
+Represents a TEAL value delta.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**action**  <br>*required*|\[at\] delta action.|integer|
+|**bytes**  <br>*optional*|\[bs\] bytes value.|string|
+|**uint**  <br>*optional*|\[ui\] uint value.|integer|
+
+
+<a name="evaldeltakeyvalue"></a>
+### EvalDeltaKeyValue
+Key-value pairs for StateDelta.
+
+
+|Name|Schema|
+|---|---|
+|**key**  <br>*required*|string|
+|**value**  <br>*required*|[EvalDelta](#evaldelta)|
+
+
 <a name="healthcheck"></a>
 ### HealthCheck
 A health check response.
@@ -846,6 +880,13 @@ Valid types:
 * delete
 
 *Type* : enum (noop, optin, closeout, clear, update, delete)
+
+
+<a name="statedelta"></a>
+### StateDelta
+Application state delta.
+
+*Type* : < [EvalDeltaKeyValue](#evaldeltakeyvalue) > array
 
 
 <a name="stateschema"></a>
@@ -914,12 +955,14 @@ data/transactions/transaction.go : Transaction
 |**first-valid**  <br>*required*|\[fv\] First valid round for this transaction.|integer|
 |**genesis-hash**  <br>*optional*|\[gh\] Hash of genesis block.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**genesis-id**  <br>*optional*|\[gen\] genesis block ID.|string|
+|**global-state-delta**  <br>*optional*|\[gd\] Global state key/value changes for the application being executed by this transaction.|[StateDelta](#statedelta)|
 |**group**  <br>*optional*|\[grp\] Base64 encoded byte array of a sha512/256 digest. When present indicates that this transaction is part of a transaction group and the value is the sha512/256 hash of the transactions in that group.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**id**  <br>*required*|Transaction ID|string|
 |**intra-round-offset**  <br>*optional*|Offset into the round where this transaction was confirmed.|integer|
 |**keyreg-transaction**  <br>*optional*||[TransactionKeyreg](#transactionkeyreg)|
 |**last-valid**  <br>*required*|\[lv\] Last valid round for this transaction.|integer|
 |**lease**  <br>*optional*|\[lx\] Base64 encoded 32-byte array. Lease enforces mutual exclusion of transactions.  If this field is nonzero, then once the transaction is confirmed, it acquires the lease identified by the (Sender, Lease) pair of the transaction until the LastValid round passes.  While this transaction possesses the lease, no other transaction specifying this lease can be confirmed.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**local-state-delta**  <br>*optional*|\[ld\] Local state key/value changes for the application being executed by this transaction.|< [AccountStateDelta](#accountstatedelta) > array|
 |**note**  <br>*optional*|\[note\] Free form data.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**payment-transaction**  <br>*optional*||[TransactionPayment](#transactionpayment)|
 |**receiver-rewards**  <br>*optional*|\[rr\] rewards applied to receiver account.|integer|
@@ -947,6 +990,7 @@ data/transactions/application.go : ApplicationCallTxnFields
 |**approval-program**  <br>*optional*|\[apap\] Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**clear-state-program**  <br>*optional*|\[apsu\] Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**foreign-apps**  <br>*optional*|\[apfa\] Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|< integer > array|
+|**foreign-assets**  <br>*optional*|\[apas\] lists the assets whose parameters may be accessed by this application's ApprovalProgram and ClearStateProgram. The access is read-only.|< integer > array|
 |**global-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
 |**local-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
 |**on-completion**  <br>*required*||[OnCompletion](#oncompletion)|

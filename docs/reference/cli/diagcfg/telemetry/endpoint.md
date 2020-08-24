@@ -4,7 +4,7 @@ title: diagcfg telemetry endpoint
 
 
 
-sets the "URI" property
+Sets the "URI" property
 
 
 
