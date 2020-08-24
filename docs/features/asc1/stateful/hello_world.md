@@ -5,11 +5,13 @@ Use the guide below to deploy a "hello world" Algorand application, a [stateful 
 This is a very basic application which implements a counter. Each time the application is called, the counter value is incremented. 
 
 !!! Info
-	[Algorand Smart Contracts](../index.md) (ASC1) are deployed as either “Stateful” and “Stateless” programs. Both use the [Transaction Execution Approval Language (TEAL)](../teal/index.md) but the available [OpCodes](../../../reference/teal/opcodes.md) and therefore their function vary by type. This guide covers only [stateful smart contracts](../index.md#stateful-smart-contracts); learn more about [stateless smart contracts](../index.md#stateless-smart-contracts).
+	[Algorand Smart Contracts](../index.md) (ASC1) are deployed as either "Stateful" or "Stateless" programs. Both use the [Transaction Execution Approval Language (TEAL)](../teal/index.md), but the available [OpCodes](../../../reference/teal/opcodes.md) and, therefore their function, vary by type. This guide covers only [stateful smart contracts](../index.md#stateful-smart-contracts); learn more about [stateless smart contracts](../index.md#stateless-smart-contracts).
 
 ## Stateful Application Primer
 
-The [Overview](./index.md) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started. The term “stateful” means the application is able to store information or “maintain state” within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](../teal/index.md) defines the available [OpCodes](../../../reference/teal/opcodes.md) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
+The [Overview](./index.md) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started.
+
+The term "stateful" means the application is able to store information or "maintain state" within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](../teal/index.md) defines the available [OpCodes](../../../reference/teal/opcodes.md) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
 
 ## Application Components
 
@@ -102,7 +104,7 @@ return
 
 #### Define TEAL Version
 
-The _approval program_ is holding stateful data so if must instruct the TEAL interpreter to use “version 2” OpCodes during execution.
+The _approval program_ is holding stateful data so if must instruct the TEAL interpreter to use "version 2" OpCodes during execution.
 
 - `#pragma version 2`  
 
@@ -110,16 +112,16 @@ The _approval program_ is holding stateful data so if must instruct the TEAL int
 
 This program has a single _global_ _key/value pair_ to store the number of times the program was called. The _key_ is the string "counter" and the _value_ will be defined as an integer when the application is created below.
 
-- `byte “counter”` places the bytes representing the string “counter” on the stack
-- `dup` duplicates that, so now “counter” is on the stack twice
-- `app_global_get` pops the top of the stack, looks within _global_ for the _key_ “counter” and places the _value_ back on top of the stack.
+- `byte "counter"` places the bytes representing the string "counter" on the stack
+- `dup` duplicates that, so now "counter" is on the stack twice
+- `app_global_get` pops the top of the stack, looks within _global_ for the _key_ "counter" and places the _value_ back on top of the stack.
 
 #### Perform Program Logic
 
 The program now has the current value for "counter" and will increment this value. A copy of this value will be stored in scratch space for use below. Note: scratch space is accessible by the program only during run-time and cannot persist any values after execution completes.
 
 - `int 1` places the integer 1 on the stack
-- `+` pops two elements from the stack (the _value_ for “counter” and int 1), sums them, and places the result back on top of the stack
+- `+` pops two elements from the stack (the _value_ for "counter" and int 1), sums them, and places the result back on top of the stack
 - `dup` duplicates the to top most value on the stack
 - `store 0` pops the duplicate value from the stack and moves it to the first position within scratch space.
 
@@ -127,7 +129,7 @@ The program now has the current value for "counter" and will increment this valu
 
 Now the program will store the incremented _value_ into _global_ storage at _key_ "counter". This value will persist on the ledger if the program completes successfully.
 
-- `app_global_put` pops two elements from the stack (_key_ “counter” from line 5 and _value_ calculated in line 11) and stores into _global_ the _value_ for _key_.
+- `app_global_put` pops two elements from the stack (_key_ "counter" from line 5 and _value_ calculated in line 11) and stores into _global_ the _value_ for _key_.
 
 #### Approval
 
@@ -148,7 +150,7 @@ Create a new file named `clear_state_program.teal` and add the following code:
 int 1
 ```
 
-- `#pragma version 2` instructs the TEAL interpreter to use “version 2” OpCodes during execution. This is required for stateful smart contract applications
+- `#pragma version 2` instructs the TEAL interpreter to use "version 2" OpCodes during execution. This is required for stateful smart contract applications
 - `int 1` places the integer 1 on the stack, signaling approval.
 
 ## Deploy New Application

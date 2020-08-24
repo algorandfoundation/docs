@@ -21,7 +21,7 @@ Atomic transfers enable use cases such as:
 To implement an atomic transfer, generate all of the transactions that will be involved in the transfer and then group those transactions together. The result of grouping is that each transaction is assigned the same group ID. Once all transactions contain this group ID, the transactions can be split up and sent to their respective senders to be authorized. A single party can then collect all the authorized transactions and submit them to the network together. 
 
 !!! info
-    An individual account involved in an atomic transfer, can verify that all the correct transfers are involved by creating the same set of [unsigned] transactions and grouping them in the same order. The group ID is a hash of the group of transactions and should match if the configuration is the same.
+    An individual account involved in an atomic transfer can verify that all the correct transfers are involved by creating the same set of [unsigned] transactions and grouping them in the same order. The group ID is a hash of the group of transactions and should match if the configuration is the same.
 
 <center>![Atomic Transfer Flow](../imgs/atomic_transfers-1.png)</center>
 <center>*Atomic Transfer Flow*</center>
