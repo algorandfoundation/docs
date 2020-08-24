@@ -88,6 +88,8 @@ goal app delete [flags]
 
       --foreign-app strings        Indexes of other apps whose global state is read in this transaction
 
+      --foreign-asset strings      Indexes of assets whose parameters are read in this transaction
+
   -k, --kmddir string              Data directory for kmd
 
   -w, --wallet string              Set the wallet to be used for the selected operation
