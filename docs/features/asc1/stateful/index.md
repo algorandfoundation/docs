@@ -17,7 +17,7 @@ Having two programs allows an account to clear the contract from its state, whet
 Calls to stateful smart contracts are implemented using `ApplicationCall` transactions. These transactions types are as follows:
 
 * NoOp - Generic application calls to execute the `ApprovalProgram`
-* OptIn - Accounts use this transaction to option into the smart contract to participate (local storage usage).
+* OptIn - Accounts use this transaction to opt in to the smart contract to participate (local storage usage).
 * DeleteApplication - Transaction to delete the application.
 * UpdateApplication - Transaction to update TEAL Programs for a contract.
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
@@ -34,7 +34,7 @@ The `goal` calls shown above in the orange boxes represent all the specific call
 Stateful smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key and value are limited to 64 bytes of storage each for both global and local storage. These values are stored as byte slices. The TEAL language provides several opcodes for facilitating reading and writing to state.
 
 ## Reading Local State from other Accounts
-Local storage values are stored in the accounts balance record. Any account that sends a transaction to the smart contract can have its local storage modified by the smart contract as long as the account has optioned into the smart contract. In addition, any call to the smart contract can also reference up to four additional accounts which can also have their local storage manipulated for the current smart contract. These five accounts can also have their storage values for any smart contract on Algorand read by specifying the application id of the smart contract. This is a read-only operation and does not allow one smart contract to modify the local state of another smart contract. The additionally referenced accounts can be changed per smart contract call (transaction). The process for reading local state from another account is described in the following sections.
+Local storage values are stored in the accounts balance record. Any account that sends a transaction to the smart contract can have its local storage modified by the smart contract as long as the account has opted in to the smart contract. In addition, any call to the smart contract can also reference up to four additional accounts which can also have their local storage manipulated for the current smart contract. These five accounts can also have their storage values for any smart contract on Algorand read by specifying the application id of the smart contract. This is a read-only operation and does not allow one smart contract to modify the local state of another smart contract. The additionally referenced accounts can be changed per smart contract call (transaction). The process for reading local state from another account is described in the following sections.
 
 ## Reading Global State from other Smart Contracts
 Global storage for the current contract can also be modified by the smart contract code. In addition, the global storage of up to two additional contracts can be read. This is a read-only operation. The global state can not be changed for other smart contracts. The two external smart contracts can be changed per smart contract call (transaction). The process for reading global state from another smart contract is described in the following sections.
@@ -76,7 +76,7 @@ app_local_put
 Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call.
 
 !!! info
-    Local storage writes are only allowed if the account has optioned into the smart contract.
+    Local storage writes are only allowed if the account has opted in to the smart contract.
 
 ## Read From State
 TEAL provides calls to read global and local state values for the current smart contract.  To read from local or global state TEAL provides the `app_local_get`, `app_global_get`, `app_local_get_ex` , and `app_global_get_ex` opcodes. The following TEAL code reads a value from global state for the current smart contract.
@@ -204,8 +204,8 @@ When creating a stateful smart contract, there is a limit of 64 key-value pairs 
 !!! info    
     Accounts can only participate or create up to 10 stateful smart contracts.
 
-# Optioning into the Smart Contract
-Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt into the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to option into the smart contract. This can be done with the `goal` CLI or the SDKs.
+# Opt in to the Smart Contract
+Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt in to the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to opt in to the smart contract. This can be done with the `goal` CLI or the SDKs.
 
 ```
 $ goal app app optin  --app-id [ID-of-Contract] --from [ADDRESS]
@@ -225,7 +225,7 @@ notoptingin:
 .
 ```
 
-Other contracts may have much more complex optioning in logic. TEAL also provides an opcode to check whether an account has already optioned into the contract.
+Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted in to the contract.
 
 ```
 int 0 
@@ -236,13 +236,13 @@ app_opted_in
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used.
 
 !!! info
-    Accounts can only option in to or create up to 10 stateful smart contracts
+    Accounts can only opt in to or create up to 10 stateful smart contracts
 
 !!! info
-    Applications that only use global state do not require accounts to option in.
+    Applications that only use global state do not require accounts to opt in.
 
 # Call the Stateful Smart Contract
-Once an account has optioned into a stateful smart contract it can begin to make calls to the contract. These calls will be in the form of `ApplicationCall` transactions that can be submitted with `goal` or the SDKs. Depending on the individual type of transaction as described in [The Lifecycle of a Stateful Smart Contract](#the-lifecycle-of-a-stateful-smart-contract), either the `ApprovalProgram` or the `ClearStateProgram` will be called. Generally, individual calls will supply application arguments. See [Passing Arguments to a Smart Contract](#passing-arguments-to-stateful-smart-contracts) for details on passing arguments.
+Once an account has opted in to a stateful smart contract it can begin to make calls to the contract. These calls will be in the form of `ApplicationCall` transactions that can be submitted with `goal` or the SDKs. Depending on the individual type of transaction as described in [The Lifecycle of a Stateful Smart Contract](#the-lifecycle-of-a-stateful-smart-contract), either the `ApprovalProgram` or the `ClearStateProgram` will be called. Generally, individual calls will supply application arguments. See [Passing Arguments to a Smart Contract](#passing-arguments-to-stateful-smart-contracts) for details on passing arguments.
 
 ```
 $ goal app call --app-id 1 --app-arg "str:myparam"  --from [ADDRESS]
@@ -412,7 +412,7 @@ This call returns two values. The first is a 0 or 1 indicating if the parameter 
 
 
 # Global Values in Smart Contracts
-Smart contracts have access to nine global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Stateful smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, you may want a contract to only allow accounts to option in after a start date, which is set when the contract is created and stored in global storage.
+Smart contracts have access to nine global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Stateful smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, you may want a contract to only allow accounts to opt in after a start date, which is set when the contract is created and stored in global storage.
 
 ```
 global LatestTimestamp
@@ -428,7 +428,7 @@ In addition to being able to read the state of a smart contract using TEAL, thes
 $ goal app read --app-id 1 --guess-format --global --from [ADDRESS]
 ```
 
-In the above example, the global state of the smart contract with the application ID of 1 is returned. The `--guess-format` option in the above example tries programmatically to display the properly formatted values of the state variables. To get the local state, replace `--global` with `--local` and note that this call will only return the local state of the `--from` account.
+In the above example, the global state of the smart contract with the application ID of 1 is returned. The `--guess-format` opt in the above example tries programmatically to display the properly formatted values of the state variables. To get the local state, replace `--global` with `--local` and note that this call will only return the local state of the `--from` account.
 
 # Differences Between Stateful and Stateless Smart Contracts
 Smart Contracts in Algorand are either stateful or stateless, where stateful contracts actually store values on blockchain and stateless are used to approve spending transactions. In addition to this primary difference, several of the TEAL opcodes are restricted to only be used with specific smart contract types. For example, the `ed25519verify` opcode can only be used in stateless smart contracts, and the `app_opted_in` opcode can only be used in stateful smart contracts. To easily determine where an opcode is valid, the [TEAL opcodes](../../../reference/teal/opcodes.md) documentation supplies a `Mode` field that will either designate `Signature ` or `Application`. The `Signature` mode refers to only stateless smart contracts and the `Application` mode refers to the stateful smart contracts. If the `Mode` attribute is not present on the opcode reference, the call can be used in either smart contract type.
@@ -488,7 +488,7 @@ err
 ```
 
 # Minimum Balance Requirement for a Smart Contract
-When creating or optioning into a stateful smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used. The calculation for this amount is as follows.
+When creating or opt in to a stateful smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used. The calculation for this amount is as follows.
 
 100000 + (25000+3500)*schema.NumUint + (25000+25000)*schema.NumByteSlice
 
@@ -498,7 +498,7 @@ Note that global storage is actually stored in the creator account, so that acco
 
 100000 to create the contract +  50000 for the global byte slice.
 
-Any account that options into the contract would have its balance requirement raised 128500 microAlgos.
+Any account that opts in to the contract would have its balance requirement raised 128500 microAlgos.
 
-100000 to option into the contract + 28500 for the locally stored integer.
+100000 to opt in to the contract + 28500 for the locally stored integer.
 
