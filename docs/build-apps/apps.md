@@ -71,9 +71,6 @@ In the case of a voting application, a vote is just a specialized transaction wh
 
 <center>![Unique Global or User-Based Variable Applications](../imgs/app-8.jpg)</center>
 
-!!! info
-    Note that Stateful Smart Contracts are currently available on BetaNet only. 
-
 # Combination Applications
 Applications will rarely just rely on one piece of technology to solve a problem. This is no different on Algorand, where any of the features described above can be composed together in multiple ways to create sophisticated, production-ready applications. The remainder of this guide illustrates several examples of how the technologies described above can be combined to solve complex real-world problems.
 
