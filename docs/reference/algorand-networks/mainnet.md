@@ -1,15 +1,10 @@
 title: MainNet
 
 # What's New
-**algod v2** was deployed to MainNet on June 16, 2020. Visit the new docs to get started:
 
-- [Connect with the v2 Client](../../build-apps/connect.md)
-- [Your First Transaction](../../build-apps/hello_world.md)
-- [v2 SDK Migration Guide](../sdks/migration.md)
-- [v2 REST API](../rest-apis/algod/v2.md)
-- [Indexer V2 Feature Guide](../../features/indexer.md)
-- [Installing the Indexer](../../run-a-node/setup/indexer.md)
-- [Indexer REST API](../rest-apis/indexer.md)
+- [Stateful Smart Contracts](../../../features/asc1/stateful/)
+- [Rekeying Support](../../../features/accounts/rekey/)
+- [Fast Catchup](../../../run-a-node/setup/install/#sync-node-network-using-fast-catchup)
   
 # Version
 `v2.1.3.stable`
