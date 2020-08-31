@@ -1,19 +1,32 @@
 package testing;
 
 import com.algorand.algosdk.util.Encoder;
+
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import com.algorand.algosdk.account.Account;
+import com.algorand.algosdk.builder.transaction.ApplicationBaseTransactionBuilder;
 import com.algorand.algosdk.crypto.Address;
+import com.algorand.algosdk.crypto.TEALProgram;
 import com.algorand.algosdk.logic.StateSchema;
+import com.algorand.algosdk.v2.client.algod.AccountInformation;
 import com.algorand.algosdk.v2.client.algod.TealCompile;
 import com.algorand.algosdk.v2.client.common.AlgodClient;
 import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.Application;
+import com.algorand.algosdk.v2.client.model.ApplicationLocalState;
 import com.algorand.algosdk.v2.client.model.CompileResponse;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.transaction.SignedTransaction;
 import com.algorand.algosdk.transaction.Transaction;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import com.algorand.algosdk.v2.client.model.TransactionsResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class StatefulSmartContract {
     public AlgodClient client = null;
@@ -23,10 +36,8 @@ public class StatefulSmartContract {
 
         // Initialize an algod client
         final String ALGOD_API_ADDR = "localhost";
-        // TODO: final Integer ALGOD_PORT = 4001;
-        // TODO: final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        final Integer ALGOD_PORT = 8080;
-        final String ALGOD_API_TOKEN = "f73ee5dac477f8ce7f7ac7599b6e77d5bb0c3a43e52712d151922d35a881fc5c";
+        final Integer ALGOD_PORT = 4001;
+        final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
         AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
         return client;
@@ -67,55 +78,256 @@ public class StatefulSmartContract {
         return compileResponse.body().result;
     }
 
-    public int createApp(AlgodClient client, Account creator, String approvalProgramSource, String clearProgramSource, int globalInts, 
-            int globalBytes, int localInts, int localBytes) {
+    public Long createApp(AlgodClient client, Account creator, TEALProgram approvalProgramSource,
+            TEALProgram clearProgramSource, int globalInts, int globalBytes, int localInts, int localBytes)
+            throws Exception {
         // define sender as creator
         Address sender = creator.getAddress();
 
         // get node suggested parameters
-        try {
-            TransactionParametersResponse params = client.TransactionParams().execute().body();
-        } catch (Exception e) {
-            e.printStackTrace();
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
+
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .approvalProgram(approvalProgramSource)
+                                .clearStateProgram(clearProgramSource)
+                                .globalStateSchema(new StateSchema(globalInts, globalBytes))
+                                .localStateSchema(new StateSchema(localInts, localBytes))
+                                .build();
+
+        // sign transaction
+        SignedTransaction signedTxn = creator.signTransaction(txn);
+        System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+        System.out.println("Successfully sent tx with ID: " + id);
+
+        // await confirmation
+        waitForConfirmation(id);
+
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        Long appId = pTrx.applicationIndex;
+        System.out.println("Created new app-id: " + appId);    
+    
+        return appId;
+    }
+
+    public void optInApp(AlgodClient client, Account account, Long appId) throws Exception {
+        // declare sender
+        Address sender = account.getAddress();
+        System.out.println("OptIn from account: " + sender);
+    
+        // get node suggested parameters
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
+    
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationOptInTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .applicationId(appId)
+                                .build();
+    
+        // sign transaction
+        SignedTransaction signedTxn = account.signTransaction(txn);
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+
+        // await confirmation
+        waitForConfirmation(id);
+    
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        System.out.println("OptIn to app-id: " + pTrx.txn.tx.applicationId);            
+    }
+
+    public void callApp(AlgodClient client, Account account, Long appId, List<byte[]> appArgs) throws Exception {
+        // declare sender
+        Address sender = account.getAddress();
+        System.out.println("Call from account: " + sender);
+
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
+    
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationCallTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .applicationId(appId)
+                                .args(appArgs)
+                                .build();
+    
+        // sign transaction
+        SignedTransaction signedTxn = account.signTransaction(txn);
+
+        // save signed transaction to  a file 
+        Files.write(Paths.get("./callArgs.stxn"), Encoder.encodeToMsgPack(signedTxn));
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+
+        // await confirmation
+        waitForConfirmation(id);
+
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        System.out.println("Called app-id: " + pTrx.txn.tx.applicationId);
+        if (pTrx.globalStateDelta != null) {
+            System.out.println("    Global state: " + pTrx.globalStateDelta.toString());
         }
+        if (pTrx.localStateDelta != null) {
+            System.out.println("    Local state: " + pTrx.localStateDelta.toString());
+        }
+    }
 
-        // create unsigned transaction TODO:
-        Transaction txn = Transaction.ApplicationCreateTransactionBuilder().
-                             .approvalProgram(approvalProgramSource)
-                             .clearStateProgram(clearProgramSource)
-                             .globalStateSchema(new StateSchema(globalInts, globalBytes))
-                             .localStateSchema(new StateSchema(localInts, localBytes));
+    public void readLocalState(AlgodClient client, Account account, Long appId) throws Exception {
+        Response<com.algorand.algosdk.v2.client.model.Account> acctResponse = client.AccountInformation(account.getAddress()).execute();
+        List<ApplicationLocalState> applicationLocalState = acctResponse.body().appsLocalState;
+        for (int i = 0; i < applicationLocalState.size(); i++) { 
+            if (applicationLocalState.get(i).id.equals(appId)) {
+                System.out.println("User's application local state: " + applicationLocalState.get(i).keyValue.toString());
+            }
+        }
+    }
 
-    
-        // // sign transaction
-        // SignedTransaction signedTxn = creator.signTransaction(txn);
-        // System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
+    public void readGlobalState(AlgodClient client, Account account, Long appId) throws Exception {
+        Response<com.algorand.algosdk.v2.client.model.Account> acctResponse = client.AccountInformation(account.getAddress()).execute();
+        List<Application> createdApplications = acctResponse.body().createdApps;
+        for (int i = 0; i < createdApplications.size(); i++) {
+            if (createdApplications.get(i).id.equals(appId)) {
+                System.out.println("Application global state: " + createdApplications.get(i).params.globalState.toString());
+            }
+        }
+    }
 
-        // // send to network
-        // byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-        // String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
-        // System.out.println("Successfully sent tx with ID: " + id);
+    public void updateApp(AlgodClient client, Account creator, Long appId, TEALProgram approvalProgramSource, TEALProgram clearProgramSource) throws Exception {
+        // define sender as creator
+        Address sender = creator.getAddress();
 
-        // // await confirmation
-        // waitForConfirmation(id);
+        // get node suggested parameters
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
 
-        // // display results
-        // PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-        // Long appId = pTrx.txn.tx.applicationId;
-        // System.out.println("Created new app-id: " + appId);    
-    
-        return 1; //appId;
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationUpdateTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .applicationId(appId)
+                                .approvalProgram(approvalProgramSource)
+                                .clearStateProgram(clearProgramSource)
+                                .build();
+
+        // sign transaction
+        SignedTransaction signedTxn = creator.signTransaction(txn);
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+
+        // await confirmation
+        waitForConfirmation(id);
+
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        System.out.println("Updated new app-id: " + appId);    
+    }
+
+    public void closeOutApp(AlgodClient client, Account userAccount, Long appId) throws Exception {
+        // define sender as creator
+        Address sender = userAccount.getAddress();
+
+        // get node suggested parameters
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
+
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationCloseTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .applicationId(appId)
+                                .build();
+
+        // sign transaction
+        SignedTransaction signedTxn = userAccount.signTransaction(txn);
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+
+        // await confirmation
+        waitForConfirmation(id);
+
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        System.out.println("Closed out from app-id: " + appId);    
+    }
+
+    public void clearApp(AlgodClient client, Account userAccount, Long appId) throws Exception {
+        // define sender as creator
+        Address sender = userAccount.getAddress();
+
+        // get node suggested parameters
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
+
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationClearTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .applicationId(appId)
+                                .build();
+
+        // sign transaction
+        SignedTransaction signedTxn = userAccount.signTransaction(txn);
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+
+        // await confirmation
+        waitForConfirmation(id);
+
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        System.out.println("Cleared local state for app-id: " + appId);    
+    }
+
+    public void deleteApp(AlgodClient client, Account creatorAccount, Long appId) throws Exception {
+        // define sender as creator
+        Address sender = creatorAccount.getAddress();
+
+        // get node suggested parameters
+        TransactionParametersResponse params = client.TransactionParams().execute().body();
+
+        // create unsigned transaction
+        Transaction txn = Transaction.ApplicationDeleteTransactionBuilder()
+                                .sender(sender)
+                                .suggestedParams(params)
+                                .applicationId(appId)
+                                .build();
+
+        // sign transaction
+        SignedTransaction signedTxn = creatorAccount.signTransaction(txn);
+
+        // send to network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+
+        // await confirmation
+        waitForConfirmation(id);
+
+        // display results
+        PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
+        System.out.println("Deleted app-id: " + appId);    
     }
 
     public void statefulSmartContract() throws Exception {
-
         // user declared account mnemonics
         String creatorMnemonic = "Your 25-word mnemonic goes here";
         String userMnemonic = "A second distinct 25-word mnemonic goes here";
-
-        // TODO: REMOVE:
-        creatorMnemonic = "domain tomato skate earth donor twice sorry pave grid image review grunt edit news jelly grain act soldier barely daring master soft skate absorb exhaust";
-        userMnemonic  = "fury paddle knife situate six enjoy praise sea ketchup present quiz east rail ability scout loud lens iron update daughter food task supply above avoid";
 
         // declare application state storage (immutable)
         int localInts = 1;
@@ -347,40 +559,60 @@ public class StatefulSmartContract {
             if( client == null ) this.client = connectToNetwork();
 
             // get accounts from mnemonic
-            Account creator = new Account(creatorMnemonic);
-            Account user = new Account(userMnemonic);
+            Account creatorAccount = new Account(creatorMnemonic);
+            Account userAccount = new Account(userMnemonic);
         
-            // compile programs NOT IMPLEMENTED IN JAVA SDK
+            // compile programs
             String approvalProgram = compileProgram(client, approvalProgramSourceInitial.getBytes("UTF-8"));
+            String clearProgram = compileProgram(client, clearProgramSource.getBytes("UTF-8"));
 
             // create new application
-            int appId = createApp(client, creator, approvalProgramSourceInitial, clearProgramSource, globalInts, globalBytes, localInts, localBytes);
-            
+            Long appId = createApp(client, creatorAccount, new TEALProgram(approvalProgram), new TEALProgram(clearProgram), globalInts, globalBytes, localInts, localBytes);
+
             // opt-in to application
-        
+            optInApp(client, userAccount, appId);
+
             // call application without arguments
+            callApp(client, userAccount, appId, null);
         
             // read local state of application from user account
-        
+            readLocalState(client, userAccount, appId);
+
             // read global state of application
+            readGlobalState(client, creatorAccount, appId);
         
             // update application
+            approvalProgram = compileProgram(client, approvalProgramSourceRefactored.getBytes("UTF-8"));
+            updateApp(client, creatorAccount, appId, new TEALProgram(approvalProgram), new TEALProgram(clearProgram));
         
             // call application with arguments
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            System.out.println(formatter.format(date));
+            List<byte[]> appArgs = new ArrayList<byte[]>();
+            appArgs.add(formatter.format(date).toString().getBytes("UTF8"));  
+            callApp(client, userAccount, appId, appArgs);
         
             // read local state of application from user account
+            readLocalState(client, userAccount, appId);
         
             // close-out from application
+            closeOutApp(client, userAccount, appId);
         
             // opt-in again to application
+            optInApp(client, userAccount, appId);
         
             // call application with arguments
-        
+            callApp(client, userAccount, appId, appArgs);
+
             // read local state of application from user account
-        
+            readLocalState(client, userAccount, appId);
+
             // delete application
+            deleteApp(client, creatorAccount, appId);
         
             // clear application from user account
+            clearApp(client, userAccount, appId);
 
         } catch (Exception e) {
             System.err.println("Exception raised: " + e.getMessage());
