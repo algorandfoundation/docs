@@ -90,14 +90,14 @@ func main() {
 Before describing each of the available REST APIs, a few specific functions are described that are supported across many of the calls. This includes [Paginated Results](#paginated-results), [Historical Data searches](#historical-data-searches), and [Note Field Searching](#note-field-searching).
 
 # Paginated Results
-When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below.
+When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below. If the limit parameter is omitted, the response defaults are in the first column. If the limit parameter is used, the maximum response limit is in the second column.
 
-| Search Type  | Maximum number of results per search  |
-| ------------- | ------------- |
-| Transaction Search | 1000 |
-| Account Search | 100 |
-| Asset Search | 100 |
-| Asset Balance Search | 1000 |
+| Search Type  | Default Response Limit | Maximum Response Limit |
+| ------------- | ------------- | ------------- |
+| Transaction Search | 1000 | 10000 |
+| Account Search | 100 | 1000 |
+| Asset Search | 100 | 1000 |
+| Asset Balance Search | 1000 | 10000 |
 
 These values represent the maximum number of results that will be returned when searching for specific results. For example, the following will return the last 1000 transactions that exceeded 10 microAlgos. 
 
@@ -151,7 +151,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ```bash tab="cURL"
- $ curl "localhost:8980/v2/transactions?currency-greater-than=10"
+$ curl "localhost:8980/v2/transactions?currency-greater-than=10"
 ```
 
 When trying to find specific transactions, the Indexer supplies a pagination method that allows separating the results into several REST calls to return larger result sets. When used with the limit parameter the results for large data sets can be returned in expected result counts.
@@ -213,7 +213,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ```bash tab="cURL"
- $ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5"
+$ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5"
 ```
 
 Will return the last 5 transactions over 10 microAlgos. In addition, a token will be added to the result list that allows querying the next 5 transactions over 5 microAlgos.
@@ -536,7 +536,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ```bash tab="cURL"
-python3 -c "import base64;print(base64.b64encode('showing prefix'.encode()))"
+$ python3 -c "import base64;print(base64.b64encode('showing prefix'.encode()))"
 $ curl "localhost:8980/v2/transactions?note-prefix=c2hvd2luZyBwcmVmaXg=" | json_pp
 ```
 
@@ -761,7 +761,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl localhost:8980/v2/accounts/TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA | json_pp
+$ curl localhost:8980/v2/accounts/TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA | json_pp
 ```
 
 Results
@@ -857,7 +857,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?after-time=2020-06-03T10:00:00-05:00|json_pp
+$ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?after-time=2020-06-03T10:00:00-05:00|json_pp
 ```
 
 Results
@@ -954,7 +954,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?min-round=7048876&max-round=7048878" | json_pp
+$ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?min-round=7048876&max-round=7048878" | json_pp
 ```
 
 In addition, you can specify a specific round by using the round parameter.
@@ -1014,7 +1014,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?round=7048877"
+$ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?round=7048877"
 ```
 
 ## Transaction ID
@@ -1074,7 +1074,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?txid=QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA" | json_pp
+$ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?txid=QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA" | json_pp
 ```
 
 ## Transaction Type
@@ -1134,7 +1134,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?tx-type=acfg" | json_pp
+$ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?tx-type=acfg" | json_pp
 ```
 
 Results
@@ -1244,7 +1244,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?asset-id=2044572&currency-greater-than=50" | json_pp
+$ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?asset-id=2044572&currency-greater-than=50" | json_pp
 ```
 
 Results
@@ -1338,7 +1338,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?sig-type=msig" | json_pp
+$ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?sig-type=msig" | json_pp
 ```
 
 The call also supports [Paginated Results](#paginated-results) and [Note Field Searching](#note-field-searching).
@@ -1395,7 +1395,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/assets?name=DevDocsCoin" | json_pp
+$ curl "localhost:8980/v2/assets?name=DevDocsCoin" | json_pp
 ```
 
 Results
@@ -1476,7 +1476,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/assets/2044572" | json_pp
+$ curl "localhost:8980/v2/assets/2044572" | json_pp
 ```
 
 Results
@@ -1551,7 +1551,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ```bash tab="cURL"
-$ $ curl "localhost:8980/v2/assets/2044572/balances" | json_pp
+$ curl "localhost:8980/v2/assets/2044572/balances" | json_pp
 ```
 
 Results
@@ -1628,7 +1628,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/assets/2044572/balances?currency-greater-than=200" | json_pp
+$ curl "localhost:8980/v2/assets/2044572/balances?currency-greater-than=200" | json_pp
 ```
 
 Results
@@ -1722,7 +1722,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/assets/2044572/transactions?address-role=receiver&address=UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI" | json_pp
+$ curl "localhost:8980/v2/assets/2044572/transactions?address-role=receiver&address=UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI" | json_pp
 ```
 
 When searching for the receiver like in the above example, a `closeto` transaction property is also returned. You can remove this by supplying the `exclude-close-to` parameter and setting its value to true.
@@ -1775,7 +1775,7 @@ fmt.Printf(string(JSON) + "\n")
 ```
 
 ``` bash tab="cURL"
-$ $ curl "localhost:8980/v2/blocks/555" | json_pp
+$ curl "localhost:8980/v2/blocks/555" | json_pp
 ```
 
 Results
@@ -1996,7 +1996,7 @@ public static void main(String args[]) throws Exception {
 ```
 
 ```bash tab="cURL"
-$ $ curl "localhost:8980/v2/applications" | json_pp
+$ curl "localhost:8980/v2/applications" | json_pp
 // Results
    "applications" : [
       {
@@ -2153,7 +2153,7 @@ public static void main(String args[]) throws Exception {
 ```
 
 ```bash tab="cURL"
-$ $ curl "localhost:8980/v2/applications/20" | json_pp
+$ curl "localhost:8980/v2/applications/20" | json_pp
 // Results
 {
    "application" : {
