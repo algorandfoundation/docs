@@ -35,9 +35,6 @@ sed -i .bak '1s/#/title:/' ../docs/reference/teal/opcodes.md
 sed -i .bak '1s/#/title:/' ../docs/reference/teal/specification.md
 sed -i .bak 's/TEAL_opcodes.md/opcodes.md/' ../docs/reference/teal/specification.md
 
-title: Specification
-
-
 # CLEANUP
 rm swagger2markup-cli.jar
 rm swagger2markup.properties
