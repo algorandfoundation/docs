@@ -397,8 +397,8 @@ def update_app(client, private_key, app_id, approval_program, clear_program) :
     # declare sender
     sender = account.address_from_private_key(private_key)
 
-    # define initial value for key "timestamp"
-    app_args = [b'initial value']
+#    # define initial value for key "timestamp"
+#    app_args = [b'initial value']
 
 	# get node suggested parameters
     params = client.suggested_params()
@@ -408,7 +408,7 @@ def update_app(client, private_key, app_id, approval_program, clear_program) :
 
     # create unsigned transaction
     txn = transaction.ApplicationUpdateTxn(sender, params, app_id, \
-                                            approval_program, clear_program, app_args)
+                                            approval_program, clear_program) #, app_args)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
