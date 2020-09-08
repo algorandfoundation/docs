@@ -123,7 +123,7 @@ localSchema := types.StateSchema{NumUint: uint64(localInts), NumByteSlice: uint6
 ```
 
 !!! Info
-The example application is not allowed to hold any `bytes` value within global storage.
+    The example application is not allowed to hold any `bytes` value within global storage.
 
 
 ## Approval Program
@@ -414,7 +414,7 @@ fmt.Printf("Created new app-id: %d\n", appId)
 
 The user must [opt-in](../../stateful/#opt-in-to-the-smart-contract) to use the application. This method requires 3 parameters:
 
-- sender: address, representing the user intending to optin to using the app
+- sender: address, representing the user intending to opt-in to using the app
 - sp: suggested parameters obtained from the network
 - index: the app-id as defined by the create method result
 
@@ -445,6 +445,7 @@ sender := userAccount.Address
 ```
 
 Construct the transaction with defined values:
+
 ```python tab="Python"
 txn = transaction.ApplicationOptInTxn(sender, params, index)
 ```
