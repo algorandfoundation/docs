@@ -20,16 +20,19 @@ This guide requires two accounts:
 creator_mnemonic = "Your first 25-word mnemonic goes here"
 user_mnemonic = "A second distinct 25-word mnemonic goes here"
 ```
+
 ```javascript tab="JavaScript"
 // user declared account mnemonics
 creatorMnemonic = "Your 25-word mnemonic goes here";
 userMnemonic = "A second distinct 25-word mnemonic goes here";
 ```
+
 ```Java tab="Java"
 // user declared account mnemonics
 String creatorMnemonic = "Your 25-word mnemonic goes here";
 String userMnemonic = "A second distinct 25-word mnemonic goes here";
 ```
+
 ```go tab="Go"
 // user defined mnemonics
 const creatorMnemonic = "Your 25-word mnemonic goes here"
@@ -44,12 +47,14 @@ algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 algod_client = algod.AlgodClient(algod_token, algod_address)
 ```
+
 ```javascript tab="JavaScript"
 // user declared algod connection parameters
 algodAddress = "http://localhost:4001";
 algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
+
 ```Java tab="Java"
 // user declared account mnemonics
 String ALGOD_API_ADDR = "localhost";
@@ -57,6 +62,7 @@ Integer ALGOD_PORT = 4001;
 String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
 ```
+
 ```go tab="Go"
 // user defined algod client settings
 const algodAddress = "http://localhost:8080"
@@ -87,6 +93,7 @@ global_bytes = 0
 global_schema = transaction.StateSchema(global_ints, global_bytes)
 local_schema = transaction.StateSchema(local_ints, local_bytes)
 ```
+
 ```javascript tab="JavaScript"
 // declare application state storage (immutable)
 localInts = 1;
@@ -94,6 +101,7 @@ localBytes = 1;
 globalInts = 1;
 globalBytes = 0;
 ```
+
 ```Java tab="Java"
 // declare application state storage (immutable)
 int localInts = 1;
@@ -101,6 +109,7 @@ int localBytes = 1;
 int globalInts = 1;
 int globalBytes = 0;
 ```
+
 ```go tab="Go"
 // declare application state storage (immutable)
 const localInts = 1
@@ -131,17 +140,20 @@ clear_program_source = b"""#pragma version 2
 int 1
 """
 ```
+
 ```javascript tab="JavaScript"
 // declare clear state program source
 clearProgramSource = `#pragma version 2
 int 1
 `;
 ```
+
 ```Java tab="Java"
 // declare clear state program source
 String clearProgramSource = "#pragma version 2\n" +
 "int 1\n";
 ```
+
 ```go tab="Go"
 // declare clear state program source
 const clearProgramSource = `#pragma version 2
@@ -170,16 +182,19 @@ Use the creator_mnemonic to define sender:
 private_key = mnemonic.to_private_key(creator_mnemonic)
 sender = account.address_from_private_key(private_key)
 ```
+
 ```javascript tab="JavaScript"
 // get account from mnemonic
 let creatorAccount = algosdk.mnemonicToSecretKey(creatorMnemonic);
 let sender = creatorAccount.addr;
 ```
+
 ```Java tab="Java"
 // get account from mnemonic
 Account creatorAccount = new Account(creatorMnemonic);
 Address sender = creatorAccount.getAddress();
 ```
+
 ```go tab="Go"
 // get account from mnemonic
 creatorAccount := recoverAccount(creatorMnemonic)
@@ -195,6 +210,7 @@ params = client.suggested_params()
 params.flat_fee = True
 params.fee = 1000
 ```
+
 ```javascript tab="JavaScript"
 // get node suggested parameters
 let params = await client.getTransactionParams().do();
@@ -202,10 +218,12 @@ let params = await client.getTransactionParams().do();
 params.fee = 1000;
 params.flatFee = true;
 ```
+
 ```Java tab="Java"
 // get node suggested parameters
 TransactionParametersResponse params = client.TransactionParams().execute().body();
 ```
+
 ```go tab="Go"
 // get transaction suggested parameters
 params, _ := client.SuggestedParams().Do(context.Background())
@@ -220,13 +238,16 @@ Set the [on_complete](../../teal/specification/#oncomplete) parameter to NoOp:
 # declare on_complete as NoOp
 on_complete = transaction.OnComplete.NoOpOC.real
 ```
+
 ```javascript tab="JavaScript"
 // declare onComplete as NoOp
 onComplete = algosdk.OnApplicationComplete.NoOpOC;
 ```
+
 ```Java tab="Java"
 // not required
 ```
+
 ```go tab="Go"
 // not required
 ```
@@ -239,6 +260,7 @@ def compile_program(client, source_code) :
     compile_response = client.compile(source_code.decode('utf-8'))
     return base64.b64decode(compile_response['result'])
 ```
+
 ```javascript tab="JavaScript"
 // helper function to compile program source  
 async function compileProgram(client, programSource) {
@@ -249,6 +271,7 @@ async function compileProgram(client, programSource) {
     return compiledBytes;
 }
 ```
+
 ```Java tab="Java"
 // helper function to compile program source
 public String compileProgram(AlgodClient client, byte[] programSource) {
@@ -262,6 +285,7 @@ public String compileProgram(AlgodClient client, byte[] programSource) {
     return compileResponse.body().result;
 }
 ```
+
 ```go tab="Go"
 func compileProgram(client *algod.Client, programSource string) (compiledProgram []byte) {
 	compileResponse, err := client.TealCompile([]byte(programSource)).Do(context.Background())
@@ -282,6 +306,7 @@ txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
                                         approval_program, clear_program, \
                                         global_schema, local_schema)
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete, 
@@ -289,6 +314,7 @@ let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete,
                                         localInts, localBytes, globalInts, globalBytes,);
 let txId = txn.txID().toString();
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
@@ -300,6 +326,7 @@ Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
                     .localStateSchema(new StateSchema(localInts, localBytes))
                     .build();
 ```
+
 ```go tab="Go"
 // create unsigned transaction
 txn, _ := future.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
@@ -325,6 +352,7 @@ transaction_response = client.pending_transaction_info(tx_id)
 app_id = transaction_response['application-index']
 print("Created new app-id: ",app_id)
 ```
+
 ```javascript tab="JavaScript"
 // Sign the transaction
 let signedTxn = txn.signTxn(creatorAccount.sk);
@@ -341,6 +369,7 @@ let transactionResponse = await client.pendingTransactionInformation(txId).do();
 let appId = transactionResponse['application-index'];
 console.log("Created new app-id: ",appId);
 ```
+
 ```Java tab="Java"
 // sign transaction
 SignedTransaction signedTxn = creator.signTransaction(txn);
@@ -359,6 +388,7 @@ PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execu
 Long appId = pTrx.applicationIndex;
 System.out.println("Created new app-id: " + appId);    
 ```
+
 ```go tab="Go"
 // Sign the transaction
 txID, signedTxn, _ := crypto.SignTransaction(creatorAccount.PrivateKey, txn)
@@ -395,16 +425,19 @@ Use the user_mnemonic to define sender:
 private_key = mnemonic.to_private_key(user_mnemonic)
 sender = account.address_from_private_key(private_key)
 ```
+
 ```javascript tab="JavaScript"
 // get accounts from mnemonic
 let userAccount = algosdk.mnemonicToSecretKey(userMnemonic);
 let sender = userAccount.addr;
 ```
+
 ```Java tab="Java"
 // declare sender
 Account userAccount = new Account(userMnemonic);
 Address sender = userAccount.getAddress();
 ```
+
 ```go tab="Go"
 // declare sender
 userAccount := recoverAccount(userMnemonic)
@@ -415,10 +448,12 @@ Construct the transaction with defined values:
 ```python tab="Python"
 txn = transaction.ApplicationOptInTxn(sender, params, index)
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationOptInTxn(sender, params, index);
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationOptInTransactionBuilder()
@@ -427,6 +462,7 @@ Transaction txn = Transaction.ApplicationOptInTransactionBuilder()
                         .applicationId(appId)
                         .build();
 ```
+
 ```go tab="Go"
 // create unsigned transaction
 txn, _ := future.MakeApplicationOptInTx(index, nil, nil, nil, nil, params,
@@ -449,6 +485,7 @@ print("OptIn to app-id: ",transaction_response['txn']['txn']['apid'])
 let transactionResponse = await client.pendingTransactionInformation(txId).do();
 console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid'])
 ```
+
 ```Java tab="Java"
 // sign, send, await
 
@@ -456,6 +493,7 @@ console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid'])
 PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
 System.out.println("OptIn to app-id: " + pTrx.txn.tx.applicationId);       
 ```
+
 ```go tab="Go"
 // sign, send, await
 
@@ -486,6 +524,7 @@ if "global-state-delta" in transaction_response :
 if "local-state-delta" in transaction_response :
     print("Local State updated :\n",transaction_response['local-state-delta'])
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationNoOpTxn(sender, params, index, appArgs)
@@ -502,6 +541,7 @@ if (transactionResponse['local-state-delta'] !== undefined ) {
     console.log("Local State updated:",transactionResponse['local-state-delta']);
 }
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationCallTransactionBuilder()
@@ -523,6 +563,7 @@ if (pTrx.localStateDelta != null) {
     System.out.println("    Local state: " + pTrx.localStateDelta.toString());
 }
 ```
+
 ```go tab="Go"
 // create unsigned transaction
 txn, _:= future.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
@@ -556,6 +597,7 @@ def read_global_state(client, addr, app_id) :
         if app['id'] == app_id :
             print(f"global_state for app_id {app_id}: ", app['params']['global-state'])
 ```
+
 ```javascript tab="JavaScript"
 // read local state of application from user account
 async function readLocalState(client, account, index){
@@ -583,6 +625,7 @@ async function readGlobalState(client, account, index){
     }
 }
 ```
+
 ```Java tab="Java"
 public void readLocalState(AlgodClient client, Account account, Long appId) throws Exception {
     Response<com.algorand.algosdk.v2.client.model.Account> acctResponse = client.AccountInformation(account.getAddress()).execute();
@@ -604,6 +647,7 @@ public void readGlobalState(AlgodClient client, Account account, Long appId) thr
     }
 }
 ```
+
 ```go tab="Go"
 func readLocalState(client *algod.Client, account crypto.Account, index uint64) {
 	accountInfo, _ := client.AccountInformation(account.Address.String()).Do(context.Background())
@@ -653,6 +697,7 @@ transaction_response = client.pending_transaction_info(tx_id)
 app_id = transaction_response['txn']['txn']['apid']
 print("Updated existing app-id: ",app_id)
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationUpdateTxn(sender, params, index, approvalProgram, clearProgram);
@@ -664,6 +709,7 @@ let transactionResponse = await client.pendingTransactionInformation(txId).do();
 let appId = transactionResponse['txn']['txn'].apid;
 console.log("Updated app-id: ",appId);
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationUpdateTransactionBuilder()
@@ -680,6 +726,7 @@ Transaction txn = Transaction.ApplicationUpdateTransactionBuilder()
 PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
 System.out.println("Updated new app-id: " + appId);    
 ```
+
 ```go tab="Go"
 	// create unsigned transaction
     txn, _ := future.MakeApplicationUpdateTx(index, nil, nil, nil, nil, 
@@ -719,6 +766,7 @@ if "global-state-delta" in transaction_response :
 if "local-state-delta" in transaction_response :
     print("Local State updated :\n",transaction_response['local-state-delta'])
 ```
+
 ```javascript tab="JavaScript"
 // call application with arguments
 let ts = new Date(new Date().toUTCString());
@@ -741,6 +789,7 @@ if (transactionResponse['local-state-delta'] !== undefined ) {
     console.log("Local State updated:",transactionResponse['local-state-delta']);
 }
 ```
+
 ```Java tab="Java"
 // call application with arguments
 SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
@@ -769,6 +818,7 @@ if (pTrx.localStateDelta != null) {
     System.out.println("    Local state: " + pTrx.localStateDelta.toString());
 }
 ```
+
 ```go tab="Go"
 // call application with arguments
 now := time.Now().Format("Mon Jan _2 15:04:05 2006")
@@ -804,6 +854,7 @@ txn = transaction.ApplicationCloseOutTxn(sender, params, index)
 transaction_response = client.pending_transaction_info(tx_id)
 print("Closed out from app-id: ",transaction_response['txn']['txn']['apid'])
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationCloseOutTxn(sender, params, index)
@@ -814,6 +865,7 @@ let txn = algosdk.makeApplicationCloseOutTxn(sender, params, index)
 let transactionResponse = await client.pendingTransactionInformation(txId).do();
 console.log("Closed out from app-id:",transactionResponse['txn']['txn']['apid'])
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationCloseTransactionBuilder()
@@ -828,6 +880,7 @@ Transaction txn = Transaction.ApplicationCloseTransactionBuilder()
 PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
 System.out.println("Closed out from app-id: " + appId);  
 ```
+
 ```go tab="Go"
 // create unsigned transaction
 txn, _ := future.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -853,6 +906,7 @@ txn = transaction.ApplicationDeleteTxn(sender, params, index)
 transaction_response = client.pending_transaction_info(tx_id)
 print("Deleted app-id: ",transaction_response['txn']['txn']['apid'])    
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationDeleteTxn(sender, params, index);
@@ -864,6 +918,7 @@ let transactionResponse = await client.pendingTransactionInformation(txId).do();
 let appId = transactionResponse['txn']['txn'].apid;
 console.log("Deleted app-id: ",appId);
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationDeleteTransactionBuilder()
@@ -878,6 +933,7 @@ Transaction txn = Transaction.ApplicationDeleteTransactionBuilder()
 PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
 System.out.println("Deleted app-id: " + appId);
 ```
+
 ```go tab="Go"
 // create unsigned transaction
 txn, _ := future.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, sender, 
@@ -905,6 +961,7 @@ txn = transaction.ApplicationClearStateTxn(sender, params, index)
 transaction_response = client.pending_transaction_info(tx_id)
 print("Cleared app-id: ",transaction_response['txn']['txn']['apid']) 
 ```
+
 ```javascript tab="JavaScript"
 // create unsigned transaction
 let txn = algosdk.makeApplicationClearStateTxn(sender, params, index);
@@ -916,6 +973,7 @@ let transactionResponse = await client.pendingTransactionInformation(txId).do();
 let appId = transactionResponse['txn']['txn'].apid;
 console.log("Cleared local state for app-id: ",appId);
 ```
+
 ```Java tab="Java"
 // create unsigned transaction
 Transaction txn = Transaction.ApplicationClearTransactionBuilder()
@@ -930,6 +988,7 @@ Transaction txn = Transaction.ApplicationClearTransactionBuilder()
 PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
 System.out.println("Cleared local state for app-id: " + appId);   
 ```
+
 ```go tab="Go"
 // create unsigned transaction
 txn, _ := future.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, sender, 
