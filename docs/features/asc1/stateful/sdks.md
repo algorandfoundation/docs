@@ -9,7 +9,7 @@ Each SDK's install process is discussed in the [SDK Reference](../../../referenc
 
 # Application Lifecycle
 
-This guide follows an application throughout its [lifecycle](stateful.md/#the-lifecycle-of-a-stateful-smart-contract) from initial creation, to usage, to modification and finally deletion. The application is a variation of the [Hello World](hello_world.md) counter application. Initially, the application stores the number of times called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
+This guide follows an application throughout its [lifecycle](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) from initial creation, to usage, to modification and finally deletion. The application is a variation of the [Hello World](hello_world.md) counter application. Initially, the application stores the number of times called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
 
 # Environment Setup
 
@@ -69,7 +69,7 @@ algodClient, err := algod.MakeClient(algodAddress, algodToken)
 
 # Declarations
 
-All stateful applications are comprised of state storage, an approval program and a clear program. Details of each are found within the [stateful smart contract guide](stateful.md).
+All stateful applications are comprised of state storage, an approval program and a clear program. Details of each are found within the [stateful smart contract guide](../../stateful).
 
 ## State Storage
 Begin by defining the application's _global_schema_ and _local_schema_ storage requirements. These values are immutable once the application is created, so they must specify the maximum number required by the initial application and any future updates. 
@@ -119,11 +119,11 @@ The example application is not allowed to hold any `bytes` value within global s
 
 ## Approval Program
 
-The [approval program](stateful.md/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application. A detailed walk through of this code is provided in the appendix of this guide.
+The [approval program](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application. A detailed walk through of this code is provided in the appendix of this guide.
 
 ## Clear Program
 
-This is the most basic [clear program](stateful.md/#the-lifecycle-of-a-stateful-smart-contract) and returns _true_ when an account clears its participation in a smart contract:
+This is the most basic [clear program](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) and returns _true_ when an account clears its participation in a smart contract:
 
 ```python tab="Python"
 # declare clear state program source
@@ -153,7 +153,7 @@ int 1
 
 ## Create
 
-The creator will deploy the application using the [create app](stateful.md#creating-the-smart-contract) method. It requires 7 parameters:
+The creator will deploy the application using the [create app](../../stateful#creating-the-smart-contract) method. It requires 7 parameters:
 
 - sender: address, representing the creator of the app
 - sp: suggested parameters obtained from the network
@@ -382,7 +382,7 @@ fmt.Printf("Created new app-id: %d\n", appId)
 
 ## Opt-In
 
-The user must [opt-in](stateful.md/#opt-in-to-the-smart-contract) to use the application. This method requires 3 parameters:
+The user must [opt-in](../../stateful/#opt-in-to-the-smart-contract) to use the application. This method requires 3 parameters:
 
 - sender: address, representing the user intending to optin to using the app
 - sp: suggested parameters obtained from the network
@@ -466,7 +466,7 @@ fmt.Printf("Oped-in to app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID
 
 ## Call (NoOp)
 
-The user may now [call](stateful.md/#call-the-stateful-smart-contract) the application. This method requires 3 parameters:
+The user may now [call](../../stateful/#call-the-stateful-smart-contract) the application. This method requires 3 parameters:
 
 - sender: address, representing the user intending to optin to using the app
 - sp: suggested parameters obtained from the network
@@ -537,7 +537,7 @@ fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 
 ## Read State
 
-Anyone may read the [global state](stateful.md/#reading-local-state-from-other-accounts) of any application or the [local state](stateful.md/#reading-local-state-from-other-accounts) of an application within a given user account using the REST API account_info endpoint. 
+Anyone may read the [global state](../../stateful/#reading-global-state-from-other-smart-contracts) of any application or the [local state](../../stateful/#reading-local-state-from-other-accounts) of an application within a given user account using the REST API account_info endpoint. 
 
 ```python tab="Python"
 # read user local state
@@ -628,7 +628,7 @@ func readGlobalState(client *algod.Client, account crypto.Account, index uint64)
 
 ## Update
 
-The creator may [update the approval program](stateful.md/#update-stateful-smart-contract) using the update method (if the current approval program allows it). The refactored approval program source code adds a key/value pair to the user's local storage indicating the timestamp when the application was called. Refer to the Appendix for details. The original clear program will be reused.
+The creator may [update the approval program](../../stateful/#update-stateful-smart-contract) using the update method (if the current approval program allows it). The refactored approval program source code adds a key/value pair to the user's local storage indicating the timestamp when the application was called. Refer to the Appendix for details. The original clear program will be reused.
 
 The update method method requires 6 parameters:
 
@@ -696,7 +696,7 @@ System.out.println("Updated new app-id: " + appId);
 
 ## Call with Arguments
 
-A program may [process arguments passed](stateful.md/#passing-arguments-to-stateful-smart-contracts) at run-time. The NoOp call method has an optional app_args parameter where the timestamp may be supplied:
+A program may [process arguments passed](../../stateful/#passing-arguments-to-stateful-smart-contracts) at run-time. The NoOp call method has an optional app_args parameter where the timestamp may be supplied:
 
 The refactored application expects a timestamp be supplied with the application call.
 
@@ -788,7 +788,7 @@ fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 
 ## Close Out
 
-The user may discontinue use of the application by sending a [close out](stateful.md/#the-lifecycle-of-a-stateful-smart-contract) transaction. This will remove the local state for this application from the user's account. This method requires 3 parameters:
+The user may discontinue use of the application by sending a [close out](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) transaction. This will remove the local state for this application from the user's account. This method requires 3 parameters:
 
 - sender: address, representing the user intending to optin to using the app
 - sp: suggested parameters obtained from the network
@@ -841,7 +841,7 @@ fmt.Printf("Closed out from app-id: %d\n", confirmedTxn.Transaction.Txn.Applicat
 
 ## Delete
 
-The approval program defines the creator as the only account able to [delete the application](stateful.md/#delete-stateful-smart-contract). This removes the global state, but does not impact any user's local state. This method uses the same 3 parameters.
+The approval program defines the creator as the only account able to [delete the application](../../stateful/#delete-stateful-smart-contract). This removes the global state, but does not impact any user's local state. This method uses the same 3 parameters.
 
 ```python tab="Python"
 # create unsigned transaction
@@ -893,7 +893,7 @@ fmt.Printf("Deleted app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 
 ## Clear State
 
-The user may [clear the local state](stateful.md/#the-lifecycle-of-a-stateful-smart-contract) for an application at any time, even if the application was deleted by the creator. This method uses the same 3 parameter.
+The user may [clear the local state](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) for an application at any time, even if the application was deleted by the creator. This method uses the same 3 parameter.
 
 ```python tab="Python"
 # create unsigned transaction
