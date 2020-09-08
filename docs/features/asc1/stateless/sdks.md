@@ -81,14 +81,6 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 from algosdk import transaction, account, mnemonic
 from algosdk.v2client import algod
 from algosdk.future.transaction import PaymentTxn, LogicSig
-import os
-
-def load_resource(res):
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    path = os.path.join(dir_path, res)
-    with open(path, "rb") as fin:
-        data = fin.read()
-    return data
 
 try:
 
@@ -100,10 +92,9 @@ try:
     # int 0 - sample.teal
     myprogram = "sample.teal"
     # read teal program
-    data = load_resource(myprogram)
-    source = data.decode('utf-8')
+    data = open(myprogram).read()
     # compile teal program
-    response = algod_client.compile(source)
+    response = algod_client.compile(data)
     # print(response)
     print ("Response Result = ",response['result'])
     print("Response Hash = ",response['hash'])
