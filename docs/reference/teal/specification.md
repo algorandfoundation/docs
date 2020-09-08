@@ -1,4 +1,4 @@
-# Transaction Execution Approval Language (TEAL)
+title: Transaction Execution Approval Language (TEAL)
 
 TEAL is a bytecode based stack language that executes inside Algorand transactions to check the parameters of the transaction and approve the transaction as if by a signature. Programs have read-only access to the transaction they are attached to, transactions in their atomic transaction group, and a few global values. Programs cannot modify or create transactions, only reject or approve them. Approval is signaled by finishing with the stack containing a single non-zero uint64 value.
 
@@ -88,7 +88,7 @@ There is a branch instruction (`bnz`, branch if not zero) which allows forward b
 
 Many programs need only a few dozen instructions. The instruction set has some optimization built in. `intc`, `bytec`, and `arg` take an immediate value byte, making a 2-byte op to load a value onto the stack, but they also have single byte versions for loading the most common constant values. Any program will benefit from having a few common values loaded with a smaller one byte opcode. Cryptographic hashes and `ed25519verify` are single byte opcodes with powerful libraries behind them. These operations still take more time than other ops (and this is reflected in the cost of each op and the cost limit of a program) but are efficient in compiled code space.
 
-This summary is supplemented by more detail in the [opcodes document](TEAL_opcodes.md).
+This summary is supplemented by more detail in the [opcodes document](opcodes.md).
 
 Some operations 'panic' and immediately end execution of the program.
 A transaction checked by a program that panics is not valid.
@@ -222,7 +222,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 47 | FreezeAssetFrozen | uint64 | The new frozen value, 0 or 1. LogicSigVersion >= 2. |
 
 
-Additional details in the [opcodes document](TEAL_opcodes.md#txn) on the `txn` op.
+Additional details in the [opcodes document](opcodes.md#txn) on the `txn` op.
 
 **Global Fields**
 
