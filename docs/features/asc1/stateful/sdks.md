@@ -119,7 +119,7 @@ The example application is not allowed to hold any `bytes` value within global s
 
 ## Approval Program
 
-The [approval program](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application. A detailed walk through of this code is provided in the appendix of this guide.
+The [approval program](../../stateful/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application. A detailed walkthrough of this code is provided in the [appendix](#appendix) of this guide.
 
 ## Clear Program
 
@@ -628,7 +628,7 @@ func readGlobalState(client *algod.Client, account crypto.Account, index uint64)
 
 ## Update
 
-The creator may [update the approval program](../../stateful/#update-stateful-smart-contract) using the update method (if the current approval program allows it). The refactored approval program source code adds a key/value pair to the user's local storage indicating the timestamp when the application was called. Refer to the Appendix for details. The original clear program will be reused.
+The creator may [update the approval program](../../stateful/#update-stateful-smart-contract) using the update method (if the current approval program allows it). The refactored approval program source code adds a key/value pair to the user's local storage indicating the timestamp when the application was called. Refer to the [appendix](#refactored-approval-program) for details. The original clear program will be reused.
 
 The update method method requires 6 parameters:
 
