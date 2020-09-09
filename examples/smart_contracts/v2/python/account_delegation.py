@@ -24,7 +24,7 @@ try:
     algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     algod_address = "http://localhost:4001"
 
-    receiver = "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ" 
+    receiver = "<receiver_address>" 
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
     myprogram = "samplearg.teal"
