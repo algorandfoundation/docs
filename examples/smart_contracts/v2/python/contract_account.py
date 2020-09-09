@@ -23,7 +23,6 @@ try:
     algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
     algod_address = "http://localhost:4001"
 
-    # receiver = "<receiver-address>" 
     receiver = "ATTR6RUEHHBHXKUHT4GUOYWNBVDV2GJ5FHUWCSFZLHD55EVKZWOWSM7ABQ"
     algod_client = algod.AlgodClient(algod_token, algod_address)
    
@@ -31,6 +30,21 @@ try:
     # Read TEAL program
     data = open(myprogram, 'r').read()
     # Compile TEAL program
+    # // This code is meant for learning purposes only
+    # // It should not be used in production	
+    # // samplearg.teal	
+
+    # arg_0	
+    # btoi	
+    # int 123	
+    # ==	
+
+    # // bto1	
+    # // Opcode: 0x17	
+    # // Pops: ... stack, []byte	
+    # // Pushes: uint64	
+    # // converts bytes X as big endian to uint64	
+    # // btoi panics if the input is longer than 8 bytes
 
     response = algod_client.compile(data)
     # Print(response)
