@@ -13,18 +13,6 @@ user_mnemonic = "A second distinct 25-word mnemonic goes here"
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-# TODO: REMOVE
-algod_address = "http://localhost:8080"
-algod_token = "f73ee5dac477f8ce7f7ac7599b6e77d5bb0c3a43e52712d151922d35a881fc5c"
-creator_mnemonic = "domain tomato skate earth donor twice sorry pave grid image review grunt edit news jelly grain act soldier barely daring master soft skate absorb exhaust"
-user_mnemonic = "fury paddle knife situate six enjoy praise sea ketchup present quiz east rail ability scout loud lens iron update daughter food task supply above avoid"
-
-
-#algod_address = "http://localhost:4002"
-#algod_token = "4063ef7e83ce9237eb669ff94408216c14bc83c09f6743006174c7b633ade2b9"
-#creator_mnemonic = "hover appear scorpion cricket almost congress senior timber also maple depth sorry gallery chef wool enlist harsh sad rate luggage general pioneer glove about diagram"
-# TODO: //END
-
 # declare application state storage (immutable)
 local_ints = 1
 local_bytes = 1
