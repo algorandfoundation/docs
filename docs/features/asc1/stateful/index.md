@@ -58,7 +58,7 @@ app_global_put
 
 ```python tab="PyTeal"
 def approval_program():
-    return(App.globalPut(Bytes("Mykey"), Int(50)))
+    return App.globalPut(Bytes("Mykey"), Int(50))
 
 with open('approval.teal', 'w') as f:
     compiled = compileTeal(approval_program(), Mode.Application)
@@ -116,7 +116,7 @@ Where 0 is the sender, 1 is the first additional account passed in and 2 is the 
 TEAL provides calls to read global and local state values for the current smart contract.  To read from local or global state TEAL provides the `app_local_get`, `app_global_get`, `app_local_get_ex` , and `app_global_get_ex` opcodes. The following TEAL code reads a value from global state for the current smart contract.
 
 ```text tab="TEAL"
-byte “MyGlobalKey”
+byte "MyGlobalKey"
 app_global_get
 ```
 
@@ -133,7 +133,7 @@ The following TEAL code reads the local state of the sender account for the spec
 
 ```text tab="TEAL"
 int 0
-byte “MyLocalKey”
+byte "MyLocalKey"
 app_local_get
 ```
 
@@ -223,7 +223,7 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 
 ```text tab="TEAL"
 int 0
-byte “MyGlobalKey”
+byte "MyGlobalKey"
 app_global_get_ex
 bnz increment_existing //found value
 ```
@@ -446,7 +446,7 @@ def approval_program():
         Return(Int(1))
     ])
 
-    program = If(my_parm, is_my_parm, is_not_my_parm)
+    program = If(Bytes("myparm") == Txn.application_args[0], is_my_parm, is_not_my_parm)
     return(program)
 
 with open('approval.teal', 'w') as f:
@@ -489,7 +489,7 @@ def approval_program():
         Return(Int(1))
     ])
 
-    program = If(creator, creation, not_creation)
+    program = If(Int(0) == Txn.application_id(), creation, not_creation)
     return(program)
 
 with open('approval.teal', 'w') as f:
@@ -532,7 +532,7 @@ def approval_program():
         Return(Int(1))
     ])
 
-    program = If(update, is_update, is_not_update)
+    program = If(OnComplete.UpdateApplication == Txn.on_completion(), is_update, is_not_update)
     return(program)
 
 with open('approval.teal', 'w') as f:
@@ -564,7 +564,7 @@ def approval_program():
         Return(Int(1))
     ])
 
-    program = If(update, is_update, is_not_update)
+    program = If(OnComplete.UpdateApplication == Txn.on_completion(), is_update, is_not_update)
     return(program)
 
 with open('approval.teal', 'w') as f:
@@ -607,7 +607,7 @@ def approval_program():
         Return(Int(1))
     ])
 
-    program = If(creation, is_creation, is_not_creation)
+    program = If(Int(0) == Txn.application_id(), is_creation, is_not_creation)
     return(program)
 
 with open('approval.teal', 'w') as f:
@@ -650,7 +650,7 @@ def approval_program():
         Return(Int(1))
     ])
 
-    program = If(deletion, is_deletion, is_not_deletion)
+    program = If(OnComplete.DeleteApplication == Txn.on_completion(), is_deletion, is_not_deletion)
     return(program)
 
 with open('approval.teal', 'w') as f:
@@ -889,4 +889,3 @@ Note that global storage is actually stored in the creator account, so that acco
 Any account that opts in to the contract would have its balance requirement raised 128500 microAlgos.
 
 100000 to opt in to the contract + 28500 for the locally stored integer.
-
