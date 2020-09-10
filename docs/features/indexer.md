@@ -90,14 +90,14 @@ func main() {
 Before describing each of the available REST APIs, a few specific functions are described that are supported across many of the calls. This includes [Paginated Results](#paginated-results), [Historical Data searches](#historical-data-searches), and [Note Field Searching](#note-field-searching).
 
 # Paginated Results
-When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below. If the limit parameter is omitted, the response defaults are in the first column. If the limit parameter is used, the maximum response limit is in the second column.
+When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below. 
 
-| Search Type  | Default Response Limit | Maximum Response Limit |
-| ------------- | ------------- | ------------- |
-| Transaction Search | 1000 | 10000 |
-| Account Search | 100 | 1000 |
-| Asset Search | 100 | 1000 |
-| Asset Balance Search | 1000 | 10000 |
+| Search Type  | Maximum number of results per search | 
+| ------------- | ------------- |
+| Transaction Search | 1000 |
+| Account Search | 100 |
+| Asset Search | 100 |
+| Asset Balance Search | 1000 |
 
 These values represent the maximum number of results that will be returned when searching for specific results. For example, the following will return the last 1000 transactions that exceeded 10 microAlgos. 
 
@@ -360,11 +360,127 @@ A new next token will be returned to get the next five. This token acts as a mar
 The following REST calls support paginated results.
 
 * `/accounts` - Search for specific accounts.
+* `/accounts?application-id={application-id}` - Search for accounts for a specific application.
 * `/accounts/{account-id}/transactions` - Search for transactions for a specific account.
 * `/assets` - Search Assets.
 * `/assets/{asset-id}/balances` - Search Asset balances.
 * `/assets/{asset-id}/transactions` - Search for Transactions with a specific Asset.
 * `/transactions` - Search all transactions
+
+Below is an example of searching accounts for a specific application with paginated results.
+
+```javascript tab="JavaScript"
+let nexttoken = "";
+let numAccounts = 1;
+(async () => {
+
+    let applicationID = 70;
+    let limit = 2;
+    while (numAccounts > 0) {
+        // execute code as long as condition is true
+        let next_page = nexttoken;
+        let accountInfo = await indexerClient.searchAccounts()
+            .applicationID(applicationID).limit(limit).nextToken(next_page).do();
+        let accounts = accountInfo['accounts'];
+        numAccounts = accounts.length;
+        if (numAccounts > 0) {
+            nexttoken = accountInfo['next-token'];
+            console.log("Information for account info for Application ID: " + JSON.stringify(accountInfo, undefined, 2));
+        }
+    }
+
+}) ().catch(e => {
+    console.log(e);
+    console.trace();
+});
+```
+
+```python tab="Python"
+nexttoken = ""
+num_accounts = 1
+# loop using next_page to paginate until there are no more accounts
+# in the response
+# (max is 100 default
+# unless limit is used for max 1000 per request on accounts)
+while (num_accounts > 0):
+    response = myindexer.accounts(
+        application_id=70, limit=2,next_page=nexttoken)
+    accounts = response['accounts']
+    num_accounts = len(accounts)
+    if (num_accounts > 0):
+        nexttoken = response['next-token']
+        # Pretty Printing JSON string
+        print("Account Info for Application ID: " + json.dumps(response, indent=2, sort_keys=True))
+```
+
+```java tab="Java"
+public static void main(String args[]) throws Exception {
+AccountsAppIDPaging ex = new AccountsAppIDPaging();
+IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();        
+Long app_id = Long.valueOf(70);
+String nexttoken = "";
+Integer numaccounts = 1;
+Long limit = Long.valueOf(2);                   
+// loop until there are no more accounts in the response
+// for the limit (100 is default, with max limit of 1000 per account request)     
+Response<AccountsResponse> response = indexerClientInstance.searchForAccounts().applicationId(app_id).limit(limit).execute();  
+while (numaccounts > 0) {
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    JSONArray jsonArray = (JSONArray) jsonObj.get("accounts");
+    numaccounts = jsonArray.length();
+    if (numaccounts > 0) {
+        nexttoken = jsonObj.get("next-token").toString();
+        JSONObject jsonObjAll = new JSONObject(response.body().toString());
+        System.out.println("Account Info for Application ID : " + jsonObjAll.toString(2)); // pretty print json
+        // note, if nexttoken is an empty string this call will fail
+        response = indexerClientInstance.searchForAccounts().applicationId(app_id).next(nexttoken)
+                .limit(limit).execute();    
+    }
+} 
+}
+```
+
+```go tab="Go"
+// query parameters
+var applicationID uint64 = 70
+var nextToken = ""
+var numAccounts = 1
+var numPages = 1
+var limit uint64 = 2
+func main() {
+	// Create an indexer client
+	indexerClient, err := indexer.MakeClient(indexerAddress, indexerToken)
+	if err != nil {
+		return
+	}
+	for numAccounts > 0 {
+	// Query
+	result, err := indexerClient.SearchAccounts().ApplicationId(applicationID).Limit(limit).NextToken(nextToken).Do(context.Background())
+	if err != nil {
+		return
+	}
+	accounts := result.Accounts
+	numAccounts = len(accounts)
+	nextToken = result.NextToken
+	if numAccounts > 0 {
+		// Print results
+		JSON, err := json.MarshalIndent(accounts, "", "\t")
+		if err != nil {
+			return
+		}
+		fmt.Println("Account Info for Application ID : ", string(JSON) )
+		fmt.Println("End of page : ", numPages)
+		fmt.Println("Accounts printed on this page : ", len(accounts))
+		fmt.Println("Next Token : ", nextToken)
+		numPages++
+	}
+	}
+```
+
+```bash tab="cURL"
+$ curl "localhost:59998/v2/accounts?application-id=70&next=NL7OCUFWGXF6B2IUGVMVUXXKRZPVZBVBVFO7PNFMN2IWSUIZY7D52MFJMA"
+```
+
 
 # Historical Data Searches 
 Many of the REST calls support getting values at specific rounds. This means that the Indexer will do calculations that determine what specific values were at a specific round. For example, if account A starts at round 50 with 200 ARCC tokens and spends 50 of those tokens in round 75, the following command would return a balance of 150
@@ -710,6 +826,121 @@ Results
 This call also supports the pagination mechanism described in [Paginated Results](/#paginated-results) using the `next` and `limit` query parameters. This call also supports [Historical Data Searches](#historical-data-searches) if the Indexer is configured for the `/accounts` call.
 
 This call returns a list of accounts with associated data, the round number the results were calculated for and optionally the `next-token` value if you are using pagination.
+
+Account searches for a specific application follows.
+
+```javascript tab="JavaScript"
+(async () => {
+    let applicationID = 70;  
+    let accountInfo = await indexerClient.searchAccounts()
+        .applicationID(applicationID).do();
+    console.log(chalk.black("Information for account info for Application ID: " + JSON.stringify(accountInfo, undefined, 2)));
+})().catch(e => {
+    console.log(e);
+    console.trace();
+});
+```
+
+```python tab="Python"
+response = myindexer.accounts(
+    application_id=2672020)
+print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
+```
+
+```java tab="Java"
+public static void main(String args[]) throws Exception {
+    AccountsAppID ex = new AccountsAppID();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long app_id = Long.valueOf(70);
+    Response<AccountsResponse> response = indexerClientInstance.searchForAccounts().applicationId(app_id).execute();
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Pretty Print of Accounts for Application: " + jsonObj.toString(2)); // pretty print json
+}
+```
+
+```go tab="Go"
+     // Lookup application
+     var applicationID uint64 = 70
+	 result, err := indexerClient.SearchAccounts().ApplicationId(applicationID).Do(context.Background())
+	// Print the results
+	JSON, err := json.MarshalIndent(result, "", "\t")
+	fmt.Printf(string(JSON) + "\n")
+```
+
+``` bash tab="cURL"
+$ curl localhost:59998/v2/accounts?application-id=70| json_pp
+```
+
+Results
+``` bash
+{
+"current-round" : 377,
+"next-token" : "6AZC53IE3ZOSW6WDJVMCLCFW6VJFPYBEDSXUVSEODQF7CYBIC6LHTWXUAM",
+"accounts" : [
+{
+    "reward-base" : 0,
+    "status" : "Offline",
+    "apps-local-state" : [
+    {
+        "id" : 70,
+        "schema" : {
+            "num-uint" : 7,
+            "num-byte-slice" : 0
+        },
+        "key-value" : [
+            {
+                "key" : "Y1g=",
+                "value" : {
+                "bytes" : "",
+                "type" : 1,
+                "uint" : 0
+                }
+            },
+            {
+                "key" : "bWI=",
+                "value" : {
+                "type" : 1,
+                "bytes" : "",
+                "uint" : 0
+                }
+            },
+            {
+                "value" : {
+                "uint" : 0,
+                "type" : 1,
+                "bytes" : ""
+                },
+                "key" : "dGw="
+            },
+            {
+                "value" : {
+                "uint" : 0,
+                "bytes" : "",
+                "type" : 1
+                },
+                "key" : "dGc="
+            },
+            {
+                "value" : {
+                "uint" : 0,
+                "type" : 1,
+                "bytes" : ""
+                },
+                "key" : "Ymw="
+            }
+        ]
+    }
+    ],
+    "amount" : 99998099,
+    "rewards" : 0,
+    "round" : 57,
+    "pending-rewards" : 99,
+    "sig-type" : "sig",
+    "address" : "KGDN7U6QWB6SO34CIKWQRPUQIUP3INMBX6JP5JJLHHUYXPMADB5DYGOCJ4",
+    "amount-without-pending-rewards" : 99998000
+},
+...
+```
 
 # Getting an Account
 The `/accounts/{account-id}` can be used to look up ledger data for a specific account.
@@ -2149,7 +2380,8 @@ public static void main(String args[]) throws Exception {
 // 		}
 // 	},
 // 	"current-round": 377
-// }   
+// }  
+
 ```
 
 ```bash tab="cURL"
