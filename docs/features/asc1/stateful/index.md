@@ -9,7 +9,7 @@ See the [*TEAL Reference Guide*](../../../reference/teal/specification.md) to un
      
     - Each PyTeal code snippet ends with the action to compile the program and write it to a file so the user can view the underlying TEAL code.
     - Sometimes the compiled version of a PyTeal code snippet will differ slightly from the TEAL version, however the resulting function should be equivalent for the particular area of focus in the documentation. In larger more complex programs, this may not always be the case.
-    - When a TEAL code snippet includes comments as placeholders for code, the PyTeal example will likely use a placeholder of `Seq([Return(Int(1))])` with a comment near it. This allows the user to compile the program. However, returning 1 is a very permissive action in Smart Contracts so be sure to update this logic accordingly.
+    - When a TEAL code snippet includes comments as placeholders for code, the PyTeal example will often use a placeholder of `Seq([Return(Int(1))])` with a comment describing this as a placeholder. This allows the user to compile the program for learning purposes. However, returning 1 is a very permissive action and should be carefully updated when used in a real application.
 
 # The Lifecycle of a Stateful Smart Contract
 Stateful smart contracts are implemented using two TEAL programs:
@@ -57,12 +57,9 @@ app_global_put
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return App.globalPut(Bytes("Mykey"), Int(50))
+program = App.globalPut(Bytes("Mykey"), Int(50))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 To store a value in local storage, the following TEAL can be used.
@@ -75,12 +72,9 @@ app_local_put
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(App.localPut(Int(0), Bytes("MyLocalKey"), Int(50)))
+program = App.localPut(Int(0), Bytes("MyLocalKey"), Int(50))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. With `goal` you can pass additional accounts using the `--app-account` option. 
@@ -99,12 +93,9 @@ app_local_put
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(App.localPut(Int(2), Bytes("MyLocalKey"), Int(50)))
+program = App.localPut(Int(2), Bytes("MyLocalKey"), Int(50))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call.
@@ -121,12 +112,9 @@ app_global_get
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(App.globalGet(Bytes("MyGlobalKey")))
+program = App.globalGet(Bytes("MyGlobalKey"))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 The following TEAL code reads the local state of the sender account for the specific call to the current smart contract.
@@ -138,12 +126,9 @@ app_local_get
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(App.localGet(Int(0), Bytes("MyLocalKey")))
+program = App.localGet(Int(0), Bytes("MyLocalKey"))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. With `goal` you can pass additional accounts using the `--app-account` option. 
@@ -160,13 +145,9 @@ app_local_get_ex
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    get_amount_given = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
-    return(get_amount_given)
+program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 !!! note
@@ -191,26 +172,25 @@ new-giver:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    get_amount_given = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
+get_amount_given = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
 
-    # Change these to appropriate logic for new and previous givers.
-    new_giver_logic = Seq([
-        Return(Int(1))
+# Change these to appropriate logic for new and previous givers.
+new_giver_logic = Seq([
+    Return(Int(1))
+])
+
+previous_giver_logic = Seq([
+    Return(Int(1))
+]) 
+
+program = Seq([
+            get_amount_given, 
+            If(get_amount_given.hasValue(), 
+                previous_giver_logic, 
+                new_giver_logic),
     ])
-    previous_giver_logic = Seq([
-        Return(Int(1))
-    ]) 
 
-    program = Seq([
-        get_amount_given, 
-        If(get_amount_given.hasValue(), previous_giver_logic, new_giver_logic),
-    ])
-    return(program)
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 The `app_global_get_ex` is used to read not only the global state of the current contract but up to two additional foreign contract applications. To access these foreign apps, they must be passed in with the application using the `--foreign-app` option. 
@@ -229,23 +209,21 @@ bnz increment_existing //found value
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
+get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
 
-    # Update with appropriate logic for use case
-    increment_existing = Seq([
-        Return(Int(1))
-    ])
+# Update with appropriate logic for use case
+increment_existing = Seq([
+    Return(Int(1))
+])
 
-    program = Seq([
+program = Seq([
         get_global_key, 
-        If(get_global_key.hasValue(), increment_existing, Return(Int(1))),
+        If(get_global_key.hasValue(), 
+            increment_existing, 
+            Return(Int(1))),
     ])
-    return(program)
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise `int 2` would represent the second passed in foreign application. Similar to the `app_local_get_ex` opcode, generally there will be branching logic testing whether the value was found or not. 
@@ -261,12 +239,9 @@ txn OnCompletion
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(OnComplete.NoOp == Txn.on_completion())
+program = OnComplete.NoOp == Txn.on_completion()
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 # Passing Arguments To Stateful Smart Contracts
@@ -288,12 +263,9 @@ byte "claim"
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Txn.application_args[1] == Bytes("claim"))
+program = Txn.application_args[1] == Bytes("claim")
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 This call gets the second passed in argument and compares it to the string "claim".
@@ -307,12 +279,9 @@ int 4
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Txn.application_args.length() == Int(4))
+program = Txn.application_args.length() == Int(4)
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 The above TEAL code will push a 0 on the top of the stack if the number of parameters in this specific transaction is anything other than 4, else it will push a 1 on the top of the stack. Internally all transaction parameters are stored as byte slices. Integers can be converted using the `btoi` opcode.
@@ -323,12 +292,9 @@ btoi
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Btoi(Txn.application_args[0]))
-    
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+program = Btoi(Txn.application_args[0])
+
+print(compileTeal(program, Mode.Application))
 ```
 
 !!! info
@@ -373,20 +339,16 @@ notoptingin:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    opting_in = OnComplete.OptIn == Txn.on_completion()
+# just a placeholder; change this
+not_opting_in = Seq([
+    Return(Int(0))
+])
 
-    # just a placeholder; change this to the code 
-    not_opting_in = Seq([
-        Return(Int(0))
-    ])
+program = If(OnComplete.OptIn == Txn.on_completion(), 
+            Return(Int(1)), 
+            not_opting_in)
 
-    program = If(opting_in, Return(Int(1)), not_opting_in)
-    return program 
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted in to the contract.
@@ -398,12 +360,9 @@ app_opted_in
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(App.optedIn(Int(0), Txn.application_id()))
+program = App.optedIn(Int(0), Txn.application_id())
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(approval_program(), Mode.Application))
 ```
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used.
@@ -435,23 +394,20 @@ not_my_parm:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    my_parm = (Bytes("myparm") == Txn.application_args[0])
-
-    # placeholder logic; change this
-    is_my_parm = Seq([
-        Return(Int(1))
-    ])
-    is_not_my_parm = Seq([
+# placeholder; change this logic in both cases
+is_my_parm = Seq([
         Return(Int(1))
     ])
 
-    program = If(Bytes("myparm") == Txn.application_args[0], is_my_parm, is_not_my_parm)
-    return(program)
+is_not_my_parm = Seq([
+        Return(Int(1))
+    ])
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+program = If(Bytes("myparm") == Txn.application_args[0], 
+            is_my_parm, 
+            is_not_my_parm)
+
+print(compileTeal(program, Mode.Application))
 ```
 
 # Update Stateful Smart Contract
@@ -477,24 +433,16 @@ not_creation:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    creator = (Int(0) == Txn.application_id())
+# placeholder logic; change this
+not_creation = Seq([
+    Return(Int(1))
+])
 
-    creation = Seq([
-        App.globalPut(Bytes("Creator"), Txn.sender())
-    ])
+program = If(Int(0) == Txn.application_id(), 
+            App.globalPut(Bytes("Creator"), Txn.sender()), 
+            not_creation)
 
-    # placeholder logic; change this
-    not_creation = Seq([
-        Return(Int(1))
-    ])
-
-    program = If(Int(0) == Txn.application_id(), creation, not_creation)
-    return(program)
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 TEAL can then be used to catch an update operation by someone other than the original creator.
@@ -520,24 +468,22 @@ not_update:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    update = OnComplete.UpdateApplication == Txn.on_completion()
+is_update = Seq([
+    If(App.globalGet(Bytes("Creator")) == Txn.sender(), 
+        Return(Int(1)), 
+        Return(Int(0)))
+])
 
-    is_update = Seq([
-        If(App.globalGet(Bytes("Creator")) == Txn.sender(), Return(Int(1)), Return(Int(0)))
-    ])
+# placeholder logic; change this
+is_not_update = Seq([
+    Return(Int(1))
+])
 
-    # placeholder logic; change this
-    is_not_update = Seq([
-        Return(Int(1))
-    ])
+program = If(OnComplete.UpdateApplication == Txn.on_completion(), 
+            is_update, 
+            is_not_update)
 
-    program = If(OnComplete.UpdateApplication == Txn.on_completion(), is_update, is_not_update)
-    return(program)
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication` application call is made to prevent anyone from ever updating the application code.
@@ -552,24 +498,16 @@ return
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    update = OnComplete.UpdateApplication == Txn.on_completion()
+# placeholder logic; change this
+is_not_update = Seq([
+    Return(Int(1))
+])
 
-    is_update = Seq([
-        Return(Int(0))
-    ])
+program = If(OnComplete.UpdateApplication == Txn.on_completion(), 
+            Return(Int(0)), 
+            is_not_update)
 
-    # placeholder logic; change this
-    is_not_update = Seq([
-        Return(Int(1))
-    ])
-
-    program = If(OnComplete.UpdateApplication == Txn.on_completion(), is_update, is_not_update)
-    return(program)
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 # Delete Stateful Smart Contract
@@ -595,24 +533,16 @@ not_creation:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    creation = (Int(0) == Txn.application_id())
+# placeholder logic; change this
+is_not_creation = Seq([
+    Return(Int(1))
+])
 
-    is_creation = Seq([
-        App.globalPut(Bytes("Creator"), Txn.sender())
-    ])
+program = If(Int(0) == Txn.application_id(), 
+            App.globalPut(Bytes("Creator"), Txn.sender()), 
+            is_not_creation)
 
-    # placeholder logic; change this
-    is_not_creation = Seq([
-        Return(Int(1))
-    ])
-
-    program = If(Int(0) == Txn.application_id(), is_creation, is_not_creation)
-    return(program)
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 TEAL can then be used to catch a delete operation by someone other than the original creator.
@@ -638,24 +568,20 @@ not_delete:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    deletion = (OnComplete.DeleteApplication == Txn.on_completion())
+is_deletion = If((App.globalGet(Bytes("Creator")) == Txn.sender()), 
+                Return(Int(1)), 
+                Return(Int(0)))
 
-    is_deletion = Seq([
-        If((App.globalGet(Bytes("Creator")) == Txn.sender()), Return(Int(1)), Return(Int(0)))
-    ])
+# placeholder logic; change this
+is_not_deletion = Seq([
+    Return(Int(1))
+])
 
-    # placeholder logic; change this
-    is_not_deletion = Seq([
-        Return(Int(1))
-    ])
+program = If(OnComplete.DeleteApplication == Txn.on_completion(), 
+            is_deletion, 
+            is_not_deletion)
 
-    program = If(OnComplete.DeleteApplication == Txn.on_completion(), is_deletion, is_not_deletion)
-    return(program)
-
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 # Atomic Transfers and Transaction Properties
@@ -666,12 +592,9 @@ txn Amount
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Txn.amount())
+program = Txn.amount()
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 In many common patterns, the stateful TEAL contract will be combined with other Algorand technologies such as Algorand Assets, Atomic Transfers, or Stateless Smart Contracts to build a complete application. In the case of Atomic transfers, more than one transaction’s properties can be checked within the stateful smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 0, then the call to the stateful smart contract is grouped with more than one transaction.
@@ -683,12 +606,9 @@ int 2
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Global.group_size() == Int(2))
+program = Global.group_size() == Int(2)
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 The above TEAL will be true if there are two transactions submitted at once using an Atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
@@ -700,12 +620,9 @@ int pay
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Gtxn[1].type_enum() == TxnType.Payment)
+program = Gtxn[1].type_enum() == TxnType.Payment
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../../reference/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. If the TEAL program fails, all transactions in the group will fail.
@@ -725,17 +642,16 @@ has_balance:
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    asset_balance = AssetHolding.balance(Int(0), Int(2))
-    program = Seq([
-        asset_balance,
-        If(asset_balance.hasValue(), Return(Int(1)), Return(Int(0)))
-    ])
-    return(program)
+asset_balance = AssetHolding.balance(Int(0), Int(2))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+program = Seq([
+        asset_balance,
+        If(asset_balance.hasValue(), 
+            Return(Int(1)), 
+            Return(Int(0)))
+    ])
+
+print(compileTeal(program, Mode.Application))
 ```
 
 This opcode takes two parameters. The first represents an index into the accounts array where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The second parameter is the Asset ID of the asset to examine. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
@@ -748,12 +664,9 @@ asset_params_get AssetTotal
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(AssetParam.total(Int(0)))
+program = AssetParam.total(Int(0))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../../reference/teal/opcodes.md) documentation for more details on what additional parameters can be read.
@@ -770,12 +683,9 @@ app_global_get
 ```
 
 ```python tab="PyTeal"
-def approval_program():
-    return(Global.latest_timestamp() >= App.globalGet(Bytes("StartDate")))
+program = Global.latest_timestamp() >= App.globalGet(Bytes("StartDate"))
 
-with open('approval.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
-    f.write(compiled)
+print(compileTeal(program, Mode.Application))
 ```
 
 # Reading a Smart Contracts State
@@ -853,14 +763,19 @@ def approval_program():
     handle_noop = Seq([
         Return(Int(1))
     ])
+
     handle_optin = Seq([
         Return(Int(1))
     ])
+
     handle_closeout = Seq([
         Return(Int(1))
     ])
+
     handle_updateapp = Err()
+
     handle_deleteapp = Err()
+
     program = Cond(
         [Txn.on_completion() == OnComplete.NoOp, handle_noop],
         [Txn.on_completion() == OnComplete.OptIn, handle_optin],
