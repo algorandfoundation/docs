@@ -362,7 +362,7 @@ app_opted_in
 ```python tab="PyTeal"
 program = App.optedIn(Int(0), Txn.application_id())
 
-print(compileTeal(approval_program(), Mode.Application))
+print(compileTeal(program, Mode.Application))
 ```
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used.
