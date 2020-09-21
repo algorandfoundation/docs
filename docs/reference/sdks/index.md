@@ -15,7 +15,7 @@ These APIs are described using the [Open API Specification version 3 (OAS3)](htt
 [Algod REST Endpoints OAS3 specfile](https://github.com/algorand/go-algorand/blob/master/daemon/algod/api/algod.oas3.yml?raw=true)(.yml)
 
 Run Algod in Postman OAS3.
-[![Run Algod in Postman OAS3](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/5128b0a5588f56e4fffc)
+[![Run Algod in Postman OAS3](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/f210a5ba9e3cb774a730)
 
 OAS2 Algod specfile [here](https://github.com/algorand/go-algorand/blob/master/daemon/algod/api/algod.oas2.json?raw=true)
 
