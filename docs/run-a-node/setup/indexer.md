@@ -9,6 +9,7 @@ The source code for the Indexer is provided on [github](https://github.com/algor
 
 For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide and the [REST API Indexer reference](../../reference/rest-apis/indexer.md). See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
 
+
 # Indexer V2
 ## Download the Indexer Binaries
 To Install the new Indexer follow the instructions below. The Indexer binaries are available on [github](https://github.com/algorand/indexer/releases).
@@ -80,6 +81,10 @@ $ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] p
 
 ## REST API Token and Server
 When starting the Indexer, a REST API is exposed. To control access to this API you can you use the `--token` parameter, which allows specifying any desired token. REST API clients will be required to pass this token in their calls in order to return successful searches. The REST API defaults to serving on port 8980. This can be changed by supply a [host:port] value to the Indexer with the `--server` option.
+
+[Click here for Indexer Rest Endpoint specfiles.](../../../reference/sdks/#algod-v2-and-indexer-rest-endpoints) 
+
+
 
 # Indexer V1
 
