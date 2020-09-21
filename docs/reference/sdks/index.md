@@ -8,7 +8,7 @@ Integration with the Algorand protocol daemon (`algod`), Algorand key management
 _**Algod V2 REST Endpoints**_
 
 !!! info
-    Algorand provides endpoints for [Open API Specification version 2 (OAS2)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) and [OAS3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md). We chose to maintain both versions of the spec because OpenAPI v3 doesn't seem to be widely supported. Some tools worked better with v3 and others with v2, so having both available has been useful. To reduce developer burdon, the v2 specfile is automatically converted v3 using [converter.swagger.io](converter.swagger.io).
+    Algorand provides endpoints for [Open API Specification version 2 (OAS2)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) and [OAS3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md). 
 
 These APIs are described using the [Open API Specification version 3 (OAS3)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md).
 
@@ -26,7 +26,7 @@ The `algorand-indexer` daemon provides its API from the _host:port_ defined by t
 [Indexer REST Endpoints OAS3 specfile](https://www.github.com/algorand/indexer/blob/develop/api/indexer.oas3.yml?raw=true)(.yml)
 
 Run Indexer in Postman OAS3.
-[![Run Indexer in Postman OAS3](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/df7e0e98de868560b702)
+[![Run Indexer in Postman OAS3](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ba172e20aaf274a78517)
 
 OAS2 Indexer specfile [here](https://github.com/algorand/indexer/blob/develop/api/indexer.oas2.json?raw=true)
 
