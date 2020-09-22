@@ -347,6 +347,7 @@ Lookup asset information.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupassetbyid-response-200)|
+|**404**||[ErrorResponse](#errorresponse)|
 
 <a name="lookupassetbyid-response-200"></a>
 **Response 200**
@@ -557,7 +558,7 @@ Search for transactions.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#searchfortransactions-response-200)|
-|**500**|error|No Content|
+|**500**||[ErrorResponse](#errorresponse)|
 
 <a name="searchfortransactions-response-200"></a>
 **Response 200**
@@ -582,6 +583,52 @@ Search for transactions.
 **Tags**
 
 * search
+
+
+<a name="lookuptransactions"></a>
+### GET /v2/transactions/{txid}
+
+**Description**
+Lookup a single transaction.
+
+
+**Parameters**
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**txid**  <br>*required*|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookuptransactions-response-200)|
+|**404**||[ErrorResponse](#errorresponse)|
+|**500**||[ErrorResponse](#errorresponse)|
+
+<a name="lookuptransactions-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**transaction**  <br>*required*||[Transaction](#transaction)|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
 
 
 
