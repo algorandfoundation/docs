@@ -50,8 +50,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 
 | Name| Description |
 |------|------|
-| <center>[Algodesk.io](https://algodesk.io) </center>| Build. Test. Execute. Algodesk provides [open-source](https://github.com/algodesk-io) and developer-friendly tools to build decentralized apps and smart contracts on Algorand network. One can [quickly create ASA](https://algodesk.io/asa/#/portal/login) and [compile ASC1](https://algodesk.io/teal/#/portal/teal) without installing anything.
- |
+| <center>[Algodesk.io](https://algodesk.io) </center>| Build. Test. Execute. Algodesk provides [open-source](https://github.com/algodesk-io) and developer-friendly tools to build decentralized apps and smart contracts on Algorand network. One can [quickly create ASA](https://algodesk.io/asa/#/portal/login) and [compile ASC1](https://algodesk.io/teal/#/portal/teal) without installing anything.|
 | <center>[Algorand Studio](https://github.com/ObsidianLabs/AlgorandStudio#algorand-studio) </center>| Algorand Studio - Online IDE, quickly create ASA and compile ASC1 without installing anything. Use the IDE to develop Algorand Smart Contracts (ASC1) for the Algorand Blockchain. It includes TEAL code editor and compiler, PyTeal integration, Algorand node, keypair manager, and block explorer. The IDE can also help to construct Algorand transactions, including atomic transfers, multi-sig transactions, Algorand Standard Assets (ASA) creation/transfer/destroy, and direct and delegated contract executions. By [Obsidian Labs](https://www.obsidians.io/).|
 
 # Smart Contract Utilities and Libraries
