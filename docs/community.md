@@ -16,7 +16,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[![](./imgs/goalseekericon.png)](https://goalseeker.purestake.io/algorand/mainnet)</center><center> [GoalSeeker](https://goalseeker.purestake.io/algorand/mainnet)</center> | GoalSeeker makes it easier than ever to view critical network statistics, browse recently created blocks, search for transactions and accounts in previous blocks, and review activity related to Algorand Standard Assets (ASAs). This Block Explorer is maintained by [PureStake](https://www.purestake.com/). |
-| <center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Algo Explorer](https://algoexplorer.io/)</center> | Algoexplorer allows you to explore and search the Algorand blockchain for transactions, addresses and assets. It also provides historical data, statistics, the staking rewards program and other activities taking place on Algorand. Created by [Cartan Group](https://randlabs.io/).|
+| <center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Algo Explorer](https://algoexplorer.io/)</center> | Algoexplorer allows you to explore and search the Algorand blockchain for transactions, addresses and assets. It also provides historical data, statistics, the staking rewards program and other activities taking place on Algorand. Created by [Rand Labs](https://randlabs.io/).|
 | <center>[![](./imgs/uneconomia-logo.png)](https://uneconomia.com/)</center><center> [Un'Economia](https://uneconomia.com/)</center> | Un'Economia, Italian for one economy, is a monitoring and analytics platform for the Algorand network which provides a top-level view of network data and activity. This platform is developed and managed by [Cartan Group](https://www.cartan.group/)|
 
 # Wallets
@@ -30,7 +30,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 <center>[![](./imgs/purestakelogo.png)](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center><center> [PureStake API Service](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center> | PureStake's API service makes it easy to quickly get up-and-running on the Algorand network. The service builds upon PureStake’s existing infrastructure platform to provide developers with easy-to-use access to native Algorand REST APIs. |
-<center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Rand Labs API Service](https://algoexplorer.io)</center> | API Services from Rand Labs. API Endpoint for Algod Operations and AlgoExplorer API. Click on the Developer API tab. Base URL: api.algoexplorer.io/|
+<center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Rand Labs API Service](https://algoexplorer.io)</center> | API Services from Rand Labs. API Endpoint for Algod Operations and AlgoExplorer API. Click on the Developer API tab to see the endpoints and Base URL info.|
 
 # SDKs
 | Name| Description |
