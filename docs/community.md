@@ -30,7 +30,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 <center>[![](./imgs/purestakelogo.png)](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center><center> [PureStake API Service](https://www.purestake.com/blog/algorand-rest-api-purestake/)</center> | PureStake's API service makes it easy to quickly get up-and-running on the Algorand network. The service builds upon PureStake’s existing infrastructure platform to provide developers with easy-to-use access to native Algorand REST APIs. |
-<center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Rand Labs API Service](https://algoexplorer.io)</center> | API Services from Rand Labs. API Endpoint for Algod Operations and AlgoExplorer API. Click on the Developer API tab to see the endpoints and Base URL info.|
+<center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Rand Labs API Service](https://algoexplorer.io)</center> | API Services from Rand Labs. API Endpoint for Algod Operations and AlgoExplorer API. **Click on the Developer API tab** to see the endpoints and Base URL info.|
 
 # SDKs
 | Name| Description |
