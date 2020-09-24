@@ -60,6 +60,23 @@ When the installer runs, it will pull down the latest update package from S3 and
 !!! info
     When installing the `rel/beta` release, specify the beta channel `-c beta`
 
+# Installing the Devtools
+
+Beginning with the 2.1.5 release, there is now a new package called `algorand-devtools` that contains the developer tools.  The package contains the following binaries, some of which are new (as of 2.1.5) and some of which have been removed from the `algorand` package to decrease its size:
+
+- carpenter
+- catchupsrv
+- msgpacktool
+- tealcut
+- tealdbg
+
+Installing the devtools is simple and no additional entries need to be added for either `apt` or `yum` to be aware of them.  Simply install the tools as usual via the respective package manager. Since the `algorand` package is a dependency of `algorand-devtools` and the two former cannot be older than the latter, one of two possible scenarios will occur upon downloading the devtools:
+
+- If `algorand` has not been previously installed, it will automatically download it.
+- If `algorand` is installed but older than the devtools, it will automatically upgrade it.
+
+See the examples below to understand how to install the deb and rpm packages.
+
 # Installing with Debian
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
 
@@ -72,7 +89,13 @@ curl -O https://releases.algorand.com/key.pub
 sudo apt-key add key.pub
 sudo add-apt-repository "deb https://releases.algorand.com/deb/ stable main"
 sudo apt-get update
+
+# To get both algorand and the devtools:
+sudo apt-get install -y algorand-devtools
+
+# Or, to only install algorand:
 sudo apt-get install -y algorand
+
 algod -v
 ```
 
@@ -92,6 +115,11 @@ curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
 sudo rpmkeys --import rpm_algorand.pub
 sudo yum install yum-utils
 sudo yum-config-manager --add-repo https://releases.algorand.com/rpm/stable/algorand.repo
+
+# To get both algorand and the devtools:
+sudo yum install algorand-devtools
+
+# Or, to only install algorand:
 sudo yum install algorand
 ```
 
