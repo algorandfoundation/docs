@@ -77,6 +77,8 @@ Installing the devtools is simple and no additional entries need to be added for
 
 See the examples below to understand how to install the deb and rpm packages.
 
+> Note that if installing using the updater script (see the section *Installing with Other Linux Distros*) that all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
+
 # Installing with Debian
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
 
