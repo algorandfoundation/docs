@@ -479,6 +479,7 @@ Sign, send, await confirmation and display the results:
 transaction_response = client.pending_transaction_info(tx_id)
 print("OptIn to app-id: ",transaction_response['txn']['txn']['apid'])  
 ```  
+
 ```javascript tab="JavaScript"
 // sign, send, await
 
