@@ -96,6 +96,9 @@ $ goal clerk dryrun -t signout.tx --dryrun-dump  -o dr.msgp
 $ tealdbg debug program.teal -d dr.msgp --group-index 0
 ```
 
+!!! warning
+	Currently the `--dryrun-dump` and `-o` flags are not implemented in release but will be available shortly.
+
 Debugging a stateless smart contract functions identically to the process described above except the state is not required. For example, a stateless contract may act as an escrow account. The following call exports the transaction for debugging purposes. This call will not execute on the blockchain as it is not submitted to the network but is written to the output file.
 
 ```
