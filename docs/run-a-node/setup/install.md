@@ -77,6 +77,8 @@ Installing the devtools is simple and no additional entries need to be added for
 
 See the examples below to understand how to install the deb and rpm packages.
 
+> Note that if installing using the updater script (see the section *Installing with Other Linux Distros*) that all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
+
 # Installing with Debian
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
 
@@ -101,9 +103,9 @@ algod -v
 
 These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`. 
 
-
 This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
 
+> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
 
 # Installing with RPM
 Installing on Fedora and Centos are described below. 
@@ -134,6 +136,8 @@ dnf install algorand
 These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`. 
 
 This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
+
+> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
 
 # Installing with Other Linux Distros
 Nodes have been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 1-4). Other modern distros should work as well.
