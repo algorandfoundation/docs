@@ -300,7 +300,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 `./goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d ~/node/datafastcatchup`
 
-   Some user had to use the following syntax to get this example to work. 
+   Alternate syntax
  
  `./goal node catchup 7560000#4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d datafastcatchup`
 
