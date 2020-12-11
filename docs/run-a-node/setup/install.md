@@ -214,10 +214,15 @@ goal node status -d /var/lib/algorand
 ./goal node start -d data
 ```
 
-This will start the node and it can be verified by running:
+This will start the node and it can be verified by creating a new terminal window and running the following command:
 
 ```
 pgrep algod
+```
+Something similiar to the following will be displayed:
+
+```
+26509
 ```
 
 The node can be manually stopped by running:
@@ -263,13 +268,19 @@ https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/mainnet/latest.c
 The results will look similar to this:
 `4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
 
+!!! Note 
+    It has been noted that in some instances the `datafastcatchup` is not found. Resulting in a 
+    Algorand node failed to start: exit status 1. Please create a directory named `datafastcatchup` and copy the contents of the `data` folder into it.
+
 Steps:
 
 1) Start the node, if not started already, and run a status.
 
 `./goal node start -d ~/node/datafastcatchup`
 
-`./goal node status -d ~/node/datafastcatchup`
+Alternate syntax
+
+`./goal node status -d datafastcatchup`
 
 Results should look something like this...
 
@@ -289,8 +300,17 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 `./goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d ~/node/datafastcatchup`
 
+   Some user had to use the following syntax to get this example to work. 
+ 
+ `./goal node catchup 7560000#4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d datafastcatchup`
+
 3) Run another status and results should look something like this showing a Catchpoint status:
+
 `./goal node status -d ~/node/datafastcatchup`
+
+Alternate syntax
+
+`./goal node status -d datafastcatchup`
 
 Results should show 5 Catchpoint status lines for Catchpoint, total accounts, accounts processed, total blocks , downloaded blocks.
 
@@ -309,6 +329,10 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 `./goal node status -d ~/node/datafastcatchup -w 1000`
 
+Alternate syntax
+
+`./goal node status -d datafastcatchup -w 1000`
+
 5) Notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. **Once there is a Sync Time of 0, the node is synced and if fully usable. **
 
 ```
@@ -326,7 +350,8 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 
 # Updating Node
-The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`. 
+The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node
+/data` or `./update.sh -d data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data` or `./update.sh -i -c stable -d data`. 
 
 If there is a newer version, it will be downloaded and unpacked. The node will shutdown, the binaries and data files will be archived, and the new binaries will be installed. If any part of the process fails, the node will restore the previous version (bin and data) and restart the node. If it succeeds, the new version is started. The automatic start can be disabled by adding the `-n` option.
 
