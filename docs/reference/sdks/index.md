@@ -139,7 +139,7 @@ The Go SDK is available as a standard package and can be downloaded and installe
 Requirements: [Go Programming Language](https://golang.org/dl/) version 1.12.x 
 
 ```zsh
-go get -u github.com/algorand/go-algorand-sdk/..
+go get -u github.com/algorand/go-algorand-sdk/...
 ```
 
 The [GitHub repository](https://github.com/algorand/go-algorand-sdk) contains additional documentation and examples.
