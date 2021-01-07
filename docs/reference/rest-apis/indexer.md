@@ -653,8 +653,10 @@ data/basics/userBalance.go : AccountData
 |**apps-total-schema**  <br>*optional*|\[tsch\] stores the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
 |**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
 |**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
+|**closed-at-round**  <br>*optional*|Round during which this account was most recently closed.|integer|
 |**created-apps**  <br>*optional*|\[appp\] parameters of applications created by this account including app global data.<br><br>Note: the raw account uses `map[int] -> AppParams` for this type.|< [Application](#application) > array|
 |**created-assets**  <br>*optional*|\[apar\] parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
+|**created-at-round**  <br>*optional*|Round during which this account first appeared in a transaction.|integer|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
 |**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
 |**reward-base**  <br>*optional*|\[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.|integer|
@@ -696,6 +698,8 @@ Application index and its parameters
 
 |Name|Description|Schema|
 |---|---|---|
+|**created-at-round**  <br>*optional*|Round when this application was created.|integer|
+|**deleted-at-round**  <br>*optional*|Round when this application was deleted.|integer|
 |**id**  <br>*required*|\[appidx\] application index.|integer|
 |**params**  <br>*required*|\[appparams\] application parameters.|[ApplicationParams](#applicationparams)|
 
@@ -707,8 +711,10 @@ Stores local state associated with an application.
 
 |Name|Description|Schema|
 |---|---|---|
+|**closed-out-at-round**  <br>*optional*|Round when account closed out of the application.|integer|
 |**id**  <br>*required*|The application which this local state is for.|integer|
 |**key-value**  <br>*optional*|\[tkv\] storage.|[TealKeyValueStore](#tealkeyvaluestore)|
+|**opted-in-at-round**  <br>*optional*|Round when the account opted into the application.|integer|
 |**schema**  <br>*required*|\[hsch\] schema.|[ApplicationStateSchema](#applicationstateschema)|
 
 
@@ -745,6 +751,8 @@ Specifies both the unique identifier and the parameters for an asset
 
 |Name|Description|Schema|
 |---|---|---|
+|**created-at-round**  <br>*optional*|Round during which this asset was created.|integer|
+|**destroyed-at-round**  <br>*optional*|Round during which this asset was destroyed.|integer|
 |**index**  <br>*required*|unique asset identifier|integer|
 |**params**  <br>*required*||[AssetParams](#assetparams)|
 
@@ -763,6 +771,8 @@ data/basics/userBalance.go : AssetHolding
 |**asset-id**  <br>*required*|Asset ID of the holding.|integer|
 |**creator**  <br>*required*|Address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.|string|
 |**is-frozen**  <br>*required*|\[f\] whether or not the holding is frozen.|boolean|
+|**opted-in-at-round**  <br>*optional*|Round during which the account opted into this asset holding.|integer|
+|**opted-out-at-round**  <br>*optional*|Round during which the account opted out of this asset holding.|integer|
 
 
 <a name="assetparams"></a>
@@ -898,7 +908,10 @@ A health check response.
 |Name|Schema|
 |---|---|
 |**data**  <br>*optional*|object|
+|**db-available**  <br>*required*|boolean|
+|**is-migrating**  <br>*required*|boolean|
 |**message**  <br>*required*|string|
+|**round**  <br>*required*|integer|
 
 
 <a name="miniassetholding"></a>
@@ -906,11 +919,13 @@ A health check response.
 A simplified version of AssetHolding
 
 
-|Name|Schema|
-|---|---|
-|**address**  <br>*required*|string|
-|**amount**  <br>*required*|integer|
-|**is-frozen**  <br>*required*|boolean|
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*required*||string|
+|**amount**  <br>*required*||integer|
+|**is-frozen**  <br>*required*||boolean|
+|**opted-in-at-round**  <br>*optional*|Round during which the account opted into the asset.|integer|
+|**opted-out-at-round**  <br>*optional*|Round during which the account opted out of the asset.|integer|
 
 
 <a name="oncompletion"></a>

@@ -12,7 +12,7 @@ Show the list of Algorand accounts on this machine
 
 
 
-Show the list of Algorand accounts on this machine. Indicates whether the account is [offline] or [online], and if the account is the default account for goal. Also displays balances and asset information.
+Show the list of Algorand accounts on this machine. Indicates whether the account is [offline] or [online], and if the account is the default account for goal. Also displays account information with --info.
 
 
 
@@ -31,6 +31,8 @@ goal account list [flags]
 ```
 
   -h, --help   help for list
+
+      --info   Include additional information about each account's assets and applications
 
 ```
 
