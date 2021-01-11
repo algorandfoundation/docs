@@ -19,6 +19,11 @@ If you have a project you want featured on the community site, [reach out](mailt
 | <center>[![](./imgs/AlgoExplorerLogo.png)](https://algoexplorer.io/)</center><center> [Algo Explorer](https://algoexplorer.io/)</center> | Algoexplorer allows you to explore and search the Algorand blockchain for transactions, addresses and assets. It also provides historical data, statistics, the staking rewards program and other activities taking place on Algorand. Created by [Rand Labs](https://randlabs.io/).|
 | <center>[![](./imgs/uneconomia-logo.png)](https://uneconomia.com/)</center><center> [Un'Economia](https://uneconomia.com/)</center> | Un'Economia, Italian for one economy, is a monitoring and analytics platform for the Algorand network which provides a top-level view of network data and activity. This platform is developed and managed by [Cartan Group](https://www.cartan.group/)|
 
+# Monitoring & Analytics
+| Name| Description |
+|------|------|
+| <center>[AlertHub](https://app.metrika.co/) | AlertHub enables monitoring and real-time alerting on Algorand addresses so that users can maintain the health of their accounts and the overall Algorand network.
+
 # Wallets
 
 | Name| Description |
