@@ -22,7 +22,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 # Monitoring & Analytics
 | Name| Description |
 |------|------|
-| <center>[AlertHub](https://app.metrika.co/) | AlertHub enables monitoring and real-time alerting on Algorand addresses so that users can maintain the health of their accounts and the overall Algorand network.
+| <center>[AlertHub](https://app.metrika.co/) | AlertHub enables monitoring and real-time alerting on Algorand addresses so that users can maintain the health of their accounts and the overall Algorand network. Subscribe to get notifications on account events like consensus participation, key expiration, and transactions.
 
 # Wallets
 
