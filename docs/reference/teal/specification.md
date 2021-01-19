@@ -32,12 +32,10 @@ The TEAL bytecode plus the length of any Args must add up to less than 1000 byte
 ## Execution modes
 
 Starting from version 2 TEAL evaluator can run programs in two modes:
-
 1. Signature verification (stateless)
 2. Application run (stateful)
 
 Differences between modes include:
-
 1. Max program length (consensus parameters LogicSigMaxSize, MaxApprovalProgramLen and MaxClearStateProgramLen)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
 3. Opcodes availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](opcodes.md) for details.
@@ -353,6 +351,12 @@ A program starts with a varuint declaring the version of the compiled code. Any 
 For version 1, subsequent bytes after the varuint are program opcode bytes. Future versions could put other metadata following the version identifier.
 
 It is important to prevent newly-introduced transaction fields from breaking assumptions made by older versions of TEAL. If one of the transactions in a group will execute a TEAL program whose version predates a given field, that field must not be set anywhere in the transaction group, or the group will be rejected. For example, executing a TEAL version 1 program on a transaction with RekeyTo set to a nonzero address will cause the program to fail, regardless of the other contents of the program itself.
+
+This requirement is enforced as follows:
+
+* For every transaction, compute the earliest TEAL version that supports all the fields and and values in this transaction. For example, a transaction with a nonzero RekeyTo field will have version (at least) 2.
+
+* Compute the largest version number across all the transactions in a group (of size 1 or more), call it `maxVerNo`. If any transaction in this group has a TEAL program with a version smaller than `maxVerNo`, then that TEAL program will fail.
 
 ## Varuint
 

@@ -1,10 +1,10 @@
-title: goal account balance
+title: goal account info
 ---
-## goal account balance
+## goal account info
 
 
 
-Retrieve the balances for the specified account
+Retrieve information about the assets and applications belonging to the specified account
 
 
 
@@ -12,13 +12,13 @@ Retrieve the balances for the specified account
 
 
 
-Retrieve the balance record for the specified account. Algo balance is displayed in microAlgos.
+Retrieve information about the assets and applications the specified account has created or opted into.
 
 
 
 ```
 
-goal account balance [flags]
+goal account info [flags]
 
 ```
 
@@ -30,9 +30,9 @@ goal account balance [flags]
 
 ```
 
-  -a, --address string   Account address to retrieve balance (required)
+  -a, --address string   Account address to look up (required)
 
-  -h, --help             help for balance
+  -h, --help             help for info
 
 ```
 

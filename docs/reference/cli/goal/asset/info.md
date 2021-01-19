@@ -30,13 +30,15 @@ goal asset info [flags]
 
 ```
 
-      --asset string     Unit name of the asset to look up
+      --asset string      DEPRECATED! Unit name of the asset to look up
 
-      --assetid uint     ID of the asset to look up
+      --assetid uint      ID of the asset to look up
 
-      --creator string   Account address of the asset creator
+      --creator string    Account address of the asset creator
 
-  -h, --help             help for info
+  -h, --help              help for info
+
+      --unitname string   Unit name of the asset to look up
 
 ```
 
