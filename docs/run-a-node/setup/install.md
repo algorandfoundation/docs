@@ -172,13 +172,19 @@ When the installer runs, it will pull down the latest update package from S3 and
 
 # Installing algod as a systemd service
 
-If installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system or user `systemd` service.
+When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service and the `systemd-setup-user.sh` script to create a user service.
 
-Here is the usage string:
+Here are the usage strings:
 
 ```
-Usage: ./systemd-setup.sh username [group|--user]
+Usage: ./systemd-setup.sh username group [bindir]
 ```
+
+```
+Usage: ./systemd-setup-user.sh username [bindir]
+```
+
+Note that both of them take an optional binary directory (`bindir`) parameter. This will be discussed more in the following sections.
 
 ### Installing system-wide
 
@@ -188,7 +194,21 @@ To install `algod` as a system-wide service, run the script with root privileges
 sudo ./systemd-setup.sh algorand algorand
 ```
 
-This will create the service in `/lib/systemd/system/algorand@.service`. This will have used the template `algorand@.service.template` downloaded in the same tarball to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
+This will create the service in `/lib/systemd/system/algorand@.service` and will have used the template `algorand@.service.template` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
+
+The location of the binaries is needed by the template to tell `systemd` where to find `algod`. This can be controlled by the `bindir` parameter, which is the third parameter when calling the shell script.
+
+Here is a snippet of the template:
+
+```
+[Service]
+ExecStart=@@BINDIR@@/algod -d %I
+User=@@USER@@
+Group=@@GROUP@@
+...
+```
+
+> If `bindir` is not provided, the script will assume the current working directory.
 
 After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
 
@@ -208,10 +228,14 @@ systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
 To install `algod` as a user service:
 
 ```
-./systemd-setup.sh kilgore-trout --user
+./systemd-setup-setup.sh kilgore-trout
 ```
 
-This will create the service in `$HOMEDIR/.config/systemd/user/algorand@.service`. This will have used the template `algorand@.service.template-user` downloaded in the same tarball to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
+This will create the service in `$HOMEDIR/.config/systemd/user/algorand@.service` and will have used the template `algorand@.service.template-user` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
+
+The location of the binaries is needed by the template to tell `systemd` where to find `algod`. This can be controlled by the `bindir` parameter, which is the second parameter when calling the shell script.
+
+> If `bindir` is not provided, the script will assume the current working directory.
 
 After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
 
@@ -225,6 +249,8 @@ All that's left now is to start the service using `systemctl`. If preferred, it 
 systemctl --user start algorand@$(systemd-escape $ALGORAND_DATA)
 
 ```
+
+> Note that not all distros currently support the user service feature. Run `systemctl --user status` to determine if it's supported.
 
 # Configure Telemetry
 Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. Telemetry can be enabled by following the commands below replacing &lt;name&gt; with your desired hostname (e.g. 'SarahsLaptop').
