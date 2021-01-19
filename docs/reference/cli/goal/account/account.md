@@ -67,6 +67,7 @@ goal account [flags]
 * [goal account export](../export/)	 - Export an account key for use with account import
 * [goal account import](../import/)	 - Import an account key from mnemonic
 * [goal account importrootkey](../importrootkey/)	 - Import .rootkey files from the data directory into a kmd wallet
+* [goal account info](../info/)	 - Retrieve information about the assets and applications belonging to the specified account
 * [goal account installpartkey](../installpartkey/)	 - Install a participation key
 * [goal account list](../list/)	 - Show the list of Algorand accounts on this machine
 * [goal account listpartkeys](../listpartkeys/)	 - List participation keys

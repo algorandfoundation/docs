@@ -9,6 +9,8 @@ _[Read more about how Participation Keys function in the Algorand Consensus Prot
 	- For security, the individual keys for each round are deleted from the key file as each round is completed. It is critical for the safety of the Algorand blockchain to avoid storing backups of participation key files that have been registered for an account.  
 	- There is no theoretical limit to the range you can specify for a partkey validity period, only disk space constraints. A recommended range is 3,000,000 rounds.
 
+!!! Note All the `goal` commands in this page must be run under the user that owns the `data` directory and runs `algod`. They should never run under the user `root`, as this may compromise permissions in the `data` folder. For example, with a default installation of the Debian package, `goal account ...` should be replaced by `sudo -u algorand -E goal account ...`.
+
 # Generate the participation key with `goal`
 
 To generate a participation key, use the [`goal account addpartkey`](../../reference/cli/goal/account/addpartkey.md) command on the node where the participation key will reside. This command takes the address of the participating account, a range of rounds, and an optional key dilution parameter.  It then generates a [VRF key pair](../../algorand_consensus.md#verifiable-random-function) and, using optimizations, generates a set of single-round voting keys for each round of the range specified. The VRF private key is what is passed into the VRF to determine if you are selected to propose or vote on a block in any given round. 

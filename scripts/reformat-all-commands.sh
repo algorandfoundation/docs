@@ -3,18 +3,19 @@
 # SETUP
 GO_ALGORAND_SRC=$1
 INDEXER_SRC=$2
+CLI_TOOLS="~/node" # path to goal, algokey, etc.
 
 # CLI GOAL
-./reformat.py -doc-dir ../docs/reference/cli/goal/ -cmd ~/go/bin/goal
+./reformat.py -doc-dir ../docs/reference/cli/goal/ -cmd $CLI_TOOLS/goal
 
 # CLI ALGOKEY
-./reformat.py -doc-dir ../docs/reference/cli/algokey/ -cmd ~/go/bin/algokey
+./reformat.py -doc-dir ../docs/reference/cli/algokey/ -cmd $CLI_TOOLS/algokey
 
 # CLI KMD
-./reformat.py -doc-dir ../docs/reference/cli/kmd/ -cmd ~/go/bin/kmd
+./reformat.py -doc-dir ../docs/reference/cli/kmd/ -cmd $CLI_TOOLS/kmd
 
 # CLI DIAGCFG
-./reformat.py -doc-dir ../docs/reference/cli/diagcfg/ -cmd ~/go/bin/diagcfg
+./reformat.py -doc-dir ../docs/reference/cli/diagcfg/ -cmd $CLI_TOOLS/diagcfg
 
 # REST KMD
 ./convert_swagger.py -target ../docs/reference/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json

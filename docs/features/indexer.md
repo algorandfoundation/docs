@@ -22,9 +22,12 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 // verify installed version
 // npm list algosdk
 const algosdk = require('algosdk');
+
 const indexer_token = "";
 const indexer_server = "http://localhost";
 const indexer_port = 8980;
+
+const indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 ```
 
 ```python tab="Python"

@@ -102,11 +102,13 @@ sudo apt-get install -y algorand
 algod -v
 ```
 
-These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`. 
+These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`.
 
 This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
 
 > Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
+
+!!! Note Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use `sudo -u algorand -E goal account listpartkeys` (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or `sudo -u algorand -E goal account listpartkey -d /var/lib/algorand` (otherwise). *Never run `goal` as `root` (e.g., `sudo goal account listpartkeys`).* Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
 
 # Installing with RPM
 Installing on Fedora and Centos are described below. 

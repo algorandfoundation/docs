@@ -30,11 +30,17 @@ goal clerk dryrun [flags]
 
 ```
 
-  -h, --help            help for dryrun
+      --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api instead of running
 
-  -P, --proto string    consensus protocol version id string
+      --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
-  -t, --txfile string   transaction or transaction-group to test
+  -h, --help                        help for dryrun
+
+  -o, --outfile string              Filename for writing dryrun state object
+
+  -P, --proto string                consensus protocol version id string
+
+  -t, --txfile string               transaction or transaction-group to test
 
 ```
 
