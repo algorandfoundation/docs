@@ -10,7 +10,6 @@ import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class YourFirstTransaction {
