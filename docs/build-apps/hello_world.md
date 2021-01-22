@@ -119,7 +119,7 @@ final String ALGOD_API_ADDR = "localhost";
 final Integer ALGOD_PORT = 4001;
 final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
 ```
 
 ```Go tab=
@@ -381,85 +381,168 @@ Successfully submitting your transaction to the network does not necessarily mea
     On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced, on average, every 5 seconds. This means that transactions are confirmed, on average, in **5 seconds**! Read more about the [Algorand's Consensus Protocol](../algorand_consensus.md) and how it achieves such high confirmation speeds and immediate transaction finality.
 
 ```javascript tab="JavaScript"
-const waitForConfirmation = async function (algodclient, txId) {
-    let status = (await algodclient.status().do());
-    let lastRound = status["last-round"];
-    while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-            //Got the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-            break;
-        }
-        lastRound++;
-        await algodclient.statusAfterBlock(lastRound).do();
+/**
+ * utility function to wait on a transaction to be confirmed
+ * the timeout parameter indicates how many rounds do you wish to check pending transactions for
+ */
+const waitForConfirmation = async function (algodclient, txId, timeout) {
+    // Wait until the transaction is confirmed or rejected, or until 'timeout'
+    // number of rounds have passed.
+    //     Args:
+    // txId(str): the transaction to wait for
+    // timeout(int): maximum number of rounds to wait
+    // Returns:
+    // pending transaction information, or throws an error if the transaction
+    // is not confirmed or rejected in the next timeout rounds
+    if (algodclient == null || txId == null || timeout < 0) {
+        throw "Bad arguments.";
     }
+    let status = (await algodclient.status().do());
+    if (status == undefined) throw new Error("Unable to get node status");
+    let startround = status["last-round"] + 1;   
+    let currentround = startround;
+
+    while (currentround < (startround + timeout)) {
+        let pendingInfo = await algodclient.pendingTransactionInformation(txId).do();      
+        if (pendingInfo != undefined) {
+            if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+                //Got the completed Transaction
+                return pendingInfo;
+            }
+            else {
+                if (pendingInfo["pool-error"] != null && pendingInfo["pool-error"].length > 0) {
+                    // If there was a pool error, then the transaction has been rejected!
+                    throw new Error("Transaction Rejected" + " pool error" + pendingInfo["pool-error"]);
+                }
+            }
+        } 
+        await algodclient.statusAfterBlock(currentround).do();
+        currentround++;
+    }
+    throw new Error("Transaction not confirmed after " + timeout + " rounds!");
 };
 ```
 
 ```python tab="Python"
-def wait_for_confirmation(client, txid):
-	"""
-	Utility function to wait until the transaction is
-	confirmed before proceeding.
-	"""
-	last_round = client.status().get('last-round')
-	txinfo = client.pending_transaction_info(txid)
-	while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
-		print("Waiting for confirmation")
-		last_round += 1
-		client.status_after_block(last_round)
-		txinfo = client.pending_transaction_info(txid)
-	print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
-	return txinfo
+# utility for waiting on a transaction confirmation
+def wait_for_confirmation(client, transaction_id, timeout):
+    """
+    Wait until the transaction is confirmed or rejected, or until 'timeout'
+    number of rounds have passed.
+    Args:
+        transaction_id (str): the transaction to wait for
+        timeout (int): maximum number of rounds to wait    
+    Returns:
+        dict: pending transaction information, or throws an error if the transaction
+            is not confirmed or rejected in the next timeout rounds
+    """
+    start_round = client.status()["last-round"] + 1;
+    current_round = start_round
+
+    while current_round < start_round + timeout:
+        try:
+            pending_txn = client.pending_transaction_info(transaction_id)
+        except Exception:
+            return 
+        if pending_txn.get("confirmed-round", 0) > 0:
+            return pending_txn
+        elif pending_txn["pool-error"]:  
+            raise Exception(
+                'pool error: {}'.format(pending_txn["pool-error"]))
+        client.status_after_block(current_round)                   
+        current_round += 1
+    raise Exception(
+        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
+
 ```
 
 ```java tab="Java"
-// utility function to wait on a transaction to be confirmed    
-public void waitForConfirmation( String txID ) throws Exception{
-    if( client == null ) this.client = connectToNetwork();
-    Long lastRound = client.GetStatus().execute().body().lastRound;
-    while(true) {
-        try {
-            //Check the pending tranactions
-            Response<PendingTransactionResponse> pendingInfo = client.PendingTransactionInformation(txID).execute();
-            if (pendingInfo.body().confirmedRound != null && pendingInfo.body().confirmedRound > 0) {
-                //Got the completed Transaction
-                System.out.println("Transaction " + txID + " confirmed in round " + pendingInfo.body().confirmedRound);
-                break;
-            } 
-            lastRound++;
-            client.WaitForBlock(lastRound).execute();
-        } catch (Exception e) {
-            throw( e );
+    /**
+     * utility function to wait on a transaction to be confirmed
+     * the timeout parameter indicates how many rounds do you wish to check pending transactions for
+     */
+    public PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
+            throws Exception {
+        if (myclient == null || txID == null || timeout < 0) {
+            throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
         }
+        Response<NodeStatusResponse> resp = myclient.GetStatus().execute();
+        if (!resp.isSuccessful()) {
+            throw new Exception(resp.message());
+        }
+        NodeStatusResponse nodeStatusResponse = resp.body();
+        Long startRound = nodeStatusResponse.lastRound+1;
+        Long currentRound = startRound;
+        while (currentRound < (startRound + timeout)) { 
+                // Check the pending transactions                 
+                Response<PendingTransactionResponse> resp2 = myclient.PendingTransactionInformation(txID).execute();
+                if (resp2.isSuccessful()) {
+                    PendingTransactionResponse pendingInfo = resp2.body();               
+                    if (pendingInfo != null) {
+                        if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
+                            // Got the completed Transaction
+                            return pendingInfo;                     
+                        }
+                        if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
+                            // If there was a pool error, then the transaction has been rejected!
+                            throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
+                        }
+                    }
+                }
+        
+                Response<NodeStatusResponse> resp3 = myclient.WaitForBlock(currentRound).execute();
+                if (!resp3.isSuccessful()) {
+                    throw new Exception(resp3.message());
+                }   
+                currentRound++;                  
+        }
+        throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
     }
-}
 ```
 
 ```go tab="Go"
 // Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client) {
+func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (models.PendingTransactionInfoResponse, error) {
+	pt := new(models.PendingTransactionInfoResponse)
+	if client == nil || txID == "" || timeout < 0 {
+		fmt.Printf("Bad arguments for waitForConfirmation")
+		var msg = errors.New("Bad arguments for waitForConfirmation")
+		return *pt, msg
+
+	}
+
 	status, err := client.Status().Do(context.Background())
 	if err != nil {
 		fmt.Printf("error getting algod status: %s\n", err)
-		return
+		var msg = errors.New(strings.Join([]string{"error getting algod status: "}, err.Error()))
+		return *pt, msg
 	}
-	lastRound := status.LastRound
-	for {
-		pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	startRound := status.LastRound + 1
+	currentRound := startRound
+
+	for currentRound < (startRound + timeout) {
+
+		*pt, _, err = client.PendingTransactionInformation(txID).Do(context.Background())
 		if err != nil {
 			fmt.Printf("error getting pending transaction: %s\n", err)
-			return
+			var msg = errors.New(strings.Join([]string{"error getting pending transaction: "}, err.Error()))
+			return *pt, msg
 		}
 		if pt.ConfirmedRound > 0 {
 			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-			break
+			return *pt, nil
+		}
+		if pt.PoolError != "" {
+			fmt.Printf("There was a pool error, then the transaction has been rejected!")
+			var msg = errors.New("There was a pool error, then the transaction has been rejected")
+			return *pt, msg
 		}
 		fmt.Printf("waiting for confirmation\n")
-		lastRound++
-		status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
+		status, err = client.StatusAfterBlock(currentRound).Do(context.Background())
+		currentRound++
 	}
+	msg := errors.New("Tx not found in round range")
+	return *pt, msg
 }
 ```
 
@@ -490,35 +573,55 @@ Read your transaction back from the blockchain.
     Although you can read any transaction on the blockchain, only archival nodes store the whole history. By default, most nodes store only the last 1000 rounds and the APIs return errors when calling for information from earlier rounds. If you need to access data further back, make sure your algod client is connected to an archival, indexer node. Read more about node configurations in the Network Participation Guide or reach out to your service provider to understand how their node is configured. 
 
 ```javascript tab="JavaScript"
-let confirmedTxn = await algodClient.pendingTransactionInformation(txId).do();
-console.log("Transaction information: %o", confirmedTxn.txn.txn);
-console.log("Decoded note: %s", algosdk.decodeObj(confirmedTxn.txn.txn.note));
+        // Wait for confirmation
+        let confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
+        //Get the completed Transaction
+        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
+        console.log("Transaction information: %o", mytxinfo);
+        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
+        console.log("Note field: ", string);
 ```
 
 ```python tab="Python"
-confirmed_txn = algod_client.pending_transaction_info(txid)
-print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
-print("Decoded note: {}".format(base64.b64decode(confirmed_txn["txn"]["txn"]["note"]).decode()))
+    # wait for confirmation	
+	try:
+		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+	except Exception as err:
+		print(err)
+		return
+
+	print("Transaction information: {}".format(
+		json.dumps(confirmed_txn, indent=4)))
+	print("Decoded note: {}".format(base64.b64decode(
+		confirmed_txn["txn"]["txn"]["note"]).decode()))
 ```
 
 ```java tab="Java"
-PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-System.out.println("Transaction information (with notes): " + pTrx.toString());
-System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
+            // Wait for transaction confirmation
+            PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+
+            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
+            // Read the transaction
+            JSONObject jsonObj = new JSONObject(pTrx.toString());
+            System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
+            System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
 ```
 
 ```go tab="Go"
-confirmedTxn, stxn, err := algodClient.PendingTransactionInformation(txID).Do(context.Background())
-if err != nil {
-    fmt.Printf("Error retrieving transaction %s\n", txID)
-    return
-}
-txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
-if err != nil {
-    fmt.Printf("Can not marshall txn data: %s\n", err)
-}
-fmt.Printf("Transaction information: %s\n", txnJSON)
-fmt.Printf("Decoded note: %s\n", string(stxn.Txn.Note))
+	// Wait for confirmation
+	confirmedTxn, err := waitForConfirmation(txID, algodClient, 4)
+	if err != nil {
+		fmt.Printf("Error wating for confirmation on txID: %s\n", txID)
+		return
+	}
+	txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
+	if err != nil {
+		fmt.Printf("Can not marshall txn data: %s\n", err)
+	}
+	fmt.Printf("Transaction information: %s\n", txnJSON)
+
+	fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 ```
 
 ```bash tab="cURL"
