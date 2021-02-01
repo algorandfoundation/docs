@@ -15,7 +15,7 @@ These APIs are described using the [Open API Specification version 3 (OAS3)](htt
 [Algod REST Endpoints OAS3 specfile](https://github.com/algorand/go-algorand/blob/master/daemon/algod/api/algod.oas3.yml?raw=true)(.yml)
 
 Run Algod in Postman OAS3.
-[![Run Algod in Postman OAS3](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/f210a5ba9e3cb774a730)
+[![Run Algod in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/a936f8334da81c0a8be3)
 
 OAS2 Algod specfile [here](https://github.com/algorand/go-algorand/blob/master/daemon/algod/api/algod.oas2.json?raw=true)
 
@@ -26,7 +26,8 @@ The `algorand-indexer` daemon provides its API from the _host:port_ defined by t
 [Indexer REST Endpoints OAS3 specfile](https://www.github.com/algorand/indexer/blob/develop/api/indexer.oas3.yml?raw=true)(.yml)
 
 Run Indexer in Postman OAS3.
-[![Run Indexer in Postman OAS3](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ba172e20aaf274a78517)
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/96f62ce3c5b46e588b2b)
 
 OAS2 Indexer specfile [here](https://github.com/algorand/indexer/blob/develop/api/indexer.oas2.json?raw=true)
 
@@ -42,13 +43,13 @@ OAS2 Indexer specfile [here](https://github.com/algorand/indexer/blob/develop/ap
 Algorand Protocol Daemon (`algod`)
 
 ```zsh
-curl http://$(cat ~/node/data/algod.net)/swagger.json
+curl http://$(cat ~/node/data/algod.net)/swagger.json 
 ```
 
 Algorand Key Management Daemon (`kmd`)
 
 ```zsh
-curl http://$(cat ~/node/data/kmd-v0.5/kmd.net)/kmdswagger.json
+curl http://$(cat ~/node/data/kmd-v0.5/kmd.net)/swagger.json 
 ```
 
 !!! info
