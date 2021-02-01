@@ -43,13 +43,13 @@ OAS2 Indexer specfile [here](https://github.com/algorand/indexer/blob/develop/ap
 Algorand Protocol Daemon (`algod`)
 
 ```zsh
-curl http://$(cat ~/node/data/algod.net)/swagger.json > swagger.json
+curl http://$(cat ~/node/data/algod.net)/swagger.json 
 ```
 
 Algorand Key Management Daemon (`kmd`)
 
 ```zsh
-curl http://$(cat ~/node/data/kmd-v0.5/kmd.net)/swagger.json > swaggerkmd.json
+curl http://$(cat ~/node/data/kmd-v0.5/kmd.net)/swagger.json 
 ```
 
 !!! info
