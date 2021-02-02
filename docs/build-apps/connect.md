@@ -218,7 +218,7 @@ The _/v2/transactions/params_ endpoint returns information about the identity of
 ...
 	try:
 		params = algod_client.suggested_params()
-		print(json.dumps(params, indent=4))
+		print(json.dumps(vars(params), indent=4))
 	except Exception as e:
 		print(e)
 ...
