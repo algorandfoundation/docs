@@ -7,7 +7,7 @@ A node installation consists of two folders: the binaries (bin) and the data (da
 When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/node/artifacts.md) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified.
 
 ```
-export ALGORAND_DATA=~/node/data 
+export ALGORAND_DATA=~/node/data
 ```
 
 When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is advisable with these installs to add the following export to shell config files.
@@ -18,7 +18,7 @@ export ALGORAND_DATA=/var/lib/algorand
 
 !!! info
     When installing with the *Debian* or *RPM* packages, `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. See [REST Endpoints](../../reference/sdks/index.md#rest-endpoints) for more details.
- 
+
 
 # Installation Overview
 Installing a new node is generally a 3 to 4-step process and will depend on the operating system. Each install option is listed in this guide and is accessible from the table of contents or select from the list below:
@@ -39,23 +39,23 @@ cd ~/node
 ```
 
 Download the updater script.
-  
+
 ```
 curl https://raw.githubusercontent.com/algorand/go-algorand-doc/master/downloads/installers/update.sh -O
-```  
+```
 
 + Ensure that your system knows it's an executable file.
-  
+
 ```
 chmod 544 update.sh
-```  
+```
 
 + Run the installer from within your node directory.
 
 ```
 ./update.sh -i -c stable -p ~/node -d ~/node/data -n
 ```
-When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node). 
+When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node).
 
 !!! info
     When installing the `rel/beta` release, specify the beta channel `-c beta`
@@ -77,8 +77,8 @@ Installing the devtools is simple and no additional entries need to be added for
 
 See the examples below to understand how to install the deb and rpm packages.
 
-!!! Note 
-    If installing using the updater script (see the section *Installing with Other Linux Distros*) that all the binaries are downloaded  together, i.e., there is not a separate devtools archive file or package.
+!!! Note
+    If installing using the updater script (see the section *Installing with Other Linux Distros*), then all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
 
 # Installing with Debian
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
@@ -111,10 +111,10 @@ This install defaults to the Algorand MainNet network. See switching networks<LI
 !!! Note Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use `sudo -u algorand -E goal account listpartkeys` (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or `sudo -u algorand -E goal account listpartkey -d /var/lib/algorand` (otherwise). *Never run `goal` as `root` (e.g., `sudo goal account listpartkeys`).* Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
 
 # Installing with RPM
-Installing on Fedora and Centos are described below. 
+Installing on Fedora and Centos are described below.
 
 + To install to CentOS, open a terminal and run the following commands.
-  
+
 ```
 curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
 sudo rpmkeys --import rpm_algorand.pub
@@ -129,14 +129,14 @@ sudo yum install algorand
 ```
 
 + To install to Fedora open a terminal and run the following commands.
-  
+
 ```
 dnf install -y 'dnf-command(config-manager)'
 dnf config-manager --add-repo=https://releases.algorand.com/rpm/stable/algorand.repo
 dnf install algorand
 ```
 
-These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`. 
+These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`.
 
 This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
 
@@ -153,16 +153,16 @@ cd ~/node
 ```
 
 Download the updater script.
-  
+
 ```
 wget https://raw.githubusercontent.com/algorand/go-algorand-doc/master/downloads/installers/update.sh
-```  
+```
 
 + Ensure that your system knows it's an executable file.
-  
+
 ```
 chmod 544 update.sh
-```  
+```
 
 + Run the installer from within your node directory.
 
@@ -170,8 +170,89 @@ chmod 544 update.sh
 ./update.sh -i -c stable -p ~/node -d ~/node/data -n
 ```
 
-When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node). 
+When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node).
 
+# Installing algod as a systemd service
+
+When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service and the `systemd-setup-user.sh` script to create a user service.
+
+Here are the usage strings:
+
+```
+Usage: ./systemd-setup.sh username group [bindir]
+```
+
+```
+Usage: ./systemd-setup-user.sh username [bindir]
+```
+
+Note that both of them take an optional binary directory (`bindir`) parameter. This will be discussed more in the following sections.
+
+### Installing system-wide
+
+To install `algod` as a system-wide service, run the script with root privileges:
+
+```
+sudo ./systemd-setup.sh algorand algorand
+```
+
+This will create the service in `/lib/systemd/system/algorand@.service` and will have used the template `algorand@.service.template` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
+
+The location of the binaries is needed by the template to tell `systemd` where to find `algod`. This can be controlled by the `bindir` parameter, which is the third parameter when calling the shell script, and is expected to be an absolute path.
+
+Here is a snippet of the template:
+
+```
+[Service]
+ExecStart=@@BINDIR@@/algod -d %I
+User=@@USER@@
+Group=@@GROUP@@
+...
+```
+
+> If `bindir` is not provided, the script will assume the current working directory.
+
+After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
+
+```
+systemctl daemon-reload
+```
+
+All that's left now is to start the service using `systemctl`. If preferred, it can also be enabled to start on system startup.
+
+```
+systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
+
+```
+
+### Installing as a user
+
+To install `algod` as a user service:
+
+```
+./systemd-setup-setup.sh kilgore-trout
+```
+
+This will create the service in `$HOMEDIR/.config/systemd/user/algorand@.service` and will have used the template `algorand@.service.template-user` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
+
+The location of the binaries is needed by the template to tell `systemd` where to find `algod`. This can be controlled by the `bindir` parameter, which is the second parameter when calling the shell script, and is expected to be an absolute path.
+
+> If `bindir` is not provided, the script will assume the current working directory.
+
+After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
+
+```
+systemctl --user daemon-reload
+```
+
+All that's left now is to start the service using `systemctl`. If preferred, it can also be enabled to start on system startup.
+
+```
+systemctl --user start algorand@$(systemd-escape $ALGORAND_DATA)
+
+```
+
+> Note that not all distros currently support the user service feature. Run `systemctl --user status` to determine if it's supported.
 
 # Configure Telemetry
 Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. Telemetry can be enabled by following the commands below replacing &lt;name&gt; with your desired hostname (e.g. 'SarahsLaptop').
@@ -191,7 +272,7 @@ Telemetry can also be provided without providing a hostname:
 
 Running the `diagcfg` commands will create and update the logging configuration settings stored in ~/.algorand/logging.config.
 
-# Start Node 
+# Start Node
 
 + The *Debian* and *RPM* installs automatically start the node. Starting and stopping a node installed with one of these packages should be done using `systemctl` commands:
 
@@ -249,7 +330,7 @@ Next consensus protocol supported: true
 Genesis ID: testnet-v1.0
 Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ```
-# Sync Node Network using Fast Catchup 
+# Sync Node Network using Fast Catchup
 
 Fast Catchup is a new feature and will rapidly update a node using catchpoint  snapshots. A new command on goal node is now available for catchup. The entire process should sync a node in minutes rather than hours or days. As an example, the results for a BetaNet fast catchup, at the time of writing this, was a couple minutes to get to the sync point and a few more minutes to sync the remaining blocks since the snapshot. The total blocks synced was around 4.2 million blocks and it finished syncing in under 6 minutes. Actual sync times may vary depending on the number of accounts, number of blocks and the network.  Here are the links to get the most recent catchup point snapshot per network. The results  include a round to catchup to and the provided catchpoint. Paste into the `goal node catchup` command.
 
@@ -283,7 +364,7 @@ Last consensus protocol: https://github.com/algorand/spec/tree/a26ed78ed8f834e2b
 Next consensus protocol: https://github.com/algorand/spec/tree/a26ed78ed8f834e2b9ccb6eb7d3ee9f629a6e622
 Round for next consensus protocol: 309
 Next consensus protocol supported: true
-Last Catchpoint: 
+Last Catchpoint:
 Genesis ID: betanet-v1.0
 Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
@@ -307,7 +388,7 @@ Catchpoint downloaded blocks: 81
 Genesis ID: betanet-v1.0
 Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
-4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch. 
+4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch.
 
 `./goal node status -d ~/node/datafastcatchup -w 1000`
 
@@ -328,14 +409,14 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 
 # Updating Node
-The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`. 
+The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
 
 If there is a newer version, it will be downloaded and unpacked. The node will shutdown, the binaries and data files will be archived, and the new binaries will be installed. If any part of the process fails, the node will restore the previous version (bin and data) and restart the node. If it succeeds, the new version is started. The automatic start can be disabled by adding the `-n` option.
 
 Setting up a schedule to automatically check for and install updates can be done with CRON.
 
 ```
-crontab -e 
+crontab -e
 ```
 
 Add a line that looks like this (run update.sh every hour, on the half-hour, of every day), where ‘user’ is the name of the account used to install / run the node:
@@ -346,17 +427,17 @@ Add a line that looks like this (run update.sh every hour, on the half-hour, of 
 
 
 # DNS Configuration for betanet
-For the `betanet` network, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory. 
-First, if there is not a config.json, make a copy of the config.json.example file.  
+For the `betanet` network, when installing a new node or relay, make the following modification to the `config.json` file located in the node's data directory.
+First, if there is not a config.json, make a copy of the config.json.example file.
 ```
 cp config.json.example config.json
 ```
 Then edit the config.json file and replace the line
-``` 
+```
 "DNSBootstrapID": "<network>.algorand.network",
 ```
-with 
-``` 
+with
+```
 "DNSBootstrapID": "<network>.algodev.network",
 ```
 This modification to the `DNSBootstrapID` is only required for the `betanet` network.
