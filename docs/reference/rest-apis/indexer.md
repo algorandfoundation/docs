@@ -657,6 +657,7 @@ data/basics/userBalance.go : AccountData
 |**created-apps**  <br>*optional*|\[appp\] parameters of applications created by this account including app global data.<br><br>Note: the raw account uses `map[int] -> AppParams` for this type.|< [Application](#application) > array|
 |**created-assets**  <br>*optional*|\[apar\] parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
 |**created-at-round**  <br>*optional*|Round during which this account first appeared in a transaction.|integer|
+|**deleted**  <br>*optional*|Whether or not this account is currently closed.|boolean|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
 |**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
 |**reward-base**  <br>*optional*|\[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.|integer|
@@ -699,6 +700,7 @@ Application index and its parameters
 |Name|Description|Schema|
 |---|---|---|
 |**created-at-round**  <br>*optional*|Round when this application was created.|integer|
+|**deleted**  <br>*optional*|Whether or not this application is currently deleted.|boolean|
 |**deleted-at-round**  <br>*optional*|Round when this application was deleted.|integer|
 |**id**  <br>*required*|\[appidx\] application index.|integer|
 |**params**  <br>*required*|\[appparams\] application parameters.|[ApplicationParams](#applicationparams)|
@@ -712,6 +714,7 @@ Stores local state associated with an application.
 |Name|Description|Schema|
 |---|---|---|
 |**closed-out-at-round**  <br>*optional*|Round when account closed out of the application.|integer|
+|**deleted**  <br>*optional*|Whether or not the application local state is currently deleted from its account.|boolean|
 |**id**  <br>*required*|The application which this local state is for.|integer|
 |**key-value**  <br>*optional*|\[tkv\] storage.|[TealKeyValueStore](#tealkeyvaluestore)|
 |**opted-in-at-round**  <br>*optional*|Round when the account opted into the application.|integer|
@@ -752,6 +755,7 @@ Specifies both the unique identifier and the parameters for an asset
 |Name|Description|Schema|
 |---|---|---|
 |**created-at-round**  <br>*optional*|Round during which this asset was created.|integer|
+|**deleted**  <br>*optional*|Whether or not this asset is currently deleted.|boolean|
 |**destroyed-at-round**  <br>*optional*|Round during which this asset was destroyed.|integer|
 |**index**  <br>*required*|unique asset identifier|integer|
 |**params**  <br>*required*||[AssetParams](#assetparams)|
@@ -770,6 +774,7 @@ data/basics/userBalance.go : AssetHolding
 |**amount**  <br>*required*|\[a\] number of units held.|integer|
 |**asset-id**  <br>*required*|Asset ID of the holding.|integer|
 |**creator**  <br>*required*|Address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.|string|
+|**deleted**  <br>*optional*|Whether or not the asset holding is currently deleted from its account.|boolean|
 |**is-frozen**  <br>*required*|\[f\] whether or not the holding is frozen.|boolean|
 |**opted-in-at-round**  <br>*optional*|Round during which the account opted into this asset holding.|integer|
 |**opted-out-at-round**  <br>*optional*|Round during which the account opted out of this asset holding.|integer|
@@ -923,6 +928,7 @@ A simplified version of AssetHolding
 |---|---|---|
 |**address**  <br>*required*||string|
 |**amount**  <br>*required*||integer|
+|**deleted**  <br>*optional*|Whether or not this asset holding is currently deleted from its account.|boolean|
 |**is-frozen**  <br>*required*||boolean|
 |**opted-in-at-round**  <br>*optional*|Round during which the account opted into the asset.|integer|
 |**opted-out-at-round**  <br>*optional*|Round during which the account opted out of the asset.|integer|

@@ -12,7 +12,7 @@ Destroy an asset
 
 
 
-Issue a transaction deleting an asset from the network. This transaction must be issued by the asset owner, who must hold all outstanding asset tokens.
+Issue a transaction deleting an asset from the network. This transaction must be issued by the asset manager while the creator holds all of the asset's tokens.
 
 
 
@@ -34,7 +34,7 @@ goal asset destroy [flags]
 
       --assetid uint                Asset ID to destroy
 
-      --creator string              Account address for asset to destroy
+      --creator string              Creator account address for asset to destroy
 
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 

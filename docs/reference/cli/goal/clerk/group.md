@@ -12,7 +12,7 @@ Group transactions together
 
 
 
-Form a transaction group.  The input file must contain one or more transactions that will form a group.  The output file will contain the same transactions, in order, with a group flag added to each transaction, which requires that the transactions must be committed together.
+Form a transaction group.  The input file must contain one or more unsigned transactions that will form a group.  The output file will contain the same transactions, in order, with a group flag added to each transaction, which requires that the transactions must be committed together. The group command would retain the logic signature, if present, as the TEAL program could verify the group using a logic signature argument.
 
 
 
