@@ -9,7 +9,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[![](./imgs/algoicon.png)](https://forum.algorand.org/)</center><center> [Developer Forums](https://forum.algorand.org/)</center> | Algorand Developer Forums. Need help implementing a solution on Algorand? Want to provide feedback? Want to connect with other Algorand developers? Check out Algorand’s developer forums! |
-| <center>[![](./imgs/discord.png)](https://discord.gg/YgPTCVk)</center><center> [Discord](https://discord.gg/YgPTCVk)</center> | Algorand Developer Discord channel. Want to connect with other Algorand developers, as several members already have? Join Algorand Developer Discord today! |
+| <center>[![](./imgs/discord.png)](https://discord.com/invite/hbcUSuw)</center><center> [Discord](https://discord.gg/YgPTCVk)</center> | Algorand Developer Discord channel. Want to connect with other Algorand developers, as several members already have? Join Algorand Developer Discord today! |
 
 # Block Explorers
 
