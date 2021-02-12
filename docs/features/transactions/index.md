@@ -72,7 +72,7 @@ Closing an account means removing it from the Algorand ledger. Since there is a 
   }
 }
 ```
-In this transaction, after the fee and the transaction `"amt"` are paid to the [receiver](../../reference/transactions.md#receiver) from the [sender](../../reference/transactions.md#closeremainderto) account (`"SYGHTA..."`), the remaining balance is transferred to the [closeto](../../reference/transactions.md#closeremainderto) account (`"SYGHTA..."`). Note that there is an implicit `"amt"` of 0 Algos when none is specified.
+In this transaction, after the fee and the transaction `"amt"` are paid to the [receiver](../../reference/transactions.md#receiver) from the [sender](../../reference/transactions.md#closeremainderto) account (`"SYGHTA..."`), the remaining balance is transferred to the [closeto](../../reference/transactions.md#closeremainderto) account (`"EW64GC..."`). Note that there is an implicit `"amt"` of 0 Algos when none is specified.
 
 !!! info
     If you have asset holdings, you must first close out those asset holdings before you can close out the Algorand account completely. Close out your asset holdings by specifying an [Asset Close Remainder To](../../reference/transactions.md#closeassetto) address within an Asset Transfer transaction.
