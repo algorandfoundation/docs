@@ -134,7 +134,11 @@ print(json.dumps(status, indent=4))
 
 ```java tab="Java"
 try {
-	NodeStatus status = algodApiInstance.getStatus();
+    Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
+    if (!resp.isSuccessful()) {
+        throw new Exception(resp.message());
+    }
+    NodeStatusResponse status = resp.body();
 	System.out.println("Algorand network status: " + status);
 } catch (ApiException e) {
 	System.err.println("Exception when calling algod#getStatus");
@@ -227,8 +231,15 @@ The _/v2/transactions/params_ endpoint returns information about the identity of
 ```java tab="Java"
 	...
         try {
-            TransactionParametersResponse params = client.TransactionParams().execute().body();
-            System.out.println("Algorand suggested parameters: " + TransactionParametersResponse);
+            Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
+            if (!resp.isSuccessful()) {
+                throw new Exception(resp.message());
+            }
+            TransactionParametersResponse params = resp.body();
+            if (params == null) {
+                throw new Exception("Params retrieval error");
+            }            
+            System.out.println("Algorand suggested parameters: " + params);
         } catch (ApiException e) {
             System.err.println("Exception when calling algod#TransactionParams");
             e.printStackTrace();

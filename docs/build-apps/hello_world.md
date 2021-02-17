@@ -172,7 +172,7 @@ final String PASSPHRASE = "Your 25-word mnemonic generated and displayed above";
 com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
 System.out.println("My Address: " + myAccount.getAddress());
 String myAddress = myAccount.getAddress().toString();
-Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
+Response <com.algorand.algosdk.v2.client.model.Account> respAcct = client.AccountInformation(myAccount.getAddress()).execute();
 if (!respAcct.isSuccessful()) {
     throw new Exception(respAcct.message());
 }
