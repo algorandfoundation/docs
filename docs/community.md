@@ -62,6 +62,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | <center>[algoDEA](https://algodea-docs.bloxbean.com/) </center>| algoDEA Algorand IntelliJ Plugin provides end to end development life-cycle on Algorand blockchain using IntelliJ IDE. Using this plugin, developers can create and test both stateless and stateful smart contracts directly from their IntelliJ IDE. It also provides other features like ASA management, Transactions, Test account management etc. GitHub: <https://github.com/bloxbean/algodea>|
 | <center>[Algorand IDE Playground](https://algorand.rockx.com/) </center>| Explorer and Smart Contract IDE|
 | <center>[Algorand VS Code Extension](https://algorand.rockx.com/) </center>| Support for Algorand in VS Code by [Obsidian Labs](https://www.obsidians.io/)|
+
 # Development Tools
 
 | Name| Description |
