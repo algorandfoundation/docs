@@ -123,7 +123,7 @@ func main() {
 Call the _status_ method from the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
 
 ```javascript tab="JavaScript"
-let status = (await algodclient.status().do());
+let status = (await algodClient.status().do());
 console.log("Algorand network status: %o", status);
 ```
 
