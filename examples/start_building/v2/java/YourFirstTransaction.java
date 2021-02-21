@@ -17,28 +17,13 @@ public class YourFirstTransaction {
 
     // utility function to connect to a node
     private AlgodClient connectToNetwork() {
-
-        // final String ALGOD_API_ADDR = "https://testnet-algorand.api.purestake.io/ps2";
         // Initialize an algod client
         final String ALGOD_API_ADDR = "localhost";
         final Integer ALGOD_PORT = 4001;
         final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-        // AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-        // hackathon - demos instance
-        // final String ALGOD_API_ADDR = "http://hackathon.algodev.network";
-        // final Integer ALGOD_PORT = 9100;
-        // final String ALGOD_API_TOKEN = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
  
-        AlgodClient client = new AlgodClient(ALGOD_API_ADDR,
-        ALGOD_PORT, ALGOD_API_TOKEN);
- 
-        // AlgodClient client = new AlgodClient();
-        //  client.setBasePath(ALGOD_API_ADDR);
-
-        // client.addDefaultHeader("X-API-Key", "YOUR API KEY");
-
-       //  AlgodApi algodApiInstance = new AlgodApi(client); 
+        AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+        
         return client;
     }
     /**
