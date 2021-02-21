@@ -30,13 +30,12 @@ algod_client = algod.AlgodClient(algod_token, algod_address)
 
 ```Java tab=
 import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Client;
 
 final String ALGOD_API_ADDR = "localhost";
 final Integer ALGOD_PORT = 4001;
 final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
 ```
 
 ```Go tab=
@@ -58,7 +57,8 @@ func main() {
 }
 ```
 
-If you are using a third-party service, use the API key header instead when instantiating an algod client.
+Some third-party services use a different API key header than the one used by default.
+For example, if the API key header is `X-API-Key`, the client can be instantiated as follows:
 
 ```JavaScript tab=
 from algosdk.v2client import algod
@@ -68,7 +68,7 @@ const port = "";
 const token = {
 	'X-API-Key': "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 };
-let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
 
 ```Python tab=
@@ -85,15 +85,20 @@ algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 
 ```Java tab=
 import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Client;
 
 final String ALGOD_API_ADDR = "https://api.host.com";
-final String ALGOD_API_KEY = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+final Integer ALGOD_PORT = 443;
 
-AlgodClient client = new AlgodClient();
-client.setBasePath(ALGOD_API_ADDR);
-client.addDefaultHeader("X-API-Key", ALGOD_API_KEY);
-AlgodApi algodApiInstance = new AlgodApi(client);
+final String[] ALGOD_API_KEY_HEADERS = {"X-API-Key"};
+final String[] ALGOD_API_KEY_VALUES = {"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"};
+
+AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, "");
+
+// Contrary to the other SDK, the Java SDK does not allow to pass
+// the headers to all queries automatically.
+// Instead, the headers should be passed when executing each query
+// For example:
+//   client.GetStatus().execute(ALGOD_API_KEY_HEADERS, ALGOD_API_KEY_VALUES).body();
 ```
 
 ```Go tab=
