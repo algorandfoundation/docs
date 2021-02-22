@@ -27,6 +27,7 @@ mnemonic_2 = "Your 25-word mnemonic goes here"
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
+
 # Function that waits for a given txId to be confirmed by the network
 def wait_for_confirmation(client, txid):
     last_round = client.status().get('last-round')
@@ -39,12 +40,14 @@ def wait_for_confirmation(client, txid):
     print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
+
 # utility function to get address string
 def get_address(mn) :
     pk_account_a = mnemonic.to_private_key(mn)
     address = account.address_from_private_key(pk_account_a)
     print("Address :", address)
     return address
+
 
 # utility function to generate new account
 def generate_new_account() :
@@ -53,10 +56,12 @@ def generate_new_account() :
 	print("Generated mnemonic: \"{}\"".format(mnemonic.from_private_key(private_key)))
 	return address    
 
+
 # utility function to display account balance
 def display_account_algo_balance(client, address) :
     account_info = client.account_info(address)
     print("{}: {} microAlgos".format(address, account_info["amount"]))
+
 
 def group_transactions() :
 	# Initialize an algodClient
@@ -130,13 +135,11 @@ def group_transactions() :
 
 	# assemble transaction group
     print("Assembling transaction group...")
-    signedGroup =  []
-    signedGroup.append(stxn_1)
-    signedGroup.append(stxn_2)
+    signed_group =  [stxn_1, stxn_2]
 
 	# send transactions
     print("Sending transaction group...")
-    tx_id = algod_client.send_transactions(signedGroup)
+    tx_id = algod_client.send_transactions(signed_group)
 
     # wait for confirmation
     wait_for_confirmation(algod_client, tx_id) 
@@ -155,4 +158,6 @@ def group_transactions() :
 	# tx2
     confirmed_txn = algod_client.pending_transaction_info(txn_2.get_txid())
     print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
+
+
 group_transactions()
