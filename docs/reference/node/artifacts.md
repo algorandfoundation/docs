@@ -58,7 +58,7 @@ One method for replacing the pool entirely is to use the goal node start -p comm
 
 In this example, the two specified relays are the only ones used.
 
-Another option is to create a file named phonebook.json in your data directory and add a list of relays similar to the following:
+Another option is to create a file named phonebook.json in your binary directory and add a list of relays similar to the following:
 
 ```
 { "Include": [
