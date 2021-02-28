@@ -157,3 +157,100 @@ $ python3 -c "import base64;print(base64.b64encode((123).to_bytes(8,'big')).deco
 The example above converts the integer value of 123 to a base64 encoded string. TEAL currently does not support negative numbers. 
 
 Each SDK provides facilities for passing parameters as well. These processes are described in the [ASC1 Stateless SDK](sdks.md) Usage documentation.
+
+# Contract Account ASA Opt-In
+
+Asset Opt-In is a common operation for serveral use-cases based on Stateless
+ASC1.
+
+This example shows how to Opt-In an ASA with a Contract Account adopting 
+security cheks to ensure that malicious users can not exploit Opt-In
+transaction approval.
+
+## Opt-In ASC1 TEAL logic
+
+First we catch the conditions to handle the Opt-In:
+
+```teal
+// IF: Single AssetTransfer THEN: Handle Opt-In
+global GroupSize
+int 1
+==
+txn TypeEnum
+int axfer
+==
+&&
+bnz branch_optin
+```
+
+We then restrict the transaction domain just to Opt-In required operations:
+
+```teal
+branch_optin:
+// Opt-In specific Asset ID
+txn XferAsset
+int VAR_TMPL_ASSET_ID
+==
+// Opt-In Asset Amount is 0
+txn AssetAmount
+int 0
+==
+&&
+// Opt-In executed as Auto-AssetTransfer
+txn Sender
+txn AssetReceiver
+==
+&&
+// Opt-In Fee limit
+txn Fee
+int VAR_TMPL_OPTIN_FEE
+<=
+&&
+// Prevent unforseen Asset Clawback
+txn AssetSender
+global ZeroAddress
+==
+&&
+// Prevent Asset Close-To
+txn AssetCloseTo
+global ZeroAddress
+==
+&&
+// Prevent Rekey-To
+txn RekeyTo
+global ZeroAddress
+==
+&&
+// Reject Opt-In after LastValid block
+txn LastValid
+int VAR_TMPL_OPTIN_EXPIRING_BLOCK
+<
+&&
+b end_program
+```
+
+## Opt-In ASC1 depolyment
+
+We get the Contracr Address compiling its TEAL logic:
+
+```
+goal clerk compile contract.teal
+
+contract.teal: CONTRACT_ADDRESS
+```
+
+As any other Algorand Account, the Contract Account must be initialized:
+
+```
+goal clerk send -f VAR_TMPL_CREATOR_ADDR -t CONTRACT_ADDRESS -a 300000
+```
+
+Asset Opt-In transaction will then be signed with its LogicSig:
+
+```
+goal asset send -f CONTRACT_ADDRESS -t CONTRACT_ADDRESS --assetid VAR_TMPL_ASSET_ID -a 0 -o optin.txn
+
+goal clerk sign -i optin.txn -p contract.teal -o optin.stxn
+
+goal clerk rawsend -f optin.stxn
+```
