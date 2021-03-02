@@ -53,7 +53,8 @@ Both global and local data are stored as _key/value pairs_, where the _key_ is b
 }
 ```
 ### Program Execution
-Application users will
+
+Application users will submit a call transaction to the application with appropriate arguments.
 
 #### Application Call Transaction
 
