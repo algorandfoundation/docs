@@ -48,6 +48,10 @@ console.log("var account1_mnemonic = \"" + account1_mnemonic + "\"");
 console.log("var account2_mnemonic = \"" + account2_mnemonic + "\"");
 console.log("var account3_mnemonic = \"" + account3_mnemonic + "\"");
 
+// const token = "your token";
+// const server = "your server";
+// const port = your port number;
+
 // sandbox
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
