@@ -321,7 +321,7 @@ When creating a stateful smart contract, there is a limit of 64 key-value pairs 
 Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt in to the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to opt in to the smart contract. This can be done with the `goal` CLI or the SDKs.
 
 ```
-$ goal app app optin  --app-id [ID-of-Contract] --from [ADDRESS]
+$ goal app optin  --app-id [ID-of-Contract] --from [ADDRESS]
 ```
 
 When this transaction is submitted, the `ApprovalProgram` of the smart contract is called and if the call succeeds the account will be opted into the smart contract. The simplest TEAL program to handle this call would just put 1 on the stack and return. 
