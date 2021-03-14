@@ -133,10 +133,10 @@ LogicSig: {
 }
 ```
 # Passing Parameters to TEAL with Goal
-Parameters can be passed to a TEAL program using `goal`. The parameters must be passed as base64 encoded strings. For example, to pass “mystringargument” to a stateless TEAL program, the argument can be encoded using an `echo` command with base64.
+Parameters can be passed to a TEAL program using `goal`. The parameters must be passed as base64 encoded strings. For example, to pass “mystringargument” to a stateless TEAL program, the argument can be encoded using an `echo` command with base64. The `-w0` argument disabled wrapping that defaults to 76 characters. 
 
 ```
-$ echo -n mystringargument | base64
+$ echo -n mystringargument | base64 -w0
 bXlzdHJpbmdhcmd1bWVudA==
 ```
 
