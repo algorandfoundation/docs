@@ -858,14 +858,15 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 ### How to generate a standalone account
 
+
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
 function generateAlgorandKeyPair() {
-	var account = algosdk.generateAccount();
-	var passphrase = algosdk.secretKeyToMnemonic(account.sk);
-	console.log( "My address: " + account.addr );
-	console.log( "My passphrase: " + passphrase );
+    var account = algosdk.generateAccount();
+    var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+    console.log( "My address: " + account.addr );
+    console.log( "My passphrase: " + passphrase );
 }
 ```
 
@@ -873,41 +874,41 @@ function generateAlgorandKeyPair() {
 from algosdk import account, mnemonic
 
 def generate_algorand_keypair():
-	private_key, address = account.generate_account()
-	print("My address: {}".format(address))
-	print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
+    private_key, address = account.generate_account()
+    print("My address: {}".format(address))
+    print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 ```
 
 ```java tab="Java"
-import com.algorand.algosdk.account.Account;	
+import com.algorand.algosdk.account.Account;    
 
 public class GenerateAlgorandKeyPair {
-	public static void main(String args[]) {
-		Account myAccount = new Account();
-		System.out.println("My Address: " + myAccount.getAddress());
-		System.out.println("My Passphrase: " + myAccount.toMnemonic());
-	}
+    public static void main(String args[]) {
+        Account myAccount = new Account();
+        System.out.println("My Address: " + myAccount.getAddress());
+        System.out.println("My Passphrase: " + myAccount.toMnemonic());
+    }
 }
 ```
 
 ```go tab="Go"
 import (
-	"fmt"
+    "fmt"
 
-	"github.com/algorand/go-algorand-sdk/crypto"
-	"github.com/algorand/go-algorand-sdk/mnemonic"
+    "github.com/algorand/go-algorand-sdk/crypto"
+    "github.com/algorand/go-algorand-sdk/mnemonic"
 )
 
 func main() {
-	account := crypto.GenerateAccount()
-	passphrase, err := mnemonic.FromPrivateKey(account.PrivateKey)
+    account := crypto.GenerateAccount()
+    passphrase, err := mnemonic.FromPrivateKey(account.PrivateKey)
 
-	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
-	} else {
-		fmt.Printf("My address: %s\n", account.Address)
-		fmt.Printf("My passphrase: %s\n", passphrase)
-	}
+    if err != nil {
+        fmt.Printf("Error creating transaction: %s\n", err)
+    } else {
+        fmt.Printf("My address: %s\n", account.Address)
+        fmt.Printf("My passphrase: %s\n", passphrase)
+    }
 }
 ```
 
@@ -945,14 +946,14 @@ Since every transaction requires a threshold of signatures you can create an ext
 
 The keys that can sign for the multisignature account can be stored in separate locations and they can be generated with kmd, as standalone accounts, or with a mixture of both.
 
-Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](../asc1/teal/index.md) and [Algorand Smart Contracts](../asc1/index.md).
+Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](../asc1/teal_overview.md) and [Algorand Smart Contracts](../asc1/index.md).
 
 **Reasons you might _not_ want to use multisignature accounts**
 
 Multisignature accounts trade off convenience for security. Every transaction requires multiple signatures which can be overly complex for a scenario where security or governance is not critical. 
 
 ## How to generate a multisignature account
-The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the addresses in the code samples below to recreate a specific multisignature address.
+The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the mnemonics in the code samples below to recreate a specific multisignature address or create [new accounts](#how-to-generate-a-standalone-account).
 
 !!! tip
 	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](../transactions/signatures.md#multisignatures).
@@ -960,14 +961,20 @@ The following code shows how to generate a multisignature account composed of th
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-    //create an account
-    var account1 = algosdk.generateAccount();
+(async() => {
+    // recover accounts
+    // paste in mnemonic phrases here for each account
+	// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+	// Change these values to use the accounts created previously.
+    var account1_mnemonic = "PASTE your phrase for account 1";
+    var account2_mnemonic = "PASTE your phrase for account 2";
+    var account3_mnemonic = "PASTE your phrase for account 3"
+
+    var account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
+    var account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
+    var account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
     console.log(account1.addr);
-    //create an account
-    var account2 = algosdk.generateAccount();
     console.log(account2.addr);
-    //create an account
-    var account3 = algosdk.generateAccount();
     console.log(account3.addr);
 
     //Setup the parameters for the multisig account
@@ -980,61 +987,81 @@ const algosdk = require('algosdk');
             account3.addr,
         ],
     };
-    //create multisig account
+
     var multsigaddr = algosdk.multisigAddress(mparams);
     console.log("Multisig Address: " + multsigaddr);
+    // Fund TestNet account
+    console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
 ```
 
 ```python tab="Python"
-from algosdk import account, transaction
+from algosdk import mnemonic
+from algosdk.future.transaction import Multisig
+# Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+# Change these values to use the accounts created previously.
+# Change these values with mnemonics
+mnemonic1 = "PASTE phrase for account 1"
+mnemonic2 = "PASTE phrase for account 2"
+mnemonic3 = "PASTE phrase for account 3"
 
-# generate three accounts
-private_key_1, account_1 = account.generate_account()
-private_key_2, account_2 = account.generate_account()
-private_key_3, account_3 = account.generate_account()
-print("Account 1:", account_1)
-print("Account 2", account_2)
-print("Account 3:", account_3)
+private_key_1 = mnemonic.to_private_key(mnemonic1)
+account_1 = mnemonic.to_public_key(mnemonic1)
+
+private_key_2 = mnemonic.to_private_key(mnemonic2)
+account_2 = mnemonic.to_public_key(mnemonic2)
+
+private_key_3 = mnemonic.to_private_key(mnemonic3)
+account_3 = mnemonic.to_public_key(mnemonic3)
 
 # create a multisig account
 version = 1  # multisig version
 threshold = 2  # how many signatures are necessary
-msig = transaction.Multisig(version, threshold, [account_1, account_2])
+msig = Multisig(version, threshold, [account_1, account_2])
 print("Multisig Address: ", msig.address())
+print("Please go to: https://bank.testnet.algorand.network/ to fund multisig account.", msig.address())
 ```
 
 ```java tab="Java"
-package com.algorand.algosdk.example;
-
+package com.algorand.javatest.multisig.v2;
+import java.util.ArrayList;
+import java.util.List;
 import com.algorand.algosdk.account.Account;
-import com.algorand.algosdk.crypto.Digest;
 import com.algorand.algosdk.crypto.Ed25519PublicKey;
 import com.algorand.algosdk.crypto.MultisigAddress;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MultisigAccount {
 
-	public static void main(String args[]) throws Exception {
+    public void multisigExample() throws Exception {
+		// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+		// Change these values to use the accounts created previously.
+        final String account1_mnemonic = <var>your-25-word-mnemonic</var>
+        final String account2_mnemonic = <var>your-25-word-mnemonic</var>
+        final String account3_mnemonic = <var>your-25-word-mnemonic</var>
 
-		Account acct1 = new Account();
-		Account acct2 = new Account();
-		Account acct3 = new Account();
-		System.out.println("Account 1 Address: " + acct1.getAddress());
-		System.out.println("Account 2 Address: " + acct2.getAddress());
-		System.out.println("Account 3 Address: " + acct3.getAddress());
-		
-		List<Ed25519PublicKey> publicKeys = new ArrayList<>();
-		publicKeys.add(acct1.getEd25519PublicKey());
-		publicKeys.add(acct2.getEd25519PublicKey());
-		publicKeys.add(acct3.getEd25519PublicKey());
-		
-		MultisigAddress msig = new MultisigAddress(1, 2, publicKeys);
+        Account act1 = new Account(account1_mnemonic);
+        Account act2 = new Account(account2_mnemonic);
+        Account act3 = new Account(account3_mnemonic);
+        System.out.println("Account1: " + act1.getAddress());
+        System.out.println("Account2: " + act2.getAddress());
+        System.out.println("Account3: " + act3.getAddress());
 
-		System.out.println("Multisig Address: " + msig.toString());
+        // List for Pks for multisig account
+        List<Ed25519PublicKey> publicKeys = new ArrayList<>();
+        publicKeys.add(act1.getEd25519PublicKey());
+        publicKeys.add(act2.getEd25519PublicKey());
+        publicKeys.add(act3.getEd25519PublicKey());
 
-	}
+        // Instantiate the Multisig Account
+        MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
+
+        System.out.println("Multisignature Address: " + msa.toString());
+        // "Use TestNet Dispenser to add funds to this account");
+    }
+
+    public static void main(String args[]) throws Exception {
+        MultisigAccount t = new MultisigAccount();
+        t.multisigExample();
+    }
 }
 ```
 
@@ -1042,33 +1069,66 @@ public class MultisigAccount {
 package main
 
 import (
+	"crypto/ed25519"
 	"fmt"
-
 	"github.com/algorand/go-algorand-sdk/crypto"
+	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
+// Accounts to be used through examples
+func loadAccounts() (map[int][]byte, map[int]string) {
+	// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+	// Change these values to use the accounts created previously.
+	// Paste in mnemonic phrases for all three accounts
+	mnemonic1 := "PASTE your phrase for account 1"
+	mnemonic2 := "PASTE your phrase for account 2"
+	mnemonic3 := "PASTE your phrase for account 3"
+
+	mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
+	pks := map[int]string{1: "", 2: "", 3: ""}
+	var sks = make(map[int][]byte)
+
+	for i, m := range mnemonics {
+		var err error
+		sk, err := mnemonic.ToPrivateKey(m)
+		sks[i+1] = sk
+		if err != nil {
+			fmt.Printf("Issue with account %d private key conversion.", i+1)
+		}
+		// derive public address from Secret Key.
+		pk := sk.Public()
+		var a types.Address
+		cpk := pk.(ed25519.PublicKey)
+		copy(a[:], cpk[:])
+		pks[i+1] = a.String()
+		fmt.Printf("Loaded Key %d: %s\n", i+1, pks[i+1])
+	}
+	return sks, pks
+}
+
 func main() {
-	// Generate Accounts
-	acct1 := crypto.GenerateAccount()
-	acct2 := crypto.GenerateAccount()
-	acct3 := crypto.GenerateAccount()
-
-	// Decode the account addresses
-	addr1, _ := types.DecodeAddress(acct1.Address.String())
-	addr2, _ := types.DecodeAddress(acct2.Address.String())
-	addr3, _ := types.DecodeAddress(acct3.Address.String())
-
+	// Get pre-defined set of keys for example
+	sks, pks := loadAccounts()
+	addr1, _ := types.DecodeAddress(pks[1])
+	addr2, _ := types.DecodeAddress(pks[2])
+	addr3, _ := types.DecodeAddress(pks[3])		
+	
 	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
 		addr1,
 		addr2,
 		addr3,
 	})
+
 	if err != nil {
 		panic("invalid multisig parameters")
 	}
-
-	fmt.Printf("Multisig address %s \n", ma.Address())
+	fromAddr, _ := ma.Address()
+	// Print multisig account
+    fmt.Printf("Multisig address : %s \n", fromAddr)
+    fmt.Println("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account.")
+    fmt.Printf("sks = "  , sks)
+}
 ```
 
 ```zsh tab="goal"
@@ -1081,3 +1141,6 @@ func main() {
 ```
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
+
+!!! info
+    Example multisignature code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
