@@ -32,7 +32,7 @@ The `algod` process configuration parameters are shown in the table below.
 | EnableAgreementTimeMetrics	| Enable agreement timing metrics flag	| FALSE | 
 | EnableAssembleStats	| Generate AssembleBlockMetrics telemetry event	| FALSE | 
 | EnableBlockService 	| EnableBlockService enables the block serving service. The functionality of this depends on NetAddress, which must also be provided. This functionality is required for the catchup.	| FALSE | 
-| EnableDeveloperAPI 	| EnableDeveloperAPI enables teal/compile, teal/dryrun API endpoints.This functionlity is disabled by default.	| FALSE | 
+| EnableDeveloperAPI 	| EnableDeveloperAPI enables teal/compile, teal/dryrun API endpoints. This functionality is disabled by default.	| FALSE | 
 | EnableGossipBlockService	| EnableGossipBlockService enables the block serving service over the gossip network. The functionality of this depends on NetAddress, which must also be provided. This functionality is required for the relays to perform catchup from nodes.	| TRUE | 
 | EnableIncomingMessageFilter 	| Enable the filtering of incoming messages.	| FALSE | 
 | EnableLedgerService	| EnableLedgerService enables the ledger serving service. The functionality of this depends on NetAddress, which must also be provided. This functionality is required for the catchpoint catchup.	| FALSE | 
