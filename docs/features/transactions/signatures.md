@@ -205,7 +205,9 @@ const keypress = async() => {
 ```
 
 ```python tab="Python"
-from algosdk import account, transaction, algod, encoding
+from algosdk import account, encoding
+from algosdk.future import transaction
+from algosdk.v2client import algod
 
 algod_token = <algod_token>
 algod_address = <algod_address>
@@ -227,17 +229,13 @@ print("Multisig Address: ", msig.address())
 input("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account." + '\n' + "Press Enter to continue...")
 
 # get suggested parameters
-params = acl.suggested_params()
-gen = params["genesisID"]
-gh = params["genesishashb64"]
-last_round = params["lastRound"]
-fee = params["fee"]
+sp = acl.suggested_params()
 
 # create a transaction
 sender = msig.address()
 recipient = "4CXXFP3SJJW63HGEQD4OPSDPPIYDW7BXCVP4DQZG7T33Z3BXTOA4UMEDM4"
 amount = 10000
-txn = transaction.PaymentTxn(sender, fee, last_round, last_round+100, gh, recipient, amount)
+txn = transaction.PaymentTxn(sender, sp, recipient, amount)
 
 # create a SignedTransaction object
 mtx = transaction.MultisigTransaction(txn, msig)
