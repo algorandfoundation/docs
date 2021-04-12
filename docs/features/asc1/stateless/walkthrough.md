@@ -140,7 +140,7 @@ $ echo -n mystringargument | base64 -w0
 bXlzdHJpbmdhcmd1bWVudA==
 ```
 
-The base64 encoded string is passed to the TEAL program using the `--agrb64` option. The `goal` command line can be passed multiple parameters using the `--argb64` option multiple times. The parameter order is specific and will directly map to the TEAL parameters array.
+The base64 encoded string is passed to the TEAL program using the `--argb64` option. The `goal` command line can be passed multiple parameters using the `--argb64` option multiple times. The parameter order is specific and will directly map to the TEAL parameters array.
 
 ```
 goal clerk send -a 1000 -c closeaccountotaddress --to toaddr --from-program myteal.teal --argb64 "bXlzdHJpbmdhcmd1bWVudA==" -d ~/node/data

@@ -1,5 +1,5 @@
 title: Node Configuration Settings
-Nodes can be configured with different options. These options will determine some of the capabilities of the node and whether it functions as a relay node or a non-relay node. This involves setting parameters in the configuration file for either the `algod` or `kmd` process. The configuration file (`config.json`) for the `algod` process is located in the nodes `data` directory (rename `config.json.example`).  The configuration file (`kmd_config.json`) for `kmd` is located in the nodes `data/kmd-version` (rename `kmd_config.json.example') directory. See [Node Types](../../run-a-node/setup/types.md) for more information.
+Nodes can be configured with different options. These options will determine some of the capabilities of the node and whether it functions as a relay node or a non-relay node. This involves setting parameters in the configuration file for either the `algod` or `kmd` process. The configuration file (`config.json`) for the `algod` process is located in the node's `data` directory (rename `config.json.example`).  The configuration file (`kmd_config.json`) for `kmd` is located in the nodes `data/kmd-version` (rename `kmd_config.json.example') directory. See [Node Types](../../run-a-node/setup/types.md) for more information.
 
 !!! info
     All changes require the node to be restarted to take effect.
@@ -32,7 +32,7 @@ The `algod` process configuration parameters are shown in the table below.
 | EnableAgreementTimeMetrics	| Enable agreement timing metrics flag	| FALSE | 
 | EnableAssembleStats	| Generate AssembleBlockMetrics telemetry event	| FALSE | 
 | EnableBlockService 	| EnableBlockService enables the block serving service. The functionality of this depends on NetAddress, which must also be provided. This functionality is required for the catchup.	| FALSE | 
-| EnableDeveloperAPI 	| EnableDeveloperAPI enables teal/compile, teal/dryrun API endpoints.This functionlity is disabled by default.	| FALSE | 
+| EnableDeveloperAPI 	| EnableDeveloperAPI enables teal/compile, teal/dryrun API endpoints. This functionality is disabled by default.	| FALSE | 
 | EnableGossipBlockService	| EnableGossipBlockService enables the block serving service over the gossip network. The functionality of this depends on NetAddress, which must also be provided. This functionality is required for the relays to perform catchup from nodes.	| TRUE | 
 | EnableIncomingMessageFilter 	| Enable the filtering of incoming messages.	| FALSE | 
 | EnableLedgerService	| EnableLedgerService enables the ledger serving service. The functionality of this depends on NetAddress, which must also be provided. This functionality is required for the catchpoint catchup.	| FALSE | 

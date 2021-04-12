@@ -782,7 +782,7 @@ Delegated Logic Signatures require that the logic signature be signed from a spe
 * Send the Transaction to the network.
 
 <center>![Delegated Signature Transaction](../../../imgs/asc1_sdk_usage-2.png)</center>
-<center>*Delegated Signature Transactiont*</center>
+<center>*Delegated Signature Transaction*</center>
 
 The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.
 
