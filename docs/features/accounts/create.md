@@ -60,8 +60,8 @@ const kmdport = <kmd-port>;
 
 const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 
-var walletid = null;
-var wallethandle = null;
+let walletid = null;
+let wallethandle = null;
 
 (async () => {
 	let walletid = (await kmdclient.createWallet("MyTestWallet1", "testpassword", "", "sqlite")).wallet.id;
@@ -245,8 +245,8 @@ const kmdport = <kmd-port>;
 
 const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 
-var walletid = null;
-var wallethandle = null;
+let walletid = null;
+let wallethandle = null;
 
 (async () => {
 	let mn = <wallet-menmonic>
@@ -441,7 +441,7 @@ const kmdaddress = <kmd-address>;
 const kmdclient = new algosdk.Kmd(kmdtoken, kmdaddress);
 
 (async () => {
-	var walletid = null;
+	let walletid = null;
 	let wallets = (await kmdclient.listWallets()).wallets;
 	wallets.forEach(function (arrayItem) {
 		if( arrayItem.name === 'MyTestWallet2'){
@@ -634,7 +634,7 @@ const kmdport = <kmd-port>;
 const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 
 (async () => {
-	var walletid = null;
+	let walletid = null;
 	let wallets = (await kmdclient.listWallets()).wallets;
 	wallets.forEach(function (arrayItem) {
 		if( arrayItem.name === 'MyTestWallet2'){
@@ -863,8 +863,8 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 const algosdk = require('algosdk');
 
 function generateAlgorandKeyPair() {
-    var account = algosdk.generateAccount();
-    var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+    let account = algosdk.generateAccount();
+    let passphrase = algosdk.secretKeyToMnemonic(account.sk);
     console.log( "My address: " + account.addr );
     console.log( "My passphrase: " + passphrase );
 }
@@ -966,13 +966,13 @@ const algosdk = require('algosdk');
     // paste in mnemonic phrases here for each account
 	// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 	// Change these values to use the accounts created previously.
-    var account1_mnemonic = "PASTE your phrase for account 1";
-    var account2_mnemonic = "PASTE your phrase for account 2";
-    var account3_mnemonic = "PASTE your phrase for account 3"
+    let account1_mnemonic = "PASTE your phrase for account 1";
+    let account2_mnemonic = "PASTE your phrase for account 2";
+    let account3_mnemonic = "PASTE your phrase for account 3"
 
-    var account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
-    var account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
-    var account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
+    let account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
+    let account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
+    let account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
     console.log(account1.addr);
     console.log(account2.addr);
     console.log(account3.addr);
@@ -988,7 +988,7 @@ const algosdk = require('algosdk');
         ],
     };
 
-    var multsigaddr = algosdk.multisigAddress(mparams);
+    let multsigaddr = algosdk.multisigAddress(mparams);
     console.log("Multisig Address: " + multsigaddr);
     // Fund TestNet account
     console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
