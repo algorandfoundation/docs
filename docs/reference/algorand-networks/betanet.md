@@ -12,7 +12,7 @@ Visit the new docs to get started:
 🔷 = BetaNet availability only
 
 # Version
-`v2.5.4-beta`
+`v2.5.5-beta`
 
 # Release Version
 https://github.com/algorand/go-algorand/releases/tag/v2.5.4-beta
