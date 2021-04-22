@@ -38,7 +38,7 @@ Starting from version 2 TEAL evaluator can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxApprovalProgramLen and MaxClearStateProgramLen)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcodes availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](TEAL_opcodes.md) for details.
+3. Opcodes availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](opcodes.md) for details.
 
 ## Constants
 
@@ -88,7 +88,7 @@ There is a branch instruction (`bnz`, branch if not zero) which allows forward b
 
 Many programs need only a few dozen instructions. The instruction set has some optimization built in. `intc`, `bytec`, and `arg` take an immediate value byte, making a 2-byte op to load a value onto the stack, but they also have single byte versions for loading the most common constant values. Any program will benefit from having a few common values loaded with a smaller one byte opcode. Cryptographic hashes and `ed25519verify` are single byte opcodes with powerful libraries behind them. These operations still take more time than other ops (and this is reflected in the cost of each op and the cost limit of a program) but are efficient in compiled code space.
 
-This summary is supplemented by more detail in the [opcodes document](TEAL_opcodes.md).
+This summary is supplemented by more detail in the [opcodes document](opcodes.md).
 
 Some operations 'panic' and immediately end execution of the program.
 A transaction checked by a program that panics is not valid.
@@ -236,7 +236,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 55 | LocalNumByteSlice | uint64 | Number of local state byteslices in ApplicationCall. LogicSigVersion >= 3. |
 
 
-Additional details in the [opcodes document](TEAL_opcodes.md#txn) on the `txn` op.
+Additional details in the [opcodes document](opcodes.md#txn) on the `txn` op.
 
 **Global Fields**
 
@@ -316,7 +316,7 @@ Asset fields include `AssetHolding` and `AssetParam` fields that are used in `as
 | `asset_holding_get i` | read from account specified by Txn.Accounts[A] and asset B holding field X (imm arg) => {0 or 1 (top), value} |
 | `asset_params_get i` | read from asset Txn.ForeignAssets[A] params field X (imm arg) => {0 or 1 (top), value} |
 
-title: Assembler Syntax
+# Assembler Syntax
 
 The assembler parses line by line. Ops that just use the stack appear on a line by themselves. Ops that take arguments are the op and then whitespace and then any argument or arguments.
 
@@ -364,7 +364,7 @@ safe:
 pop
 ```
 
-title: Encoding and Versioning
+# Encoding and Versioning
 
 A program starts with a varuint declaring the version of the compiled code. Any addition, removal, or change of opcode behavior increments the version. For the most part opcode behavior should not change, addition will be infrequent (not likely more often than every three months and less often as the language matures), and removal should be very rare.
 
@@ -382,7 +382,7 @@ This requirement is enforced as follows:
 
 A '[proto-buf style variable length unsigned int](https://developers.google.com/protocol-buffers/docs/encoding#varint)' is encoded with 7 data bits per byte and the high bit is 1 if there is a following byte and 0 for the last byte. The lowest order 7 bits are in the first byte, followed by successively higher groups of 7 bits.
 
-title: What TEAL Cannot Do
+# What TEAL Cannot Do
 
 Current design and implementation limitations to be aware of.
 
