@@ -34,7 +34,7 @@ goal asset config [flags]
 
       --assetid uint                Asset ID to configure
 
-      --creator string              Account address for asset to configure
+      --creator string              Account address for asset to configure (defaults to manager)
 
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
@@ -50,7 +50,7 @@ goal asset config [flags]
 
   -x, --lease string                Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
 
-      --manager string              Manager account to issue the config transaction (defaults to creator)
+      --manager string              Manager account to issue the config transaction
 
       --new-clawback string         New clawback address
 
