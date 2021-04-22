@@ -312,6 +312,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
+
 # create a multisig account
 version = 1  # multisig version
 threshold = 2  # how many signatures are necessary
@@ -335,12 +336,14 @@ params = algod_client.suggested_params()
 params.flat_fee = True
 params.fee = 1000
 
+
 # create a transaction
 sender = msig.address()
 recipient = account_3
 amount = 10000
 note = "Hello Multisig".encode()
 txn = PaymentTxn(sender, params, recipient, amount, None, note, None)
+
 
 # create a SignedTransaction object
 mtx = MultisigTransaction(txn, msig)

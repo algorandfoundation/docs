@@ -753,7 +753,6 @@ The refactored application expects a timestamp be supplied with the application 
 # call application with arguments
 now = datetime.datetime.now().strftime("%H:%M:%S")
 app_args = [now.encode("utf-8")]
-call_app(algod_client, user_private_key, app_id, app_args)
 
 # create unsigned transaction
 txn = transaction.ApplicationNoOpTxn(sender, params, index, app_args)
