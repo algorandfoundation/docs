@@ -26,7 +26,7 @@ note            = "note=" *qchar
 otherparam      = qchar *qchar [ "=" *qchar ]
 ```
 
-Here, "qchar" corresponds to valid characters of an RFC 3986 URI query component, excluding the "=" and "&" characters, which this BIP takes as separators.
+Here, "qchar" corresponds to valid characters of an RFC 3986 URI query component, excluding the "=" and "&" characters, which this specification takes as separators.
 
 The scheme component ("algorand:") is case-insensitive, and implementations must accept any combination of uppercase and lowercase letters. The rest of the URI is case-sensitive, including the query parameter keys.
 
@@ -39,9 +39,9 @@ The scheme component ("algorand:") is case-insensitive, and implementations must
 
 - address: Algorand address
 
-- xnotes: A URL-encoded notes field value that must not be modifiable by the user when displayed to users.
+- xnote: A URL-encoded notes field value that must not be modifiable by the user when displayed to users.
 
-- notes: A URL-encoded default notes field value that the the user interface may optionally make editable by the user.
+- note: A URL-encoded default notes field value that the the user interface may optionally make editable by the user.
 
 - amount: microAlgos or smallest unit of asset 
 
