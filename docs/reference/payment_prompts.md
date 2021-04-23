@@ -26,7 +26,7 @@ note            = "note=" *qchar
 otherparam      = qchar *qchar [ "=" *qchar ]
 ```
 
-Here, "qchar" corresponds to valid characters of an RFC 3986 URI query component, excluding the "=" and "&" characters, which this BIP takes as separators.
+Here, "qchar" corresponds to valid characters of an RFC 3986 URI query component, excluding the "=" and "&" characters, which this specification takes as separators.
 
 The scheme component ("algorand:") is case-insensitive, and implementations must accept any combination of uppercase and lowercase letters. The rest of the URI is case-sensitive, including the query parameter keys.
 
