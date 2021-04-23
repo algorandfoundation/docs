@@ -7,4 +7,4 @@ arrange:
   - rest-apis
   - teal
   - transactions.md
-  - payment-prompts.md
+  - payment_prompts.md

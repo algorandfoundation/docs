@@ -45,7 +45,7 @@ An index of the structure and fields of Algorand Transactions.
 
 # Payment Prompts
 
-The [URI specification](payment-prompts.md) representing a standardized way for applications and websites to send requests and information through deeplinks, QR codes, etc. 
+The [URI specification](payment_prompts.md) representing a standardized way for applications and websites to send requests and information through deeplinks, QR codes, etc. 
 
 # Node Reference
 
