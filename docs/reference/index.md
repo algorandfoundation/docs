@@ -43,6 +43,10 @@ An index of the structure and fields of Algorand Transactions.
 
 [Common Fields](./transactions.md#common-fields) - [Payment](transactions.md#payment-transaction) - [Key Registration](transactions.md#key-registration-transaction) - [Asset Configuration](./transactions.md#asset-configuration-transaction) - [Asset Transfer](./transactions.md#asset-transfer-transaction) - [Asset Opt-In](./transactions.md#asset-accept-transaction) - [Asset Clawback](./transactions.md#asset-clawback-transaction) - [Asset Freeze](./transactions.md#asset-freeze-transaction) - [Application Call](./transactions.md#application-call-transaction) - [Signed](./transactions.md#signed-transaction)
 
+# Payment Prompts
+
+The [URI specification](payment-prompts.md) representing a standardized way for applications and websites to send requests and information through deeplinks, QR codes, etc. 
+
 # Node Reference
 
 An overview of the files and software packaged with a node plus the full list of node configuration settings.
