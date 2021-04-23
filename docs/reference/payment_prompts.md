@@ -39,9 +39,9 @@ The scheme component ("algorand:") is case-insensitive, and implementations must
 
 - address: Algorand address
 
-- xnotes: A URL-encoded notes field value that must not be modifiable by the user when displayed to users.
+- xnote: A URL-encoded notes field value that must not be modifiable by the user when displayed to users.
 
-- notes: A URL-encoded default notes field value that the the user interface may optionally make editable by the user.
+- note: A URL-encoded default notes field value that the the user interface may optionally make editable by the user.
 
 - amount: microAlgos or smallest unit of asset 
 
