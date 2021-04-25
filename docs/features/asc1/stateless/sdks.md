@@ -262,12 +262,18 @@ The SDKs require that parameters to a stateless smart contract TEAL program be i
     The samples show setting parameters at the creation of the logic signature. These parameters can be changed at the time of submitting the transaction.
 
 ```javascript tab="JavaScript"
-    //string parameter
-    let args = ["my string"];
-    let lsig = algosdk.makeLogicSig(program, args);
-    //integer parameter
-    let args = [[123]];
-    let lsig = algosdk.makeLogicSig(program, args);
+    // string parameter
+    const args = ["my string"];
+    const lsig = algosdk.makeLogicSig(program, args);
+    
+    // integer parameter
+    const value = 123;
+    const buffer = Buffer.alloc(8);
+    const bigIntValue = BigInt(value);
+    buffer.writeBigUInt64BE(bigIntValue)
+    const arg1 = Uint8Array.from(buffer);
+    const args = [arg1];
+    const lsig = algosdk.makeLogicSig(program, args);
 ```
 
 ```python tab="Python"
