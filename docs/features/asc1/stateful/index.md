@@ -697,6 +697,29 @@ $ goal app read --app-id 1 --guess-format --global --from [ADDRESS]
 
 In the above example, the global state of the smart contract with the application ID of 1 is returned. The `--guess-format` opt in the above example tries programmatically to display the properly formatted values of the state variables. To get the local state, replace `--global` with `--local` and note that this call will only return the local state of the `--from` account.
 
+Here is an example output with 3 keys/values:
+```json
+{
+  "Creator": {
+    "tb": "FRYCPGH25DHCYQGXEB54NJ6LHQG6I2TWMUV2P3UWUU7RWP7BQ2BMBBDPD4",
+    "tt": 1
+  },
+  "MyBytesKey": {
+    "tb": "hello",
+    "tt": 1
+  },
+  "MyUintKey": {
+    "tt": 2,
+    "ui": 50
+  }
+}
+```
+Interpretation:
+* the keys are `Creator`, `MyBytesKey`, `MyUintKey`.
+* the field `tt` is the type of the value: 1 for byte slices, 2 for uint.
+* when `tt=1`, the value is in the field `tb`. Note that because of `--guess-format`, the value for `Creator` is automatically converted to an Algorand address with checksum (as opposed to a 32-byte public key, see [the accounts overview](../../accounts#transformation-public-key-to-algorand-address)).
+* when `tt=2`, the value is in the field `ui`.
+
 # Differences Between Stateful and Stateless Smart Contracts
 Smart Contracts in Algorand are either stateful or stateless, where stateful contracts actually store values on blockchain and stateless are used to approve spending transactions. In addition to this primary difference, several of the TEAL opcodes are restricted to only be used with specific smart contract types. For example, the `ed25519verify` opcode can only be used in stateless smart contracts, and the `app_opted_in` opcode can only be used in stateful smart contracts. To easily determine where an opcode is valid, the [TEAL opcodes](../../../reference/teal/opcodes.md) documentation supplies a `Mode` field that will either designate `Signature ` or `Application`. The `Signature` mode refers to only stateless smart contracts and the `Application` mode refers to the stateful smart contracts. If the `Mode` attribute is not present on the opcode reference, the call can be used in either smart contract type.
 
