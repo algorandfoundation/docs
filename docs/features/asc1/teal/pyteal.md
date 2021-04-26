@@ -10,11 +10,11 @@ See the complete code [documentation for PyTeal](https://pyteal.readthedocs.io/e
 Complete install instructions are available in the PyTeal [documentation](https://pyteal.readthedocs.io/en/latest/). Run the following to install PyTeal with the Python package manager.
 
 ```python
-$ pip3 install pyteal
+$ pip3 install pyteal --upgrade
 ```
 
 # Simple PyTeal Example
-As an example, a simple stateless smart contract can be created with PyTeal. This example creates a stateless contract account that only allows withdrawals from a specific account. It also checks to verify that the `CloseRemainderTo` and `AssetCloseTo` transaction properties are not set, to prevent malicious transactions.
+As an example, a simple stateless smart contract can be created with PyTeal. This example creates a stateless contract account that only allows withdrawals from a specific account. It also checks to verify that the `RekeyTo`, `CloseRemainderTo`, and `AssetCloseTo` transaction properties are not set, to prevent malicious transactions (see [guidelines](../../../reference/teal/guidelines)) for more details.
 
 ```python
 # simple.py
@@ -26,17 +26,24 @@ def bank_for_account(receiver):
     is_payment = Txn.type_enum() == Int(1)
     is_correct_receiver = Txn.receiver() == Addr(receiver)
     is_one_tx = Global.group_size() == Int(1)
-    is_not_close = Txn.close_remainder_to() == Global.zero_address()
-    is_not_close_asset = Txn.asset_close_to() == Global.zero_address()
-    return And(is_payment, is_correct_receiver, is_one_tx, is_not_close, is_not_close_asset)
+
+    safety_cond = And(
+        Txn.asset_close_to() == Global.zero_address(),
+        Txn.close_remainder_to() == Global.zero_address(),
+        Txn.rekey_to() == Global.zero_address(),
+    )
+
+    return And(is_payment, is_correct_receiver, is_one_tx, safety_cond)
+
 program = bank_for_account("ZZAF5ARA4MEC5PVDOP64JM5O5MQST63Q2KOY2FLYFLXXD3PFSNJJBYAFZM")
-print( compileTeal(program, Mode.Signature ) )
+print(compileTeal(program, Mode.Signature, version=3))
 ```
 
 When executed this python will return the following TEAL.
 
-```go
+```bash
 $ python3 simple.py
+#pragma version 3
 txn TypeEnum
 int 1
 ==
@@ -44,13 +51,21 @@ txn Receiver
 addr ZZAF5ARA4MEC5PVDOP64JM5O5MQST63Q2KOY2FLYFLXXD3PFSNJJBYAFZM
 ==
 &&
-txn CloseRemainderTo
-global ZeroAddress
+global GroupSize
+int 1
 ==
 &&
 txn AssetCloseTo
 global ZeroAddress
 ==
+txn CloseRemainderTo
+global ZeroAddress
+==
+&&
+txn RekeyTo
+global ZeroAddress
+==
+&&
 &&
 ```
 
