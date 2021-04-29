@@ -78,7 +78,7 @@ In the above example, the block information will be displayed if the block exist
 
 # JavaScript
 ## Installation
-The JavaScript SDK is available as an [NPM package](https://www.npmjs.com/package/algosdk) or as a [minified JavaScript library](https://github.com/algorand/js-algorand-sdk/blob/master/dist/algosdk.min.js). 
+The JavaScript SDK is available as an [NPM package](https://www.npmjs.com/package/algosdk) or as a [minified JavaScript library](https://unpkg.com/algosdk@latest).
 
 Requirements: [Node.js](https://nodejs.org/en/download/) 
 
@@ -86,14 +86,14 @@ Requirements: [Node.js](https://nodejs.org/en/download/)
 $ npm install algosdk
 ```
 
-To install the minified library, download the [latest distribution](https://github.com/algorand/js-algorand-sdk/tree/develop/dist) and add it to the project's library location. Use the src tag to specify the location of the library.
+To use the minified library hosted on the [unpkg CDN](https://unpkg.com/), include the browser bundle directly in your HTML like so:
 
 ```javascript tab="JavaScript"
-<script src="algosdk.min.js"/> 
+<script src="https://unpkg.com/algosdk@latest" />
+<!-- or https://cdn.jsdelivr.net/npm/algosdk@latest -->
 ```
 
-The [GitHub repository](https://github.com/algorand/js-algorand-sdk) contains additional documentation and examples.
-
+Additional documentation is available on the JavaScript SDK [reference documentation site](https://algorand.github.io/js-algorand-sdk/), and examples can be found in the [GitHub repository](https://github.com/algorand/js-algorand-sdk).
 
 # Python
 ## Installation
