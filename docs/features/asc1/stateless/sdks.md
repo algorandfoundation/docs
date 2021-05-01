@@ -63,7 +63,7 @@ const main = async () => {
     const data = fs.readFileSync(filePath);
 
     // Compile teal
-    const results = await algodClient.compile('x').do();
+    const results = await algodClient.compile(data).do();
     return results;
 };
 
@@ -223,7 +223,6 @@ ASABACI=
 The response result from the TEAL `compile` command above is used to create the `program` variable. This variable can then be used as an input parameter to the function to make a logic signature.
 
 ```javascript tab="JavaScript"
-    // let program = new Uint8Array(Buffer.from("ASABACI=", "base64"));
     const program = new Uint8Array(Buffer.from(results.result , "base64"));
     const lsig = algosdk.makeLogicSig(program);   
 ```
@@ -268,10 +267,7 @@ The SDKs require that parameters to a stateless smart contract TEAL program be i
     
     // integer parameter
     const value = 123;
-    const buffer = Buffer.alloc(8);
-    const bigIntValue = BigInt(value);
-    buffer.writeBigUInt64BE(bigIntValue)
-    const arg1 = Uint8Array.from(buffer);
+    const arg1 = algosdk.encodeUint64(value)
     const args = [arg1];
     const lsig = algosdk.makeLogicSig(program, args);
 ```
@@ -412,10 +408,7 @@ const main = async () => {
 
     // Integer parameter
     const value = 123;
-    const buffer = Buffer.alloc(8);
-    const bigIntValue = BigInt(value);
-    buffer.writeBigUInt64BE(bigIntValue)
-    const arg1 = Uint8Array.from(buffer);
+    const arg1 = algosdk.encodeUint64(value)
     const args = [arg1];
 
     const lsig = algosdk.makeLogicSig(program, args);
@@ -813,10 +806,7 @@ const main = async () => {
 
     // Integer parameter
     const value = 123;
-    const buffer = Buffer.alloc(8);
-    const bigIntValue = BigInt(value);
-    buffer.writeBigUInt64BE(bigIntValue)
-    const arg1 = Uint8Array.from(buffer);
+    const arg1 = algosdk.encodeUint64(value)
     const args = [arg1];
 
     const lsig = algosdk.makeLogicSig(program, args); 
