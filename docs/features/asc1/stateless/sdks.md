@@ -262,13 +262,13 @@ The SDKs require that parameters to a stateless smart contract TEAL program be i
 
 ```javascript tab="JavaScript"
     // string parameter
-    const args = ["my string"];
+    const args = [];
+    args.push([...Buffer.from("my string")]);
     const lsig = algosdk.makeLogicSig(program, args);
     
     // integer parameter
-    const value = 123;
-    const arg1 = algosdk.encodeUint64(value)
-    const args = [arg1];
+    const args = [];
+    args.push(algosdk.encodeUint64(123));
     const lsig = algosdk.makeLogicSig(program, args);
 ```
 
@@ -402,14 +402,15 @@ const main = async () => {
     // Use this if no args
     // const lsig = algosdk.makeLogicSig(program);
 
+    // Initialize arguments array
+    const args = [];
+
     // String parameter
-    // const args = ["my string"];
-    // const lsig = algosdk.makeLogicSig(program, args);
+    // args.push([...Buffer.from("my string")]);
 
     // Integer parameter
-    const value = 123;
-    const arg1 = algosdk.encodeUint64(value)
-    const args = [arg1];
+    args.push(algosdk.encodeUint64(123));
+
 
     const lsig = algosdk.makeLogicSig(program, args);
     console.log("lsig : " + lsig.address());   
@@ -804,11 +805,9 @@ const main = async () => {
     const  results = await algodClient.compile(data).do();
     const program = new Uint8Array(Buffer.from(results.result, "base64"));
 
-    // Integer parameter
-    const value = 123;
-    const arg1 = algosdk.encodeUint64(value)
-    const args = [arg1];
-
+    const args = [];
+    args.push(algosdk.encodeUint64(123));
+   
     const lsig = algosdk.makeLogicSig(program, args); 
     
     // *** Begin account delegation changes ***
