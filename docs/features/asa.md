@@ -315,7 +315,7 @@ goal asset create --creator <address> --total 1000 --unitname <unit-name> --asse
 
 **Authorized by**: [Asset Manager Account](../reference/transactions.md#manageraddr)
 
-After an asset has been created only the manager, reserve, freeze and reserve accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
+After an asset has been created only the manager, reserve, freeze and clawback accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
 
 ``` javascript tab="JavaScript"
 // Asset configuration specific parameters
