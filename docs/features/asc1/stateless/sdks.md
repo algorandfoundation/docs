@@ -46,31 +46,36 @@ int 0
     The samples on this page use a [docker sandbox install](https://developer.algorand.org/docs/build-apps/setup/#2-use-docker-sandbox)
 
 ```javascript tab="JavaScript"
+const fs = require('fs');
+const path = require('path');
 const algosdk = require('algosdk');
+// We assume that testing is done off of sandbox, hence the settings below
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
 
-// Import the filesystem module 
-const fs = require('fs');
 // create v2 client
-let algodclient = new algosdk.Algodv2(token, server, port);
+const algodClient = new algosdk.Algodv2(token, server, port);
 
-(async () => {
+const main = async () => {
     // Read file for Teal code - int 0
-    var fs = require('fs'),
-    path = require('path'),
-    filePath = path.join(__dirname, 'sample.teal');
-    let data = fs.readFileSync(filePath);
+    const filePath = path.join(__dirname, 'sample.teal');
+    const data = fs.readFileSync(filePath);
+
     // Compile teal
-    let results = await algodclient.compile(data).do();
+    const results = await algodClient.compile(data).do();
+    return results;
+};
+
+main().then((results) => {
     // Print results
     console.log("Hash = " + results.hash);
     console.log("Result = " + results.result);
-})().catch(e => {
-    console.log(e.body.message);
-    console.log(e);
+}).catch(e => {
+    const error = e.body && e.body.message ? e.body.message : e;
+    console.log(error);
 });
+
 // output would be similar to this... 
 // Hash : KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
 // Result : ASABACI=
@@ -218,9 +223,8 @@ ASABACI=
 The response result from the TEAL `compile` command above is used to create the `program` variable. This variable can then be used as an input parameter to the function to make a logic signature.
 
 ```javascript tab="JavaScript"
-    // let program = new Uint8Array(Buffer.from("ASABACI=", "base64"));
-    let program = new Uint8Array(Buffer.from(results.result , "base64"));
-    let lsig = algosdk.makeLogicSig(program);   
+    const program = new Uint8Array(Buffer.from(results.result , "base64"));
+    const lsig = algosdk.makeLogicSig(program);   
 ```
 
 ```python tab="Python"
@@ -257,12 +261,15 @@ The SDKs require that parameters to a stateless smart contract TEAL program be i
     The samples show setting parameters at the creation of the logic signature. These parameters can be changed at the time of submitting the transaction.
 
 ```javascript tab="JavaScript"
-    //string parameter
-    let args = ["my string"];
-    let lsig = algosdk.makeLogicSig(program, args);
-    //integer parameter
-    let args = [[123]];
-    let lsig = algosdk.makeLogicSig(program, args);
+    // string parameter
+    const args = [];
+    args.push([...Buffer.from("my string")]);
+    const lsig = algosdk.makeLogicSig(program, args);
+    
+    // integer parameter
+    const args = [];
+    args.push(algosdk.encodeUint64(123));
+    const lsig = algosdk.makeLogicSig(program, args);
 ```
 
 ```python tab="Python"
@@ -350,83 +357,83 @@ int 123
 ```
 
 ```javascript tab="JavaScript"
+const fs = require('fs');
+const path = require('path');
 const algosdk = require('algosdk');
-
+// We assume that testing is done off of sandbox, hence the settings below
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
 
-
-// Import the filesystem module 
-const fs = require('fs'); 
+// create v2 client
+const algodClient = new algosdk.Algodv2(token, server, port);
 
 // Function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let response = await algodclient.status().do();
+const waitForConfirmation = async function (algodClient, txId) {
+    const response = await algodClient.status().do();
     let lastround = response["last-round"];
     while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+        const pendingInfo = await algodClient.pendingTransactionInformation(txId).do();
         if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
             //Got the completed Transaction
             console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
             break;
         }
         lastround++;
-        await algodclient.statusAfterBlock(lastround).do();
+        await algodClient.statusAfterBlock(lastround).do();
     }
 };
 
-// create an algod v2 client
-let algodclient = new algosdk.Algodv2(token, server, port);
-
-(async () => {
+const main = async () => {
     // get suggested parameters
-    let params = await algodclient.getTransactionParams().do();
+    const params = await algodClient.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     params.fee = 1000;
     params.flatFee = true;
-    console.log(params);
 
-    // create logic sig
-    var fs = require('fs'),
-        path = require('path'),
-        filePath = path.join(__dirname, 'samplearg.teal');
-        // filePath = path.join(__dirname, '<PLACEHOLDER>');       
-    let data = fs.readFileSync(filePath);
-    let results = await algodclient.compile(data).do();
+    const filePath = path.join(__dirname, 'samplearg.teal');
+      
+    const data = fs.readFileSync(filePath);
+    const  results = await algodClient.compile(data).do();
     console.log("Hash = " + results.hash);
     console.log("Result = " + results.result);
-    // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
-    let program = new Uint8Array(Buffer.from(results.result, "base64"));
+
+    const program = new Uint8Array(Buffer.from(results.result, "base64"));
     // Use this if no args
-    // let lsig = algosdk.makeLogicSig(program);
+    // const lsig = algosdk.makeLogicSig(program);
+
+    // Initialize arguments array
+    const args = [];
 
     // String parameter
-    // let args = ["my string"];
-    // let lsig = algosdk.makeLogicSig(program, args);
+    // args.push([...Buffer.from("my string")]);
+
     // Integer parameter
-    let args = [[123]];
-    let lsig = algosdk.makeLogicSig(program, args);
+    args.push(algosdk.encodeUint64(123));
+
+
+    const lsig = algosdk.makeLogicSig(program, args);
     console.log("lsig : " + lsig.address());   
 
     // create a transaction
-    let sender = lsig.address();
-    let receiver = "<receiver-address>";
-    let amount = 10000;
-    let closeToRemaninder = undefined;
-    let note = undefined;
-    let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
+    const sender = lsig.address();
+    const receiver = "<receiver-address>";
+    const amount = 10000;
+    const closeToRemaninder = undefined;
+    const note = undefined;
+    const txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
 
-    let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
+    const rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
 
     // send raw LogicSigTransaction to network
-    let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
+    const tx = await algodClient.sendRawTransaction(rawSignedTxn.blob).do();
     console.log("Transaction : " + tx.txId);   
-    await waitForConfirmation(algodclient, tx.txId);
+    await waitForConfirmation(algodClient, tx.txId);
+};
 
-})().catch(e => {
-    console.log(e.body.message);
-    console.log(e);
+main().then().catch(e => {
+    const error = e.body && e.body.message ? e.body.message : e;
+    console.log(error);
 });
 ```
 
@@ -787,88 +794,44 @@ Delegated Logic Signatures require that the logic signature be signed from a spe
 The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.
 
 ```javascript tab="JavaScript"
-const algosdk = require('algosdk');
-
-// sandbox
-const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-const server = "http://localhost";
-const port = 4001;
-
-// Import the filesystem module 
-const fs = require('fs'); 
-// import your private key mnemonic
-let PASSPHRASE = "<25-word-mnemonic>";
-
-var myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
-console.log("My Address: " + myAccount.addr);
-// Function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let response = await algodclient.status().do();
-    let lastround = response["last-round"];
-    while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-            //Got the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-            break;
-        }
-        lastround++;
-        await algodclient.statusAfterBlock(lastround).do();
-    }
-};
-// create an algod v2 client
-let algodclient = new algosdk.Algodv2(token, server, port);
-(async () => {
-    // get suggested parameter
-    let params = await algodclient.getTransactionParams().do();
-    // comment out the next two lines to use suggested fee 
+const main = async () => {
+    // get suggested parameters
+    const params = await algodClient.getTransactionParams().do();
     params.fee = 1000;
     params.flatFee = true;
-    console.log(params);
-    // create logic sig
 
-     var fs = require('fs'),
-        path = require('path'),
-        filePath = path.join(__dirname, 'samplearg.teal');
-    // filePath = path.join(__dirname, '< PLACEHOLDER >');
-    let data = fs.readFileSync(filePath);
-    let results = await algodclient.compile(data).do();
-    console.log("Hash = " + results.hash);
-    console.log("Result = " + results.result);
-    // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
-    let program = new Uint8Array(Buffer.from(results.result , "base64"));
-    // Use this if no args
-    // let lsig = algosdk.makeLogicSig(program);
+    const filePath = path.join(__dirname, 'samplearg.teal');
+    const data = fs.readFileSync(filePath);
+    const  results = await algodClient.compile(data).do();
+    const program = new Uint8Array(Buffer.from(results.result, "base64"));
 
-    // String parameter
-    // let args = ["my string"];
-    // let lsig = algosdk.makeLogicSig(program, args);
-    // Integer parameter
-    let args = [[123]];
-    let lsig = algosdk.makeLogicSig(program, args);
+    const args = [];
+    args.push(algosdk.encodeUint64(123));
+   
+    const lsig = algosdk.makeLogicSig(program, args); 
+    
+    // *** Begin account delegation changes ***
+    // import your private key mnemonic
+    const PASSPHRASE = "< mnemonic >";
+    const myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
 
     // sign the logic signature with an account sk
     lsig.sign(myAccount.sk);
-    
-    // Setup a transaction
-    let sender = myAccount.addr;
-    let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
-    // let receiver = "< PLACEHOLDER >";
-    let amount = 10000;
-    let closeToRemaninder = undefined;
-    let note = undefined;
-    let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
-    // Create the LogicSigTransaction with contract account LogicSig
-    let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
+    // *** End account delegation changes ***
 
-    // send raw LogicSigTransaction to network    
-    let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
+    // Setup a transaction
+    const sender = myAccount.addr;
+    const receiver = "GVVIH6IE3ZAFLIQF6UFBOH4TI5ZOPHFRMDQUTXQRKZ6XWSRTVRDBQ4GZLY";
+    const amount = 10000;
+    const closeToRemaninder = undefined;
+    const note = undefined;
+    const txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
+    const rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
+   
+    const tx = await algodClient.sendRawTransaction(rawSignedTxn.blob).do();
     console.log("Transaction : " + tx.txId);    
-    await waitForConfirmation(algodclient, tx.txId);
-})().catch(e => {
-    console.log(e.body.message);
-    console.log(e);
-});
+    await waitForConfirmation(algodClient, tx.txId);
+};
 ```
 
 ```python tab="Python"
@@ -1248,6 +1211,8 @@ func main() {
     }
 ```
 
+!!! Notice
+    The samplearg.teal file will compile to the address UVBYHRZIHUNUELDO6HWUAHOZF6G66W6T3JOXIIUSV3LDSBWVCFZ6LM6NCA, please fund this address with at least 11000 microALGO else executing the sample code as written will result in an overspend response from the network node.
 
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
