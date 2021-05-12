@@ -228,6 +228,16 @@ print(compileTeal(program, Mode.Application))
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise `int 2` would represent the second passed in foreign application. Similar to the `app_local_get_ex` opcode, generally there will be branching logic testing whether the value was found or not. 
 
+## Summary of State Operations
+
+| Context            | Write            | Read                | Delete           | Check If Exists     |
+| ---                | ---              | ---                 | ---              | ---                 |
+| Current App Global | `app_global_put` | `app_global_get`    | `app_global_del` | `app_global_get_ex` |
+| Current App Local  | `app_local_put`  | `app_local_get`     | `app_local_del`  | `app_local_get_ex`  |
+| Other App Global   |                  | `app_global_get_ex` |                  | `app_global_get_ex` |
+| Other App Local    |                  | `app_local_get_ex`  |                  | `app_local_get_ex`  |
+
+
 # Checking the Transaction Type in a Smart Contract
 The `ApplicationCall` transaction types defined in [The Lifecycle of a Stateful Smart Contract](#the-lifecycle-of-a-stateful-smart-contract) can be checked within the TEAL code by examining the `OnCompletion` transaction property. 
 
