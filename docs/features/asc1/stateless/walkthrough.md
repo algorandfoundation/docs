@@ -231,7 +231,7 @@ b end_program
 
 ## Opt-In ASC1 depolyment
 
-We get the Contracr Address compiling its TEAL logic:
+We get the Contract Address by compiling its TEAL logic:
 
 ```
 goal clerk compile contract.teal
@@ -239,10 +239,17 @@ goal clerk compile contract.teal
 contract.teal: CONTRACT_ADDRESS
 ```
 
-As any other Algorand Account, the Contract Account must be initialized:
+As any other Algorand Account, the Contract Account must be first initialized with 0,1 ALGO and funded with additional 0,1 ALGO for each additional ASA to Opt-In.
+
+!!! tip
+  In order to prevent malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees, you can either:
+  
+  1. Fund the Contract Account just with the exact amount that covers minumum balance and transaction fees
+  2. Fund the Contract Account with an [Atomic Transfer](https://developer.algorand.org/docs/features/atomic_transfers/) that includes both the initial funding and Opt-In transction
+  3. Make use of [transaction's lease property](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/), hardcoding it into Contract Account TEAL logic.
 
 ```
-goal clerk send -f VAR_TMPL_CREATOR_ADDR -t CONTRACT_ADDRESS -a 300000
+goal clerk send -f VAR_TMPL_CREATOR_ADDR -t CONTRACT_ADDRESS -a 202000
 ```
 
 Asset Opt-In transaction will then be signed with its LogicSig:
@@ -254,3 +261,5 @@ goal clerk sign -i optin.txn -p contract.teal -o optin.stxn
 
 goal clerk rawsend -f optin.stxn
 ```
+
+Then you can add more fund to the Contract Address once the Opt-In validity block expires.
