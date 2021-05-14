@@ -1,50 +1,30 @@
+const fs = require('fs');
+const path = require('path');
 const algosdk = require('algosdk');
+const { waitForConfirmation } = require('./utils/waitForConfirmation');
 
-// const token = "<algod-token>";
-// const server = "<algod-address>";
-// const port = <algod-port>;
-
+// We assume that testing is done off of sandbox, hence the settings below
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
 
+const algodClient = new algosdk.Algodv2(token, server, port);
 
-// Function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let response = await algodclient.status().do();
-    let lastround = response["last-round"];
-    while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-            //Got the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-            break;
-        }
-        lastround++;
-        await algodclient.statusAfterBlock(lastround).do();
-    }
-};
+const main = async () => {
+    const filePath = path.join(__dirname, '/teal/sample.teal');
+    const data = fs.readFileSync(filePath);
 
-// Import the filesystem module 
-const fs = require('fs');
-let algodclient = new algosdk.Algodv2(token, server, port);
+    const results = await algodClient.compile(data).do();
+    return results;
+}
 
-(async () => {
-    // Read file for Teal code - int 0
-    var fs = require('fs'),
-        path = require('path'),
-        filePath = path.join(__dirname, 'sample.teal');
-    //  filePath = path.join(__dirname, '<filename>');    
-    let data = fs.readFileSync(filePath);
-    //  algodclient.compile(data.toString())
-    let results = await algodclient.compile(data).do();
+main().then((results) => {
     console.log("Hash = " + results.hash);
     console.log("Result = " + results.result);
-    
-})().catch(e => {
-    console.log(e.body.message);
-    console.log(e);
+    // output would be similar to this... 
+    // Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+    // Result = ASABACI=
+}).catch(e => {
+    const error = e.body && e.body.message ? e.body.message : e;
+    console.log(error);
 });
-// output would be similar to this... 
-// Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-// Result = ASABACI=
