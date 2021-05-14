@@ -239,7 +239,7 @@ goal clerk compile contract.teal
 contract.teal: CONTRACT_ADDRESS
 ```
 
-As any other Algorand Account, the Contract Account must be first initialized with 0,1 ALGO and funded with additional 0,1 ALGO for each additional ASA to Opt-In.
+As any other Algorand Account, the Contract Account must be first initialized with 0.1 ALGO and funded with additional 0.1 ALGO for each additional ASA to Opt-In.
 
 !!! tip
   In order to prevent malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees, you can either:
