@@ -23,8 +23,8 @@ In order to send a transaction, you first need an [account](../features/accounts
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-var account = algosdk.generateAccount();
-var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+const account = algosdk.generateAccount();
+const passphrase = algosdk.secretKeyToMnemonic(account.sk);
 console.log( "My address: " + account.addr );
 console.log( "My passphrase: " + passphrase );
 ```
@@ -100,7 +100,7 @@ const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 const algodServer = "http://localhost";
 const algodPort = 4001;
 
-let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
 
 ```Python tab=
@@ -146,14 +146,13 @@ func main() {
 Check your balance to confirm the added funds.
 
 ```javascript tab="JavaScript"
+const passphrase = "Your 25-word mnemonic generated and displayed above";
 
-	const passphrase = "Your 25-word mnemonic generated and displayed above";
+const myAccount = algosdk.mnemonicToSecretKey(passphrase)
+console.log("My address: %s", myAccount.addr)
 
-	let myAccount = algosdk.mnemonicToSecretKey(passphrase)
-	console.log("My address: %s", myAccount.addr)
-
-    let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
-    console.log("Account balance: %d microAlgos", accountInfo.amount);
+const accountInfo = await algodClient.accountInformation(myAccount.addr).do();
+console.log("Account balance: %d microAlgos", accountInfo.amount);
 ```
 
 ```python tab="Python"
@@ -226,10 +225,11 @@ let params = await algodClient.getTransactionParams().do();
 // comment out the next two lines to use suggested fee
 params.fee = 1000;
 params.flatFee = true;
-const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
-let note = algosdk.encodeObj("Hello World");
 
-let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
+const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
+const note = algosdk.encodeObj("Hello World");
+
+const txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
 ```
 
 ```python tab="Python"
@@ -304,8 +304,8 @@ _Learn more about the [Structure of Transactions on Algorand](../features/transa
 Sign the transaction with your private key. This creates a new signed transaction object in the SDKs. Retrieve the transaction ID of the signed transaction.
 
 ```javascript tab="JavaScript"
-let signedTxn = txn.signTxn(myAccount.sk);
-let txId = txn.txID().toString();
+const signedTxn = txn.signTxn(myAccount.sk);
+const txId = txn.txID().toString();
 console.log("Signed transaction with txID: %s", txId);
 ```
 
@@ -400,55 +400,21 @@ Successfully submitting your transaction to the network does not necessarily mea
 ```javascript tab="JavaScript"
 /**
  * utility function to wait on a transaction to be confirmed
- * the timeout parameter indicates how many rounds do you wish to check pending transactions for
  */
-const waitForConfirmation = async function (algodclient, txId, timeout) {
-    // Wait until the transaction is confirmed or rejected, or until 'timeout'
-    // number of rounds have passed.
-    //     Args:
-    // txId(str): the transaction to wait for
-    // timeout(int): maximum number of rounds to wait
-    // Returns:
-    // pending transaction information, or throws an error if the transaction
-    // is not confirmed or rejected in the next timeout rounds
-    if (algodclient == null || txId == null || timeout < 0) {
-        throw "Bad arguments.";
+const waitForConfirmation = async function (algodclient, txId) {
+    const response = await algodclient.status().do();
+    let lastround = response["last-round"];
+    while (true) {
+        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+            //Got the completed Transaction
+            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+            break;
+        }
+        lastround++;
+        await algodclient.statusAfterBlock(lastround).do();
     }
-    let status = (await algodclient.status().do());
-    if (status == undefined) throw new Error("Unable to get node status");
-    let startround = status["last-round"] + 1;   
-    let currentround = startround;
-
-    while (currentround < (startround + timeout)) {
-        let pendingInfo = await algodclient.pendingTransactionInformation(txId).do();      
-        if (pendingInfo != undefined) {
-            if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-                //Got the completed Transaction
-                return pendingInfo;
-            }
-            else {
-                if (pendingInfo["pool-error"] != null && pendingInfo["pool-error"].length > 0) {
-                    // If there was a pool error, then the transaction has been rejected!
-                    throw new Error("Transaction Rejected" + " pool error" + pendingInfo["pool-error"]);
-                }
-            }
-        } 
-        await algodclient.statusAfterBlock(currentround).do();
-        currentround++;
-    }
-    throw new Error("Transaction not confirmed after " + timeout + " rounds!");
 };
-
-private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
-    String myAddress = myAccount.getAddress().toString();
-    Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
-    if (!respAcct.isSuccessful()) {
-        throw new Exception(respAcct.message());
-    }
-    com.algorand.algosdk.v2.client.model.Account accountInfo = respAcct.body();
-    System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
-    return myAddress;
-}
 ```
 
 ```python tab="Python"
@@ -601,12 +567,13 @@ Read your transaction back from the blockchain.
 
 ```javascript tab="JavaScript"
         // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
-        //Get the completed Transaction
+        const confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
         console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
+
+        const mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
         console.log("Transaction information: %o", mytxinfo);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
+
+        const string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
         console.log("Note field: ", string);
 ```
 
