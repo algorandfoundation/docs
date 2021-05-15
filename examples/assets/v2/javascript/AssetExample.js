@@ -1,16 +1,4 @@
 const algosdk = require('algosdk');
-// Retrieve the token, server and port values for your installation in the 
-// algod.net and algod.token files within the data directory
-
-// UPDATE THESE VALUES
-// const token = "TOKEN";
-// const server = "SERVER";
-// const port = PORT;
-
-//hackathon
-// const token = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
-// const server = "http://hackathon.algodev.network";
-// const port = 9100;
 
 // sandbox
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

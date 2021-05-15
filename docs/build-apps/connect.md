@@ -13,6 +13,7 @@ Instantiate an **algod** client with your preferred SDK.
 ```JavaScript tab=
 const algosdk = require('algosdk');
 
+// Sandbox settings assumed below
 const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const algodServer = "http://localhost";
 const algodPort = 4001;
@@ -61,13 +62,14 @@ Some third-party services use a different API key header than the one used by de
 For example, if the API key header is `X-API-Key`, the client can be instantiated as follows:
 
 ```JavaScript tab=
-from algosdk.v2client import algod
+const algosdk = require('algosdk');
 
 const algodServer = "https://api.host.com";
 const port = "";
 const token = {
 	'X-API-Key': "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 };
+
 const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
 
@@ -128,7 +130,7 @@ func main() {
 Call the _status_ method from the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
 
 ```javascript tab="JavaScript"
-let status = (await algodClient.status().do());
+const status = await algodClient.status().do();
 console.log("Algorand network status: %o", status);
 ```
 
@@ -217,10 +219,8 @@ The _/v2/transactions/params_ endpoint returns information about the identity of
 
 
 ```javascript tab="JavaScript"
-...
-	let params = await algodClient.getTransactionParams().do();
+	const params = await algodClient.getTransactionParams().do();
 	console.log("Algorand suggested parameters: %o", params)
-...
 ```
 
 ```python tab="Python"

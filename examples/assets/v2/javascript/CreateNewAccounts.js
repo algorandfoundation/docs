@@ -4,9 +4,8 @@ const algosdk = require('algosdk');
 // once created sucessfully, you will need to add funds to all three
 // The Algorand TestNet Dispenser is located here: 
 // https://bank.testnet.algorand.network/
-var acct = null;
 
-acct = algosdk.generateAccount();
+const acct_1 = algosdk.generateAccount();
 
 account1 = acct.addr;
 console.log("Account 1 = " + account1);
