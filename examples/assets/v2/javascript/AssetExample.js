@@ -369,9 +369,9 @@ console.log(recoveredAccount3.addr);
     params.fee = 1000;
     params.flatFee = true;
 
-    from = recoveredAccount2.addr;
-    freezeTarget = recoveredAccount3.addr;
-    freezeState = true;
+    const from = recoveredAccount2.addr;
+    const freezeTarget = recoveredAccount3.addr;
+    const freezeState = true;
 
     // The freeze transaction needs to be signed by the freeze account
     let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(from, note,
