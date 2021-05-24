@@ -203,8 +203,8 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 
 ``` javascript tab="JavaScript"
 // Sign each transaction in the group 
-signedTx1 = transaction1.signTxn( myAccountA.sk )
-signedTx2 = transaction2.signTxn( myAccountB.sk )
+let signedTx1 = transaction1.signTxn( myAccountA.sk )
+let signedTx2 = transaction2.signTxn( myAccountB.sk )
 
 ```
 
@@ -293,7 +293,7 @@ let tx = (await algodClient.sendRawTransaction(signed).do());
 console.log("Transaction : " + tx.txId);
 
 // Wait for transaction to be confirmed
-await waitForConfirmation(algodClient, tx.txId)
+await waitForConfirmation(algodClient, tx.txId, 4)
 ```
 
 ``` python tab="Python"
