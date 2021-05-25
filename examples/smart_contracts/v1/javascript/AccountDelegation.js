@@ -38,7 +38,7 @@ const main = async () => {
 
     // Setup a transaction
     const sender = myAccount.addr;
-    const receiver = "GVVIH6IE3ZAFLIQF6UFBOH4TI5ZOPHFRMDQUTXQRKZ6XWSRTVRDBQ4GZLY";
+    const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
     const amount = 10000;
     const closeToRemaninder = undefined;
     const note = undefined;
