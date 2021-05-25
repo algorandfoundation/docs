@@ -233,6 +233,8 @@ let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 10
 ```
 
 ```python tab="Python"
+from algosdk.future.transaction import PaymentTxn
+
 params = algod_client.suggested_params()
 # comment out the next two (2) lines to use suggested fees
 params.flat_fee = True
