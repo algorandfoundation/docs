@@ -490,7 +490,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
 ```java tab="Java"
 /**
  * utility function to wait on a transaction to be confirmed
- * the timeout parameter indicates how many rounds do you wish to check pending transactions for
+ * the timeout parameter indicates how many rounds do you wish to check pending transactions for [fix]
  */
 public PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
 throws Exception {
