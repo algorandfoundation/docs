@@ -23,6 +23,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[AlertHub](https://app.metrika.co/) | AlertHub enables monitoring and real-time alerting on Algorand addresses so that users can maintain the health of their accounts and the overall Algorand network. Subscribe to get notifications on account events like consensus participation, key expiration, and transactions.
+| <center>[HowBigIsAlgorand](https://howbigisalgorand.com/) | HowBigIsAlgorand is a real-time dashboard tool designed to inform users interested in spinning up their own archival nodes about the disk space requirement for a given Algorand Blockchain. 
 
 # Wallets
 
