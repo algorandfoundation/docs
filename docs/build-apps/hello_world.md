@@ -23,8 +23,8 @@ In order to send a transaction, you first need an [account](../features/accounts
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-var account = algosdk.generateAccount();
-var passphrase = algosdk.secretKeyToMnemonic(account.sk);
+const account = algosdk.generateAccount();
+const passphrase = algosdk.secretKeyToMnemonic(account.sk);
 console.log( "My address: " + account.addr );
 console.log( "My passphrase: " + passphrase );
 ```
@@ -146,14 +146,13 @@ func main() {
 Check your balance to confirm the added funds.
 
 ```javascript tab="JavaScript"
+const passphrase = "Your 25-word mnemonic generated and displayed above";
 
-	const passphrase = "Your 25-word mnemonic generated and displayed above";
+let myAccount = algosdk.mnemonicToSecretKey(passphrase)
+console.log("My address: %s", myAccount.addr)
 
-	let myAccount = algosdk.mnemonicToSecretKey(passphrase)
-	console.log("My address: %s", myAccount.addr)
-
-    let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
-    console.log("Account balance: %d microAlgos", accountInfo.amount);
+let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
+console.log("Account balance: %d microAlgos", accountInfo.amount);
 ```
 
 ```python tab="Python"
@@ -441,17 +440,6 @@ const waitForConfirmation = async function (algodClient, txId, timeout) {
 
     throw new Error("Transaction " + txId + " not confirmed after " + timeout + " rounds!");
 };
-
-private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
-    String myAddress = myAccount.getAddress().toString();
-    Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
-    if (!respAcct.isSuccessful()) {
-        throw new Exception(respAcct.message());
-    }
-    com.algorand.algosdk.v2.client.model.Account accountInfo = respAcct.body();
-    System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
-    return myAddress;
-}
 ```
 
 ```python tab="Python"
@@ -528,6 +516,18 @@ throws Exception {
     }
     throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
 }
+
+
+private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
+    String myAddress = myAccount.getAddress().toString();
+    Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
+    if (!respAcct.isSuccessful()) {
+        throw new Exception(respAcct.message());
+    }
+    com.algorand.algosdk.v2.client.model.Account accountInfo = respAcct.body();
+    System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
+    return myAddress;
+}
 ```
 
 ```go tab="Go"
@@ -597,62 +597,64 @@ Transaction [TXID] committed in round [COMMITTED_ROUND]
 
 # Read the transaction from the blockchain
 
-Read your transaction back from the blockchain. 
+Read your transaction back from the blockchain. But first, make sure that the transaction has been added to the blockchain.
 
 !!! info
     Although you can read any transaction on the blockchain, only archival nodes store the whole history. By default, most nodes store only the last 1000 rounds and the APIs return errors when calling for information from earlier rounds. If you need to access data further back, make sure your algod client is connected to an archival, indexer node. Read more about node configurations in the Network Participation Guide or reach out to your service provider to understand how their node is configured. 
 
 ```javascript tab="JavaScript"
-        // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-        console.log("Transaction information: %o", mytxinfo);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);
+// Wait for confirmation
+let confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
+
+// Get the completed transaction
+console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
+console.log("Transaction information: %o", mytxinfo);
+
+const myNote = algosdk.decodeObj(confirmedTxn.txn.txn.note);
+console.log("Note field: ", myNote);
 ```
 
 ```python tab="Python"
-    # wait for confirmation	
-	try:
-		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
-	except Exception as err:
-		print(err)
-		return
+# wait for confirmation	
+try:
+    confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+except Exception as err:
+    print(err)
+    return
 
-	print("Transaction information: {}".format(
-		json.dumps(confirmed_txn, indent=4)))
-	print("Decoded note: {}".format(base64.b64decode(
-		confirmed_txn["txn"]["txn"]["note"]).decode()))
+print("Transaction information: {}".format(
+    json.dumps(confirmed_txn, indent=4)))
+print("Decoded note: {}".format(base64.b64decode(
+    confirmed_txn["txn"]["txn"]["note"]).decode()))
 ```
 
 ```java tab="Java"
-            // Wait for transaction confirmation
-            PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+// Wait for transaction confirmation
+PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
 
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // Read the transaction
-            JSONObject jsonObj = new JSONObject(pTrx.toString());
-            System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
-            System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-            printBalance(myAccount);
+// Read the transaction
+JSONObject jsonObj = new JSONObject(pTrx.toString());
+System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
+System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
+printBalance(myAccount);
 ```
 
 ```go tab="Go"
-	// Wait for confirmation
-	confirmedTxn, err := waitForConfirmation(txID, algodClient, 4)
-	if err != nil {
-		fmt.Printf("Error wating for confirmation on txID: %s\n", txID)
-		return
-	}
-	txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
-	if err != nil {
-		fmt.Printf("Can not marshall txn data: %s\n", err)
-	}
-	fmt.Printf("Transaction information: %s\n", txnJSON)
+// Wait for confirmation
+confirmedTxn, err := waitForConfirmation(txID, algodClient, 4)
+if err != nil {
+    fmt.Printf("Error wating for confirmation on txID: %s\n", txID)
+    return
+}
+txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
+if err != nil {
+    fmt.Printf("Can not marshall txn data: %s\n", err)
+}
+fmt.Printf("Transaction information: %s\n", txnJSON)
 
-	fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
+fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 ```
 
 ```bash tab="cURL"

@@ -217,54 +217,50 @@ The _/v2/transactions/params_ endpoint returns information about the identity of
 
 
 ```javascript tab="JavaScript"
-...
-	let params = await algodClient.getTransactionParams().do();
-	console.log("Algorand suggested parameters: %o", params)
-...
+let params = await algodClient.getTransactionParams().do();
+console.log("Algorand suggested parameters: %o", params)
+
 ```
 
 ```python tab="Python"
-...
-	try:
-		params = algod_client.suggested_params()
-		print(json.dumps(vars(params), indent=4))
-	except Exception as e:
-		print(e)
-...
+try:
+    params = algod_client.suggested_params()
+    print(json.dumps(vars(params), indent=4))
+except Exception as e:
+    print(e)
+
 ```
 
 ```java tab="Java"
-	...
-        try {
-            Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            TransactionParametersResponse params = resp.body();
-            if (params == null) {
-                throw new Exception("Params retrieval error");
-            }            
-            System.out.println("Algorand suggested parameters: " + params);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling algod#TransactionParams");
-            e.printStackTrace();
-        }
-	...
+try {
+    Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
+    if (!resp.isSuccessful()) {
+        throw new Exception(resp.message());
+    }
+    TransactionParametersResponse params = resp.body();
+    if (params == null) {
+        throw new Exception("Params retrieval error");
+    }            
+    System.out.println("Algorand suggested parameters: " + params);
+} catch (ApiException e) {
+    System.err.println("Exception when calling algod#TransactionParams");
+    e.printStackTrace();
+}
+
 ```
 
 ```go tab="Go"
-...
-	txParams, err := algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		fmt.Printf("Error Algorand suggested parameters: %s\n", err)
-		return
-	}
-	JSON, err := json.MarshalIndent(txParams, "", "\t")
-	if err != nil {
-		fmt.Printf("Can not marshall suggested parameters data: %s\n", err)
-	}
-	fmt.Printf("%s\n", JSON)
-...
+txParams, err := algodClient.SuggestedParams().Do(context.Background())
+if err != nil {
+    fmt.Printf("Error Algorand suggested parameters: %s\n", err)
+    return
+}
+JSON, err := json.MarshalIndent(txParams, "", "\t")
+if err != nil {
+    fmt.Printf("Can not marshall suggested parameters data: %s\n", err)
+}
+fmt.Printf("%s\n", JSON)
+
 ```
 
 ```bash tab="cURL"
