@@ -16,7 +16,7 @@ These APIs are described using the [Open API Specification version 3 (OAS3)](htt
 
 Run Algod in Postman OAS3.
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/55526bb6589a3c2ffd20)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/95292f6a2dccbd89e224)
 
 OAS2 Algod specfile [here](https://github.com/algorand/go-algorand/blob/master/daemon/algod/api/algod.oas2.json?raw=true)
 
@@ -28,7 +28,8 @@ The `algorand-indexer` daemon provides its API from the _host:port_ defined by t
 
 Run Indexer in Postman OAS3.
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/03f510cc97aaf6fae64f)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2d0435bec2aa95d54607)
+
 
 OAS2 Indexer specfile [here](https://github.com/algorand/indexer/blob/develop/api/indexer.oas2.json?raw=true)
 
