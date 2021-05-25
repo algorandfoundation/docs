@@ -19,13 +19,13 @@ public class YourFirstTransaction {
     // utility function to connect to a node
     private AlgodClient connectToNetwork() {
 
-         // Initialize an algod client
+        // Initialize an algod client
         final String ALGOD_API_ADDR = "localhost";
         final Integer ALGOD_PORT = 4001;
         final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-        AlgodClient client = new AlgodClient(ALGOD_API_ADDR,
-            ALGOD_PORT, ALGOD_API_TOKEN);
+ 
+        AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+        
         return client;
     }
     /**
