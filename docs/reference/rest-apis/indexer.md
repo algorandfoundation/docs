@@ -46,6 +46,7 @@ Search for accounts.
 |**Query**|**auth-addr**  <br>*optional*|Include accounts configured to use this spending key.|string|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations.|integer|
@@ -94,6 +95,7 @@ Lookup account information.
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**account-id**  <br>*required*|account string|string|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 
 
@@ -199,6 +201,7 @@ Search for applications
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 
@@ -243,9 +246,10 @@ Lookup application.
 
 **Parameters**
 
-|Type|Name|Schema|
-|---|---|---|
-|**Path**|**application-id**  <br>*required*|integer|
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**application-id**  <br>*required*||integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 
 
 **Responses**
@@ -291,6 +295,7 @@ Search for assets.
 |---|---|---|---|
 |**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
 |**Query**|**creator**  <br>*optional*|Filter just assets with the given creator address.|string|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
 |**Query**|**name**  <br>*optional*|Filter just assets with the given name.|string|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
@@ -337,9 +342,10 @@ Lookup asset information.
 
 **Parameters**
 
-|Type|Name|Schema|
-|---|---|---|
-|**Path**|**asset-id**  <br>*required*|integer|
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**asset-id**  <br>*required*||integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 
 
 **Responses**
@@ -387,6 +393,7 @@ Lookup the list of accounts who hold this asset
 |**Path**|**asset-id**  <br>*required*||integer|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
@@ -585,7 +592,7 @@ Search for transactions.
 * search
 
 
-<a name="lookuptransactions"></a>
+<a name="lookuptransaction"></a>
 ### GET /v2/transactions/{txid}
 
 **Description**
@@ -603,11 +610,11 @@ Lookup a single transaction.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|(empty)|[Response 200](#lookuptransactions-response-200)|
+|**200**|(empty)|[Response 200](#lookuptransaction-response-200)|
 |**404**||[ErrorResponse](#errorresponse)|
 |**500**||[ErrorResponse](#errorresponse)|
 
-<a name="lookuptransactions-response-200"></a>
+<a name="lookuptransaction-response-200"></a>
 **Response 200**
 
 |Name|Description|Schema|
@@ -914,6 +921,7 @@ A health check response.
 |---|---|
 |**data**  <br>*optional*|object|
 |**db-available**  <br>*required*|boolean|
+|**errors**  <br>*optional*|< string > array|
 |**is-migrating**  <br>*required*|boolean|
 |**message**  <br>*required*|string|
 |**round**  <br>*required*|integer|
@@ -1013,7 +1021,7 @@ data/transactions/transaction.go : Transaction
 |**asset-config-transaction**  <br>*optional*||[TransactionAssetConfig](#transactionassetconfig)|
 |**asset-freeze-transaction**  <br>*optional*||[TransactionAssetFreeze](#transactionassetfreeze)|
 |**asset-transfer-transaction**  <br>*optional*||[TransactionAssetTransfer](#transactionassettransfer)|
-|**auth-addr**  <br>*optional*|\[sgnr\] The address used to sign the transaction. This is used for rekeyed accounts to indicate that the sender address did not sign the transaction.|string|
+|**auth-addr**  <br>*optional*|\[sgnr\] this is included with signed transactions when the signing address does not equal the sender. The backend can use this to ensure that auth addr is equal to the accounts auth addr.|string|
 |**close-rewards**  <br>*optional*|\[rc\] rewards applied to close-remainder-to account.|integer|
 |**closing-amount**  <br>*optional*|\[ca\] closing amount for transaction.|integer|
 |**confirmed-round**  <br>*optional*|Round when the transaction was confirmed.|integer|

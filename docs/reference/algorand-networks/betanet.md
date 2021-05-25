@@ -12,10 +12,10 @@ Visit the new docs to get started:
 🔷 = BetaNet availability only
 
 # Version
-`v2.4.0-beta`
+`v2.5.6-beta`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.4.0-beta
+https://github.com/algorand/go-algorand/releases/tag/v2.5.6-beta
 
 # Genesis ID
 `betanet-v1.0`
@@ -33,7 +33,7 @@ https://github.com/algorand/go-algorand/releases/tag/v2.4.0-beta
 
 You can dispense algos to your TestNet account by visiting [Algorand BetaNet Dispenser](https://bank.betanet.algodev.network/).
 
-Click the Google sign-in link at the top of the Dispenser page and sign-in with your Google account. Complete the reCAPTCHA. Then copy and paste the address you would like to send money to into the empty text box. Click "Dispense". A `200` status code and a transaction ID means success. Run `goal account balance -a <algorand-address>` to view the new balance.
+Complete the reCAPTCHA. Then copy and paste the address you would like to send money to into the empty text box. Click "Dispense". A `200` status code and a transaction ID means success. Run `goal account balance -a <algorand-address>` to view the new balance.
 
 
 

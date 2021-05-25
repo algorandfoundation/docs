@@ -43,7 +43,7 @@ const printCreatedAsset = async function (algodclient, account, assetid) {
     // and in the loop below use this to extract the asset for a particular account
     // accountInfo['accounts'][idx][account]);
     let accountInfo = await algodclient.accountInformation(account).do();
-    for (idx = 0; idx < accountInfo['created-assets'].length; idx++) {
+    for (let idx = 0; idx < accountInfo['created-assets'].length; idx++) {
         let scrutinizedAsset = accountInfo['created-assets'][idx];
         if (scrutinizedAsset['index'] == assetid) {
             console.log("AssetID = " + scrutinizedAsset['index']);
@@ -61,7 +61,7 @@ const printAssetHolding = async function (algodclient, account, assetid) {
     // and in the loop below use this to extract the asset for a particular account
     // accountInfo['accounts'][idx][account]);
     let accountInfo = await algodclient.accountInformation(account).do();
-    for (idx = 0; idx < accountInfo['assets'].length; idx++) {
+    for (let idx = 0; idx < accountInfo['assets'].length; idx++) {
         let scrutinizedAsset = accountInfo['assets'][idx];
         if (scrutinizedAsset['asset-id'] == assetid) {
             let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
@@ -319,7 +319,7 @@ console.log(recoveredAccount3.addr);
     revocationTarget = undefined;
     closeRemainderTo = undefined;
     //Amount of the asset to transfer
-    amount = 10;
+    let amount = 10;
 
     // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
     let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
@@ -369,9 +369,9 @@ console.log(recoveredAccount3.addr);
     params.fee = 1000;
     params.flatFee = true;
 
-    from = recoveredAccount2.addr;
-    freezeTarget = recoveredAccount3.addr;
-    freezeState = true;
+    const from = recoveredAccount2.addr;
+    const freezeTarget = recoveredAccount3.addr;
+    const freezeState = true;
 
     // The freeze transaction needs to be signed by the freeze account
     let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(from, note,

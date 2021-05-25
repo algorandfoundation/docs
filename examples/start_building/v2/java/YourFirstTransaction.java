@@ -9,6 +9,7 @@ import com.algorand.algosdk.v2.client.common.AlgodClient;
 import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
+import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import org.json.JSONObject;
 
@@ -17,6 +18,7 @@ public class YourFirstTransaction {
 
     // utility function to connect to a node
     private AlgodClient connectToNetwork() {
+
         // Initialize an algod client
         final String ALGOD_API_ADDR = "localhost";
         final Integer ALGOD_PORT = 4001;
@@ -31,50 +33,49 @@ public class YourFirstTransaction {
      * the timeout parameter indicates how many rounds do you wish to check pending transactions for
      */
     public PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
-            throws Exception {
+    throws Exception {
         if (myclient == null || txID == null || timeout < 0) {
             throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
         }
-        Response<NodeStatusResponse> resp = myclient.GetStatus().execute();
+        Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
         if (!resp.isSuccessful()) {
             throw new Exception(resp.message());
         }
         NodeStatusResponse nodeStatusResponse = resp.body();
-        Long startRound = nodeStatusResponse.lastRound+1;
+        Long startRound = nodeStatusResponse.lastRound + 1;
         Long currentRound = startRound;
-        while (currentRound < (startRound + timeout)) { 
-                // Check the pending transactions                 
-                Response<PendingTransactionResponse> resp2 = myclient.PendingTransactionInformation(txID).execute();
-                if (resp2.isSuccessful()) {
-                    PendingTransactionResponse pendingInfo = resp2.body();               
-                    if (pendingInfo != null) {
-                        if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
-                            // Got the completed Transaction
-                            return pendingInfo;                     
-                        }
-                        if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
-                            // If there was a pool error, then the transaction has been rejected!
-                            throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
-                        }
+        while (currentRound < (startRound + timeout)) {
+            // Check the pending transactions                 
+            Response < PendingTransactionResponse > resp2 = myclient.PendingTransactionInformation(txID).execute();
+            if (resp2.isSuccessful()) {
+                PendingTransactionResponse pendingInfo = resp2.body();
+                if (pendingInfo != null) {
+                    if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
+                        // Got the completed Transaction
+                        return pendingInfo;
+                    }
+                    if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
+                        // If there was a pool error, then the transaction has been rejected!
+                        throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
                     }
                 }
-        
-                Response<NodeStatusResponse> resp3 = myclient.WaitForBlock(currentRound).execute();
-                if (!resp3.isSuccessful()) {
-                    throw new Exception(resp3.message());
-                }   
-                currentRound++;                  
+            }
+            resp = myclient.WaitForBlock(currentRound).execute();
+            if (!resp.isSuccessful()) {
+                throw new Exception(resp.message());
+            }
+            currentRound++;
         }
         throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
     }
+
 
     public void gettingStartedExample() throws Exception {
 
         if (client == null)
             this.client = connectToNetwork();
-
         // Import your private key mnemonic and address
-        final String PASSPHRASE = "patrol target joy dial ethics flip usual fatigue bulb security prosper brand coast arch casino burger inch cricket scissors shoe evolve eternal calm absorb school";
+        final String PASSPHRASE = "Your 25-word mnemonic generated and displayed above";
         com.algorand.algosdk.account.Account myAccount = new Account(PASSPHRASE);
         System.out.println("My Address: " + myAccount.getAddress());
 
@@ -84,14 +85,21 @@ public class YourFirstTransaction {
             // Construct the transaction
             final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
             String note = "Hello World";
-            TransactionParametersResponse params = client.TransactionParams().execute().body();
+            Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
+            if (!resp.isSuccessful()) {
+                throw new Exception(resp.message());
+            }
+            TransactionParametersResponse params = resp.body();
+            if (params == null) {
+                throw new Exception("Params retrieval error");
+            }
             Transaction txn = Transaction.PaymentTransactionBuilder()
-                    .sender(myAddress)
-                    .note(note.getBytes())
-                    .amount(100000)
-                    .receiver(new Address(RECEIVER))
-                    .suggestedParams(params)
-                    .build();
+                .sender(myAddress)
+                .note(note.getBytes())
+                .amount(100000)
+                .receiver(new Address(RECEIVER))
+                .suggestedParams(params)
+                .build();
 
             // Sign the transaction
             SignedTransaction signedTxn = myAccount.signTransaction(txn);
@@ -99,7 +107,11 @@ public class YourFirstTransaction {
 
             // Submit the transaction to the network
             byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-            String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
+            Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
+            if (!rawtxresponse.isSuccessful()) {
+                throw new Exception(rawtxresponse.message());
+            }
+            String id = rawtxresponse.body().txId;
             System.out.println("Successfully sent tx with ID: " + id);
 
             // Wait for transaction confirmation
@@ -111,17 +123,18 @@ public class YourFirstTransaction {
             System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
             System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
             printBalance(myAccount);
-            } catch (Exception e) {
-                System.err.println("Exception when calling algod#transactionInformation: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Exception when calling algod#transactionInformation: " + e.getMessage());
         }
     }
 
     private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
         String myAddress = myAccount.getAddress().toString();
-
-        com.algorand.algosdk.v2.client.model.Account accountInfo = client.AccountInformation(myAccount.getAddress())
-                .execute().body();
-
+        Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
+        if (!respAcct.isSuccessful()) {
+            throw new Exception(respAcct.message());
+        }
+        com.algorand.algosdk.v2.client.model.Account accountInfo = respAcct.body();
         System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
         return myAddress;
     }

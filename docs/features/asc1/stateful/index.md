@@ -228,6 +228,16 @@ print(compileTeal(program, Mode.Application))
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise `int 2` would represent the second passed in foreign application. Similar to the `app_local_get_ex` opcode, generally there will be branching logic testing whether the value was found or not. 
 
+## Summary of State Operations
+
+| Context            | Write            | Read                | Delete           | Check If Exists     |
+| ---                | ---              | ---                 | ---              | ---                 |
+| Current App Global | `app_global_put` | `app_global_get`    | `app_global_del` | `app_global_get_ex` |
+| Current App Local  | `app_local_put`  | `app_local_get`     | `app_local_del`  | `app_local_get_ex`  |
+| Other App Global   |                  | `app_global_get_ex` |                  | `app_global_get_ex` |
+| Other App Local    |                  | `app_local_get_ex`  |                  | `app_local_get_ex`  |
+
+
 # Checking the Transaction Type in a Smart Contract
 The `ApplicationCall` transaction types defined in [The Lifecycle of a Stateful Smart Contract](#the-lifecycle-of-a-stateful-smart-contract) can be checked within the TEAL code by examining the `OnCompletion` transaction property. 
 
@@ -321,7 +331,7 @@ When creating a stateful smart contract, there is a limit of 64 key-value pairs 
 Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt in to the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to opt in to the smart contract. This can be done with the `goal` CLI or the SDKs.
 
 ```
-$ goal app app optin  --app-id [ID-of-Contract] --from [ADDRESS]
+$ goal app optin  --app-id [ID-of-Contract] --from [ADDRESS]
 ```
 
 When this transaction is submitted, the `ApprovalProgram` of the smart contract is called and if the call succeeds the account will be opted into the smart contract. The simplest TEAL program to handle this call would just put 1 on the stack and return. 
@@ -597,7 +607,7 @@ program = Txn.amount()
 print(compileTeal(program, Mode.Application))
 ```
 
-In many common patterns, the stateful TEAL contract will be combined with other Algorand technologies such as Algorand Assets, Atomic Transfers, or Stateless Smart Contracts to build a complete application. In the case of Atomic transfers, more than one transaction’s properties can be checked within the stateful smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 0, then the call to the stateful smart contract is grouped with more than one transaction.
+In many common patterns, the stateful TEAL contract will be combined with other Algorand technologies such as Algorand Assets, Atomic Transfers, or Stateless Smart Contracts to build a complete application. In the case of Atomic transfers, more than one transaction’s properties can be checked within the stateful smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the stateful smart contract is grouped with more than one transaction.
 
 ```text tab="TEAL"
 global GroupSize
@@ -696,6 +706,29 @@ $ goal app read --app-id 1 --guess-format --global --from [ADDRESS]
 ```
 
 In the above example, the global state of the smart contract with the application ID of 1 is returned. The `--guess-format` opt in the above example tries programmatically to display the properly formatted values of the state variables. To get the local state, replace `--global` with `--local` and note that this call will only return the local state of the `--from` account.
+
+Here is an example output with 3 keys/values:
+```json
+{
+  "Creator": {
+    "tb": "FRYCPGH25DHCYQGXEB54NJ6LHQG6I2TWMUV2P3UWUU7RWP7BQ2BMBBDPD4",
+    "tt": 1
+  },
+  "MyBytesKey": {
+    "tb": "hello",
+    "tt": 1
+  },
+  "MyUintKey": {
+    "tt": 2,
+    "ui": 50
+  }
+}
+```
+Interpretation:
+* the keys are `Creator`, `MyBytesKey`, `MyUintKey`.
+* the field `tt` is the type of the value: 1 for byte slices, 2 for uint.
+* when `tt=1`, the value is in the field `tb`. Note that because of `--guess-format`, the value for `Creator` is automatically converted to an Algorand address with checksum (as opposed to a 32-byte public key, see [the accounts overview](../../accounts#transformation-public-key-to-algorand-address)).
+* when `tt=2`, the value is in the field `ui`.
 
 # Differences Between Stateful and Stateless Smart Contracts
 Smart Contracts in Algorand are either stateful or stateless, where stateful contracts actually store values on blockchain and stateless are used to approve spending transactions. In addition to this primary difference, several of the TEAL opcodes are restricted to only be used with specific smart contract types. For example, the `ed25519verify` opcode can only be used in stateless smart contracts, and the `app_opted_in` opcode can only be used in stateful smart contracts. To easily determine where an opcode is valid, the [TEAL opcodes](../../../reference/teal/opcodes.md) documentation supplies a `Mode` field that will either designate `Signature ` or `Application`. The `Signature` mode refers to only stateless smart contracts and the `Application` mode refers to the stateful smart contracts. If the `Mode` attribute is not present on the opcode reference, the call can be used in either smart contract type.
