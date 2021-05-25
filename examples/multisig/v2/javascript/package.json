@@ -1,0 +1,20 @@
+{
+    "name": "Algrorand_docs",
+    "version": "0.1.0",
+    "scripts": {
+        "start": ""
+    },
+    "keywords": [],
+    "author": "Algorand Inc",
+    "contributors": [
+        {
+            "name": "Edward D. Gaudio",
+            "email": "edwardgaudio@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "algosdk": "^1.9.1",
+        "dotenv": "^8.1.0"
+    }
+}

@@ -18,7 +18,7 @@ Unsigned transactions require the transaction object to be created before writin
     let params = await algodClient.getTransactionParams().do();
     const enc = new TextEncoder();
     const note = enc.encode("Hello World");
-    console.log(note);
+
     let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
     // Save transaction to file
     fs.writeFileSync('./unsigned.txn', algosdk.encodeUnsignedTransaction( txn ));     

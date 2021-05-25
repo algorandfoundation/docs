@@ -131,7 +131,7 @@ Extend the example from the [Multisignature Account](../accounts/create.md#multi
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-const waitForConfirmation = async function (algodclient, txId, timeout) {
+const waitForConfirmation = async function (algodClient, txId, timeout) {
     // ...covered in a previous example
 };
 
@@ -186,10 +186,10 @@ const main = async () => {
     const twosigs = algosdk.appendSignMultisigTransaction(rawSignedTxn, mparams, account2.sk).blob;
     
     //submit the transaction
-    await algodclient.sendRawTransaction(twosigs).do();
+    await algodClient.sendRawTransaction(twosigs).do();
 
     // Wait for confirmation
-    const confirmedTxn = await waitForConfirmation(algodclient, txId, 4);
+    const confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
     console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
     
     const mytxInfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
