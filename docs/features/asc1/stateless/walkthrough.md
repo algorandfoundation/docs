@@ -216,6 +216,11 @@ txn AssetCloseTo
 global ZeroAddress
 ==
 &&
+// Prevent Close-To
+txn CloseRemainderTo
+global ZeroAddress
+==
+&&
 // Prevent Rekey-To
 txn RekeyTo
 global ZeroAddress
