@@ -231,7 +231,7 @@ systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
 To install `algod` as a user service:
 
 ```
-./systemd-setup-setup.sh kilgore-trout
+./systemd-setup.sh kilgore-trout
 ```
 
 This will create the service in `$HOMEDIR/.config/systemd/user/algorand@.service` and will have used the template `algorand@.service.template-user` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
