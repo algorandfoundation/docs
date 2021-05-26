@@ -614,6 +614,8 @@ Read your transaction back from the blockchain.
 ```
 
 ```python tab="Python"
+    import base64
+
     # wait for confirmation	
 	try:
 		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
