@@ -194,7 +194,7 @@ The populated "spend" field instructs the validation protocol to only approve tr
 The following transaction will **fail** because, by default, `goal` attempts to add the authorization using the `--from` parameter. However, the protocol will reject this because it is expecting the authorization from `$ADDR_B` due to the confirmed _rekeying transaction_ above.
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000
 ```
 
 ### Send from Authorized Address
@@ -210,7 +210,7 @@ Sending from the _authorized address_ of Account "A" requires:
 First, construct an unsigned transaction using `goal` with the `--outfile` flag to write the unsigned transction to a file:
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-single.txn
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --out send-single.txn
 ```
 
 #### Sign Using Authorized Address
@@ -229,7 +229,7 @@ Finally, send the the signed transaction file using `goal`:
 $ goal clerk rawsend --filename send-single.stxn
 ```
 
-This will succeed, sending the 1000 microAlgos from `$ADDR_A` to `$ADDR_B` using the _private spending key_ of Account "B".
+This will succeed, sending the 100000 microAlgos from `$ADDR_A` to `$ADDR_B` using the _private spending key_ of Account "B".
 
 ## 2 - Rekey to MultiSig Address
 
@@ -254,7 +254,7 @@ Recall from scenario 1 that Account "A" has already _rekeyed_ to `$ADDR_B`.
 The _rekey transaction_ constructed for this scenario requires authorize from `$ADDR_B`.
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1
+$ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1 --out rekey-multisig.txn
 ```
 
 ### Sign Rekey Transaction
@@ -290,12 +290,9 @@ Use the established pattern:
 - Confirm transaction
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-multisig-bct1.txn
-$ goal clerk sign --signer $ADDR_C --infile send-multisig-bct1.txn --outfile send-multisig-bct1.stxn
-$ goal clerk rawsend --filename send-multisig-bct1.stxn
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --msig-params="1 $ADDR_B $ADDR_C" --out send-multisig-bct1.txn
+$ goal clerk multisig sign --tx send-multisig-bct1.txn --address $ADDR_C
+$ goal clerk rawsend --filename send-multisig-bct1.txn
 ```
 
 This transaction will succeed as _private spending key_ for `$ADDR_C` provided the authorization and meets the threshold requirement for the MultiSig account.
-
-
-
