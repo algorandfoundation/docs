@@ -23,6 +23,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[AlertHub](https://app.metrika.co/) | AlertHub enables monitoring and real-time alerting on Algorand addresses so that users can maintain the health of their accounts and the overall Algorand network. Subscribe to get notifications on account events like consensus participation, key expiration, and transactions.
+| <center>[HowBigIsAlgorand](https://howbigisalgorand.com/) | HowBigIsAlgorand is a real-time dashboard tool designed to inform users interested in spinning up their own archival nodes about the disk space requirement for a given Algorand Blockchain. 
 
 # Wallets
 
@@ -69,6 +70,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 |------|------|
 | <center>[Algorand Wallet Manager](https://github.com/CiottiGiorgio/Algorand-Wallet-Manager)</center> | This Python application is a graphic interface for the user who owns or have access to an Algorand node and would like to issue operations through a GUI rather than CLI. (i.e.: manage wallets and addresses, send transactions, save a contact list) |
 | <center>[Sandbox](https://github.com/algorand/sandbox)</center> | Algorand Sandbox. |
+| <center>[vim TEAL plugin](https://github.com/aldur/vim-algorand-teal)</center> | Syntax highlighting for TEAL scripts within vim. |
 
 # Smart Contract Utilities and Libraries
 

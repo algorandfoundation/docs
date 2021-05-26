@@ -233,6 +233,8 @@ let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 10
 ```
 
 ```python tab="Python"
+from algosdk.future.transaction import PaymentTxn
+
 params = algod_client.suggested_params()
 # comment out the next two (2) lines to use suggested fees
 params.flat_fee = True
@@ -612,6 +614,8 @@ Read your transaction back from the blockchain.
 ```
 
 ```python tab="Python"
+    import base64
+
     # wait for confirmation	
 	try:
 		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
