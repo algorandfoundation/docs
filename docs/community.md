@@ -68,7 +68,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 
 | Name| Description |
 |------|------|
-| <center>[Algorand Wallet Manager](https://github.com/CiottiGiorgio/Algorand-Wallet-Manager)</center> | This Python application is a graphic interface for the user who owns or have access to an Algorand node and would like to issue operations through a GUI rather than CLI. (i.e.: manage wallets and addresses, send transactions, save a contact list) |
+| <center>[![](./imgs/algotides-logo.png)](https://github.com/CiottiGiorgio/algotides/)</center><center>[Algo Tides](https://github.com/CiottiGiorgio/algotides)</center> | This Python application is a graphic interface for the user who owns or have access to an Algorand node and would like to issue operations through a GUI rather than CLI. (i.e.: manage wallets and addresses, send transactions, save a contact list) |
 | <center>[Sandbox](https://github.com/algorand/sandbox)</center> | Algorand Sandbox. |
 | <center>[vim TEAL plugin](https://github.com/aldur/vim-algorand-teal)</center> | Syntax highlighting for TEAL scripts within vim. |
 
