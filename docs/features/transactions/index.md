@@ -19,7 +19,7 @@ The following sections describe the five types of Algorand transactions through 
 
 ## Payment Transaction
 
-A `PaymentTxn` sends Algos (the Algorand blockchain's native currency) from one account to another.
+A `PaymentTx` sends Algos (the Algorand blockchain's native currency) from one account to another.
 
 [_Payment Transaction Fields Reference_](../../reference/transactions.md#payment-transaction)
 
