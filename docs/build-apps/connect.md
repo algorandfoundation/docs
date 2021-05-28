@@ -5,7 +5,7 @@ The **algod IP address** and access **token** you obtained in the [Workspace Set
 _Read more about the [node's algod process](../reference/node/artifacts.md#algod)._
 
 !!! info
-    The examples in this section have been updated to the v2 API, which was launched to MainNet on June 16, 2020. Visit the [v2 Migration Guide](../reference/sdks/migration.md) for information on how to migrate your code from v1. Access archived v1 examples [here](https://github.com/algorand/docs/tree/master/examples/start-building). 
+    The examples in this section have been updated to the v2 API, which was launched to MainNet on June 16, 2020. Visit the [v2 Migration Guide](../reference/sdks/migration.md) for information on how to migrate your code from v1. Access v2 and archived v1 examples [here](https://github.com/algorand/docs/tree/master/examples/start_building/v2). 
 
 # Create an algod client
 Instantiate an **algod** client with your preferred SDK. 
@@ -30,13 +30,12 @@ algod_client = algod.AlgodClient(algod_token, algod_address)
 
 ```Java tab=
 import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Client;
 
 final String ALGOD_API_ADDR = "localhost";
 final Integer ALGOD_PORT = 4001;
 final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
 ```
 
 ```Go tab=
@@ -58,7 +57,8 @@ func main() {
 }
 ```
 
-If you are using a third-party service, use the API key header instead when instantiating an algod client.
+Some third-party services use a different API key header than the one used by default.
+For example, if the API key header is `X-API-Key`, the client can be instantiated as follows:
 
 ```JavaScript tab=
 from algosdk.v2client import algod
@@ -68,7 +68,7 @@ const port = "";
 const token = {
 	'X-API-Key': "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 };
-let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
 
 ```Python tab=
@@ -85,15 +85,20 @@ algod_client = algod.AlgodClient(algod_token, algod_address, headers)
 
 ```Java tab=
 import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Client;
 
 final String ALGOD_API_ADDR = "https://api.host.com";
-final String ALGOD_API_KEY = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+final Integer ALGOD_PORT = 443;
 
-AlgodClient client = new AlgodClient();
-client.setBasePath(ALGOD_API_ADDR);
-client.addDefaultHeader("X-API-Key", ALGOD_API_KEY);
-AlgodApi algodApiInstance = new AlgodApi(client);
+final String[] ALGOD_API_KEY_HEADERS = {"X-API-Key"};
+final String[] ALGOD_API_KEY_VALUES = {"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"};
+
+AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, "");
+
+// Contrary to the other SDK, the Java SDK does not allow to pass
+// the headers to all queries automatically.
+// Instead, the headers should be passed when executing each query
+// For example:
+//   client.GetStatus().execute(ALGOD_API_KEY_HEADERS, ALGOD_API_KEY_VALUES).body();
 ```
 
 ```Go tab=
@@ -123,7 +128,7 @@ func main() {
 Call the _status_ method from the algod client to check the details of your connection. This information is also available through equivalent REST API calls and `goal` commands.
 
 ```javascript tab="JavaScript"
-let status = (await algodclient.status().do());
+let status = (await algodClient.status().do());
 console.log("Algorand network status: %o", status);
 ```
 
@@ -134,7 +139,11 @@ print(json.dumps(status, indent=4))
 
 ```java tab="Java"
 try {
-	NodeStatus status = algodApiInstance.getStatus();
+    Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
+    if (!resp.isSuccessful()) {
+        throw new Exception(resp.message());
+    }
+    NodeStatusResponse status = resp.body();
 	System.out.println("Algorand network status: " + status);
 } catch (ApiException e) {
 	System.err.println("Exception when calling algod#getStatus");
@@ -227,8 +236,15 @@ The _/v2/transactions/params_ endpoint returns information about the identity of
 ```java tab="Java"
 	...
         try {
-            TransactionParametersResponse params = client.TransactionParams().execute().body();
-            System.out.println("Algorand suggested parameters: " + TransactionParametersResponse);
+            Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
+            if (!resp.isSuccessful()) {
+                throw new Exception(resp.message());
+            }
+            TransactionParametersResponse params = resp.body();
+            if (params == null) {
+                throw new Exception("Params retrieval error");
+            }            
+            System.out.println("Algorand suggested parameters: " + params);
         } catch (ApiException e) {
             System.err.println("Exception when calling algod#TransactionParams");
             e.printStackTrace();

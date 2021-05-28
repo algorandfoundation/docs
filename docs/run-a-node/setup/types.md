@@ -14,7 +14,7 @@ Classifying a node as a participation node is not a configuration parameter but 
 
 
 # Archival Mode
- By default non-relay nodes only store a limited number of blocks (approximately up to the last 1000 blocks) locally. Older blocks are dropped from the local copy of the ledger. This reduces the disk space requirement of the node. These nodes are can still participate in consensus and applications can connect to these nodes for transaction submission and reading block data. The primary drawback for this type of operation is that older block data will not be available. 
+ By default non-relay nodes only store a limited number of blocks (approximately up to the last 1000 blocks) locally. Older blocks are dropped from the local copy of the ledger. This reduces the disk space requirement of the node. These nodes can still participate in consensus and applications can connect to these nodes for transaction submission and reading block data. The primary drawback for this type of operation is that older block data will not be available. 
  
  The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. Visit the [Node Configuration](../../reference/node/config.md) guide for details on configuring your node. 
  

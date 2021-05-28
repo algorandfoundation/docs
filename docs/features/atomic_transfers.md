@@ -145,9 +145,9 @@ let txgroup = algosdk.assignGroupID(txns);
 
 ``` python tab="Python"
 # get group id and assign it to transactions
-gid = transaction.calculate_group_id([txn1, txn2])
-txn1.group = gid
-txn2.group = gid
+gid = transaction.calculate_group_id([txn_1, txn_2])
+txn_1.group = gid
+txn_2.group = gid
 ```
 
 ``` java tab="Java"
@@ -165,7 +165,7 @@ tx2.Group = gid
 ```
 
 ``` goal tab="goal"
-$ goal clerk group -i yourwalletcombinedtransactions.tx -o groupedtransactions.tx -d data -w 
+$ goal clerk group -i combinedtransactions.tx -o groupedtransactions.tx -d data -w yourwallet 
 ```
 
 ## Split Transactions
@@ -204,7 +204,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 ``` javascript tab="JavaScript"
 // Sign each transaction in the group 
 signedTx1 = transaction1.signTxn( myAccountA.sk )
-signedTx2 = transaction1.signTxn( myAccountB.sk )
+signedTx2 = transaction2.signTxn( myAccountB.sk )
 
 ```
 
@@ -261,9 +261,7 @@ signed.push( signedTx2 )
 
 ``` python tab="Python"
 # assemble transaction group
-signedGroup =  []
-signedGroup.append(stxn_1)
-signedGroup.append(stxn_2)
+signed_group =  [stxn_1, stxn_2]
 ```
 
 ``` java tab="Java"
@@ -299,7 +297,7 @@ await waitForConfirmation(algodClient, tx.txId)
 ```
 
 ``` python tab="Python"
-tx_id = algod_client.send_transactions(signedGroup)
+tx_id = algod_client.send_transactions(signed_group)
 
 # wait for confirmation
 wait_for_confirmation(algod_client, tx_id) 
