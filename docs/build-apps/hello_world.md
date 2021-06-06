@@ -195,7 +195,7 @@ cpk := publicKey.(ed25519.PublicKey)
 copy(myAddress[:], cpk[:])
 fmt.Printf("My address: %s\n", myAddress.String())
 
-accountInfo, err := algodClient.AccountInformation(myAddress.String()).Do(context.Background())
+accountInfo, err := algodClient.AccountInformation(myAddress.String())
 if err != nil {
     fmt.Printf("Error getting account info: %s\n", err)
     return
@@ -267,7 +267,7 @@ Transaction txn = Transaction.PaymentTransactionBuilder()
 ```
 
 ```go tab="Go"
-txParams, err := algodClient.SuggestedParams().Do(context.Background())
+txParams, err := algodClient.SuggestedParams()
 if err != nil {
     fmt.Printf("Error getting suggested tx params: %s\n", err)
     return
@@ -362,7 +362,7 @@ System.out.println("Successfully sent tx with ID: " + id);
 ```
 
 ```go tab="Go"
-sendResponse, err := algodClient.SendRawTransaction(signedTxn).Do(context.Background())
+sendResponse, err := algodClient.SendRawTransaction(signedTxn)
 if err != nil {
     fmt.Printf("failed to send transaction: %s\n", err)
     return
@@ -541,7 +541,7 @@ func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (mod
 
 	}
 
-	status, err := client.Status().Do(context.Background())
+	status, err := client.Status()
 	if err != nil {
 		fmt.Printf("error getting algod status: %s\n", err)
 		var msg = errors.New(strings.Join([]string{"error getting algod status: "}, err.Error()))
@@ -552,7 +552,7 @@ func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (mod
 
 	for currentRound < (startRound + timeout) {
 
-		*pt, _, err = client.PendingTransactionInformation(txID).Do(context.Background())
+		*pt, _, err = client.PendingTransactionInformation(txID)
 		if err != nil {
 			fmt.Printf("error getting pending transaction: %s\n", err)
 			var msg = errors.New(strings.Join([]string{"error getting pending transaction: "}, err.Error()))
@@ -568,7 +568,7 @@ func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (mod
 			return *pt, msg
 		}
 		fmt.Printf("waiting for confirmation\n")
-		status, err = client.StatusAfterBlock(currentRound).Do(context.Background())
+		status, err = client.StatusAfterBlock(currentRound)
 		currentRound++
 	}
 	msg := errors.New("Tx not found in round range")
