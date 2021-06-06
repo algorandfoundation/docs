@@ -41,7 +41,7 @@ Search for accounts.
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**application-id**  <br>*optional*|Application ID for opted-in accounts|integer|
 |**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
 |**Query**|**auth-addr**  <br>*optional*|Include accounts configured to use this spending key.|string|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
