@@ -152,16 +152,23 @@ try {
 ```
 
 ```go tab="Go"
-	status, err := algodClient.Status().Do(context.Background())
-	if err != nil {
-		fmt.Printf("Error getting status: %s\n", err)
-		return
-	}
-	statusJSON, err := json.MarshalIndent(status, "", "\t")
-	if err != nil {
-		fmt.Printf("Can not marshall status data: %s\n", err)
-	}
-	fmt.Printf("%s\n", statusJSON)
+        import "encoding/json"
+	nodeStatus, err := algodClient.Status()
+        if err != nil {
+          fmt.Printf("Error getting status: %s\n", err)
+          return
+        } else {
+          statusJSON, err := json.MarshalIndent(nodeStatus, "", "\t")
+	  if err != nil {
+	    fmt.Printf("Can not marshall status data: %s\n", err)
+	    fmt.Printf("algod last round: %d\n", nodeStatus.LastRound)
+            fmt.Printf("algod time since last round: %d\n", nodeStatus.TimeSinceLastRound)
+            fmt.Printf("algod catchup: %d\n", nodeStatus.CatchupTime)
+            fmt.Printf("algod latest version: %s\n", nodeStatus.LastVersion)
+	  } else {
+	    fmt.Printf("%s\n", statusJSON)
+	  }
+    }
 ```
 
 ```bash tab="cURL"
