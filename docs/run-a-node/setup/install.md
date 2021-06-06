@@ -345,7 +345,7 @@ MainNet
 https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/mainnet/latest.catchpoint
 
 The results will look similar to this:
-`4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
+`14600000#2Q7G6KE2S7UCKLBYLDTD7SR7GKKPOLKFY5QVZKGWDX3VIFPWIVKQ`
 
 Steps:
 
@@ -358,36 +358,37 @@ Steps:
 Results should look something like this...
 
 ```
-Last committed block: 308
-Time since last block: 0.0s
-Sync Time: 6.5s
+Last committed block: 14041
+Time since last block: 0.1s
+Sync Time: 386.2s
 Last consensus protocol: https://github.com/algorand/spec/tree/a26ed78ed8f834e2b9ccb6eb7d3ee9f629a6e622
-Next consensus protocol: https://github.com/algorand/spec/tree/a26ed78ed8f834e2b9ccb6eb7d3ee9f629a6e622
-Round for next consensus protocol: 309
+Next consensus protocol: https://github.com/algorand/spec/tree/22726c9dcd12d9cddce4a8bd7e8ccaa707f74101
+Round for next consensus protocol: 20001
 Next consensus protocol supported: true
 Last Catchpoint:
-Genesis ID: betanet-v1.0
-Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
+Genesis ID: testnet-v1.0
+Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ```
 2) Use the sync point captured above and paste into the catchup option
 
-`./goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d ~/node/datafastcatchup`
+`./goal node catchup 14600000#2Q7G6KE2S7UCKLBYLDTD7SR7GKKPOLKFY5QVZKGWDX3VIFPWIVKQ -d ~/node/datafastcatchup`
 
 3) Run another status and results should look something like this showing a Catchpoint status:
 `./goal node status -d ~/node/datafastcatchup`
 
-Results should show 5 Catchpoint status lines for Catchpoint, total accounts, accounts processed, total blocks , downloaded blocks.
+Results should show 6 Catchpoint status lines for Catchpoint, total accounts, accounts processed, accounts verified, total blocks , downloaded blocks.
 
 ```
-Last committed block: 4453
-Sync Time: 15.8s
-Catchpoint: 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA
-Catchpoint total accounts: 1146
-Catchpoint accounts processed: 1146
+Last committed block: 21948
+Sync Time: 77.9s
+Catchpoint: 14600000#2Q7G6KE2S7UCKLBYLDTD7SR7GKKPOLKFY5QVZKGWDX3VIFPWIVKQ
+Catchpoint total accounts: 449476
+Catchpoint accounts processed: 449476
+Catchpoint accounts verified: 449476
 Catchpoint total blocks: 1000
-Catchpoint downloaded blocks: 81
-Genesis ID: betanet-v1.0
-Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
+Catchpoint downloaded blocks: 543
+Genesis ID: testnet-v1.0
+Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ```
 4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch.
 
