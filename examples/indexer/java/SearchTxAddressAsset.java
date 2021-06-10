@@ -5,6 +5,8 @@ package com.algorand.javatest.indexer;
 
 import com.algorand.algosdk.v2.client.common.IndexerClient;
 import com.algorand.algosdk.v2.client.common.Client;
+import com.algorand.algosdk.v2.client.common.Response;
+import com.algorand.algosdk.v2.client.model.TransactionsResponse;
 import org.json.JSONObject;
 import com.algorand.algosdk.crypto.Address;
 	
@@ -13,7 +15,7 @@ public class SearchTxAddressAsset {
     // utility function to connect to a node
     private Client connectToNetwork(){
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 8980;       
+        final int INDEXER_API_PORT = 8981;       
         IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
         return indexerClient;
     }
@@ -21,12 +23,20 @@ public class SearchTxAddressAsset {
     public static void main(String args[]) throws Exception {
         SearchTxAddressAsset ex = new SearchTxAddressAsset();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU");
-        Long asset_id = Long.valueOf(2044572);   
-        Long min_amount = Long.valueOf(50);              
-        String response = indexerClientInstance.searchForTransactions().address(account)
-                    .currencyGreaterThan(min_amount).assetId(asset_id).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
+        Address account = new Address("AMF3CVE4MFZM24CCFEWRCOCWW7TEDJQS3O26OUBRHZ3KWKUBE5ZJRNZ3OY");
+        Long asset_id = Long.valueOf(12215366);   
+        Long min_amount = Long.valueOf(5);              
+        Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .address(account)
+            .currencyGreaterThan(min_amount)
+            .assetId(asset_id).execute();
+
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        }  
+
+        JSONObject jsonObj = new JSONObject(response.body().toString());
         System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
     }
  }

@@ -3,6 +3,8 @@
 package com.algorand.javatest.indexer;
 import com.algorand.algosdk.v2.client.common.IndexerClient;
 import com.algorand.algosdk.v2.client.common.Client;
+import com.algorand.algosdk.v2.client.common.Response;
+import com.algorand.algosdk.v2.client.model.Block;
 import org.json.JSONObject;
 
 public class BlockInfo {
@@ -10,7 +12,7 @@ public class BlockInfo {
     // utility function to connect to a node
     private Client connectToNetwork(){
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 8980;       
+        final int INDEXER_API_PORT = 8981;       
         IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
         return indexerClient;
     }
@@ -18,8 +20,13 @@ public class BlockInfo {
         BlockInfo ex = new BlockInfo();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
         Long block = Long.valueOf(50);
-        String response = indexerClientInstance.lookupBlock(block).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Block Info: " + jsonObj.toString(2)); // pretty print json
+        Response<Block> response = indexerClientInstance
+            .lookupBlock(block).execute();
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        } 
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println("Block Info: " + jsonObj.toString(2)); // pretty print json            
+
     }
  }
