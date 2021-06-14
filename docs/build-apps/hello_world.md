@@ -205,7 +205,7 @@ fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:<algod-token> \
+   -H "X-Algo-API-Token:<algod-token>" \
  'http://<algod-address>:<algod-port>/v1/account/<address>'
 ```
 
@@ -372,7 +372,7 @@ fmt.Printf("Submitted transaction %s\n", sendResponse)
 
 ```bash tab="cURL"
 curl -i -X POST \
-   -H "X-Algo-API-Token:<algod-token> \
+   -H "X-Algo-API-Token:<algod-token>" \
    -H "Content-Type:application/x-binary" \
    -T "hello-world.stxn" \
  'http://<algod-address>:<algod-port>/v1/transactions'
@@ -578,7 +578,7 @@ func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (mod
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:<algod-token> \
+   -H "X-Algo-API-Token:<algod-token>" \
  'http://<algod-address>:<algod-port>/v1/transactions/pending/<txid>'
 ```
 
@@ -659,7 +659,7 @@ Read your transaction back from the blockchain.
 
 ```bash tab="cURL"
 curl -i -X GET \
-   -H "X-Algo-API-Token:<algod-token> \
+   -H "X-Algo-API-Token:<algod-token>" \
  'http://<algod-address>:<port>/v1/account/<my-address>/transaction/<txid>'
 ```
 
