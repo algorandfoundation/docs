@@ -77,6 +77,9 @@ In this transaction, after the fee and the transaction `"amt"` are paid to the [
 !!! info
     If you have asset holdings, you must first close out those asset holdings before you can close out the Algorand account completely. Close out your asset holdings by specifying an [Asset Close Remainder To](../../reference/transactions.md#closeassetto) address within an Asset Transfer transaction.
 
+!!! warning
+    Using the `--close-to` parameter on any transaction from a _rekeyed account_ will remove the **auth-addr** field, thus reverting signing authority to the original address. The `--close-to` parameter should be used with caution by keyholder(s) of **auth-addr** as the effects remove their authority to access this account thereafter.
+
 ## Key Registration Transaction
 The purpose of a `KeyRegistrationTx` is to register an account either `online` or `offline` to participate (i.e. vote) in Algorand Consensus. 
 
