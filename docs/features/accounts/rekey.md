@@ -7,6 +7,9 @@ Rekeying is a powerful protocol feature which enables an Algorand account holder
 !!! Info
     The term "spending key(s)" is used throughout this document to signify that generally either a single key or a set of keys from a MultiSig account may authorize from a given public address. The address itself cannot distinguish how many spending keys are specifically required.
 
+!!! warning
+    Using the `--close-to` parameter on any transaction from a _rekeyed account_ will remove the **auth-addr** field, thus reverting signing authority to the original address. The `--close-to` parameter should be used with caution by keyholder(s) of **auth-addr** as the effects remove their authority to access this account thereafter.
+
 ### Account Review
 
 The [account overview](../index.md#keys-and-addresses) page introduces _keys_, _addresses_ and _accounts_. During initial account generation, a public key and corresponding private spending key are created and used to derive the Algorand address. This public address is commonly displayed within wallet software and remains static for each account. When you receive Algos or other assets, they will be sent to your public Algorand address. When you send from your account, the transaction must be authorized using the appropriate private spending key(s).  
@@ -194,7 +197,7 @@ The populated "spend" field instructs the validation protocol to only approve tr
 The following transaction will **fail** because, by default, `goal` attempts to add the authorization using the `--from` parameter. However, the protocol will reject this because it is expecting the authorization from `$ADDR_B` due to the confirmed _rekeying transaction_ above.
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000
 ```
 
 ### Send from Authorized Address
@@ -210,7 +213,7 @@ Sending from the _authorized address_ of Account "A" requires:
 First, construct an unsigned transaction using `goal` with the `--outfile` flag to write the unsigned transction to a file:
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-single.txn
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --out send-single.txn
 ```
 
 #### Sign Using Authorized Address
@@ -229,7 +232,7 @@ Finally, send the the signed transaction file using `goal`:
 $ goal clerk rawsend --filename send-single.stxn
 ```
 
-This will succeed, sending the 1000 microAlgos from `$ADDR_A` to `$ADDR_B` using the _private spending key_ of Account "B".
+This will succeed, sending the 100000 microAlgos from `$ADDR_A` to `$ADDR_B` using the _private spending key_ of Account "B".
 
 ## 2 - Rekey to MultiSig Address
 
@@ -254,7 +257,7 @@ Recall from scenario 1 that Account "A" has already _rekeyed_ to `$ADDR_B`.
 The _rekey transaction_ constructed for this scenario requires authorize from `$ADDR_B`.
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1
+$ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1 --out rekey-multisig.txn
 ```
 
 ### Sign Rekey Transaction
@@ -290,12 +293,9 @@ Use the established pattern:
 - Confirm transaction
 
 ```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 1000 --out send-multisig-bct1.txn
-$ goal clerk sign --signer $ADDR_C --infile send-multisig-bct1.txn --outfile send-multisig-bct1.stxn
-$ goal clerk rawsend --filename send-multisig-bct1.stxn
+$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --msig-params="1 $ADDR_B $ADDR_C" --out send-multisig-bct1.txn
+$ goal clerk multisig sign --tx send-multisig-bct1.txn --address $ADDR_C
+$ goal clerk rawsend --filename send-multisig-bct1.txn
 ```
 
 This transaction will succeed as _private spending key_ for `$ADDR_C` provided the authorization and meets the threshold requirement for the MultiSig account.
-
-
-
