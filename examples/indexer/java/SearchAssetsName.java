@@ -13,7 +13,7 @@ public class SearchAssetsName {
     // utility function to connect to a node
     private Client connectToNetwork(){
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 8981;       
+        final int INDEXER_API_PORT = 8980;       
         IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
         return indexerClient;
     }

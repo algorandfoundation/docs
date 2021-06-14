@@ -13,7 +13,7 @@ public class SearchTransactionsNote {
      */
     private static IndexerClient connectToNetwork() {
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 8981;
+        final int INDEXER_API_PORT = 8980;
         return new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT);
     }
 

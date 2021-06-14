@@ -14,7 +14,7 @@ public class LookupApplication {
     // utility function to connect to a node
     private Client connectToNetwork(){
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 8981;
+        final int INDEXER_API_PORT = 8980;
         IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT);
         return indexerClient;
     }
@@ -58,86 +58,7 @@ public class LookupApplication {
 //             },
 //             "key": "YXNzZXRfaWQ="
 //           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 4294967316
-//             },
-//             "key": "b3B0aW9uX2ZpcnN0"
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 4294967326
-//             },
-//             "key": "b3B0aW9uX3NlY29uZA=="
-//           },
-//           {
-//             "value": {
-//               "bytes": "v5WyR1XaHaNu97Sngrp+bcpo3BLYGZNcFgFUUXK59Lg=",
-//               "type": 1,
-//               "uint": 0
-//             },
-//             "key": "Q3JlYXRvcg=="
-//           },
-//           {
-//             "value": {
-//               "bytes": "bXVjaGRlY2lzaW9u",
-//               "type": 1,
-//               "uint": 0
-//             },
-//             "key": "TmFtZQ=="
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 4294967296
-//             },
-//             "key": "b3B0aW9uX2Fub3RoZXJvbmU="
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 4294967296
-//             },
-//             "key": "b3B0aW9uX2hleQ=="
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 4294967296
-//             },
-//             "key": "b3B0aW9uX3RoaXJk"
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 1623000921
-//             },
-//             "key": "dm90aW5nX2VuZF90aW1l"
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 1622136921
-//             },
-//             "key": "dm90aW5nX3N0YXJ0X3RpbWU="
-//           },
-//           {
-//             "value": {
-//               "bytes": "",
-//               "type": 2,
-//               "uint": 4294967296
-//             },
-//             "key": "b3B0aW9uX3NpeA=="
-//           }
+//           ...
 //         ],
 //         "creator": "X6K3ER2V3IO2G3XXWSTYFOT6NXFGRXAS3AMZGXAWAFKFC4VZ6S4K4JLOFY",
 //         "local-state-schema": {
@@ -153,3 +74,5 @@ public class LookupApplication {
 //     },
 //     "current-round": 14694513
 //   }
+
+//reference for additional context for the keys and programs: https://developer.algorand.org/docs/features/asc1/stateful/sdks/

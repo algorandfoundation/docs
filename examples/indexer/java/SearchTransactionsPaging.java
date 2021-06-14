@@ -17,7 +17,7 @@ public class SearchTransactionsPaging {
         // final int INDEXER_API_PORT = 8980;
         final String INDEXER_API_ADDR = "localhost";
         // final String INDEXER_TOKEN = "";
-        final int INDEXER_API_PORT = 8981;            
+        final int INDEXER_API_PORT = 8980;            
         IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
         return indexerClient;
     }
