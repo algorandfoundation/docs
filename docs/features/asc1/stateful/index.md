@@ -724,7 +724,9 @@ Here is an example output with 3 keys/values:
   }
 }
 ```
+
 Interpretation:
+
 * the keys are `Creator`, `MyBytesKey`, `MyUintKey`.
 * the field `tt` is the type of the value: 1 for byte slices, 2 for uint.
 * when `tt=1`, the value is in the field `tb`. Note that because of `--guess-format`, the value for `Creator` is automatically converted to an Algorand address with checksum (as opposed to a 32-byte public key, see [the accounts overview](../../accounts#transformation-public-key-to-algorand-address)).
