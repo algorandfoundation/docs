@@ -3,8 +3,10 @@
 package com.algorand.javatest.indexer;
 
 import com.algorand.algosdk.v2.client.common.IndexerClient;
+import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.Enums.TxType;
 import com.algorand.algosdk.v2.client.common.Client;
+import com.algorand.algosdk.v2.client.model.TransactionsResponse;
 import org.json.JSONObject;
 import com.algorand.algosdk.crypto.Address;
 
@@ -21,10 +23,16 @@ public class SearchTxAddresstxntype {
     public static void main(String args[]) throws Exception {
         SearchTxAddresstxntype ex = new SearchTxAddresstxntype();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU");
+        Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
         TxType txType = TxType.ACFG;
-        String response = indexerClientInstance.searchForTransactions().address(account).txType(txType).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
+        Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .address(account)
+            .txType(txType).execute();
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        }          
+        JSONObject jsonObj = new JSONObject(response.body().toString());
         System.out.println("txn_type: acfg = " + jsonObj.toString(2)); // pretty print json
     }
  }

@@ -4,6 +4,8 @@ package com.algorand.javatest.indexer;
 
 import com.algorand.algosdk.v2.client.common.IndexerClient;
 import com.algorand.algosdk.v2.client.common.Client;
+import com.algorand.algosdk.v2.client.common.Response;
+import com.algorand.algosdk.v2.client.model.TransactionsResponse;
 import org.json.JSONObject;
 import com.algorand.algosdk.crypto.Address;
 
@@ -20,10 +22,16 @@ public class SearchTxAddressTxId {
     public static void main(String args[]) throws Exception {
         SearchTxAddressTxId ex = new SearchTxAddressTxId();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        String txid = "QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA";
-        String response = indexerClientInstance.searchForTransactions().address(account).txid(txid).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("txid: QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA = " + jsonObj.toString(2)); // pretty print json
+        Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
+        String txid = "GZKSVXCVQASQ2KLI7JUWZ2LP54WAKPVA3TC2ZGQVAHKIWEMMFNEQ";
+        Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .address(account)
+            .txid(txid).execute();        
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        }  
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println("txid: GZKSVXCVQASQ2KLI7JUWZ2LP54WAKPVA3TC2ZGQVAHKIWEMMFNEQ = " + jsonObj.toString(2)); // pretty print json
     }
  }
