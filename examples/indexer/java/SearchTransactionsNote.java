@@ -24,16 +24,16 @@ public class SearchTransactionsNote {
         IndexerClient indexerClientInstance = connectToNetwork();
         Response<TransactionsResponse> resp = indexerClientInstance.searchForTransactions()
                 .notePrefix("showing prefix".getBytes())
-                .minRound(10894697L)
-                .maxRound(10994697L).execute();
+                .address("IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI")
+                .execute();
         if (!resp.isSuccessful()) {
             throw new Exception(resp.message());
         }
-
+    
         // pretty print json
         JSONObject jsonObj = new JSONObject(resp.body().toString());
         System.out.println("Transaction Info: " + jsonObj.toString(2));
-
+    
         int i = 0;
         for (Transaction tx : resp.body().transactions) {
             i++;

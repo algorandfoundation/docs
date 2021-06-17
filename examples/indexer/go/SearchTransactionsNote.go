@@ -19,7 +19,9 @@ var minAmount uint64 = 10
 var notePrefix = "showing prefix"
 
 
+
 func main() {
+	address, _ := types.DecodeAddress("IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI")
 
 	// Create an indexer client
 	indexerClient, err := indexer.MakeClient(indexerAddress, indexerToken)
@@ -28,7 +30,7 @@ func main() {
 	}
 
 	// Query
-	result, err := indexerClient.SearchForTransactions().NotePrefix([]byte(notePrefix)).Do(context.Background())
+	result, err := indexerClient.SearchForTransactions().Address(address).NotePrefix([]byte(notePrefix)).Do(context.Background())
 
 	// Print the results
 	JSON, err := json.MarshalIndent(result, "", "\t")

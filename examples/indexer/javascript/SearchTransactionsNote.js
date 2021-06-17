@@ -14,8 +14,10 @@ let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_p
 (async () => {
     //let s = buffer.toString('base64');   
     let s = "c2hvd2luZyBwcmVmaXg=";
+    let address = "IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI"
     let transactionInfo = await indexerClient.searchForTransactions()
-        .notePrefix(s).do();
+        .notePrefix(s)
+        .address(address).do();
     console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));
 })().catch(e => {
     console.log(e);

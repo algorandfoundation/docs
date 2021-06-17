@@ -92,6 +92,9 @@ func main() {
 
 Before describing each of the available REST APIs, a few specific functions are described that are supported across many of the calls. This includes [Paginated Results](#paginated-results), [Historical Data searches](#historical-data-searches), and [Note Field Searching](#note-field-searching).
 
+!!! tip
+    Data query is an expensive computational process so if the search is too broad, the search may run into a timeout error. If this is the case, add extra parameters to narrow down the search.
+
 # Paginated Results
 When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below.
 
@@ -518,8 +521,10 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 (async () => {
     //let s = buffer.toString('base64');   
     let s = "c2hvd2luZyBwcmVmaXg=";
+    let address = "IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI"
     let transactionInfo = await indexerClient.searchForTransactions()
-        .notePrefix(s).do();
+        .notePrefix(s)
+        .address(address).do();
     console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));
 })().catch(e => {
     console.log(e);
@@ -529,11 +534,11 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 ```python tab="Python"
 # /indexer/python/search_transactions_note.py
-
 import base64
 note_prefix = 'showing prefix'.encode()
 
 response = myindexer.search_transactions(
+    address="IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI",
     note_prefix=note_prefix)
 
 print("note_prefix = " +
@@ -546,8 +551,8 @@ public static void main(String args[]) throws Exception {
     IndexerClient indexerClientInstance = connectToNetwork();
     Response<TransactionsResponse> resp = indexerClientInstance.searchForTransactions()
             .notePrefix("showing prefix".getBytes())
-            .minRound(10894697L)
-            .maxRound(10994697L).execute();
+            .address("IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI")
+            .execute();
     if (!resp.isSuccessful()) {
         throw new Exception(resp.message());
     }
@@ -568,53 +573,54 @@ public static void main(String args[]) throws Exception {
 ```go tab="Go"
 // Parameters
 var notePrefix = "showing prefix"
+address, _ := types.DecodeAddress("IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI")
 
 // Query
-result, err := indexerClient.SearchForTransactions().NotePrefix([]byte(notePrefix)).Do(context.Background())
+result, err := indexerClient.SearchForTransactions().Address(address).NotePrefix([]byte(notePrefix)).Do(context.Background())
 
 // Print results
 JSON, err := json.MarshalIndent(result, "", "\t")
 fmt.Printf(string(JSON) + "\n")
 }
-
 ```
 
 ```bash tab="cURL"
 python3 -c "import base64;print(base64.b64encode('showing prefix'.encode()))"
-$ curl "localhost:8980/v2/transactions?note-prefix=c2hvd2luZyBwcmVmaXg=" | json_pp
+$ curl "localhost:8980/v2/accounts/IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI/transactions?note-prefix=c2hvd2luZyBwcmVmaXg=" | json_pp
 ```
 
 Results
 ``` bash
 {
-   "current-round" : 7087347,
-   "next-token" : "qCFsAAAAAAAAAAAA",
-   "transactions" : [
-      {
-         "note" : "c2hvd2luZyBwcmVmaXggc2VhcmNoZXM=",
-         "round-time" : 1591374973,
-         "intra-round-offset" : 0,
-         "close-rewards" : 0,
-         "id" : "KWLZ4USIJC7P2WFWFA7SKGUDPBF5FOYS7OZ3I6T5ZBBJATRMNWLQ",
-         "tx-type" : "pay",
-         "payment-transaction" : {
-            "receiver" : "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI",
-            "close-amount" : 0,
-            "amount" : 1000000
-         },
-         "confirmed-round" : 7086504,
-         "last-valid" : 7087499,
-         "sender-rewards" : 14650,
-         "fee" : 1000,
-         "closing-amount" : 0,
-         "sender" : "IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI",
-         "receiver-rewards" : 0,
-         "first-valid" : 7086499,
-         "signature" : {
-            "sig" : "H8I6wnDdTO+q8N8t0H35GfphOkbaHoJ90gzz8YYX8SV1pUXXXbx0hvU0AT+r8MaJB09FafhQQfkl2HfoII0EBw=="
-         }
-      }
-   ]
+  "current-round": 14479526,
+  "next-token": "qCFsAAAAAAAAAAAA",
+  "transactions": [
+    {
+      "close-rewards": 0,
+      "closing-amount": 0,
+      "confirmed-round": 7086504,
+      "fee": 1000,
+      "first-valid": 7086499,
+      "genesis-hash": "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
+      "id": "TZTZFLEKTP7VARQGSR4VF74OZRPXRVE4M7BRVGMFIZ4WFFBFE2BQ",
+      "intra-round-offset": 0,
+      "last-valid": 7087499,
+      "note": "c2hvd2luZyBwcmVmaXggc2VhcmNoZXM=",
+      "payment-transaction": {
+        "amount": 1000000,
+        "close-amount": 0,
+        "receiver": "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI"
+      },
+      "receiver-rewards": 0,
+      "round-time": 1591374973,
+      "sender": "IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI",
+      "sender-rewards": 14650,
+      "signature": {
+        "sig": "H8I6wnDdTO+q8N8t0H35GfphOkbaHoJ90gzz8YYX8SV1pUXXXbx0hvU0AT+r8MaJB09FafhQQfkl2HfoII0EBw=="
+      },
+      "tx-type": "pay"
+    }
+  ]
 }
 ```
 
