@@ -131,8 +131,19 @@ Extend the example from the [Multisignature Account](../accounts/create.md#multi
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
 
-const waitForConfirmation = async function (algodClient, txId, timeout) {
-    // ...covered in a previous example
+const waitForConfirmation = async function (algodClient, txId) {
+    const response = await algodClient.status().do();
+    let lastround = response["last-round"];
+    while (true) {
+        const pendingInfo = await algodClient.pendingTransactionInformation(txId).do();
+        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+            //Got the completed Transaction
+            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+            break;
+        }
+        lastround++;
+        await algodClient.statusAfterBlock(lastround).do();
+    }
 };
 
 // enter token, server, and port

@@ -44,7 +44,7 @@ const main = async () => {
     // Create a transaction
     const sender = lsig.address();
     // This is a sandbox address and will be different in your environment
-    const receiver = "GVVIH6IE3ZAFLIQF6UFBOH4TI5ZOPHFRMDQUTXQRKZ6XWSRTVRDBQ4GZLY";
+    const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
     const amount = 10000;
     const closeToRemaninder = undefined;
     const note = undefined;
