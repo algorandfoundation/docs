@@ -151,7 +151,7 @@ print(compileTeal(program, Mode.Application))
 ```
 
 !!! note
-    They PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
+    The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
 
 The `txn ApplicationID` line refers to the current application, but could be any application that exists on Algorand. The top value on the stack will either return 0 or 1 depending on if the variable was found.  Most likely branching logic will be used after a call to the `_ex` opcode. The following example illustrates this concept.
 
