@@ -4,13 +4,16 @@ This guide explains how to install the Algorand Node software on Linux Distribut
 
 A node installation consists of two folders: the binaries (bin) and the data (data) folders. The bin folder can be created anywhere, but Algorand recommends `~/node`, if not using *RPM* or *Debian* installs. This location is referenced later in the documentation. Remember to replace this location in the documentation below with the correct location. It is assumed that this folder is dedicated to Algorand binaries and is archived before each update. Note that nothing is currently deleted, the binaries for Algorand are just overwritten.
 
-When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/node/artifacts.md) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified.
+When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/node/artifacts.md) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
 ```
 export ALGORAND_DATA=~/node/data
+export PATH=~/node:$PATH
 ```
 
-When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is advisable with these installs to add the following export to shell config files.
+Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files.
+
+When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. With these installs, it is again recommended to add the following to shell config files.
 
 ```
 export ALGORAND_DATA=/var/lib/algorand
@@ -31,7 +34,7 @@ Installing a new node is generally a 3 to 4-step process and will depend on the 
 # Installing on a Mac
 Verified on OSX v10.13.4 / High Sierra.
 
-+ Create a temporary folder to hold the install package and files.
++ Create a folder to hold the install package and files.
 
 ```
 mkdir ~/node
@@ -59,6 +62,13 @@ When the installer runs, it will pull down the latest update package from S3 and
 
 !!! info
     When installing the `rel/beta` release, specify the beta channel `-c beta`
+
+Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
+
+```
+export ALGORAND_DATA=~/node/data
+export PATH=~/node:$PATH
+```
 
 # Installing the Devtools
 
@@ -172,6 +182,13 @@ chmod 544 update.sh
 ```
 
 When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node).
+
+Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
+
+```
+export ALGORAND_DATA=~/node/data
+export PATH=~/node:$PATH
+```
 
 # Installing algod as a systemd service
 
@@ -295,7 +312,7 @@ goal node status -d /var/lib/algorand
 + The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done from the `~node` directory with the following command:
 
 ```
-./goal node start -d data
+goal node start
 ```
 
 This will start the node and it can be verified by running:
@@ -307,7 +324,7 @@ pgrep algod
 The node can be manually stopped by running:
 
 ```
-./goal node stop -d data
+goal node stop
 ```
 
 
@@ -315,7 +332,7 @@ The node can be manually stopped by running:
 When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. See the section below a [Fast Catchup](#sync-node-network-using-fast-catchup) option. The status can be checked by running the following goal command:
 
 ```
-./goal node status -d data
+goal node status
 ```
 
 The goal node status command will return information about the node and what block number it is currently processing. When the node is caught up with the rest of the network, the "Sync Time" will be 0.0 as in the example response below (if on MainNet, some details will be different).
@@ -351,9 +368,9 @@ Steps:
 
 1) Start the node, if not started already, and run a status.
 
-`./goal node start -d ~/node/datafastcatchup`
+`goal node start`
 
-`./goal node status -d ~/node/datafastcatchup`
+`goal node status`
 
 Results should look something like this...
 
@@ -371,10 +388,10 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
 2) Use the sync point captured above and paste into the catchup option
 
-`./goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d ~/node/datafastcatchup`
+`goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
 
 3) Run another status and results should look something like this showing a Catchpoint status:
-`./goal node status -d ~/node/datafastcatchup`
+`goal node status`
 
 Results should show 5 Catchpoint status lines for Catchpoint, total accounts, accounts processed, total blocks , downloaded blocks.
 
@@ -391,7 +408,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
 4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch.
 
-`./goal node status -d ~/node/datafastcatchup -w 1000`
+`goal node status -w 1000`
 
 5) Notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. **Once there is a Sync Time of 0, the node is synced and if fully usable. **
 
@@ -410,7 +427,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 
 # Updating Node
-The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
+The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. Note that the `-d` argument has to be specified when updating. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
 
 If there is a newer version, it will be downloaded and unpacked. The node will shutdown, the binaries and data files will be archived, and the new binaries will be installed. If any part of the process fails, the node will restore the previous version (bin and data) and restart the node. If it succeeds, the new version is started. The automatic start can be disabled by adding the `-n` option.
 
