@@ -46,12 +46,14 @@ Each program may read both the _global_ and _local_ state storage locations for 
 Both global and local data are stored as _key/value pairs_, where the _key_ is bytes and the _value_ may be either a `bytes` or `uint64`.
 
 ```json tab="Data Structure Template"
-{ "key": {
-	"type": <1 || 2>,
-	"value": <[]byte || uint64>
-	}
+{ 
+  "key": {
+    "type": <1 || 2>,
+    "value": <[]byte || uint64>
+  }
 }
 ```
+
 ### Program Execution
 
 Application users will submit a call transaction to the application with appropriate arguments.
@@ -103,7 +105,7 @@ load 0
 return
 ```
 
-!!! Warning The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend to start from the template provided in the [Overview](./index.md#boilerplate-stateful-smart-contract).
+!!! warning The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend to start from the template provided in the [Overview](./index.md#boilerplate-stateful-smart-contract).
 
 #### Define TEAL Version
 
@@ -172,8 +174,8 @@ export LOCAL_BYTESLICES=0
 export LOCAL_INTS=0
 
 goal app create --creator $ADDR_CREATOR \
-                --approval-prog $TEAL_APPROVAL_PROG \
-				--clear-prog $TEAL_CLEAR_PROG \
+                --approval-prog "$TEAL_APPROVAL_PROG" \
+				--clear-prog "$TEAL_CLEAR_PROG" \
 				--global-byteslices $GLOBAL_BYTESLICES \
 				--global-ints $GLOBAL_INTS \
 				--local-byteslices $LOCAL_BYTESLICES \
@@ -192,7 +194,7 @@ Created app with app index 33
 Application ID **33** was created above. Check yours using:
 
 ```bash
-$ goal account dump --address $ADDR_CREATOR
+goal account dump --address $ADDR_CREATOR
 ```
 Results:
 ```json
@@ -218,7 +220,7 @@ export APP_ID=<your_app_id>
 
 Another way to view information about an application is with the following `goal` command:
 ```bash
-$ goal app info --app-id $APP_ID
+goal app info --app-id $APP_ID
 ```
 
 Results:
@@ -257,6 +259,7 @@ Result:
   "counter": {
     "tt": 2,
     "ui": 1
+  }
 }
 ```
 Here the single _global_ _key/value pair_ for your application is displayed. The _key_ "counter" was assigned the type "tt" of integer at creation (1 for bytes, 2 for uint64). The current integer _value_ "ui" is 1. The _approval program_ executed once during creation. 
@@ -278,6 +281,7 @@ Result:
   "counter": {
     "tt": 2,
     "ui": 2
+  }
 }
 ```
 The "hello world" application has been called again as observed by the incremented _value_ "ui" for _key_ "counter". Continue making calls and reading the updated state.
