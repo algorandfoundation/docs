@@ -63,12 +63,13 @@ When the installer runs, it will pull down the latest update package from S3 and
 !!! info
     When installing the `rel/beta` release, specify the beta channel `-c beta`
 
-Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
+!!! info
+    Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
 
-```
-export ALGORAND_DATA=~/node/data
-export PATH=~/node:$PATH
-```
+    ```
+    export ALGORAND_DATA=~/node/data
+    export PATH=~/node:$PATH
+    ```
 
 # Installing the Devtools
 
@@ -183,12 +184,13 @@ chmod 544 update.sh
 
 When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node).
 
-Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
+!!! info
+    Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
 
-```
-export ALGORAND_DATA=~/node/data
-export PATH=~/node:$PATH
-```
+    ```
+    export ALGORAND_DATA=~/node/data
+    export PATH=~/node:$PATH
+    ```
 
 # Installing algod as a systemd service
 
@@ -309,7 +311,7 @@ With these installs, the status of the node can be checked by running:
 goal node status -d /var/lib/algorand
 ```
 
-+ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done from the `~node` directory with the following command:
++ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done from the `~/node` directory with the following command:
 
 ```
 goal node start
