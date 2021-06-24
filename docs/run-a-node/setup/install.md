@@ -8,7 +8,7 @@ When installing for the first time a `data` directory will need to be specified 
 
 ```
 export ALGORAND_DATA="$HOME/node/data"
-export PATH=~/node:$PATH
+export PATH="$HOME/node:$PATH"
 ```
 
 Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files.
