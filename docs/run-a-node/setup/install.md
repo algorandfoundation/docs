@@ -189,7 +189,7 @@ When the installer runs, it will pull down the latest update package from S3 and
 
     ```
     export ALGORAND_DATA="$HOME/node/data"
-    export PATH=~/node:$PATH
+    export PATH="$HOME/node:$PATH"
     ```
 
 # Installing algod as a systemd service
