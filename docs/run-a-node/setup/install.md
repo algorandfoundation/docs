@@ -7,7 +7,7 @@ A node installation consists of two folders: the binaries (bin) and the data (da
 When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/node/artifacts.md) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
 ```
-export ALGORAND_DATA=~/node/data
+export ALGORAND_DATA="$HOME/node/data"
 export PATH=~/node:$PATH
 ```
 
