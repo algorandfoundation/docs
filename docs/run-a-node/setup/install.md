@@ -311,7 +311,7 @@ With these installs, the status of the node can be checked by running:
 goal node status -d /var/lib/algorand
 ```
 
-+ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done from the `~/node` directory with the following command:
++ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done  with the following command:
 
 ```
 goal node start
