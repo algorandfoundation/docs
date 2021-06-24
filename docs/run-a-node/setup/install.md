@@ -67,7 +67,7 @@ When the installer runs, it will pull down the latest update package from S3 and
     Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
 
     ```
-    export ALGORAND_DATA=~/node/data
+    export ALGORAND_DATA="$HOME/node/data"
     export PATH=~/node:$PATH
     ```
 
