@@ -11,7 +11,7 @@ export ALGORAND_DATA="$HOME/node/data"
 export PATH="$HOME/node:$PATH"
 ```
 
-Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files.
+Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
 
 When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. With these installs, it is again recommended to add the following to shell config files.
 
