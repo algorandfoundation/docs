@@ -60,6 +60,45 @@ The load command is used to retrieve a value from the scratch space as illustrat
 <center>![Loading Values](../../../imgs/teal_overview-7.png)</center>
 <center>*Loading Values*</center>
 
+# Looping and Subroutines
+TEAL contracts written in version 4 or higher can use loops and subroutines. Loops can be performed using any of the branching opcodes `b`, `bz`, and `bnz`. For example the TEAL below loops ten times.
+
+```tab="TEAL"
+#pragma version 4
+// loop 1 - 10
+// init loop var
+int 0 
+loop:
+int 1
++
+// implement loop code
+// ...
+// check upper bound
+int 10
+<=
+bnz loop
+```
+
+Subroutines can be implemented using labels and the `callsub` and `retsub` opcodes. The sample below illustrates a sample subroutine call.
+
+```tab="TEAL"
+#pragma version 4
+// jump to main loop
+b main
+
+// subroutine
+my_subroutine:
+// implement subroutine code
+// with the two args
+retsub
+
+main:
+int 1
+int 5
+callsub my_suboutine
+return
+```
+
 # Dynamic Operational Cost of TEAL Opcodes
 Stateless TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, TEAL programs are also limited in opcode cost. This cost is evaluated when a smart contract runs. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents its opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 35) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. Stateless TEAL programs are limited to 20000 for total opcode cost of all program operators. Stateful TEAL programs are limited to 700 for each of the programs associated with the contract. The [TEAL Opcodes](../../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
 
