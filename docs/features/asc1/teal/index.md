@@ -61,7 +61,7 @@ The load command is used to retrieve a value from the scratch space as illustrat
 <center>*Loading Values*</center>
 
 # Dynamic Operational Cost of TEAL Opcodes
-Stateless TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Stateful smart contracts are limited to 2k total for the compiled approval and clear programs. This size can be increased up to 3 additional 2k pages, which would result in an 8k limit for both programs. For optimal performance, TEAL programs are also limited in opcode cost. This cost is evaluated when a smart contract runs. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents its opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 35) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. Stateless TEAL programs are limited to 20000 for total opcode cost of all program operators. Stateful TEAL programs are limited to 700 for each of the programs associated with the contract. The [TEAL Opcodes](../../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
+Stateless TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, TEAL programs are also limited in opcode cost. This cost is evaluated when a smart contract runs. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents its opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 35) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. Stateless TEAL programs are limited to 20000 for total opcode cost of all program operators. Stateful TEAL programs are limited to 700 for each of the programs associated with the contract. The [TEAL Opcodes](../../../reference/teal/opcodes.md) reference lists the opcode cost for every operator.
 
 # Example Walkthrough of a TEAL Program
 The example covered in this tutorial is for a stateless contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
@@ -137,7 +137,7 @@ sha256
 // The constant byte array of the base64 version of our secret is pushed onto the stack
 byte base64 QzYhq9JlYbn2QdOMrhyxVlNtNjeyvyJc/I8d8VAGfGc=
 
-// The == operator pops the two values and push 0 or 1 onto the stack
+// The == operator pops the two values and pushes 0 or 1 onto the stack
 // If arg0 is equal to the secret this value will be 1 and if not it will be 0
 ==
 
