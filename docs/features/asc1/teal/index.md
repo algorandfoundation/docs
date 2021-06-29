@@ -2,7 +2,7 @@ title: The Smart Contract Language
 
 Stateless and stateful smart contracts are written in Transaction Execution Approval Langauge (TEAL). These contracts can be written directly or with Python using the [PyTeal library](pyteal.md).
 
-TEAL is an assembly-like language and is processed by the Algorand Virtual Machine (AVM). The language is a turing-complete language that supports looping and subroutines but limits the amount of time the contract has to execute using a dynamic opcode cost evaluation algorithm.  TEAL programs are processed one line at a time that push and pop values from the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and flow control functions like `bnz` for branching and `callsub` for calling subroutines. In addition, stateful smart contracts can read and write global storage for the contract and local storage for accounts that opt-in to the contract. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more details.
+TEAL is an assembly-like language and is processed by the Algorand Virtual Machine (AVM). The language is a Turing-complete language that supports looping and subroutines, but limits the amount of time the contract has to execute using a dynamic opcode cost evaluation algorithm.  TEAL programs are processed one line at a time pushing and popping values on and off the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and flow control functions like `bnz` for branching and `callsub` for calling subroutines. In addition, stateful smart contracts can read and write global storage for the contract and local storage for accounts that opt-in to the contract. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more details.
 
 Some of the opcodes in TEAL are only valid for a specific contract type. These are denoted in the [TEAL Opcodes](../../../reference/teal/opcodes.md) documentation with a `Mode` attribute. This attribute will be set to `Signature` for stateless smart contracts and `Application` for stateful smart contracts. For example, reading account assets or Algo balances is only available in stateful smart contracts. Using the `ed25519verify` opcode for signature verification is only available in stateless smart contracts. 
 
@@ -13,17 +13,17 @@ Some of the opcodes in TEAL are only valid for a specific contract type. These a
     When writing smart contracts, make sure to follow [TEAL guidelines](../../../reference/teal/guidelines.md). This is very important in order to prevent smart contracts from being compromised.
 
 # TEAL Versions
-Currently, Algorand supports versions 1 - 4 of TEAL. When writing TEAL Version 2 or higher contracts make sure to add `#pragma version #` where # should be replaced by the specific number, as the first line of the program. If this line does not exists, the protocol will treat the contract as a version 1 contract. If upgrading a contract to version 2 or higher it is important to verify you are checking the `RekeyTo` property of all transactions that are attached to the contract. See the [TEAL guidelines](../../../reference/teal/guidelines.md) for more suggestions to help prevent a contract from being compromised. 
+Currently, Algorand supports versions 1 through 4 of TEAL. When writing contracts with TEAL version 2 or higher, make sure to add `#pragma version #` where # should be replaced by the specific number, as the first line of the program. If this line does not exist, the protocol will treat the contract as a version 1 contract. If upgrading a contract to version 2 or higher, it is important to verify you are checking the `RekeyTo` property of all transactions that are attached to the contract. See the [TEAL guidelines](../../../reference/teal/guidelines.md) for more suggestions to help prevent a contract from being compromised. 
 
 # Getting Transaction Properties
-The primary purpose of a TEAL program is to return either true or false. When the program completes if there is a non-zero value on the stack then it returns true and if a zero value or the stack is empty it will return false. If the stack has more than one value the program also returns false unless the `return` opcode is used. The following diagram illustrates how the stack machine processes the program.
+The primary purpose of a TEAL program is to return either true or false. When the program completes, if there is a non-zero value on the stack then it returns true. If there is a zero value or the stack is empty, it will return false. If the stack has more than one value the program also returns false unless the `return` opcode is used. The following diagram illustrates how the stack machine processes the program.
 
 Program line number 1:
 
 <center>![Transaction Properties](../../../imgs/teal_overview-2.png)</center>
 <center>*Getting Transaction Properties*</center>
 
-The program uses the `txn` to reference the current transaction lists of properties. Grouped transaction properties are referenced using `gtxn` and `gtxns`. The number of transactions in a grouped transaction is available in the global variable `GroupSize`. To get the first transaction's receiver use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
+The program uses the `txn` to reference the current transaction's list of properties. Grouped transaction properties are referenced using `gtxn` and `gtxns`. The number of transactions in a grouped transaction is available in the global variable `GroupSize`. To get the first transaction's receiver use `gtxn 0 Receiver`. See [TEAL Specification Reference](../../../reference/teal/specification.md) for more transaction properties.
 
 # Pseudo Opcodes
 The TEAL specification provides several pseudo opcodes for convenience.  For example, the second line in the program below uses the `addr` pseudo opcode.
@@ -47,7 +47,7 @@ The diagram below shows an example of logic that is loading a parameter onto the
 <center>![Arguments](../../../imgs/teal_overview-5.png)</center>
 <center>*Arguments*</center>
 
-All argument parameters to a TEAL program are byte arrays. The order that parameters are passed is specific. In the diagram above, The first parameter is pushed on to the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. 
+All argument parameters to a TEAL program are byte arrays. The order that parameters are passed is specific. In the diagram above, The first parameter is pushed onto the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. 
 
 # Storing and Loading from Scratchspace
 TEAL provides a scratch space as a way of temporarily storing values for use later in your code. The diagram below illustrates a small TEAL program that loads 12 onto the stack and then duplicates it. These values are multiplied together and result (144) is pushed to the top of the stack. The store command stores the value in the scratch space 1 slot.

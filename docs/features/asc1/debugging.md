@@ -5,11 +5,11 @@ Smart contracts can be debugged using two different methods. The first is an int
 # Using the TEAL Debugger
 Algorand provides the `tealdbg` command-line tool to launch an interactive session to debug smart contracts. This tool is explained in the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
-This debugger can debug local smart contracts or connected remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options.
+This debugger can debug local smart contracts or connect remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options.
 
 The debugger process supports both Chrome Developer Tools and a simple Web Frontend.
 
-To launch the debugger locally, for use with the CDT, the following command can be executed from a terminal.
+To launch the debugger locally, for use with the CDT, execute the following command from a terminal.
 
 ```
 $ tealdbg debug program.teal
@@ -123,7 +123,7 @@ When using the `goal` command-line tool, the --out option is used to write a sig
 The SDKs support debugging with the dryrun REST API. The dryrun response to this REST API includes disassembly, logic sig messages w PASS/REJECT, a sig trace, app call messages, and an app call trace.
 
 !!! important "enabling dryrun-remote"
-    The dryrun REST API is only available on a node if it has been enabled in 'the node's configuration. This can be done using the following commands.
+    The dryrun REST API is only available on a node if it has been enabled in the node's configuration. This can be done using the following commands.
 
     ```
     $ algocfg set -p EnableDeveloperAPI -v true

@@ -23,7 +23,7 @@ Every Algorand stateful application is comprised of at least two _programs_: *ap
 The _approval program_ is the main application logic for the smart contract. 
 
 #### Clear State Program
-The _clear state_ program is used to retire an application, its global state, and remove local state from the user’s account. 
+The _clear state_ program is used to retire an application for specific users. This will clear the smart contract's local state variables from the user's balance record.
 
 ### State Storage Locations
 
@@ -69,10 +69,10 @@ TEAL provides OpCodes allowing the program to _get_ (read) and _put_ (write) dat
 Programs may implicitly read their own _global_ storage and the _local_ storage of the account submitting the _application call transaction_. 
 
 #### get_external
-Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of _external_ programs which are stored in the application array for the specific transaction. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts which are stored in the accounts array for the specific transaction. For more information on the applications and accounts arrays, see the [stateful smart contract](./index.md#stateful-contract-arrays) documentation.
+Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of _external_ programs which are stored in the application array of an application call transaction. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts which are stored in the accounts array of an application call transaction. For more information on the applications and accounts arrays, see the [stateful smart contract](./index.md#stateful-contract-arrays) documentation.
 
 #### put
-Writing data is restricted to _global_ storage of the "called" program and the _local_ storage of the "calling" account or any account in the accounts array, both specified within the _application call transaction_ (note: _external_ locations may only be read from). The _local_ storage can only be modified if the account has opted into the application.
+Writing data is restricted to global storage of the "called" program and local storage of the "calling" account or any account in the accounts array, both specified within the _application call transaction_ (note: _external_ locations may only be read from). The _local_ storage can only be modified if the account has opted into the application.
 
 ## Draft Application Code
 
@@ -108,7 +108,7 @@ return
 
 #### Define TEAL Version
 
-The _approval program_ instructs the Algorand Virtual Machine (AVM) interpreter to use "version 4" TEAL OpCodes during execution.
+The _approval program_ instructs the Algorand Virtual Machine (AVM) to use "version 4" TEAL OpCodes during execution.
 
 - `#pragma version 4`  
 
@@ -154,7 +154,7 @@ Create a new file named `clear_state_program.teal` and add the following code:
 int 1
 ```
 
-- `#pragma version 4` instructs the AVM's TEAL interpreter to use "version 4" OpCodes during execution. This is required for stateful smart contract applications
+- `#pragma version 4` instructs the AVM to use "version 4" OpCodes during execution. This is required for stateful smart contract applications
 - `int 1` places the integer 1 on the stack, signaling approval.
 
 ## Deploy New Application
