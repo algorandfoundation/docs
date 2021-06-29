@@ -77,6 +77,17 @@ This method is recommended if you need access to all developer tools including `
 !!! warning
 	Bootstrapping from a snapshot bypasses the normal node catchup procedure that cryptographically verifies the whole history of the blockchain - a procedure that is imperative to maintaining a healthy network. Therefore, this method is *only* recommended in the context of early-stage application development to avoid catchup wait times and get started quickly. It should *never* be used to run a node in production or participate in consensus. Make sure that you migrate your application to a node that has undergone full catchup prior to launching your application in production.
 
+!!! Info
+	When using sandbox, `goal` should be replaced by `./sandbox goal`. Furthermore, `./sandbox goal` runs in its own Docker container and cannot directly access files in the current folder. To run any `goal` command that uses files in the current folder, you need to first copy the files. For example, to send the transactions in the file `mytransaction.sig`, you need to run:
+	```bash
+	./sandbox copy mytransaction.sig
+	./sandbox goal clerk rawsend -f mytransaction.sig
+	```
+	instead of:
+	```bash
+	goal clerk rawsend -f mytransaction.sig
+	```
+
 ## 3. Run your own node
 
 This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This is the recommended follow-on to [option 2](#2-use-docker-sandbox) before launching an application on MainNet. This method gives you full control of your node and its configuration. 

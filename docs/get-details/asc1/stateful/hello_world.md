@@ -172,13 +172,22 @@ export LOCAL_BYTESLICES=0
 export LOCAL_INTS=0
 
 goal app create --creator $ADDR_CREATOR \
-                --approval-prog $TEAL_APPROVAL_PROG \
-				--clear-prog $TEAL_CLEAR_PROG \
+                --approval-prog "$TEAL_APPROVAL_PROG" \
+				--clear-prog "$TEAL_CLEAR_PROG" \
 				--global-byteslices $GLOBAL_BYTESLICES \
 				--global-ints $GLOBAL_INTS \
 				--local-byteslices $LOCAL_BYTESLICES \
 				--local-ints $LOCAL_INTS 
 ```
+
+!!! Note
+	If you are using [sandbox](https://github.com/algorand/sandbox), you need to copy the approval and clear programs to sandbox beforehand. Concretely, after all the `export` commands, run:
+    ```bash
+    ./sandbox copy "$TEAL_APPROVAL_PROG"
+    ./sandbox copy "$TEAL_CLEAR_PROG"
+    ./sandbox goal app create ...
+    ```
+    where `...` should be replaced by the parameters above.
 
 Results:
 ```bash
