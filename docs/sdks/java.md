@@ -17,7 +17,7 @@ cd sandbox
 ./sandbox up testnet
 ```
 
-[Watch Video](https://youtu.be/uOZ95YzU9hU)
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=21)
 
 [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
 
@@ -50,9 +50,10 @@ Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for
 </dependency>
 ```
 
-[`Run Code`](https://this_is_url/)
-[`Watch Video`](https://this_is_url/)
-[`More Information`](https://this_is_url/)
+
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=98)
+
+[`More Information`](https://github.com/algorand/java-algorand-sdk#installation)
 
 The GitHub repository contains additional documentation and examples.
 
@@ -106,7 +107,7 @@ class GettingStarted{
 
 ```
 
-[Watch Video](https://this_is_url/)
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=139)
 
 [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
 
@@ -115,10 +116,18 @@ Never share Mnemonic private keys. Production environments require stringent pri
 
 # Fund the Account
 
-The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/).
+The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/). The 
 
 !!! Info
-All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](https://developer.algorand.org/docs/features/accounts/#minimum-balance).
+All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](https://developer.algorand.org/docs/features/accounts/#minimum-balance). 
+
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=178)
+
+# Viewing the Transaction
+
+To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet) and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
+
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=209)
 
 # Build First Transaction
 
@@ -235,7 +244,7 @@ public void gettingStartedExample(Account myAccount) throws Exception {
         // more code below
 ```
 
-[`Watch Video`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=288)
 
 !!! Info
 Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/).
@@ -250,7 +259,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
         System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
 ```
 
-[`Watch Video`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=401)
 
 !!! Info
 Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures).
@@ -292,7 +301,7 @@ The signed transaction can now be submitted to the network. `waitForConfirmation
 
 [`Run Code`](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java)
 
-[`Watch Video`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=410)
 
 # Complete Example
 
@@ -473,16 +482,11 @@ class GettingStarted{
 
 [Run Code](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java)
 
-[Watch Video](https://this_is_url/)
+[Watch Video](https://youtu.be/_EEMXHrbMzU)
 
 !!! Warning
 In order for this transaction to be successful, the account must be funded.
 
-# Viewing the Transaction
-
-To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet) and paste the transaction ID into the search bar.
-
-[Watch Video](https://this_is_url/)
 
 # Setting Up Your Editor/Framework
 
@@ -493,3 +497,4 @@ The Algorand community provides many editors, frameworks, and plugins that can b
 - [Algorand Studio VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
 - [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
 - [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
+
