@@ -95,7 +95,7 @@ retsub
 main:
 int 1
 int 5
-callsub my_suboutine
+callsub my_subroutine
 return
 ```
 
