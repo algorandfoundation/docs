@@ -54,7 +54,7 @@ This is used to create, configure and destroy an asset depending on which fields
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="configasset">ConfigAsset</a>| _required, except on create_ |uint64|`"caid"`|For re-configure or destroy transactions, this is the unique asset ID. On asset creation, the ID is set to zero.|
+|<a name="configasset">ConfigAsset</a>| _required, except on create_ |uint64|`"caid"`|For re-configure or destroy transactions, this is the unique asset ID. On asset creation, the ID is not set.|
 |[AssetParams](#asset-parameters) |_required, except on destroy_|[AssetParams](#asset-parameters)|`"apar"`| See AssetParams table for all available fields.|
 
 ## Asset Parameters
