@@ -12,7 +12,7 @@ These fields are common to all transactions.
 |<a name="firstvalid">FirstValid</a>| _required_ | uint64 | `"fv"`|The first round for when the transaction is valid. If the transaction is sent prior to this round it will be rejected by the network.|
 |<a name="genesishash">GenesisHash</a>|_required_|[32]byte|`"gh"`|The hash of the genesis block of the network for which the transaction is valid. See the genesis hash for [MainNet](./algorand-networks/mainnet.md#genesis-hash), [TestNet](./algorand-networks/testnet.md#genesis-hash), and [BetaNet](./algorand-networks/betanet.md#genesis-hash).
 |<a name="lastvalid">LastValid</a>| _required_ | uint64 | `"lv"`|The ending round for which the transaction is valid. After this round, the transaction will be rejected by the network.|
-|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that pays the fee and amount.|
+|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that signs and pays the fee.|
 |<a name="type">TxType</a>|_required_|string|`"type"`| Specifies the type of transaction. This value is automatically generated using any of the developer tools.|
 |<a name="genesisid">GenesisID</a>|_optional_|string|`"gen"`| The human-readable string that identifies the network for the transaction. The genesis ID is found in the genesis block. See the genesis ID for [MainNet](./algorand-networks/mainnet.md#genesis-id), [TestNet](./algorand-networks/testnet.md#genesis_id), and [BetaNet](./algorand-networks/betanet.md#genesis-id). |
 <a name="group">Group</a>|_optional_|[32]byte|`"grp"`|The group specifies that the transaction is part of a group and, if so, specifies the hash of the transaction group. Assign a group ID to a transaction through the workflow described in the [Atomic Transfers Guide](../features/atomic_transfers.md).|
@@ -27,6 +27,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
+|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that signs, pays the fee and sends the amount.|
 |<a name="receiver">Receiver</a>| _required_ |Address|`"rcv"`|The address of the account that receives the [amount](#amount).|
 |<a name="amount">Amount</a>|_required_|uint64|`"amt"`| The total amount to be sent in microAlgos.|
 |<a name="closeremainderto">CloseRemainderTo</a>|_optional_|Address|`"close"`|When set, it indicates that the transaction is requesting that the [Sender](#sender) account should be closed, and all remaining funds, after the [fee](#fee) and [amount](#amount) are paid, be transferred to this address.|
@@ -81,6 +82,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
+|<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that signs, pays the fee and sends the asset.|
 |<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to be transferred.|
 |<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred. A zero amount transferred to self allocates that asset in the account's Asset map.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`|The sender of the transfer. The regular [sender](#sender) field should be used and this one set to the zero value for regular transfers between accounts. If this value is nonzero, it indicates a clawback transaction where the [sender](#sender) is the asset's clawback address and the asset sender is the address from which the funds will be withdrawn.|
