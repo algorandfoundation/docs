@@ -102,7 +102,7 @@ let unitName = "LATINUM";
 let assetName = "latinum";
 // Optional string pointing to a URL relating to the asset
 let assetURL = "http://someurl";
-// Optional hash commitment of some sort relating to the asset. 32 character length.
+// Optional hash commitment of some sort relating to the asset. 96 character length.
 let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
 // The following parameters are the only ones
 // that can be changed, and they have to be changed

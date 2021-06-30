@@ -5,11 +5,11 @@ Smart contracts can be debugged using two different methods. The first is an int
 # Using the TEAL Debugger
 Algorand provides the `tealdbg` command-line tool to launch an interactive session to debug smart contracts. This tool is explained in the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
-This debugger can debug local smart contracts or connected remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options.
+This debugger can debug local smart contracts or connect remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options.
 
 The debugger process supports both Chrome Developer Tools and a simple Web Frontend.
 
-To launch the debugger locally for use with the CDT, the following command can be executed from a terminal.
+To launch the debugger locally, for use with the CDT, execute the following command from a terminal.
 
 ```
 $ tealdbg debug program.teal
@@ -30,7 +30,7 @@ This will launch the debugger and allow the smart contract to be inspected. The 
 ![Teal Debugger](../../imgs/tealdbg-2.png)
 <center>*TEAL Debugger*</center>
 
-The Scope pane contains the current stack and is useful for determining what values the current line of code is processing. When a smart contract returns, if anything other than one positive value is left on the stack the program will fail. The Scope pane also displays the current transaction with all its properties, the current scratch space, global variables, and any state associated with the contract. If this transaction is part of an atomic transfer, all transactions will also be available in the Scope pane.
+The Scope pane contains the current stack and is useful for determining what values the current line of code is processing. When a smart contract returns, if anything other than one positive value is left on the stack or the `return` opcode is used with a nonpositive value on the top of the stack, the program will fail. The Scope pane also displays the current transaction with all its properties, the current scratch space, global variables, and any state associated with the contract. If this transaction is part of an atomic transfer, all transactions will also be available in the Scope pane.
 
 When using the command above to launch the debugger most of the scope properties will be empty because no context has been set for the debugging session. To debug most smart contracts adequately, some context will have to be supplied. This can be done by supplying parameters to the `tealdbg` tool. The following context items can be set for a debug session
 
@@ -63,14 +63,14 @@ $ tealdbg debug program.teal --dryrun-req statefultx.dr
 ```
 
 !!! note "a note on supplying the Teal code"
-    The `tealdbg` command does not require the Teal program above as the decompiled version is available in the dryrun-req dump file. In this example is supplied for easier readability while in the debugger. Supplying the program will allow debugging the original source and not the decompiled version.
+    The `tealdbg` command does not require the Teal program above as the decompiled version is available in the dryrun-req dump file. In this example it is supplied for easier readability while in the debugger. Supplying the program will allow debugging the original source and not the decompiled version.
 
 The scope panel will now have the proper context data for the debugging session.
 
 ![Teal Debugger Scope](../../imgs/tealdbg-3.png)
 <center>*TEAL Debugger Scope*</center>
 
-One or more transactions that are stored in a file can be debugged by dumping the context data with the `goal clerk dryrun` command. For example two stateful smart contracts are grouped below and the context data is generated using the `dryrun-dump` option. The `tealdbg` command is then used to start the debugger.
+One or more transactions that are stored in a file can be debugged by dumping the context data with the `goal clerk dryrun` command. For example, two stateful smart contracts are grouped below and the context data is generated using the `dryrun-dump` option. The `tealdbg` command is then used to start the debugger.
 
 ```
 #generate calls
@@ -116,14 +116,14 @@ The `tealdbg` utility has many more options for setting specific context items. 
 
 # Using Dryrun for Debugging a TEAL Program
 
-The SDKs and `goal` command-line tool provide the functionality to do a test run of a TEAL smart contract.
+The SDKs and the `goal` command-line tool provide the functionality to do a test run of a TEAL smart contract.
 
 When using the `goal` command-line tool, the --out option is used to write a signed transaction out to a file and the transaction will not be submitted to the network. You can also generate a dryrun-dump file as described in [Setting The Debugger Context](#setting-the-debugger-context) to not only capture the transaction in the output file but the associated state of a smart contract. This allows testing of the TEAL logic with the `goal clerk dryrun-remote` command which shows how the TEAL is processed and approved or rejected.
 
 The SDKs support debugging with the dryrun REST API. The dryrun response to this REST API includes disassembly, logic sig messages w PASS/REJECT, a sig trace, app call messages, and an app call trace.
 
 !!! important "enabling dryrun-remote"
-    The dryrun REST API is only available on a node if it has been enabled in the nodes configuration. This can be done using the following commands.
+    The dryrun REST API is only available on a node if it has been enabled in the node's configuration. This can be done using the following commands.
 
     ```
     $ algocfg set -p EnableDeveloperAPI -v true
