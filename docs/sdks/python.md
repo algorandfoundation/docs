@@ -4,7 +4,7 @@ This section is a quick start guide for interacting with the Algorand network us
 
 # Alternative Guide
 
-If you are a visual learner, try our [live demo](https://replit.com/@Algorand/gettingStartedPython#main.py) of submitting your first transaction or watch a [full video]() that explains the following steps.
+If you are a visual learner, try our submitting your first transaction [live demo](https://replit.com/@Algorand/gettingStartedPython#main.py) or watch a [full video]() that explains the following steps.
 
 # Sandbox Install
 
@@ -42,18 +42,13 @@ Algorand provides an SDK for Python which is available as a pip package. To inst
 ``` bash
 pip3 install py-algorand-sdk
 ``` 
-[`Watch Video`](https://this_is_url/)  
-[`More Information`](https://this_is_url/)  
-​
+[`Watch Video`](https://this_is_url/)  ​
 
 Alternatively, choose and download a [distribution file](https://pypi.org/project/py-algorand-sdk/#files), and run
 
 ``` bash
 pip3 install [file name].
 ``` 
-[`Watch Video`](https://this_is_url/)  
-[`More Information`](https://this_is_url/)  
-
 
 The [GitHub repository](https://github.com/algorand/py-algorand-sdk) contains additional documentation and examples.
 
@@ -80,12 +75,12 @@ def generate_algorand_keypair():
     Make sure to save your account's address and passphrase at a seperate place, as they will be used later on.
 ​
 !!! Warning
-    Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
+    Never share Mnemonic and private key. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
 
 # Fund the Account
 Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand faucet](https://dispenser.testnet.aws.algodev.network/). 
 ​
-<button name="button" onclick="http://www.google.com">Watch Video</button>
+[`Watch Video`](https://this_is_url/)  
 ​
 !!! Info
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance, see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance).  
