@@ -4,7 +4,7 @@ This section is a quick start guide for interacting with the Algorand network us
 
 # Alternative Guide
 
-If you are a visual learner, try our submitting your first transaction [live demo](https://replit.com/@Algorand/gettingStartedPython#main.py) or watch a [full video]() that explains the following steps.
+If you are a visual learner, try our submitting your first transaction [live demo](https://replit.com/@Algorand/gettingStartedPython#main.py) or watch a [full video](https://www.youtube.com/watch?v=ku2hFalMWmA) that explains the following steps.
 
 # Sandbox Install
 
@@ -19,7 +19,7 @@ git clone https://github.com/algorand/sandbox.git
 cd sandbox
 ./sandbox up testnet
 ```
-[`Watch Video`](https://this_is_url/)  
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23)  
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/)  
 
 This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/). 
@@ -42,7 +42,7 @@ Algorand provides an SDK for Python which is available as a pip package. To inst
 ``` bash
 pip3 install py-algorand-sdk
 ``` 
-[`Watch Video`](https://this_is_url/)  ​
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=128)  ​
 
 Alternatively, choose and download a [distribution file](https://pypi.org/project/py-algorand-sdk/#files), and run
 
@@ -68,7 +68,7 @@ def generate_algorand_keypair():
     print("My private key: {}".format(private_key))
     print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 ```
-[`Watch Video`](https://this_is_url/)  
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=161)  
 [`More Information`](https://developer.algorand.org/docs/features/accounts/create/#standalone)
 
 !!! Tip
@@ -80,7 +80,7 @@ def generate_algorand_keypair():
 # Fund the Account
 Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand faucet](https://dispenser.testnet.aws.algodev.network/). 
 ​
-[`Watch Video`](https://this_is_url/)  
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=257)  
 ​
 !!! Info
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance, see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance).  
@@ -96,7 +96,7 @@ def first_transaction_example(private_key, my_address):
     algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     algod_client = algod.AlgodClient(algod_token, algod_address)
 ```
-[`Watch Video`](https://this_is_url/)  
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=322)  
 
 !!! Info
     The example code connects to the sandbox Algod client. If you want to connect to a Purestake client, see Purestake's [code samples](https://developer.purestake.io/code-samples).
@@ -108,7 +108,7 @@ Before moving on to the next step, make sure your account has been funded by the
     account_info = algod_client.account_info(my_address)
     print("Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
 ```
-[`Watch Video`](https://this_is_url/) 
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=381) 
 
 # Build First Transaction
 Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code.
@@ -126,7 +126,7 @@ from algosdk.future.transaction import PaymentTxn
 
     unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
 ```
-[`Watch Video`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=398)
 ​
 !!! Info
     Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/). 
@@ -138,7 +138,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 	# sign transaction
     signed_txn = unsigned_txn.sign(private_key)
 ``` 
-[`Watch Video`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=454)
 ​
 !!! Info
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures). 
@@ -196,7 +196,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 ``` 
-[`Watch Video`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=480)
 
 # Complete Example
 The complete example below illustrates how to quickly submit your first transaction.
@@ -292,7 +292,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
 first_transaction_example(private_key, my_address)​
 ```
 [`Run Code`](https://replit.com/@Algorand/gettingStartedPython#main.py)  
-[`Watch Video`](https://this_is_url/)  
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=556)  
 [`Go to Github`](https://github.com/algorand/docs/blob/staging/examples/start_building/v2/python/your_first_transaction.py)
 ​​
 !!! Warning 
@@ -301,7 +301,7 @@ first_transaction_example(private_key, my_address)​
 # Viewing the Transaction
 To view the transaction, open the [AlgoExplorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet) and paste the transaction ID into the search bar.  
 
-[`Watch Video`](https://this_is_url/) 
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=618) 
 
 # Setting Up Your Editor/Framework
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.  
