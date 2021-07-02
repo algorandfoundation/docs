@@ -4,8 +4,8 @@ This section is a quick start guide for interacting with the Algorand network us
 ​
 # Alternative Guide
  
-If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-JavaScript#index.js) of submitting your first transaction or watch a [full video]() that explains the following steps.
- 
+If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-JavaScript) of submitting your first transaction or watch a [full video](https://youtu.be/WuhaGp2yrak) that explains the following steps.
+
  
 # Sandbox Install
 !!! Prerequisites
@@ -20,10 +20,11 @@ cd sandbox
 ./sandbox up testnet
 ```
  
-​[Watch Video](https://youtu.be/uOZ95YzU9hU)
+​[Watch Video](https://youtu.be/WuhaGp2yrak?t=21)
  
 [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
 ​
+
 This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/).
 ​
 ​To use Indexer in the sandbox, start it to the default private network as follows. 
@@ -39,11 +40,12 @@ This will install a Sandbox node connected to the Algorand TestNet. To read more
     The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup)
     .
 # Install SDK For Runtime
-Algorand provides an SDK for JavaScript. The instructions for installing the SDK will depend on what runtime you plan on using.
-​
-``` javascript tab="Node"
+Algorand provides an SDK for JavaScript. The instructions for installing the SDK will depend on what runtime you plan on using. 
 
-// Install Node.js https://nodejs.org/download
+!!! Prerequisites
+   - Install [Node.js](https://nodejs.org/download)
+​
+``` javascript 
 // initialize project
 npm init
 // install Algorand sdk
@@ -54,26 +56,15 @@ npm list algosdk
 // This package provides TypeScript types, but you will need TypeScript version 4.2 or higher to use them properly.
  
 ```
-[`Watch Video`](https://this_is_url/)
-[`More Information`](https://this_is_url/)
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=164 )
+
+[`More Information`](https://github.com/algorand/js-algorand-sdk)
  
-``` javascript tab="React"
-//Get started with React https://reactjs.org/
-npx create-react-app my-app
-cd my-app
-npm install algosdk
-yarn start
-​
-// Or clone the Algorand Starter Project
-
-//git clone need https://github.com/rekpero/algorand-sdk-react-component
-
-[`More Information`](https://github.com/rekpero/algorand-sdk-react-component)
-```
-
 The SDK is installed with the specific runtime and can now interact with the Sandbox created earlier.
+
 ​
 !!! Info
+   
    Using a Web Runtime requires the AlgoSigner or plugin or other web-based private key management software. For more information see [community wallets](https://developer.algorand.org/docs/community/#wallets). 
 ​
 # Create an Account on Algorand
@@ -97,32 +88,32 @@ const createAccount =  function (){
     }
 };
 ```
-[Watch Video](https://this_is_url/)
+[Watch Video](https://youtu.be/WuhaGp2yrak?t=212)
 
 [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
  
 !!! Tip
-    Make sure to save your account's address and passphrase at a separate place, as they will be used later on.
-    ​
+    Make sure to save your account's address and passphrase at a separate place, as they will be used later on.    ​
 
 !!! Warning 
     Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
 
-[Watch Video](https://this_is_url/) 
 ​
 # Fund the Account
-The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand faucet](https://dispenser.testnet.aws.algodev.network/).
+The code below prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/).
 
 ​
 !!! Info
    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance)
  
-​[Watch Video](https://this_is_url/)
+​
+[Watch Video](https://youtu.be/WuhaGp2yrak?t=307)
 
 # Viewing the Transaction
-To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet) and paste the transaction ID into the search bar.
+To view the transaction, click on the transaction link in the dispenser or copy the transaction ID and paste to the search bar on the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet).
 ​
-[Watch Video](https://this_is_url/)
+
+[Watch Video](https://youtu.be/WuhaGp2yrak?t=326)
 ​​
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively.
@@ -143,7 +134,7 @@ async function firstTransaction() {
 ```
  
 !!! Info
-The example code connects to the sandbox Algod client. If you want to connect to a other clients, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2).
+    The example code connects to the sandbox Algod client. If you want to connect to a other clients, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2).
  
 # Check Your Balance
 Before moving on to the next step, make sure your account has been funded by the faucet.
@@ -155,7 +146,7 @@ Before moving on to the next step, make sure your account has been funded by the
         let startingAmount = accountInfo.amount;
 
 ```
-[`Watch Video`](https://this_is_url/)
+
  
 # Build First Transaction
 Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code.
@@ -173,10 +164,9 @@ Communication with the Algorand network is performed using transactions. To crea
         let amount = 1000000;
         let sender = myAccount.addr;
         let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
-
-
-[`Watch Video`](https://this_is_url/)
 ```
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386)
+
 
 ​
 !!! Info
@@ -191,7 +181,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
         let txId = txn.txID().toString();
         console.log("Signed transaction with txID: %s", txId);
 ```
-​[`Watch Video`](https://this_is_url/)
+​[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500)
 
 
 ​!!! Info
@@ -220,7 +210,7 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
         console.log("Account balance: %d microAlgos", accountInfo.amount);
 
 ```
-[`Watch Video`](https://this_is_url/)​
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=508)​
 
  
 # Complete Example
@@ -304,9 +294,6 @@ async function firstTransaction() {
         console.log("Press any key when the account is funded");
         await keypress();
         // Connect your client
-        // const algodToken = '';
-        // const algodServer = 'https://testnet.algoexplorerapi.io';
-        // const algodPort = '';
         const algodToken = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
         const algodServer = 'http://localhost';
         const algodPort = 4001;
@@ -367,12 +354,10 @@ async function firstTransaction() {
 firstTransaction();
 ```
 
+[Run Code](https://replit.com/@Algorand/Getting-Started-with-JavaScript)
 
+[Watch Video](https://youtu.be/WuhaGp2yrak)
 
-[Run Code](https://replit.com/@Algorand/Getting-Started-with-JavaScript))
-[Watch Video](https://this_is_url/)
-
-​
 
 ​
 !!! Warning
