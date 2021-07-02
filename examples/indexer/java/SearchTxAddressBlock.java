@@ -4,6 +4,8 @@ package com.algorand.javatest.indexer;
 
 import com.algorand.algosdk.v2.client.common.IndexerClient;
 import com.algorand.algosdk.v2.client.common.Client;
+import com.algorand.algosdk.v2.client.common.Response;
+import com.algorand.algosdk.v2.client.model.TransactionsResponse;
 import org.json.JSONObject;
 import com.algorand.algosdk.crypto.Address;
 	
@@ -20,11 +22,16 @@ public class SearchTxAddressBlock {
     public static void main(String args[]) throws Exception {
         SearchTxAddressBlock ex = new SearchTxAddressBlock();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Long block = Long.valueOf(7048877);             
-        String response = indexerClientInstance.searchForTransactions().address(account)
-                    .round(block).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
+        Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
+        Long block = Long.valueOf(8965633);             
+        Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .address(account)
+            .round(block).execute();
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        }              
+        JSONObject jsonObj = new JSONObject(response.body().toString());
         System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
     }
  }

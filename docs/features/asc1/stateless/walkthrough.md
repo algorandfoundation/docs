@@ -157,3 +157,123 @@ $ python3 -c "import base64;print(base64.b64encode((123).to_bytes(8,'big')).deco
 The example above converts the integer value of 123 to a base64 encoded string. TEAL currently does not support negative numbers. 
 
 Each SDK provides facilities for passing parameters as well. These processes are described in the [ASC1 Stateless SDK](sdks.md) Usage documentation.
+
+# Contract Account ASA Opt-In
+
+Asset Opt-In is a common operation for serveral use-cases based on Stateless
+ASC1.
+
+This example shows how to Opt-In an ASA with a Contract Account adopting 
+security checks to ensure that malicious users can not exploit Opt-In
+transaction approval.
+
+## Opt-In ASC1 TEAL logic
+
+First we catch the conditions to handle the Opt-In:
+
+```teal
+// IF: Single AssetTransfer THEN: Handle Opt-In
+global GroupSize
+int 1
+==
+txn TypeEnum
+int axfer
+==
+&&
+bnz branch_optin
+```
+
+We then restrict the transaction domain just to Opt-In required operations:
+
+```teal
+branch_optin:
+// Opt-In specific Asset ID
+txn XferAsset
+int VAR_TMPL_ASSET_ID
+==
+// Opt-In Asset Amount is 0
+txn AssetAmount
+int 0
+==
+&&
+// Opt-In executed as Auto-AssetTransfer
+txn Sender
+txn AssetReceiver
+==
+&&
+// Opt-In Fee limit
+txn Fee
+int VAR_TMPL_OPTIN_FEE
+<=
+&&
+// Prevent unforseen Asset Clawback
+txn AssetSender
+global ZeroAddress
+==
+&&
+// Prevent Asset Close-To
+txn AssetCloseTo
+global ZeroAddress
+==
+&&
+// Prevent Close-To
+txn CloseRemainderTo
+global ZeroAddress
+==
+&&
+// Prevent Rekey-To
+txn RekeyTo
+global ZeroAddress
+==
+&&
+// Reject Opt-In after LastValid block
+txn LastValid
+int VAR_TMPL_OPTIN_EXPIRING_BLOCK
+<
+&&
+b end_program
+```
+
+For sake of generality the Contract Account ASA Opt-In example makes use of **template parameters**, that should be assigned according to the specific use case. In particular, before compiling the TEAL source code, the following parameters hardcoded into TEAL program should be assigned:
+
+1. `VAR_TMPL_ASSET_ID`: is the Asset ID of the ASA the Contract Account will Opt-In. This implies that the ASA must be created before the ASC1.
+2. `VAR_TMPL_OPTIN_FEE`: is the maximum [fee](../../../transactions/#fees), expressed in microALGO, that the Contract Account would accept for the ASA Opt-In transaction. This check prevents malicious adversaries form forcing the Contract Account to pay arbitrarily high fees.
+3. `VAR_TMPL_OPTIN_EXPIRING_BLOCK`: setting a [last valid block](../../../transactions/#setting-first-and-last-valid) for the ASA Opt-In transaction means that Contract Account will only approve ASA Opt-In transactions until a certain block. This check prevents malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees after that block.
+
+!!! tip
+    For [AlgoDea](https://algodea-docs.bloxbean.com/) users, it is convenient to adopt the prefix VAR_TMPL_ as a parameter naming convention so that they can be easily assigned within the IDE, before compiling the TEAL stateless program.
+
+## Opt-In ASC1 depolyment
+
+We get the Contract Address by compiling its TEAL logic:
+
+```
+goal clerk compile contract.teal
+
+contract.teal: CONTRACT_ADDRESS
+```
+
+As any other Algorand Account, the Contract Account must be first initialized with 0.1 ALGO and funded with additional 0.1 ALGO for each additional ASA to Opt-In.
+
+!!! tip
+    In order to prevent malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees, you can either:
+  
+  1. Fund the Contract Account just with the exact amount that covers minumum balance and transaction fees
+  2. Fund the Contract Account with an [Atomic Transfer](https://developer.algorand.org/docs/features/atomic_transfers/) that includes both the initial funding and Opt-In transction
+  3. Make use of [transaction's lease property](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/), hardcoding it into Contract Account TEAL logic.
+
+```
+goal clerk send -f VAR_TMPL_CREATOR_ADDR -t CONTRACT_ADDRESS -a 202000
+```
+
+Asset Opt-In transaction will then be signed with its LogicSig:
+
+```
+goal asset send -f CONTRACT_ADDRESS -t CONTRACT_ADDRESS --assetid VAR_TMPL_ASSET_ID -a 0 -o optin.txn
+
+goal clerk sign -i optin.txn -p contract.teal -o optin.stxn
+
+goal clerk rawsend -f optin.stxn
+```
+
+Then you can add more funds to the Contract Address once the Opt-In validity block expires.

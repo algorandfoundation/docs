@@ -12,10 +12,10 @@ Visit the new docs to get started:
 🔷 = BetaNet availability only
 
 # Version
-`v2.5.5-beta`
+`v2.7.1-beta`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.5.5-beta
+https://github.com/algorand/go-algorand/releases/tag/v2.7.1-beta
 
 # Genesis ID
 `betanet-v1.0`

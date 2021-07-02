@@ -945,7 +945,7 @@ Multisignature accounts are a logical representation of an ordered set of addres
 
 Multisignature accounts cannot nest other multisignature accounts. 
 
-When creating a multisignature account with Address A, Address B, and Address C will not produce the same address as one with Address B, Address A, and Address C, however signing a multisignature transaction does not require any specific order. 
+Creating a multisignature account with Address A, Address B, and Address C will not produce the same address as one with Address B, Address A, and Address C. However, signing a multisignature transaction does not require any specific order. 
 
 !!! tip
 	You can use the fact that order matters to generate multiple addresses that can be signed by the same set of keys.

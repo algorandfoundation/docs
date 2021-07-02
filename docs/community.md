@@ -23,6 +23,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[AlertHub](https://app.metrika.co/) | AlertHub enables monitoring and real-time alerting on Algorand addresses so that users can maintain the health of their accounts and the overall Algorand network. Subscribe to get notifications on account events like consensus participation, key expiration, and transactions.
+| <center>[HowBigIsAlgorand](https://howbigisalgorand.com/) | HowBigIsAlgorand is a real-time dashboard tool designed to inform users interested in spinning up their own archival nodes about the disk space requirement for a given Algorand Blockchain. 
 
 # Wallets
 
@@ -67,8 +68,9 @@ If you have a project you want featured on the community site, [reach out](mailt
 
 | Name| Description |
 |------|------|
-| <center>[Algorand Wallet Manager](https://github.com/CiottiGiorgio/Algorand-Wallet-Manager)</center> | This Python application is a graphic interface for the user who owns or have access to an Algorand node and would like to issue operations through a GUI rather than CLI. (i.e.: manage wallets and addresses, send transactions, save a contact list) |
+| <center>[![](./imgs/algotides-logo.png)](https://github.com/CiottiGiorgio/algotides/)</center><center>[Algo Tides](https://github.com/CiottiGiorgio/algotides)</center> | This Python application is a graphic interface for the user who owns or have access to an Algorand node and would like to issue operations through a GUI rather than CLI. (i.e.: manage wallets and addresses, send transactions, save a contact list) |
 | <center>[Sandbox](https://github.com/algorand/sandbox)</center> | Algorand Sandbox. |
+| <center>[vim TEAL plugin](https://github.com/aldur/vim-algorand-teal)</center> | Syntax highlighting for TEAL scripts within vim. |
 
 # Smart Contract Utilities and Libraries
 
@@ -86,7 +88,7 @@ If you have a project you want featured on the community site, [reach out](mailt
 | Name| Description |
 |------|------|
 | <center>[Algonaut](https://github.com/algonaut)</center> | Provides open source community projects for the Algorand ecosystem. Repositories include:  [Vue components](https://github.com/algonaut/algo-vue-components) & [validation](https://github.com/algonaut/algo-validation-agent) of fields for [Algorand JavaScript SDK](https://github.com/algorand/js-algorand-sdk)
-| <center>[Algorand Builder](https://github.com/scale-it/algorand-builder)</center> | CLI framework to automate development of Algorand Assets and Smart Contracts. Algorand builder is a trustworthy framework for Algorand dapps (Decentralized Applications). Its main goal is to make shipping Algorand applications simple, efficient, and scalable. Think about it as a Truffle suite for Algorand. |
+| <center>[![image](https://user-images.githubusercontent.com/811701/123177240-2ca9da80-d485-11eb-865f-7994fdb23573.png) Algo Builder](http://algobuilder.dev)</center> | CLI framework to automate development of Algorand Assets and Smart Contracts. Algorand builder is a trustworthy framework for Algorand dapps (Decentralized Applications). Its main goal is to make shipping Algorand applications simple, efficient, and scalable. Think about it as a Truffle suite for Algorand. |
 | <center>[Algorand-React-Component](https://github.com/mmitrasish/algorand-sdk-react-component)</center> | A set of reusable functional React components for creating and signing transactions, writing to the note field of a transaction, multisig transactions, offline account generation and mnemonic account recover. This tool acts a wrapper to the Algorand JavaScript SDK. |
 | <center>[React-Algorand](https://www.npmjs.com/package/react-algorand)</center> | React-Alogrand is an npm package that allows a user to create simple wallet applications for pay transactions, scheduled transactions, interactive UI with rendered metadata for processing transactions and can be configured for both MainNet and TestNet. |
 

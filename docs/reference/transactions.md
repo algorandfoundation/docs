@@ -65,8 +65,8 @@ Object Name: `AssetParams`
 |<a name="total">Total</a>|_required on creation_|uint64|`"t"`| The total number of base units of the asset to create. This number cannot be changed.|
 |<a name="decimals">Decimals</a>|_required on creation_|uint32|`"dc"`| The number of digits to use after the decimal point when displaying the asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths. |
 |<a name="defaultfrozen">DefaultFrozen</a>|_required on creation_|bool|`"df"`| True to freeze holdings for this asset by default. |
-|<a name="unitname">UnitName</a>|_optional_|string|`"un"`| The name of a unit of this asset. Supplied on creation. Example: USDT |
-|<a name="assetname">AssetName</a>|_optional_|string|`"an"`| The name of the asset. Supplied on creation. Example: Tether|
+|<a name="unitname">UnitName</a>|_optional_|string|`"un"`| The name of a unit of this asset. Supplied on creation. Max size is 8 bytes. Example: USDT |
+|<a name="assetname">AssetName</a>|_optional_|string|`"an"`| The name of the asset. Supplied on creation. Max size is 32 bytes. Example: Tether|
 |<a name="url">URL</a>|_optional_|string|`"au"`| Specifies a URL where more information about the asset can be retrieved. Max size is 32 bytes. |
 |<a name="metadatahash">MetaDataHash</a>|_optional_|[]byte|`"am"`| This field is intended to be a 32-byte hash of some metadata that is relevant to your asset and/or asset holders. The format of this metadata is up to the application. This field can _only_ be specified upon creation. An example might be the hash of some certificate that acknowledges the digitized asset as the official representation of a particular real-world asset.  |
 |<a name="manageraddr">ManagerAddr</a>|_optional_|Address|`"m"`| The address of the account that can manage the configuration of the asset and destroy it. |
@@ -137,13 +137,14 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Application ID</a>| _required_| uint64| `"apid"`| ID of the application being configured or empty if creating.|
 | <a name="">OnComplete</a>| _required_| uint64| `"apan"`| Defines what additional actions occur with the transaction. See the [OnComplete](./teal/specification.md#oncomplete) section of the TEAL spec for details.|
 | <a name="">Accounts</a>| _optional_| Address| `"apat"`| List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|
-| <a name="">Approval Program</a>| _optional_| Address| `"apap"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
-| <a name="">App Arguments</a>| _optional_| byte[]| `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|
-| <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.|
+| <a name="">Approval Program</a>| _optional_| []byte | `"apap"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
+| <a name="">App Arguments</a>| _optional_| []byte | `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|
+| <a name="">Clear State Program</a>| _optional_| []byte | `"apsu"`| Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">GlobalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
 | <a name="">LocalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apls"`| Holds the maximum number of local state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
+| <a name="">ExtraProgramPages</a>| _optional_| <a href=#extra-program-pages>StateSchema</a>| `"apep"`| Number of additional pages allocated to the application's approval and clear state programs. Each `ExtraProgramPages` is 2048 bytes. The sum of `ApprovalProgram` and `ClearStateProgram` may not exceed 2048*(1+`ExtraProgramPages`) bytes. |
 
 ## Storage State Schema
 Object Name: `StateSchema`
@@ -153,7 +154,7 @@ The `StateSchema` object is only required for the create application call transa
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
 | <a name="">Number Ints</a>| _required_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] application key/value store. Immutable.|
-| <a name="">Number Byteslices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
+| <a name="">Number ByteSlices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
 
 # Signed Transaction
 Transaction Object Type: `SignedTxn`

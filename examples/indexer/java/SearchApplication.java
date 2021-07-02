@@ -5,6 +5,8 @@ package com.algorand.javatest.indexer;
 import com.algorand.algosdk.v2.client.common.IndexerClient;
 import com.algorand.algosdk.v2.client.common.Client;
 import com.algorand.algosdk.crypto.Address;
+import com.algorand.algosdk.v2.client.common.Response;
+import com.algorand.algosdk.v2.client.model.ApplicationsResponse;
 import org.json.JSONObject;
 
 public class SearchApplication {
@@ -12,21 +14,28 @@ public class SearchApplication {
     // utility function to connect to a node
     private Client connectToNetwork(){
         final String INDEXER_API_ADDR = "localhost";
-        final int INDEXER_API_PORT = 59998;       
+        final int INDEXER_API_PORT = 8980;       
         IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
         return indexerClient;
     }
     public static void main(String args[]) throws Exception {
         SearchApplication ex = new SearchApplication();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+        Long limit = 4L;
+        Response<ApplicationsResponse> response = indexerClientInstance
+            .searchForApplications()
+            .limit(limit).execute();
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        } 
 
-        String response = indexerClientInstance.searchForApplications().execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
+        JSONObject jsonObj = new JSONObject(response.body().toString());
         System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
+
     }
  }
 
-// response information should look similar to this...
+// response should look similar to this...
 //  Response Info:
 //  {
 //   "next-token": "142",

@@ -61,7 +61,7 @@ public class InstantiateIndexer {
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
         System.out.println("IndexerClient Instantiated : " + indexerClientInstance); // pretty print json
     }
- }
+}
 ```
 
 ```go tab="Go"
@@ -128,17 +128,21 @@ print(json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/SearchTransactionsMinAmount.java
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsMinAmount ex = new SearchTransactionsMinAmount();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long min_amount = Long.valueOf(10);     
-        String response = indexerClientInstance
-                .searchForTransactions()
-                .currencyGreaterThan(min_amount).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
-};
+public static void main(String args[]) throws Exception {
+    SearchTransactionsMinAmount ex = new SearchTransactionsMinAmount();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long min_amount = Long.valueOf(10);     
+    Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .currencyGreaterThan(min_amount)
+            .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }                
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json        
+}
 ```
 
 ```go tab="Go"
@@ -188,19 +192,23 @@ print(json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/SearchTransactionsLimit.js
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsLimit ex = new SearchTransactionsLimit();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long min_amount = Long.valueOf(10);
-        Long limit = Long.valueOf(2);       
-        String response = indexerClientInstance
-                .searchForTransactions()
-                .currencyGreaterThan(min_amount)
-                .limit(limit)
-        .execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTransactionsLimit ex = new SearchTransactionsLimit();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long min_amount = Long.valueOf(10);
+    Long limit = Long.valueOf(2);       
+    Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .currencyGreaterThan(min_amount)
+            .limit(limit)
+            .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }   
+    
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json             
+}
 ```
 
 ```go tab="Go"
@@ -286,30 +294,39 @@ while (numtx > 0):
 
 ```java tab="Java"
 // /indexer/java/SearchTransactionsPaging.java
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsPaging ex = new SearchTransactionsPaging();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        String nexttoken = "";
-        Integer numtx = 1;               
-        // loop until there are no more transactions in the response
-        // for the limit (max limit is 1000 per request)
-        while (numtx > 0) {
-            Long min_amount = Long.valueOf(100000000000000L);
-            Long limit = Long.valueOf(2);
-            String next_page = nexttoken;
-            String response = indexerClientInstance.searchForTransactions().next(next_page)
-                    .currencyGreaterThan(min_amount).limit(limit).execute().toString();
-            JSONObject jsonObj = new JSONObject(response.toString());
+public static void main(String args[]) throws Exception {
+    SearchTransactionsPaging ex = new SearchTransactionsPaging();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    String nexttoken = "";
+    Integer numtx = 1;  
+    Long maxround=Long.valueOf(30000);           
+    // loop until there are no more transactions in the response
+    // for the limit (max limit is 1000 per request)
+    while (numtx > 0) {
+        Long min_amount = Long.valueOf(500000000000L);
+        Long limit = Long.valueOf(4);
+        String next_page = nexttoken;
+        Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .next(next_page)
+            .currencyGreaterThan(min_amount)
+            .maxRound(maxround)
+            .limit(limit)
+            .execute();
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        }        
+        JSONObject jsonObj = new JSONObject(response.body().toString());
 
-            JSONArray jsonArray = (JSONArray) jsonObj.get("transactions");
-            numtx = jsonArray.length();
-            if (numtx > 0) {
-
-                nexttoken = jsonObj.get("next-token").toString();
-                JSONObject jsonObjAll = new JSONObject(response.toString());
-                System.out.println("Transaction Info: " + jsonObjAll.toString(2)); // pretty print json
-            }
+        JSONArray jsonArray = (JSONArray) jsonObj.get("transactions");
+        numtx = jsonArray.length();
+        if (numtx > 0) {
+            nexttoken = jsonObj.get("next-token").toString();
+            JSONObject jsonObjAll = new JSONObject(response.body().toString());
+            System.out.println("Transaction Info: " + jsonObjAll.toString(2)); // pretty print json
         }
+    }
+}
 ```
 
 ```go tab="Go"
@@ -394,14 +411,20 @@ print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AccountInfo.java
-    public static void main(String args[]) throws Exception {
-        AccountInfo ex = new AccountInfo();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Address account = new Address("7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI");
-         String response = indexerClientInstance.lookupAccountByID(account).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Account Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AccountInfo ex = new AccountInfo();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
+    Response<AccountResponse> response = indexerClientInstance
+        .lookupAccountByID(account)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Account Info: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -438,15 +461,22 @@ print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AccountInfoBlock.java
-    public static void main(String args[]) throws Exception {
-        AccountInfoBlock ex = new AccountInfoBlock();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Address account = new Address("7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI");
-        Long round = Long.valueOf(50);
-        String response = indexerClientInstance.lookupAccountByID(account).round(round).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Account Info for block: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AccountInfoBlock ex = new AccountInfoBlock();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Address account = new Address("ZYATCNPXNCPI4RE7VPKH7OBLFDFWJGNWY2RPE35DH5IPZFHWBWRL7TS3LU");
+    Long round = Long.valueOf(14653225);
+    Response<AccountResponse>  response = indexerClientInstance
+        .lookupAccountByID(account)
+        .round(round)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Account Info for block: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -512,16 +542,27 @@ print("note_prefix = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTransactionsNote.java
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsNote ex = new SearchTransactionsNote();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        byte[] notePrefix = "showing prefix".getBytes();
-        String response = indexerClientInstance
-                .searchForTransactions()
-                .notePrefix(notePrefix).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
+public static void main(String args[]) throws Exception {
+    IndexerClient indexerClientInstance = connectToNetwork();
+    Response<TransactionsResponse> resp = indexerClientInstance.searchForTransactions()
+            .notePrefix("showing prefix".getBytes())
+            .minRound(10894697L)
+            .maxRound(10994697L).execute();
+    if (!resp.isSuccessful()) {
+        throw new Exception(resp.message());
     }
+
+    // pretty print json
+    JSONObject jsonObj = new JSONObject(resp.body().toString());
+    System.out.println("Transaction Info: " + jsonObj.toString(2));
+
+    int i = 0;
+    for (Transaction tx : resp.body().transactions) {
+        i++;
+        System.out.println("Transaction " + i);
+        System.out.println("  Note Info: " + new String(tx.note));
+    }
+}
 ```
 
 ```go tab="Go"
@@ -603,14 +644,21 @@ print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AccountsAssetID.java
-    public static void main(String args[]) throws Exception {
-        AccountsAssetID ex = new AccountsAssetID();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(312769);
-        String response = indexerClientInstance.searchForAccounts().assetId(asset_id).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Pretty Print of Account for Asset: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AccountsAssetID ex = new AccountsAssetID();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long asset_id = Long.valueOf(408947);
+    Response<AccountsResponse> response = indexerClientInstance
+        .searchForAccounts()
+        .assetId(asset_id)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Pretty Print of Account for Asset: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -658,18 +706,23 @@ print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AccountsAssetIDMinBalance.java
-    public static void main(String args[]) throws Exception {
-        AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(312769);
-        Long currencyGreaterThan = Long.valueOf(100);
-        // searches for asset greater than currencyGreaterThan
-        String response = indexerClientInstance.searchForAccounts()
-                .assetId(asset_id)
-                .currencyGreaterThan(currencyGreaterThan).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Account Info for Asset Min Balance: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long asset_id = Long.valueOf(408947);
+    Long currencyGreaterThan = Long.valueOf(3007326000L);
+    // searches for asset greater than currencyGreaterThan
+    Response<AccountsResponse> response = indexerClientInstance.searchForAccounts()
+            .assetId(asset_id)
+            .currencyGreaterThan(currencyGreaterThan)
+            .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Account Info for Asset Min Balance: " + jsonObj.toString(2)); // pretty print json  
+}
 ```
 
 ```go tab="Go"
@@ -741,14 +794,20 @@ print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AccountInfo.java
-    public static void main(String args[]) throws Exception {
-        AccountInfo ex = new AccountInfo();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Address account = new Address("7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI");
-         String response = indexerClientInstance.lookupAccountByID(account).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Account Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AccountInfo ex = new AccountInfo();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
+    Response<AccountResponse> response = indexerClientInstance
+        .lookupAccountByID(account)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Account Info: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -831,19 +890,24 @@ print("Transaction Start Time 2020-06-03T10:00:00-05:00 = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddressTime.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressTime ex = new SearchTxAddressTime();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-        Date start_time = sdf.parse("2020-06-03T10:00:00-05:00");
-        String response = indexerClientInstance
-                .searchForTransactions()
-                .address(account)
-                .afterTime(start_time).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("start_time: 06/03/2020 11:00:00-05:00 = " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddressTime ex = new SearchTxAddressTime();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    Date start_time = sdf.parse("2020-08-31T02:35:47-05:00");
+    Response<TransactionsResponse> response = indexerClientInstance
+            .searchForTransactions()
+            .address(account)
+            .afterTime(start_time)
+            .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("start_time: 08/31/2020 02:35:47 = " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -929,17 +993,25 @@ print("min-max rounds: 7048876-7048878 = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddressBlockRange.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressBlockRange ex = new SearchTxAddressBlockRange();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Long min_round = Long.valueOf(7048876);
-        Long max_round = Long.valueOf(7048878);       
-        String response = indexerClientInstance.searchForTransactions().address(account)
-                    .minRound(min_round).maxRound(max_round).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddressBlockRange ex = new SearchTxAddressBlockRange();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4");
+    Long min_round = Long.valueOf(8965632);
+    Long max_round = Long.valueOf(8965651);       
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .minRound(min_round)
+        .maxRound(max_round)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }               
+    
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -990,16 +1062,23 @@ print("block: 7048877 = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddressBlock.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressBlock ex = new SearchTxAddressBlock();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Long block = Long.valueOf(7048877);             
-        String response = indexerClientInstance.searchForTransactions().address(account)
-                    .round(block).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddressBlock ex = new SearchTxAddressBlock();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
+    Long block = Long.valueOf(8965633);             
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .round(block)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }              
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1052,15 +1131,23 @@ print("txid: QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddressTxId.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressTxId ex = new SearchTxAddressTxId();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        String txid = "QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA";
-        String response = indexerClientInstance.searchForTransactions().address(account).txid(txid).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("txid: QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA = " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddressTxId ex = new SearchTxAddressTxId();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
+    String txid = "GZKSVXCVQASQ2KLI7JUWZ2LP54WAKPVA3TC2ZGQVAHKIWEMMFNEQ";
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .txid(txid)
+        .execute();        
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }  
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("txid: GZKSVXCVQASQ2KLI7JUWZ2LP54WAKPVA3TC2ZGQVAHKIWEMMFNEQ = " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1112,15 +1199,23 @@ print("txn_type: acfg = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddresstxntype.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddresstxntype ex = new SearchTxAddresstxntype();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU");
-        TxType txType = TxType.ACFG;
-        String response = indexerClientInstance.searchForTransactions().address(account).txType(txType).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("txn_type: acfg = " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddresstxntype ex = new SearchTxAddresstxntype();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
+    TxType txType = TxType.ACFG;
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .txType(txType)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }          
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("txn_type: acfg = " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1219,17 +1314,25 @@ print("Asset Balances :" + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddressAsset.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressAsset ex = new SearchTxAddressAsset();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU");
-        Long asset_id = Long.valueOf(2044572);   
-        Long min_amount = Long.valueOf(50);              
-        String response = indexerClientInstance.searchForTransactions().address(account)
-                    .currencyGreaterThan(min_amount).assetId(asset_id).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddressAsset ex = new SearchTxAddressAsset();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("AMF3CVE4MFZM24CCFEWRCOCWW7TEDJQS3O26OUBRHZ3KWKUBE5ZJRNZ3OY");
+    Long asset_id = Long.valueOf(12215366);   
+    Long min_amount = Long.valueOf(5);              
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .currencyGreaterThan(min_amount)
+        .assetId(asset_id)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }  
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1316,15 +1419,23 @@ print("sig_type: msig = " +
 
 ```java tab="Java"
 // /indexer/java/SearchTxAddresssigtype.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddresssigtype ex = new SearchTxAddresssigtype();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        SigType sig_type = SigType.MSIG;    
-        String response = indexerClientInstance.searchForTransactions().address(account).sigType(sig_type).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info SigType msig: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchTxAddresssigtype ex = new SearchTxAddresssigtype();
+    IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+    Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
+    SigType sig_type = SigType.MSIG;    
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .sigType(sig_type)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    }      
+
+    JSONObject jsonObj = new JSONObject(response.toString());
+    System.out.println("Transaction Info SigType msig: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1374,15 +1485,21 @@ print("Asset Name Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/SearchAssetsName.java
-    public static void main(String args[]) throws Exception {
-        SearchAssetsName ex = new SearchAssetsName();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        String name = "DevDocsCoin";        
-        String response = indexerClientInstance.searchForAssets()
-                        .name(name).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Asset Info for Name: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchAssetsName ex = new SearchAssetsName();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    String name = "Planet";        
+    Response<AssetsResponse> response = indexerClientInstance
+        .searchForAssets()
+        .name(name)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Asset Info for Name: " + jsonObj.toString(2)); // pretty print json           
+}
 ```
 
 ```go tab="Go"
@@ -1455,15 +1572,21 @@ print("Asset Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/SearchAssets.java
-    public static void main(String args[]) throws Exception {
-        SearchAssets ex = new SearchAssets();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(2044572);        
-        String response = indexerClientInstance.searchForAssets()
-                        .assetId(asset_id).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchAssets ex = new SearchAssets();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long asset_id = Long.valueOf(12215366);        
+    Response<AssetsResponse> response = indexerClientInstance
+        .searchForAssets()
+        .assetId(asset_id)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json            
+}
 ```
 
 ```go tab="Go"
@@ -1530,15 +1653,21 @@ print("Asset Balance: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AssetsBalances.java
-    public static void main(String args[]) throws Exception {
-        AssetsBalances ex = new AssetsBalances();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(2044572);
-        // searhes for asset greater than currencyGreaterThan
-        String response = indexerClientInstance.lookupAssetBalances(asset_id).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AssetsBalances ex = new AssetsBalances();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long asset_id = Long.valueOf(440307);
+    // searhes for asset greater than currencyGreaterThan
+    Response<AssetBalancesResponse> response = indexerClientInstance
+        .lookupAssetBalances(asset_id)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1603,18 +1732,23 @@ print("Asset Balances :" + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/AccountsAssetIDMinBalance.java
-    public static void main(String args[]) throws Exception {
-        AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(312769);
-        Long currencyGreaterThan = Long.valueOf(100);
-        // searches for asset greater than currencyGreaterThan
-        String response = indexerClientInstance.searchForAccounts()
-                .assetId(asset_id)
-                .currencyGreaterThan(currencyGreaterThan).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Account Info for Asset Min Balance: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long asset_id = Long.valueOf(408947);
+    Long currencyGreaterThan = Long.valueOf(3007326000L);
+    // searches for asset greater than currencyGreaterThan
+    Response<AccountsResponse> response = indexerClientInstance.searchForAccounts()
+            .assetId(asset_id)
+            .currencyGreaterThan(currencyGreaterThan)
+            .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Account Info for Asset Min Balance: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1699,16 +1833,25 @@ print("Asset Transaction Info: " + json.dumps(response, indent=2, sort_keys=True
 
 ```java tab="Java"
 // /indexer/java/SearchAssetsTransactionsRole.java
-    public static void main(String args[]) throws Exception {
-        SearchAssetsTransactionsRole ex = new SearchAssetsTransactionsRole();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(2044572);
-        AddressRole addressRole = AddressRole.RECEIVER;
-        Address account = new Address("UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI");           
-        String response = indexerClientInstance.searchForTransactions().address(account).assetId(asset_id).addressRole(addressRole).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Asset Info for Name: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    SearchAssetsTransactionsRole ex = new SearchAssetsTransactionsRole();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long asset_id = Long.valueOf(408947);
+    AddressRole addressRole = AddressRole.RECEIVER;
+    Address account = new Address("G26NNWKJUPSTGVLLDHCUQ7LFJHMZP2UUAQG2HURLI6LOEI235YCQUNPQEI");           
+    Response<TransactionsResponse> response = indexerClientInstance
+        .searchForTransactions()
+        .address(account)
+        .assetId(asset_id)
+        .addressRole(addressRole)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Asset Info for Name: " + jsonObj.toString(2)); // pretty print json
+}
 ```
 
 ```go tab="Go"
@@ -1755,14 +1898,20 @@ print("Block Info: " + json.dumps(response, indent=2, sort_keys=True))
 
 ```java tab="Java"
 // /indexer/java/BlockInfo.java
-    public static void main(String args[]) throws Exception {
-        BlockInfo ex = new BlockInfo();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long block = Long.valueOf(50);
-        String response = indexerClientInstance.lookupBlock(block).execute().toString();
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Block Info: " + jsonObj.toString(2)); // pretty print json
-    }
+public static void main(String args[]) throws Exception {
+    BlockInfo ex = new BlockInfo();
+    IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long block = Long.valueOf(50);
+    Response<Block> response = indexerClientInstance
+        .lookupBlock(block)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Block Info: " + jsonObj.toString(2)); // pretty print json            
+}
 ```
 
 ```go tab="Go"
@@ -1919,15 +2068,23 @@ print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
 ```
 
 ```java tab="Java"
+// /indexer/java/SearchApplication.java
 public static void main(String args[]) throws Exception {
     SearchApplication ex = new SearchApplication();
     IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+    Long limit = 4L;
+    Response<ApplicationsResponse> response = indexerClientInstance
+        .searchForApplications()
+        .limit(limit)
+        .execute();
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
 
-    String response = indexerClientInstance.searchForApplications().execute().toString();
-    JSONObject jsonObj = new JSONObject(response.toString());
+    JSONObject jsonObj = new JSONObject(response.body().toString());
     System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
 }
-// response information should look similar to this...
+// response should look similar to this...
 //  Response Info:
 //  {
 //   "next-token": "142",
@@ -2103,34 +2260,62 @@ print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
 ```
 
 ```java tab="Java"
+// /indexer/java/LookupApplication.java
 public static void main(String args[]) throws Exception {
     LookupApplication ex = new LookupApplication();
     IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-    Long application_id = Long.valueOf(22);
-    String response = indexerClientInstance.lookupApplicationByID(application_id).execute().toString();
-    JSONObject jsonObj = new JSONObject(response.toString());
-    System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
+    Long application_id = Long.valueOf(15974179);   
+    Response<ApplicationResponse> response = indexerClientInstance
+        .lookupApplicationByID(application_id)
+        .execute(); 
+    if (!response.isSuccessful()) {
+        throw new Exception(response.message());
+    } 
+
+    JSONObject jsonObj = new JSONObject(response.body().toString());
+    System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json          
 }
-// response information should look similar to this...
-//  Response Info:
-//  {
-//   "application": {
-//     "id": 22,
-//     "params": {
-//       "global-state": [],
-//       "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-//       "local-state-schema": {
-//         "num-uint": 0,
-//         "num-byte-slice": 0
-//       },
-//       "global-state-schema": {
-//         "num-uint": 0,
-//         "num-byte-slice": 0
+// response should look like this
+//  Response Info: {
+//     "application": {
+//       "deleted": false,
+//       "created-at-round": 14412247,
+//       "id": 15974179,
+//       "params": {
+//         "clear-state-program": "AiABASJD",
+//         "global-state": [
+//           {
+//             "value": {
+//               "bytes": "",
+//               "type": 2,
+//               "uint": 200
+//             },
+//             "key": "YXNzZXRfY29lZmZpY2llbnQ="
+//           },
+//           {
+//             "value": {
+//               "bytes": "",
+//               "type": 2,
+//               "uint": 13164495
+//             },
+//             "key": "YXNzZXRfaWQ="
+//           },
+//           ...
+//         ],
+//         "creator": "X6K3ER2V3IO2G3XXWSTYFOT6NXFGRXAS3AMZGXAWAFKFC4VZ6S4K4JLOFY",
+//         "local-state-schema": {
+//           "num-uint": 1,
+//           "num-byte-slice": 1
+//         },
+//         "approval-program": "AiAFAAUEAYCAgIAQJgwEdm90ZQthZGRfb3B0aW9ucwdDcmVhdG9yBE5hbWUIYXNzZXRfaWQRYXN...",
+//         "global-state-schema": {
+//           "num-uint": 10,
+//           "num-byte-slice": 3
+//         }
 //       }
-//     }
-//   },
-//   "current-round": 377
-// }
+//     },
+//     "current-round": 14694513
+//   }
 ```
 
 ```go tab="Go"

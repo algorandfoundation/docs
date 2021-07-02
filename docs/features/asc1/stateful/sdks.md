@@ -136,27 +136,27 @@ This is the most basic [clear program](../../stateful/#the-lifecycle-of-a-statef
 
 ```python tab="Python"
 # declare clear state program source
-clear_program_source = b"""#pragma version 2
+clear_program_source = b"""#pragma version 4
 int 1
 """
 ```
 
 ```javascript tab="JavaScript"
 // declare clear state program source
-clearProgramSource = `#pragma version 2
+clearProgramSource = `#pragma version 4
 int 1
 `;
 ```
 
 ```Java tab="Java"
 // declare clear state program source
-String clearProgramSource = "#pragma version 2\n" +
+String clearProgramSource = "#pragma version 4\n" +
 "int 1\n";
 ```
 
 ```go tab="Go"
 // declare clear state program source
-const clearProgramSource = `#pragma version 2
+const clearProgramSource = `#pragma version 4
 int 1
 `
 ```
@@ -331,7 +331,7 @@ Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
 // create unsigned transaction
 txn, _ := future.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
                     nil, nil, nil, nil, params, creatorAccount.Address, nil, 
-                    types.Digest{}, [32]byte{}, types.Address{})
+                    types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
 ```
 
 Sign, send, await confirmation and display the results:
@@ -1007,7 +1007,7 @@ fmt.Printf("Cleared local state for app-id: %d\n", confirmedTxn.Transaction.Txn.
 ## Approval Program Walkthrough
 
 ```teal
-#pragma version 2
+#pragma version 4
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -1116,7 +1116,7 @@ return
 ## Refactored Approval Program
 
 ```teal
-#pragma version 2
+#pragma version 4
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.

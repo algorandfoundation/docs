@@ -11,7 +11,7 @@ This is a very basic application which implements a counter. Each time the appli
 
 The [Overview](./index.md) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started.
 
-The term "stateful" means the application is able to store information or "maintain state" within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](../teal/index.md) defines the available [OpCodes](../../../reference/teal/opcodes.md) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) which are evaluated by the program at run-time. Every program execution must complete with a single non-zero unit64 value remaining on the stack to be valid and thus commit all state changes to the ledger. 
+The term "stateful" means the application is able to store information or "maintain state" within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](../teal/index.md) defines the available [OpCodes](../../../reference/teal/opcodes.md) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) that are evaluated by the program at run-time. Every program execution must complete with a single non-zero uint64 value (or use the `return` opcode with a non-zero uint64 on top of the stack) remaining on the stack to be valid and thus commit all state changes to the ledger. 
 
 ## Application Components
 
@@ -23,11 +23,11 @@ Every Algorand stateful application is comprised of at least two _programs_: *ap
 The _approval program_ is the main application logic for the smart contract. 
 
 #### Clear State Program
-The _clear state_ program is used to retire an application, its global state and remove local state from the user’s account. 
+The _clear state_ program is used to retire an application for specific users. This will clear the smart contract's local state variables from the user's balance record.
 
 ### State Storage Locations
 
-Applications have access to three storage locations for stateful data: _global_, _local_ and _external_. 
+Applications have access to three storage locations for stateful data: _global_, _local_, and _external_. 
 
 #### Global
 
@@ -35,21 +35,22 @@ _Global_ data are stored within the application itself. The program will read fr
 
 #### Local
 
-Each program may read from and write to _local_ storage within the account object of the "calling account". This allows an application developer to store user specific data and vary program execution logic at run-time per user.
+Each program may read from and write to _local_ storage within the account object of the "calling account". This allows an application developer to store user-specific data and vary program execution logic at run-time per user.
 
 #### External
 
-Each program may read both the _global_ and _local_ state storage locations for limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract](./index.md) documentation.
+Each program may read both the _global_ and _local_ state storage locations for a limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract](./index.md) documentation.
 
 ### State Data
 
 Both global and local data are stored as _key/value pairs_, where the _key_ is bytes and the _value_ may be either a `bytes` or `uint64`.
 
 ```json tab="Data Structure Template"
-{ "key": {
-	"type": <1 || 2>,
-	"value": <[]byte || uint64>
-	}
+{ 
+  "key": {
+    "type": <1 || 2>,
+    "value": <[]byte || uint64>
+  }
 }
 ```
 ### Program Execution
@@ -68,10 +69,10 @@ TEAL provides OpCodes allowing the program to _get_ (read) and _put_ (write) dat
 Programs may implicitly read their own _global_ storage and the _local_ storage of the account submitting the _application call transaction_. 
 
 #### get_external
-Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of up to two (2) _external_ programs. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts.
+Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of _external_ programs which are stored in the application array of an application call transaction. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts which are stored in the accounts array of an application call transaction. For more information on the applications and accounts arrays, see the [stateful smart contract](./index.md#stateful-contract-arrays) documentation.
 
 #### put
-Writing data is restricted to _global_ storage of the "called" program and the _local_ storage of the "calling" account, both specified within the _application call transaction_ (note: _external_ locations may only be read from).
+Writing data is restricted to global storage of the "called" program and local storage of the "calling" account or any account in the accounts array, both specified within the _application call transaction_ (note: _external_ locations may only be read from). The _local_ storage can only be modified if the account has opted into the application.
 
 ## Draft Application Code
 
@@ -80,7 +81,7 @@ Writing data is restricted to _global_ storage of the "called" program and the _
 Create a new file named `approval_program.teal` and add the following code:
 
 ```teal
-#pragma version 2
+#pragma version 4
 
 // read global state
 byte "counter"
@@ -103,13 +104,13 @@ load 0
 return
 ```
 
-!!! Warning The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend to start from the template provided in the [Overview](./index.md#boilerplate-stateful-smart-contract).
+!!! warning The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend starting from the template provided in the [Overview](./index.md#boilerplate-stateful-smart-contract).
 
 #### Define TEAL Version
 
-The _approval program_ is holding stateful data so if must instruct the TEAL interpreter to use "version 2" OpCodes during execution.
+The _approval program_ instructs the Algorand Virtual Machine (AVM) to use "version 4" TEAL OpCodes during execution.
 
-- `#pragma version 2`  
+- `#pragma version 4`  
 
 #### Read from Global State
 
@@ -125,7 +126,7 @@ The program now has the current value for "counter" and will increment this valu
 
 - `int 1` places the integer 1 on the stack
 - `+` pops two elements from the stack (the _value_ for "counter" and int 1), sums them, and places the result back on top of the stack
-- `dup` duplicates the to top most value on the stack
+- `dup` duplicates the topmost value on the stack
 - `store 0` pops the duplicate value from the stack and moves it to the first position within scratch space.
 
 #### Write to Global State
@@ -136,7 +137,7 @@ Now the program will store the incremented _value_ into _global_ storage at _key
 
 #### Approval
 
-At this point the stack is empty. A valid approval program must complete with a single non-zero uint64 value remaining on the stack. If the value is 0x00 (false) the program will fail, all state transitions will be discarded, and the calling transaction will also fail. The scratch space still holds a duplicate copy the counter value. Loading that ensures the program will complete successfully.
+At this point the stack is empty. A valid approval program must complete with a single non-zero uint64 value remaining on the stack. If the value is 0x00 (false) the program will fail, all state transitions will be discarded, and the calling transaction will also fail. The scratch space still holds a duplicate copy of the counter value. Loading that ensures the program will complete successfully.
 
 - `load 0` copies the first value from scratch space and places it on top of the stack
 - `return` use last value on stack as success value; end
@@ -147,13 +148,13 @@ The _clear state program_ is used by the application to clear the _global_ and _
 
 Create a new file named `clear_state_program.teal` and add the following code:
 ```teal
-#pragma version 2
+#pragma version 4
 // This program clears program state
 
 int 1
 ```
 
-- `#pragma version 2` instructs the TEAL interpreter to use "version 2" OpCodes during execution. This is required for stateful smart contract applications
+- `#pragma version 4` instructs the AVM to use "version 4" OpCodes during execution. This is required for stateful smart contract applications
 - `int 1` places the integer 1 on the stack, signaling approval.
 
 ## Deploy New Application
@@ -172,13 +173,22 @@ export LOCAL_BYTESLICES=0
 export LOCAL_INTS=0
 
 goal app create --creator $ADDR_CREATOR \
-                --approval-prog $TEAL_APPROVAL_PROG \
-				--clear-prog $TEAL_CLEAR_PROG \
+                --approval-prog "$TEAL_APPROVAL_PROG" \
+				--clear-prog "$TEAL_CLEAR_PROG" \
 				--global-byteslices $GLOBAL_BYTESLICES \
 				--global-ints $GLOBAL_INTS \
 				--local-byteslices $LOCAL_BYTESLICES \
 				--local-ints $LOCAL_INTS 
 ```
+
+!!! Note
+	If you are using [sandbox](https://github.com/algorand/sandbox), you need to copy the approval and clear programs to sandbox beforehand. Concretely, after all the `export` commands, run:
+    ```bash
+    ./sandbox copy "$TEAL_APPROVAL_PROG"
+    ./sandbox copy "$TEAL_CLEAR_PROG"
+    ./sandbox goal app create ...
+    ```
+    where `...` should be replaced by the parameters above.
 
 Results:
 ```bash
@@ -192,7 +202,7 @@ Created app with app index 33
 Application ID **33** was created above. Check yours using:
 
 ```bash
-$ goal account dump --address $ADDR_CREATOR
+goal account dump --address $ADDR_CREATOR
 ```
 Results:
 ```json
@@ -212,13 +222,15 @@ Results:
 ```
 
 Notice the "appp" section has "33" which is the application ID found within the creator's account. Export your specific value for use within future scripts using:
+
 ```bash
 export APP_ID=<your_app_id>
 ```
 
 Another way to view information about an application is with the following `goal` command:
+
 ```bash
-$ goal app info --app-id $APP_ID
+goal app info --app-id $APP_ID
 ```
 
 Results:
@@ -242,7 +254,7 @@ There are a number of application calls available to interact with the applicati
 
 ### OptIn to Application
 
-Most applications require each user [OptIn]() prior to interacting with the application. However, this "hello world" application did not allocate any _local_ state when created so it will not require an OptIn _application call_ by any accounts. 
+Most applications (if local state is used) require each user [OptIn](index.md#opt-in-to-the-smart-contract) prior to interacting with the application. However, this "hello world" application did not allocate any _local_ state when created so it will not require an OptIn _application call_ by any accounts. 
 
 ### Read State
 
@@ -257,6 +269,7 @@ Result:
   "counter": {
     "tt": 2,
     "ui": 1
+  }
 }
 ```
 Here the single _global_ _key/value pair_ for your application is displayed. The _key_ "counter" was assigned the type "tt" of integer at creation (1 for bytes, 2 for uint64). The current integer _value_ "ui" is 1. The _approval program_ executed once during creation. 
@@ -278,6 +291,7 @@ Result:
   "counter": {
     "tt": 2,
     "ui": 2
+  }
 }
 ```
 The "hello world" application has been called again as observed by the incremented _value_ "ui" for _key_ "counter". Continue making calls and reading the updated state.
