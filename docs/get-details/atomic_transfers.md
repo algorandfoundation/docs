@@ -16,6 +16,8 @@ Atomic transfers enable use cases such as:
 
 **Distributed payments** - Payments to multiple recipients. 
 
+**Pooled Transaction Fees** - One transaction pays the fees of others. 
+
 # Process Overview
 
 To implement an atomic transfer, generate all of the transactions that will be involved in the transfer and then group those transactions together. The result of grouping is that each transaction is assigned the same group ID. Once all transactions contain this group ID, the transactions can be split up and sent to their respective senders to be authorized. A single party can then collect all the authorized transactions and submit them to the network together. 
@@ -322,6 +324,12 @@ waitForConfirmation(pendingTxID, algodClient)
 ``` goal tab="Goal"
 goal clerk rawsend -f signout.tx -d data -w yourwallet
 ```
+
+# Pooled Transaction Fees
+The Algorand protocol supports pooled fees where one transaction can pay the fees of other transactions within an atomic group. For atomic transactions, the protocol sums the number of transactions and calculates the total amount of required fees, then calculates the amount of fees submitted by all transactions. If the collected fees are greater than or equal to the required amount, the transaction fee requirement is considered met.
+
+<center>![Atomic Pooled Fees](../imgs/atomic_transfers-2.png)</center>
+<center>*Atomic Pooled Fees*</center>
 
 !!! info
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).

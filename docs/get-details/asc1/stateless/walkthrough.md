@@ -164,7 +164,7 @@ Asset Opt-In is a common operation for serveral use-cases based on Stateless
 ASC1.
 
 This example shows how to Opt-In an ASA with a Contract Account adopting 
-security chekcs to ensure that malicious users can not exploit Opt-In
+security checks to ensure that malicious users can not exploit Opt-In
 transaction approval.
 
 ## Opt-In ASC1 TEAL logic
@@ -237,11 +237,11 @@ b end_program
 For sake of generality the Contract Account ASA Opt-In example makes use of **template parameters**, that should be assigned according to the specific use case. In particular, before compiling the TEAL source code, the following parameters hardcoded into TEAL program should be assigned:
 
 1. `VAR_TMPL_ASSET_ID`: is the Asset ID of the ASA the Contract Account will Opt-In. This implies that the ASA must be created before the ASC1.
-2. `VAR_TMPL_OPTIN_FEE`: is the maximum [fee](https://developer.algorand.org/docs/features/transactions/#fees), expressed in microALGO, that the Contract Account would accept for the ASA Opt-In transaction. This check prevents malicious adversaries form forcing the Contract Account to pay arbitrarily high fees.
-3. `VAR_TMPL_OPTIN_EXPIRING_BLOCK`: setting a [last valid block](https://developer.algorand.org/docs/features/transactions/#setting-first-and-last-valid) for the ASA Opt-In transaction means that Contract Account will only approve ASA Opt-In transactions until a certain block. This check prevents malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees after that block.
+2. `VAR_TMPL_OPTIN_FEE`: is the maximum [fee](../../../transactions/#fees), expressed in microALGO, that the Contract Account would accept for the ASA Opt-In transaction. This check prevents malicious adversaries form forcing the Contract Account to pay arbitrarily high fees.
+3. `VAR_TMPL_OPTIN_EXPIRING_BLOCK`: setting a [last valid block](../../../transactions/#setting-first-and-last-valid) for the ASA Opt-In transaction means that Contract Account will only approve ASA Opt-In transactions until a certain block. This check prevents malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees after that block.
 
 !!! tip
-  For [AlgoDea](https://algodea-docs.bloxbean.com/) users is convenient to adopt the prefix `VAR_TMPL_` as parameters naming convention so that they can be easily assigned directly within the IDE, before compiling the TEAL stateless program.
+    For [AlgoDea](https://algodea-docs.bloxbean.com/) users, it is convenient to adopt the prefix VAR_TMPL_ as a parameter naming convention so that they can be easily assigned within the IDE, before compiling the TEAL stateless program.
 
 ## Opt-In ASC1 depolyment
 
@@ -256,7 +256,7 @@ contract.teal: CONTRACT_ADDRESS
 As any other Algorand Account, the Contract Account must be first initialized with 0.1 ALGO and funded with additional 0.1 ALGO for each additional ASA to Opt-In.
 
 !!! tip
-  In order to prevent malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees, you can either:
+    In order to prevent malicious adversaries from draining Contract Account ALGOs in Opt-In transaction fees, you can either:
   
   1. Fund the Contract Account just with the exact amount that covers minumum balance and transaction fees
   2. Fund the Contract Account with an [Atomic Transfer](https://developer.algorand.org/docs/features/atomic_transfers/) that includes both the initial funding and Opt-In transction
