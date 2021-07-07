@@ -2,5 +2,5 @@ title: dApps & Smart Contracts
 
 arrange:
     - index.md
-    - pyteal
-    - reach
+    - pyteal.md
+    - reach.md
