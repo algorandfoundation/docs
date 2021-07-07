@@ -1,4 +1,4 @@
-title: Payments with Algos
+title: Pay with Algos
 
 TO DO:
 
