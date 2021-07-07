@@ -340,8 +340,23 @@ An Asset Freeze Transaction is issued by the Freeze Address and results in the a
   }
 }
 ```
-An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](../../reference/transactions.md#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](../../reference/transactions.md#assetfrozen) field is set to `true`.
+An asset freeze transaction is identified by `"type": "afrz"`. Asset freeze transactions are used for both the freezing and unfreezing of an account. In the above example, the [freeze manager](../../reference/transactions.md#asset-parameters) specified via the `freezeaddr` field during asset creation is `"EW64GC..."` (i.e. the sender) who then freezes the asset `168103` for the account represented by address `"QC7XT7..."`. This is done by the [AssetFrozen](../../reference/transactions.md#asset-freeze-transaction) field, represented by `"afrz"`, being set to `true` to freeze the account. To unfreeze the account, another asset freeze transaction would need to be sent with the AssetFrozen field set to `false`. Upon inspecting a transaction that unfreezes an asset with `goal clerk inspect`, you should see a similar JSON output as below where the 'afrz' field is omitted which implies the unfreezing of an asset.
 
+```json
+{
+  "txn": {
+    "fadd": "QC7XT7QU7X6IHNRJZBR67RBMKCAPH67PCSX4LYH4QKVSQ7DQZ32PG5HSVQ",
+    "faid": 168103,
+    "fee": 1000,
+    "fv": 7687793,
+    "gh": "SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=",
+    "lv": 7688793,
+    "snd": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
+    "type": "afrz"
+  }
+}
+
+```
 ### See also
 - [Freezing an Asset](../asa.md#freezing-an-asset)
 
