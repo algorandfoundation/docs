@@ -9,3 +9,4 @@ arrange:
     - dapps
     - indexer.md
     - algorand-networks
+    - algorand_consensus.md
