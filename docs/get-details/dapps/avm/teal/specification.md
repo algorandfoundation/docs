@@ -1,4 +1,4 @@
-title: Transaction Execution Approval Language (TEAL)
+title: Specification
 
 TEAL is a bytecode based stack language that executes inside Algorand transactions. TEAL programs can be used to check the parameters of the transaction and approve the transaction as if by a signature. This use of TEAL is called a _LogicSig_. Starting with v2, TEAL programs may
 also execute as _Applications_ which are invoked with explicit application call transactions. Programs have read-only access to the transaction they are attached to, transactions in their atomic transaction group, and a few global values. In addition, _Application_ programs have access to limited state that is global to the application and per-account local state for each account that has opted-in to the application. Programs cannot modify or create transactions, only reject or approve them. For both types of program, approval is signaled by finishing with the stack containing a single non-zero uint64 value.

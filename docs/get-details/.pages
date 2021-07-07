@@ -1,1 +1,11 @@
 title: Get Details
+
+arrange:
+    - index.md
+    - accounts
+    - transactions
+    - asa.md
+    - atomic_transfers.md
+    - dapps
+    - indexer.md
+    - algorand-networks

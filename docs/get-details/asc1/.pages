@@ -1,7 +1,0 @@
-title: Smart Contracts
-arrange:
-   - index.md
-   - stateful
-   - stateless
-   - teal 
-   - debugging.md
