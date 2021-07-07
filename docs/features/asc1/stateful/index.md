@@ -30,7 +30,7 @@ Calls to stateful smart contracts are implemented using `ApplicationCall` transa
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
 * ClearState - Similar to CloseOut, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
 
-The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
+The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgam` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
 
 <center>![Stateful Smart Contract](../../../imgs/stateful-1.png)</center>
 <center>*Stateful Smart Contract*</center>
