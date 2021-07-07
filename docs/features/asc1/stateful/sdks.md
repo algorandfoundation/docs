@@ -1004,6 +1004,9 @@ fmt.Printf("Cleared local state for app-id: %d\n", confirmedTxn.Transaction.Txn.
 
 # Appendix
 
+!!! Notice
+    The below example codes are hardcoded with an address. To run the below code, replace the hardcoded account addresses to your account address.
+
 ## Approval Program Walkthrough
 
 ```teal
@@ -1043,7 +1046,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 bnz handle_optin
@@ -1098,14 +1101,14 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
@@ -1152,7 +1155,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 bnz handle_optin
@@ -1214,14 +1217,14 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return

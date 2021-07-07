@@ -58,7 +58,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 bnz handle_optin
@@ -113,14 +113,14 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
@@ -164,7 +164,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 bnz handle_optin
@@ -226,14 +226,14 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4 //replace with your account address
 txn Sender
 ==
 return
