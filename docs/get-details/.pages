@@ -7,6 +7,5 @@ arrange:
     - asa.md
     - atomic_transfers.md
     - dapps
-    - asc1
     - indexer.md
     - algorand-networks
