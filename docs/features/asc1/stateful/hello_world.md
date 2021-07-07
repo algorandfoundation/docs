@@ -104,8 +104,8 @@ load 0
 return
 ```
 
-!!! warning 
-  The above approval program is **insecure** and should **not** be used in a real application. In     particular, anybody can update the approval program. For a real application, we recommend starting from the template provided in the [Overview](./index.md#boilerplate-stateful-smart-contract).
+!!! Warning
+    The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend starting from the template provided in the [Overview](./index.md#boilerplate-stateful-smart-contract).
 
 #### Define TEAL Version
 
