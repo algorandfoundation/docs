@@ -1,1 +1,6 @@
 title: Integration
+
+arrange:
+    - payments.md
+    - tokens.md
+    - onchain_data.md
