@@ -1,8 +1,6 @@
 title: SDKs
 arrange:
-  - index.md
-  - python.md
-  - javascript.md
-  - go.md
-  - java.md
-  - migration.md
+  - python
+  - javascript
+  - go
+  - java

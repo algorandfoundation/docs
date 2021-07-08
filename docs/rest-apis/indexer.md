@@ -657,6 +657,7 @@ data/basics/userBalance.go : AccountData
 |**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer|
 |**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer|
 |**apps-local-state**  <br>*optional*|\[appl\] applications local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalState](#applicationlocalstate) > array|
+|**apps-total-extra-pages**  <br>*optional*|\[teap\] the sum of all extra application program pages for this account.|integer|
 |**apps-total-schema**  <br>*optional*|\[tsch\] stores the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
 |**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
 |**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
@@ -738,6 +739,7 @@ Stores the global information associated with an application.
 |**approval-program**  <br>*required*|\[approv\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**clear-state-program**  <br>*required*|\[clearp\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**creator**  <br>*optional*|The address that created this application. This is the address where the parameters and global state for this application can be found.|string|
+|**extra-program-pages**  <br>*optional*|\[epp\] the amount of extra program pages available to this app.|integer|
 |**global-state**  <br>*optional*|[\gs\] global schema|[TealKeyValueStore](#tealkeyvaluestore)|
 |**global-state-schema**  <br>*optional*|[\lsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|[\lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
@@ -1065,6 +1067,7 @@ data/transactions/application.go : ApplicationCallTxnFields
 |**application-id**  <br>*required*|\[apid\] ID of the application being configured or empty if creating.|integer|
 |**approval-program**  <br>*optional*|\[apap\] Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**clear-state-program**  <br>*optional*|\[apsu\] Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**extra-program-pages**  <br>*optional*|\[epp\] specifies the additional app program len requested in pages.|integer|
 |**foreign-apps**  <br>*optional*|\[apfa\] Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|< integer > array|
 |**foreign-assets**  <br>*optional*|\[apas\] lists the assets whose parameters may be accessed by this application's ApprovalProgram and ClearStateProgram. The access is read-only.|< integer > array|
 |**global-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
