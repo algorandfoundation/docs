@@ -336,6 +336,9 @@ When creating a stateful smart contract, there is a limit of 64 key-value pairs 
 
 Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased up to 3 additional 2KB pages, which would result in an 8KB limit for both programs. Note the size increases will also increase the minimum balance requirement for creating the application. To request additional pages, the setting (`extra-pages`) is available when creating the stateful smart contract using `goal`. These extra pages can also be requested using the SDKs. This setting allows setting up to 3 additional 2KB pages.
 
+!!! warning
+	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
+
 !!! info    
     Accounts can only opt into or create up to 10 stateful smart contracts.
 
