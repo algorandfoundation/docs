@@ -4,15 +4,17 @@ This section is a quick start guide for interacting with the Algorand network us
 
 # Alternative Guide
 
-If you are a visual learner, try our submitting your first transaction [live demo](https://replit.com/@Algorand/gettingStartedPython#main.py) or watch a [full video](https://www.youtube.com/watch?v=ku2hFalMWmA) that explains the following steps.
+If you are a visual learner, try our submitting your first transaction live demo or watch a full video that explains the following steps.  
+[`Try Live Demo`](https://replit.com/@Algorand/gettingStartedPython#main.py)  
+[`Watch Full Video`](https://www.youtube.com/watch?v=ku2hFalMWmA)  
 
-# Sandbox Install
+# Install Sandbox
 
 !!! Prerequisites
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
     - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)) 
 
-Algorand provides a docker instance for setting up a node, which can be used to get started developing. To install and use this instance, follow these instructions.
+Algorand provides a docker instance for setting up a node, which can be used to get started developing quickly. To install and use this instance, follow these instructions.
 ​
 ```bash
 git clone https://github.com/algorand/sandbox.git
