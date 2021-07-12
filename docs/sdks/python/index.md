@@ -24,19 +24,10 @@ cd sandbox
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23){target=_blank}    
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank}    
 
-This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/){target=_blank}. 
-
-To use Indexer in the sandbox, start it to the default private network as follows. 
- 
-```bash
-./sandbox up
-```
-
-!!! Info 
-    The Indexer allows quick searching of the entire  blockchain for transactions, assets, applications and accounts in a timely manner. To learn more about this capability, see [Searching the Blockchain](https://developer.algorand.org/docs/features/indexer/){target=_blank}. When running Algorand Sandbox for TestNet, BetaNet or MainNet, you will not have access to the Sandbox Algorand Indexer. 
+This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](../../get-details/algorand-networks/index.md){target=_blank}. 
  
 !!! Warning
-    The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup){target=_blank}
+    The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](../../run-a-node/setup/install.md#sync-node-network-using-fast-catchup){target=_blank}
 
 # Install SDK
 Algorand provides an SDK for Python which is available as a pip package. To install the Python SDK, open a terminal and run the following command:
@@ -71,7 +62,7 @@ def generate_algorand_keypair():
     print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 ```
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=161){target=_blank}    
-[`More Information`](https://developer.algorand.org/docs/features/accounts/create/#standalone){target=_blank}  
+[`More Information`](../../get-details/accounts/create.md#standalone){target=_blank}  
 
 !!! Tip
     Make sure to save your account's address and passphrase in a seperate place, as they will be used later on.
@@ -85,7 +76,7 @@ Before sending transactions to the Algorand network, the account must be funded 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=257){target=_blank}    
 ​
 !!! Info
-    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance, see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance){target=_blank}.  
+    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance, see [Account Overview](../../get-details/accounts/index.md#minimum-balance){target=_blank}.  
 
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. Code beyond this point will be put into the ***first_transaction_example*** function to create a single script.
@@ -131,7 +122,7 @@ from algosdk.future.transaction import PaymentTxn
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=398){target=_blank}  
 ​
 !!! Info
-    Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/){target=_blank}. 
+    Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/index.md#transaction-types){target=_blank}. 
 
 # Sign First Transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
@@ -143,7 +134,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=454){target=_blank}  
 ​
 !!! Info
-    Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures){target=_blank}. 
+    Algorand provides many ways to sign transactions. To see other ways see [Authorization](../../get-details/transactions/signatures.md#single-signatures){target=_blank}. 
     
 # Submit the Transaction
 The signed transaction can now be submitted to the network. `wait_for_confirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation){target=_blank}.
@@ -303,7 +294,7 @@ first_transaction_example(private_key, my_address)​
 # View the Transaction
 To view the transaction, open [AlgoExplorer](https://testnet.algoexplorer.io/){target=_blank} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){target=_blank} and paste the transaction ID into the search bar.  
 
-[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=618{target=_blank}   
+[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=618){target=_blank}   
 
 # Set Up Your Editor/Framework
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.  
