@@ -23,18 +23,10 @@ cd sandbox
 
 This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/).
 
-To use Indexer in the sandbox, start it to the default private network as follows.
-
-```bash
-./sandbox up
-```
-
-!!! Info
-The Indexer allows quick searching the entire blockchain for transactions, assets, applications and accounts in a timely manner. To learn more about this capability, see [Searching the Blockchain](https://developer.algorand.org/docs/features/indexer/). When running Algorand Sandbox for TestNet, BetaNet or MainNet, you will not have access to the Sandbox Algorand Indexer.
 
 !!! Warning
 The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup)
-.
+. 
 
 # Install SDK For Runtime
 
@@ -151,9 +143,9 @@ import org.json.JSONObject;
 private AlgodClient client = null;
     // utility function to connect to a node
     private AlgodClient connectToNetwork() {
-    final Integer ALGOD_PORT = 443;
-    final String ALGOD_API_TOKEN = "";
-    final String ALGOD_API_ADDR = "https://testnet.algoexplorerapi.io/";
+    final String ALGOD_API_ADDR = "localhost";
+    final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    final Integer ALGOD_PORT = 4001;
     AlgodClient client = new AlgodClient(ALGOD_API_ADDR,
         ALGOD_PORT, ALGOD_API_TOKEN);
     return client;
@@ -271,7 +263,12 @@ The signed transaction can now be submitted to the network. `waitForConfirmation
 ```java
         // Submit the transaction to the network
         byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
+        String[] headers = {"Content-Type"};
+        String[] values = {"application/x-binary"};
+        // Submit the transaction to the network
+        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute(headers, values);
+
         if (!rawtxresponse.isSuccessful()) {
             throw new Exception(rawtxresponse.message());
         }
@@ -353,9 +350,9 @@ class GettingStarted{
     private AlgodClient client = null;
       // utility function to connect to a node
       private AlgodClient connectToNetwork() {
-      final Integer ALGOD_PORT = 443;
-      final String ALGOD_API_TOKEN = "";
-      final String ALGOD_API_ADDR = "https://testnet.algoexplorerapi.io/";
+    final String ALGOD_API_ADDR = "localhost";
+    final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    final Integer ALGOD_PORT = 4001;
       AlgodClient client = new AlgodClient(ALGOD_API_ADDR,
           ALGOD_PORT, ALGOD_API_TOKEN);
       return client;
@@ -446,7 +443,12 @@ class GettingStarted{
             System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
             // Submit the transaction to the network
             byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-            Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
+            String[] headers = {"Content-Type"};
+            String[] values = {"application/x-binary"};
+            // Submit the transaction to the network
+            byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
+            Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute(headers, values);
+
             if (!rawtxresponse.isSuccessful()) {
                 throw new Exception(rawtxresponse.message());
             }
