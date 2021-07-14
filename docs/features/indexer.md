@@ -516,8 +516,9 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 ```javascript tab="JavaScript"
 // /indexer/python/SearchTransactionsNote.js
 (async () => {
-    //let s = buffer.toString('base64');   
-    let s = "c2hvd2luZyBwcmVmaXg=";
+    const enc = new TextEncoder();
+    let note = enc.encode("Hello");  
+    let s = Buffer.from(note).toString("base64");
     let transactionInfo = await indexerClient.searchForTransactions()
         .notePrefix(s).do();
     console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));

@@ -227,8 +227,8 @@ let params = await algodClient.getTransactionParams().do();
 params.fee = 1000;
 params.flatFee = true;
 const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
-let note = algosdk.encodeObj("Hello World");
-
+const enc = new TextEncoder();
+let note = enc.encode("Hello World");
 let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
 ```
 

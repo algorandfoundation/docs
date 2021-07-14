@@ -76,7 +76,7 @@ async function yourFirstTransaction() {
         // receiver defined as TestNet faucet address 
         const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
         const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
+        let note = enc.encode("Hello World");
 
         let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);
 
