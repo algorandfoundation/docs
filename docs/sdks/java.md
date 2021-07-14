@@ -263,9 +263,7 @@ The signed transaction can now be submitted to the network. `waitForConfirmation
 ```java
         // Submit the transaction to the network
         byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-        String[] headers = {"Content-Type"};
-        String[] values = {"application/x-binary"};
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute(headers, values);
+        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
 
         if (!rawtxresponse.isSuccessful()) {
             throw new Exception(rawtxresponse.message());
@@ -440,10 +438,8 @@ class GettingStarted{
             SignedTransaction signedTxn = myAccount.signTransaction(txn);
             System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
             // Submit the transaction to the network
-            String[] headers = {"Content-Type"};
-            String[] values = {"application/x-binary"};
             byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-            Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute(headers, values);
+            Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
 
             if (!rawtxresponse.isSuccessful()) {
                 throw new Exception(rawtxresponse.message());
