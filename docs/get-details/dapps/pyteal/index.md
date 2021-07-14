@@ -1,4 +1,4 @@
-title: PyTeal Overview
+title: What is PyTeal?
 
 [PyTeal](https://github.com/algorand/pyteal) is a python language binding for Algorand Smart Contracts (ASC) that abstracts away the complexities in writing smart contracts. 
 

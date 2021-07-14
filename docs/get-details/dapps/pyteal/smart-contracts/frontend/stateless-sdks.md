@@ -1,4 +1,4 @@
-title: Using the SDKs
+title: Interact with stateless contracts
 
 This guide covers using stateless smart contracts with the Algorand SDKs. Stateless smart contracts can be used to create contract accounts or to handle account delegation which is described in the [Modes](modes.md) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](../teal/index.md) or with Python using the [PyTeal](../teal/pyteal.md) library.
 
