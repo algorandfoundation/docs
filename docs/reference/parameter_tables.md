@@ -1,4 +1,4 @@
-[comment]: <> (generated from: https://docs.google.com/spreadsheets/d/12E_B6AYBfhrOoylO8NZysqKns4rHKklV8I0fejiwMXE)
+title: Algorand Parameter Tables
 ## Minimum balance
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
