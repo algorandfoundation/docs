@@ -1,0 +1,7 @@
+title:
+arrange:
+  - index.md
+  - stateful
+  - stateless
+  - frontend
+  - test-and-deploy

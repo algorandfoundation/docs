@@ -1,0 +1,4 @@
+title: Build with PyTeal
+arrange:
+  - index.md
+  - dapp-contracts
