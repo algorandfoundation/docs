@@ -85,7 +85,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred. A zero amount transferred to self allocates that asset in the account's Asset map.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`|The sender of the transfer. The regular [sender](#sender) field should be used and this one set to the zero value for regular transfers between accounts. If this value is nonzero, it indicates a clawback transaction where the [sender](#sender) is the asset's clawback address and the asset sender is the address from which the funds will be withdrawn.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
-|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance. |
+|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance (i.e. opt-out of the asset). |
 
 # Asset Accept Transaction 
 Transaction Object Type: `AssetTransferTx`
@@ -96,7 +96,7 @@ This is a special form of an Asset Transfer Transaction.
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to be transferred.|
+|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to opt-in to.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The account which is allocating the asset to their account's Asset map.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The account which is allocating the asset to their account's Asset map.|
 
@@ -137,13 +137,14 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Application ID</a>| _required_| uint64| `"apid"`| ID of the application being configured or empty if creating.|
 | <a name="">OnComplete</a>| _required_| uint64| `"apan"`| Defines what additional actions occur with the transaction. See the [OnComplete](./teal/specification.md#oncomplete) section of the TEAL spec for details.|
 | <a name="">Accounts</a>| _optional_| Address| `"apat"`| List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|
-| <a name="">Approval Program</a>| _optional_| Address| `"apap"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
-| <a name="">App Arguments</a>| _optional_| byte[]| `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|
-| <a name="">Clear State Program</a>| _optional_| Address| `"apsu"`| Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.|
+| <a name="">Approval Program</a>| _optional_| []byte | `"apap"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
+| <a name="">App Arguments</a>| _optional_| []byte | `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|
+| <a name="">Clear State Program</a>| _optional_| []byte | `"apsu"`| Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.|
 | <a name="">Foreign Apps</a>| _optional_| Address| `"apfa"`| Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">Foreign Assets</a>| _optional_| Address| `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">GlobalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
 | <a name="">LocalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apls"`| Holds the maximum number of local state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
+| <a name="">ExtraProgramPages</a>| _optional_| <a href=#extra-program-pages>StateSchema</a>| `"apep"`| Number of additional pages allocated to the application's approval and clear state programs. Each `ExtraProgramPages` is 2048 bytes. The sum of `ApprovalProgram` and `ClearStateProgram` may not exceed 2048*(1+`ExtraProgramPages`) bytes. |
 
 ## Storage State Schema
 Object Name: `StateSchema`
@@ -153,7 +154,7 @@ The `StateSchema` object is only required for the create application call transa
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
 | <a name="">Number Ints</a>| _required_| uint64| `"nui"`| Maximum number of integer values that may be stored in the [global \|\| local] application key/value store. Immutable.|
-| <a name="">Number Byteslices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
+| <a name="">Number ByteSlices</a>| _required_| uint64| `"nbs"`| Maximum number of byte slices values that may be stored in the [global \|\| local] application key/value store. Immutable.|
 
 # Signed Transaction
 Transaction Object Type: `SignedTxn`

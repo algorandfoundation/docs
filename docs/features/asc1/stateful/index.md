@@ -30,7 +30,7 @@ Calls to stateful smart contracts are implemented using `ApplicationCall` transa
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
 * ClearState - Similar to CloseOut, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
 
-The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgam` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
+The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
 
 <center>![Stateful Smart Contract](../../../imgs/stateful-1.png)</center>
 <center>*Stateful Smart Contract*</center>
@@ -335,6 +335,9 @@ The creator is the account that is creating the application and this transaction
 When creating a stateful smart contract, there is a limit of 64 key-value pairs that can be used by the contract for global storage and 16 key-value pairs that can be used for local storage. When creating the smart contract the amount of storage can never be changed once the contract is created. Additionally, the minimum balance is raised for any account that participates in the contract. See [Minimum Balance Requirement for Smart Contracts](#minimum-balance-requirement-for-a-smart-contract) described below for more detail.
 
 Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased up to 3 additional 2KB pages, which would result in an 8KB limit for both programs. Note the size increases will also increase the minimum balance requirement for creating the application. To request additional pages, the setting (`extra-pages`) is available when creating the stateful smart contract using `goal`. These extra pages can also be requested using the SDKs. This setting allows setting up to 3 additional 2KB pages.
+
+!!! warning
+	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
 
 !!! info    
     Accounts can only opt into or create up to 10 stateful smart contracts.

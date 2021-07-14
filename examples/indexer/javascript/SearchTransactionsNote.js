@@ -12,10 +12,12 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    //let s = buffer.toString('base64');   
-    let s = "c2hvd2luZyBwcmVmaXg=";
+    const enc = new TextEncoder();
+    let note = enc.encode("Hello");
+    let s = Buffer.from(note).toString("base64");
     let transactionInfo = await indexerClient.searchForTransactions()
-        .notePrefix(s).do();
+        .notePrefix(s)
+        .minRound(14838981).do();
     console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));
 })().catch(e => {
     console.log(e);
