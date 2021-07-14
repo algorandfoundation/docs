@@ -85,7 +85,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred. A zero amount transferred to self allocates that asset in the account's Asset map.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`|The sender of the transfer. The regular [sender](#sender) field should be used and this one set to the zero value for regular transfers between accounts. If this value is nonzero, it indicates a clawback transaction where the [sender](#sender) is the asset's clawback address and the asset sender is the address from which the funds will be withdrawn.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
-|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance. |
+|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance (i.e. opt-out of the asset). |
 
 # Asset Accept Transaction 
 Transaction Object Type: `AssetTransferTx`
@@ -96,7 +96,7 @@ This is a special form of an Asset Transfer Transaction.
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to be transferred.|
+|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to opt-in to.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The account which is allocating the asset to their account's Asset map.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The account which is allocating the asset to their account's Asset map.|
 

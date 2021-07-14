@@ -13,7 +13,7 @@ When first starting a node it will process all blocks in the blockchain, even if
 It is possible to check the status of the catchup process by checking a node's status.
 
 ```
-goal node status -d data
+goal node status [-d <data directory>]
 ```
 
 After running this status check, monitor the `Sync Time:` property that is returned. If this value is incrementing, the node is still synching. The `Sync Time:` will display `Sync Time: 0.0s` when the node is fully caught up. The status also reports the last block process by the node in the `Last committed block:` property. Comparing this block number to what is shown using an Algorand [Block Explorer](../../community.md#block-explorers) will indicate how much more time catchup will take.
