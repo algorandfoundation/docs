@@ -113,7 +113,7 @@ func main() {
 	toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
 	var amount uint64 = 9000000
 	var minFee uint64 = 1000
-	note := []byte("Hello World")
+	note := []byte("DevPortal - My First Transaction with Go SDK")
 	genID := txParams.GenesisID
 	genHash := txParams.GenesisHash
 	firstValidRound := uint64(txParams.FirstRoundValid)
