@@ -55,7 +55,7 @@ This representation is called the private key **mnemonic**. You may also see it 
 
 Wallets, in the context of Algorand developer tools, refer to wallets generated and managed by the Key Management Daemon (kmd) process. A wallet stores a collection of keys. kmd stores collections of wallets and allows users to perform operations using the keys stored within these wallets. Every wallet is associated with a master key, represented as a 25-word mnemonic, from which all accounts in that wallet are derived. This allows the owner of the wallet to only need to remember a single passphrase for all of their accounts. Wallets are stored encrypted on disk. 
 
-See [Wallet-derived (kmd)](./create.md#wallet-derived-kmd) accounts in the [Creation Methods](#creation-methods) section for more details.
+See [Wallet-derived (kmd)](./create.md#wallet-derived-kmd) accounts in the [Creation Methods](./create.md) section for more details.
 
 ## Accounts
 Accounts are entities on the Algorand blockchain associated with specific onchain data, like a balance. An Algorand Address is the identifier for an Algorand account. 
