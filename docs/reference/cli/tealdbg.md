@@ -19,10 +19,8 @@ title: tealdbg
   - [Configure the Listener](#configure-the-listener)
   - [Supported Operations](#supported-operations)
 - [Development and Architecture Overview](#development-and-architecture-overview)
-  - [TEAL Evaluator](#teal-evaluator)
-  - [Tealdbg](#tealdbg)
+  - [Tealdbg constituents](#tealdbg-constituents)
   - [Debugger Core](#debugger-core)
-  - [Debug Adapter](#debug-adapter)
   - [Algod hacking](#algod-hacking)
 
 ## Quick Start
@@ -208,42 +206,19 @@ Refer to the [Chrome DevTools debugging](https://developers.google.com/web/tools
 
 ## Development and Architecture Overview
 
-### TEAL Evaluator
-
-The evaluator accepts a new `Debugger` parameter described as the interface:
-```golang
-type DebuggerHook interface {
-	// Register is fired on program creation
-	Register(state *DebugState) error
-	// Update is fired on every step
-	Update(state *DebugState) error
-	// Complete is called when the program exits
-	Complete(state *DebugState) error
-}
-```
-If `Debugger` is set the evaluator calls `Register` on creation, `Update` on every step and `Complete` on exit.
-
-### Tealdbg
+### Tealdbg constituents
 
 The debugger consist of a core, transport adapters and debug adapters (frontends).
 
 ### Debugger Core
 
 The core process `Register`, `Update` and `Complete` calls from the evaluator.
+
 On `Register` it starts a new session and establish notification channel for state updates.
+
 On `Update` it checks for breakpoints matches and if found, the debugger publishes the notification and waits for confirmation.
+
 On `Complete` it publishes a final state update and removes the session.
-
-### Debug Adapter
-
-An adapter must implement the following interface:
-```golang
-type DebugAdapter interface {
-	SessionStarted(sid string, debugger Control, ch chan Notification)
-	SessionEnded(sid string)
-	WaitForCompletion()
-}
-```
 
 The core calls `SessionStarted` for all adapters as part of dispatching `Register`. It is up to adapter to setup communication channel with a user. Then an adapter needs to start processing notifications from the channel and manage execution using debugger's `Control` interface.
 
