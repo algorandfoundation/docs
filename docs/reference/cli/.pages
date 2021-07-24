@@ -3,5 +3,6 @@ arrange:
     - goal
     - diagcfg
     - kmd.md
+    - tealdbg.md
     - algokey
     
