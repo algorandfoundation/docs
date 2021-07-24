@@ -1,25 +1,29 @@
-# Algorand TEAL Debugger
+title: tealdbg
+---
+## Algorand TEAL Debugger
 
+
+- [title: tealdbg](#title-tealdbg)
 - [Algorand TEAL Debugger](#algorand-teal-debugger)
-  - [Quick Start](#quick-start)
-  - [Features Overview](#features-overview)
-    - [Local vs Remote Debugging](#local-vs-remote-debugging)
-    - [Frontends](#frontends)
-  - [Setting Execution Context](#setting-execution-context)
-    - [Protocol](#protocol)
-    - [Transaction and Transaction Group](#transaction-and-transaction-group)
-    - [Balance records](#balance-records)
-    - [Indexer Support](#indexer-support)
-    - [Execution mode](#execution-mode)
-  - [Chrome DevTools Frontend Features](#chrome-devtools-frontend-features)
-    - [Configure the Listener](#configure-the-listener)
-    - [Supported Operations](#supported-operations)
-  - [Development and Architecture Overview](#development-and-architecture-overview)
-    - [TEAL Evaluator](#teal-evaluator)
-    - [Tealdbg](#tealdbg)
-    - [Debugger Core](#debugger-core)
-    - [Debug Adapter](#debug-adapter)
-    - [Algod hacking](#algod-hacking)
+- [Quick Start](#quick-start)
+- [Features Overview](#features-overview)
+  - [Local vs Remote Debugging](#local-vs-remote-debugging)
+  - [Frontends](#frontends)
+- [Setting Execution Context](#setting-execution-context)
+  - [Protocol](#protocol)
+  - [Transaction and Transaction Group](#transaction-and-transaction-group)
+  - [Balance records](#balance-records)
+  - [Indexer Support](#indexer-support)
+  - [Execution mode](#execution-mode)
+- [Chrome DevTools Frontend Features](#chrome-devtools-frontend-features)
+  - [Configure the Listener](#configure-the-listener)
+  - [Supported Operations](#supported-operations)
+- [Development and Architecture Overview](#development-and-architecture-overview)
+  - [TEAL Evaluator](#teal-evaluator)
+  - [Tealdbg](#tealdbg)
+  - [Debugger Core](#debugger-core)
+  - [Debug Adapter](#debug-adapter)
+  - [Algod hacking](#algod-hacking)
 
 ## Quick Start
 
