@@ -603,7 +603,7 @@ See `bnz` for details on how branches work. `b` always jumps to the offset.
 - Opcode: 0x43
 - Pops: *... stack*, uint64
 - Pushes: _None_
-- use last value on stack as success value; end
+- use last value on stack as success value and ends.
 - LogicSigVersion >= 2
 
 ## assert
@@ -641,7 +641,7 @@ See `bnz` for details on how branches work. `b` always jumps to the offset.
 - Opcode: 0x4b {uint8 depth}
 - Pops: *... stack*, any
 - Pushes: *... stack*, any, any
-- push the Nth value from the top of the stack. dig 0 is equivalent to dup
+- push the Nth value from the top of the stack. dig 0 is equivalent to dup.
 - LogicSigVersion >= 3
 
 ## swap
@@ -665,7 +665,7 @@ See `bnz` for details on how branches work. `b` always jumps to the offset.
 - Opcode: 0x50
 - Pops: *... stack*, {[]byte A}, {[]byte B}
 - Pushes: []byte
-- pop two byte-arrays A and B and join them, push the result
+- pop two byte-arrays A and B and join them, push the result.
 - LogicSigVersion >= 2
 
 `concat` panics if the result would be greater than 4096 bytes.
