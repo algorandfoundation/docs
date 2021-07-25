@@ -16,12 +16,17 @@ In addition to the stack there are 256 positions of scratch space, also uint64-b
 ## Execution Modes
 
 Starting from version 2 TEAL evaluator can run programs in two modes:
+
 1. LogicSig (stateless)
+
 2. Application run (stateful)
 
 Differences between modes include:
+
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
+   
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
+
 3. Opcode availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](opcodes.md) for details.
 
 ## Execution Environment for LogicSigs
