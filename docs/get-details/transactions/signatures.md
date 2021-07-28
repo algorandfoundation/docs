@@ -1,8 +1,8 @@
 title: Authorization
 
-In the [Transactions Section](../transactions/index.md), you learned how transactions are composed. In this section you will learn how to authorize them. 
+In the [Transactions Section](/get-details/transactions/), you learned how transactions are composed. In this section you will learn how to authorize them. 
 
-Before a transaction is sent to the network, it must first be authorized by the [sender](../../reference/transactions.md#sender). Authorization occurs through the addition of a **signature** to the transaction object. Specifically, a transaction object, when signed, is wrapped in a [`SignedTxn`](../../reference/transactions.md#signed-transaction) object that includes the [transaction](../../reference/transactions.md#txn) and a type of [signature](../../reference/transactions.md#sig). 
+Before a transaction is sent to the network, it must first be authorized by the [sender](/get-details/transactions/transactions#sender). Authorization occurs through the addition of a **signature** to the transaction object. Specifically, a transaction object, when signed, is wrapped in a [`SignedTxn`](/get-details/transactions/transactions#signed-transaction) object that includes the [transaction](/get-details/transactions/transactions#txn) and a type of [signature](/get-details/transactions/transactions#sig). 
 
 There are three types of signatures:
 
@@ -13,7 +13,7 @@ There are three types of signatures:
 
 
 # Single Signatures
-A single signature corresponds to a signature from the private key of an [Algorand public/private key pair](../accounts/index.md#keys-and-addresses).
+A single signature corresponds to a signature from the private key of an [Algorand public/private key pair](/get-details/accounts/#keys-and-addresses).
 
 This is an example of a transaction signed by an Algorand private key displayed with `goal clerk inspect` command:
 
@@ -33,15 +33,15 @@ This is an example of a transaction signed by an Algorand private key displayed 
   }
 }
 ```
-This transaction sends 1 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](../../reference/transactions.md#sig) field.
+This transaction sends 1 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](/get-details/transactions/transactions#sig) field.
 
 **Related How-To**
 
-- [Sign a transaction with your private key](../../build-apps/hello_world.md#sign-the-transaction)
+- [Sign a transaction with your private key](/archive/build-apps/hello_world#sign-the-transaction)
 
 # Multisignatures
 
-When the [sender](../../reference/transactions.md#sender) of a transaction is the address of a [multisignature account](../accounts/create.md#multisignature) then authorization requires a subset of signatures, _equal to or greater than the threshold value_, from the associated private keys of the addresses that multisignature account is composed of. See [Multisignature Accounts](../accounts/create.md#multisignature) for details on how to configure a multisignature account.
+When the [sender](/get-details/transactions/transactions#sender) of a transaction is the address of a [multisignature account](/get-details/accounts/create#multisignature) then authorization requires a subset of signatures, _equal to or greater than the threshold value_, from the associated private keys of the addresses that multisignature account is composed of. See [Multisignature Accounts](/get-details/accounts/create#multisignature) for details on how to configure a multisignature account.
 
 !!! important
 	Upon signing, either the signing agent or the transaction needs to know the composition of the multisignature account, i.e. the ordered addresses, threshold, and version. 
@@ -78,7 +78,7 @@ Here is what the same transaction above would look like if sent from a 2/3 multi
   }
 }
 ```
-The difference between this transaction and the one above is the form of its signature component. For multisignature accounts, an [`"msig"`](../../reference/transactions.md#msig) struct is added which contains the 3 public addresses (`"pk"`), the threshold value (`"thr"`) and the multisig version `"v"`. This transaction is still unsigned but the addition of the correct `"msig"` struct is confirmation that the transaction is "aware" of the fact that the sender is multisig and will have no trouble accepting sub-signatures from single keys even if the signing agent does not contain information about its multisignature properties.
+The difference between this transaction and the one above is the form of its signature component. For multisignature accounts, an [`"msig"`](/get-details/transactions/transactions#msig) struct is added which contains the 3 public addresses (`"pk"`), the threshold value (`"thr"`) and the multisig version `"v"`. This transaction is still unsigned but the addition of the correct `"msig"` struct is confirmation that the transaction is "aware" of the fact that the sender is multisig and will have no trouble accepting sub-signatures from single keys even if the signing agent does not contain information about its multisignature properties.
 
 !!! tip
 	Adding the `"msig"` template to make the transaction "aware" of its multisig sender is highly recommended, particularly in cases where the transaction is signed by multiple parties or offline. Without it, the signing agent would need to have its own knowledge of the multisignature account. For example, `goal` can sign a multisig transaction that does not contain an `"msig"` template _if_ the multisig address was created within its wallet. On signing, it will add the `"msig"` template. 
@@ -126,7 +126,7 @@ The two signatures are added underneath their respective addresses. Since 2 meet
 
 **How-To**
 
-Extend the example from the [Multisignature Account](../accounts/create.md#multisignature) section by creating, signing, and sending a transaction from a multisig account on TestNet.
+Extend the example from the [Multisignature Account](/get-details/accounts/create#multisignature) section by creating, signing, and sending a transaction from a multisig account on TestNet.
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
@@ -781,14 +781,14 @@ $ algokey multisig --txfile=multisig2.txn --outfile=multisig2.stxn -m <25-word-m
 
 # Logic Signatures
 
-Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../asc1/stateless/modes.md#contract-account) or from a [Delegated Account](../asc1/stateless/modes.md#delegated-account).
+Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](/get-details/dapps/pyteal/smart-contracts/stateless/modes#contract-account) or from a [Delegated Account](/get-details/dapps/pyteal/smart-contracts/stateless/modes#delegated-account).
 
-A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../asc1/stateless/modes.md#logic-signatures).
+A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](/get-details/dapps/pyteal/smart-contracts/stateless/modes#logic-signatures).
 
 **Related How-To**
 
-- [Use LogicSigs with the SDKs](../asc1/stateless/sdks.md)
-- [Attach a LogicSig with `goal`](../asc1/stateless/walkthrough.md)
+- [Use LogicSigs with the SDKs](/get-details/dapps/pyteal/smart-contracts/frontend/stateless-sdks)
+- [Attach a LogicSig with `goal`](/get-details/dapps/pyteal/smart-contracts/stateless/walkthrough)
 
 !!! info
     Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).

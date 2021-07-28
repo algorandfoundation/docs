@@ -7,7 +7,7 @@ Sections marked with 🔷 indicate a feature that is currently available on Beta
 <div class="homepage-cards">
   <div class="homepage-card">
     <span class="rocket-icon"></span>
-    <a href="./build-apps/setup/" class="card-title">Start Building</a>
+    <a href="/archive/build-apps/setup" class="card-title">Start Building</a>
     <div class="card-description">
     Learn how to setup your environment and send your first transaction.
     </div>
@@ -59,7 +59,7 @@ Sections marked with 🔷 indicate a feature that is currently available on Beta
   </div>
   <div class="homepage-card">
     <span class="study-owl-icon"></span>
-    <a href="./algorand_consensus/" class="card-title">Algorand Consensus</a>
+    <a href="/get-details/algorand_consensus" class="card-title">Algorand Consensus</a>
     <div class="card-description">
     Learn more about how Algorand consensus works.
     </div>

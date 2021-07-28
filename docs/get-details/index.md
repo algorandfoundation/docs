@@ -4,62 +4,62 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 # Accounts
 
-[Overview](./accounts/index.md) - Learn all about Algorand accounts, keys, wallets, and addresses.
+[Overview](/get-details/accounts/) - Learn all about Algorand accounts, keys, wallets, and addresses.
 
-[Creation Methods](./accounts/create.md) - How to create standalone accounts, wallet-derived (kmd) accounts, or multisignature accounts.
+[Creation Methods](/get-details/accounts/create) - How to create standalone accounts, wallet-derived (kmd) accounts, or multisignature accounts.
 
-[Rekeying](./accounts/rekey.md) - Learn how to change the private spending key of an Algorand address.
+[Rekeying](/get-details/accounts/rekey) - Learn how to change the private spending key of an Algorand address.
 
 # Transactions
 
-[Structure](./transactions/index.md) - A look at the underlying structure of the different types of transactions.
+[Structure](/get-details/transactions/) - A look at the underlying structure of the different types of transactions.
 
-[Authorization](./transactions/signatures.md) - How to authorize transactions with Single Signatures, Multisignatures, and Logic Signatures.
+[Authorization](/get-details/transactions/signatures) - How to authorize transactions with Single Signatures, Multisignatures, and Logic Signatures.
 
-[Offline Authorization](./transactions/offline_transactions.md) - How to authorize transactions _without_ requiring an internet connection.
+[Offline Authorization](/get-details/transactions/offline_transactions) - How to authorize transactions _without_ requiring an internet connection.
 
 # Assets
 
-[Algorand Standard Assets Overview](./asa.md) - Learn all about assets and how they are implemented on Algorand at layer-1.
+[Algorand Standard Assets Overview](/get-details/asa) - Learn all about assets and how they are implemented on Algorand at layer-1.
 
-[Asset Parameters](./asa.md#asset-parameters) - The mutable and immutable properties of an asset.
+[Asset Parameters](/get-details/asa#asset-parameters) - The mutable and immutable properties of an asset.
 
-[Creating an Asset](./asa.md#creating-an-asset) - [Modifying an Asset](./asa.md#modifying-an-asset) - [Receiving an Asset](./asa.md#receiving-an-asset) - [Transferring an Asset](./asa.md#transferring-an-asset) - [Freezing an Asset](./asa.md#freezing-an-asset) - [Revoking an Asset](./asa.md#revoking-an-asset) - [Destroying an Asset](./asa.md#destroying-an-asset)
+[Creating an Asset](/get-details/asa#creating-an-asset) - [Modifying an Asset](/get-details/asa#modifying-an-asset) - [Receiving an Asset](/get-details/asa#receiving-an-asset) - [Transferring an Asset](/get-details/asa#transferring-an-asset) - [Freezing an Asset](/get-details/asa#freezing-an-asset) - [Revoking an Asset](/get-details/asa#revoking-an-asset) - [Destroying an Asset](/get-details/asa#destroying-an-asset)
 
-[Retrieving Asset Information](./asa.md#retrieve-asset-information) - How to retrieve information about an asset.
+[Retrieving Asset Information](/get-details/asa#retrieve-asset-information) - How to retrieve information about an asset.
 
 # Atomic Transfers
 
-[Overview](./atomic_transfers.md) - What atomic transfers are and how they are they implemented on Algorand.
+[Overview](/get-details/atomic_transfers) - What atomic transfers are and how they are they implemented on Algorand.
 
-[Step-by-Step Guide](./atomic_transfers.md#step-by-step-guide) - Walkthrough an atomic transfer in the SDKs and goal.
+[Step-by-Step Guide](/get-details/atomic_transfers#step-by-step-guide) - Walkthrough an atomic transfer in the SDKs and goal.
 
 # Smart Contracts
 
-[Smart Contract Overview](./asc1/index.md) - An overview of Smart Contracts on Algorand, including Stateful and Stateless versions.
+[Smart Contract Overview](/get-details/dapps/pyteal/smart-contracts/) - An overview of Smart Contracts on Algorand, including Stateful and Stateless versions.
 
-[Stateful Smart Contracts](./asc1/stateful/index.md) 🔷 - An overview of Stateful Smart Contracts.
+[Stateful Smart Contracts](/get-details/dapps/pyteal/smart-contracts/stateful/) 🔷 - An overview of Stateful Smart Contracts.
 
 
-[Stateless Smart Contracts](./asc1/stateless/index.md) - An overview of Stateless Smart Contracts. 
+[Stateless Smart Contracts](/get-details/dapps/pyteal/smart-contracts/stateless/) - An overview of Stateless Smart Contracts. 
 
-[Logic Signatures](./asc1/stateless/modes.md#logic-signatures) - The authorization method for transactions that use Smart Contracts.
+[Logic Signatures](/get-details/dapps/pyteal/smart-contracts/stateless/modes#logic-signatures) - The authorization method for transactions that use Smart Contracts.
 
-[Modes of Use - Contract Account](./asc1/stateless/modes.md#contract-account) - How to use a Smart Contract as its own Algorand account.
+[Modes of Use - Contract Account](/get-details/dapps/pyteal/smart-contracts/stateless/modes#contract-account) - How to use a Smart Contract as its own Algorand account.
 
-[Modes of Use - Delegated Approval](./asc1/stateless/modes.md#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
+[Modes of Use - Delegated Approval](/get-details/dapps/pyteal/smart-contracts/stateless/modes#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
 
-[Using the SDKS](./asc1/stateless/sdks.md) - Stateless Smart Contract functionality from within the SDKs.
+[Using the SDKS](/get-details/dapps/pyteal/smart-contracts/frontend/stateless-sdks) - Stateless Smart Contract functionality from within the SDKs.
 
-[The Smart Contract Language](./asc1/teal/index.md) - Learn all about TEAL, the language of Smart Contracts.
+[The Smart Contract Language](/get-details/dapps/avm/teal/) - Learn all about TEAL, the language of Smart Contracts.
 
-[Contract Walkthrough](./asc1/stateless/walkthrough.md) - A simple command-line walkthrough of creating stateless smart contracts.
+[Contract Walkthrough](/get-details/dapps/pyteal/smart-contracts/stateless/walkthrough) - A simple command-line walkthrough of creating stateless smart contracts.
 
-[Debugging TEAL](./asc1/debugging.md) - Tools and methods for debugging TEAL code.
+[Debugging TEAL](/get-details/dapps/pyteal/smart-contracts/test-and-deploy/debugging) - Tools and methods for debugging TEAL code.
 
 
 
 
 # Searching the Blockchain (Indexer V2)
 
-[Overview](./indexer.md) - How to use Indexer v2 functionality to efficiently query data on the blockchain.
+[Overview](/get-details/indexer) - How to use Indexer v2 functionality to efficiently query data on the blockchain.

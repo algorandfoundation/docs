@@ -10,9 +10,9 @@ At the end of this section are several useful transaction-related how-tos.
 # Transaction Types
 There are [five transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 1) [Payment](#payment-transaction), 2) [Key Registration](#key-registration-transaction), 3) [Asset Configuration](#asset-configuration-transaction), 4) [Asset Freeze](#asset-freeze-transaction), 5) [Asset Transfer](#asset-transfer-transaction).
 
-These five transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](../atomic_transfers.md#creating-an-asset) and [destroy an asset](../atomic_transfers.md#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
+These five transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](/get-details/atomic_transfers#creating-an-asset) and [destroy an asset](/get-details/atomic_transfers#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
 
-Note that all of the transactions shown in this guide are not yet authorized and would fail if submitted to the network. The next section will explain how to [authorize transactions](../transactions/signatures.md) before sending them to the network.
+Note that all of the transactions shown in this guide are not yet authorized and would fail if submitted to the network. The next section will explain how to [authorize transactions](/get-details/transactions/signatures) before sending them to the network.
 
 # Transaction Walkthroughs
 The following sections describe the five types of Algorand transactions through example transactions that represent common use cases. Each transaction is displayed using the `goal clerk inspect` command which takes a signed or unsigned transaction file (msgpack-encoded) as input and outputs a human-readable json object. 
@@ -21,7 +21,7 @@ The following sections describe the five types of Algorand transactions through 
 
 A `PaymentTx` sends Algos (the Algorand blockchain's native currency) from one account to another.
 
-[_Payment Transaction Fields Reference_](../../reference/transactions.md#payment-transaction)
+[_Payment Transaction Fields Reference_](/get-details/transactions/transactions#payment-transaction)
 
 
 ### Send 5 Algos
@@ -47,15 +47,15 @@ The `"type": "pay"` signals that this is a payment transaction.
 
 This transaction transfers 5 Algos (shown as 5000000 microAlgos) from the account represented by the address starting with `"EW64GC..."` to the account with the address starting with `"GD64YI..."`. The sender address (`"EW64GC..."`) will pay a fee of `1000` microAlgos, which is also the minimum fee. An optional note is included in this transaction, which corresponds to the base64-encoded bytes for `"Hello World"`. Note that the base64 representation is a by product of the output of the `goal clerk inspect` command. 
 
-This transaction is valid on MainNet, as per the genesis hash value which corresponds to [MainNet's genesis hash](../../reference/algorand-networks/mainnet.md#genesis-hash). The genesis ID is also provided for human-readability and also matches [MainNet](../../reference/algorand-networks/mainnet.md#genesis-id). Be sure to validate against the genesis hash value since it is unique to the specific network. The genesis ID is not; anyone could spin up a private network and call it `"mainnet-v1.0"` if desired. This transaction is valid if submitted between rounds 6000000 and 6001000.
+This transaction is valid on MainNet, as per the genesis hash value which corresponds to [MainNet's genesis hash](/get-details/algorand-networks/mainnet#genesis-hash). The genesis ID is also provided for human-readability and also matches [MainNet](/get-details/algorand-networks/mainnet#genesis-id). Be sure to validate against the genesis hash value since it is unique to the specific network. The genesis ID is not; anyone could spin up a private network and call it `"mainnet-v1.0"` if desired. This transaction is valid if submitted between rounds 6000000 and 6001000.
 
 **Related How-To**
 
-- [Create a Payment Transaction](../../build-apps/hello_world.md). 
+- [Create a Payment Transaction](/archive/build-apps/hello_world). 
 
 ### Close an Account
 
-Closing an account means removing it from the Algorand ledger. Since there is a minimum balance requirement for every account on Algorand, the only way to completely remove it is to use the [Close Remainder To](../../reference/transactions.md#closeremainderto) field as in the transaction below.
+Closing an account means removing it from the Algorand ledger. Since there is a minimum balance requirement for every account on Algorand, the only way to completely remove it is to use the [Close Remainder To](/get-details/transactions/transactions#closeremainderto) field as in the transaction below.
 
 ```json
 {
@@ -72,10 +72,10 @@ Closing an account means removing it from the Algorand ledger. Since there is a 
   }
 }
 ```
-In this transaction, after the fee and the transaction `"amt"` are paid to the [receiver](../../reference/transactions.md#receiver) from the [sender](../../reference/transactions.md#closeremainderto) account (`"SYGHTA..."`), the remaining balance is transferred to the [closeto](../../reference/transactions.md#closeremainderto) account (`"EW64GC..."`). Note that there is an implicit `"amt"` of 0 Algos when none is specified.
+In this transaction, after the fee and the transaction `"amt"` are paid to the [receiver](/get-details/transactions/transactions#receiver) from the [sender](/get-details/transactions/transactions#closeremainderto) account (`"SYGHTA..."`), the remaining balance is transferred to the [closeto](/get-details/transactions/transactions#closeremainderto) account (`"EW64GC..."`). Note that there is an implicit `"amt"` of 0 Algos when none is specified.
 
 !!! info
-    If you have asset holdings, you must first close out those asset holdings before you can close out the Algorand account completely. Close out your asset holdings by specifying an [Asset Close Remainder To](../../reference/transactions.md#closeassetto) address within an Asset Transfer transaction.
+    If you have asset holdings, you must first close out those asset holdings before you can close out the Algorand account completely. Close out your asset holdings by specifying an [Asset Close Remainder To](/get-details/transactions/transactions#closeassetto) address within an Asset Transfer transaction.
 
 !!! warning
     Using the `--close-to` parameter on any transaction from a _rekeyed account_ will remove the **auth-addr** field, thus reverting signing authority to the original address. The `--close-to` parameter should be used with caution by keyholder(s) of **auth-addr** as the effects remove their authority to access this account thereafter.
@@ -85,7 +85,7 @@ The purpose of a `KeyRegistrationTx` is to register an account either `online` o
 
 An account that is marked `online` does not necessarily mean it is participating in consensus. The process of registering an account online involves first generating a participation key *prior* to issuing a KeyReg transaction. It is important to follow the steps in the [Participate in Consensus section](../../run-a-node/participate/index.md) for a full overview participation and to ensure that you follow good network behavior. 
 
-[_Key Registration Transaction Fields Reference_](../../reference/transactions.md#key-registration-transaction)
+[_Key Registration Transaction Fields Reference_](/get-details/transactions/transactions#key-registration-transaction)
 
 ### Register account online 
 This is an example of an **online** key registration transaction. 
@@ -107,7 +107,7 @@ This is an example of an **online** key registration transaction.
   }
 }
 ```
-What distinguishes this as a key registration transaction is `"type": "keyreg"` and what distinguishes it as an _online_ key registration is the existence of the participation key-related fields, namely `"votekey"`, `"selkey"`, `"votekd"`, `"votefst"`, and `"votelst"`. The values for these fields are obtained by dumping the participation key info on the node where the participation key lives. The [sender](../../reference/transactions.md#sender) (`"EW64GC..."`) will pay a fee of `2000` microAlgos and its account state will change to `online` after this transaction is confirmed by the network. The transaction is valid between rounds 6002000 and 6003000 on [TestNet](../../reference/algorand-networks/testnet.md).
+What distinguishes this as a key registration transaction is `"type": "keyreg"` and what distinguishes it as an _online_ key registration is the existence of the participation key-related fields, namely `"votekey"`, `"selkey"`, `"votekd"`, `"votefst"`, and `"votelst"`. The values for these fields are obtained by dumping the participation key info on the node where the participation key lives. The [sender](/get-details/transactions/transactions#sender) (`"EW64GC..."`) will pay a fee of `2000` microAlgos and its account state will change to `online` after this transaction is confirmed by the network. The transaction is valid between rounds 6002000 and 6003000 on [TestNet](/get-details/algorand-networks/testnet).
 
 **Related How-To**
 
@@ -130,7 +130,7 @@ Here is an example of an **offline** key registration transaction.
   }
 }
 ```
-What distinguishes this from an _online_ transaction is that it does _not_ contain any participation key-related fields, since the account will no longer need a participation key if the transaction is confirmed. The [sender](../../reference/transactions.md#sender) (`"EW64GC..."`) will pay a fee of `2000` microAlgos and its account state will change to `offline` after this transaction is confirmed by the network. This transaction is valid between rounds 7,000,000 (`"fv"`) and 7,001,000 (`"lv"`) on [TestNet](../../reference/algorand-networks/testnet.md#genesis-hash) as per the [Genesis Hash](#genesis-hash) (`"gh"`) value.
+What distinguishes this from an _online_ transaction is that it does _not_ contain any participation key-related fields, since the account will no longer need a participation key if the transaction is confirmed. The [sender](/get-details/transactions/transactions#sender) (`"EW64GC..."`) will pay a fee of `2000` microAlgos and its account state will change to `offline` after this transaction is confirmed by the network. This transaction is valid between rounds 7,000,000 (`"fv"`) and 7,001,000 (`"lv"`) on [TestNet](/get-details/algorand-networks/testnet#genesis-hash) as per the [Genesis Hash](#genesis-hash) (`"gh"`) value.
 
 **Related How-To**
 
@@ -139,7 +139,7 @@ What distinguishes this from an _online_ transaction is that it does _not_ conta
 ## Asset Configuration Transaction
 An `AssetConfigTx` is used to create an asset, modify certain parameters of an asset, or destroy an asset. 
 
-[_Asset Configuration Transaction Fields Reference_](../../reference/transactions.md#asset-configuration-transaction)
+[_Asset Configuration Transaction Fields Reference_](/get-details/transactions/transactions#asset-configuration-transaction)
 
 ### Create an Asset
 
@@ -169,13 +169,13 @@ Here is an example asset creation transaction:
   }
 }
 ```
-The `"type": "acfg"` distinguishes this as an Asset Configuration transaction. What makes this uniquely an **asset creation** transaction is that _no_ [asset ID (`"caid"`)](../../reference/transactions.md#configasset) is specified and there exists an [asset parameters](../../reference/transactions.md#asset-parameters) struct that includes all the initial configurations for the asset. The asset is [named](../../reference/transactions.md#assetname) (`an`) "My New Coin". the [unitname](../../reference/transactions.md#unitname) (`"un"`) is "MNC". There are 50,000,000 [total](../../reference/transactions.md#total) base units of this asset. Combine this with the [decimals](../../reference/transactions.md#decimals) (`"dc"`) value set to 2, means that there are 500,000.00 of this asset. There is an [asset URL](../../reference/transactions.md#asseturl) (`"au"`) specified which points to [developer.algorand.org](https://developer.algorand.org/) and a base64-encoded [metadata hash](../../reference/transactions.md#metadatahash) (`"am"`). This specific value corresponds to the SHA512/256 hash of the string "My New Coin Certificate of Value". The [manager](../../reference/transactions.md#manageraddr) (`"m"`), [freeze](../../reference/transactions.md#freezeaddr) (`"f"`), [clawback](../../reference/transactions.md#clawbackaddr) (`"c"`), and [reserve](../../reference/transactions.md#reserveaddr) (`"r"`) are the same as the sender. The [sender](../../reference/transactions.md#sender) is also the [creator](../../reference/transactions.md#creator).
+The `"type": "acfg"` distinguishes this as an Asset Configuration transaction. What makes this uniquely an **asset creation** transaction is that _no_ [asset ID (`"caid"`)](/get-details/transactions/transactions#configasset) is specified and there exists an [asset parameters](/get-details/transactions/transactions#asset-parameters) struct that includes all the initial configurations for the asset. The asset is [named](/get-details/transactions/transactions#assetname) (`an`) "My New Coin". the [unitname](/get-details/transactions/transactions#unitname) (`"un"`) is "MNC". There are 50,000,000 [total](/get-details/transactions/transactions#total) base units of this asset. Combine this with the [decimals](/get-details/transactions/transactions#decimals) (`"dc"`) value set to 2, means that there are 500,000.00 of this asset. There is an [asset URL](/get-details/transactions/transactions#asseturl) (`"au"`) specified which points to [developer.algorand.org](https://developer.algorand.org/) and a base64-encoded [metadata hash](/get-details/transactions/transactions#metadatahash) (`"am"`). This specific value corresponds to the SHA512/256 hash of the string "My New Coin Certificate of Value". The [manager](/get-details/transactions/transactions#manageraddr) (`"m"`), [freeze](/get-details/transactions/transactions#freezeaddr) (`"f"`), [clawback](/get-details/transactions/transactions#clawbackaddr) (`"c"`), and [reserve](/get-details/transactions/transactions#reserveaddr) (`"r"`) are the same as the sender. The [sender](/get-details/transactions/transactions#sender) is also the [creator](/get-details/transactions/transactions#creator).
 
-This transaction is valid between rounds 6000000 (`"fv"`) and 6001000 (`"lv"`) on [TestNet](../../reference/algorand-networks/testnet.md#genesis-hash) as per the [Genesis Hash](../../reference/transactions.md#genesishash) (`"gh"`) value.
+This transaction is valid between rounds 6000000 (`"fv"`) and 6001000 (`"lv"`) on [TestNet](/get-details/algorand-networks/testnet#genesis-hash) as per the [Genesis Hash](/get-details/transactions/transactions#genesishash) (`"gh"`) value.
 
 **Related How-To**
 
-- [Create an Asset](../asa.md#creating-an-asset)
+- [Create an Asset](/get-details/asa#creating-an-asset)
 
 ### Reconfigure an Asset
 A **Reconfiguration Transaction** is issued by the asset manager to change the configuration of an already created asset.
@@ -201,17 +201,17 @@ Here is what an example reconfiguration transaction that changes the manager add
   }
 }
 ```
-What distinguishes this from an asset creation transaction is the inclusion of the **asset id** to be changed. The only fields that can be reconfigured are the [manager](../../reference/transactions.md#manageraddr), [freeze](../../reference/transactions.md#freezeaddr), [clawback](../../reference/transactions.md#clawbackaddr), and [reserve](../../reference/transactions.md#reserveaddr) addresses. All of them must be specified even if they do not change. 
+What distinguishes this from an asset creation transaction is the inclusion of the **asset id** to be changed. The only fields that can be reconfigured are the [manager](/get-details/transactions/transactions#manageraddr), [freeze](/get-details/transactions/transactions#freezeaddr), [clawback](/get-details/transactions/transactions#clawbackaddr), and [reserve](/get-details/transactions/transactions#reserveaddr) addresses. All of them must be specified even if they do not change. 
 
 !!! warning
 	The protocol interprets unspecified addresses in an `AssetConfigTx` as an explicit action to set those values to null for the asset. Once set to `null`, this action cannot be undone.
 
 Upon confirmation, this transaction will change the manager of the asset from `"EW64GC..."` to `"QC7XT7..."`.
-This transaction is valid on [TestNet](../../reference/algorand-networks/testnet.md#genesis-hash) between rounds 6002000 and 6003000. A fee of `1000` microAlgos will be paid by the sender if confirmed. 
+This transaction is valid on [TestNet](/get-details/algorand-networks/testnet#genesis-hash) between rounds 6002000 and 6003000. A fee of `1000` microAlgos will be paid by the sender if confirmed. 
 
 **Related How-To**
 
-- [Modifying an Asset](../asa.md#modifying-an-asset)
+- [Modifying an Asset](/get-details/asa#modifying-an-asset)
 
 ### Destroy an Asset
 
@@ -237,12 +237,12 @@ This transaction differentiates itself from an **Asset Creation** transaction in
 
 **Related How-To**
 
-- [Destroying an Asset](../asa.md#destroying-an-asset)
+- [Destroying an Asset](/get-details/asa#destroying-an-asset)
 
 ## Asset Transfer Transaction
 An Asset Transfer Transaction is used to opt-in to receive a specific type of Algorand Standard Asset, transfer an Algorand Standard asset, or revoke an Algorand Standard Asset from a specific account.
 
-[_Asset Transfer Transaction Fields Reference_](../../reference/transactions.md#asset-transfer-transaction)
+[_Asset Transfer Transaction Fields Reference_](/get-details/transactions/transactions#asset-transfer-transaction)
 
 ### Opt-in to an Asset
 Here is an example of an opt-in transaction:
@@ -261,11 +261,11 @@ Here is an example of an opt-in transaction:
   }
 }
 ```
-The `"type": "axfer"` distinguishes this as an asset transfer transaction. The fields used in the transaction are the same as any other asset transfer. What distinguishes it as an opt-in transaction is in how those fields are specified and the sender account's asset holdings state prior to sending the transaction. In particular, the address `"QC7XT7...` is both the [sender](../../reference/transactions.md#sender) and [asset receiver](../../reference/transactions.md#assetreceiver) and it is assumed that the sender does not yet possess any of the desired asset identified with the [asset ID](../../reference/transactions.md#xferasset) `168103`. The asset amount is not specified in this example. This transaction is valid on TestNet between rounds 6631154 and 6632154.
+The `"type": "axfer"` distinguishes this as an asset transfer transaction. The fields used in the transaction are the same as any other asset transfer. What distinguishes it as an opt-in transaction is in how those fields are specified and the sender account's asset holdings state prior to sending the transaction. In particular, the address `"QC7XT7...` is both the [sender](/get-details/transactions/transactions#sender) and [asset receiver](/get-details/transactions/transactions#assetreceiver) and it is assumed that the sender does not yet possess any of the desired asset identified with the [asset ID](/get-details/transactions/transactions#xferasset) `168103`. The asset amount is not specified in this example. This transaction is valid on TestNet between rounds 6631154 and 6632154.
 
 **Related How-To**
 
-- [Receiving an Asset](../asa.md#receiving-an-asset)
+- [Receiving an Asset](/get-details/asa#receiving-an-asset)
   
 ### Transfer an Asset
 
@@ -292,7 +292,7 @@ An asset transfer transaction assumes that the asset receiver has already [opted
 
 **Related How-To**
 
-- [Transferring an Asset](../asa.md#transferring-an-asset)
+- [Transferring an Asset](/get-details/asa#transferring-an-asset)
 
 ### Revoke an Asset
 
@@ -314,11 +314,11 @@ Here is an example of the clawback account revoking assets from another account.
   }
 }
 ```
-The existence of an [asset sender](../../reference/transactions.md#assetsender) tells us that this transaction is utilizing the clawback workflow. During a clawback, the clawback address (`"EW64GC..."`) sends the transactions and therefore authorizes it and pays the `1000` microAlgo fee. The [asset sender](../../reference/transactions.md#assetsender) (`"QC7XT7..."`) is the address of the account from which the assets will be revoked. In this case, 5 million base units (5,000.00 units) of asset `168103` will be revoked from `"QC7XT7..."` and transferred to `"EW64GC..."`.
+The existence of an [asset sender](/get-details/transactions/transactions#assetsender) tells us that this transaction is utilizing the clawback workflow. During a clawback, the clawback address (`"EW64GC..."`) sends the transactions and therefore authorizes it and pays the `1000` microAlgo fee. The [asset sender](/get-details/transactions/transactions#assetsender) (`"QC7XT7..."`) is the address of the account from which the assets will be revoked. In this case, 5 million base units (5,000.00 units) of asset `168103` will be revoked from `"QC7XT7..."` and transferred to `"EW64GC..."`.
 
 **Related How-To**
 
-- [Revoking an Asset](../asa.md#revoking-an-asset)
+- [Revoking an Asset](/get-details/asa#revoking-an-asset)
 
 ## Asset Freeze Transaction
 An Asset Freeze Transaction is issued by the Freeze Address and results in the asset receiver address losing or being granted the ability to send or receive the frozen asset.
@@ -340,23 +340,23 @@ An Asset Freeze Transaction is issued by the Freeze Address and results in the a
   }
 }
 ```
-An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](../../reference/transactions.md#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](../../reference/transactions.md#assetfrozen) field is set to `true`.
+An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](/get-details/transactions/transactions#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](/get-details/transactions/transactions#assetfrozen) field is set to `true`.
 
 ### See also
-- [Freezing an Asset](../asa.md#freezing-an-asset)
+- [Freezing an Asset](/get-details/asa#freezing-an-asset)
 
 # Sending a Transaction in the Future
 
 Algorand transactions are valid for a specific round range and the range maximum is 1000 rounds. If you plan to submit the transaction right away, specifying this round range is trivial. However, when the transaction requires offline signing or you plan to make frequent transactions from that account, it may be beneficial to specify a future round range or ranges that are more convenient. You can sign these transactions in a single secure session, and then submit them to the network when the valid round range is reached.
 
 !!! tip
-	For recurring transactions, Algorand Smart Contracts can be a more secure option. Read the corresponding [guide](../asc1/index.md) to learn more.
+	For recurring transactions, Algorand Smart Contracts can be a more secure option. Read the corresponding [guide](/get-details/dapps/pyteal/smart-contracts/) to learn more.
 
 Calculating the round range requires you to know the **current round**, the **average block time**, and the **target submission time**. 
 
 ## Current Round
 
-To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](../../community.md#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](../../build-apps/connect.md#check-node-status-and-network-version).
+To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](../../community.md#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](/archive/build-apps/connect#check-node-status-and-network-version).
 
 ## Average Block Time
 
@@ -462,7 +462,7 @@ There are two primary ways to set the fee for a transaction.
 
 ## Suggested Fee
 
-The SDK provides a method to get the [**suggested fee** per byte (`fee`)](../../reference/rest-apis/algod/v1.md#transactionfee) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
+The SDK provides a method to get the [**suggested fee** per byte (`fee`)](/rest-apis/algod/v1#transactionfee) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
 
 For larger transactions (> 1 KB in size), the resulting total fee will be greater than the network minimum, which in certain network conditions, may be more than you need to pay to get the transaction processed into the blockchain quickly. In particular, when blocks have enough room for all transactions, the minimum transaction fee will generally suffice. In this network scenario, set the fee (per byte) to 0 if you want to ensure that the minimum fee is chosen instead. 
 

@@ -22,12 +22,12 @@ $ tealdbg debug program.teal
 
 This will launch the debugger process and return an endpoint that is listening for connections. This process can be connected to directly with the Chrome Developer Tools. The simplest way to do this is to enter `chrome://inspect/` into the address bar of the browser, click “Configure” to add “localhost:9392”, and select the Algorand TEAL Debugger in the Remote Target Section (click on the inspect link).
 
-![CDT Remote Connection](../../imgs/tealdbg-1.png)
+![CDT Remote Connection](/imgs/tealdbg-1.png)
 <center>*Configure CDT Remote Connection*</center>
 
 This will launch the debugger and allow the smart contract to be inspected. The debugger provides standard debugger controls, like single-stepping, pausing, breakpoints etc.
 
-![Teal Debugger](../../imgs/tealdbg-2.png)
+![Teal Debugger](/imgs/tealdbg-2.png)
 <center>*TEAL Debugger*</center>
 
 The Scope pane contains the current stack and is useful for determining what values the current line of code is processing. When a smart contract returns, if anything other than one positive value is left on the stack or the `return` opcode is used with a nonpositive value on the top of the stack, the program will fail. The Scope pane also displays the current transaction with all its properties, the current scratch space, global variables, and any state associated with the contract. If this transaction is part of an atomic transfer, all transactions will also be available in the Scope pane.
@@ -67,7 +67,7 @@ $ tealdbg debug program.teal --dryrun-req statefultx.dr
 
 The scope panel will now have the proper context data for the debugging session.
 
-![Teal Debugger Scope](../../imgs/tealdbg-3.png)
+![Teal Debugger Scope](/imgs/tealdbg-3.png)
 <center>*TEAL Debugger Scope*</center>
 
 One or more transactions that are stored in a file can be debugged by dumping the context data with the `goal clerk dryrun` command. For example, two stateful smart contracts are grouped below and the context data is generated using the `dryrun-dump` option. The `tealdbg` command is then used to start the debugger.
