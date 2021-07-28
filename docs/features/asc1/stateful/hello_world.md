@@ -184,8 +184,8 @@ goal app create --creator $ADDR_CREATOR \
 !!! Note
 	If you are using [sandbox](https://github.com/algorand/sandbox), you need to copy the approval and clear programs to sandbox beforehand. Concretely, after all the `export` commands, run:
     ```bash
-    ./sandbox copy "$TEAL_APPROVAL_PROG"
-    ./sandbox copy "$TEAL_CLEAR_PROG"
+    ./sandbox copyTo "$TEAL_APPROVAL_PROG"
+    ./sandbox copyTo "$TEAL_CLEAR_PROG"
     ./sandbox goal app create ...
     ```
     where `...` should be replaced by the parameters above.
