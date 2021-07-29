@@ -7,10 +7,10 @@ title: TestNet
 - [Fast Catchup](../../../run-a-node/setup/install/#sync-node-network-using-fast-catchup)
   
 # Version
-`v2.7.1.stable`
+`v2.8.0.stable`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.7.1-stable
+https://github.com/algorand/go-algorand/releases/tag/v2.8.0-stable
 
 # Genesis ID
 `testnet-v1.0`
