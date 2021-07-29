@@ -1,17 +1,17 @@
 title: Your First Application
 
-Use the guide below to deploy a "hello world" Algorand application, a [stateful smart contract](/get-details/dapps/pyteal/smart-contracts/#stateful-smart-contracts) using the [Transaction Execution Approval Language (TEAL)](/get-details/dapps/avm/teal/). This requires [setting up your workspace](/archive/build-apps/setup) and [connecting to a node](/archive/build-apps/connect). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
+Use the guide below to deploy a "hello world" Algorand application, a [stateful smart contract](..#stateful-smart-contracts) using the [Transaction Execution Approval Language (TEAL)](../../../avm/teal). This requires [setting up your workspace](../../../../../archive/build-apps/setup) and [connecting to a node](../../../../../archive/build-apps/connect). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
 
 This is a very basic application which implements a counter. Each time the application is called, the counter value is incremented. 
 
 !!! Info
-	[Algorand Smart Contracts](/get-details/dapps/pyteal/smart-contracts/) (ASC1) are deployed as either "Stateful" or "Stateless" programs. Both use the [Transaction Execution Approval Language (TEAL)](/get-details/dapps/avm/teal/), but the available [OpCodes](/get-details/dapps/avm/teal/opcodes) and, therefore their function, vary by type. This guide covers only [stateful smart contracts](/get-details/dapps/pyteal/smart-contracts/#stateful-smart-contracts); learn more about [stateless smart contracts](/get-details/dapps/pyteal/smart-contracts/#stateless-smart-contracts).
+	[Algorand Smart Contracts](..) (ASC1) are deployed as either "Stateful" or "Stateless" programs. Both use the [Transaction Execution Approval Language (TEAL)](../../../avm/teal), but the available [OpCodes](../../../avm/teal/opcodes) and, therefore their function, vary by type. This guide covers only [stateful smart contracts](..#stateful-smart-contracts); learn more about [stateless smart contracts](..#stateless-smart-contracts).
 
 ## Stateful Application Primer
 
-The [Overview](/get-details/dapps/pyteal/smart-contracts/stateful/) of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started.
+The [Overview]() of Algorand Stateful Smart Contracts should be consulted for details of the concepts covered in this document. Here is a brief primer to get started.
 
-The term "stateful" means the application is able to store information or "maintain state" within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](/get-details/dapps/avm/teal/) defines the available [OpCodes](/get-details/dapps/avm/teal/opcodes) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) that are evaluated by the program at run-time. Every program execution must complete with a single non-zero uint64 value (or use the `return` opcode with a non-zero uint64 on top of the stack) remaining on the stack to be valid and thus commit all state changes to the ledger. 
+The term "stateful" means the application is able to store information or "maintain state" within the ledger. The information ("data") is structured into _key/value pairs_. The [Transaction Execution Approval Language (TEAL)](../../../avm/teal) defines the available [OpCodes](../../../avm/teal/opcodes) for use during program execution. _Application Call Transactions_ are used to interact with the application and may include _arguments_ (additional data) that are evaluated by the program at run-time. Every program execution must complete with a single non-zero uint64 value (or use the `return` opcode with a non-zero uint64 on top of the stack) remaining on the stack to be valid and thus commit all state changes to the ledger. 
 
 ## Application Components
 
@@ -39,7 +39,7 @@ Each program may read from and write to _local_ storage within the account objec
 
 #### External
 
-Each program may read both the _global_ and _local_ state storage locations for a limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract](/get-details/dapps/pyteal/smart-contracts/stateful/) documentation.
+Each program may read both the _global_ and _local_ state storage locations for a limited number of other _external_ programs and accounts. For more information on external programs and accounts see the [stateful smart contract]() documentation.
 
 ### State Data
 
@@ -69,7 +69,7 @@ TEAL provides OpCodes allowing the program to _get_ (read) and _put_ (write) dat
 Programs may implicitly read their own _global_ storage and the _local_ storage of the account submitting the _application call transaction_. 
 
 #### get_external
-Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of _external_ programs which are stored in the application array of an application call transaction. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts which are stored in the accounts array of an application call transaction. For more information on the applications and accounts arrays, see the [stateful smart contract](/get-details/dapps/pyteal/smart-contracts/stateful/#stateful-contract-arrays) documentation.
+Reading from _global_ and _local_ storage of an _external_ program or account is allowed by explicitly passing the address as an argument within the _application call transaction_. Programs may read from _global_ storage of _external_ programs which are stored in the application array of an application call transaction. Additionally, programs may read from _local_ storage of up to four (4) _external_ accounts which are stored in the accounts array of an application call transaction. For more information on the applications and accounts arrays, see the [stateful smart contract](#stateful-contract-arrays) documentation.
 
 #### put
 Writing data is restricted to global storage of the "called" program and local storage of the "calling" account or any account in the accounts array, both specified within the _application call transaction_ (note: _external_ locations may only be read from). The _local_ storage can only be modified if the account has opted into the application.
@@ -104,7 +104,7 @@ load 0
 return
 ```
 
-!!! warning The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend starting from the template provided in the [Overview](/get-details/dapps/pyteal/smart-contracts/stateful/#boilerplate-stateful-smart-contract).
+!!! warning The above approval program is **insecure** and should **not** be used in a real application. In particular, anybody can update the approval program. For a real application, we recommend starting from the template provided in the [Overview](#boilerplate-stateful-smart-contract).
 
 #### Define TEAL Version
 

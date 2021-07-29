@@ -6,7 +6,7 @@ Stateless smart contracts have two basic usage scenarios; as a [**contract accou
 Logic Signatures, referenced as LogicSig, are structures that contain the following four parts.
 
 
-<center>![Logic Signature Structure](/imgs/modes-0.png)</center>
+<center>![Logic Signature Structure](../../../../../imgs/modes-0.png)</center>
 <center>*Logic Signature Structure*</center>
 
 Before a LogicSig can be used with a transaction, it first must be a valid Logic Signature. The LogicSig is considered valid if one of the following scenarios is true.
@@ -24,7 +24,7 @@ For each unique compiled stateless smart contract program there exists a single 
 Contract accounts are great for setting up escrow style accounts where you want to limit withdrawals or you want to do periodic payments, etc. For example, Alice sets up a contract account and funds it with tokens. The TEAL logic is written to allow Bob to remove up to 200 tokens every 10000 rounds from the contract account. Bob submits a transaction to remove 201 tokens from the contract account and the transaction is rejected. Bob submits a transaction to remove 150 tokens and the transaction is successful. Bob immediately resubmits the same transaction and it is rejected.
 
 
-<center>![Contract Account](/imgs/modes-1.png)</center>
+<center>![Contract Account](../../../../../imgs/modes-1.png)</center>
 <center>*TEAL Contract Account*</center>
 
 # Delegated Approval
@@ -32,5 +32,5 @@ Stateless smart contracts can also be used to delegate signatures, which means t
 For example, if Alice wants to set up a recurring payment with her utility company for up to 200 Algos every 50000 rounds, she creates a TEAL contract that encodes this logic, signs it with her private key, and gives it to the utility company. The utility company uses that logic signature in the transaction they submit every 50000 rounds to collect payment from Alice.
 The logic signature can be produced from either a single or multi-signature account.
 
-<center>![Delegated Signature](/imgs/modes-2.png)</center>
+<center>![Delegated Signature](../../../../../imgs/modes-2.png)</center>
 <center>*TEAL Delegated Signature*</center>

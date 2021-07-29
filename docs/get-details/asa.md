@@ -25,34 +25,34 @@ Here are several things to be aware of before getting started with assets.
 - If any transaction is issued that would violate the maximum number of assets for an account or not meet the minimum balance requirements, the transaction will fail.
 
 ## Asset Parameters
-The type of asset that is created will depend on the parameters that are passed during asset creation and sometimes during asset re-configuration. View the full list of asset parameters in the [Asset Parameters Reference](/get-details/transactions/transactions#asset-parameters).
+The type of asset that is created will depend on the parameters that are passed during asset creation and sometimes during asset re-configuration. View the full list of asset parameters in the [Asset Parameters Reference](../transactions/transactions#asset-parameters).
 
 ### Immutable Asset Parameters
 
 These eight parameters can *only* be specified when an asset is created.  
 
-- [Creator](/get-details/transactions/transactions#creator) (*required*)
-- [AssetName](/get-details/transactions/transactions#assetname) (*optional, but recommended*)
-- [UnitName](/get-details/transactions/transactions#unitname) (*optional, but recommended*)
-- [Total](/get-details/transactions/transactions#total) (*required*)
-- [Decimals](/get-details/transactions/transactions#decimals) (*required*)
-- [DefaultFrozen](/get-details/transactions/transactions#defaultfrozen) (*required*)
-- [URL](/get-details/transactions/transactions#url) (*optional*)
-- [MetaDataHash](/get-details/transactions/transactions#metadatahash) (*optional*)
+- [Creator](../transactions/transactions#creator) (*required*)
+- [AssetName](../transactions/transactions#assetname) (*optional, but recommended*)
+- [UnitName](../transactions/transactions#unitname) (*optional, but recommended*)
+- [Total](../transactions/transactions#total) (*required*)
+- [Decimals](../transactions/transactions#decimals) (*required*)
+- [DefaultFrozen](../transactions/transactions#defaultfrozen) (*required*)
+- [URL](../transactions/transactions#url) (*optional*)
+- [MetaDataHash](../transactions/transactions#metadatahash) (*optional*)
 
 ### Mutable Asset Parameters
 There are four parameters that correspond to addresses that can authorize specific functionality for an asset. These addresses must be specified on creation but they can also be modified after creation. Alternatively, these addresses can be set as empty strings, which will irrevocably lock the function that they would have had authority over. 
 
 Here are the four address types.
 
-[**Manager Address**](/get-details/transactions/transactions#manageraddr)
+[**Manager Address**](../transactions/transactions#manageraddr)
 
 The manager account is the only account that can authorize transactions to [re-configure](#modifying-an-asset) or [destroy](#destroying-an-asset) an asset. 
 
 !!! warning
     Never set this address to empty if you want to be able to re-configure or destroy the asset.
 
-[**Reserve Address**](/get-details/transactions/transactions#reserveaddr)
+[**Reserve Address**](../transactions/transactions#reserveaddr)
 
 Specifying a reserve account signifies that non-minted assets will reside in that account instead of the default creator account. Assets transferred from this account are "minted" units of the asset. If you specify a new reserve address, you must make sure the new account has opted into the asset and then issue a transaction to transfer all assets to the new reserve.
 
@@ -60,14 +60,14 @@ Specifying a reserve account signifies that non-minted assets will reside in tha
     The reserve account has no functional authority in the protocol. It is purely informational. 
 
 
-[**Freeze Address**](/get-details/transactions/transactions#freezeaddr)
+[**Freeze Address**](../transactions/transactions#freezeaddr)
 
 The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. In traditional finance, freezing assets may be performed to restrict liquidation of company stock, to investigate suspected criminal activity or to deny-list certain accounts. If the DefaultFrozen state is set to True, you can use the unfreeze action to authorize certain accounts to trade the asset (such as after passing KYC/AML checks). 
 
 !!! tip
     Set this address to `""` if you want to prove to asset holders that the asset can never be frozen.
 
-[**Clawback Address**](/get-details/transactions/transactions#clawbackaddr)
+[**Clawback Address**](../transactions/transactions#clawbackaddr)
 
 The clawback address represents an account that is allowed to transfer assets from and to any asset holder (assuming they have opted-in).  Use this if you need the option to revoke assets from an account (like if they breach certain contractual obligations tied to holding the asset). In traditional finance, this sort of transaction is referred to as a clawback.
 
@@ -308,12 +308,12 @@ goal asset create --creator <address> --total 1000 --unitname <unit-name> --asse
 
 **See also**
 
-- [Anatomy of an Asset Creation Transaction](/get-details/transactions/#create-an-asset)
+- [Anatomy of an Asset Creation Transaction](../transactions#create-an-asset)
 
 
 ## Modifying an Asset
 
-**Authorized by**: [Asset Manager Account](/get-details/transactions/transactions#manageraddr)
+**Authorized by**: [Asset Manager Account](../transactions/transactions#manageraddr)
 
 After an asset has been created only the manager, reserve, freeze and clawback accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
 
@@ -453,7 +453,7 @@ goal asset config  --manager <address> --new-reserve <address> --assetid <asset-
 
 **See also**
 
-- [Anatomy of an Asset Reconfiguration Transaction](/get-details/transactions/#reconfigure-an-asset)
+- [Anatomy of an Asset Reconfiguration Transaction](../transactions#reconfigure-an-asset)
 
 
 ## Receiving an Asset
@@ -613,7 +613,7 @@ goal asset send -a 0 --asset <asset-name>  -f <opt-in-account> -t <opt-in-accoun
 
 **See also**
 
-- [Structure of an Asset Opt-In Transaction](/get-details/transactions/#opt-in-to-an-asset)
+- [Structure of an Asset Opt-In Transaction](../transactions#opt-in-to-an-asset)
 
 ## Transferring an Asset
 
@@ -761,11 +761,11 @@ goal asset send -a <asset-amount> --asset <asset-name> -f <asset-sender> -t <ass
 
 **See also**
 
-- [Anatomy of an Asset Transfer Transaction](/get-details/transactions/#transfer-an-asset)
+- [Anatomy of an Asset Transfer Transaction](../transactions#transfer-an-asset)
 
 ## Freezing an Asset
 
-**Authorized by**: [Asset Freeze Address](/get-details/transactions/transactions#freezeaddr)
+**Authorized by**: [Asset Freeze Address](../transactions/transactions#freezeaddr)
 
 Freezing or unfreezing an asset for an account requires a transaction that is signed by the freeze account. The code below illustrates the freeze transaction.
 
@@ -899,11 +899,11 @@ goal asset freeze --freezer <asset-freeze-account> --freeze=true --account <acco
 
 **See also**
 
-- [Anatomy of an Asset Freeze Transaction](/get-details/transactions/#freeze-an-asset)
+- [Anatomy of an Asset Freeze Transaction](../transactions#freeze-an-asset)
 
 ## Revoking an Asset
 
-**Authorized by**: [Asset Clawback Address](/get-details/transactions/transactions#clawbackaddr)
+**Authorized by**: [Asset Clawback Address](../transactions/transactions#clawbackaddr)
 
 Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires specifying an asset sender (the revoke target account) and an asset receiver (the account to transfer the funds back to). The code below illustrates the clawback transaction.
 
@@ -1063,11 +1063,11 @@ goal asset send -a <amount-to-revoke> --asset <asset-name> -f <address-of-revoke
 
 **See also**
 
-- [Anatomy of an Asset Clawback Transaction](/get-details/transactions/#revoke-an-asset)
+- [Anatomy of an Asset Clawback Transaction](../transactions#revoke-an-asset)
 
 ## Destroying an Asset
 
-**Authorized by**: [Asset Manager](/get-details/transactions/transactions#manageraddr)
+**Authorized by**: [Asset Manager](../transactions/transactions#manageraddr)
 
 Created assets can be destroyed only by the asset manager account. All of the assets must be owned by the creator of the asset before the asset can be deleted. 
 
@@ -1229,7 +1229,7 @@ goal asset destroy --creator <creator-address> --manager <asset-manager-address>
 
 **See also**
 
-- [Anatomy of the Asset Destroy Transaction](/get-details/transactions/#destroy-an-asset)
+- [Anatomy of the Asset Destroy Transaction](../transactions#destroy-an-asset)
 
 # Retrieve Asset Information
 Retrieve an asset's configuration information from the network using the SDKs or `goal`. Additional details are also added to the accounts that own the specific asset and can be listed with standard account information calls.
