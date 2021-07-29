@@ -12,10 +12,10 @@ Code snippets are abbreviated for conciseness and clarity. See the full code exa
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/start_building](https://github.com/algorand/docs/tree/master/examples/start_building) and for [download](https://github.com/algorand/docs/blob/master/examples/start_building/start_building.zip?raw=true) (.zip).
 
 # Create an account
-In order to send a transaction, you first need an [account](../../get-details/accounts#accounts) on Algorand. Create an account by generating an Algorand public/private key pair and then funding the public address with Algos on your chosen network. 
+In order to send a transaction, you first need an [account](../../../get-details/accounts#accounts) on Algorand. Create an account by generating an Algorand public/private key pair and then funding the public address with Algos on your chosen network. 
 
 !!! info
-	The terms **account**, **public key**, and **address** are used interchangeably in certain contexts, but they have slightly different meanings. Read more about these differences in the [Accounts Overview](../../get-details/accounts).
+	The terms **account**, **public key**, and **address** are used interchangeably in certain contexts, but they have slightly different meanings. Read more about these differences in the [Accounts Overview](../../../get-details/accounts).
 
 
 ## Generate a public/private key pair
@@ -81,7 +81,7 @@ Private key mnemonic: [PASSPHRASE]
 Public key: [ADDRESS]
 ```
 
-_Learn more about [Creating Accounts on Algorand](../../get-details/accounts/create)._
+_Learn more about [Creating Accounts on Algorand](../../../get-details/accounts/create)._
 
 ## Add funds
 For [TestNet](../../reference/algorand-networks/testnet/#faucet) and [BetaNet](../../reference/algorand-networks/betanet/#faucet), copy and paste the public portion of your key pair in the corresponding faucet prompt and click "Submit". A `200` response means the transaction went through and your balance increased by 100,000,000 microAlgos (i.e. 100 Algos).
@@ -218,7 +218,7 @@ $ goal account balance -a <my-address>
 
 Create a transaction to send 1 Algo from your account to the TestNet faucet address (`GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A`) with the note "Hello World".
 
-Transactions require a certain minimum set of parameters to be valid. Mandatory fields include the **round validity range**, the **fee**, and the **genesis hash** for the network the transaction is valid for. Read all about Transaction types, fields, and configurations in the [Transactions Feature Guide](../../get-details/transactions). For now, construct a payment transaction as follows. Use the _suggested parameters_ methods to initialize network-related 
+Transactions require a certain minimum set of parameters to be valid. Mandatory fields include the **round validity range**, the **fee**, and the **genesis hash** for the network the transaction is valid for. Read all about Transaction types, fields, and configurations in the [Transactions Feature Guide](../../../get-details/transactions). For now, construct a payment transaction as follows. Use the _suggested parameters_ methods to initialize network-related 
 fields. 
 
 ```javascript tab="JavaScript"
@@ -300,7 +300,7 @@ $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVF
 !!! info
     Some of the SDKs provide wrapper functions for creating certain types of transactions, like `makePaymentTxn` in Go. 
 
-_Learn more about the [Structure of Transactions on Algorand](../../get-details/transactions)._
+_Learn more about the [Structure of Transactions on Algorand](../../../get-details/transactions)._
 
 # Sign the transaction
 Sign the transaction with your private key. This creates a new signed transaction object in the SDKs. Retrieve the transaction ID of the signed transaction.
@@ -336,7 +336,7 @@ $ goal clerk sign --infile="hello-world.txn" --outfile="hello-world.stxn"
 ```bash tab="algokey"
 ```
 
-_Learn more about [Authorizing Transactions on Algorand](../../get-details/transactions/signatures)._
+_Learn more about [Authorizing Transactions on Algorand](../../../get-details/transactions/signatures)._
 
 # Submit the transaction
 Send the signed transaction to the network with your algod client. 
@@ -397,7 +397,7 @@ Transaction [TXID] committed in round [COMMITTED_ROUND]
 Successfully submitting your transaction to the network does not necessarily mean the network confirmed it. Always check that the network confirmed your transaction within a block before proceeding. 
 
 !!! info
-    On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced, on average, every 5 seconds. This means that transactions are confirmed, on average, in **5 seconds**! Read more about the [Algorand's Consensus Protocol](../../get-details/algorand_consensus) and how it achieves such high confirmation speeds and immediate transaction finality.
+    On Algorand, transactions are final as soon as they are incorporated into a block and blocks are produced, on average, every 5 seconds. This means that transactions are confirmed, on average, in **5 seconds**! Read more about the [Algorand's Consensus Protocol](../../../get-details/algorand_consensus) and how it achieves such high confirmation speeds and immediate transaction finality.
 
 ```javascript tab="JavaScript"
 /**

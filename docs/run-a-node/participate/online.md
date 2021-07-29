@@ -125,12 +125,12 @@ $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJH
 ```
 
 # Authorize and Send the Transaction
-Use the appropriate [authorization method](../../docs/get-details/transactions/signatures.md) to sign the transaction. 
+Use the appropriate [authorization method](../../../get-details/transactions/signatures) to sign the transaction. 
 
 !!! tip
     It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
 
-[Verify that the participation key is in the node's ledger directory](generate_keys.md#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../archive/build-apps/hello_world.md#submit-the-transaction) the transaction and [wait for confirmation](../../archive/build-apps/hello_world.md#wait-for-confirmation). 
+[Verify that the participation key is in the node's ledger directory](../generate_keys#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) the transaction and [wait for confirmation](../../../archive/build-apps/hello_world#wait-for-confirmation). 
 
 # Check that the node is participating
 
@@ -145,5 +145,5 @@ $ grep 'VoteBroadcast' node.log
 
 **See also**
 
-- [Key Registration Transactions](../../get-details/transactions/index.md#key-registration-transaction)
-- [Register account online](../../get-details/transactions/index.md#register-account-online)
+- [Key Registration Transactions](../../../get-details/transactions/#key-registration-transaction)
+- [Register account online](../../../get-details/transactions/#register-account-online)

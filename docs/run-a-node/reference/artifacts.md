@@ -3,7 +3,7 @@ title: Node Artifacts
 These files run as part of the Algorand node or are CLI utilities that will help to diagnose or interact with a currently running node. The primary files are described below.
 
 # goal
-Goal is the command line utility used to interact with the Algorand node. It communicates with algod and the kmd process to do things like: create an account, list the ledger, examine the status of the network, or create a transaction. Goal documentation is available in the [Goal](../../clis/goal/goal) guide.
+Goal is the command line utility used to interact with the Algorand node. It communicates with algod and the kmd process to do things like: create an account, list the ledger, examine the status of the network, or create a transaction. Goal documentation is available in the [Goal](../../../clis/goal/goal) guide.
 
 # algod
 Algod is the main Algorand process for handling the blockchain. Messages between nodes are processed, the protocol steps are executed, and the blocks are written to disk. The algod process also exposes a REST API server that developers can use to communicate with the node and the network. Algod uses the data directory for storage and configuration information.

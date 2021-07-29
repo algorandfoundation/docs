@@ -8,7 +8,7 @@ It is possible to set up a relay for a personal network that does not require DN
 Follow the [install instructions](../../run-a-node/setup/install.md) for the specific operating system that the relay will run on.
 
 # Edit the Configuration File
-Edit the configuration file for the node as described in the [configuration](config) guide. Set the property `NetAddress` to `":4161"` and save the file. Make sure the file is named `config.json`.
+Edit the configuration file for the node as described in the [configuration](../config) guide. Set the property `NetAddress` to `":4161"` and save the file. Make sure the file is named `config.json`.
 
 !!! warning
 	As a precaution, it is not recommended that relay nodes interact with accounts or participate in consensus.

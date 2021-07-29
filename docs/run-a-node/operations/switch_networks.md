@@ -1,5 +1,5 @@
 title: Switch Networks
-By default, an Algorand installation is configured to run on MainNet. For most users, this is the desired outcome. Developers, however, need access to [TestNet or BetaNet networks](../../../build-apps/setup/#choosing-a-network). This guide describes switching between networks.
+By default, an Algorand installation is configured to run on MainNet. For most users, this is the desired outcome. Developers, however, need access to [TestNet or BetaNet networks](../../../archive/build-apps/setup/#choosing-a-network). This guide describes switching between networks.
 
 # Replacing the Genesis file
 Every Algorand node has a data directory that is used to store the ledger and other configuration information. As part of this configuration, a `genesis.json` file is used. The `genesis.json` file specifies the initial state of the blockchain - its ‘genesis block’. This is a JSON formatted file with the schema for the blockchain. It contains the network name and id, the protocol version and list of allocated addresses to start the chain with. Each address contains a list of things like address status and the amount of Algos owned by the address.

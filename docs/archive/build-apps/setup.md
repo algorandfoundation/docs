@@ -20,7 +20,7 @@ Algorand officially supports four SDKs for developing applications: [Javascript]
 
 ## Command Line Interface (CLI) Tools 
 
-Algorand provides three command-line utilities packaged with Algorand node software: [`goal`](../../clis/goal/goal), [`kmd`](../../clis/kmd), and [`algokey`](../../clis/algokey/algokey).
+Algorand provides three command-line utilities packaged with Algorand node software: [`goal`](../../../clis/goal/goal), [`kmd`](../../../clis/kmd), and [`algokey`](../../../clis/algokey/algokey).
 
 `goal` is the primary tool for operating a node and it also contains functionality to manage keys, sign and send transactions, create assets, and perform many of the same or similar functions that are available in the SDKs. Although not required to build an application, developers who run nodes may find it useful to achieve some level of fluency in `goal` as a complementary tool during testing and validation. `goal` _is_ required to setup more advanced testing environments using private networks.
 
@@ -30,16 +30,16 @@ There are also REST APIs available for both **algod** and **kmd** processes.
 
 ## Indexer
 
-Algorand provides a standalone daemon [algorand-indexer](../../get-details/indexer) that reads committed blocks from the Algorand blockchain and maintains a local database of transactions and accounts that are searchable and indexed. A [REST API](../../rest-apis/indexer) is available which enables application developers to perform rich and efficient queries on accounts, transactions, assets, and so forth.
+Algorand provides a standalone daemon [algorand-indexer](../../../get-details/indexer) that reads committed blocks from the Algorand blockchain and maintains a local database of transactions and accounts that are searchable and indexed. A [REST API](../../../rest-apis/indexer) is available which enables application developers to perform rich and efficient queries on accounts, transactions, assets, and so forth.
 
 # Choosing a network
-There are three **public** [Algorand Networks](../../get-details/algorand-networks) paired with the functionality to [create **private** networks](https://developer.algorand.org/tutorials/create-private-network/) using any protocol version. 
+There are three **public** [Algorand Networks](../../../get-details/algorand-networks) paired with the functionality to [create **private** networks](https://developer.algorand.org/tutorials/create-private-network/) using any protocol version. 
 
-[**MainNet**](../../get-details/algorand-networks/mainnet) is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. [**TestNet**](../../get-details/algorand-networks/testnet) mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  [**BetaNet**](../../get-details/algorand-networks/betanet) is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common.
+[**MainNet**](../../../get-details/algorand-networks/mainnet) is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. [**TestNet**](../../../get-details/algorand-networks/testnet) mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  [**BetaNet**](../../../get-details/algorand-networks/betanet) is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common.
 
  
 ## Recommended Use
-If your application depends on features currently available on MainNet, use TestNet as your public testing network. If your application depends on features only available on BetaNet, use BetaNet as your public testing network. In all cases, use private networks, as needed, for greater control and isolation of your development environment. Learn more about feature availability on each of the networks in the [Network Reference](../../get-details/algorand-networks) section. Sections in these docs marked with 🔷 indicate a feature available on BetaNet only.
+If your application depends on features currently available on MainNet, use TestNet as your public testing network. If your application depends on features only available on BetaNet, use BetaNet as your public testing network. In all cases, use private networks, as needed, for greater control and isolation of your development environment. Learn more about feature availability on each of the networks in the [Network Reference](../../../get-details/algorand-networks) section. Sections in these docs marked with 🔷 indicate a feature available on BetaNet only.
 
 If you are not sure which network to start with, TestNet is usually a good option as it allows you to develop against live features without risking real assets. Switching networks later will be trivial.
 
@@ -47,7 +47,7 @@ If you are not sure which network to start with, TestNet is usually a good optio
 
  || **MainNet** | **TestNet** | **BetaNet** | 
 :-- |:-------------:| :-------------: | :-------------: | 
-**Protocol Version** | [Current](../../get-details/algorand-networks/mainnet) | Current| Future | Any |
+**Protocol Version** | [Current](../../../get-details/algorand-networks/mainnet) | Current| Future | Any |
 **Genesis Distribution** | Unique | Unique | Unique | Any |
 **Algo Accessibility** | For sale | Free from faucet | Free from faucet | 
 **Network Reliability**         | Most Stable  | Very Stable, but restarts are possible | Experimental; frequent restarts | 
@@ -119,7 +119,7 @@ $ cat $ALGORAND_DATA/algod.token
 **Production Ready**| ✅ | ❌ | ✅
 
 # Install your preferred SDK
-Install your preferred SDK by following the setup instructions in the [SDK reference docs](../reference/sdks/index.md).
+Install your preferred SDK by following the setup instructions in the [SDK reference docs](../../reference/sdks/index.md).
 
 # Other Setup Tips
 

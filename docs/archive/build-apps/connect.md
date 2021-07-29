@@ -2,7 +2,7 @@ title: 2. Connect to Node
 
 The **algod IP address** and access **token** you obtained in the [Workspace Setup](setup) section gives your application the credentials to interface with the Algorand blockchain. Interfacing with the Algorand blockchain using the SDKs is accomplished through an **algod client**. If using the algod REST API directly, these credentials can be supplied with each request.
 
-_Read more about the [node's algod process](../../run-a-node/reference/artifacts#algod)._
+_Read more about the [node's algod process](../../../run-a-node/reference/artifacts#algod)._
 
 !!! info
     The examples in this section have been updated to the v2 API, which was launched to MainNet on June 16, 2020. Visit the [v2 Migration Guide](../migration) for information on how to migrate your code from v1. Access v2 and archived v1 examples [here](https://github.com/algorand/docs/tree/master/examples/start_building/v2). 
