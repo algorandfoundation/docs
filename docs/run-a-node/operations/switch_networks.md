@@ -1,4 +1,4 @@
-title: Switch Networks
+title: Switch networks
 By default, an Algorand installation is configured to run on MainNet. For most users, this is the desired outcome. Developers, however, need access to [TestNet or BetaNet networks](../../../build-apps/setup/#choosing-a-network). This guide describes switching between networks.
 
 # Replacing the Genesis file

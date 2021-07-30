@@ -1,4 +1,4 @@
-title: Security Tokens
+title: Create a security token
 
 TO DO:
 

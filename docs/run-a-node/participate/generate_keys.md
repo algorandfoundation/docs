@@ -1,4 +1,4 @@
-title: Generate a Participation Key
+title: Generate a participation key
 
 Algorand provides a set of keys for voting and proposing blocks separate from account spending keys. These are called **participation keys** (sometimes referred to as **partkeys**).  At a high-level, participation keys are a specialized set of keys located on a single node. Once this participation key set is associated with an account, the account has the ability to participate in consensus. 
 

@@ -1,4 +1,4 @@
-title: Fungible Tokens
+title: Create a fungible token
 
 TO DO:
 

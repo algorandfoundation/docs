@@ -1,4 +1,4 @@
-title: Build with PyTeal
+title: Build with Python
 
 TO DO:
 

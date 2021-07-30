@@ -1,4 +1,4 @@
-title: A Contract Walkthrough
+title: A contract walkthrough
 
 This guide covers working with the `goal` command-line tool with stateless smart contracts.
 

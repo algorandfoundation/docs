@@ -1,4 +1,4 @@
-title: Renew Participation Keys
+title: Renew participation keys
 
 The process of renewing a participation key is simply creating a new participation key and registering it online before the previous key expires.
 

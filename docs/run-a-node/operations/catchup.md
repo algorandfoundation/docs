@@ -1,4 +1,4 @@
-title: Catchup And Status
+title: Catchup And status
 
 # Catchup
 When first starting a node it will process all blocks in the blockchain, even if it does not store all blocks locally. The node does so to verify every block in the blockchain thereby checking the validity of the chain. The process can be time-consuming but is essential when running a trusted node.  
