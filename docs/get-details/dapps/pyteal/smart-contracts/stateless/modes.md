@@ -1,4 +1,4 @@
-title: Modes of Use
+title: Modes of use
 
 Stateless smart contracts have two basic usage scenarios; as a [**contract account**](#contract-account) or as a [**delegated signature**](#delegated-approval). These modes are used to approve transactions in different ways which are described below. Both modes make use of Logic Signatures.
 

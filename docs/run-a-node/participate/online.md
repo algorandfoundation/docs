@@ -1,4 +1,4 @@
-title: Register Online
+title: Register online
 
 This section assumes that you have already [generated a participation key](generate_keys.md) for the account you plan to mark online. 
 

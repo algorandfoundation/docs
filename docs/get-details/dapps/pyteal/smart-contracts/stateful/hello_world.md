@@ -1,4 +1,4 @@
-title: Your First Application
+title: Your first application
 
 Use the guide below to deploy a "hello world" Algorand application, a [stateful smart contract](..#stateful-smart-contracts) using the [Transaction Execution Approval Language (TEAL)](../../../avm/teal). This requires [setting up your workspace](../../../../../archive/build-apps/setup) and [connecting to a node](../../../../../archive/build-apps/connect). This guide covers drafting the smart contract code, deploying to the network, interacting with and removing the application.
 
@@ -184,8 +184,8 @@ goal app create --creator $ADDR_CREATOR \
 !!! Note
 	If you are using [sandbox](https://github.com/algorand/sandbox), you need to copy the approval and clear programs to sandbox beforehand. Concretely, after all the `export` commands, run:
     ```bash
-    ./sandbox copy "$TEAL_APPROVAL_PROG"
-    ./sandbox copy "$TEAL_CLEAR_PROG"
+    ./sandbox copyTo "$TEAL_APPROVAL_PROG"
+    ./sandbox copyTo "$TEAL_CLEAR_PROG"
     ./sandbox goal app create ...
     ```
     where `...` should be replaced by the parameters above.

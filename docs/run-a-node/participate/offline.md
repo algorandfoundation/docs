@@ -1,4 +1,4 @@
-title: Register Offline
+title: Register offline
 
 To mark an account **offline** send a key registration transaction to the network authorized by the account to be marked offline. The signal to mark the sending account offline is the issuance of a `"type": "keyreg"` transaction that does not contain any participation key-related fields (i.e. they are all set to null values)
 

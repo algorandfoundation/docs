@@ -1,4 +1,4 @@
-title: Transaction Reference
+title: Transaction reference
 
 Each table below specifies the **field name**, whether it is optional or required, its **type** within the protocol code (note that SDKs input types for these fields may differ), the **codec**, which is the name of the field when viewed within a transaction, and a **description** of the field. 
 

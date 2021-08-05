@@ -1,4 +1,4 @@
-title: Install a Node
+title: Install a node
 # Overview
 This guide explains how to install the Algorand Node software on Linux Distributions and Mac OS. When installing on Linux, three methods are covered: *RPM installs*, *Debian installs* and *Other Linux Distributions*. The *Other Linux Distributions* method has been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 3) and allows manually setting data directories and requires manual updates. The *RPM* and *Debian* installs use fixed directories and automatically update.
 
@@ -125,7 +125,7 @@ This install defaults to the Algorand MainNet network. See [switching networks](
 # Installing with RPM
 Installing on Fedora and Centos are described below.
 
-+ To install to CentOS, open a terminal and run the following commands.
++ To install to CentOS 7, open a terminal and run the following commands.
 
 ```
 curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
@@ -140,9 +140,11 @@ sudo yum install algorand-devtools
 sudo yum install algorand
 ```
 
-+ To install to Fedora open a terminal and run the following commands.
++ To install to Fedora or CentOS 8 Stream, open a terminal and run the following commands.
 
 ```
+curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
+sudo rpmkeys --import rpm_algorand.pub
 dnf install -y 'dnf-command(config-manager)'
 dnf config-manager --add-repo=https://releases.algorand.com/rpm/stable/algorand.repo
 dnf install algorand
@@ -194,19 +196,13 @@ When the installer runs, it will pull down the latest update package from S3 and
 
 # Installing algod as a systemd service
 
-When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service and the `systemd-setup-user.sh` script to create a user service.
-
-Here are the usage strings:
+When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service.
 
 ```
 Usage: ./systemd-setup.sh username group [bindir]
 ```
 
-```
-Usage: ./systemd-setup-user.sh username [bindir]
-```
-
-Note that both of them take an optional binary directory (`bindir`) parameter. This will be discussed more in the following sections.
+Note that this takes an optional binary directory (`bindir`) parameter. This will be discussed more in the following sections.
 
 ### Installing system-wide
 
@@ -235,44 +231,14 @@ Group=@@GROUP@@
 After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
 
 ```
-systemctl daemon-reload
+sudo systemctl daemon-reload
 ```
 
 All that's left now is to start the service using `systemctl`. If preferred, it can also be enabled to start on system startup.
 
 ```
-systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
-
+sudo systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
 ```
-
-### Installing as a user
-
-To install `algod` as a user service:
-
-```
-./systemd-setup.sh kilgore-trout
-```
-
-This will create the service in `$HOMEDIR/.config/systemd/user/algorand@.service` and will have used the template `algorand@.service.template-user` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
-
-The location of the binaries is needed by the template to tell `systemd` where to find `algod`. This can be controlled by the `bindir` parameter, which is the second parameter when calling the shell script, and is expected to be an absolute path.
-
-> If `bindir` is not provided, the script will assume the current working directory.
-
-After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
-
-```
-systemctl --user daemon-reload
-```
-
-All that's left now is to start the service using `systemctl`. If preferred, it can also be enabled to start on system startup.
-
-```
-systemctl --user start algorand@$(systemd-escape $ALGORAND_DATA)
-
-```
-
-> Note that not all distros currently support the user service feature. Run `systemctl --user status` to determine if it's supported.
 
 # Configure Telemetry
 Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. Telemetry can be enabled by following the commands below replacing &lt;name&gt; with your desired hostname (e.g. 'SarahsLaptop').

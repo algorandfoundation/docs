@@ -1,4 +1,4 @@
-title: Configure Node as a Relay
+title: Configure node as a relay
 
 A benefit of Algorand's decentralized network implementation is that a relay is effectively the same as any other node. The distinction currently is made by configuring a node to actively listen for connections from other nodes and having itself advertised using SRV records available through DNS. 
 

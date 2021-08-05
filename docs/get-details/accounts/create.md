@@ -1,4 +1,4 @@
-Title: Creation Methods
+Title: Creation methods
 
 This section describes the three primary methods to create accounts on Algorand, how to use them in the SDKs, `goal`, and `algokey`, and the reasons you might want to choose one method over another for your application. 
 

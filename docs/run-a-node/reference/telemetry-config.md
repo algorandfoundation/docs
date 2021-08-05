@@ -1,4 +1,4 @@
-title: Telemetry Config Settings
+title: Telemetry config settings
 
 #Initialization
 
