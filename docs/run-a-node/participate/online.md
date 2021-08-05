@@ -2,14 +2,14 @@ title: Register online
 
 This section assumes that you have already [generated a participation key](generate_keys.md) for the account you plan to mark online. 
 
-Registering an account online requires authorizing a [key registration transaction](../../features/transactions/index.md#key-registration-transaction) with details of the participation key that will vote on the account's behalf. Once the transaction is processed by the blockchain, the Verifiable Random Function public key (referred to as the VRF public the key) is written into the account’s data and the account will start participating in consensus with that key. This VRF public key is how the account is associated with the specific participation keys.
+Registering an account online requires authorizing a [key registration transaction](../../get-details/transactions/index.md#key-registration-transaction) with details of the participation key that will vote on the account's behalf. Once the transaction is processed by the blockchain, the Verifiable Random Function public key (referred to as the VRF public the key) is written into the account’s data and the account will start participating in consensus with that key. This VRF public key is how the account is associated with the specific participation keys.
 
 !!! info "Important"
 	The moment a key registration transaction is confirmed by the network it takes 320 rounds for the change to take effect. In other words, if a key registration is confirmed in round 1000, the account will not start participating until round 1320.
 
 # Create an online key registration transaction
 
-Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../features/transactions/offline_transactions.md#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register online transaction example](../../features/transactions/index.md#register-account-online). 
+Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../get-details/transactions/offline_transactions.md#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register online transaction example](../../get-details/transactions/index.md#register-account-online). 
 
 
 ```python tab="Python"
@@ -125,12 +125,12 @@ $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJH
 ```
 
 # Authorize and Send the Transaction
-Use the appropriate [authorization method](../../features/transactions/signatures.md) to sign the transaction. 
+Use the appropriate [authorization method](../../../get-details/transactions/signatures) to sign the transaction. 
 
 !!! tip
     It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
 
-[Verify that the participation key is in the node's ledger directory](../../run-a-node/participate/generate_keys.md#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../build-apps/hello_world.md#submit-the-transaction) the transaction and [wait for confirmation](../../build-apps/hello_world.md#wait-for-confirmation). 
+[Verify that the participation key is in the node's ledger directory](../generate_keys#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) the transaction and [wait for confirmation](../../../archive/build-apps/hello_world#wait-for-confirmation). 
 
 # Check that the node is participating
 
@@ -145,5 +145,5 @@ $ grep 'VoteBroadcast' node.log
 
 **See also**
 
-- [Key Registration Transactions](../../features/transactions/index.md#key-registration-transaction)
-- [Register account online](../../features/transactions/index.md#register-account-online)
+- [Key Registration Transactions](../../../get-details/transactions/#key-registration-transaction)
+- [Register account online](../../../get-details/transactions/#register-account-online)

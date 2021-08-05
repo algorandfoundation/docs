@@ -7,7 +7,7 @@ To mark an account **offline** send a key registration transaction to the networ
 
 # Create an offline key registration transaction
 
-Create an offline key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../features/transactions/offline_transactions.md#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register offline transaction example](../../features/transactions/index.md#register-account-offline). 
+Create an offline key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../../get-details/transactions/offline_transactions#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register offline transaction example](../../../get-details/transactions#register-account-offline). 
 
 
 ```python tab="Python"
@@ -62,14 +62,14 @@ $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJH
 ```
 
 # Authorize and Send the Transaction
-Use the appropriate [authorization method](../../features/transactions/signatures.md) to sign the transaction. 
+Use the appropriate [authorization method](../../../get-details/transactions/signatures) to sign the transaction. 
 
 !!! tip
     It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
 
-Once the transaction is signed, wait for the network to reach the transaction's first valid round and then [submit](../../build-apps/hello_world.md#submit-the-transaction) and [wait for confirmation](../../build-apps/hello_world.md#wait-for-confirmation). 
+Once the transaction is signed, wait for the network to reach the transaction's first valid round and then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) and [wait for confirmation](../../../archive/build-apps/hello_world#wait-for-confirmation). 
 
 **See also**
 
-- [Key Registration Transactions](../../features/transactions/index.md#key-registration-transaction)
-- [Register account offline](../../features/transactions/index.md#register-account-offline)
+- [Key Registration Transactions](../../../get-details/transactions#key-registration-transaction)
+- [Register account offline](../../../get-details/transactions#register-account-offline)

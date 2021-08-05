@@ -2,14 +2,14 @@ Title: Creation methods
 
 This section describes the three primary methods to create accounts on Algorand, how to use them in the SDKs, `goal`, and `algokey`, and the reasons you might want to choose one method over another for your application. 
 
-The three primary ways to create accounts on Algorand are as [wallet-derived accounts](#wallet-derived-kmd) (using [kmd](../../reference/node/artifacts.md#kmd)), as [standalone](#standalone), or as [multisignature accounts](#multisignature) (which entails one of the prior methods).
+The three primary ways to create accounts on Algorand are as [wallet-derived accounts](#wallet-derived-kmd) (using [kmd](../../../run-a-node/reference/artifacts#kmd)), as [standalone](#standalone), or as [multisignature accounts](#multisignature) (which entails one of the prior methods).
 
 !!! info
     Remember that accounts participating in transactions are required to maintain a minimum balance of 100,000 micro Algos. Prior to using a newly created account in transactions, make sure that it has a sufficient balance by transferring at least 100,000 micro Algos to it.  An initial transfer of under that amount will fail due to the minimum balance constraint.
 
 # Wallet-derived (kmd)
 
-The Key Management Daemon is a process that runs on [Algorand nodes](../../reference/node/artifacts.md#kmd), so if you are using a [third-party API service](../../build-apps/setup.md#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs also connect to kmd through a REST endpoint and access token. 
+The Key Management Daemon is a process that runs on [Algorand nodes](../../../run-a-node/reference/artifacts#kmd), so if you are using a [third-party API service](../../../archive/build-apps/setup#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs also connect to kmd through a REST endpoint and access token. 
 
 **Reasons you might want to use kmd**
 
@@ -25,7 +25,7 @@ Using kmd requires running a process and storing keys on disk. If you do not hav
 ## How-to use kmd
 ### Start the kmd process
 
-To initiate the kmd process and generate the required `kmd.net` and `kmd.token` files use [`goal kmd`](../../reference/cli/goal/kmd/kmd.md) or [`kmd`](../../reference/cli/kmd.md) command line utilities. 
+To initiate the kmd process and generate the required `kmd.net` and `kmd.token` files use [`goal kmd`](../../../clis/goal/kmd/kmd) or [`kmd`](../../../clis/kmd) command line utilities. 
 
 Start kmd with a 3600 second timeout.
 
@@ -845,7 +845,7 @@ A standalone account is an Algorand address and private key pair that is _not_ s
 
 Standalone accounts have a low setup cost as you do not need to connect to a separate client that depends on separate hardware. All you need is the 25-word human-readable mnemonic of the relevant account. 
 
-Since keys are not stored on disk, standalone accounts can be used in [secure offline signing procedures](../transactions/offline_transactions.md) where hardware constraints may make using kmd more difficult.
+Since keys are not stored on disk, standalone accounts can be used in [secure offline signing procedures](../../transactions/offline_transactions) where hardware constraints may make using kmd more difficult.
 
 Standalone account mnemonics are widely used across developer tools and services within the Algorand ecosystem. However, this should not limit developers who prefer to use kmd since [import](#import-account) and [export](#export-account) functions exist with kmd to ensure compatibility.
 
@@ -946,7 +946,7 @@ Since every transaction requires a threshold of signatures you can create an ext
 
 The keys that can sign for the multisignature account can be stored in separate locations and they can be generated with kmd, as standalone accounts, or with a mixture of both.
 
-Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](../asc1/teal/index.md) and [Algorand Smart Contracts](../asc1/index.md).
+Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](../../dapps/avm/teal) and [Algorand Smart Contracts](../../dapps/pyteal/smart-contracts).
 
 **Reasons you might _not_ want to use multisignature accounts**
 
@@ -956,7 +956,7 @@ Multisignature accounts trade off convenience for security. Every transaction re
 The following code shows how to generate a multisignature account composed of three Algorand addresses, with a signing threshold of 2, and using version 1 of the software (currently the only version). Hardcode the mnemonics in the code samples below to recreate a specific multisignature address or create [new accounts](#how-to-generate-a-standalone-account).
 
 !!! tip
-	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](../transactions/signatures.md#multisignatures).
+	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](../../transactions/signatures#multisignatures).
 
 ```javascript tab="JavaScript"
 const algosdk = require('algosdk');
