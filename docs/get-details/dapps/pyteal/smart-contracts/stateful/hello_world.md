@@ -5,7 +5,7 @@ Use the guide below to deploy a "hello world" Algorand application, a [stateful 
 This is a very basic application which implements a counter. Each time the application is called, the counter value is incremented. 
 
 !!! Info
-	[Algorand Smart Contracts](..) (ASC1) are deployed as either "Stateful" or "Stateless" programs. Both use the [Transaction Execution Approval Language (TEAL)](../../../avm/teal), but the available [OpCodes](../../../avm/teal/opcodes) and, therefore their function, vary by type. This guide covers only [stateful smart contracts](..#stateful-smart-contracts); learn more about [stateless smart contracts](..#stateless-smart-contracts).
+	[Algorand Smart Contracts](/..) (ASC1) are deployed as either "Stateful" or "Stateless" programs. Both use the [Transaction Execution Approval Language (TEAL)](../../../avm/teal), but the available [OpCodes](../../../avm/teal/opcodes) and, therefore their function, vary by type. This guide covers only [stateful smart contracts](..#stateful-smart-contracts); learn more about [stateless smart contracts](..#stateless-smart-contracts).
 
 ## Stateful Application Primer
 

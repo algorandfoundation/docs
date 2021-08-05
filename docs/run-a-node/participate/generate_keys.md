@@ -2,7 +2,7 @@ title: Generate a Participation Key
 
 Algorand provides a set of keys for voting and proposing blocks separate from account spending keys. These are called **participation keys** (sometimes referred to as **partkeys**).  At a high-level, participation keys are a specialized set of keys located on a single node. Once this participation key set is associated with an account, the account has the ability to participate in consensus. 
 
-_[Read more about how Participation Keys function in the Algorand Consensus Protocol](../../get-details/algorand_consensus#participation-keys)._
+_[Read more about how Participation Keys function in the Algorand Consensus Protocol](../../../get-details/algorand_consensus#participation-keys)._
 
 !!! info "Important"
 	- The account’s private spending key does not need to be on the node to generate a participation key. Technically, anyone can generate a participation key for a particular account, but only the private spending key of the account can authorize the transaction that would register the account to go online with a particular participation key. This distinction allows you to keep private keys in cold storage.
@@ -14,7 +14,7 @@ _[Read more about how Participation Keys function in the Algorand Consensus Prot
 
 # Generate the participation key with `goal`
 
-To generate a participation key, use the [`goal account addpartkey`](../../clis/goal/account/addpartkey) command on the node where the participation key will reside. This command takes the address of the participating account, a range of rounds, and an optional key dilution parameter.  It then generates a [VRF key pair](../../get-details/algorand_consensus#verifiable-random-function) and, using optimizations, generates a set of single-round voting keys for each round of the range specified. The VRF private key is what is passed into the VRF to determine if you are selected to propose or vote on a block in any given round. 
+To generate a participation key, use the [`goal account addpartkey`](../../../clis/goal/account/addpartkey) command on the node where the participation key will reside. This command takes the address of the participating account, a range of rounds, and an optional key dilution parameter.  It then generates a [VRF key pair](../../../get-details/algorand_consensus#verifiable-random-function) and, using optimizations, generates a set of single-round voting keys for each round of the range specified. The VRF private key is what is passed into the VRF to determine if you are selected to propose or vote on a block in any given round. 
 
 ```zsh tab="goal"
 $ goal account addpartkey -a <address-of-participating-account> --roundFirstValid=<partkey-first-round> --roundLastValid=<partkey-last-round> --keyDilution=<key-dilution-value> 
@@ -28,7 +28,7 @@ This creates a participation key in the ledger directory of the node, which is w
 
 # Check that the key exists in the node's ledger directory
 
-The [`goal account listpartkeys`](../../clis/goal/account/listpartkeys) command will check for any participation keys that live on the node and display pertinent information about them. 
+The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) command will check for any participation keys that live on the node and display pertinent information about them. 
 
 ```zsh tab="goal"
 $ goal account listpartkeys
@@ -47,7 +47,7 @@ If the key you generated does not show up, check that it was correctly placed in
 
 # View participation key info
 
-Use [`goal account partkeyinfo`](../../clis/goal/account/partkeyinfo) to dump all the information about each participation key that lives on the node. This information is used to generate the online key registration transaction [described in the next section](./online.md).
+Use [`goal account partkeyinfo`](../../../clis/goal/account/partkeyinfo) to dump all the information about each participation key that lives on the node. This information is used to generate the online key registration transaction [described in the next section](./online.md).
 
 ```zsh tab="goal"
 $ goal account partkeyinfo
@@ -65,4 +65,4 @@ File: EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4.6000000.9000000
 ...
 ```
 
-Above is the example output from a particular node. Use these values to create the [key registration transaction](../../get-details/transactions#register-account-online) that will place the account online.
+Above is the example output from a particular node. Use these values to create the [key registration transaction](../../../get-details/transactions#register-account-online) that will place the account online.

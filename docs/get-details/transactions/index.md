@@ -469,7 +469,7 @@ For larger transactions (> 1 KB in size), the resulting total fee will be greate
 In the future as more transactions are added to the network (and blocks are full), the minimum transaction fee may not guarantee that your transaction is processed as quickly as other transactions with higher fees set. In this case, using the returned suggested fee, which is based on the current transaction load, is the preferred method.
 
 ## Flat Fee
-You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`minFee`)](../../reference/rest-apis/algod/#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
+You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`minFee`)](../../reference/rest-apis/algod/v1#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
 
 # Setting First and Last Valid
 
