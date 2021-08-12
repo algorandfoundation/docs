@@ -7,10 +7,10 @@ title: MainNet
 - [Fast Catchup](../../../run-a-node/setup/install/#sync-node-network-using-fast-catchup)
   
 # Version
-`v2.8.0.stable`
+`v2.9.1.stable`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v2.8.0-stable
+https://github.com/algorand/go-algorand/releases/tag/v2.9.1-stable
 
 # Genesis ID
 `mainnet-v1.0`
