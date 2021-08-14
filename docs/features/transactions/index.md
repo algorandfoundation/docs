@@ -340,7 +340,7 @@ An Asset Freeze Transaction is issued by the Freeze Address and results in the a
   }
 }
 ```
-An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](../../reference/transactions.md#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](../../reference/transactions.md#assetfrozen) field is set to `true`.
+An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](../../reference/transactions.md#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](../../reference/transactions.md#assetfrozen) field is set to `false`.
 
 ### See also
 - [Freezing an Asset](../asa.md#freezing-an-asset)
