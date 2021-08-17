@@ -57,9 +57,10 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 [Debugging TEAL](./asc1/debugging.md) - Tools and methods for debugging TEAL code.
 
-
-
-
 # Searching the Blockchain (Indexer V2)
 
 [Overview](./indexer.md) - How to use Indexer v2 functionality to efficiently query data on the blockchain.
+
+# WalletConnect
+
+[WalletConnect](./walletconnect.md) is an open protocol to communicate securely between mobile wallets and decentralized applications.

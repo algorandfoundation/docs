@@ -8,3 +8,4 @@ arrange:
   - teal
   - transactions.md
   - payment_prompts.md
+  - walletconnect-schema.md

@@ -47,6 +47,10 @@ An index of the structure and fields of Algorand Transactions.
 
 The [URI specification](payment_prompts.md) representing a standardized way for applications and websites to send requests and information through deeplinks, QR codes, etc. 
 
+# WalletConnect Schema
+
+The [WalletConnect Schema](./walletconnect-schema.md) is a set of JSON-RPC 2.0 requests and responses supporting secure communication between mobile wallets and decentralized applications.
+
 # Node Reference
 
 An overview of the files and software packaged with a node plus the full list of node configuration settings.
