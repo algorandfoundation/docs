@@ -47,7 +47,7 @@ sudo mkdir -p ${ALGORAND_DATA}
 Copy the specific network genesis file to the new directory and set the ownership to the algorand account.
 
 ```
-sudo cp -p /var/lib/algorand/genesis/devnet/genesis.json ${ALGORAND_DATA}/genesis.json
+sudo cp -p /var/lib/algorand/genesis/testnet/genesis.json ${ALGORAND_DATA}/genesis.json
 sudo cp -p /var/lib/algorand/system.json ${ALGORAND_DATA}/system.json
 sudo chown -R algorand ${ALGORAND_DATA}
 ```
