@@ -2,11 +2,11 @@ title: WalletConnect
 
 ## What is WalletConnect protocol?
 
-WalletConnect is an open protocol to communicate securely between mobile wallets and decentralized applications (dApps) using QR code scanning (desktop) or deep linking (mobile); It’s not an app, not a blockchain and has no token. The protocol is implemented directly within the official Algorand Wallet and allows any dApp developer to add it to their application workflows.
+[WalletConnect](https://walletconnect.org/ target="_blank") is an open protocol to communicate securely between mobile wallets and decentralized applications (dApps) using QR code scanning (desktop) or deep linking (mobile); It’s not an app, not a blockchain and has no token. The protocol is implemented directly within the official Algorand Wallet and allows any dApp developer to add it to their application workflows.
 
 ## Why should I care?
 
-From an enduser standpoint, they really don’t need to understand _how_ it works, but they will need to accept the _connection request_ initiated by the dApp within their mobile wallet. As a dApp developer you’ll want to understand some basics about the protocol for a successful integration and provide a seamless user experience. Algorand provide a [custom WalletConnect schema](../reference/walletconnect-schema.md) and a [quick start guide](#quick-start-for-dapp-devs) for accelerating integrations.
+From an end user standpoint, they really don’t need to understand _how_ it works, but they will need to accept the _connection request_ initiated by the dApp within their mobile wallet. As a dApp developer you’ll want to understand some basics about the protocol for a successful integration and provide a seamless user experience. Algorand provide a [custom WalletConnect schema](../reference/walletconnect-schema.md) and a [quick start guide](#quick-start-for-dapp-devs) for accelerating integrations.
 
 <center>![WalletConnect Header](../imgs/walletconnect-header.png)</center>
 
@@ -22,16 +22,16 @@ Information exchange between the peers typically consists of an unsigned atomic 
 
 ## Quick start for dApp devs
 
-The TypeScript sample code below should allow a dApp developer to establish a connection and request a simple payment transaction for signature. A [detailed example](https://github.com/jasonpaulos/algorand-walletconnect-example-dapp) is offered in React and a [live demo](https://jasonpaulos.github.io/algorand-walletconnect-example-dapp/) is available on TestNet.
+The TypeScript sample code below should allow a dApp developer to establish a connection and request a simple payment transaction for signature.
 
 ### Install
 
 ```bash tab="yarn"
-yarn add @walletconnect/client @walletconnect/qrcode-modal @algorand/js-algorand-sdk
+yarn add @walletconnect/client algorand-walletconnect-qrcode-modal algosdk
 ```
 
 ```bash tab="npm"
-npm install --save @walletconnect/client @walletconnect/qrcode-modal @algorand/js-algorand-sdk
+npm install --save @walletconnect/client algorand-walletconnect-qrcode-modal algosdk
 ```
 
 ### Initiate Connection
@@ -59,8 +59,8 @@ connector.on("connect", (error, payload) => {
     throw error;
   }
 
-  // Get provided accounts and chainId
-  const { accounts, chainId } = payload.params[0];
+  // Get provided accounts
+  const { accounts } = payload.params[0];
 });
 
 connector.on("session_update", (error, payload) => {
@@ -68,16 +68,14 @@ connector.on("session_update", (error, payload) => {
     throw error;
   }
 
-  // Get updated accounts and chainId
-  const { accounts, chainId } = payload.params[0];
+  // Get updated accounts 
+  const { accounts } = payload.params[0];
 });
 
 connector.on("disconnect", (error, payload) => {
   if (error) {
     throw error;
   }
-
-  // Delete connector
 });
 ```
 
@@ -93,14 +91,35 @@ const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
 });
 
 // Sign transaction
-connector
-  .signTransaction(txn)
-  .then((result) => {
-    // Returns signed transaction
-    console.log(result);
-  })
-  .catch((error) => {
-    // Error returned when rejected
-    console.error(error);
-  });
+// txns is an array of algosdk.Transaction
+const txnsToSign = txns.map(txn => {
+  const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn.txn)).toString("base64");
+
+  return {
+    txn: encodedTxn,
+    message: 'Description of transaction being signed',
+    // Note: if the transaction does not need to be signed (because it's part of an atomic group
+    // that will be signed by another party), specify an empty singers array like so:
+    // signers: [],
+  };
+});
+
+const requestParams = [txnsToSign];
+
+const request = formatJsonRpcRequest(ALGORAND_SIGN_TRANSACTION_REQUEST, requestParams);
+const result: Array<string | null> = await this.connector.sendCustomRequest(request);
+const decodedResult = result.map(element => {
+  return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
+});
 ```
+
+### Close Connection
+
+```TypeScript
+// Delete connector
+connector.killSession();
+```
+
+## Next Steps
+
+A [detailed example](https://github.com/algorand/algorand-walletconnect-example-dapp) is offered in React and a [live demo](https://algorand.github.io/algorand-walletconnect-example-dapp/) is available on TestNet. 
