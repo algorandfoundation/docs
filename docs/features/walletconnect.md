@@ -2,7 +2,7 @@ title: WalletConnect
 
 ## What is WalletConnect protocol?
 
-[WalletConnect](https://walletconnect.org/ target="_blank") is an open protocol to communicate securely between mobile wallets and decentralized applications (dApps) using QR code scanning (desktop) or deep linking (mobile); It’s not an app, not a blockchain and has no token. The protocol is implemented directly within the official Algorand Wallet and allows any dApp developer to add it to their application workflows.
+[WalletConnect](https://walletconnect.org/) is an open protocol to communicate securely between mobile wallets and decentralized applications (dApps) using QR code scanning (desktop) or deep linking (mobile); It’s not an app, not a blockchain and has no token. The protocol is implemented directly within the official Algorand Wallet and allows any dApp developer to add it to their application workflows.
 
 ## Why should I care?
 
@@ -27,19 +27,20 @@ The TypeScript sample code below should allow a dApp developer to establish a co
 ### Install
 
 ```bash tab="yarn"
-yarn add @walletconnect/client algorand-walletconnect-qrcode-modal algosdk
+yarn add @walletconnect/client algorand-walletconnect-qrcode-modal algosdk @json-rpc-tools/utils
 ```
 
 ```bash tab="npm"
-npm install --save @walletconnect/client algorand-walletconnect-qrcode-modal algosdk
+npm install --save @walletconnect/client algorand-walletconnect-qrcode-modal algosdk @json-rpc-tools/utils
 ```
 
 ### Initiate Connection
 
 ```typescript
 import WalletConnect from "@walletconnect/client";
-import QRCodeModal from "@walletconnect/qrcode-modal";
-import algosdk from "@algorand/js-algorand-sdk";
+import QRCodeModal from "algorand-walletconnect-qrcode-modal";
+import algosdk from "algosdk";
+import { formatJsonRpcRequest } from "@json-rpc-tools/utils";
 
 // Create a connector
 const connector = new WalletConnect({
@@ -106,7 +107,7 @@ const txnsToSign = txns.map(txn => {
 
 const requestParams = [txnsToSign];
 
-const request = formatJsonRpcRequest(ALGORAND_SIGN_TRANSACTION_REQUEST, requestParams);
+const request = formatJsonRpcRequest(algo_signTxn, requestParams);
 const result: Array<string | null> = await this.connector.sendCustomRequest(request);
 const decodedResult = result.map(element => {
   return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
@@ -122,4 +123,4 @@ connector.killSession();
 
 ## Next Steps
 
-A [detailed example](https://github.com/algorand/algorand-walletconnect-example-dapp) is offered in React and a [live demo](https://algorand.github.io/algorand-walletconnect-example-dapp/) is available on TestNet. 
+A [detailed example](https://github.com/algorand/walletconnect-example-dapp) is offered in React and a [live demo](https://algorand.github.io/walletconnect-example-dapp/) is available on TestNet. 
