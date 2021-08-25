@@ -107,7 +107,7 @@ const txnsToSign = txns.map(txn => {
 
 const requestParams = [txnsToSign];
 
-const request = formatJsonRpcRequest(algo_signTxn, requestParams);
+const request = formatJsonRpcRequest("algo_signTxn", requestParams);
 const result: Array<string | null> = await this.connector.sendCustomRequest(request);
 const decodedResult = result.map(element => {
   return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
