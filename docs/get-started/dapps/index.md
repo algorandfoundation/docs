@@ -1,4 +1,4 @@
-title: What is a dapp?
+title: What is a dApp?
 
 TO DO:
 

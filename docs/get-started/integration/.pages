@@ -1,6 +1,5 @@
 title: Integration
 
 arrange:
-    - payments.md
-    - tokens.md
+    - assets.md
     - searching_data.md
