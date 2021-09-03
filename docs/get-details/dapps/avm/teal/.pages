@@ -1,9 +1,8 @@
 title: TEAL
 arrange:
-  - stateful
-  - stateless
-  - debugging.md
+  - index.md
   - specification.md
   - opcodes.md
   - guidelines.md
   - templates
+  - updates

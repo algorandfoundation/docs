@@ -1,0 +1,8 @@
+title: Smart contracts
+
+arrange:
+  - index.md
+  - stateful
+  - stateless
+  - frontend
+  - test-and-deploy

@@ -1,6 +1,6 @@
-title: Using the SDKs
+title: Interact with stateful contracts
 
-This guide covers using stateful smart contracts with the Algorand SDKs. Stateful smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../teal/index.md) or with Python using the [PyTeal](../teal/pyteal.md) library.
+This guide covers using stateful smart contracts with the Algorand SDKs. Stateful smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../../../../avm/teal/) or with Python using the [PyTeal](../../../../pyteal/) library.
 
 Each SDK's install process is discussed in the [SDK Reference](../../../reference/sdks/index.md) documentation.
 

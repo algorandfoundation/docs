@@ -2,7 +2,7 @@ title: Overview
 
 Algorand Smart Contracts can be written in either a stateless or stateful manner. To be stateful means that some amount of storage on the chain is used to store values. This storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Like stateless smart contracts, stateful contracts are written in TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. Stateless smart contracts’ primary purpose is to approve or reject spending transactions. Stateful contracts do not approve spending transactions but provide logic that allows the state (globally or locally) of the contract to be manipulated. Most often, these contracts will be paired with other Algorand capabilities or each other using atomic transfers to form a complete application.
 
-See the [*TEAL Reference Guide*](../../../reference/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../../../reference/teal/opcodes.md) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../teal/index.md).
+See the [*TEAL Reference Guide*](../../../avm/teal/specification) to understand how to write TEAL and the [*TEAL Opcodes*](../../../avm/teal/opcodes) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../../../avm/teal).
 
 !!! important "A note about PyTeal"
     Where possible, TEAL code snippets are accompanied by their counterparts in PyTeal. Here are a few things to be aware of when comparing across these two languages:
@@ -30,9 +30,9 @@ Calls to stateful smart contracts are implemented using `ApplicationCall` transa
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
 * ClearState - Similar to CloseOut, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
 
-The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgam` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
+The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
 
-<center>![Stateful Smart Contract](../../../imgs/stateful-1.png)</center>
+<center>![Stateful Smart Contract](../../../../../imgs/stateful-1.png)</center>
 <center>*Stateful Smart Contract*</center>
 
 The `goal` calls shown above in the orange boxes represent all the specific calls that can be made against a stateful smart contract and are described later in this document. These calls are also available in the SDKs. The teal-colored boxes represent the two required TEAL programs, the blue boxes are the state variables (local and global), and the yellow boxes represent the TEAL opcodes used to modify state. Modifying state is detailed in the next section.
@@ -44,7 +44,7 @@ The arguments array is used to pass standard arguments to the contract. The argu
 
 The other three arrays are limited to 8 total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction. Many opcodes that make use of these arrays take an integer parameter as an index into these arrays. The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. Most of the opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
 
-<center>![Stateful Smart Contract](../../../imgs/stateful-2.png)</center>
+<center>![Stateful Smart Contract](../../../../../imgs/stateful-2.png)</center>
 <center>*Stateful Smart Contract Arrays*</center>
 
 # Modifying State in Smart Contract
@@ -336,6 +336,9 @@ When creating a stateful smart contract, there is a limit of 64 key-value pairs 
 
 Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased up to 3 additional 2KB pages, which would result in an 8KB limit for both programs. Note the size increases will also increase the minimum balance requirement for creating the application. To request additional pages, the setting (`extra-pages`) is available when creating the stateful smart contract using `goal`. These extra pages can also be requested using the SDKs. This setting allows setting up to 3 additional 2KB pages.
 
+!!! warning
+	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
+
 !!! info    
     Accounts can only opt into or create up to 10 stateful smart contracts.
 
@@ -507,7 +510,7 @@ print(compileTeal(program, Mode.Application))
 ```
 
 # Atomic Transfers and Transaction Properties
-The [TEAL opcodes](../../../reference/teal/opcodes.md) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using TEAL.
+The [TEAL opcodes](../../../avm/teal/opcodes) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using TEAL.
 
 ```text tab="TEAL"
 txn Amount
@@ -547,7 +550,7 @@ program = Gtxn[1].type_enum() == TxnType.Payment
 print(compileTeal(program, Mode.Application))
 ```
 
-In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../../reference/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
+In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../../avm/teal/opcodes) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
 
 If any transaction in a group of transactions is a call to a stateful smart contract, the opcodes `gtxna` and `gtxnsa` can be used to access any of the transactions array values.
 
@@ -608,7 +611,7 @@ program = AssetParam.total(Int(0))
 print(compileTeal(program, Mode.Application))
 ```
 
-This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../../reference/teal/opcodes.md) documentation for more details on what additional parameters can be read.
+This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../../avm/teal/opcodes) documentation for more details on what additional parameters can be read.
 
 # Creating An Asset or Contract Within A Group Of Transactions
 The Algorand Protocol assigns an identifier (ID) when creating Algorand Standard Assets (ASA) or Stateful Smart Contracts. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the stateful smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. When creating either in an atomic transfer TEAL can be used to retrieve these IDs. For example you may want to store the asset ID or another smart contract ID in the contract’s state for later usage. 
@@ -681,7 +684,7 @@ Interpretation:
 * when `tt=2`, the value is in the field `ui`.
 
 # Differences Between Stateful and Stateless Smart Contracts
-Smart Contracts in Algorand are either stateful or stateless, where stateful contracts actually store values on blockchain and stateless are used to approve spending transactions. In addition to this primary difference, several of the TEAL opcodes are restricted to only be used with specific smart contract types. For example, the `ed25519verify` opcode can only be used in stateless smart contracts, and the `app_opted_in` opcode can only be used in stateful smart contracts. To easily determine where an opcode is valid, the [TEAL opcodes](../../../reference/teal/opcodes.md) documentation supplies a `Mode` field that will either designate `Signature ` or `Application`. The `Signature` mode refers to only stateless smart contracts and the `Application` mode refers to the stateful smart contracts. If the `Mode` attribute is not present on the opcode reference, the call can be used in either smart contract type.
+Smart Contracts in Algorand are either stateful or stateless, where stateful contracts actually store values on blockchain and stateless are used to approve spending transactions. In addition to this primary difference, several of the TEAL opcodes are restricted to only be used with specific smart contract types. For example, the `ed25519verify` opcode can only be used in stateless smart contracts, and the `app_opted_in` opcode can only be used in stateful smart contracts. To easily determine where an opcode is valid, the [TEAL opcodes](../../../avm/teal/opcodes) documentation supplies a `Mode` field that will either designate `Signature ` or `Application`. The `Signature` mode refers to only stateless smart contracts and the `Application` mode refers to the stateful smart contracts. If the `Mode` attribute is not present on the opcode reference, the call can be used in either smart contract type.
 
 # Boilerplate Stateful Smart Contract
 As a way of getting started writing stateful smart contracts, the following boilerplate template is supplied. The code provides labels or handling different `ApplicationCall` transactions and also prevents updating and deleting the smart contract.

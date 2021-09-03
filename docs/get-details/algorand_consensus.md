@@ -1,4 +1,4 @@
-title: Algorand Consensus
+title: Algorand consensus
 
 The Algorand blockchain uses a decentralized Byzantine Agreement protocol that leverages pure proof of stake (Pure POS). This means that it can tolerate malicious users, achieving consensus without a central authority, as long as a supermajority of the stake is in non-malicious hands. This protocol is very fast and requires minimal computational power per node, giving it the ability to finalize transactions efficiently. 
 
@@ -18,18 +18,18 @@ Consensus requires three steps to propose, confirm and write the block to the bl
 # Block Proposal
 In the block proposal phase, accounts are selected to propose new blocks to the network. This phase starts with every node in the network looping through each online account for which it has valid participation keys, running Algorand’s VRF to determine if the account is selected to propose the block. The VRF acts similar to a weighted lottery where the number of Algos that the account has participating online determines the account’s chance of being selected. Once an account is selected by the VRF, the node propagates the proposed block along with the VRF output, which proves that the account is a valid proposer. We then move from the propose step to the soft vote step.
 
-![Block Proposal](./imgs/algorand_consensus-1.png)
+![Block Proposal](../imgs/algorand_consensus-1.png)
 <center>*Block Proposal*</center>
 
 # Soft Vote
 The purpose of this phase is to filter the number of proposals down to one, guaranteeing that only one block gets certified. Each node in the network will get many proposal messages from other nodes. Nodes will verify the signature of the message and then validate the selection using the VRF proof. Next, the node will compare the hash from each validated winner’s VRF proof to determine which is the lowest and will only propagate the block proposal with the lowest VRF hash. This process continues for a fixed amount of time to allow votes to be propagated across the network. 
 
-![Soft Vote 1](./imgs/algorand_consensus-2.png)
+![Soft Vote 1](../imgs/algorand_consensus-2.png)
 <center>*Soft Vote Part 1*</center>
 
 Each node will then run the VRF for every participating account it manages to see if they have been chosen to participate in the soft vote committee. If any account is chosen it will have a weighted vote based on the number of Algos the account has, and these votes will be propagated to the network. These votes will be for the lowest VRF block proposal calculated at the timeout and will be sent out to the other nodes along with the VRF Proof.
 
-![Soft Vote 2](./imgs/algorand_consensus-3.png)
+![Soft Vote 2](../imgs/algorand_consensus-3.png)
 <center>*Soft Vote Part 2*</center>
 
 A new committee is selected for every step in the process and each step has a different committee size. This committee size is quantified in algos.  A quorum of votes is needed to move to the next step and must be a certain percentage of the expected committee size. These votes will be received from other nodes on the network and each node will validate the committee membership VRF proof before adding to the vote tally. Once a quorum is reached for the soft vote the process moves to the certify vote step.
@@ -37,7 +37,7 @@ A new committee is selected for every step in the process and each step has a di
 # Certify Vote
 A new committee checks the block proposal that was voted on in the soft vote stage for overspending, double-spending, or any other problems. If valid, the new committee votes again to certify the block. This is done in a similar manner as the soft vote where each node iterates through its managed accounts to select a committee and to send votes. These votes are collected and validated by each node until a quorum is reached, triggering an end to the round and prompting the node to create a certificate for the block and write it to the ledger. At that point, a new round is initiated and the process starts over.
 
-![Certify Vote](./imgs/algorand_consensus-4.png)
+![Certify Vote](../imgs/algorand_consensus-4.png)
 <center>*Certify Vote*</center>
 
 If a quorum is not reached in a certifying committee vote by a certain timeout then the network will enter recovery mode.

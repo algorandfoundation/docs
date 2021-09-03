@@ -1,4 +1,4 @@
-title: Using the SDKs
+title: Interact with stateless contracts
 
 This guide covers using stateless smart contracts with the Algorand SDKs. Stateless smart contracts can be used to create contract accounts or to handle account delegation which is described in the [Modes](modes.md) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](../teal/index.md) or with Python using the [PyTeal](../teal/pyteal.md) library.
 
@@ -341,7 +341,7 @@ Contract Accounts are created by compiling the TEAL logic. Once the contract acc
 * Sign the Transaction with the Logic Signature.
 * Send the Transaction to the network.
 
-<center>![Transaction From Contract Account](../../../imgs/asc1_sdk_usage-1.png)</center>
+<center>![Transaction From Contract Account](../../../../../imgs/asc1_sdk_usage-1.png)</center>
 <center>*Transaction From Contract Account*</center>
 
 The following example illustrates compiling a TEAL program with one argument and signing a transaction with a created logic signature. The example TEAL program `samplearg.teal` takes one argument. Information on TEAL Opcodes can be [found here](https://developer.algorand.org/docs/reference/teal/opcodes/#opcodes). 
@@ -790,7 +790,7 @@ Delegated Logic Signatures require that the logic signature be signed from a spe
 * Sign the Transaction with the Logic Signature.
 * Send the Transaction to the network.
 
-<center>![Delegated Signature Transaction](../../../imgs/asc1_sdk_usage-2.png)</center>
+<center>![Delegated Signature Transaction](../../../../../imgs/asc1_sdk_usage-2.png)</center>
 <center>*Delegated Signature Transaction*</center>
 
 The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.

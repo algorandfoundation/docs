@@ -1,4 +1,4 @@
-title: Transaction Reference
+title: Transaction reference
 
 Each table below specifies the **field name**, whether it is optional or required, its **type** within the protocol code (note that SDKs input types for these fields may differ), the **codec**, which is the name of the field when viewed within a transaction, and a **description** of the field. 
 
@@ -10,15 +10,15 @@ These fields are common to all transactions.
 |---|---|---|---|---|
 |<a name="fee">Fee</a>| _required_| uint64|`"fee"`|Paid by the sender to the FeeSink to prevent denial-of-service. The minimum fee on Algorand is currently 1000 microAlgos.|
 |<a name="firstvalid">FirstValid</a>| _required_ | uint64 | `"fv"`|The first round for when the transaction is valid. If the transaction is sent prior to this round it will be rejected by the network.|
-|<a name="genesishash">GenesisHash</a>|_required_|[32]byte|`"gh"`|The hash of the genesis block of the network for which the transaction is valid. See the genesis hash for [MainNet](./algorand-networks/mainnet.md#genesis-hash), [TestNet](./algorand-networks/testnet.md#genesis-hash), and [BetaNet](./algorand-networks/betanet.md#genesis-hash).
+|<a name="genesishash">GenesisHash</a>|_required_|[32]byte|`"gh"`|The hash of the genesis block of the network for which the transaction is valid. See the genesis hash for [MainNet](../algorand-networks/mainnet#genesis-hash), [TestNet](../algorand-networks/testnet#genesis-hash), and [BetaNet](../algorand-networks/betanet#genesis-hash).
 |<a name="lastvalid">LastValid</a>| _required_ | uint64 | `"lv"`|The ending round for which the transaction is valid. After this round, the transaction will be rejected by the network.|
 |<a name="sender">Sender</a>| _required_ |Address|`"snd"`|The address of the account that pays the fee and amount.|
 |<a name="type">TxType</a>|_required_|string|`"type"`| Specifies the type of transaction. This value is automatically generated using any of the developer tools.|
-|<a name="genesisid">GenesisID</a>|_optional_|string|`"gen"`| The human-readable string that identifies the network for the transaction. The genesis ID is found in the genesis block. See the genesis ID for [MainNet](./algorand-networks/mainnet.md#genesis-id), [TestNet](./algorand-networks/testnet.md#genesis_id), and [BetaNet](./algorand-networks/betanet.md#genesis-id). |
-<a name="group">Group</a>|_optional_|[32]byte|`"grp"`|The group specifies that the transaction is part of a group and, if so, specifies the hash of the transaction group. Assign a group ID to a transaction through the workflow described in the [Atomic Transfers Guide](../features/atomic_transfers.md).|
-<a name="lease">Lease</a>|_optional_|[32]byte|`"lx"`|A lease enforces mutual exclusion of transactions. If this field is nonzero, then once the transaction is confirmed, it acquires the lease identified by the (Sender, Lease) pair of the transaction until the LastValid round passes. While this transaction possesses the lease, no other transaction specifying this lease can be confirmed.  A lease is often used in the context of Algorand Smart Contracts to prevent replay attacks. Read more about [Algorand Smart Contracts](../features/asc1/index.md) and see the Delegate [Key Registration TEAL template](./teal/templates/delegate_keyreg.md) for an example implementation of leases. Leases can also be used to safeguard against unintended duplicate spends. For example, if I send a transaction to the network and later realize my fee was too low, I could send another transaction with a higher fee, but the same lease value. This would ensure that only one of those transactions ends up getting confirmed during the validity period. |
+|<a name="genesisid">GenesisID</a>|_optional_|string|`"gen"`| The human-readable string that identifies the network for the transaction. The genesis ID is found in the genesis block. See the genesis ID for [MainNet](../algorand-networks/mainnet#genesis-id), [TestNet](../algorand-networks/testnet#genesis_id), and [BetaNet](../algorand-networks/betanet#genesis-id). |
+<a name="group">Group</a>|_optional_|[32]byte|`"grp"`|The group specifies that the transaction is part of a group and, if so, specifies the hash of the transaction group. Assign a group ID to a transaction through the workflow described in the [Atomic Transfers Guide](../atomic_transfers).|
+<a name="lease">Lease</a>|_optional_|[32]byte|`"lx"`|A lease enforces mutual exclusion of transactions. If this field is nonzero, then once the transaction is confirmed, it acquires the lease identified by the (Sender, Lease) pair of the transaction until the LastValid round passes. While this transaction possesses the lease, no other transaction specifying this lease can be confirmed.  A lease is often used in the context of Algorand Smart Contracts to prevent replay attacks. Read more about [Algorand Smart Contracts](../dapps/pyteal/smart-contracts) and see the Delegate [Key Registration TEAL template](../dapps/avm/teal/templates/delegate_keyreg) for an example implementation of leases. Leases can also be used to safeguard against unintended duplicate spends. For example, if I send a transaction to the network and later realize my fee was too low, I could send another transaction with a higher fee, but the same lease value. This would ensure that only one of those transactions ends up getting confirmed during the validity period. |
 |<a name="note">Note</a>|_optional_|[]byte|`"note"`| Any data up to 1000 bytes. |
-|<a name="rekeyto">RekeyTo</a>|_optional_|Address|`"rekey"`| Specifies the authorized address. This address will be used to authorize all future transactions. Learn more about [Rekeying](../../features/accounts/rekey/) accounts. |
+|<a name="rekeyto">RekeyTo</a>|_optional_|Address|`"rekey"`| Specifies the authorized address. This address will be used to authorize all future transactions. Learn more about [Rekeying](../accounts/rekey) accounts. |
 
 # Payment Transaction
 Transaction Object Type: `PaymentTx`
@@ -38,7 +38,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="votepk">VotePk</a>| _required for online_ |ed25519PublicKey|`"votekey"`|The root participation public key. See [Generate a Participation Key](../run-a-node/participate/generate_keys.md) to learn more.|
+|<a name="votepk">VotePk</a>| _required for online_ |ed25519PublicKey|`"votekey"`|The root participation public key. See [Generate a Participation Key](../../run-a-node/participate/generate_keys.md) to learn more.|
 |<a name="selectionpk">SelectionPK</a>|_required for online_|VrfPubkey|`"selkey"`| The VRF public key.|
 |<a name="votefirst">VoteFirst</a>|_required for online_|uint64|`"votefst"`|The first round that the *participation key* is valid. Not to be confused with the [FirstValid](#firstvalid) round of the keyreg transaction.|
 |<a name="votelast">VoteLast</a>|_required for online_|uint64|`"votelst"`|The last round that the *participation key* is valid. Not to be confused with the [LastValid](#lastvalid) round of the keyreg transaction.|
@@ -85,7 +85,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred. A zero amount transferred to self allocates that asset in the account's Asset map.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`|The sender of the transfer. The regular [sender](#sender) field should be used and this one set to the zero value for regular transfers between accounts. If this value is nonzero, it indicates a clawback transaction where the [sender](#sender) is the asset's clawback address and the asset sender is the address from which the funds will be withdrawn.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
-|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance. |
+|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance (i.e. opt-out of the asset). |
 
 # Asset Accept Transaction 
 Transaction Object Type: `AssetTransferTx`
@@ -96,7 +96,7 @@ This is a special form of an Asset Transfer Transaction.
 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
-|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to be transferred.|
+|<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to opt-in to.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The account which is allocating the asset to their account's Asset map.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The account which is allocating the asset to their account's Asset map.|
 
@@ -135,7 +135,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
 | <a name="">Application ID</a>| _required_| uint64| `"apid"`| ID of the application being configured or empty if creating.|
-| <a name="">OnComplete</a>| _required_| uint64| `"apan"`| Defines what additional actions occur with the transaction. See the [OnComplete](./teal/specification.md#oncomplete) section of the TEAL spec for details.|
+| <a name="">OnComplete</a>| _required_| uint64| `"apan"`| Defines what additional actions occur with the transaction. See the [OnComplete](../dapps/avm/teal/specification#oncomplete) section of the TEAL spec for details.|
 | <a name="">Accounts</a>| _optional_| Address| `"apat"`| List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|
 | <a name="">Approval Program</a>| _optional_| []byte | `"apap"`| Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.|
 | <a name="">App Arguments</a>| _optional_| []byte | `"apaa"`| Transaction specific arguments accessed from the application's approval-program and clear-state-program.|

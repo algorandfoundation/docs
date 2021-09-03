@@ -1,8 +1,8 @@
-title: A Contract Walkthrough
+title: A contract walkthrough
 
 This guide covers working with the `goal` command-line tool with stateless smart contracts.
 
-TEAL programs can be written with any editor and are compiled using the `goal` command-line tool. They can also be built using python with the [PyTeal Library](../teal/pyteal.md). The command-line tool provides the ability to use these compiled programs within transactions. 
+TEAL programs can be written with any editor and are compiled using the `goal` command-line tool. They can also be built using python with the [PyTeal Library](../..). The command-line tool provides the ability to use these compiled programs within transactions. 
 
 # Simple TEAL example
 The simplest program you can write in TEAL is probably the following:
@@ -61,13 +61,13 @@ intcblock 0
 intc_0
 ```
 
-In the above examples, the TEAL program is compiled and can be used as a contract account as discussed in the [Usage Modes](modes.md) documentation. To use TEAL for account [delegation](modes.md#delegated-account), the program must be signed by an account or a multi-signature account. This can be done with `goal` using the `-s` option. The following will produce a LogicSig file.
+In the above examples, the TEAL program is compiled and can be used as a contract account as discussed in the [Usage Modes](modes) documentation. To use TEAL for account [delegation](modes#delegated-account), the program must be signed by an account or a multi-signature account. This can be done with `goal` using the `-s` option. The following will produce a LogicSig file.
 
 ```
 goal clerk compile  simple.teal -o /tmp/simple.lsig -s -d ~/node/data
 ```
 
-In the example above, the `-o` option is used to produce the logic signature file, which contains the raw program binary and the signature as discussed in the [Logic Signature](modes.md#logic-signatures) documentation. Using the `-a` option allows the TEAL program to be signed by a specific account.
+In the example above, the `-o` option is used to produce the logic signature file, which contains the raw program binary and the signature as discussed in the [Logic Signature](modes#logic-signatures) documentation. Using the `-a` option allows the TEAL program to be signed by a specific account.
 
 ```
 goal clerk compile  simple.teal -o /tmp/simple.lsig -s -a LSJY4JD5J626BMJY2NMODBP64WDQP5OS4M6YF2F5BWQUS22I3YJYCXHHIA -d ~/node/data
@@ -87,7 +87,7 @@ LogicSig: {
 ```
 
 # Creating a Multi-Signature Delegated Logic Sig
-In the previous section, a logic signature was created using a single account. As discussed in the [Logic Signature](modes.md#logic-signatures) documentation, LogicSigs can also be created using a multi-signature account. For example, a three account multi-signature account with a threshold level of 2 can be created using the following command.
+In the previous section, a logic signature was created using a single account. As discussed in the [Logic Signature](modes#logic-signatures) documentation, LogicSigs can also be created using a multi-signature account. For example, a three account multi-signature account with a threshold level of 2 can be created using the following command.
 
 ```
 goal account multisig new -T 2 DFPKC2SJP3OTFVJFMCD356YB7BOT4SJZTGWLIPPFEWL3ZABUFLTOY6ILYE LSJY4JD5J626BMJY2NMODBP64WDQP5OS4M6YF2F5BWQUS22I3YJYCXHHIA YYKRMERAFXMXCDWMBNR6BUUWQXDCUR53FPUGXLUYS7VNASRTJW2ENQ7BMQ -d ~/node/data
@@ -156,7 +156,7 @@ $ python3 -c "import base64;print(base64.b64encode((123).to_bytes(8,'big')).deco
 
 The example above converts the integer value of 123 to a base64 encoded string. TEAL currently does not support negative numbers. 
 
-Each SDK provides facilities for passing parameters as well. These processes are described in the [ASC1 Stateless SDK](sdks.md) Usage documentation.
+Each SDK provides facilities for passing parameters as well. These processes are described in the [ASC1 Stateless SDK](../frontend/stateless-sdks) Usage documentation.
 
 # Contract Account ASA Opt-In
 

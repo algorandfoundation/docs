@@ -1,5 +1,6 @@
-title: dApps & Smart Contracts
+title: dapps & smart contracts
 arrange:
-  - avm
+  - what_is_a_dapp.md
   - pyteal
   - reach
+  - avm

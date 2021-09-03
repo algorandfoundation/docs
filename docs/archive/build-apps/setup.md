@@ -7,7 +7,7 @@ Building an application on Algorand means that your application, directly or ind
 
 The following is a brief primer on some terms and relationships of the components that comprise the Algorand development environment. Figure 1. below illustrates these components and how they fit together. 
 
-![Figure 1. Algorand Developer Environment](../imgs/algo_dev_stack.png "Algorand Development Environment")
+![Figure 1. Algorand Developer Environment](/imgs/algo_dev_stack.png "Algorand Development Environment")
 
 The Algorand blockchain is a distributed system of **nodes** each maintaining their **local state** based on validating the history of blocks and the transactions therein. State data is maintained by the consensus protocol which is implemented within the `algod` daemon, often referred to as the node software. As a developer, this is most likely the base layer for your applications.
 
@@ -20,7 +20,7 @@ Algorand officially supports four SDKs for developing applications: [Javascript]
 
 ## Command Line Interface (CLI) Tools 
 
-Algorand provides three command-line utilities packaged with Algorand node software: [`goal`](../reference/cli/goal/goal.md), [`kmd`](../reference/cli/kmd.md), and [`algokey`](../reference/cli/algokey/algokey.md).
+Algorand provides three command-line utilities packaged with Algorand node software: [`goal`](../../../clis/goal/goal), [`kmd`](../../../clis/kmd), and [`algokey`](../../../clis/algokey/algokey).
 
 `goal` is the primary tool for operating a node and it also contains functionality to manage keys, sign and send transactions, create assets, and perform many of the same or similar functions that are available in the SDKs. Although not required to build an application, developers who run nodes may find it useful to achieve some level of fluency in `goal` as a complementary tool during testing and validation. `goal` _is_ required to setup more advanced testing environments using private networks.
 
@@ -30,16 +30,16 @@ There are also REST APIs available for both **algod** and **kmd** processes.
 
 ## Indexer
 
-Algorand provides a standalone daemon [algorand-indexer](../features/indexer.md) that reads committed blocks from the Algorand blockchain and maintains a local database of transactions and accounts that are searchable and indexed. A [REST API](../reference/rest-apis/indexer.md) is available which enables application developers to perform rich and efficient queries on accounts, transactions, assets, and so forth.
+Algorand provides a standalone daemon [algorand-indexer](../../../get-details/indexer) that reads committed blocks from the Algorand blockchain and maintains a local database of transactions and accounts that are searchable and indexed. A [REST API](../../../rest-apis/indexer) is available which enables application developers to perform rich and efficient queries on accounts, transactions, assets, and so forth.
 
 # Choosing a network
-There are three **public** [Algorand Networks](../reference/algorand-networks/index.md) paired with the functionality to [create **private** networks](https://developer.algorand.org/tutorials/create-private-network/) using any protocol version. 
+There are three **public** [Algorand Networks](../../../get-details/algorand-networks) paired with the functionality to [create **private** networks](https://developer.algorand.org/tutorials/create-private-network/) using any protocol version. 
 
-[**MainNet**](../reference/algorand-networks/mainnet.md) is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. [**TestNet**](../reference/algorand-networks/testnet.md) mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  [**BetaNet**](../reference/algorand-networks/betanet.md) is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common.
+[**MainNet**](../../../get-details/algorand-networks/mainnet) is the primary Algorand Network with real-value assets, including Algorand's native currency - the Algo. [**TestNet**](../../../get-details/algorand-networks/testnet) mirrors MainNet in terms of its protocol (i.e. software) version, but it has test Algos, available via a faucet, and a different genesis block, which means that the state of accounts and distribution of funds is different.  [**BetaNet**](../../../get-details/algorand-networks/betanet) is where new protocol-level features will be released for initial testing. Therefore, quality and features may not be final, and protocol upgrades and network restarts are common.
 
  
 ## Recommended Use
-If your application depends on features currently available on MainNet, use TestNet as your public testing network. If your application depends on features only available on BetaNet, use BetaNet as your public testing network. In all cases, use private networks, as needed, for greater control and isolation of your development environment. Learn more about feature availability on each of the networks in the [Network Reference](../reference/algorand-networks/index.md) section. Sections in these docs marked with 🔷 indicate a feature available on BetaNet only.
+If your application depends on features currently available on MainNet, use TestNet as your public testing network. If your application depends on features only available on BetaNet, use BetaNet as your public testing network. In all cases, use private networks, as needed, for greater control and isolation of your development environment. Learn more about feature availability on each of the networks in the [Network Reference](../../../get-details/algorand-networks) section. Sections in these docs marked with 🔷 indicate a feature available on BetaNet only.
 
 If you are not sure which network to start with, TestNet is usually a good option as it allows you to develop against live features without risking real assets. Switching networks later will be trivial.
 
@@ -47,7 +47,7 @@ If you are not sure which network to start with, TestNet is usually a good optio
 
  || **MainNet** | **TestNet** | **BetaNet** | 
 :-- |:-------------:| :-------------: | :-------------: | 
-**Protocol Version** | [Current](../reference/algorand-networks/mainnet.md) | Current| Future | Any |
+**Protocol Version** | [Current](../../../get-details/algorand-networks/mainnet) | Current| Future | Any |
 **Genesis Distribution** | Unique | Unique | Unique | Any |
 **Algo Accessibility** | For sale | Free from faucet | Free from faucet | 
 **Network Reliability**         | Most Stable  | Very Stable, but restarts are possible | Experimental; frequent restarts | 
@@ -80,7 +80,7 @@ This method is recommended if you need access to all developer tools including `
 !!! Info
 	When using sandbox, `goal` should be replaced by `./sandbox goal`. Furthermore, `./sandbox goal` runs in its own Docker container and cannot directly access files in the current folder. To run any `goal` command that uses files in the current folder, you need to first copy the files. For example, to send the transactions in the file `mytransaction.sig`, you need to run:
 	```bash
-	./sandbox copy mytransaction.sig
+	./sandbox copyTo mytransaction.sig
 	./sandbox goal clerk rawsend -f mytransaction.sig
 	```
 	instead of:
@@ -92,7 +92,7 @@ This method is recommended if you need access to all developer tools including `
 
 This method is recommended if you need access to all developer tools including `goal`, `kmd`, and `algokey`, and want to setup a production-ready environment. This is the recommended follow-on to [option 2](#2-use-docker-sandbox) before launching an application on MainNet. This method gives you full control of your node and its configuration. 
 
-[Read the docs to setup and run a node.](../run-a-node/setup/install.md)
+[Read the docs to setup and run a node.](../../run-a-node/setup/install.md)
 
 After setup, find your **REST endpoint's IP address** here:
 
@@ -112,14 +112,14 @@ $ cat $ALGORAND_DATA/algod.token
 :-- |:-------------:| :-------------: | :-------------: |
 **Time**         | **Seconds** - Just signup| **Minutes** - Same as running a node with no catchup	| **Days** - need to wait for node to catchup
 **Trust**         | 1 party       | 1 party	| Yourself 
-**Cost**         | Usually free for development; pay based on rate limits in production | Variable (with free option) - see [node types](../run-a-node/setup/types.md)	| Variable (with free option) - see [node types](../run-a-node/setup/types.md)	
+**Cost**         | Usually free for development; pay based on rate limits in production | Variable (with free option) - see [node types](../../run-a-node/setup/types.md)	| Variable (with free option) - see [node types](../../run-a-node/setup/types.md)	
 **Private Networks**| ❌ | ✅ | ✅
 **`goal`, `algokey`, `kmd`**| ❌ | ✅ | ✅
 **Platform**|Varies|MacOS; Linux|MacOS; Linux|
 **Production Ready**| ✅ | ❌ | ✅
 
 # Install your preferred SDK
-Install your preferred SDK by following the setup instructions in the [SDK reference docs](../reference/sdks/index.md).
+Install your preferred SDK by following the setup instructions in the [SDK reference docs](../../reference/sdks/index.md).
 
 # Other Setup Tips
 
