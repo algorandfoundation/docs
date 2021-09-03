@@ -34,6 +34,9 @@ yarn add @walletconnect/client algorand-walletconnect-qrcode-modal algosdk @json
 npm install --save @walletconnect/client algorand-walletconnect-qrcode-modal algosdk @json-rpc-tools/utils
 ```
 
+!!! Info
+  Developers are encouraged to watch the [walletconnect-monorepo](https://github.com/WalletConnect/walletconnect-monorepo/releases) for new releases. Rebuild and deploy your dApp to utilize new features and performance enhancements. 
+
 ### Initiate Connection
 
 ```typescript
