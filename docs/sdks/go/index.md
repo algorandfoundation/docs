@@ -3,15 +3,15 @@ title: Your First Transaction
 This section is a quick start guide for sending your first transaction on the Algorand TestNet network using the Go programming language. This guide installs the Go SDK, creates an account and submits a payment transaction. This guide also installs Algorand Sandbox, which provides required infrastructure for development and testing. 
 
 !!! Info
-    If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-Go){target=_blank} or watch a [video walkthrough](https://youtu.be/rFG7Zo2JvIY?t=){target=_blank} explaining all the code in the steps below.
+    If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-Go) or watch a [video walkthrough](https://youtu.be/rFG7Zo2JvIY?t=) explaining all the code in the steps below.
  
 # Install Algorand Sandbox
 
-Algorand Sandbox is developer-focused tool for quickly spinning up the Algorand infrastructure portion of your development environment. It uses Docker to provide an `algod` instance for connecting to the network of your choosing and an `indexer` instance for querying blockchain data. APIs are exposed by both instances for client access from the SDK. Read more about [Algorand networks](../../get-details/algorand-networks/index.md){target=_blank}, their capabilities and intended use.
+Algorand Sandbox is developer-focused tool for quickly spinning up the Algorand infrastructure portion of your development environment. It uses Docker to provide an `algod` instance for connecting to the network of your choosing and an `indexer` instance for querying blockchain data. APIs are exposed by both instances for client access provided within the SDK. Read more about [Algorand networks](../../get-details/algorand-networks/index.md), their capabilities and intended use.
 
 !!! Prerequisites
-    - Docker Compose ([install guide](https://docs.docker.com/compose/install/){target=_blank})
-    - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){target=_blank})
+    - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
+    - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
 
 From a terminal window, install Algorand Sandbox connected to TestNet:
 
@@ -22,20 +22,20 @@ cd sandbox
 ```
 
 !!! Warning
-    The Algorand Sandbox installation may take a few minutes to complete in order to catch up to the current round on TestNet. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup){target=_blank}.
+    The Algorand Sandbox installation may take a few minutes to complete in order to catch up to the current round on TestNet. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup).
 
 !!! Info
     The `indexer` is enabled **only** for _private networks_. Therefore, all blockchain queries in this guide will use the `algod` API.
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=18){target=_blank}
-- [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=18)
+- [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
 
 # Install Go SDK
 
 Algorand provides an SDK for Go. 
 
 !!! Prerequisites
-    - Go programming language ([install guide](https://golang.org/doc/install){target=_blank})
+    - Go programming language ([install guide](https://golang.org/doc/install))
 
 From a terminal window, install the Go SDK:
 
@@ -43,8 +43,8 @@ From a terminal window, install the Go SDK:
 go get -u github.com/algorand/go-algorand-sdk/...
 ```
 
-- [`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=88){target=_blank}
-- [`More Information`](https://github.com/algorand/go-algorand-sdk){target=_blank}
+- [`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=88)
+- [`More Information`](https://github.com/algorand/go-algorand-sdk)
  
 The SDK is installed and can now interact with the running Algorand Sandbox environment, as configured above.
 
@@ -91,8 +91,8 @@ func main() {
 }
 ```
 
-!!! Info 
-    Lines 17 and 35 contain comments about inserting additional code. As you proceed with this guide, ensure the line numbers remain in sync.
+!!! Note 
+    Lines 17 and 35 contain TODO: comments about inserting additional code. As you proceed with this guide, ensure the line numbers remain in sync.
 
 !!! Tip
     Make sure to save the generated address and passphrase in a secure location, as they will be used later on.
@@ -100,12 +100,12 @@ func main() {
 !!! Warning 
     Never share your mnemonic passphrase or private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the open source [Algorand Wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=97){target=_blank}
-- [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=97)
+- [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
  
 # Fund account
 
-The code below prompts to fund the newly generated account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){target=_blank}. 
+The code below prompts to fund the newly generated account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/). 
 
 ```go linenums="35"
 // Fund account
@@ -115,9 +115,9 @@ fmt.Scanln()
 ```
 
 !!! Info
-    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance){target=_blank}
+    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance)
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=138){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=138)
 
 # Instantiate client
 
@@ -136,9 +136,9 @@ if err != nil {
 ```
  
 !!! Info
-    This guide provides values for `algodAddress` and `algodToken` as specified by Algorand Sandbox. If you want to connect to a third-party service provider, see [Purestake](https://developer.purestake.io/code-samples){target=_blank} or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2){target=_blank} and adjust these values accordingly.
+    This guide provides values for `algodAddress` and `algodToken` as specified by Algorand Sandbox. If you want to connect to a third-party service provider, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2) and adjust these values accordingly.
  
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=149){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=149)
 
 # Check account balance
 
@@ -158,7 +158,7 @@ fmt.Println("--> Ensure balance greater than 0, press ENTER key to continue...")
 fmt.Scanln()
 ```
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=161){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=161)
 
 # Build transaction
 
@@ -188,9 +188,9 @@ if err != nil {
 ```
 
 !!! Info
-    Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/){target=_blank}.
+    Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/).
 
-[`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=178){target=_blank}
+[`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=178)
 
 # Sign transaction
 
@@ -207,9 +207,9 @@ fmt.Printf("Signed txid: %s\n", txID)
 ```
 
 !!! Info
-    Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures){target=_blank}.
+    Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures).
 
-[`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=204){target=_blank}
+[`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=204)
 
 # Submit transaction
 
@@ -232,7 +232,7 @@ if err != nil {
 }
 ```
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=216){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=216)
 
 # Display completed transaction
 
@@ -248,11 +248,11 @@ fmt.Printf("Transaction information: %s\n", txnJSON)
 fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 ```
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=232){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=232)
  
 # Add utility functions
 
-The utility function `waitFoConfirmation` should be inserted between your `imports` and `main()` code blocks:
+The utility function `waitForConfirmation` should be inserted between your `imports` and `main()` code blocks:
 
 ```go linenums="17"
 // Utility function that waits for a given txId to be confirmed by the network
@@ -300,14 +300,14 @@ func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (mod
 }
 ```
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=241){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=241)
  
 # Run the program
  
 Save your file and execute the program:
 
 ```bash
-$ go run yourFirstTransaction.go
+go run yourFirstTransaction.go
 ```
 
 !!! Warning
@@ -316,25 +316,25 @@ $ go run yourFirstTransaction.go
 !!! Info
 	View the confirmed transaction in your web browser by clicking the link to these third-party block explorers and inserting the transactionID within their search bar:
 	
-	- [AlgoExplorer](https://testnet.algoexplorer.io/){target=_blank}
-	- [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){target=_blank}
+	- [AlgoExplorer](https://testnet.algoexplorer.io/)
+	- [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet)
 
-- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=232){target=_blank}
+- [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=232)
  
 # Complete example
 
 If you have any trouble compiling or running your program, please check the complete example below which details how to quickly submit your first transaction.
  
-[Run Code](https://replit.com/@Algorand/Getting-Started-with-Go){target=_blank}
+[Run Code](https://replit.com/@Algorand/Getting-Started-with-Go)
 
-[Watch Video](https://youtu.be/rFG7Zo2JvIY?t=){target=_blank}
+[Watch Video](https://youtu.be/rFG7Zo2JvIY?t=)
 
 # Setting up your editor/framework
 
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
 
-* [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-go/){target=_blank}
-* [Algorand VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/){target=_blank}
-* [Algo Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/){target=_blank}
-* [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/){target=_blank}
-* [Algo Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/){target=_blank}
+* [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-go/)
+* [Algorand VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
+* [Algo Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
+* [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
+* [Algo Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
