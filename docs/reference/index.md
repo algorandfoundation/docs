@@ -55,4 +55,10 @@ The [WalletConnect Schema](./walletconnect-schema.md) is a set of JSON-RPC 2.0 r
 
 An overview of the files and software packaged with a node plus the full list of node configuration settings.
 
-[Node Artifacts](./node/artifacts.md) - [Node Configuration Settings](./node/config.md) - [Configure Node as a Relay](./node/relay.md)
+- [Node Artifacts](./node/artifacts.md) 
+- [Node Configuration Settings](./node/config.md) 
+- [Configure Node as a Relay](./node/relay.md)
+
+# Parameters and Constraints
+
+Includes tables describing frequently used [chain parameters and constraints](./parameter_tables.md).
