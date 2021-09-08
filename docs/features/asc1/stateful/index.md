@@ -161,7 +161,7 @@ print(compileTeal(program, Mode.Application))
 ```
 
 !!! note
-    They PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
+    The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
 
 The `int 0` is the index into the accounts array. The actual address could also be specified as long as the account is in the accounts array. The `txn ApplicationID` line refers to the current application, but could be any application that exists on Algorand as long as the contract's ID is in the applications array. Instead of specifying the application ID, the index into the application array can be used as well. The top value on the stack will either return 0 or 1 depending on if the variable was found.  Most likely branching logic will be used after a call to the `_ex` opcode. The following example illustrates this concept.
 
