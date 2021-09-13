@@ -33,7 +33,7 @@ This is an example of a transaction signed by an Algorand private key displayed 
   }
 }
 ```
-This transaction sends 1 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](transactions#sig) field.
+This transaction sends 10 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](../../reference/transactions.md#sig) field.
 
 **Related How-To**
 
