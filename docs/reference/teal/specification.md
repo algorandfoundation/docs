@@ -14,6 +14,12 @@ The maximum stack depth is currently 1000.
 
 In addition to the stack there are 256 positions of scratch space, also uint64-bytes union values, accessed by the `load` and `store` ops moving data from or to scratch space, respectively.
 
+## State
+
+In Stateful Smart Contracts, state may be stored in Global or Local state.  The Global state is limited to 64 key/value pairs with a combined size of 128 bytes.  The Local state is limited to 16 key/value pairs with a combined size of 128 bytes for each acccount that is opted into the application.
+
+Access to these fields in a Stateful Smart Contract is achieved through the (State Access)[https://developer.algorand.org/docs/reference/teal/specification/#state-access] opcodes.
+
 ## Execution Environment
 
 TEAL runs in Algorand nodes as part of testing a proposed transaction to see if it is valid and authorized to be committed into a block.
