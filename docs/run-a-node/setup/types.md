@@ -1,4 +1,4 @@
-title: Algorand Node Types
+title: Algorand node types
 
 The Algorand network is comprised of two distinct types of nodes, **relay nodes**, and **non-relay nodes**. Relay nodes are primarily used for communication routing to a set of connected non-relay nodes. Relay nodes communicate with other relay nodes and route blocks to all connected non-relay nodes. Non-relay nodes only connect to relay nodes and can also participate in consensus. Non-relay nodes may connect to several relay nodes but never connect to another non-relay node.
 
@@ -16,7 +16,7 @@ Classifying a node as a participation node is not a configuration parameter but 
 # Archival Mode
  By default non-relay nodes only store a limited number of blocks (approximately up to the last 1000 blocks) locally. Older blocks are dropped from the local copy of the ledger. This reduces the disk space requirement of the node. These nodes can still participate in consensus and applications can connect to these nodes for transaction submission and reading block data. The primary drawback for this type of operation is that older block data will not be available. 
  
- The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. Visit the [Node Configuration](../../reference/node/config.md) guide for details on configuring your node. 
+ The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. Visit the [Node Configuration](../../reference/config) guide for details on configuring your node. 
  
 !!! warning
      Setting a node to run in archival mode will increase the disk space requirements for the node. For example, after 36 hours, the TestNet archival ledger was 212.5MB, whereas the non-archival ledger was 9MB.
@@ -35,7 +35,7 @@ A node is a valid relay node if two things are true:
    
 Relay nodes are where other nodes connect. Therefore, a relay node must be able to support a large number of connections and handle the processing load associated with all the data flowing to and from these connections. Thus, relay nodes require significantly more power than non-relay nodes. Relay nodes are always configured in archival mode.
 
-See [Configuring Node as a Relay](../../reference/node/relay.md) for more information on setting up a relay.
+See [Configuring Node as a Relay](../../reference/relay) for more information on setting up a relay.
 
 
 

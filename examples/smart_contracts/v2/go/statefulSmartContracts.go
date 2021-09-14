@@ -29,40 +29,32 @@ const globalInts = 1
 const globalBytes = 0
 
 // user declared approval program (initial)
-const approvalProgramSourceInitial = `#pragma version 2
-
+const approvalProgramSourceInitial = `#pragma version 4
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
-
 txn OnCompletion
 int NoOp
 ==
 bnz handle_noop
-
 txn OnCompletion
 int OptIn
 ==
 bnz handle_optin
-
 txn OnCompletion
 int CloseOut
 ==
 bnz handle_closeout
-
 txn OnCompletion
 int UpdateApplication
 ==
 bnz handle_updateapp
-
 txn OnCompletion
 int DeleteApplication
 ==
 bnz handle_deleteapp
-
 // Unexpected OnCompletion value. Should be unreachable.
 err
-
 handle_noop:
 // Handle NoOp
 // Check for creator
@@ -70,62 +62,50 @@ addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
 txn Sender
 ==
 bnz handle_optin
-
 // read global state
 byte "counter"
 dup
 app_global_get
-
 // increment the value
 int 1
 +
-
 // store to scratch space
 dup
 store 0
-
 // update global state
 app_global_put
-
 // read local state for sender
 int 0
 byte "counter"
 app_local_get
-
 // increment the value
 int 1
 +
 store 1
-
 // update local state for sender
 int 0
 byte "counter"
 load 1
 app_local_put
-
 // load return value as approval
 load 0
 return
-
 handle_optin:
 // Handle OptIn
 // approval
 int 1
 return
-
 handle_closeout:
 // Handle CloseOut
 //approval
 int 1
 return
-
 handle_deleteapp:
 // Check for creator
 addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
 txn Sender
 ==
 return
-
 handle_updateapp:
 // Check for creator
 addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
@@ -135,39 +115,32 @@ return
 `
 
 // user declared approval program (refactored)
-const approvalProgramSourceRefactored = `#pragma version 2
+const approvalProgramSourceRefactored = `#pragma version 4
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
-
 txn OnCompletion
 int NoOp
 ==
 bnz handle_noop
-
 txn OnCompletion
 int OptIn
 ==
 bnz handle_optin
-
 txn OnCompletion
 int CloseOut
 ==
 bnz handle_closeout
-
 txn OnCompletion
 int UpdateApplication
 ==
 bnz handle_updateapp
-
 txn OnCompletion
 int DeleteApplication
 ==
 bnz handle_deleteapp
-
 // Unexpected OnCompletion value. Should be unreachable.
 err
-
 handle_noop:
 // Handle NoOp
 // Check for creator
@@ -175,69 +148,56 @@ addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
 txn Sender
 ==
 bnz handle_optin
-
 // read global state
 byte "counter"
 dup
 app_global_get
-
 // increment the value
 int 1
 +
-
 // store to scratch space
 dup
 store 0
-
 // update global state
 app_global_put
-
 // read local state for sender
 int 0
 byte "counter"
 app_local_get
-
 // increment the value
 int 1
 +
 store 1
-
 // update local state for sender
 // update "counter"
 int 0
 byte "counter"
 load 1
 app_local_put
-
 // update "timestamp"
 int 0
 byte "timestamp"
 txn ApplicationArgs 0
 app_local_put
-
 // load return value as approval
 load 0
 return
-
 handle_optin:
 // Handle OptIn
 // approval
 int 1
 return
-
 handle_closeout:
 // Handle CloseOut
 //approval
 int 1
 return
-
 handle_deleteapp:
 // Check for creator
 addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
 txn Sender
 ==
 return
-
 handle_updateapp:
 // Check for creator
 addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
@@ -247,7 +207,7 @@ return
 `
 
 // declare clear state program source
-const clearProgramSource = `#pragma version 2
+const clearProgramSource = `#pragma version 4
 int 1
 `
 
@@ -321,7 +281,7 @@ func createApp(client *algod.Client, creatorAccount crypto.Account, approvalProg
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, nil,
-		nil, nil, nil, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+		nil, nil, nil, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
