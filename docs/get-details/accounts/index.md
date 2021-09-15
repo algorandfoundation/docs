@@ -55,7 +55,7 @@ This representation is called the private key **mnemonic**. You may also see it 
 
 Wallets, in the context of Algorand developer tools, refer to wallets generated and managed by the Key Management Daemon (kmd) process. A wallet stores a collection of keys. kmd stores collections of wallets and allows users to perform operations using the keys stored within these wallets. Every wallet is associated with a master key, represented as a 25-word mnemonic, from which all accounts in that wallet are derived. This allows the owner of the wallet to only need to remember a single passphrase for all of their accounts. Wallets are stored encrypted on disk. 
 
-See [Wallet-derived (kmd)](./create.md#wallet-derived-kmd) accounts in the [Creation Methods](#creation-methods) section for more details.
+See [Wallet-derived (kmd)](create#wallet-derived-kmd) accounts in the [Creation Methods](#creation-methods) section for more details.
 
 ## Accounts
 Accounts are entities on the Algorand blockchain associated with specific onchain data, like a balance. An Algorand Address is the identifier for an Algorand account. 
@@ -67,13 +67,13 @@ After generating a private key and corresponding address, sending Algos to the a
 
 ### Attributes
 #### Minimum Balance
-Every account on Algorand must have a minimum balance of 100,000 microAlgos. If ever a transaction is sent that would result in a balance lower than the minimum, the transaction will fail. The minimum balance increases with each asset holding the account has. Read more about assets and changes to the minimum balance requirement in the [Algorand Standard Assets](../asa.md) section.
+Every account on Algorand must have a minimum balance of 100,000 microAlgos. If ever a transaction is sent that would result in a balance lower than the minimum, the transaction will fail. The minimum balance increases with each asset holding the account has. Read more about assets and changes to the minimum balance requirement in the [Algorand Standard Assets](../asa) section.
 
 #### Online/Offline
 By default, Algorand accounts are set to **offline**. An **online** account is one that participates in Algorand consensus. For an account to go online, it must generate a participation key and send a special key registration transaction. Read more about how to register an account online in the [Network Participation](../../run-a-node/participate/index.md) section.
 
 ### Other Account Types
-Creating an Algorand address from a public key is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authorize spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](../asc1/stateless/modes.md) section. Multisignature accounts are described [below](./create.md#multisignature).
+Creating an Algorand address from a public key is not the only way. A valid address can also be produced from a compiled TEAL contract and through multisignature accounts. These accounts differ in how they authorize spends, but they look like any other account on Algorand. Read more about contract accounts in the [Algorand Smart Contracts](../dapps/pyteal/smart-contracts/stateless/modes) section. Multisignature accounts are described [below](create#multisignature).
 
 ### Special Accounts
 
@@ -81,9 +81,9 @@ Two accounts carry special meaning on the Algorand blockchain. They are the **Fe
 
 In addition, the ZeroAddress `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ` is an address that represents a blank byte array. It is used when you leave an address field in a transaction blank.
 
-_MainNet [FeeSink](../../reference/algorand-networks/mainnet.md#feesink-address) and [RewardsPool](../../reference/algorand-networks/mainnet.md#rewardspool-address) addresses_
+_MainNet [FeeSink](../algorand-networks/mainnet#feesink-address) and [RewardsPool](../algorand-networks/mainnet#rewardspool-address) addresses_
 
-_TestNet [FeeSink](../../reference/algorand-networks/testnet.md#feesink-address) and [RewardsPool](../../reference/algorand-networks/testnet.md#rewardspool-address) addresses_
+_TestNet [FeeSink](../algorand-networks/testnet#feesink-address) and [RewardsPool](../algorand-networks/testnet#rewardspool-address) addresses_
 
 ## A note about term usage in these docs
 Even in these docs, use of these terms may be inconsistent. At times this is a deliberate style choice to ensure clarity around a broader concept. Sometimes it is to emphasize the inherent pairing of the public and private portions of a key. (e.g. In code examples, it is sometimes clearer to name variables as such to emphasize the connection between these two entities). Other times it is to abstract away from complexity related to generating an account on Algorand. For example, code samples may use terms like "generateAccount" to generate a private key and Algorand address. There is an underlying assumption that this pair will be used as an Algorand account even though on generation it is not yet represented on the blockchain and therefore is not yet technically an Algorand account.

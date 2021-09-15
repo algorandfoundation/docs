@@ -1,5 +1,4 @@
-title: Getting Started With JavaScript
-​
+title: Your First Transaction
 
 This section is a quick start guide for interacting with the Algorand network using JavaScript. This guide will help to install ***sandbox***, which provides a node for testing and development. This guide will also help to install the JavaScript SDK, create an account and submit your first transaction using different JavaScript Runtimes.
 ​

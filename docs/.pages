@@ -6,7 +6,5 @@ arrange:
   - rest-apis
   - clis
   - run-a-node
-  - reference
-  - algorand_consensus.md
   - about.md
-  - build-apps
+  - archive

@@ -1,0 +1,8 @@
+title: TEAL
+arrange:
+  - index.md
+  - specification.md
+  - opcodes.md
+  - guidelines.md
+  - templates
+  - updates

@@ -36,6 +36,8 @@ goal app create [flags]
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
+      --extra-pages uint32          Additional program space for supporting larger TEAL assembly program. A maximum of 3 extra pages is allowed. A page is 1024 bytes.
+
       --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
       --firstvalid uint             The first round where the transaction may be committed to the ledger

@@ -1,16 +1,19 @@
-title: Install a Node
+title: Install a node
 # Overview
 This guide explains how to install the Algorand Node software on Linux Distributions and Mac OS. When installing on Linux, three methods are covered: *RPM installs*, *Debian installs* and *Other Linux Distributions*. The *Other Linux Distributions* method has been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 3) and allows manually setting data directories and requires manual updates. The *RPM* and *Debian* installs use fixed directories and automatically update.
 
 A node installation consists of two folders: the binaries (bin) and the data (data) folders. The bin folder can be created anywhere, but Algorand recommends `~/node`, if not using *RPM* or *Debian* installs. This location is referenced later in the documentation. Remember to replace this location in the documentation below with the correct location. It is assumed that this folder is dedicated to Algorand binaries and is archived before each update. Note that nothing is currently deleted, the binaries for Algorand are just overwritten.
 
-When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/node/artifacts.md) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified.
+When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/artifacts) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
 ```
-export ALGORAND_DATA=~/node/data
+export ALGORAND_DATA="$HOME/node/data"
+export PATH="$HOME/node:$PATH"
 ```
 
-When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is advisable with these installs to add the following export to shell config files.
+Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
+
+When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. With these installs, it is again recommended to add the following to shell config files.
 
 ```
 export ALGORAND_DATA=/var/lib/algorand
@@ -31,7 +34,7 @@ Installing a new node is generally a 3 to 4-step process and will depend on the 
 # Installing on a Mac
 Verified on OSX v10.13.4 / High Sierra.
 
-+ Create a temporary folder to hold the install package and files.
++ Create a folder to hold the install package and files.
 
 ```
 mkdir ~/node
@@ -60,6 +63,14 @@ When the installer runs, it will pull down the latest update package from S3 and
 !!! info
     When installing the `rel/beta` release, specify the beta channel `-c beta`
 
+!!! info
+    Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
+
+    ```
+    export ALGORAND_DATA="$HOME/node/data"
+    export PATH="$HOME/node:$PATH"
+    ```
+
 # Installing the Devtools
 
 Beginning with the 2.1.5 release, there is now a new package called `algorand-devtools` that contains the developer tools.  The package contains the following binaries, some of which are new (as of 2.1.5) and some of which have been removed from the `algorand` package to decrease its size:
@@ -80,7 +91,7 @@ See the examples below to understand how to install the deb and rpm packages.
 !!! Note
     If installing using the updater script (see the section *Installing with Other Linux Distros*), then all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
 
-# Installing with Debian
+# Installing with Debian packages (Debian, Ubuntu, ...)
 Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
 
 + Open a terminal and run the following commands.
@@ -114,7 +125,7 @@ This install defaults to the Algorand MainNet network. See [switching networks](
 # Installing with RPM
 Installing on Fedora and Centos are described below.
 
-+ To install to CentOS, open a terminal and run the following commands.
++ To install to CentOS 7, open a terminal and run the following commands.
 
 ```
 curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
@@ -129,9 +140,11 @@ sudo yum install algorand-devtools
 sudo yum install algorand
 ```
 
-+ To install to Fedora open a terminal and run the following commands.
++ To install to Fedora or CentOS 8 Stream, open a terminal and run the following commands.
 
 ```
+curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
+sudo rpmkeys --import rpm_algorand.pub
 dnf install -y 'dnf-command(config-manager)'
 dnf config-manager --add-repo=https://releases.algorand.com/rpm/stable/algorand.repo
 dnf install algorand
@@ -173,21 +186,23 @@ chmod 544 update.sh
 
 When the installer runs, it will pull down the latest update package from S3 and install it. The `-n` option above tells the installer to not auto-start the node. If the installation succeeds the node will need to be started manually described later in this [guide](#start-node).
 
+!!! info
+    Add the following exports to shell config files. Hereafter, goal will default to using `$ALGORAND_DATA` as the data directory, removing the need to specify `-d ~/node/data` in every command.
+
+    ```
+    export ALGORAND_DATA="$HOME/node/data"
+    export PATH="$HOME/node:$PATH"
+    ```
+
 # Installing algod as a systemd service
 
-When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service and the `systemd-setup-user.sh` script to create a user service.
-
-Here are the usage strings:
+When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service.
 
 ```
 Usage: ./systemd-setup.sh username group [bindir]
 ```
 
-```
-Usage: ./systemd-setup-user.sh username [bindir]
-```
-
-Note that both of them take an optional binary directory (`bindir`) parameter. This will be discussed more in the following sections.
+Note that this takes an optional binary directory (`bindir`) parameter. This will be discussed more in the following sections.
 
 ### Installing system-wide
 
@@ -216,44 +231,14 @@ Group=@@GROUP@@
 After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
 
 ```
-systemctl daemon-reload
+sudo systemctl daemon-reload
 ```
 
 All that's left now is to start the service using `systemctl`. If preferred, it can also be enabled to start on system startup.
 
 ```
-systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
-
+sudo systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
 ```
-
-### Installing as a user
-
-To install `algod` as a user service:
-
-```
-./systemd-setup.sh kilgore-trout
-```
-
-This will create the service in `$HOMEDIR/.config/systemd/user/algorand@.service` and will have used the template `algorand@.service.template-user` (downloaded in the same tarball) to create the service. It includes a lot of helpful information at the top of the file and is worth perusing.
-
-The location of the binaries is needed by the template to tell `systemd` where to find `algod`. This can be controlled by the `bindir` parameter, which is the second parameter when calling the shell script, and is expected to be an absolute path.
-
-> If `bindir` is not provided, the script will assume the current working directory.
-
-After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
-
-```
-systemctl --user daemon-reload
-```
-
-All that's left now is to start the service using `systemctl`. If preferred, it can also be enabled to start on system startup.
-
-```
-systemctl --user start algorand@$(systemd-escape $ALGORAND_DATA)
-
-```
-
-> Note that not all distros currently support the user service feature. Run `systemctl --user status` to determine if it's supported.
 
 # Configure Telemetry
 Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. Telemetry can be enabled by following the commands below replacing &lt;name&gt; with your desired hostname (e.g. 'SarahsLaptop').
@@ -292,10 +277,10 @@ With these installs, the status of the node can be checked by running:
 goal node status -d /var/lib/algorand
 ```
 
-+ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done from the `~node` directory with the following command:
++ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done  with the following command:
 
 ```
-./goal node start -d data
+goal node start
 ```
 
 This will start the node and it can be verified by running:
@@ -307,7 +292,7 @@ pgrep algod
 The node can be manually stopped by running:
 
 ```
-./goal node stop -d data
+goal node stop
 ```
 
 
@@ -315,7 +300,7 @@ The node can be manually stopped by running:
 When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. See the section below a [Fast Catchup](#sync-node-network-using-fast-catchup) option. The status can be checked by running the following goal command:
 
 ```
-./goal node status -d data
+goal node status
 ```
 
 The goal node status command will return information about the node and what block number it is currently processing. When the node is caught up with the rest of the network, the "Sync Time" will be 0.0 as in the example response below (if on MainNet, some details will be different).
@@ -351,9 +336,9 @@ Steps:
 
 1) Start the node, if not started already, and run a status.
 
-`./goal node start -d ~/node/datafastcatchup`
+`goal node start`
 
-`./goal node status -d ~/node/datafastcatchup`
+`goal node status`
 
 Results should look something like this...
 
@@ -371,10 +356,10 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
 2) Use the sync point captured above and paste into the catchup option
 
-`./goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA -d ~/node/datafastcatchup`
+`goal node catchup 4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
 
 3) Run another status and results should look something like this showing a Catchpoint status:
-`./goal node status -d ~/node/datafastcatchup`
+`goal node status`
 
 Results should show 5 Catchpoint status lines for Catchpoint, total accounts, accounts processed, total blocks , downloaded blocks.
 
@@ -391,7 +376,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
 4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch.
 
-`./goal node status -d ~/node/datafastcatchup -w 1000`
+`goal node status -w 1000`
 
 5) Notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. **Once there is a Sync Time of 0, the node is synced and if fully usable. **
 
@@ -410,7 +395,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 
 # Updating Node
-The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
+The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. Note that the `-d` argument has to be specified when updating. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
 
 If there is a newer version, it will be downloaded and unpacked. The node will shutdown, the binaries and data files will be archived, and the new binaries will be installed. If any part of the process fails, the node will restore the previous version (bin and data) and restart the node. If it succeeds, the new version is started. The automatic start can be disabled by adding the `-n` option.
 
