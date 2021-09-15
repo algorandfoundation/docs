@@ -1,1 +1,11 @@
-title: Algorand virtual machine (AVM)
+title: AVM
+
+The Algorand virtual machine (AVM) runs on every node in the Algorand blockchain. This virtual machine contains a stack engine that executes smart contracts and smart signatures. The AVM processes these programs by interpreting their compiled TEAL code. These programs either fail or succeed depending on the contained logic. 
+
+Smart contracts also referred to as stateful smart contracts, contain logic that once deployed can be remotely called from any node on the Algorand blockchain. The contracts are called by issuing an application call transaction. The AVM evaluates the contract as part of resolving this transaction. The logic within a smart contract can modify data associated with the contract on a global basis or a per-user basis. If a call to a smart contract fails, any data changed by that call will not be committed to the blockchain. If the call is successful, the data changes will be recorded to the blockchain.
+
+Smart signatures also referred to as stateless contracts, contain logic that is used to sign transactions, primarily for signature delegation. The logic of the smart signature is submitted with the transaction. While the logic in the smart signature is stored on the chain as part of resolving the transaction, the logic is not remotely callable. Any new transaction that relies on the same smart signature would resubmit the logic. When the logic is submitted to a node the AVM evaluates the logic, where it either fails or succeeds. If a smart signature’s logic fails when executed by the AVM, the associated transaction will not be executed.   
+
+The AVM interprets an assembler-like language called [Transaction Execution Approval Language (TEAL)](teal/index.md). TEAL can be thought of as syntactic sugar for AVM bytecode and the [full specification](teal/specification.md) of the TEAL language is available in the developer documentation. In addition, a simple [overview guide](teal/index.md) explains many of the features of the language. TEAL programs are comprised of a set of operation codes (opcodes). These opcodes are used to implement the logic of smart contracts and smart signatures. The full list of available [opcodes](teal/opcodes.md) is available in the developer documentation.  
+
+While it is possible to write TEAL manually, it is much simpler to write smart signatures and smart contracts using Python and the PyTeal library. For more information on using Python to implement these see [Build with Python](../pyteal/index.md). 

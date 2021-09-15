@@ -2,7 +2,7 @@ title: Smart contract debugging
 
 Smart contracts can be debugged using two different methods. The first is an interactive debugger that uses the `tealdbg` command-line tool to launch a debug session where the smart contract can be examined as the contract is being evaluated. The second method uses the `goal clerk dryrun-remote` command which outputs a line by line result of the evaluation of the smart contract.  These two methods are described below.
 
-# Using the TEAL Debugger
+# Using the TEAL debugger
 Algorand provides the `tealdbg` command-line tool to launch an interactive session to debug smart contracts. This tool is explained in the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
 This debugger can debug local smart contracts or connect remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options.
@@ -40,15 +40,15 @@ When using the command above to launch the debugger most of the scope properties
  - Protocol - Set the protocol of consensus that the debug session uses when evaluating the contract.
  - Round - Set the current round for the debug session.
 Group Index - If using more than one transaction, the specific index that is being processed can be set.
- - Mode - The debugger can debug both stateless (Signature) and stateful (Application) smart contracts. The mode can be set to determine which type is being processed. By default, the debugger scans the program to determine the type of contract.
- - Application ID - Manually set the application ID of the current stateful smart contract.
+ - Mode - The debugger can debug both smart signatures (Signature) and smart contracts (Application). The mode can be set to determine which type is being processed. By default, the debugger scans the program to determine the type of contract.
+ - Application ID - Manually set the application ID of the current smart contract.
 
 The context can also be read directly from an instance of the Indexer. See the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) for more information.
 
-What context is needed for a debug session will depend on the type of contract that is being debugged and what opcodes are used in the program. The primary context that needs to be set for most debug sessions is the transaction(s) being processed and the associated balance records (if debugging a stateful smart contract) of the accounts involved. In most cases using the `--dryrun-dump` option with `goal` will get all the context needed for a debug session. See the following sections that show how to debug stateful and stateless smart contracts supplying the proper context. To learn more about setting individual context items, see the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
+What context is needed for a debug session will depend on the type of contract that is being debugged and what opcodes are used in the program. The primary context that needs to be set for most debug sessions is the transaction(s) being processed and the associated balance records (if debugging a smart contract) of the accounts involved. In most cases using the `--dryrun-dump` option with `goal` will get all the context needed for a debug session. See the following sections that show how to debug smart contracts supplying the proper context. To learn more about setting individual context items, see the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
-## Setting the Debugger Context
-For most stateful smart contracts, the balance records for all accounts that the contract interacts with for a specific transaction should be supplied. Additionally, at least the transaction calling the smart contract should be supplied. The `goal` command-tool provides the `--dryrun-dump` option when using the `goal clerk send` or `goal app` call that generates the needed context.  By default, the `--dryrun-dump` option will output the data in JSON format. This can be changed to MessagePack format if needed by using the `--dryrun-dump-format` option. The examples below show exporting the context.
+## Setting the debugger context
+For most smart contracts, the balance records for all accounts that the contract interacts with for a specific transaction should be supplied. Additionally, at least the transaction calling the smart contract should be supplied. The `goal` command-tool provides the `--dryrun-dump` option when using the `goal clerk send` or `goal app` call that generates the needed context.  By default, the `--dryrun-dump` option will output the data in JSON format. This can be changed to MessagePack format if needed by using the `--dryrun-dump-format` option. The examples below show exporting the context.
 
 ```
 // getting transactions
@@ -70,7 +70,7 @@ The scope panel will now have the proper context data for the debugging session.
 ![Teal Debugger Scope](../../../../../imgs/tealdbg-3.png)
 <center>*TEAL Debugger Scope*</center>
 
-One or more transactions that are stored in a file can be debugged by dumping the context data with the `goal clerk dryrun` command. For example, two stateful smart contracts are grouped below and the context data is generated using the `dryrun-dump` option. The `tealdbg` command is then used to start the debugger.
+One or more transactions that are stored in a file can be debugged by dumping the context data with the `goal clerk dryrun` command. For example, two smart contracts are grouped below and the context data is generated using the `dryrun-dump` option. The `tealdbg` command is then used to start the debugger.
 
 ```
 #generate calls
@@ -114,7 +114,7 @@ $ tealdbg debug stateless.teal -d statelesstx.tx
 The `tealdbg` utility has many more options for setting specific context items. For information on these capabilities, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
 
-# Using Dryrun for Debugging a TEAL Program
+# Using dryrun for debugging a TEAL program
 
 The SDKs and the `goal` command-line tool provide the functionality to do a test run of a TEAL smart contract.
 

@@ -2,4 +2,3 @@ title: Test and deploy
 
 arrange:
   - debugging.md
-  - deploy.md

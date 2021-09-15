@@ -1,10 +1,10 @@
-title: The Smart Contract Language
+title: The smart contract language
 
-Stateless and stateful smart contracts are written in Transaction Execution Approval Langauge (TEAL). These contracts can be written directly or with Python using the [PyTeal library](../../pyteal).
+Smart contracts and smart signatures are written in Transaction Execution Approval Langauge (TEAL). These contracts can be written directly or with Python using the [PyTeal library](../../pyteal/index.md).
 
-TEAL is an assembly-like language and is processed by the Algorand Virtual Machine (AVM). The language is a Turing-complete language that supports looping and subroutines, but limits the amount of time the contract has to execute using a dynamic opcode cost evaluation algorithm.  TEAL programs are processed one line at a time pushing and popping values on and off the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and flow control functions like `bnz` for branching and `callsub` for calling subroutines. In addition, stateful smart contracts can read and write global storage for the contract and local storage for accounts that opt-in to the contract. See [TEAL Specification Reference](specification) for more details.
+TEAL is an assembly-like language and is processed by the Algorand Virtual Machine (AVM). The language is a Turing-complete language that supports looping and subroutines, but limits the amount of time the contract has to execute using a dynamic opcode cost evaluation algorithm.  TEAL programs are processed one line at a time pushing and popping values on and off the stack. These stack values are either unsigned 64 bit integers or byte strings. TEAL provides a set of operators that operate on the values within the stack. TEAL also allows arguments to be passed into the program from a transaction, a scratch space to temporarily store values for use later in the program, access to grouped or single transaction properties, global values, a couple of pseudo operators, constants and flow control functions like `bnz` for branching and `callsub` for calling subroutines. Smart contracts can read and write global storage for the contract and local storage for accounts that opt-in to the contract. Smart contracts also have the ability to generate both asset and payment transactions within the logic. Using this ability, they can function as escrow accounts. See [TEAL Specification Reference](specification) for more details.
 
-Some of the opcodes in TEAL are only valid for a specific contract type. These are denoted in the [TEAL Opcodes](opcodes) documentation with a `Mode` attribute. This attribute will be set to `Signature` for stateless smart contracts and `Application` for stateful smart contracts. For example, reading account assets or Algo balances is only available in stateful smart contracts. Using the `ed25519verify` opcode for signature verification is only available in stateless smart contracts. 
+Some of the opcodes in TEAL are only valid for a specific contract type. These are denoted in the [TEAL Opcodes](opcodes) documentation with a `Mode` attribute. This attribute will be set to `Signature` for smart signatures and `Application` for smart contracts. For example, reading account assets or Algo balances is only available in smart contracts. 
 
 <center>![TEAL Architecture](../../../../imgs/teal_overview-1.png)</center>
 <center>*TEAL Architecture Overview*</center>
@@ -12,10 +12,10 @@ Some of the opcodes in TEAL are only valid for a specific contract type. These a
 !!! warning
     When writing smart contracts, make sure to follow [TEAL guidelines](guidelines). This is very important in order to prevent smart contracts from being compromised.
 
-# TEAL Versions
-Currently, Algorand supports versions 1 through 4 of TEAL. When writing contracts with TEAL version 2 or higher, make sure to add `#pragma version #` where # should be replaced by the specific number, as the first line of the program. If this line does not exist, the protocol will treat the contract as a version 1 contract. If upgrading a contract to version 2 or higher, it is important to verify you are checking the `RekeyTo` property of all transactions that are attached to the contract. See the [TEAL guidelines](guidelines) for more suggestions to help prevent a contract from being compromised. 
+# TEAL versions
+Currently, Algorand supports versions 1 through 5 of TEAL. When writing contracts with TEAL version 2 or higher, make sure to add `#pragma version #` where # should be replaced by the specific number, as the first line of the program. If this line does not exist, the protocol will treat the contract as a version 1 contract. If upgrading a contract to version 2 or higher, it is important to verify you are checking the `RekeyTo` property of all transactions that are attached to the contract. See the [TEAL guidelines](guidelines) for more suggestions to help prevent a contract from being compromised. 
 
-# Getting Transaction Properties
+# Getting transaction properties
 The primary purpose of a TEAL program is to return either true or false. When the program completes, if there is a non-zero value on the stack then it returns true. If there is a zero value or the stack is empty, it will return false. If the stack has more than one value the program also returns false unless the `return` opcode is used. The following diagram illustrates how the stack machine processes the program.
 
 Program line number 1:
@@ -25,7 +25,7 @@ Program line number 1:
 
 The program uses the `txn` to reference the current transaction's list of properties. Grouped transaction properties are referenced using `gtxn` and `gtxns`. The number of transactions in a grouped transaction is available in the global variable `GroupSize`. To get the first transaction's receiver use `gtxn 0 Receiver`. See [TEAL Specification Reference](specification) for more transaction properties.
 
-# Pseudo Opcodes
+# Pseudo opcodes
 The TEAL specification provides several pseudo opcodes for convenience.  For example, the second line in the program below uses the `addr` pseudo opcode.
 
 <center>![Pseudo Opcodes](../../../../imgs/teal_overview-3.png)</center>
@@ -39,17 +39,17 @@ TEAL provides operators to work with data that is on the stack. For example, the
 <center>![Operators](../../../../imgs/teal_overview-4.png)</center>
 <center>*Operators*</center>
 
-# Argument Passing
-TEAL supports program arguments. Stateless and stateful smart contracts handle these parameters with different opcodes. For information on passing parameters to stateful smart contracts, see the stateful smart contract [Overview](../../pyteal/smart-contracts/stateful) documentation. Passing parameters to a stateless smart contract is explained in the stateless smart contract [SDK Usage](../stateless/sdks/#passing-parameters-using-the-sdks) documentation. The [Goal Teal Walkthrough](../../pyteal/smart-contracts/stateless/walkthrough) documentation explains a simple example of passing a parameter to a stateless smart contract with the `goal` command-line tool. 
+# Argument passing
+TEAL supports program arguments. Smart contracts and smart signatures handle these parameters with different opcodes. For information on passing parameters to smart contracts, see the smart contract [Overview](../../smart-contracts/stateful/index.md) documentation. Passing parameters to a smart signature is explained in the [Interact with smart signatures](../../smart-contracts/frontend/stateless-sdks.md) documentation. The [CLI smart signatures](../../smart-contracts/stateless/walkthrough.md) documentation explains a simple example of passing a parameter to a smart signature with the `goal` command-line tool. 
 
-The diagram below shows an example of logic that is loading a parameter onto the stack within a stateless smart contract. 
+The diagram below shows an example of logic that is loading a parameter onto the stack within a smart signature. 
 
 <center>![Arguments](../../../../imgs/teal_overview-5.png)</center>
 <center>*Arguments*</center>
 
 All argument parameters to a TEAL program are byte arrays. The order that parameters are passed is specific. In the diagram above, The first parameter is pushed onto the stack. The SDKs provide standard language functions that allow you to convert parameters to a byte array. 
 
-# Storing and Loading from Scratchspace
+# Storing and loading from scratchspace
 TEAL provides a scratch space as a way of temporarily storing values for use later in your code. The diagram below illustrates a small TEAL program that loads 12 onto the stack and then duplicates it. These values are multiplied together and result (144) is pushed to the top of the stack. The store command stores the value in the scratch space 1 slot.
 
 <center>![Storing Values](../../../../imgs/teal_overview-6.png)</center>
@@ -60,7 +60,7 @@ The load command is used to retrieve a value from the scratch space as illustrat
 <center>![Loading Values](../../../../imgs/teal_overview-7.png)</center>
 <center>*Loading Values*</center>
 
-# Looping and Subroutines
+# Looping and subroutines
 TEAL contracts written in version 4 or higher can use loops and subroutines. Loops can be performed using any of the branching opcodes `b`, `bz`, and `bnz`. For example the TEAL below loops ten times.
 
 ```tab="TEAL"
@@ -99,20 +99,11 @@ callsub my_subroutine
 return
 ```
 
-# Dynamic Operational Cost of TEAL Opcodes
-Stateless TEAL programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, TEAL programs are also limited in opcode cost. This cost is evaluated when a smart contract runs. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents its opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 35) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. Stateless TEAL programs are limited to 20000 for total opcode cost of all program operators. Stateful TEAL programs are limited to 700 for each of the programs associated with the contract. The [TEAL Opcodes](opcodes) reference lists the opcode cost for every operator.
+# Dynamic operational cost of TEAL opcodes
+Smart signature programs are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, TEAL programs are also limited in opcode cost. This cost is evaluated when a smart contract runs. This cost is representative of a TEAL program's computational expense. Every opcode within TEAL has a numeric value that represents its opcode cost. Most opcodes have an opcode cost of 1. Some operators such as the `SHA256` (cost 35) operator or the `ed25519verify` (cost 1900) operator have substantially larger opcode costs. Smart signatures are limited to 20000 for total opcode cost of all program operators. Smart contracts are limited to 700 for each of the programs associated with the contract. This budget can be used as needed. If using a smart contract in a group of transactions, the opcocode budget is considered pooled. The total opcode budget will be 700 multiplied by the number of application transactions within the group. So if the maximum number of transactions is used and all transactions are application transactions, the opcode budget would be 700x16=11200. The [TEAL Opcodes](opcodes) reference lists the opcode cost for every operator.
 
-!!! warning
-	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
-
-!!! warning
-	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
-
-!!! warning
-	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
-
-# Example Walkthrough of a TEAL Program
-The example covered in this tutorial is for a stateless contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
+# Example walkthrough of a TEAL program
+The example covered in this tutorial is for a smart signature contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
 
 The example uses two addresses (addr1 and addr2). The variables have the values of addr1 = `RFGEHKTFSLPIEGZYNVYALM6J4LJX4RPWERDWYS2PFKNVDWW3NG7MECQTJY` and addr2 = `SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y`.  The variable addr1 represents the creator of the contact account. The addr1 account funds the contract account after creation. The variable addr2 is the intended recipient of the funds, but only if addr2 supplies a proper secret key and the transaction must be submitted within a time limit (represented with a number of blocks). If addr2 does not submit the transaction in time or can’t supply the proper secret key, addr1 can submit the transaction and retrieve all the tokens. The transaction fee for the transaction is limited to no more than 1 Algo and this must not be a rekey transaction. The pseudo-code for this example is represented with the following logic:
 
@@ -267,7 +258,7 @@ txn RekeyTo
 // The global zero address is then pushed onto the stack. 
 global ZeroAddress
 
-// the == operator will replace the last two fields with a 0 or a 1. If the value is 1, this is not a rekey transaction. This is a very important check for stateless smart contracts.
+// the == operator will replace the last two fields with a 0 or a 1. If the value is 1, this is not a rekey transaction.
 ==
 
 // next the && operator is used to AND the two conditions in the third clause.
