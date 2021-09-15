@@ -4,7 +4,7 @@ This section is a quick start guide for interacting with the Algorand network us
 ​
 # Alternative Guide
  
-If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-JavaScript) of submitting your first transaction or watch a [full video](https://youtu.be/WuhaGp2yrak) that explains the following steps.
+If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-JavaScript){:target="_blank"} of submitting your first transaction or watch a [full video](https://youtu.be/WuhaGp2yrak){:target="_blank"} that explains the following steps.
 
  
 # Sandbox Install
@@ -20,7 +20,7 @@ cd sandbox
 ./sandbox up testnet
 ```
  
-​[Watch Video](https://youtu.be/WuhaGp2yrak?t=21)
+​[Watch Video](https://youtu.be/WuhaGp2yrak?t=21){:target="_blank"}
  
 [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
 ​
@@ -56,7 +56,7 @@ npm list algosdk
 // This package provides TypeScript types, but you will need TypeScript version 4.2 or higher to use them properly.
  
 ```
-[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=164 )
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=164 ){:target="_blank"}
 
 [`More Information`](https://github.com/algorand/js-algorand-sdk)
  
@@ -88,7 +88,7 @@ const createAccount =  function (){
     }
 };
 ```
-[Watch Video](https://youtu.be/WuhaGp2yrak?t=212)
+[Watch Video](https://youtu.be/WuhaGp2yrak?t=212){:target="_blank"}
 
 [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
  
@@ -107,13 +107,13 @@ The code below prompts to fund the newly created account. Before sending transac
    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance)
  
 ​
-[Watch Video](https://youtu.be/WuhaGp2yrak?t=307)
+[Watch Video](https://youtu.be/WuhaGp2yrak?t=307){:target="_blank"}
 
 # Viewing the Transaction
 To view the transaction, click on the transaction link in the dispenser or copy the transaction ID and paste to the search bar on the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet).
 ​
 
-[Watch Video](https://youtu.be/WuhaGp2yrak?t=326)
+[Watch Video](https://youtu.be/WuhaGp2yrak?t=326){:target="_blank"}
 ​​
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively.
@@ -165,7 +165,7 @@ Communication with the Algorand network is performed using transactions. To crea
         let sender = myAccount.addr;
         let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
 ```
-[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386)
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386){:target="_blank"}
 
 
 ​
@@ -175,17 +175,20 @@ Communication with the Algorand network is performed using transactions. To crea
 # Sign First Transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 ​
-```javascript tab="Node"
+```javascript 
        // Sign the transaction
         let signedTxn = txn.signTxn(myAccount.sk);
         let txId = txn.txID().toString();
         console.log("Signed transaction with txID: %s", txId);
 ```
-​[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500)
+​
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500){:target="_blank"}
+
 
 
 ​!!! Info
-   Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures).
+    Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures).
+  
  
 # Submit the Transaction
 The signed transaction can now be submitted to the network.`waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation)
@@ -210,8 +213,8 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
         console.log("Account balance: %d microAlgos", accountInfo.amount);
 
 ```
-[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=508)​
 
+[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=508){:target="_blank"}
  
 # Complete Example
  
@@ -354,14 +357,14 @@ async function firstTransaction() {
 firstTransaction();
 ```
 
-[Run Code](https://replit.com/@Algorand/Getting-Started-with-JavaScript)
+[Run Code](https://replit.com/@Algorand/Getting-Started-with-JavaScript){:target="_blank"}
 
-[Watch Video](https://youtu.be/WuhaGp2yrak)
+[Watch Video](https://youtu.be/WuhaGp2yrak){:target="_blank"}
 
 
 ​
 !!! Warning
-   In order for this transaction to be successful, the account must be funded.
+   In order for this transaction to be successful, the account must be [funded](https://dispenser.testnet.aws.algodev.network/).
 ​
 
 # Setting Up Your Editor/Framework
