@@ -114,7 +114,7 @@ Export the secret key associated with the passed public key.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|Reponse to `POST /v1/key/export`|[APIV1POSTKeyExportResponse](#apiv1postkeyexportresponse)|
+|**200**|Response to `POST /v1/key/export`|[APIV1POSTKeyExportResponse](#apiv1postkeyexportresponse)|
 
 
 **Produces**
@@ -145,7 +145,7 @@ Import an externally generated key into the wallet. Note that if you wish to bac
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|Repsonse to `POST /v1/key/import`|[APIV1POSTKeyImportResponse](#apiv1postkeyimportresponse)|
+|**200**|Response to `POST /v1/key/import`|[APIV1POSTKeyImportResponse](#apiv1postkeyimportresponse)|
 
 
 **Produces**
@@ -207,7 +207,7 @@ Export the master derivation key from the wallet. This key is a master "backup" 
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|Reponse to `POST /v1/master-key/export`|[APIV1POSTMasterKeyExportResponse](#apiv1postmasterkeyexportresponse)|
+|**200**|Response to `POST /v1/master-key/export`|[APIV1POSTMasterKeyExportResponse](#apiv1postmasterkeyexportresponse)|
 
 
 **Produces**
@@ -751,7 +751,7 @@ friendly:ListWalletsResponse
 
 <a name="apiv1postkeyexportresponse"></a>
 ### APIV1POSTKeyExportResponse
-APIV1POSTKeyExportResponse is the reponse to `POST /v1/key/export`
+APIV1POSTKeyExportResponse is the response to `POST /v1/key/export`
 friendly:ExportKeyResponse
 
 
@@ -764,7 +764,7 @@ friendly:ExportKeyResponse
 
 <a name="apiv1postkeyimportresponse"></a>
 ### APIV1POSTKeyImportResponse
-APIV1POSTKeyImportResponse is the repsonse to `POST /v1/key/import`
+APIV1POSTKeyImportResponse is the response to `POST /v1/key/import`
 friendly:ImportKeyResponse
 
 
@@ -803,7 +803,7 @@ friendly:GenerateKeyResponse
 
 <a name="apiv1postmasterkeyexportresponse"></a>
 ### APIV1POSTMasterKeyExportResponse
-APIV1POSTMasterKeyExportResponse is the reponse to `POST /v1/master-key/export`
+APIV1POSTMasterKeyExportResponse is the response to `POST /v1/master-key/export`
 friendly:ExportMasterKeyResponse
 
 
@@ -883,7 +883,7 @@ friendly:SignMultisigResponse
 
 <a name="apiv1postprogramsignresponse"></a>
 ### APIV1POSTProgramSignResponse
-APIV1POSTProgramSignResponse is the repsonse to `POST /v1/data/sign`
+APIV1POSTProgramSignResponse is the response to `POST /v1/data/sign`
 friendly:SignProgramResponse
 
 
@@ -896,7 +896,7 @@ friendly:SignProgramResponse
 
 <a name="apiv1posttransactionsignresponse"></a>
 ### APIV1POSTTransactionSignResponse
-APIV1POSTTransactionSignResponse is the repsonse to `POST /v1/transaction/sign`
+APIV1POSTTransactionSignResponse is the response to `POST /v1/transaction/sign`
 friendly:SignTransactionResponse
 
 

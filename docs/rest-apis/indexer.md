@@ -808,11 +808,14 @@ data/transactions/asset.go : AssetParams
 |**freeze**  <br>*optional*|\[f\] Address of account used to freeze holdings of this asset.  If empty, freezing is not permitted.|string|
 |**manager**  <br>*optional*|\[m\] Address of account used to manage the keys of this asset and to destroy it.|string|
 |**metadata-hash**  <br>*optional*|\[am\] A commitment to some unspecified asset metadata. The format of this metadata is up to the application.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**name**  <br>*optional*|\[an\] Name of this asset, as supplied by the creator.|string|
+|**name**  <br>*optional*|\[an\] Name of this asset, as supplied by the creator. Included only when the asset name is composed of printable utf-8 characters.|string|
+|**name-b64**  <br>*optional*|Base64 encoded name of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**reserve**  <br>*optional*|\[r\] Address of account holding reserve (non-minted) units of this asset.|string|
 |**total**  <br>*required*|\[t\] The total number of units of this asset.|integer|
-|**unit-name**  <br>*optional*|\[un\] Name of a unit of this asset, as supplied by the creator.|string|
-|**url**  <br>*optional*|\[au\] URL where more information about the asset can be retrieved.|string|
+|**unit-name**  <br>*optional*|\[un\] Name of a unit of this asset, as supplied by the creator. Included only when the name of a unit of this asset is composed of printable utf-8 characters.|string|
+|**unit-name-b64**  <br>*optional*|Base64 encoded name of a unit of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**url**  <br>*optional*|\[au\] URL where more information about the asset can be retrieved. Included only when the URL is composed of printable utf-8 characters.|string|
+|**url-b64**  <br>*optional*|Base64 encoded URL where more information about the asset can be retrieved.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="block"></a>

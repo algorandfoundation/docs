@@ -1,7 +1,7 @@
 title: CLI Tools
 arrange:
     - goal
-    - diagcfg
     - kmd.md
     - algokey
+    - diagcfg
     
