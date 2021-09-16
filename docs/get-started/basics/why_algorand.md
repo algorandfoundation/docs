@@ -3,7 +3,7 @@ title: Why Algorand?
 So far, we’ve discussed blockchain technology and the benefits it brings to applications that transfer value. But we made some assumptions about the type of blockchain we’re dealing with when we formed these definitions. In reality, not all blockchains are created equal, and not all of them can provide the same degree of benefit.  
 
 _As a developer, it’s important to do your research and choose a blockchain that you can rely on for all the properties that a blockchain promises._ 
-_
+
 In this section we will outline some of the main categories to evaluate against when choosing a blockchain and we’ll explain how Algorand fares in each of these categories. We are confident that by the end, you’ll determine that the Algorand blockchain is the best place to build your application!
 
 # Our founding principles
@@ -30,7 +30,7 @@ Simply put, a **proof-of-stake** blockchain gives users who have more stake (who
 
 <center>
 ![Proof-of-stake](../../imgs/basics-pos.png){: width='500px' }
-<figcaption style="font-size:12px">Concept drawing of voting procedure in proof-of-stake protocols.</figcaption>
+<figcaption style="font-size:12px">Concept drawing of the voting procedure in proof-of-stake protocols.</figcaption>
 </center>
 
 In **proof-of-work**, nodes race to solve a challenging cryptographic puzzle and serve up their solution alongside a new block proposal (this is referred to as “mining” and these nodes are called “miners”). The winner is rewarded with some of the underlying currency of the system and their block becomes part of the chain. 
