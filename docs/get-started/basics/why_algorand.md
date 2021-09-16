@@ -100,7 +100,7 @@ Algorand makes it easy to tokenize, transfer, and program conditions on any inst
 Developers can write smart contracts in Python or Reach (a Javascript-like language) and can use one of four SDKs (Python, JavaScript, Golang, Java) to connect to on-chain assets or applications.
 
 Algorand has a growing ecosystem of developer tools like IDEs, tools for monitoring, etc.
-> [Explore developer tools from the community](../../../ecosystem-projects/){: target="_blank" }
+> [Explore developer tools from the community](../../../../ecosystem-projects/){: target="_blank" }
 
 # The team & ecosystem
 The Algorand protocol is completely open source, so why can’t anyone just go create a copy and create another Algorand-like blockchain? Well they absolutely can, but then they’ll have to convince everyone why the new one is better. As we’ve seen, the technology is a critical component to a blockchain, but so is the ecosystem built around it. 
