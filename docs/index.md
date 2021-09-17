@@ -1,67 +1,129 @@
 title: Algorand Developer Docs
 
-Sections marked with 🔷 indicate a feature that is currently available on BetaNet only. 
+## Start with the Basics
 
-## Application Developers
+<ul class="docs-homepage__card-list">
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--orange">
+                <span class="start-with-basics-overview-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Overview</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--orange">
+                <span class="introduction-to-algorand-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Introduction to Algorand</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--orange">
+                <span class="create-your-first-token-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Create Your First Token</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+</ul>
 
-<div class="homepage-cards">
-  <div class="homepage-card">
-    <span class="rocket-icon"></span>
-    <a href="/archive/build-apps/setup" class="card-title">Start Building</a>
-    <div class="card-description">
-    Learn how to setup your environment and send your first transaction.
-    </div>
-  </div>
-  <div class="homepage-card">
-    <span class="checklist-icon"></span>
-    <a href="./features/" class="card-title">Explore Features</a>
-    <div class="card-description">
-    In-depth explanations and how-tos for core Algorand features.
-    </div>
-  </div>
-  <div class="homepage-card">
-    <span class="folder-file-icon"></span>
-    <a href="./reference/" class="card-title">Reference Docs</a>
-    <div class="card-description">
-    Learn commands and syntax for specific developer tools.
-    </div>
-  </div>
-</div>
+## Create a Smart Contract
 
-## Noderunners
+<ul class="docs-homepage__card-list">
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--purple">
+                <span class="create-smart-contract-overview-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Overview</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--purple">
+                <span class="stateful-smart-contracts-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Stateful Smart Contracts</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--purple">
+                <span class="stateless-smart-contracts-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Stateless Smart Contracts</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+</ul>
 
-<div class="homepage-cards">
-  <div class="homepage-card">
-    <span class="server-icon"></span>
-    <a href="./run-a-node/setup/types/" class="card-title">Run a Node</a>
-    <div class="card-description">
-    Install, configure, and run a node.
-    </div>
-  </div>
-  <div class="homepage-card">
-    <span class="multiple-users-network-icon"></span>
-    <a href="./run-a-node/participate/" class="card-title">Participate in Consensus</a>
-    <div class="card-description">
-    Register accounts to participate in Algorand consensus.
-    </div>
-  </div>
-</div>
+## Layer-1 Primitives
 
-## Everyone
+<ul class="docs-homepage__card-list">
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
+                <span class="payment-with-algos-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Payment with Algos</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
+                <span class="nfts-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">NFTs</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
+                <span class="fungible-assets-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Fungible Assets</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+    <li class="docs-homepage__card-list-item">
+        <a class="docs-homepage__card" href="./build-apps/setup/">
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
+                <span class="payment-with-algos-icon"></span>
+            </div>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Atomic Transfers</p>
+            <p class="typography--regular-body docs-homepage__card__description">Learn more about the Algorand blockchain</p>
+        </a>
+    </li>
+</ul>
 
-<div class="homepage-cards">
-  <div class="homepage-card">
-    <span class="community-icon"></span>
-    <a href="./community/" class="card-title">Community Projects</a>
-    <div class="card-description">
-    Browse existing projects built on Algorand.
-    </div>
-  </div>
-  <div class="homepage-card">
-    <span class="study-owl-icon"></span>
-    <a href="/get-details/algorand_consensus" class="card-title">Algorand Consensus</a>
-    <div class="card-description">
-    Learn more about how Algorand consensus works.
-    </div>
-  </div>
-</div>
+## Docs w/out icon
+
+<ul class="docs-homepage__without-icon-list">
+  <li class="docs-homepage__without-icon-list-item">
+    <a class="docs-homepage__without-icon-card" href="./build-apps/setup/">
+        <span class="docs-icon"></span>
+        <p class="text-gray--main typography--large-button docs-homepage__without-icon-card__description">Integrate with Algos and ASAs </p>
+    </a>
+  </li>
+  <li class="docs-homepage__without-icon-list-item">
+    <a class="docs-homepage__without-icon-card" href="./build-apps/setup/">
+        <span class="docs-icon"></span>
+        <p class="text-gray--main typography--large-button docs-homepage__without-icon-card__description">Payment with Algos</p>
+    </a>
+  </li>  
+  <li class="docs-homepage__without-icon-list-item">
+    <a class="docs-homepage__without-icon-card" href="./build-apps/setup/">
+        <span class="docs-icon"></span>
+        <p class="text-gray--main typography--large-button docs-homepage__without-icon-card__description">Payment with Algos</p>
+    </a>
+  </li>  
+</ul>
