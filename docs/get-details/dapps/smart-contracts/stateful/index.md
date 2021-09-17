@@ -1,6 +1,8 @@
 title: Smart contract details
 
-Algorand Smart Contracts can can use some amount of storage on the chain to store values. This storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Like smart signatures, stateful contracts are written in TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. 
+Algorand smart contracts are pieces of logic that reside on the Algorand blockchain and are remotely callable. These contracts are primarily responsible for implementing the logic associated with a distributed application. Smart contracts are referred to as stateful smart contracts or applications in the Algorand documentation. Smart contracts can generate asset and payment transactions allowing them to function as Escrow accounts on the Algorand blockchain. Smart contracts can also store values on the blockchain. This storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Like smart signatures, smart contracts are written in Python using PyTeal or TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. The recommended approach for writing smart contracts is to use the Python SDK with the PyTeal library.  
+
+See the [*PyTeal Documentation*](../../pyteal/index.md) for information on building smart contracts in Python.
 
 See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../../avm/teal/opcodes.md) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../../avm/teal/index.md).
 
@@ -9,19 +11,19 @@ See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand 
      
     - Each PyTeal code snippet ends with the action to compile the program and write it to a file so the user can view the underlying TEAL code.
     - Sometimes the compiled version of a PyTeal code snippet will differ slightly from the TEAL version. However, the resulting function should be equivalent for the particular area of focus in the documentation. In larger more complex programs, this may not always be the case.
-    - When a TEAL code snippet includes comments as placeholders for code, the PyTeal example will often use a placeholder of `Seq([Return(Int(1))])` with a comment describing this as a placeholder. This allows the user to compile the program for learning purposes. However, returning 1 is a very permissive action and should be carefully updated when used in a real application.
+    - When a TEAL code snippet includes comments as placeholders for code, the PyTeal example will often use a placeholder of `Seq([Return(Int(1))])` with a comment describing this as a placeholder. This allows the user to compile the program for learning purposes. However, returning 1 is a very permissive action and should be carefully updated when used in a production application.
 
 # The lifecycle of a smart contract
-Stateful smart contracts are implemented using two TEAL programs:
+Smart contracts are implemented using two programs:
 
-* The `ApprovalProgram` is responsible for processing all application calls to the contract, with the exception of the clear call (described in the next bullet). This program is responsible for implementing most of the logic of an application. Like stateless contracts, this program will succeed only if one nonzero value is left on the stack upon program completion or the `return` opcode is called with a positive value on the top of the stack.
+* The `ApprovalProgram` is responsible for processing all application calls to the contract, with the exception of the clear call (described in the next bullet). This program is responsible for implementing most of the logic of an application. Like smart signatures, this program will succeed only if one nonzero value is left on the stack upon program completion or the `return` opcode is called with a positive value on the top of the stack.
 * The `ClearStateProgram` is used to handle accounts using the clear call to remove the smart contract from their balance record. This program will pass or fail the same way the `ApprovalProgram` does. 
 
 In either program, if a global or local state variable is modified and the program fails, the state changes will not be applied. 
 
 Having two programs allows an account to clear the contract from its state, whether the logic passes or not. When the clear call is made to the contract, whether the logic passes or fails, the contract will still be removed from the balance record for the specified account. Note the similarity to the CloseOut transaction call which can fail to remove the contract from the account, which is described below.
 
-Calls to stateful smart contracts are implemented using `ApplicationCall` transactions. These transactions types are as follows:
+Calls to smart contracts are implemented using `ApplicationCall` transactions. These transaction types are as follows:
 
 * NoOp - Generic application calls to execute the `ApprovalProgram`
 * OptIn - Accounts use this transaction to opt into the smart contract to participate (local storage usage).
@@ -30,32 +32,219 @@ Calls to stateful smart contracts are implemented using `ApplicationCall` transa
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
 * ClearState - Similar to CloseOut, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
 
-The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a stateful TEAL program is shown below. In the following sections, details on the individual capabilities of a stateful smart contract will be explained.
+The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a smart contract is shown below. In the following sections, details on the individual capabilities of a smart contract will be explained.
 
-<center>![Stateful Smart Contract](../../../../../imgs/stateful-1.png)</center>
-<center>*Stateful Smart Contract*</center>
+<center>![Smart Contract](../../../../../imgs/stateful-1.png)</center>
+<center>*Smart Contract*</center>
 
-The `goal` calls shown above in the orange boxes represent all the specific calls that can be made against a stateful smart contract and are described later in this document. These calls are also available in the SDKs. The teal-colored boxes represent the two required TEAL programs, the blue boxes are the state variables (local and global), and the yellow boxes represent the TEAL opcodes used to modify state. Modifying state is detailed in the next section.
+The `goal` calls shown above in the orange boxes represent all the specific calls that can be made against a smart contract and are described later in this document. These calls are also available in the SDKs. The teal-colored boxes represent the two required TEAL programs, the blue boxes are the state variables (local and global), and the yellow boxes represent the TEAL opcodes used to modify state. Modifying state is detailed in later section.
 
 # Smart contract arrays
-A set of arrays can be passed with any application transaction, which instructs the protocol to load additional data for use in the contract. These arrays are the *applications* array, the *accounts* array, the *assets* array, and the *arguments* array. The application array is used to pass other stateful smart contract IDs that can be used to read state for the specific contracts. The accounts array allows additional accounts to be passed to the contract for balance information and local storage. The assets array is used to pass a list of asset IDs that can be used to retrieve configuration and asset balance information. 
+A set of arrays can be passed with any application transaction, which instructs the protocol to load additional data for use in the contract. These arrays are the *applications* array, the *accounts* array, the *assets* array, and the *arguments* array. The application array is used to pass other smart contract IDs that can be used to read state for the specific contracts. The accounts array allows additional accounts to be passed to the contract for balance information and local storage. The assets array is used to pass a list of asset IDs that can be used to retrieve configuration and asset balance information. 
 
-The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a size limit of 2KB for the total of arguments. See [Passing Arguments To Stateful Smart Contracts](#passing-arguments-to-stateful-smart-contracts) for more details on arguments.
+The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a size limit of 2KB for the total of arguments. See [Passing Arguments To Smart Contracts](#passing-arguments-to-smart-contracts) for more details on arguments.
 
 The other three arrays are limited to 8 total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction. Many opcodes that make use of these arrays take an integer parameter as an index into these arrays. The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. Most of the opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
 
-<center>![Stateful Smart Contract](../../../../../imgs/stateful-2.png)</center>
-<center>*Stateful Smart Contract Arrays*</center>
+<center>![Smart Contract](../../../../../imgs/stateful-2.png)</center>
+<center>*Smart Contract Arrays*</center>
+
+# Using a smart contract as an escrow
+When a smart contract is deployed to the Algorand blockchain it is assigned a unique identifier, called the app id. Additionally, every smart contract has a unique Algorand address that is generated from this specific ID. The address allows the smart contract to function as an escrow account. To see the specific address of the smart contract the `goal app info` command can be used.
+
+```bash
+% ./goal app info --app-id 1 -d data
+Application ID:        1
+Application account:   WCS6TVPJRBSARHLN2326LRU5BYVJZUKI2VJ53CAWKYYHDE455ZGKANWMGM
+Creator:               VJG4SF5O4DUQDK7MQYHHSJ2HB5LEAB3OQMM2XCUM7OVQKWC7E4GSNCM4FQ
+Approval hash:         IYRFKZVCHBQW3UNKEWRQPMCXSXH4TDF4K74EAH65UYLJ5R5JQGVZJ4FF2M
+Clear hash:            P7GEWDXXW5IONRW6XRIRVPJCT2XXEQGOBGG65VJPBUOYZEJCBZWTPHS3VQ
+Max global byteslices: 0
+Max global integers:   1
+Max local byteslices:  0
+Max local integers:    0
+```
+
+The application address will be shown as the Application account. This addressed can also be retrieved with the SDKs or calculated by using the following code and the smart contract’s application id.
+
+```bash
+# app ID of 1’s address
+python3 -c "import algosdk.encoding as e; print(e.encode_address(e.checksum(b'appID'+(1).to_bytes(8, 'big'))))"
+WCS6TVPJRBSARHLN2326LRU5BYVJZUKI2VJ53CAWKYYHDE455ZGKANWMGM
+```
+## Inner transactions
+To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to 16 inner transactions within one call to the smart contract. If any of these transactions fail, then the smart contract will also fail. Inner transactions currently support payment and all asset transaction types. To generate an inner transaction the `itxn_begin`, `itxn_field` and `itxn_submit` opcodes must be used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field’ opcode is used to set specific transaction properties and the `itxn_submit` opcode is used to submit the transaction. As an example, the following TEAL generates a simple payment transaction.
+
+```teal
+itxn_begin
+int pay
+itxn_field TypeEnum
+int 5000
+itxn_field Amount
+txn Sender
+itxn_field Receiver
+itxn_submit
+```
+
+In this example, the type is set to pay using the TypeEnum field, the amount is set to 5000 microalgos using the Amount field, and the receiver is set to the caller of the smart contract using the Receiver field. Inner transactions do not support all transaction properties. See the table at the end of this section for a complete list of settable transaction properties. Fees for these transactions are paid by the smart contract and are set automatically the minimum transaction fee. Inner transaction fees are eligible for fee pooling similar to any other transaction. This allows either the application call or any other transaction in a group of transactions to pay the fee for inner transactions. Inner transactions are evaluated during the AVM execution allowing changes to be visible within the contract. For example, if the ‘balance’ opcode is used before and after a ‘pay’ transaction is submitted, the balance change would be visible to the executing contract. 
+
+!!!note
+    Inner transactions also have access to the Sender field. It is not required to set this field as all inner transactions default the sender to the contract address. If another account is rekeyed to the smart contract address, setting sender to the address that has been rekeyed allows the contract to spend from that account.
+
+## Asset transfer
+If a smart contract wishes to transfer an asset it holds or needs to opt into an asset this can be done with an asset transfer inner transaction.
+
+```teal
+itxn_begin
+int axfer
+itxn_field TypeEnum
+txn Sender
+itxn_field AssetReceiver
+//Asset ID must be in the assets array
+txn Assets 0
+itxn_field XferAsset
+// send 10
+int 1000
+itxn_field AssetAmount
+itxn_submit
+``` 
+
+In this example, 1000 units of the asset are sent to the account calling the contract. Note that the asset must be in the assets array. If the smart contract is opting into an asset, the contract would send 0 units of the asset to itself. In this case, the receiver could be set to the `global CurrentApplicationAddress`. 
+
+## Asset freeze
+A smart contract can freeze any asset, where the smart contract is the freeze address. This can be done with the following TEAL.
+
+```teal
+itxn_begin
+int afrz
+itxn_field TypeEnum
+//asset to be frozen
+txn Assets 0
+itxn_field FreezeAsset
+//account to freeze
+//first account in accounts array
+txn Accounts 1
+itxn_field FreezeAssetAccount
+//set frozen status to true
+int 1
+itxn_field FreezeAssetFrozen
+itxn_submit
+```
+
+## Asset revoke
+A smart contract can revoke or clawback any asset where the smart contract address is specified as the asset clawback address. 
+
+```teal
+itxn_begin
+int axfer
+itxn_field TypeEnum
+global CurrentApplicationAddress
+itxn_field AssetReceiver
+txn Assets 0
+itxn_field XferAsset
+// send 10
+int 1000
+itxn_field AssetAmount
+//first account in the accounts array
+txn Accounts 1
+itxn_field AssetSender
+itxn_submit
+```
+
+## Asset create
+Assets can also be created by a smart contract. To create an asset with an inner transaction using the following TEAL.
+
+```teal
+itxn_begin
+int acfg
+itxn_field TypeEnum
+int 1000000
+itxn_field ConfigAssetTotal
+int 3
+itxn_field ConfigAssetDecimals
+byte "oz"
+itxn_field ConfigAssetUnitName
+byte "Gold"
+itxn_field ConfigAssetName
+byte "https://gold.rush/"
+itxn_field ConfigAssetURL
+global CurrentApplicationAddress
+dup
+dup2
+itxn_field ConfigAssetManager
+itxn_field ConfigAssetReserve
+itxn_field ConfigAssetFreeze
+itxn_field ConfigAssetClawback
+itxn_submit
+itxn CreatedAssetID
+```
+
+In this example, a simple asset is created. Using the `itxn CreatedAssetID` opcode after the transaction is submitted allows the contract to get the asset id of the newly created asset.
+
+##Asset configuration
+As with all assets, the mutable addresses can be changed. For example to change the freeze address for an asset managed by the contract, the follow teal can be used.
+
+```teal
+itxn_begin
+int acfg
+itxn_field TypeEnum
+txn Sender
+itxn_field ConfigAssetFreeze
+global CurrentApplicationAddress
+dup
+dup
+itxn_field ConfigAssetManager
+itxn_field ConfigAssetReserve
+itxn_field ConfigAssetClawback
+//first asset in the assets array
+txn Assets 0
+itxn_field ConfigAsset
+itxn_submit
+```
+
+This example sets the freeze address to the sender of the application transaction. Note that when changing one address, all others must be reset or they will be cleared. Cleared addresses will be locked forever.
+
+## Delete an asset
+Assets managed by the contract can also be deleted. This can be done with the following TEAL.
+
+```teal
+itxn_begin
+int acfg
+itxn_field TypeEnum
+//first asset in the assets array
+txn Assets 0
+itxn_field ConfigAsset
+itxn_submit
+```
+
+All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
+## Setting transaction properties
+The following table list all setting properties within an inner transaciton.
+
+| Payment and Asset Transfers | Asset Freeze       | Asset Configuration |
+|-----------------------------|--------------------|---------------------|
+| Sender                      | FreezeAsset        | ConfigAssetTotal    |
+| Fee                         | FreezeAssetAccount | ConfigAssetDecimals |
+| Receiver                    | FreezeAssetFrozen  | ConfigAssetUnitName |
+| Amount                      | TypeEnum           | ConfigAssetName     |
+| CloseRemainderTo            |                    | ConfigAssetURL      |
+| Type                        |                    | ConfigAssetManager  |
+| TypeEnum                    |                    | ConfigAssetReserve  |
+| XferAsset                   |                    | ConfigAssetFreeze   |
+| AssetAmount                 |                    | ConfigAssetClawback |
+| AssetSender                 |                    | ConfigAsset         |
+| AssetReceiver               |                    | TypeEnum            |
+| AssetCloseTo                |                    |                     |
+
 
 # Modifying state in smart contract
-Stateful smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. The TEAL language provides several opcodes for facilitating reading and writing to state.
+Smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. The TEAL language provides several opcodes for facilitating reading and writing to state.
 
 ## Reading local state from other accounts
 Local storage values are stored in the account's balance record. Any account that sends a transaction to the smart contract can have its local storage modified by the smart contract as long as the account has opted into the smart contract. In addition, any call to the smart contract can also reference up to four additional accounts which can also have their local storage manipulated for the current smart contract as long as the account has opted into the contract. These five accounts can also have their storage values for any smart contract on Algorand read by specifying the application id of the smart contract, if the additional contract is in the applications array for the transaction. This is a read-only operation and does not allow one smart contract to modify the local state of another smart contract. The additionally referenced accounts can be changed per smart contract call (transaction). The process for reading local state from another account is described in the following sections.
 
 ## Reading global state from other smart contracts
 Global storage for the current contract can also be modified by the smart contract code. In addition, the global storage of any contract in the applications array can be read. This is a read-only operation. The global state can not be changed for other smart contracts. The external smart contracts can be changed per smart contract call (transaction). The process for reading global state from another smart contract is described in the following sections.
-
 
 ## Write to state
 To write to either local or global state, the opcodes `app_global_put` and `app_local_put` should be used. These calls are similar but with local storage, you provide an additional account parameter. This determines what account should have its local storage modified. In addition to the sender of the transaction, any call to the smart contract can reference up to four additional accounts. Below is an example of doing a global write with TEAL.
@@ -145,7 +334,7 @@ In this example, the `int 0` represents the sender of the transaction. This is a
 
 `int 0` represents the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call. 
 
-The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (stateful smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following TEAL should be used.
+The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following TEAL should be used.
 
 ```text tab="TEAL"
 int 0 // sender
@@ -265,7 +454,7 @@ print(compileTeal(program, Mode.Application))
 ```
 
 # Passing arguments to smart contracts
-Arguments can be passed to any of the supported application transaction calls, including create. The number and type can also be different for any subsequent calls to the stateful smart contract. The `goal` CLI supports passing strings, ints, base64 encoded data, and addresses as parameters. To pass a parameter supply the `--app-arg` option to the call and supply the value according to the format shown below.
+Arguments can be passed to any of the supported application transaction calls, including create. The number and type can also be different for any subsequent calls to the smart contract. The `goal` CLI supports passing strings, ints, base64 encoded data, and addresses as parameters. To pass a parameter supply the `--app-arg` option to the call and supply the value according to the format shown below.
 
 Argument Type | Example
 ------------ | ------------- 
@@ -318,29 +507,26 @@ print(compileTeal(program, Mode.Application))
 ```
 
 !!! info
-    Argument passing for stateful smart contracts is very different from passing arguments to stateless smart contracts. 
+    Argument passing for smart contracts is very different from passing arguments to smart signatures. 
 
 The total size of all parameters is limited to 2KB in size.
 
 
 # Creating the smart contract
-Before creating a stateful smart contract, the code for the `ApprovalProgram` and the `ClearStateProgram` program should be written. The SDKs and the `goal` CLI tool can be used to create a smart contract application. To create the application with `goal` use a command similar to the following.
+Before creating a smart contract, the code for the `ApprovalProgram` and the `ClearStateProgram` program should be written. The SDKs and the `goal` CLI tool can be used to create a smart contract application. To create the application with `goal` use a command similar to the following.
 
 ```
 $ goal app create --creator [address]  --approval-prog [approval_program.teal] --clear-prog [clear_state_program.teal] --global-byteslices [number-of-global-byteslices] --global-ints [number-of-global-ints] --local-byteslices [number-of-local-byteslices] --local-ints [number-local-ints] --extra-pages [number of extra 2KB pages]
 ```
 
-The creator is the account that is creating the application and this transaction is signed by this account. The approval program and the clear state program should also be provided. The number of global and local byte slices (byte-array value) and integers also needs to be specified. These represent the absolute on-chain amount of space that the smart contract will use. Once set, these values can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. When the smart contract is created the network will return a unique ApplicationID. This ID can then be used to make `ApplicationCall` transactions to the smart contract. 
+The creator is the account that is creating the application and this transaction is signed by this account. The approval program and the clear state program should also be provided. The number of global and local byte slices (byte-array value) and integers also needs to be specified. These represent the absolute on-chain amount of space that the smart contract will use. Once set, these values can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. When the smart contract is created the network will return a unique ApplicationID. This ID can then be used to make `ApplicationCall` transactions to the smart contract. The smart contract will also have a unique Algorand address that is generated from this ID. This address allows the contract to function as an escrow account. See [Using a smart contract as an escrow](#using-a-smart-contract-as-an-escrow) for more details on this capability. 
 
-When creating a stateful smart contract, there is a limit of 64 key-value pairs that can be used by the contract for global storage and 16 key-value pairs that can be used for local storage. When creating the smart contract the amount of storage can never be changed once the contract is created. Additionally, the minimum balance is raised for any account that participates in the contract. See [Minimum Balance Requirement for Smart Contracts](#minimum-balance-requirement-for-a-smart-contract) described below for more detail.
+When creating a smart contract, there is a limit of 64 key-value pairs that can be used by the contract for global storage and 16 key-value pairs that can be used for local storage. When creating the smart contract the amount of storage can never be changed once the contract is created. Additionally, the minimum balance is raised for any account that participates in the contract. See [Minimum Balance Requirement for Smart Contracts](#minimum-balance-requirement-for-a-smart-contract) described below for more detail.
 
-Stateful smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased up to 3 additional 2KB pages, which would result in an 8KB limit for both programs. Note the size increases will also increase the minimum balance requirement for creating the application. To request additional pages, the setting (`extra-pages`) is available when creating the stateful smart contract using `goal`. These extra pages can also be requested using the SDKs. This setting allows setting up to 3 additional 2KB pages.
-
-!!! warning
-	Currently, applications up to 2KB in size can be updated, while applications between 2KB and 8KB in size can not. This discrepancy will be resolved in the next consensus upgrade and all applications of any size, including ones that have already been created, will be updateable. Please note - 2KB applications can still be updated. 
+Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased up to 3 additional 2KB pages, which would result in an 8KB limit for both programs. Note the size increases will also increase the minimum balance requirement for creating the application. To request additional pages, the setting (`extra-pages`) is available when creating the smart contract using `goal`. These extra pages can also be requested using the SDKs. This setting allows setting up to 3 additional 2KB pages.
 
 !!! info    
-    Accounts can only opt into or create up to 50 stateful smart contracts.
+    Accounts can only opt into up to 50 smart contracts. Accounts may only create 10 smart contracts.
 
 # Opt into the smart contract
 Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt into the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to opt into the smart contract. This can be done with the `goal` CLI or the SDKs.
@@ -393,13 +579,13 @@ print(compileTeal(program, Mode.Application))
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array.
 
 !!! info
-    Accounts can only opt into or create up to 50 stateful smart contracts
+    Accounts can only opt into up to 50 smart contracts. Accounts may only create 10 smart contracts.
 
 !!! info
     Applications that only use global state do not require accounts to opt in.
 
 # Call the smart contract
-Once an account has opted into a stateful smart contract it can begin to make calls to the contract. These calls will be in the form of `ApplicationCall` transactions that can be submitted with `goal` or the SDKs. Depending on the individual type of transaction as described in [The Lifecycle of a Smart Contract](#the-lifecycle-of-a-smart-contract), either the `ApprovalProgram` or the `ClearStateProgram` will be called. Generally, individual calls will supply application arguments. See [Passing Arguments to a Smart Contract](#passing-arguments-to-smart-contracts) for details on passing arguments.
+Any account can make a call to the smart contract. These calls will be in the form of `ApplicationCall` transactions that can be submitted with `goal` or the SDKs. Depending on the individual type of transaction as described in [The Lifecycle of a Smart Contract](#the-lifecycle-of-a-smart-contract), either the `ApprovalProgram` or the `ClearStateProgram` will be called. Generally, individual calls will supply application arguments. See [Passing Arguments to a Smart Contract](#passing-arguments-to-smart-contracts) for details on passing arguments.
 
 ```
 $ goal app call --app-id 1 --app-arg "str:myparam"  --from [ADDRESS]
@@ -436,13 +622,13 @@ print(compileTeal(program, Mode.Application))
 ```
 
 # Update smart contract
-A stateful smart contract’s programs can be updated at any time. This is done by an `ApplicationCall` transaction type of `UpdateApplication`. This operation can be done with `goal` or the SDKs and requires passing the new programs and specifying the application ID.
+A smart contract’s programs can be updated at any time. This is done by an `ApplicationCall` transaction type of `UpdateApplication`. This operation can be done with `goal` or the SDKs and requires passing the new programs and specifying the application ID.
 
 ```
 goal app update --app-id=[APPID] --from [ADDRESS]  --approval-prog [new_approval_program.teal]   --clear-prog [new_clear_state_program.teal]
 ```
 
-The one caveat to this operation is that global or local state requirements for the smart contract can never be updated.
+The one caveat to this operation is that global or local state requirements for the smart contract can never be updated. Updating a smart contract's programs does not affect any values currently in state.
 
 As stated earlier, anyone can update the program. If this is not desired and you want only the original creator to be able to update the programs, code must be added to your `ApprovalProgram` to handle this situation. This can be done by comparing the global `CreatorAddress` to the sender address.
 
@@ -491,10 +677,10 @@ To delete a smart contract, an `ApplicationCall` transaction of type `DeleteAppl
 $ goal app delete --app-id=[APPID] --from [ADDRESS]
 ```
 
-When making this call the `--app-id` and the `--from` options are required. Anyone can delete a smart contract. If this is not desired, logic in the program must reject the call. Using a method described in [Update Stateful Smart Contract](#update-stateful-smart-contract) must be supplied. 
+When making this call the `--app-id` and the `--from` options are required. Anyone can delete a smart contract. If this is not desired, logic in the program must reject the call. Using a method described in [Update Smart Contract](#update-smart-contract) must be supplied. 
 
 # Global values in smart contracts
-Smart contracts have access to many global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Stateful smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, a contract may only allow accounts to opt in after a start date, which is set when the contract is created and stored in global storage.
+Smart contracts have access to many global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, a contract may only allow accounts to opt in after a start date, which is set when the contract is created and stored in global storage.
 
 ```text tab="TEAL"
 global LatestTimestamp
@@ -522,7 +708,7 @@ program = Txn.amount()
 print(compileTeal(program, Mode.Application))
 ```
 
-In many common patterns, the stateful TEAL contract will be combined with other Algorand technologies such as Algorand Assets, Atomic Transfers, or Stateless Smart Contracts to build a complete application. In the case of Atomic transfers, more than one transaction’s properties can be checked within the stateful smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the stateful smart contract is grouped with more than one transaction.
+In many common patterns, the smart contract will be combined with other Algorand technologies such as assets, atomic transfers, or smart signatures to build a complete application. In the case of atomic transfers, more than one transaction’s properties can be checked within the smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the smart contract is grouped with more than one transaction.
 
 ```text tab="TEAL"
 global GroupSize
@@ -536,7 +722,7 @@ program = Global.group_size() == Int(2)
 print(compileTeal(program, Mode.Application))
 ```
 
-The above TEAL will be true if there are two transactions submitted at once using an Atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
+The above TEAL will be true if there are two transactions submitted at once using an atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
 
 ```text tab="TEAL"
 gtxn 1 TypeEnum
@@ -552,11 +738,11 @@ print(compileTeal(program, Mode.Application))
 
 In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
 
-If any transaction in a group of transactions is a call to a stateful smart contract, the opcodes `gtxna` and `gtxnsa` can be used to access any of the transactions array values.
+If any transaction in a group of transactions is a call to a smart contract, the opcodes `gtxna` and `gtxnsa` can be used to access any of the transactions array values.
 
 ```text tab="TEAL"
 // get the first argument of the previous transaction
-// in a stateful smart contract
+// in a smart contract
 txn GroupIndex
 int 1
 -
@@ -570,7 +756,7 @@ print(compileTeal(program, Mode.Application))
 ```
 
 # Using assets in smart contracts
-Stateful contract applications can work in conjunction with Algorand Assets. In addition to normal asset transaction properties, such as asset amount, sender, and receiver, TEAL provides an opcode to interrogate an account’s asset balance and whether the asset is frozen. This opcode `asset_holding_get` can be used to retrieve an asset balance or check whether the asset is frozen for any account in the transaction accounts array. The asset must also be in the assets array.
+Smart contract applications can work in conjunction with assets. In addition to normal asset transaction properties, such as asset amount, sender, and receiver, TEAL provides an opcode to interrogate an account’s asset balance and whether the asset is frozen. This opcode `asset_holding_get` can be used to retrieve an asset balance or check whether the asset is frozen for any account in the transaction accounts array. The asset must also be in the assets array.
 
 ```text tab="TEAL"
 int 0
@@ -596,7 +782,7 @@ program = Seq([
 print(compileTeal(program, Mode.Application))
 ```
 
-This opcode takes two parameters. The first represents an index into the accounts array where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
+This opcode takes two parameters. The first represents an index into the accounts array where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
 
 It is also possible to get an Asset’s configuration information within a smart contract if the asset ID is passed with the transaction in the assets array. This can be done with `goal` by supplying the `--foreign-asset` parameter. The value of the parameter should be the asset ID. To read the configuration, the `asset_params_get` opcode must be used. This opcode should be supplied with one parameter, which is the index into the assets array or the actual asset ID.
 
@@ -614,7 +800,7 @@ print(compileTeal(program, Mode.Application))
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
 
 # Creating an asset or contract within a group of transactions
-The Algorand Protocol assigns an identifier (ID) when creating Algorand Standard Assets (ASA) or Stateful Smart Contracts. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the stateful smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. When creating either in an atomic transfer TEAL can be used to retrieve these IDs. For example you may want to store the asset ID or another smart contract ID in the contract’s state for later usage. 
+The Algorand Protocol assigns an identifier (ID) when creating an asset (ASA) or a smart contract. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. When creating either in an atomic transfer TEAL can be used to retrieve these IDs. For example, to store the asset ID or another smart contract ID in the contract’s state for later usage. 
 
 This operation can be performed by using one of two opcodes (`gaid` and `gaids`). With the `gaid` opcode, the specific transaction to read must be passed to the command. The `gaids` opcode will use the last value on the stack as the transaction index.
 
@@ -627,11 +813,11 @@ gaids
 ```
 
 # Sharing data between contracts
-In additon to reading another contract's state, data can be passed between contracts. Algorand’s AVM gives smart contracts access to scratch space that can be used to temporarily store values, while the contract is executing. TEAL allows other contracts to read this scratch space. Scratch space can only be read by other transactions that the specific transaction is grouped with atomically. Additionally, because grouped transactions execute in the order they are grouped, contracts can not read scratch space for transactions that occur after the current contract transaction. 
+In additon to reading another contract's state, data can be passed between contracts. Algorand’s AVM gives smart contracts access to scratch space that can be used to temporarily store values, while the contract is executing. TEAL allows other contracts to read this scratch space. Scratch space can only be read by other transactions that the specific transaction is grouped with atomically. Grouped transactions execute in the order they are grouped, contracts can not read scratch space for transactions that occur after the current contract transaction. 
 
 This operation can be performed by using one of two opcodes (`gload` and `gloads`). With the `gload` opcode, the specific transaction to read and the slot number must be passed to the command. The `gloads` opcode will use the last value on the stack as the transaction index and must be passed the slot number to read.
 
-For example, with two grouped stateful smart contracts the following code can be used.
+For example, with two grouped smart contracts the following code can be used.
 
 Store an integer in scratch space in the first transaction.
 
@@ -685,10 +871,10 @@ Interpretation:
 
 
 # Boilerplate smart Contract
-As a way of getting started writing stateful smart contracts, the following boilerplate template is supplied. The code provides labels or handling different `ApplicationCall` transactions and also prevents updating and deleting the smart contract.
+As a way of getting started writing smart contracts, the following boilerplate template is supplied. The code provides labels or handling different `ApplicationCall` transactions and also prevents updating and deleting the smart contract.
 
 ```text tab="TEAL"
-#pragma version 4
+#pragma version 5
 
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
@@ -770,18 +956,18 @@ def approval_program():
     return program
 
 with open('boilerplate_approval_pyteal.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application)
+    compiled = compileTeal(approval_program(), Mode.Application, version=5))
     f.write(compiled)
 ```
 
 # Minimum balance requirement for a smart contract
-When creating or opting into a stateful smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used and additional 2KB pages requested when deploying the contract. The calculation for the amount for creation is as follows.
+When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used and additional 2KB pages requested when deploying the contract. The calculation for the amount for creation is as follows.
 
 100000*(1+ExtraProgramPages) + (28500)*schema.NumUint + (50000)*schema.NumByteSlice
 
 100000 microAlgo base fee for opting in or creating multiplied by 1 plus the number of extra pages. 50000 microAlgos for each key byte-slice (byte-array value) and 28500 microAlgos for each integer value.
 
-Any user that opts into the stateful smart contract will have their minimum balance increased by the following amount.
+Any user that opts into the smart contract will have their minimum balance increased by the following amount.
 
 100000 + (28500)*schema.NumUint + (50000*schema.NumByteSlice)
 
