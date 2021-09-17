@@ -9,8 +9,8 @@ If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Ge
  
 # Sandbox Install
 !!! Prerequisites
-   - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
-   - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)) 
+    - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
+    - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)) 
  
 Algorand provides a docker instance for setting up a node, which can be used to get started developing. To install and use this instance, follow these instructions.
 ​
@@ -56,6 +56,7 @@ npm list algosdk
 // This package provides TypeScript types, but you will need TypeScript version 4.2 or higher to use them properly.
  
 ```
+
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=164 ){:target="_blank"}
 
 [`More Information`](https://github.com/algorand/js-algorand-sdk)
@@ -104,7 +105,7 @@ The code below prompts to fund the newly created account. Before sending transac
 
 ​
 !!! Info
-   All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance)
+    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance)
  
 ​
 [Watch Video](https://youtu.be/WuhaGp2yrak?t=307){:target="_blank"}
@@ -170,7 +171,7 @@ Communication with the Algorand network is performed using transactions. To crea
 
 ​
 !!! Info
-   Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/).
+    Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/).
 ​
 # Sign First Transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
@@ -184,11 +185,10 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ​
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500){:target="_blank"}
 
-
-
-​!!! Info
+!!! Info
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures).
-  
+ 
+
  
 # Submit the Transaction
 The signed transaction can now be submitted to the network.`waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation)
@@ -364,14 +364,20 @@ firstTransaction();
 
 ​
 !!! Warning
-   In order for this transaction to be successful, the account must be [funded](https://dispenser.testnet.aws.algodev.network/).
+    In order for this transaction to be successful, the account must be [funded](https://dispenser.testnet.aws.algodev.network/).
 ​
 
 # Setting Up Your Editor/Framework
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
 ​
+
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/)
+
 * [Algorand Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
+
 * [Algorand Studio VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
+
 * [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
+
 * [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
+
