@@ -63,7 +63,7 @@ The load command is used to retrieve a value from the scratch space as illustrat
 # Looping and subroutines
 TEAL contracts written in version 4 or higher can use loops and subroutines. Loops can be performed using any of the branching opcodes `b`, `bz`, and `bnz`. For example the TEAL below loops ten times.
 
-```tab="TEAL"
+```teal
 #pragma version 4
 // loop 1 - 10
 // init loop var
@@ -81,7 +81,7 @@ bnz loop
 
 Subroutines can be implemented using labels and the `callsub` and `retsub` opcodes. The sample below illustrates a sample subroutine call.
 
-```tab="TEAL"
+```teal
 #pragma version 4
 // jump to main loop
 b main
@@ -116,7 +116,7 @@ The example uses the `CloseRemainderTo` field to close out the account and move 
 
 The first clause of the pseudo logic is implemented with the following TEAL.
 
-``` text tab="TEAL"
+```teal
 // Are used to comment in TEAL
 // htlc.teal
 // Push the CloseRemainderTo property of the current transaction onto the stack
@@ -191,7 +191,7 @@ byte base64 QzYhq9JlYbn2QdOMrhyxVlNtNjeyvyJc/I8d8VAGfGc=
 
 The second clause of the pseudo logic is implemented with the following TEAL.
 
-``` text tab="TEAL"
+```teal
 
 // The following six lines of teal check if the 
 // transaction is reciever is set to addr1 and that the CloseRemainderTo
@@ -230,7 +230,7 @@ int 67240
 
 This completes the second clause. Clause 1 and 2 are ORed together.
 
-```text tab="TEAL"
+```teal
 // The || operator is pushed onto the stack which ORs
 // the first two clauses
 // and pops the two values and pushes a 0 or 1 
@@ -239,7 +239,7 @@ This completes the second clause. Clause 1 and 2 are ORed together.
 
 The third clause is responsible for verifying that the transaction fee is below 1 Algo and that no rekey operation is happening. This is an important check to prevent an account from being cleared by an errant transaction fee requirement or assigned to a new private key.
 
-``` text tab="TEAL"
+```teal
 
 // The current transaction fee is pushed onto the stack
 txn Fee
@@ -269,7 +269,7 @@ global ZeroAddress
 
 The && is the final operator used in this example. This ANDs the third clause with the result of the OR operation between the first and second clauses.
 
-``` text tab="TEAL"
+```teal
 // The && operator is used to pop those values by anding them and pushing either 
 // a 1 or 0
 // Since this is the end of the program this value represents the return value
@@ -279,7 +279,7 @@ The && is the final operator used in this example. This ANDs the third clause wi
 
 Full example is presented below.
 
-``` text tab="TEAL"
+```teal
 
 txn CloseRemainderTo
 addr SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y
