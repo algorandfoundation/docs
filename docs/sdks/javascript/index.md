@@ -56,6 +56,7 @@ npm list algosdk
 // This package provides TypeScript types, but you will need TypeScript version 4.2 or higher to use them properly.
  
 ```
+
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=164 ){:target="_blank"}
 
 [`More Information`](https://github.com/algorand/js-algorand-sdk)
@@ -184,11 +185,10 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ​
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500){:target="_blank"}
 
-
-
-​!!! Info
+!!! Info
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures).
-  
+ 
+
  
 # Submit the Transaction
 The signed transaction can now be submitted to the network.`waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation)
@@ -370,8 +370,14 @@ firstTransaction();
 # Setting Up Your Editor/Framework
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
 ​
+
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/)
+
 * [Algorand Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
+
 * [Algorand Studio VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
+
 * [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
+
 * [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
+
