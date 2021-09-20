@@ -249,32 +249,40 @@ Global storage for the current contract can also be modified by the smart contra
 ## Write to state
 To write to either local or global state, the opcodes `app_global_put` and `app_local_put` should be used. These calls are similar but with local storage, you provide an additional account parameter. This determines what account should have its local storage modified. In addition to the sender of the transaction, any call to the smart contract can reference up to four additional accounts. Below is an example of doing a global write with TEAL.
 
-```teal
-byte "Mykey"
-int 50
-app_global_put
-```
+=== "Teal"
 
-```python
-program = App.globalPut(Bytes("Mykey"), Int(50))
+    ```teal
+    byte "Mykey"
+    int 50
+    app_global_put
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.globalPut(Bytes("Mykey"), Int(50))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 To store a value in local storage, the following TEAL can be used.
 
-```teal
-int 0
-byte "MyLocalKey"
-int 50
-app_local_put
-```
+=== "Teal"
 
-```python
-program = App.localPut(Int(0), Bytes("MyLocalKey"), Int(50))
+    ```teal
+    int 0
+    byte "MyLocalKey"
+    int 50
+    app_local_put
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.localPut(Int(0), Bytes("MyLocalKey"), Int(50))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. With `goal` you can pass additional accounts using the `--app-account` option. The address can be also be specified instead of the index. If using an address, it still must exist in the accounts array.
 
@@ -284,18 +292,22 @@ $ goal app call --app-account account1 --app-account account2
 
 To store a value into account2, the TEAL would be as follows.
 
-```teal
-int 2
-byte “MyLocalKey”
-int 50
-app_local_put
-```
+=== "Teal"
 
-```python
-program = App.localPut(Int(2), Bytes("MyLocalKey"), Int(50))
+    ```teal
+    int 2
+    byte “MyLocalKey”
+    int 50
+    app_local_put
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.localPut(Int(2), Bytes("MyLocalKey"), Int(50))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call.
 
@@ -305,30 +317,38 @@ Where 0 is the sender, 1 is the first additional account passed in and 2 is the 
 ## Read from state
 TEAL provides calls to read global and local state values for the current smart contract.  To read from local or global state TEAL provides the `app_local_get`, `app_global_get`, `app_local_get_ex` , and `app_global_get_ex` opcodes. The following TEAL code reads a value from global state for the current smart contract.
 
-```teal
-byte "MyGlobalKey"
-app_global_get
-```
+=== "Teal"
 
-```python
-program = App.globalGet(Bytes("MyGlobalKey"))
+    ```teal
+    byte "MyGlobalKey"
+    app_global_get
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.globalGet(Bytes("MyGlobalKey"))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 The following TEAL code reads the local state of the sender account for the specific call to the current smart contract.
 
-```teal
-int 0
-byte "MyLocalKey"
-app_local_get
-```
+=== "Teal"
 
-```python
-program = App.localGet(Int(0), Bytes("MyLocalKey"))
+    ```teal
+    int 0
+    byte "MyLocalKey"
+    app_local_get
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.localGet(Int(0), Bytes("MyLocalKey"))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. The address can be specified instead of the index as long as the account is in the accounts array. With `goal` you can pass additional accounts using the `--app-account` option. 
 
@@ -336,61 +356,69 @@ In this example, the `int 0` represents the sender of the transaction. This is a
 
 The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following TEAL should be used.
 
-```teal
-int 0 // sender
-txn ApplicationID // current smart contract
-byte "MyAmountGiven"
-app_local_get_ex
-```
+=== "Teal"
 
-```python
-program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
+    ```teal
+    int 0 // sender
+    txn ApplicationID // current smart contract
+    byte "MyAmountGiven"
+    app_local_get_ex
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 !!! note
     The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
 
 The `int 0` is the index into the accounts array. The actual address could also be specified as long as the account is in the accounts array. The `txn ApplicationID` line refers to the current application, but could be any application that exists on Algorand as long as the contract's ID is in the applications array. Instead of specifying the application ID, the index into the application array can be used as well. The top value on the stack will either return 0 or 1 depending on if the variable was found.  Most likely branching logic will be used after a call to the `_ex` opcode. The following example illustrates this concept.
 
-```teal
-int 0 // sender
-txn ApplicationID
-byte "MyAmountGiven"
-app_local_get_ex
-bz new-giver
+=== "Teal"
 
-// logic to deal with an existing giver
-// stored value is on the top of the stack
-// return
+    ```teal
+    int 0 // sender
+    txn ApplicationID
+    byte "MyAmountGiven"
+    app_local_get_ex
+    bz new-giver
 
-new-giver:
+    // logic to deal with an existing giver
+    // stored value is on the top of the stack
+    // return
 
-// logic to deal with a new giver
-```
+    new-giver:
 
-```python
-get_amount_given = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
+    // logic to deal with a new giver
+    ```
 
-# Change these to appropriate logic for new and previous givers.
-new_giver_logic = Seq([
-    Return(Int(1))
-])
+=== "Python"
 
-previous_giver_logic = Seq([
-    Return(Int(1))
-]) 
+    ```python
+    get_amount_given = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
 
-program = Seq([
-            get_amount_given, 
-            If(get_amount_given.hasValue(), 
-                previous_giver_logic, 
-                new_giver_logic),
+    # Change these to appropriate logic for new and previous givers.
+    new_giver_logic = Seq([
+        Return(Int(1))
     ])
 
-print(compileTeal(program, Mode.Application))
-```
+    previous_giver_logic = Seq([
+        Return(Int(1))
+    ]) 
+
+    program = Seq([
+                get_amount_given, 
+                If(get_amount_given.hasValue(), 
+                    previous_giver_logic, 
+                    new_giver_logic),
+        ])
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 The `app_global_get_ex` is used to read not only the global state of the current contract but any contract that is in the applications array. To access these foreign apps, they must be passed in with the application using the `--foreign-app` option. 
 
@@ -400,30 +428,34 @@ $ goal app call --foreign-app APP1ID --foreign-app APP2ID
 
 To read from the global state with the `app_global_get_ex` opcode, use the following TEAL.
 
-```teal
-int 0
-byte "MyGlobalKey"
-app_global_get_ex
-bnz increment_existing //found value
-```
+=== "Teal"
 
-```python
-get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
+    ```teal
+    int 0
+    byte "MyGlobalKey"
+    app_global_get_ex
+    bnz increment_existing //found value
+    ```
 
-# Update with appropriate logic for use case
-increment_existing = Seq([
-    Return(Int(1))
-])
+=== "Python"
 
-program = Seq([
-        get_global_key, 
-        If(get_global_key.hasValue(), 
-            increment_existing, 
-            Return(Int(1))),
+    ```python
+    get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
+
+    # Update with appropriate logic for use case
+    increment_existing = Seq([
+        Return(Int(1))
     ])
 
-print(compileTeal(program, Mode.Application))
-```
+    program = Seq([
+            get_global_key, 
+            If(get_global_key.hasValue(), 
+                increment_existing, 
+                Return(Int(1))),
+        ])
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise, `int 2` would represent the second passed in foreign application. The actual contract IDs can also be specified as long as the contract is in the contracts array. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
 
@@ -440,18 +472,22 @@ The `int 0` represents the current application and `int 1` would reference the f
 # Checking the transaction type in a smart Contract
 The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Contract](#the-lifecycle-of-a-smart-contract) can be checked within the TEAL code by examining the `OnCompletion` transaction property. 
 
-```teal
-int NoOp 
-//or OptIn, UpdateApplication, DeleteApplication, CloseOut, ClearState 
-txn OnCompletion
-==
-```
+=== "Teal"
 
-```python
-program = OnComplete.NoOp == Txn.on_completion()
+    ```teal
+    int NoOp 
+    //or OptIn, UpdateApplication, DeleteApplication, CloseOut, ClearState 
+    txn OnCompletion
+    ==
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = OnComplete.NoOp == Txn.on_completion()
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 # Passing arguments to smart contracts
 Arguments can be passed to any of the supported application transaction calls, including create. The number and type can also be different for any subsequent calls to the smart contract. The `goal` CLI supports passing strings, ints, base64 encoded data, and addresses as parameters. To pass a parameter supply the `--app-arg` option to the call and supply the value according to the format shown below.
@@ -465,46 +501,58 @@ Base64 | `goal app call --app-arg "b64:A==".....`
 
 These parameters are loaded into the arguments array. TEAL opcodes are available to get the values within the array. The primary argument opcode is the `ApplicationArgs` opcode and can be used as shown below.
 
-```teal
-txna ApplicationArgs 1
-byte "claim" 
-==
-```
+=== "Teal"
 
-```python
-program = Txn.application_args[1] == Bytes("claim")
+    ```teal
+    txna ApplicationArgs 1
+    byte "claim" 
+    ==
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = Txn.application_args[1] == Bytes("claim")
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 This call gets the second passed in argument and compares it to the string "claim".
 
 A global variable is also available to check the size of the transaction argument array. This size can be checked with a simple TEAL call.
 
-```teal
-txn NumAppArgs
-int 4
-==
-```
+=== "Teal"
 
-```python
-program = Txn.application_args.length() == Int(4)
+    ```teal
+    txn NumAppArgs
+    int 4
+    ==
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = Txn.application_args.length() == Int(4)
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 The above TEAL code will push a 0 on the top of the stack if the number of parameters in this specific transaction is anything other than 4, else it will push a 1 on the top of the stack. Internally all transaction parameters are stored as byte slices (byte-array value). Integers can be converted using the `btoi` opcode.
 
-```teal
-txna ApplicationArgs 0
-btoi
-```
+=== "Teal"
 
-```python
-program = Btoi(Txn.application_args[0])
+    ```teal
+    txna ApplicationArgs 0
+    btoi
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = Btoi(Txn.application_args[0])
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 !!! info
     Argument passing for smart contracts is very different from passing arguments to smart signatures. 
@@ -515,7 +563,7 @@ The total size of all parameters is limited to 2KB in size.
 # Creating the smart contract
 Before creating a smart contract, the code for the `ApprovalProgram` and the `ClearStateProgram` program should be written. The SDKs and the `goal` CLI tool can be used to create a smart contract application. To create the application with `goal` use a command similar to the following.
 
-```
+```bash
 $ goal app create --creator [address]  --approval-prog [approval_program.teal] --clear-prog [clear_state_program.teal] --global-byteslices [number-of-global-byteslices] --global-ints [number-of-global-ints] --local-byteslices [number-of-local-byteslices] --local-ints [number-local-ints] --extra-pages [number of extra 2KB pages]
 ```
 
@@ -531,50 +579,58 @@ Smart contracts are limited to 2KB total for the compiled approval and clear pro
 # Opt into the smart contract
 Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt into the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to opt into the smart contract. This can be done with the `goal` CLI or the SDKs.
 
-```
+```bash
 $ goal app optin  --app-id [ID-of-Contract] --from [ADDRESS]
 ```
 
 When this transaction is submitted, the `ApprovalProgram` of the smart contract is called and if the call succeeds the account will be opted into the smart contract. The simplest TEAL program to handle this call would just put 1 on the stack and return. 
 
-```teal
-int OptIn
-txn OnCompletion
-==
-bz notoptingin
-int 1
-Return
-notoptingin:
-.
-.
-```
+=== "Teal"
 
-```python
-# just a placeholder; change this
-not_opting_in = Seq([
-    Return(Int(0))
-])
+    ```teal
+    int OptIn
+    txn OnCompletion
+    ==
+    bz notoptingin
+    int 1
+    Return
+    notoptingin:
+    .
+    .
+    ```
 
-program = If(OnComplete.OptIn == Txn.on_completion(), 
-            Return(Int(1)), 
-            not_opting_in)
+=== "Python"
 
-print(compileTeal(program, Mode.Application))
-```
+    ```python
+    # just a placeholder; change this
+    not_opting_in = Seq([
+        Return(Int(0))
+    ])
+
+    program = If(OnComplete.OptIn == Txn.on_completion(), 
+                Return(Int(1)), 
+                not_opting_in)
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted into the contract.
 
-```teal
-int 0 
-txn ApplicationID
-app_opted_in
-```
+=== "Teal"
 
-```python
-program = App.optedIn(Int(0), Txn.application_id())
+    ```teal
+    int 0 
+    txn ApplicationID
+    app_opted_in
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python
+    program = App.optedIn(Int(0), Txn.application_id())
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array.
 
@@ -587,44 +643,48 @@ In the above example, the int 0 is a reference index into the accounts array, wh
 # Call the smart contract
 Any account can make a call to the smart contract. These calls will be in the form of `ApplicationCall` transactions that can be submitted with `goal` or the SDKs. Depending on the individual type of transaction as described in [The Lifecycle of a Smart Contract](#the-lifecycle-of-a-smart-contract), either the `ApprovalProgram` or the `ClearStateProgram` will be called. Generally, individual calls will supply application arguments. See [Passing Arguments to a Smart Contract](#passing-arguments-to-smart-contracts) for details on passing arguments.
 
-```
+```bash
 $ goal app call --app-id 1 --app-arg "str:myparam"  --from [ADDRESS]
 ```
 
 The call must specify the intended contract using the `--app-id` option. Additionally, the `--from` option specifies the sender’s address. In this example, a string parameter is passed with this call. TEAL can use these parameters to make decisions on how to handle the call.
 
-```teal
-byte "myparm" 
-txna ApplicationArgs 0
-==
-bz not_my_parm
-//handle my_parm
-return
-not_my_parm:
-//handle not_my_parm
-```
+=== "Teal"
 
-```python
-# placeholder; change this logic in both cases
-is_my_parm = Seq([
-        Return(Int(1))
-    ])
+    ```teal
+    byte "myparm" 
+    txna ApplicationArgs 0
+    ==
+    bz not_my_parm
+    //handle my_parm
+    return
+    not_my_parm:
+    //handle not_my_parm
+    ```
 
-is_not_my_parm = Seq([
-        Return(Int(1))
-    ])
+=== "Python"
 
-program = If(Bytes("myparm") == Txn.application_args[0], 
-            is_my_parm, 
-            is_not_my_parm)
+    ```python
+    # placeholder; change this logic in both cases
+    is_my_parm = Seq([
+            Return(Int(1))
+        ])
 
-print(compileTeal(program, Mode.Application))
-```
+    is_not_my_parm = Seq([
+            Return(Int(1))
+        ])
+
+    program = If(Bytes("myparm") == Txn.application_args[0], 
+                is_my_parm, 
+                is_not_my_parm)
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 # Update smart contract
 A smart contract’s programs can be updated at any time. This is done by an `ApplicationCall` transaction type of `UpdateApplication`. This operation can be done with `goal` or the SDKs and requires passing the new programs and specifying the application ID.
 
-```
+```bash
 goal app update --app-id=[APPID] --from [ADDRESS]  --approval-prog [new_approval_program.teal]   --clear-prog [new_clear_state_program.teal]
 ```
 
@@ -632,48 +692,56 @@ The one caveat to this operation is that global or local state requirements for 
 
 As stated earlier, anyone can update the program. If this is not desired and you want only the original creator to be able to update the programs, code must be added to your `ApprovalProgram` to handle this situation. This can be done by comparing the global `CreatorAddress` to the sender address.
 
-```teal
-global CreatorAddress
-txn Sender
-==
-assert
-```
+=== "Teal"
 
-```python 
-program = Assert(Global.creator_address() == Txn.sender())
+    ```teal
+    global CreatorAddress
+    txn Sender
+    ==
+    assert
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = Assert(Global.creator_address() == Txn.sender())
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 
 Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication` application call is made to prevent anyone from ever updating the application code.
 
-```teal
-int UpdateApplication
-txn OnCompletion
-==
-bz not_update
-int 0
-return
-```
+=== "Teal"
 
-```python 
-# placeholder logic; change this
-is_not_update = Seq([
-    Return(Int(1))
-])
+    ```teal
+    int UpdateApplication
+    txn OnCompletion
+    ==
+    bz not_update
+    int 0
+    return
+    ```
 
-program = If(OnComplete.UpdateApplication == Txn.on_completion(), 
-            Return(Int(0)), 
-            is_not_update)
+=== "Python"
 
-print(compileTeal(program, Mode.Application))
-```
+    ```python 
+    # placeholder logic; change this
+    is_not_update = Seq([
+        Return(Int(1))
+    ])
+
+    program = If(OnComplete.UpdateApplication == Txn.on_completion(), 
+                Return(Int(0)), 
+                is_not_update)
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 # Delete smart contract
 To delete a smart contract, an `ApplicationCall` transaction of type `DeleteApplication` must be submitted to the blockchain. The `ApprovalProgram` handles this transaction type and if the call returns true the application will be deleted. This can be done using `goal` or the SDKs. 
 
-```
+```bash
 $ goal app delete --app-id=[APPID] --from [ADDRESS]
 ```
 
@@ -682,120 +750,148 @@ When making this call the `--app-id` and the `--from` options are required. Anyo
 # Global values in smart contracts
 Smart contracts have access to many global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, a contract may only allow accounts to opt in after a start date, which is set when the contract is created and stored in global storage.
 
-```teal
-global LatestTimestamp
-byte "StartDate"
-app_global_get
->=
-```
+=== "Teal"
 
-```python 
-program = Global.latest_timestamp() >= App.globalGet(Bytes("StartDate"))
+    ```teal
+    global LatestTimestamp
+    byte "StartDate"
+    app_global_get
+    >=
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = Global.latest_timestamp() >= App.globalGet(Bytes("StartDate"))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 # Atomic transfers and transaction properties
 The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using TEAL.
 
-```teal
-txn Amount
-```
+=== "Teal"
 
-```python 
-program = Txn.amount()
+    ```teal
+    txn Amount
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = Txn.amount()
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 In many common patterns, the smart contract will be combined with other Algorand technologies such as assets, atomic transfers, or smart signatures to build a complete application. In the case of atomic transfers, more than one transaction’s properties can be checked within the smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the smart contract is grouped with more than one transaction.
 
-```teal
-global GroupSize
-int 2
-==
-```
+=== "Teal"
 
-```python 
-program = Global.group_size() == Int(2)
+    ```teal
+    global GroupSize
+    int 2
+    ==
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = Global.group_size() == Int(2)
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 The above TEAL will be true if there are two transactions submitted at once using an atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
 
-```teal
-gtxn 1 TypeEnum
-int pay
-==
-```
+=== "Teal"
 
-```python 
-program = Gtxn[1].type_enum() == TxnType.Payment
+    ```teal
+    gtxn 1 TypeEnum
+    int pay
+    ==
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = Gtxn[1].type_enum() == TxnType.Payment
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
 
 If any transaction in a group of transactions is a call to a smart contract, the opcodes `gtxna` and `gtxnsa` can be used to access any of the transactions array values.
 
-```teal
-// get the first argument of the previous transaction
-// in a smart contract
-txn GroupIndex
-int 1
--
-gtxnsa ApplicationArgs 0
-```
+=== "Teal"
 
-```python 
-program = Gtxn[Txn.group_index() - Int(1)].application_args[0]
+    ```teal
+    // get the first argument of the previous transaction
+    // in a smart contract
+    txn GroupIndex
+    int 1
+    -
+    gtxnsa ApplicationArgs 0
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = Gtxn[Txn.group_index() - Int(1)].application_args[0]
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 # Using assets in smart contracts
 Smart contract applications can work in conjunction with assets. In addition to normal asset transaction properties, such as asset amount, sender, and receiver, TEAL provides an opcode to interrogate an account’s asset balance and whether the asset is frozen. This opcode `asset_holding_get` can be used to retrieve an asset balance or check whether the asset is frozen for any account in the transaction accounts array. The asset must also be in the assets array.
 
-```teal
-int 0
-int 2
-asset_holding_get AssetBalance
-bnz has_balance
-int 0 
-return
-has_balance:
-//balance value is now on top of the stack
-```
+=== "Teal"
 
-```python 
-asset_balance = AssetHolding.balance(Int(0), Int(2))
+    ```teal
+    int 0
+    int 2
+    asset_holding_get AssetBalance
+    bnz has_balance
+    int 0 
+    return
+    has_balance:
+    //balance value is now on top of the stack
+    ```
 
-program = Seq([
-        asset_balance,
-        If(asset_balance.hasValue(), 
-            Return(Int(1)), 
-            Return(Int(0)))
-    ])
+=== "Python"
 
-print(compileTeal(program, Mode.Application))
-```
+    ```python 
+    asset_balance = AssetHolding.balance(Int(0), Int(2))
+
+    program = Seq([
+            asset_balance,
+            If(asset_balance.hasValue(), 
+                Return(Int(1)), 
+                Return(Int(0)))
+        ])
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 This opcode takes two parameters. The first represents an index into the accounts array where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
 
 It is also possible to get an Asset’s configuration information within a smart contract if the asset ID is passed with the transaction in the assets array. This can be done with `goal` by supplying the `--foreign-asset` parameter. The value of the parameter should be the asset ID. To read the configuration, the `asset_params_get` opcode must be used. This opcode should be supplied with one parameter, which is the index into the assets array or the actual asset ID.
 
-```teal
-int 0
-asset_params_get AssetTotal
-```
+=== "Teal"
 
-```python 
-program = AssetParam.total(Int(0))
+    ```teal
+    int 0
+    asset_params_get AssetTotal
+    ```
 
-print(compileTeal(program, Mode.Application))
-```
+=== "Python"
+
+    ```python 
+    program = AssetParam.total(Int(0))
+
+    print(compileTeal(program, Mode.Application))
+    ```
 
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
 
@@ -804,7 +900,7 @@ The Algorand Protocol assigns an identifier (ID) when creating an asset (ASA) or
 
 This operation can be performed by using one of two opcodes (`gaid` and `gaids`). With the `gaid` opcode, the specific transaction to read must be passed to the command. The `gaids` opcode will use the last value on the stack as the transaction index.
 
-```tab="TEAL"
+```teal
 // Get the created id of the asset created in the first tx
 gaid 0
 // Get the created id of the asset created in the second tx
@@ -821,14 +917,14 @@ For example, with two grouped smart contracts the following code can be used.
 
 Store an integer in scratch space in the first transaction.
 
-```tab="TEAL"
+```teal
 int 777
 store 10
 ```
 
 In the second transaction read the stored value.
 
-```tab="TEAL"
+```teal
 // read the first 
 // transactions 10th
 // slot of scratch space
@@ -838,13 +934,14 @@ gload 0 10
 # Reading a smart contracts state
 In addition to being able to read the state of a smart contract using TEAL, these global and local values can be read externally with the SDKs and `goal`. These reads are not transactions and just query the current state of the contract. 
 
-```
+```bash
 $ goal app read --app-id 1 --guess-format --global --from [ADDRESS]
 ```
 
 In the above example, the global state of the smart contract with the application ID of 1 is returned. The `--guess-format` opt in the above example tries programmatically to display the properly formatted values of the state variables. To get the local state, replace `--global` with `--local` and note that this call will only return the local state of the `--from` account.
 
 Here is an example output with 3 keys/values:
+
 ```json
 {
   "Creator": {
@@ -873,92 +970,96 @@ Interpretation:
 # Boilerplate smart Contract
 As a way of getting started writing smart contracts, the following boilerplate template is supplied. The code provides labels or handling different `ApplicationCall` transactions and also prevents updating and deleting the smart contract.
 
-```teal
-#pragma version 5
+=== "Teal"
 
-// Handle each possible OnCompletion type. We don't have to worry about
-// handling ClearState, because the ClearStateProgram will execute in that
-// case, not the ApprovalProgram.
+    ```teal
+    #pragma version 5
 
-txn OnCompletion
-int NoOp
-==
-bnz handle_noop
+    // Handle each possible OnCompletion type. We don't have to worry about
+    // handling ClearState, because the ClearStateProgram will execute in that
+    // case, not the ApprovalProgram.
 
-txn OnCompletion
-int OptIn
-==
-bnz handle_optin
+    txn OnCompletion
+    int NoOp
+    ==
+    bnz handle_noop
 
-txn OnCompletion
-int CloseOut
-==
-bnz handle_closeout
+    txn OnCompletion
+    int OptIn
+    ==
+    bnz handle_optin
 
-txn OnCompletion
-int UpdateApplication
-==
-bnz handle_updateapp
+    txn OnCompletion
+    int CloseOut
+    ==
+    bnz handle_closeout
 
-txn OnCompletion
-int DeleteApplication
-==
-bnz handle_deleteapp
+    txn OnCompletion
+    int UpdateApplication
+    ==
+    bnz handle_updateapp
 
-// Unexpected OnCompletion value. Should be unreachable.
-err
+    txn OnCompletion
+    int DeleteApplication
+    ==
+    bnz handle_deleteapp
 
-handle_noop:
-// Handle NoOp
+    // Unexpected OnCompletion value. Should be unreachable.
+    err
 
-handle_optin:
-// Handle OptIn
+    handle_noop:
+    // Handle NoOp
 
-handle_closeout:
-// Handle CloseOut
+    handle_optin:
+    // Handle OptIn
 
-// By default, disallow updating or deleting the app. Add custom authorization
-// logic below to allow updating or deletion in certain circumstances.
-handle_updateapp:
-handle_deleteapp:
-err
-```
+    handle_closeout:
+    // Handle CloseOut
 
-```python 
-from pyteal import *
-# Handle each possible OnCompletion type. We don't have to worry about
-# handling ClearState, because the ClearStateProgram will execute in that
-# case, not the ApprovalProgram.
-def approval_program():
-    handle_noop = Seq([
-        Return(Int(1))
-    ])
+    // By default, disallow updating or deleting the app. Add custom authorization
+    // logic below to allow updating or deletion in certain circumstances.
+    handle_updateapp:
+    handle_deleteapp:
+    err
+    ```
 
-    handle_optin = Seq([
-        Return(Int(1))
-    ])
+=== "Python"
 
-    handle_closeout = Seq([
-        Return(Int(1))
-    ])
+    ```python 
+    from pyteal import *
+    # Handle each possible OnCompletion type. We don't have to worry about
+    # handling ClearState, because the ClearStateProgram will execute in that
+    # case, not the ApprovalProgram.
+    def approval_program():
+        handle_noop = Seq([
+            Return(Int(1))
+        ])
 
-    handle_updateapp = Err()
+        handle_optin = Seq([
+            Return(Int(1))
+        ])
 
-    handle_deleteapp = Err()
+        handle_closeout = Seq([
+            Return(Int(1))
+        ])
 
-    program = Cond(
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp]
-    )
-    return program
+        handle_updateapp = Err()
 
-with open('boilerplate_approval_pyteal.teal', 'w') as f:
-    compiled = compileTeal(approval_program(), Mode.Application, version=5))
-    f.write(compiled)
-```
+        handle_deleteapp = Err()
+
+        program = Cond(
+            [Txn.on_completion() == OnComplete.NoOp, handle_noop],
+            [Txn.on_completion() == OnComplete.OptIn, handle_optin],
+            [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
+            [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
+            [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp]
+        )
+        return program
+
+    with open('boilerplate_approval_pyteal.teal', 'w') as f:
+        compiled = compileTeal(approval_program(), Mode.Application, version=5))
+        f.write(compiled)
+    ```
 
 # Minimum balance requirement for a smart contract
 When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used and additional 2KB pages requested when deploying the contract. The calculation for the amount for creation is as follows.
