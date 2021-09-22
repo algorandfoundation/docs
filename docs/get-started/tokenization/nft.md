@@ -5,7 +5,7 @@ title: Create an NFT
 Non-fungible tokens, or NFTs for short, are unique assets represented on the blockchain. Digital art and collectibles are types of NFTs that you may have heard about, but they only scratch the surface of what is possible. 
 
 <center>
-![Examples of NFTs](../../imgs/){: style="width:500px" align=center }
+![Examples of NFTs](../../imgs/tokenization-nfts.png){: style="width:500px" align=center }
 <figcaption style="font-size:12px">Examples of NFT use cases: Tokenizing the rights to a song to facilitate royalty payments, in-game collectibles, or special edition brand merchandise.</figcaption>
 </center>
 
@@ -44,7 +44,7 @@ Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation
 Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](../../../ecosystem-projects/?tags=block-explorers) to find your newly created NFT on TestNet.
 
 <center>
-![Alice creates an NFT](../../imgs/){: style="width:500px"}
+![Alice creates an NFT](../../imgs/tokenization-alice-bob-nft.png){: style="width:500px"}
 <figcaption style="font-size:12px">Alice tokenizes her art piece as an NFT on Algorand.</figcaption>
 </center>
 
