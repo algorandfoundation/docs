@@ -11,35 +11,39 @@ Non-fungible tokens, or NFTs for short, are unique assets represented on the blo
 
 Remember that Alice wants to use blockchain to help her scale and grow her business, because it provides important properties that she cannot achieve otherwise (trust, transparency, efficiency, low costs). The first step for her is to represent her unique art pieces on-chain as NFTs. Let's go ahead and learn how to create an NFT on Algorand.
 
-Learn more about NFTs from Algorand's Chief Product Officer: 
-
-> [The Enduring Value of NFTs on Algorand: A Critical Role in the Future of Finance](https://www.algorand.com/resources/blog/the-enduring-value-of-nfts-on-algorand){: target="blank"}
-
 # How to create NFTs
 NFTs are created using Algorand Standard Assets (ASAs), which are built into the protocol and activated using a special type of transaction. You do not need to write smart contract code, which may be the case on some other blockchains. You just need to specify a few parameters to identify it as an NFT (e.g. total count of 1) and attach metadata so that potential owners have the information they need to validate the integrity of the asset. The relevant code snippet in each of the SDKs is as follows:
 
-=== "JavaScript"
-    ```
+=== "Python"
+    ```python
     ```
 
-=== "Python"
-    ```
+=== "JavaScript"
+    ```javascript
     ```
 
 === "Java"
-    ```
+    ```java
     ```
 
 === "Go"
+    ```go
     ```
-    ```
+
 
 Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) NFT standard. Choose your favorite SDK to run the full code example for creating an NFT on TestNet and watch the step-by-step video guide.
 
-|JS|Python|Java|Go|
-|---|---|---|---|
-|[![Replit](../../imgs/replit-512.png){: width='24px' } Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}|[![Replit](../../imgs/replit-512.png){: width='24px' } Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank" }|[![Replit](../../imgs/replit-512.png){: width='24px' } Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank" }|[![Replit](../../imgs/replit-512.png){: width='24px' } Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank" }|
-|[![YouTube](../../imgs/yt.png){: width='24px' } Play video](){: target="_blank"}| [![YouTube](../../imgs/yt.png){: width='24px' } Play video](){: target="_blank" }| [![YouTube](../../imgs/yt.png){: width='24px' } Play video](){: target="_blank" }|[![YouTube](../../imgs/yt.png){: width='24px' } Play video](){: target="_blank" }|
+=== "Python"
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}
+
+=== "JavaScript"
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/CreateNFTJavaScript#index.js){: target="_blank"}
+
+=== "Java"
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
+
+=== "Go"
+
 
 Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](../../../ecosystem-projects/?tags=block-explorers) to find your newly created NFT on TestNet.
 
@@ -80,6 +84,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 
 # More NFT Resources
 
+- Learn more about NFTs from Algorand's Chief Product Officer: [The Enduring Value of NFTs on Algorand: A Critical Role in the Future of Finance](https://www.algorand.com/resources/blog/the-enduring-value-of-nfts-on-algorand){: target="blank"}
 - [Search the developer blog](../../../blog/?query=nfts){: target="blank"} for more NFT-related guides, code prototypes, and explanations from the community.
 - [Browse community tools and projects](../../../ecosystem-projects/?tags=nfts){: target="blank"} related to NFTs.
 - Detailed documentation on [Algorand Standard Assets (ASAs)](../../../get-details/asa/){: target="blank"} and related [transaction types](../../../get-details/transactions/#asset-configuration-transaction){: target="blank"}.
