@@ -37,12 +37,12 @@ from pyteal import *
  
 def approval_program():
    program = Return(Int(1))
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
    return compileTeal(program, Mode.Application, version=5)
 
 def clear_state_program():
    program = Return(Int(1))
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
    return compileTeal(program, Mode.Application, version=5)
 ``` 
 
@@ -53,13 +53,13 @@ All communication with Algorand smart contracts is achieved through a special tr
 <center>![Stateful Smart Contract](../../../imgs/sccalltypes.png)</center>
 <center>*Application Transaction Types*</center>
 
-Most smart contract logic will be implemented with a NoOp transaction type. The other subtypes are primarily less used or once-only transaction types. For example, Algorand allows smart contracts to be updated. Code must be implemented in the contract to prevent this if it is an unwanted feature. Smart contracts can also be deleted, although this can be disabled as well. The Optin transaction type is submitted by an account that wants to opt into the smart contract. Note that this is only required by contracts that store per account values. It is also possible to have smart contracts that store values for certain accounts but not others. In this case, if logic is encountered in the contract that attempts to store values for a particular account it will fail unless the account has opted into the contract. The CloseOut application transaction is used to gracefully exit a smart contract. It is primarily an opt-out type of operation that allows the smart contract to do cleanup when an account wishes to leave the contract. This transaction can fail based on the logic, which would lock the user into the contract forever. To circumvent this issue, Algorand also has a Clear application transaction type. This type of transaction allows an ungraceful exit from the contract. This transaction may still fail but the blockchain will still clear any data associated with the contract from the account. Only the Clear transaction will call the clear program. All others will call the approval program.  
+Most smart contract logic will be implemented with a NoOp transaction type. The other subtypes are primarily less used or once-only transaction types. For example, Algorand allows smart contracts to be updated. Code must be implemented in the contract to prevent this if it is an unwanted feature. Smart contracts can also be deleted, although this can be disabled as well. The Optin transaction type is submitted by an account that wants to opt into the smart contract. Note that this is only required by contracts that store per account values. It is also possible to have smart contracts that store values for certain accounts but not others. In this case, if logic is encountered in the contract that attempts to store values for a particular account. It will fail unless the account has opted into the contract. The CloseOut application transaction is used to gracefully exit a smart contract. It is primarily an opt-out type of operation that allows the smart contract to do cleanup when an account wishes to leave the contract. This transaction can fail based on the logic, which would lock the user into the contract forever. To circumvent this issue, Algorand also has a Clear application transaction type. This type of transaction allows an ungraceful exit from the contract. This transaction may still fail but the blockchain will still clear any data associated with the contract from the account. Only the Clear transaction will call the clear program. All others will call the approval program.  
 
 Within PyTeal, a developer can switch on the type of transaction. This is the preferred way of building a PyTeal contract. Sections of code should be created that handle any of the transaction types they may encounter. The above example's approval program can be changed to the following to handle the different application transaction types.
 
 ```python
 def approval_program():
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
 
    program = Cond(
        [Txn.application_id() == Int(0), handle_creation],
@@ -84,7 +84,7 @@ The example also uses the arithmetic expression `==` to check equality. See the 
 ```python
 
 def approval_program():
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
 
    handle_creation = Seq([
        App.globalPut(Bytes("Count"), Int(0)),
@@ -111,7 +111,7 @@ Opting into this contract is not required as no local variables are stored. The 
 ```python
 
 def approval_program():
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
 
    handle_creation = Seq([
        App.globalPut(Bytes("Count"), Int(0)),
@@ -139,7 +139,7 @@ def approval_program():
 
 ```
 
-All four of these transaction types simply return a 0, which will cause the transactions to fail. This contract now handles all application transactions but the standard NoOp type. Do remember that deploying the contract for the first time is actually a NoOp transaction type, but this case is accounted for in the `handle_creation` function. The NoOp transaction type is the primary location where application logic will be implemented in most smart contracts. This example requires an add and a deduct function to be handled for NoOp application transactions. Which of these two methods is executed will depend on the first parameter to the stateful smart contract. In addition, we want to verify that application transactions are not grouped with any other transactions.
+All four of these transaction types simply return a 0, which will cause the transactions to fail. This contract now handles all application transactions but the standard NoOp type. Do remember that deploying the contract for the first time is actually a NoOp transaction type, but this case is accounted for in the `handle_creation` function. The NoOp transaction type is the primary location where application logic will be implemented in most smart contracts. This example requires an add and a deduct function, to increment and decrement the counter respectively, to be handled for NoOp application transactions. Which of these two methods is executed will depend on the first parameter to the stateful smart contract. In addition, we want to verify that application transactions are not grouped with any other transactions.
 
 For more information on passing parameters to smart contracts, see the [smart contract documentation](../smart-contracts/stateful/index.md). 
 
@@ -149,7 +149,7 @@ from pyteal import *
 """Basic Counter Application"""
  
 def approval_program():
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
 
    handle_creation = Seq([
        App.globalPut(Bytes("Count"), Int(0)),
@@ -193,7 +193,7 @@ The final step for the approval program is to implement the add and deduct funct
 
 ```python
 def approval_program():
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
 
    handle_creation = Seq([
        App.globalPut(Bytes("Count"), Int(0)),
@@ -308,13 +308,13 @@ def approval_program():
        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
    )
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
    return compileTeal(program, Mode.Application, version=3)
  
  
 def clear_state_program():
    program = Return(Int(1))
-   # Mode.Application specifies that this is a stateful smart contract
+   # Mode.Application specifies that this is a smart contract
    return compileTeal(program, Mode.Application, version=3)
 
 # print out the results
@@ -481,7 +481,7 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
 
 This function is a simple example of creating an application creation transaction, which when submitted will deploy a smart contract. This example is very generic and can be used to deploy any smart contract. First, the creator’s address is resolved from the private key passed to the function, the transaction type is set to a NoOp application transaction, and the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction.
 
-The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction.  This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a stateful smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s.  More information on state values can be found in the [smart contract documentation](../smart-contracts/stateful/index.md#modifying-state-in-smart-contract).
+The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction.  This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s.  More information on state values can be found in the [smart contract documentation](../smart-contracts/stateful/index.md#modifying-state-in-smart-contract).
 
 The passed-in private key is then used to sign the transaction and the ID of the transaction is retrieved. This ID is unique and can be used to look up the transaction later.
 
@@ -565,7 +565,7 @@ def call_app(client, private_key, index, app_args) :
     print("Application called")
 ```
 
-This function operates similarly to the `create_app` function we defined earlier. In this case, we use the Python SDK’s `ApplicationNoOpTnx` function to create a standard NoOp application transaction. The address of the account sending the call is specified, followed by the network suggested parameters, the application id of the smart contract, and any arguments to the call. The arguments will be used to specify either the Add or Deduct methods.  
+This function operates similarly to the `create_app` function we defined earlier. In this case, we use the Python SDK’s `ApplicationNoOpTxn` function to create a standard NoOp application transaction. The address of the account sending the call is specified, followed by the network suggested parameters, the application id of the smart contract, and any arguments to the call. The arguments will be used to specify either the Add or Deduct methods.  
 
 The `main` function can then be modified to call the smart contract after deploying by adding the following to the bottom of the `main` function.
 
@@ -717,12 +717,12 @@ def approval_program():
         [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
         [Txn.on_completion() == OnComplete.NoOp, handle_noop]
     )
-    # Mode.Application specifies that this is a stateful smart contract
+    # Mode.Application specifies that this is a smart contract
     return compileTeal(program, Mode.Application, version=3)
 
 def clear_state_program():
     program = Return(Int(1))
-    # Mode.Application specifies that this is a stateful smart contract
+    # Mode.Application specifies that this is a smart contract
     return compileTeal(program, Mode.Application, version=3)
 
     
@@ -847,7 +847,7 @@ When used as a delegate, the logic can be signed by a specific account. The logi
 
 Any time a smart signature is used the complete logic must be submitted as part of the transaction where the logic is used. The logic is recorded as part of the transaction but this is after the fact.
 
-PyTeal supports building smart signatures in Python. For example, assume an escrow account is needed. This escrow can be funded by anyone but only a specific account is the beneficiary of the escrow and that account can withdrawal funds at any time.  
+PyTeal supports building smart signatures in Python. For example, assume an escrow account is needed. This escrow can be funded by anyone but only a specific account is the beneficiary of the escrow and that account can withdraw funds at any time.  
 
 ```python
 #sample_smart_sig.py
@@ -902,7 +902,7 @@ This sample can be executed using the following command.
 $ python3 sample_smart_sig.py
 ```
 
-This will print out the compiled TEAL. The Algorand address of the escrow can be retrieved by first saving the produced teal to a file and then compiled to byte code using the `goal` command-line tool. In the next section, using this smart signature with a transaction will be demonstrated.
+This will print out the compiled TEAL. The Algorand address of the escrow can be retrieved by first saving the produced TEAL to a file and then compiled to byte code using the `goal` command-line tool. In the next section,  using this smart signature with a transaction will be demonstrated.
 
 ```bash
 $ python3 smart_sig.py > test.teal
@@ -994,7 +994,7 @@ def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
 
 This function takes a creator mnemonic of the address that is creating the payment transaction as the first parameter. The amount to send and the receiver of the payment transaction are the next two parameters. The final parameter is a connection to a valid Algorand node. In this example, the sandbox installed node is used. 
 
-In this function, the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction. The creator of the transaction’s address and private key are resolved from the mnemonic. The unsigned payment transaction is created using the Python SDK’s `PaymentTxn` method. This transaction is then signed with the recovered private key. As noted earlier in a production application, the transaction should be signed by a valid wallet provider for production applications. The signed transaction is submitted to the node and the `wait_for_confirmation` utility function is called, which will return when the transaction is finalized on the blockchain. 
+In this function, the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction. The creator of the transaction’s address and private key are resolved from the mnemonic. The unsigned payment transaction is created using the Python SDK’s `PaymentTxn` method. This transaction is then signed with the recovered private key. As noted earlier, in a production application, the transaction should be signed by a valid wallet provider. The signed transaction is submitted to the node and the `wait_for_confirmation` utility function is called, which will return when the transaction is finalized on the blockchain. 
 
 Another utility function is also added to create a payment transaction that is signed by the escrow logic. This function is very similar to the previous function.
 
