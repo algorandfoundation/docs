@@ -10,7 +10,7 @@ Find information about each of Algorand's public networks, including the genesis
 # Command Line Interface Tools (CLI Tools)
 List of available commands for three official Algorand CLIs that are included as part of node install packages.
 
-[goal](./cli/goal/goal) - [kmd](./cli/kmd/kmd) - [algokey](./cli/algokey/algokey)
+[goal](./cli/goal/goal.md) - [kmd](./cli/kmd.md) - [algokey](./cli/algokey/algokey.md)
 
 # SDKs
 
