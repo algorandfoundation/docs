@@ -1,8 +1,5 @@
 title: Build with Python
 
-Build with PyTeal
-
-
 Alice and Bob have settled on their design and are ready to kick-off development of their Algorand-powered NFT auction dApp! This guide will take you through the steps to build the dApp, which includes setting up a development environment, writing the smart contract code, deploying it, and writing the functions to interact with it.
 
 A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Python on Algorand. This guide does not cover all the details of the smart contract code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand. So don’t worry if you don’t understand what everything does in the smart contract. This is expected! After you feel comfortable with the basics, you can head over to the detailed PyTeal documentation and work on becoming an expert in the PyTeal smart contract language.
