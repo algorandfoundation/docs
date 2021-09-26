@@ -70,7 +70,7 @@ Run the `example.py` file. This will run a simple 30-second auction.
 python3 example.py 
 ```
 
-```bash
+```text
 #output 
 Alice is generating temporary accounts...
 Alice is generating an example NFT...
@@ -88,6 +88,7 @@ Carla's NFT balance: 1  for NFT ID:  17
 Alice's balances after auction:  {0: 101197100, 17: 0}  Algos
 Carla's balances after auction:  {0: 98997100, 17: 1}  Algos
 ```
+
 Optionally Run tests.
 
 ```bash
