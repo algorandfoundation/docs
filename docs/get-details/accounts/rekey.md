@@ -26,9 +26,10 @@ Conceptually illustrated in the image below, a "standard" account uses its _priv
 
 Use the following code sample to view a _standard_ account on BetaNet:
 
-```bash tab="goal"
-$ goal account dump --address NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU
-```
+=== "goal"
+  ```bash
+  goal account dump --address NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU
+  ```
 
 Response:
 
@@ -72,14 +73,15 @@ The _rekey-to transaction_ workflow is as follows:
 
 The following commands will construct an unsigned transaction file `rekey.txn` and inspect the contents:
 
-```bash tab="goal"
-$ goal clerk send --from L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU \
-                  --to L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU \
-                  --amount 0 \
-                  --rekey-to NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU \
-                  --out rekey.txn
-$ goal clerk inspect rekey.txn
-```
+=== "goal"
+  ```bash
+  goal clerk send --from L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU \
+                    --to L42DW7MSHP4PMIAZSDAXYTZVHTE756KGXCJYGFKCET5XHIAWLBYYNSMZQU \
+                    --amount 0 \
+                    --rekey-to NFFMZJC6H52JLEAITTJ7OIML3XCJFKIRXYRJLO4WLWIJZB7N6CTWESRAZU \
+                    --out rekey.txn
+  goal clerk inspect rekey.txn
+  ```
 
 Response:
 
@@ -148,15 +150,15 @@ The first scenario rekeys a single key account with address "A" to a distinct si
 
 Refer to the Getting Started guide to learn how to generate two accounts and fund their respective address from the Faucet. This example uses the following public addresses:
 
-```bash tab="bash"
-ADDR_A="UGAGADYHIUGFGRBEPHXRFI6Z73HUFZ25QP32P5FV4H6B3H3DS2JII5ZF3Q"
-ADDR_B="LOWE5DE25WOXZB643JSNWPE6MGIJNBLRPU2RBAVUNI4ZU22E3N7PHYYHSY"
+```bash
+  ADDR_A="UGAGADYHIUGFGRBEPHXRFI6Z73HUFZ25QP32P5FV4H6B3H3DS2JII5ZF3Q"
+  ADDR_B="LOWE5DE25WOXZB643JSNWPE6MGIJNBLRPU2RBAVUNI4ZU22E3N7PHYYHSY"
 ```
 
 View the initial _authorized address_ for Account A using `goal`:
 
-```
-$ goal account dump --address $ADDR_A
+```bash
+goal account dump --address $ADDR_A
 ```
 
 Response:
@@ -175,9 +177,10 @@ Implicitly, the _authorized address_ is the defined as the "addr" field displaye
 
 Account A intends to _rekey_ its _authorized address_ to `$ADDR_B` which is the public address of Account "B". This can be accomplished in a single `goal` command:
 
-```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_B
-```
+=== "goal"
+  ```bash
+  goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_B
+  ```
 
 Results of `goal account dump --address $ADDR_A` will now display:
 
@@ -196,9 +199,10 @@ The populated "spend" field instructs the validation protocol to only approve tr
 
 The following transaction will **fail** because, by default, `goal` attempts to add the authorization using the `--from` parameter. However, the protocol will reject this because it is expecting the authorization from `$ADDR_B` due to the confirmed _rekeying transaction_ above.
 
-```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000
-```
+=== "goal"
+  ```bash
+  goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000
+  ```
 
 ### Send from Authorized Address
 
@@ -212,25 +216,28 @@ Sending from the _authorized address_ of Account "A" requires:
 
 First, construct an unsigned transaction using `goal` with the `--outfile` flag to write the unsigned transction to a file:
 
-```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --out send-single.txn
-```
+=== "goal"
+  ```bash
+  goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --out send-single.txn
+  ```
 
 #### Sign Using Authorized Address
 
 Next, locate the wallet containing the _private spending key_ for Account "B". The `goal clerk sign` command provides the flag `--signer` which allows specifying the proper required _authorized address_ `$ADDR_B`. Notice the `infile` flag reads in the unsigned transaction file from above and the `--outfile` flag writes the signed transaction to a separate file.
 
-```bash tab="goal"
-$ goal clerk sign --signer $ADDR_B --infile send-single.txn --outfile send-single.stxn
-```
+=== "goal"
+  ```bash
+  goal clerk sign --signer $ADDR_B --infile send-single.txn --outfile send-single.stxn
+  ```
 
 #### TEST: Send with Auth B
 
 Finally, send the the signed transaction file using `goal`:
 
-```bash tab="goal"
-$ goal clerk rawsend --filename send-single.stxn
-```
+=== "goal"
+  ```bash
+  goal clerk rawsend --filename send-single.stxn
+  ```
 
 This will succeed, sending the 100000 microAlgos from `$ADDR_A` to `$ADDR_B` using the _private spending key_ of Account "B".
 
@@ -256,22 +263,25 @@ Recall from scenario 1 that Account "A" has already _rekeyed_ to `$ADDR_B`.
 
 The _rekey transaction_ constructed for this scenario requires authorize from `$ADDR_B`.
 
-```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1 --out rekey-multisig.txn
-```
+=== "goal"
+  ```bash
+  goal clerk send --from $ADDR_A --to $ADDR_A --amount 0 --rekey-to $ADDR_BC_T1 --out rekey-multisig.txn
+  ```
 
 ### Sign Rekey Transaction
 
-```bash tab="goal"
-$ goal clerk sign --signer $ADDR_B --infile rekey-multisig.txn --outfile rekey-multisig.stxn
-```
+=== "goal"
+  ```bash
+  goal clerk sign --signer $ADDR_B --infile rekey-multisig.txn --outfile rekey-multisig.stxn
+  ```
 
 ### Send and Confirm Rekey to MultiSig
 
-```bash tab="goal"
-$ goal clerk rawsend --filename rekey-multisig.stxn
-$ goal account dump --address $ADDR_A
-```
+=== "goal"
+  ```bash
+  goal clerk rawsend --filename rekey-multisig.stxn
+  goal account dump --address $ADDR_A
+  ```
 
 The _rekey transaction_ will confirm, resulting in the "spend" field update within the _account object_:
 
@@ -292,10 +302,11 @@ Use the established pattern:
 - Sign transaction
 - Confirm transaction
 
-```bash tab="goal"
-$ goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --msig-params="1 $ADDR_B $ADDR_C" --out send-multisig-bct1.txn
-$ goal clerk multisig sign --tx send-multisig-bct1.txn --address $ADDR_C
-$ goal clerk rawsend --filename send-multisig-bct1.txn
-```
+=== "goal"
+  ```bash
+  goal clerk send --from $ADDR_A --to $ADDR_B --amount 100000 --msig-params="1 $ADDR_B $ADDR_C" --out send-multisig-bct1.txn
+  goal clerk multisig sign --tx send-multisig-bct1.txn --address $ADDR_C
+  goal clerk rawsend --filename send-multisig-bct1.txn
+  ```
 
 This transaction will succeed as _private spending key_ for `$ADDR_C` provided the authorization and meets the threshold requirement for the MultiSig account.
