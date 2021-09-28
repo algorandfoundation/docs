@@ -4,8 +4,8 @@ title: Algorand Developer Docs
 <ul class="docs-homepage__card-list">
     <li class="docs-homepage__card-list-item">
         <a class="docs-homepage__card" href="./get-started/basics/what_is_blockchain/">
-            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--orange">
-                <span class="create-your-first-token-icon"></span>
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--purple">
+                <span class="create-smart-contract-overview-icon"></span>
             </div>
             <p class="docs-homepage__card__title text-gray--main typography--large-button">Get started</p>
             <p class="typography--regular-body docs-homepage__card__description">Start here to learn the basics</p>
@@ -13,8 +13,8 @@ title: Algorand Developer Docs
     </li>
     <li class="docs-homepage__card-list-item">
         <a class="docs-homepage__card" href="./get-details/">
-            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--orange">
-                <span class="create-smart-contract-overview-icon"></span>
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--purple">
+                <span class="stateless-smart-contracts-icon"></span>
             </div>
             <p class="docs-homepage__card__title text-gray--main typography--large-button">Get details</p>
             <p class="typography--regular-body docs-homepage__card__description">In-depth guides and explanations of all features</p>
@@ -22,14 +22,13 @@ title: Algorand Developer Docs
     </li>
     <li class="docs-homepage__card-list-item">
         <a class="docs-homepage__card" href="./run-a-node/setup/types/">
-            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--orange">
-                <span class="stateless-smart-contracts-icon"></span>
+            <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--purple">
+                <span class="stateful-smart-contracts-icon"></span>
             </div>
             <p class="docs-homepage__card__title text-gray--main typography--large-button">Run a node</p>
             <p class="typography--regular-body docs-homepage__card__description">Setup a node and participate in consensus</p>
         </a>
     </li>
-
 </ul>
 
 # Spotlight
@@ -40,8 +39,8 @@ title: Algorand Developer Docs
             <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
                 <span class="payment-with-algos-icon"></span>
             </div>
-            <p class="docs-homepage__card__title text-gray--main typography--large-button">The Algorand Virtual Machine (AVM)</p>
-            <p class="typography--regular-body docs-homepage__card__description">Learn more about Algorand's smart contract evaluation engine</p>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">The AVM</p>
+            <p class="typography--regular-body docs-homepage__card__description">The Algorand Virtual Machine</p>
         </a>
     </li>
     <li class="docs-homepage__card-list-item">
@@ -76,8 +75,8 @@ title: Algorand Developer Docs
             <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
                 <span class="payment-with-algos-icon"></span>
             </div>
-            <p class="docs-homepage__card__title text-gray--main typography--large-button">Algorand Standard Assets (ASAs)</p>
-            <p class="typography--regular-body docs-homepage__card__description">Tokenize FTs, NFTs, and more with the ASA built-in standard</p>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">ASAs</p>
+            <p class="typography--regular-body docs-homepage__card__description">Tokenize FTs, NFTs, and more with a built-in standard</p>
         </a>
     </li>
     <li class="docs-homepage__card-list-item">
