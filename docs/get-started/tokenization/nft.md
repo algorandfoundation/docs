@@ -102,13 +102,13 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 	assetName := "fractional@arc3"
 	unitName := "FRACTION"
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
-	assetMetadataHash := base64("base64EncodedHashOfmetadata.json")
+	assetMetadataHash := metadataHash
 	totalIssuance := uint64(1)      // Fractionalized NFTs have totalIssuance of exactly 1
 	decimals := uint32(2)           // Fractionalized NFTs have decimals greater than 0
-	manager := account.Address.String()
-	reserve := account.Address.String()
-	freeze := account.Address.String()
-	clawback := account.Address.String()
+	manager := account.Address.String() // OPTIONAL: FOR DEMO ONLY, USED TO DESTROY ASSET WITHIN THIS SCRIPT
+	reserve := ""
+	freeze := ""
+	clawback := ""
 	defaultFrozen := false
 	note := []byte(nil)
 
