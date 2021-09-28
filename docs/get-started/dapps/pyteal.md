@@ -15,9 +15,13 @@ All of the code for this guide is [located here](https://github.com/algorand/auc
 #Launching the application
 Algorand provides a docker instance for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have docker installed, then run this code to launch a sandbox node with a private network, i.e. your own local blockchain that runs the Algorand protocol.
 
+<center>
+![Sandbox node guy](../../imgs/sandbox-node-guy.png){: style="width:200px"}
+<figcaption style="font-size:12px">Sandbox node to the rescue!</figcaption>
+</center>
+
 ##Install Sandbox
  
-[Image of one of the little node guys representing your sandbox node]
  
 ```bash
 git clone https://github.com/algorand/sandbox.git
