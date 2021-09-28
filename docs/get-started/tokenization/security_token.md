@@ -20,18 +20,13 @@ So how can we solve for this use case without encroaching on the promise of dece
 Creating security tokens is the same as creating NFTs or FTs, with the extra configuration settings specified. Run the accompanying code in your favorite SDK to see an example of using the freeze and clawback capabilities.
 
 === "Python"
-    ```python
-    ```
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code]()){: target="_blank"}
 
 === "JavaScript"
-    ```javascript
-    ```
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/ASASecurityTokensJS){: target="_blank"}
 
 === "Java"
-    ```java
-    ```
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](){: target="_blank"}
 
 === "Go"
-    ```go
-    ```
 

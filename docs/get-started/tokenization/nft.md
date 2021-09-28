@@ -34,18 +34,19 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) NFT standard. Choose your favorite SDK to run the full code example for creating an NFT on TestNet and watch the step-by-step video guide.
 
 === "Python"
-    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}
 
 === "JavaScript"
-    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/CreateNFTJavaScript#index.js){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/CreateNFTJavaScript#index.js){: target="_blank"}
 
 === "Java"
-    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
 
 === "Go"
+    [Run code](https://replit.com/@Algorand/CreateNFTGo){: target="_blank"}
 
 
-Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](../../../ecosystem-projects/?tags=block-explorers) to find your newly created NFT on TestNet.
+Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](https://developer.algorand.org/ecosystem-projects/?tags=block-explorers) to find your newly created NFT on TestNet.
 
 <center>
 ![Alice creates an NFT](../../imgs/tokenization-alice-bob-nft.png){: style="width:500px"}
@@ -58,7 +59,7 @@ ASAs can be composed with other features on Algorand (like smart contracts) and 
 
 # Fractional NFTS
 
-A fractional NFT is a unique asset that has been divided into multiple, equal shares. Why do this? When NFTs are selling for millions of dollars, this may be one way to lower the bar for entry and reach more potential buyers who would not have been able to invest in the whole NFT. The other side of the coin (pun intended) is that by increasing your pool of potential buyers, you may see the value of your NFT increase. Need a compelling example? In September 2021, the owner of a meme Doge NFT who paid 4 million dollars for it, fractionalized it and then auctioned off a portion of those fractional shares at a price that revalued their asset at 225 million USD[^1].
+A fractional NFT is a unique asset that has been divided into multiple, equal shares. When NFTs are selling for millions of dollars, this may be one way to lower the bar for entry and reach more potential buyers who would not have been able to invest in the whole NFT. The other side of the coin (pun intended) is that by increasing your pool of potential buyers, you may see the value of your NFT increase. Need a compelling example? In September 2021, the owner of a meme Doge NFT who paid 4 million dollars for it, fractionalized it and then auctioned off a portion of those fractional shares at a price that revalued their asset at 225 million USD[^1].
 
 [^1]: [https://www.theblockcrypto.com/linked/116464/fractionalized-doge-nft-valued-at-225-million-after-sushiswap-auction](https://www.theblockcrypto.com/linked/116464/fractionalized-doge-nft-valued-at-225-million-after-sushiswap-auction){: target="_blank"}
 
@@ -85,6 +86,6 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 # More NFT Resources
 
 - Learn more about NFTs from Algorand's Chief Product Officer: [The Enduring Value of NFTs on Algorand: A Critical Role in the Future of Finance](https://www.algorand.com/resources/blog/the-enduring-value-of-nfts-on-algorand){: target="blank"}
-- [Search the developer blog](../../../blog/?query=nfts){: target="blank"} for more NFT-related guides, code prototypes, and explanations from the community.
-- [Browse community tools and projects](../../../ecosystem-projects/?tags=nfts){: target="blank"} related to NFTs.
+- [Search the developer blog](https://developer.algorand.org/blog/?query=nfts){: target="blank"} for more NFT-related guides, code prototypes, and explanations from the community.
+- [Browse community tools and projects](https://developer.algorand.org/ecosystem-projects/?tags=nfts){: target="blank"} related to NFTs.
 - Detailed documentation on [Algorand Standard Assets (ASAs)](../../../get-details/asa/){: target="blank"} and related [transaction types](../../../get-details/transactions/#asset-configuration-transaction){: target="blank"}.

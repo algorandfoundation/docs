@@ -37,7 +37,7 @@ Let’s imagine that Alice wants to create a loyalty point program for her buyer
     [Run code](https://replit.com/@Algorand/CreateFTPython/){: target="_blank"}
 
 === "JavaScript"
-    [Run code](https://replit.com/@Algorand/CreateFTJava/){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/CreateFTJavaScript/){: target="_blank"}
 
 === "Java"
     [Run code](https://replit.com/@Algorand/CreateFTJava/){: target="_blank"}
