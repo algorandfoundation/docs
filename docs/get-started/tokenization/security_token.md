@@ -33,5 +33,23 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 
 === "Go"
     ```go
+    creator := account.Address.String()
+	assetName := "secuity@arc3"
+	unitName := "SECURITY"
+	assetURL := "https://path/to/my/security/asset/metadata.json"
+	assetMetadataHash := base64("base64EncodedHashOfmetadata.json")
+	totalIssuance := uint64(1000)        // Secuirty tokens are typically fungible
+	decimals := uint32(2)                // Security tokens typically have some precision
+	manager := account.Address.String()  // Address able to change mutable asset data
+	reserve := account.Address.String()  // Address where non-minted assets will reside
+	freeze := account.Address.String()   // Address able un/freze the asset
+	clawback := account.Address.String() // Address able to remove asset from account
+	defaultFrozen := false
+	note := []byte(nil)
+
+    	txn, err := transaction.MakeAssetCreateTxn(
+		creator, note, txParams, totalIssuance, decimals,
+		defaultFrozen, manager, reserve, freeze, clawback,
+		unitName, assetName, assetURL, assetMetadataHash)
     ```
 
