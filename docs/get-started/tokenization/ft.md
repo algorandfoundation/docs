@@ -65,7 +65,7 @@ Let’s imagine that Alice wants to create a loyalty point program for her buyer
     [Run code](https://replit.com/@Algorand/CreateFTGo/){: target="_blank"}
 
 # Other fungible token resources 
-- [Search the developer blog](../../../blog/?query=fts){: target="blank"} for more FT-related guides, code prototypes, and explanations from the community.
-- [Browse community tools and projects](../../../ecosystem-projects/?tags=fts){: target="blank"} related to NFTs.
+- [Search the developer blog](../../../../blog/?query=fts){: target="blank"} for more FT-related guides, code prototypes, and explanations from the community.
+- [Browse community tools and projects](../../../../ecosystem-projects/?tags=fts){: target="blank"} related to NFTs.
 - Detailed documentation on [Algorand Standard Assets (ASAs)](../../../get-details/asa/){: target="blank"} and related [transaction types](../../../get-details/transactions/#asset-configuration-transaction){: target="blank"}.
 

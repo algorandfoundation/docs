@@ -97,7 +97,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
     ```
 
 === "Go"
-    ```
+    ```go
     creator := account.Address.String()
 	assetName := "fractional@arc3"
 	unitName := "FRACTION"
@@ -121,6 +121,6 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 # More NFT Resources
 
 - Learn more about NFTs from Algorand's Chief Product Officer: [The Enduring Value of NFTs on Algorand: A Critical Role in the Future of Finance](https://www.algorand.com/resources/blog/the-enduring-value-of-nfts-on-algorand){: target="blank"}
-- [Search the developer blog](https://developer.algorand.org/blog/?query=nfts){: target="blank"} for more NFT-related guides, code prototypes, and explanations from the community.
-- [Browse community tools and projects](https://developer.algorand.org/ecosystem-projects/?tags=nfts){: target="blank"} related to NFTs.
+- [Search the developer blog](../../../../blog/?query=nfts){: target="blank"} for more NFT-related guides, code prototypes, and explanations from the community.
+- [Browse community tools and projects](../../../../ecosystem-projects/?tags=nfts){: target="blank"} related to NFTs.
 - Detailed documentation on [Algorand Standard Assets (ASAs)](../../../get-details/asa/){: target="blank"} and related [transaction types](../../../get-details/transactions/#asset-configuration-transaction){: target="blank"}.
