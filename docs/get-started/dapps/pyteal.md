@@ -37,6 +37,7 @@ The auction app requires Python 3.6 or higher. Clone the repository using the fo
  
 ```bash
 git clone https://github.com/algorand/auction-demo
+cd auction-demo
 ```
 
 ## Setup environment and run tests
