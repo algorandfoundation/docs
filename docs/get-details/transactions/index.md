@@ -356,11 +356,11 @@ Calculating the round range requires you to know the **current round**, the **av
 
 ## Current Round
 
-To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](../../community.md#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](../../archive/build-apps/connect#check-node-status-and-network-version).
+To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](https://developer.algorand.org/ecosystem-projects/#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](../../archive/build-apps/connect#check-node-status-and-network-version).
 
 ## Average Block Time
 
-This refers to the number of seconds it takes, on average, for a block to be committed on the Algorand blockchain. This number is not dynamically available through the Algorand developer tools, but at the time of writing this, blocks are confirmed in less than 5 seconds on Algorand so you can use a rough estimate of 4.5 seconds if precision is not critical. It is highly recommended that you validate this number against your own analytics or check our [Community Projects](../../community.md) for other projects that may provide this information since the average has shown above may be out of date at the time of reading this.
+This refers to the number of seconds it takes, on average, for a block to be committed on the Algorand blockchain. This number is not dynamically available through the Algorand developer tools, but at the time of writing this, blocks are confirmed in less than 5 seconds on Algorand so you can use a rough estimate of 4.5 seconds if precision is not critical. It is highly recommended that you validate this number against your own analytics or check our [Community Projects](https://developer.algorand.org/ecosystem-projects/) for other projects that may provide this information since the average has shown above may be out of date at the time of reading this.
 
 ## Target Submission Time
 

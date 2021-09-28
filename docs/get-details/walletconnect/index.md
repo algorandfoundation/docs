@@ -6,7 +6,7 @@ title: WalletConnect
 
 ## Why should I care?
 
-From an end user standpoint, they really don’t need to understand _how_ it works, but they will need to accept the _connection request_ initiated by the dApp within their mobile wallet. As a dApp developer you’ll want to understand some basics about the protocol for a successful integration and provide a seamless user experience. Algorand provide a [custom WalletConnect schema](../reference/walletconnect-schema.md) and a [quick start guide](#quick-start-for-dapp-devs) for accelerating integrations.
+From an end user standpoint, they really don’t need to understand _how_ it works, but they will need to accept the _connection request_ initiated by the dApp within their mobile wallet. As a dApp developer you’ll want to understand some basics about the protocol for a successful integration and provide a seamless user experience. Algorand provide a [custom WalletConnect schema](./walletconnect-schema.md) and a [quick start guide](#quick-start-for-dapp-devs) for accelerating integrations.
 
 <center>![WalletConnect Header](../../imgs/walletconnect-header.png)</center>
 

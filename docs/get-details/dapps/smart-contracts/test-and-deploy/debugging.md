@@ -22,12 +22,12 @@ $ tealdbg debug program.teal
 
 This will launch the debugger process and return an endpoint that is listening for connections. This process can be connected to directly with the Chrome Developer Tools. The simplest way to do this is to enter `chrome://inspect/` into the address bar of the browser, click “Configure” to add “localhost:9392”, and select the Algorand TEAL Debugger in the Remote Target Section (click on the inspect link).
 
-![CDT Remote Connection](../../../../../imgs/tealdbg-1.png)
+![CDT Remote Connection](../../../../imgs/tealdbg-1.png)
 <center>*Configure CDT Remote Connection*</center>
 
 This will launch the debugger and allow the smart contract to be inspected. The debugger provides standard debugger controls, like single-stepping, pausing, breakpoints etc.
 
-![Teal Debugger](../../../../../imgs/tealdbg-2.png)
+![Teal Debugger](../../../../imgs/tealdbg-2.png)
 <center>*TEAL Debugger*</center>
 
 The Scope pane contains the current stack and is useful for determining what values the current line of code is processing. When a smart contract returns, if anything other than one positive value is left on the stack or the `return` opcode is used with a nonpositive value on the top of the stack, the program will fail. The Scope pane also displays the current transaction with all its properties, the current scratch space, global variables, and any state associated with the contract. If this transaction is part of an atomic transfer, all transactions will also be available in the Scope pane.
@@ -67,7 +67,7 @@ $ tealdbg debug program.teal --dryrun-req statefultx.dr
 
 The scope panel will now have the proper context data for the debugging session.
 
-![Teal Debugger Scope](../../../../../imgs/tealdbg-3.png)
+![Teal Debugger Scope](../../../../imgs/tealdbg-3.png)
 <center>*TEAL Debugger Scope*</center>
 
 One or more transactions that are stored in a file can be debugged by dumping the context data with the `goal clerk dryrun` command. For example, two smart contracts are grouped below and the context data is generated using the `dryrun-dump` option. The `tealdbg` command is then used to start the debugger.
@@ -130,455 +130,465 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
     $ goal node restart
     ```
 
-```javascript tab="JavaScript"
-// dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
-async function dryrunDebugging(lsig, txn, data) {
-    if (data == null)
-    {
-        //compile
-        txns = [{
-            lsig: lsig,
-            txn: txn,
-        }];        
+=== "JavaScript"
+	```javascript
+    // dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
+    async function dryrunDebugging(lsig, txn, data) {
+        if (data == null)
+        {
+            //compile
+            txns = [{
+                lsig: lsig,
+                txn: txn,
+            }];        
+        }
+        else
+        {
+            // source
+            txns = [{
+                txn: txn,
+            }];
+            sources = [new algosdk.modelsv2.DryrunSource("lsig", data.toString("utf8"), 0)];
+        }
+        const dr = new algosdk.modelsv2.DryrunRequest({
+            txns: txns,
+            sources: sources,
+        });
+        dryrunResponse = await algodclient.dryrun(dr).do();
+        return dryrunResponse;
     }
-    else
-    {
+
+    // the dryrun response should look similar to this
+    // {
+    // "error": "",
+    // "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
+    // "txns": [
+    // {
+    //     "disassembly": [
+    //         "// version 1",
+    //         "intcblock 123",
+    //         "arg_0",
+    //         "btoi",
+    //         "intc_0",
+    //         "==",
+    //         ""
+    //     ],
+    //     "logic-sig-messages": [
+    //         "PASS"
+    //     ],
+    //     "logic-sig-trace": [
+    //         {
+    //             "line": 1,
+    //             "pc": 1,
+    //             "stack": []
+    //         },
+    //         {
+    //             "line": 2,
+    //             "pc": 4,
+    //             "stack": []
+    //         },
+    //         {
+    //             "line": 3,
+    //             "pc": 5,
+    //             "stack": [
+    //                 {
+    //                     "bytes": "ew==",
+    //                     "type": 1,
+    //                     "uint": 0
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             "line": 4,
+    //             "pc": 6,
+    //             "stack": [
+    //                 {
+    //                     "bytes": "",
+    //                     "type": 2,
+    //                     "uint": 123
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             "line": 5,
+    //             "pc": 7,
+    //             "stack": [
+    //                 {
+    //                     "bytes": "",
+    //                     "type": 2,
+    //                     "uint": 123
+    //                 },
+    //                 {
+    //                     "bytes": "",
+    //                     "type": 2,
+    //                     "uint": 123
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             "line": 6,
+    //             "pc": 8,
+    //             "stack": [
+    //                 {
+    //                     "bytes": "",
+    //                     "type": 2,
+    //                     "uint": 1
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // }
+    // ]
+    // }
+    ```
+
+=== "Python"
+	```python
+    # dryrun_debug returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
+    # dryrun source if provided, else dryrun compiled
+    def dryrun_debug(lstx, mysource):
+        sources = []
+        if (mysource != None):
+            # source
+            sources = [DryrunSource(field_name="lsig", source=mysource, txn_index=0)]
+        drr = DryrunRequest(txns=[lstx], sources=sources)
+        dryrun_response = algod_client.dryrun(drr)
+        return dryrun_response
+
+    # dryrun response should look similar to this
+    # {
+    # "error": "",
+    # "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
+    # "txns": [
+    # {
+    # "disassembly": [
+    #     "// version 1",
+    #     "intcblock 123",
+    #     "arg_0",
+    #     "btoi",
+    #     "intc_0",
+    #     "==",
+    #     ""
+    # ],
+    # "logic-sig-messages": [
+    #     "PASS"
+    # ],
+    # "logic-sig-trace": [
+    #     {
+    #         "line": 1,
+    #         "pc": 1,
+    #         "stack": []
+    #     },
+    #     {
+    #         "line": 2,
+    #         "pc": 4,
+    #         "stack": []
+    #     },
+    #     {
+    #         "line": 3,
+    #         "pc": 5,
+    #         "stack": [
+    #             {
+    #                 "bytes": "AAAAAAAAAHs=",
+    #                 "type": 1,
+    #                 "uint": 0
+    #             }
+    #         ]
+    #     },
+    #     {
+    #         "line": 4,
+    #         "pc": 6,
+    #         "stack": [
+    #             {
+    #                 "bytes": "",
+    #                 "type": 2,
+    #                 "uint": 123
+    #             }
+    #         ]
+    #     },
+    #     {
+    #         "line": 5,
+    #         "pc": 7,
+    #         "stack": [
+    #             {
+    #                 "bytes": "",
+    #                 "type": 2,
+    #                 "uint": 123
+    #             },
+    #             {
+    #                 "bytes": "",
+    #                 "type": 2,
+    #                 "uint": 123
+    #             }
+    #         ]
+    #     },
+    #     {
+    #         "line": 6,
+    #         "pc": 8,
+    #         "stack": [
+    #             {
+    #                 "bytes": "",
+    #                 "type": 2,
+    #                 "uint": 1
+    #             }
+    #         ]
+    #     }
+    # ]
+    # }
+    # ]
+    # }
+    ```
+
+=== "Java"
+	```java
+    // getDryrun returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
+    private Response<DryrunResponse> getDryrunResponse(SignedTransaction stxn, byte[] source)
+            throws Exception{
+        List<DryrunSource> sources = new ArrayList<DryrunSource>();
+        List<SignedTransaction> stxns = new ArrayList<SignedTransaction>();
+        // compiled 
+        if (source == null) {
+            stxns.add(stxn);
+        }
         // source
-        txns = [{
-            txn: txn,
-        }];
-        sources = [new algosdk.modelsv2.DryrunSource("lsig", data.toString("utf8"), 0)];
+        else if (source != null) {
+            DryrunSource drs = new DryrunSource();
+            drs.fieldName = "lsig";
+            drs.source = new String(source);
+            drs.txnIndex = 0l;
+            sources.add(drs);
+            stxns.add(stxn);
+        }
+        Response<DryrunResponse> dryrunResponse;
+        DryrunRequest dr = new DryrunRequest();
+        dr.txns = stxns;
+        dr.sources = sources;
+        dryrunResponse = client.TealDryrun().request(dr).execute();
+        return dryrunResponse;
+    } 
+    // response should look similar to this
+    // Dryrun repsonse : {
+    //   "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
+    //   "error": "",
+    //   "txns": [{
+    //     "global-delta": [],
+    //     "local-deltas": [],
+    //     "disassembly": [
+    //       "// version 1",
+    //       "intcblock 123",
+    //       "arg_0",
+    //       "btoi",
+    //       "intc_0",
+    //       "==",
+    //       ""
+    //     ],
+    //     "logic-sig-messages": ["PASS"],
+    //     "app-call-messages": [],
+    //     "app-call-trace": [],
+    //     "logic-sig-trace": [
+    //       {
+    //         "stack": [],
+    //         "pc": 1,
+    //         "line": 1,
+    //         "scratch": []
+    //       },
+    //       {
+    //         "stack": [],
+    //         "pc": 4,
+    //         "line": 2,
+    //         "scratch": []
+    //       },
+    //       {
+    //         "stack": [{
+    //           "bytes": "ew==",
+    //           "type": 1,
+    //           "uint": 0
+    //         }],
+    //         "pc": 5,
+    //         "line": 3,
+    //         "scratch": []
+    //       },
+    //       {
+    //         "stack": [{
+    //           "bytes": "",
+    //           "type": 2,
+    //           "uint": 123
+    //         }],
+    //         "pc": 6,
+    //         "line": 4,
+    //         "scratch": []
+    //       },
+    //       {
+    //         "stack": [
+    //           {
+    //             "bytes": "",
+    //             "type": 2,
+    //             "uint": 123
+    //           },
+    //           {
+    //             "bytes": "",
+    //             "type": 2,
+    //             "uint": 123
+    //           }
+    //         ],
+    //         "pc": 7,
+    //         "line": 5,
+    //         "scratch": []
+    //       },
+    //       {
+    //         "stack": [{
+    //           "bytes": "",
+    //           "type": 2,
+    //           "uint": 1
+    //         }],
+    //         "pc": 8,
+    //         "line": 6,
+    //         "scratch": []
+    //       }
+    //     ]
+    //   }]
+    // }
+    ```
+
+=== "Go"
+	```go
+    // dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
+    func dryrunDebugging(lsig types.LogicSig, args [][]byte,tealFile []byte, client *algod.Client) modelsV2.DryrunResponse {
+        // if tealFile is nil, use compile
+        txns := []types.SignedTxn{{}}
+        sources := []modelsV2.DryrunSource{}
+        if (tealFile == nil){
+            // complile
+            txns[0].Lsig = lsig    
+        }else{
+            // source
+            txns[0].Lsig.Args = args
+            sources = append(sources, modelsV2.DryrunSource{
+                FieldName: "lsig",
+                Source:    string(tealFile),
+                TxnIndex:  0,
+            })
+        }
+
+        ddr := modelsV2.DryrunRequest{
+            Txns:    txns,
+            Sources: sources,
+        }
+
+        result, err := client.TealDryrun(ddr).Do(context.Background())
+        if err != nil {
+            return result
+        }
+        return  result
     }
-    const dr = new algosdk.modelsv2.DryrunRequest({
-        txns: txns,
-        sources: sources,
-    });
-    dryrunResponse = await algodclient.dryrun(dr).do();
-    return dryrunResponse;
-}
+    // the response should look similar to this...
+    // Result = {
+    // "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
+    // "txns": [
+    // {
+    //     "disassembly": [
+    //         "// version 1",
+    //         "intcblock 123",
+    //         "arg_0",
+    //         "btoi",
+    //         "intc_0",
+    //         "==",
+    //         ""
+    //     ],
+    //     "logic-sig-messages": [
+    //         "PASS"
+    //     ],
+    //     "logic-sig-trace": [
+    //         {
+    //             "line": 1,
+    //             "pc": 1
+    //         },
+    //         {
+    //             "line": 2,
+    //             "pc": 4
+    //         },
+    //         {
+    //             "line": 3,
+    //             "pc": 5,
+    //             "stack": [
+    //                 {
+    //                     "bytes": "AAAAAAAAAHs=",
+    //                     "type": 1
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             "line": 4,
+    //             "pc": 6,
+    //             "stack": [
+    //                 {
+    //                     "type": 2,
+    //                     "uint": 123
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             "line": 5,
+    //             "pc": 7,
+    //             "stack": [
+    //                 {
+    //                     "type": 2,
+    //                     "uint": 123
+    //                 },
+    //                 {
+    //                     "type": 2,
+    //                     "uint": 123
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             "line": 6,
+    //             "pc": 8,
+    //             "stack": [
+    //                 {
+    //                     "type": 2,
+    //                     "uint": 1
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // }
 
-// the dryrun response should look similar to this
-// {
-// "error": "",
-// "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-// "txns": [
-// {
-//     "disassembly": [
-//         "// version 1",
-//         "intcblock 123",
-//         "arg_0",
-//         "btoi",
-//         "intc_0",
-//         "==",
-//         ""
-//     ],
-//     "logic-sig-messages": [
-//         "PASS"
-//     ],
-//     "logic-sig-trace": [
-//         {
-//             "line": 1,
-//             "pc": 1,
-//             "stack": []
-//         },
-//         {
-//             "line": 2,
-//             "pc": 4,
-//             "stack": []
-//         },
-//         {
-//             "line": 3,
-//             "pc": 5,
-//             "stack": [
-//                 {
-//                     "bytes": "ew==",
-//                     "type": 1,
-//                     "uint": 0
-//                 }
-//             ]
-//         },
-//         {
-//             "line": 4,
-//             "pc": 6,
-//             "stack": [
-//                 {
-//                     "bytes": "",
-//                     "type": 2,
-//                     "uint": 123
-//                 }
-//             ]
-//         },
-//         {
-//             "line": 5,
-//             "pc": 7,
-//             "stack": [
-//                 {
-//                     "bytes": "",
-//                     "type": 2,
-//                     "uint": 123
-//                 },
-//                 {
-//                     "bytes": "",
-//                     "type": 2,
-//                     "uint": 123
-//                 }
-//             ]
-//         },
-//         {
-//             "line": 6,
-//             "pc": 8,
-//             "stack": [
-//                 {
-//                     "bytes": "",
-//                     "type": 2,
-//                     "uint": 1
-//                 }
-//             ]
-//         }
-//     ]
-// }
-// ]
-// }
-```
+    // ]
+    // }   
+    ```
 
-```python tab="Python"
-# dryrun_debug returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
-# dryrun source if provided, else dryrun compiled
-def dryrun_debug(lstx, mysource):
-    sources = []
-    if (mysource != None):
-        # source
-        sources = [DryrunSource(field_name="lsig", source=mysource, txn_index=0)]
-    drr = DryrunRequest(txns=[lstx], sources=sources)
-    dryrun_response = algod_client.dryrun(drr)
-    return dryrun_response
+=== "goal"
+	```bash
+    $ goal app call --app-id 1  --app-arg "str:test1" --from [SENDER_ACCOUNT] --out=dump.dr --dryrun-dump
+    $ goal app clerk dryrun-remote -D dump.dr --verbose
+    ```
 
-# dryrun response should look similar to this
-# {
-# "error": "",
-# "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-# "txns": [
-# {
-# "disassembly": [
-#     "// version 1",
-#     "intcblock 123",
-#     "arg_0",
-#     "btoi",
-#     "intc_0",
-#     "==",
-#     ""
-# ],
-# "logic-sig-messages": [
-#     "PASS"
-# ],
-# "logic-sig-trace": [
-#     {
-#         "line": 1,
-#         "pc": 1,
-#         "stack": []
-#     },
-#     {
-#         "line": 2,
-#         "pc": 4,
-#         "stack": []
-#     },
-#     {
-#         "line": 3,
-#         "pc": 5,
-#         "stack": [
-#             {
-#                 "bytes": "AAAAAAAAAHs=",
-#                 "type": 1,
-#                 "uint": 0
-#             }
-#         ]
-#     },
-#     {
-#         "line": 4,
-#         "pc": 6,
-#         "stack": [
-#             {
-#                 "bytes": "",
-#                 "type": 2,
-#                 "uint": 123
-#             }
-#         ]
-#     },
-#     {
-#         "line": 5,
-#         "pc": 7,
-#         "stack": [
-#             {
-#                 "bytes": "",
-#                 "type": 2,
-#                 "uint": 123
-#             },
-#             {
-#                 "bytes": "",
-#                 "type": 2,
-#                 "uint": 123
-#             }
-#         ]
-#     },
-#     {
-#         "line": 6,
-#         "pc": 8,
-#         "stack": [
-#             {
-#                 "bytes": "",
-#                 "type": 2,
-#                 "uint": 1
-#             }
-#         ]
-#     }
-# ]
-# }
-# ]
-# }
-```
+    Output
 
-```java tab="Java"
-// getDryrun returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
-private Response<DryrunResponse> getDryrunResponse(SignedTransaction stxn, byte[] source)
-        throws Exception{
-    List<DryrunSource> sources = new ArrayList<DryrunSource>();
-    List<SignedTransaction> stxns = new ArrayList<SignedTransaction>();
-    // compiled 
-    if (source == null) {
-        stxns.add(stxn);
-    }
-    // source
-    else if (source != null) {
-        DryrunSource drs = new DryrunSource();
-        drs.fieldName = "lsig";
-        drs.source = new String(source);
-        drs.txnIndex = 0l;
-        sources.add(drs);
-        stxns.add(stxn);
-    }
-    Response<DryrunResponse> dryrunResponse;
-    DryrunRequest dr = new DryrunRequest();
-    dr.txns = stxns;
-    dr.sources = sources;
-    dryrunResponse = client.TealDryrun().request(dr).execute();
-    return dryrunResponse;
-} 
-// response should look similar to this
-// Dryrun repsonse : {
-//   "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-//   "error": "",
-//   "txns": [{
-//     "global-delta": [],
-//     "local-deltas": [],
-//     "disassembly": [
-//       "// version 1",
-//       "intcblock 123",
-//       "arg_0",
-//       "btoi",
-//       "intc_0",
-//       "==",
-//       ""
-//     ],
-//     "logic-sig-messages": ["PASS"],
-//     "app-call-messages": [],
-//     "app-call-trace": [],
-//     "logic-sig-trace": [
-//       {
-//         "stack": [],
-//         "pc": 1,
-//         "line": 1,
-//         "scratch": []
-//       },
-//       {
-//         "stack": [],
-//         "pc": 4,
-//         "line": 2,
-//         "scratch": []
-//       },
-//       {
-//         "stack": [{
-//           "bytes": "ew==",
-//           "type": 1,
-//           "uint": 0
-//         }],
-//         "pc": 5,
-//         "line": 3,
-//         "scratch": []
-//       },
-//       {
-//         "stack": [{
-//           "bytes": "",
-//           "type": 2,
-//           "uint": 123
-//         }],
-//         "pc": 6,
-//         "line": 4,
-//         "scratch": []
-//       },
-//       {
-//         "stack": [
-//           {
-//             "bytes": "",
-//             "type": 2,
-//             "uint": 123
-//           },
-//           {
-//             "bytes": "",
-//             "type": 2,
-//             "uint": 123
-//           }
-//         ],
-//         "pc": 7,
-//         "line": 5,
-//         "scratch": []
-//       },
-//       {
-//         "stack": [{
-//           "bytes": "",
-//           "type": 2,
-//           "uint": 1
-//         }],
-//         "pc": 8,
-//         "line": 6,
-//         "scratch": []
-//       }
-//     ]
-//   }]
-// }
-```
-
-```go tab="Go"
-// dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
-func dryrunDebugging(lsig types.LogicSig, args [][]byte,tealFile []byte, client *algod.Client) modelsV2.DryrunResponse {
-    // if tealFile is nil, use compile
-	txns := []types.SignedTxn{{}}
-    sources := []modelsV2.DryrunSource{}
-    if (tealFile == nil){
-        // complile
-    	txns[0].Lsig = lsig    
-    }else{
-        // source
-        txns[0].Lsig.Args = args
-		sources = append(sources, modelsV2.DryrunSource{
-			FieldName: "lsig",
-			Source:    string(tealFile),
-            TxnIndex:  0,
-        })
-    }
-
-	ddr := modelsV2.DryrunRequest{
-		Txns:    txns,
-		Sources: sources,
-	}
-
-	result, err := client.TealDryrun(ddr).Do(context.Background())
-	if err != nil {
-		return result
-    }
-    return  result
-}
-// the response should look similar to this...
-// Result = {
-// "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-// "txns": [
-// {
-//     "disassembly": [
-//         "// version 1",
-//         "intcblock 123",
-//         "arg_0",
-//         "btoi",
-//         "intc_0",
-//         "==",
-//         ""
-//     ],
-//     "logic-sig-messages": [
-//         "PASS"
-//     ],
-//     "logic-sig-trace": [
-//         {
-//             "line": 1,
-//             "pc": 1
-//         },
-//         {
-//             "line": 2,
-//             "pc": 4
-//         },
-//         {
-//             "line": 3,
-//             "pc": 5,
-//             "stack": [
-//                 {
-//                     "bytes": "AAAAAAAAAHs=",
-//                     "type": 1
-//                 }
-//             ]
-//         },
-//         {
-//             "line": 4,
-//             "pc": 6,
-//             "stack": [
-//                 {
-//                     "type": 2,
-//                     "uint": 123
-//                 }
-//             ]
-//         },
-//         {
-//             "line": 5,
-//             "pc": 7,
-//             "stack": [
-//                 {
-//                     "type": 2,
-//                     "uint": 123
-//                 },
-//                 {
-//                     "type": 2,
-//                     "uint": 123
-//                 }
-//             ]
-//         },
-//         {
-//             "line": 6,
-//             "pc": 8,
-//             "stack": [
-//                 {
-//                     "type": 2,
-//                     "uint": 1
-//                 }
-//             ]
-//         }
-//     ]
-// }
-
-// ]
-// }   
-```
-
-```text tab="goal"
-$ goal app call --app-id 1  --app-arg "str:test1" --from [SENDER_ACCOUNT] --out=dump.dr --dryrun-dump
-$ goal app clerk dryrun-remote -D dump.dr --verbose
-tx[0] messages:
-ApprovalProgram
-PASS
-tx[0] trace:
-   1 (0001): // version 2 []
-   2 (0006): intcblock 6 1 0 []
-   3 (0010): bytecblock 0x636f756e746572 []
-   4 (0012): txn TypeEnum [6]
-   5 (0013): intc_0 [6 6]
-   6 (0014): == [1]
-   7 (0017): bz label1 []
-   8 (0018): bytec_0 [Y291bnRlcg==]
-   9 (0019): dup [Y291bnRlcg== Y291bnRlcg==]
-  10 (001a): app_global_get [Y291bnRlcg== 1]
-  11 (001b): intc_1 [Y291bnRlcg== 1 1]
-  12 (001c): + [Y291bnRlcg== 2]
-  13 (001d): dup [Y291bnRlcg== 2 2]
-  14 (001f): store 0 [Y291bnRlcg== 2]
-  15 (0020): app_global_put []
-  16 (0022): load 0 [2]
-  20 (0025): return [2]
-```
+    ```text
+        tx[0] messages:
+        ApprovalProgram
+        PASS
+        tx[0] trace:
+        1 (0001): // version 2 []
+        2 (0006): intcblock 6 1 0 []
+        3 (0010): bytecblock 0x636f756e746572 []
+        4 (0012): txn TypeEnum [6]
+        5 (0013): intc_0 [6 6]
+        6 (0014): == [1]
+        7 (0017): bz label1 []
+        8 (0018): bytec_0 [Y291bnRlcg==]
+        9 (0019): dup [Y291bnRlcg== Y291bnRlcg==]
+        10 (001a): app_global_get [Y291bnRlcg== 1]
+        11 (001b): intc_1 [Y291bnRlcg== 1 1]
+        12 (001c): + [Y291bnRlcg== 2]
+        13 (001d): dup [Y291bnRlcg== 2 2]
+        14 (001f): store 0 [Y291bnRlcg== 2]
+        15 (0020): app_global_put []
+        16 (0022): load 0 [2]
+        20 (0025): return [2]
+    ```
 
 
 !!! info

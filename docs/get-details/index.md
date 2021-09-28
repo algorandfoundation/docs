@@ -1,6 +1,6 @@
 title: Section Index
 
-The **Explore Features** section contains explanations and how-tos for all Algorand features. Code examples are embedded throughout in each of the [SDKs](../reference/index.md#sdks) and [command line interface tools](../reference/index.md#command-line-interface-tools-cli-tools).
+The **Explore Features** section contains explanations and how-tos for all Algorand features. Code examples are embedded throughout in each of the SDKs and command line interface tools.
 
 # Accounts
 
@@ -43,17 +43,17 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 [Stateless Smart Contracts](dapps/pyteal/smart-contracts/stateless) - An overview of Stateless Smart Contracts. 
 
-[Logic Signatures](dapps/pyteal/smart-contracts/stateless/modes#logic-signatures) - The authorization method for transactions that use Smart Contracts.
+[Logic Signatures](dapps/pyteal/smart-contracts/smartsigs/modes#logic-signatures) - The authorization method for transactions that use Smart Contracts.
 
-[Modes of Use - Contract Account](dapps/pyteal/smart-contracts/stateless/modes#contract-account) - How to use a Smart Contract as its own Algorand account.
+[Modes of Use - Contract Account](dapps/pyteal/smart-contracts/smartsigs/modes#contract-account) - How to use a Smart Contract as its own Algorand account.
 
-[Modes of Use - Delegated Approval](dapps/pyteal/smart-contracts/stateless/modes#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
+[Modes of Use - Delegated Approval](dapps/pyteal/smart-contracts/smartsigs/modes#delegated-approval) - How to use a Smart Contract to authorize spending from an existing account.
 
 [Using the SDKS](dapps/pyteal/smart-contracts/frontend/stateless-sdks) - Stateless Smart Contract functionality from within the SDKs.
 
 [The Smart Contract Language](dapps/avm/teal) - Learn all about TEAL, the language of Smart Contracts.
 
-[Contract Walkthrough](dapps/pyteal/smart-contracts/stateless/walkthrough) - A simple command-line walkthrough of creating stateless smart contracts.
+[Contract Walkthrough](dapps/pyteal/smart-contracts/smartsigs/walkthrough) - A simple command-line walkthrough of creating stateless smart contracts.
 
 [Debugging TEAL](dapps/pyteal/smart-contracts/test-and-deploy/debugging) - Tools and methods for debugging TEAL code.
 

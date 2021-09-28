@@ -1,14 +1,6 @@
 title: BetaNet 🔷
 # What's New
 
-**New Features Available on BetaNet!** 
-
-Visit the new docs to get started:
-
-- [Stateful Smart Contracts](../../../features/asc1/stateful/)
-- [Rekeying Support](../../../features/accounts/rekey/)
-- [Fast Catchup](../../../run-a-node/setup/install/#sync-node-network-using-fast-catchup)
-
 🔷 = BetaNet availability only
 
 # Version

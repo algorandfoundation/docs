@@ -1,10 +1,4 @@
 title: MainNet
-
-# What's New
-
-- [Stateful Smart Contracts](../../../features/asc1/stateful/)
-- [Rekeying Support](../../../features/accounts/rekey/)
-- [Fast Catchup](../../../run-a-node/setup/install/#sync-node-network-using-fast-catchup)
   
 # Version
 `v2.10.1.stable`

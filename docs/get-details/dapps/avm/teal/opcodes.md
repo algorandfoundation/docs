@@ -1045,7 +1045,7 @@ params: Txn.ForeignApps offset or an app id that appears in Txn.ForeignApps. Ret
 - Opcode: 0x78
 - Pops: *... stack*, any
 - Pushes: uint64
-- get minimum required balance for account A, in microalgos. Required balance is affected by [ASA](https://developer.algorand.org/docs/features/asa/#assets-overview) and [App](https://developer.algorand.org/docs/features/asc1/stateful/#minimum-balance-requirement-for-a-smart-contract) usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes.
+- get minimum required balance for account A, in microalgos. Required balance is affected by [ASA](../../../asa/#assets-overview) and [App](../../smart-contracts/dapps/#minimum-balance-requirement-for-a-smart-contract) usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes.
 - LogicSigVersion >= 3
 - Mode: Application
 

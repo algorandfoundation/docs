@@ -206,7 +206,7 @@ The _status_ methods returns information about the status of the node, such as t
 }
 ```
 
-Check if the node is caught up by validating against others running nodes, like a [public block explorer](../community.md#block-explorers). As a secondary check, see if your `catchup-time` is 0 and your rounds are progressing at a rate of less than 5 seconds on average. This is the time it takes to confirm a block on Algorand. Note that the `time-since-last-round` is represented in nanoseconds.
+Check if the node is caught up by validating against others running nodes, like a [public block explorer](https://developer.algorand.org/ecosystem-projects/#block-explorers). As a secondary check, see if your `catchup-time` is 0 and your rounds are progressing at a rate of less than 5 seconds on average. This is the time it takes to confirm a block on Algorand. Note that the `time-since-last-round` is represented in nanoseconds.
 
 !!! warning
 	If your node is out-of-sync with the rest of the network you cannot send transactions and account balances will be out-of-date. 

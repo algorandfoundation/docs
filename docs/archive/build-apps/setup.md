@@ -16,7 +16,7 @@ An application connects to the Algorand blockchain through an **algod** client. 
 # Available tools
 ## Software Development Kits (SDK)
 
-Algorand officially supports four SDKs for developing applications: [Javascript](../reference/sdks/index.md#javascript), [Java](../reference/sdks/index.md#java), [Python](../reference/sdks/index.md#python), and [Go](../reference/sdks/index.md#go). Additionally, [Community Provided SDKs](../../community/#sdks) expand the development reach. 
+Algorand officially supports four SDKs for developing applications: [Javascript](../sdks/javascript/), [Java](../sdks/java/), [Python](../sdks/python/), and [Go](../sdks/go/). Additionally, [Community Provided SDKs](https://developer.algorand.org/ecosystem-projects/#sdks) expand the development reach. 
 
 ## Command Line Interface (CLI) Tools 
 
@@ -65,7 +65,7 @@ This method is recommended if you plan to use _only_ the SDKs or the algod RESTf
 
 A third-party service runs a node and provides access to that node through its own API keys. On signup, the service provides you with an algod address and an API key which will replace your algod token.
 
-[See the list of known API services on the Community Projects page.](../community.md#api-services)
+[See the list of known API services on the Community Projects page.](https://developer.algorand.org/ecosystem-projects/#api-services)
 
 ## 2. Use Docker Sandbox
 
@@ -119,7 +119,7 @@ $ cat $ALGORAND_DATA/algod.token
 **Production Ready**| ✅ | ❌ | ✅
 
 # Install your preferred SDK
-Install your preferred SDK by following the setup instructions in the [SDK reference docs](../../reference/sdks/index.md).
+Install your preferred SDK by following the setup instructions in the SDK reference docs.
 
 # Other Setup Tips
 

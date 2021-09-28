@@ -33,7 +33,7 @@ This is an example of a transaction signed by an Algorand private key displayed 
   }
 }
 ```
-This transaction sends 10 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](../../reference/transactions.md#sig) field.
+This transaction sends 10 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](./transactions.md#sig) field.
 
 **Related How-To**
 
@@ -787,14 +787,14 @@ Extend the example from the [Multisignature Account](../accounts/create#multisig
 
 # Logic Signatures
 
-Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../dapps/pyteal/smart-contracts/stateless/modes#contract-account) or from a [Delegated Account](../dapps/pyteal/smart-contracts/stateless/modes#delegated-account).
+Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../dapps/pyteal/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../dapps/pyteal/smart-contracts/smartsigs/modes#delegated-account).
 
-A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../dapps/pyteal/smart-contracts/stateless/modes#logic-signatures).
+A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../dapps/pyteal/smart-contracts/smartsigs/modes#logic-signatures).
 
 **Related How-To**
 
 - [Use LogicSigs with the SDKs](../dapps/pyteal/smart-contracts/frontend/stateless-sdks)
-- [Attach a LogicSig with `goal`](../dapps/pyteal/smart-contracts/stateless/walkthrough)
+- [Attach a LogicSig with `goal`](../dapps/pyteal/smart-contracts/smartsigs/walkthrough)
 
 !!! info
     Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
