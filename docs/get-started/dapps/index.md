@@ -3,7 +3,7 @@ title: What is a dApp?
 Decentralized Applications, or dApps, are applications that are run in a decentralized computing system, like a blockchain. This guide will introduce what dApps are and how dApps are architected and implemented on the Algorand blockchain.
 
 <center>
-![dApp world](){: style="width:500px" align=center }
+![dApp world](../../imgs/dapps.png){: style="width:500px" align=center }
 <figcaption style="font-size:12px">A segment of the dApp ecosystem.</figcaption>
 </center>
 

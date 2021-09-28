@@ -4,9 +4,9 @@ Alice and Bob have settled on their design and are ready to kick-off development
 
 A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Python on Algorand. This guide does not cover all the details of the smart contract code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand. So don’t worry if you don’t understand what everything does in the smart contract. This is expected! After you feel comfortable with the basics, you can head over to the detailed PyTeal documentation and work on becoming an expert in the PyTeal smart contract language.
 
-Now let’s get started. 
+Let’s get started. 
 
-# Organization
+# How this is organized
 
 This guide is organized into two sections. The first section helps you launch the dApp and run a mock auction. The second section provides an overview of the different components of the auction application.
 
@@ -108,19 +108,31 @@ The auction demo application uses a smart contract to auction off a non-fungible
 
 The first method creates the smart contract and initializes the auction state on the blockchain, which includes the auction creator’s account, the specific NFT ID to auction, the NFT seller’s account, the start and end times of the auction, the reserve amount for the auction, and the minimum bid increment. 
 
-[Image of Bob creating the auction app with initial state]
+<center>
+![Auction creation](../../imgs/dapp-create.png){: style="width:500px" align=center }
+<figcaption style="font-size:12px">Create the auction: Bob deploys the auction contract to MainNet.</figcaption>
+</center>
 
 The second method completes the auction set up by funding the smart contract with a small amount of algos (to fulfill minimum balance requirements and to pay transaction fees) and by moving the NFT into the smart contract.
 
-[Image of Alice funding the contract and sending the NFT to it]
+<center>
+![Auction setup](../../imgs/dapp-setup.png){: style="width:500px" align=center }
+<figcaption style="font-size:12px">Setup the auction: Alice sends Algos and her NFT to the contract.</figcaption>
+</center>
 
 The third method constructs the bid scenario. This involves the potential buyer sending the bid in algos to the smart contract. If the bid is successful, the contract will hold the algos. Bidding is only allowed between the beginning and end times of the auction. If the bid supplants a previous bid, the contract automatically refunds the previous higher bidder’s algos. 
 
-[Image of Carla making a bid]
+<center>
+![Auction bidding](../../imgs/dapp-bid.png){: style="width:500px" align=center }
+<figcaption style="font-size:12px">Bid in the auction: Carla bids on Alice's NFT.</figcaption>
+</center>
 
 The fourth and final method of the contract allows the auction to be closed out, which will either award the NFT to the highest bidder and transfer the algos to the seller or return the NFT to the seller and close out any remaining algos to the seller.
 
-[Image of Carla claiming the NFT and funds dispersed to Alice]
+<center>
+![Auction close](../../imgs/dapp-close.png){: style="width:500px" align=center }
+<figcaption style="font-size:12px">Close out the auction: Carla receives the NFT and Alice gets paid 2000 Algos.</figcaption>
+</center>
 
 Smart contracts live on the blockchain and are remotely callable by a special transaction type called an application transaction. The simplest way to develop smart contracts is to use the PyTeal library with the Algorand Python SDK. Use PyTeal to write the smart contract logic that will be stored (the on-chain value transfer logic).  Use the SDK to deploy the smart contract and then to create the application transactions that will interact with the smart contract (the off-chain logic and smart contract triggers). 
 

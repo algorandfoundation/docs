@@ -20,36 +20,34 @@ So how can we solve for this use case without encroaching on the promise of dece
 Creating security tokens is the same as creating NFTs or FTs, with the extra configuration settings specified. Run the accompanying code in your favorite SDK to see an example of using the freeze and clawback capabilities.
 
 === "Python"
-    ```python
-    ```
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code]()){: target="_blank"}
 
 === "JavaScript"
-    ```javascript
-    ```
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](https://replit.com/@Algorand/ASASecurityTokensJS){: target="_blank"}
 
 === "Java"
-    ```java
-    ```
+    [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](){: target="_blank"}
 
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "secuity@arc3"
-	unitName := "SECURITY"
-	assetURL := "https://path/to/my/security/asset/metadata.json"
-	assetMetadataHash := base64("base64EncodedHashOfmetadata.json")
-	totalIssuance := uint64(1000)        // Secuirty tokens are typically fungible
-	decimals := uint32(2)                // Security tokens typically have some precision
-	manager := account.Address.String()  // Address able to change mutable asset data
-	reserve := account.Address.String()  // Address where non-minted assets will reside
-	freeze := account.Address.String()   // Address able un/freze the asset
-	clawback := account.Address.String() // Address able to remove asset from account
-	defaultFrozen := false
-	note := []byte(nil)
+	  assetName := "secuity@arc3"
+	  unitName := "SECURITY"
+	  assetURL := "https://path/to/my/security/asset/metadata.json"
+	  assetMetadataHash := base64("base64EncodedHashOfmetadata.json")
+	  totalIssuance := uint64(1000)        // Secuirty tokens are typically fungible
+	  decimals := uint32(2)                // Security tokens typically have some precision
+	  manager := account.Address.String()  // Address able to change mutable asset data
+	  reserve := account.Address.String()  // Address where non-minted assets will reside
+	  freeze := account.Address.String()   // Address able un/freze the asset
+	  clawback := account.Address.String() // Address able to remove asset from account
+	  defaultFrozen := false
+	  note := []byte(nil)
 
-    	txn, err := transaction.MakeAssetCreateTxn(
+      txn, err := transaction.MakeAssetCreateTxn(
 		creator, note, txParams, totalIssuance, decimals,
 		defaultFrozen, manager, reserve, freeze, clawback,
 		unitName, assetName, assetURL, assetMetadataHash)
     ```
+
 

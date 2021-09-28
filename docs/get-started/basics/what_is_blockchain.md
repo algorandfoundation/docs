@@ -35,7 +35,7 @@ Compare this to a traditional ledger where a change in a database is entrusted t
 
 <center>
 ![Traditional bid error](../../imgs/basics-traditional-error.png){: width='500px' }
-<figcaption style="font-size:12px">Example of how a centralized system could [unintentionally] disqualify user participation.</figcaption>
+<figcaption style="font-size:12px">Example of how a centralized system could unintentionally disqualify user participation.</figcaption>
 </center>
 
 
@@ -46,13 +46,13 @@ But how do blocks get added to the chain in the first place? Each node runs soft
 
 _Blockchain, at its core, is a technology that innovates on how we transfer value._ So, if your application exchanges value in some way, blockchain may be a candidate technology to bring your application to the next level. 
 
-But before jumping in, it is important to understand specifically how it might benefit your application so that you can design a system that targets those benefits and doesn’t add unnecessary complexity to other parts of your application. This usually maps to discussions about which components to put “on-chain” versus “off-chain”.
+But before jumping in, it is important to understand specifically how it might benefit your application so that you can design a system that targets those benefits and doesn’t add unnecessary complexity to other parts of your application. This usually maps to thinking about which components to put “on-chain” versus “off-chain”.
 
 Below are some of the characteristics of blockchains that make them attractive technologies for value-based applications. 
 
 
 <center>
-![Blockchain properties](../../imgs/blockchain-properties.png){: width='500px' }
+![Blockchain properties](../../imgs/blockchain-properties.png)
 </center>
 
 Not all of these may be important to your application or some may be more important than others, so a good first question to ask is: 
