@@ -14,9 +14,9 @@ The **Explore Features** section contains explanations and how-tos for all Algor
 
 [Structure](transactions) - A look at the underlying structure of the different types of transactions.
 
-[Authorization](transactions/signatures) - How to authorize transactions with Single Signatures, Multisignatures, and Logic Signatures.
+[Signatures](transactions/signatures) - How to authorize transactions with Single Signatures, Multisignatures, and Logic Signatures.
 
-[Offline Authorization](transactions/offline_transactions) - How to authorize transactions _without_ requiring an internet connection.
+[Offline signatures](transactions/offline_transactions) - How to authorize transactions _without_ requiring an internet connection.
 
 # Assets
 
