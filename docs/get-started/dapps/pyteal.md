@@ -10,7 +10,7 @@ Let’s get started.
 
 This guide is organized into two sections. The first section helps you launch the dApp and run a mock auction. The second section provides an overview of the different components of the auction application.
 
-All of the code for this guide is [located here](https://github.com/algorand/auction-demo). Clone the repo and follow along!
+All of the code for this guide is [located here](https://github.com/algorand/auction-demo){: target="_blank"}. Clone the repo and follow along!
 
 #Launching the application
 Algorand provides a docker instance for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have docker installed, then run this code to launch a sandbox node with a private network, i.e. your own local blockchain that runs the Algorand protocol.
@@ -31,11 +31,6 @@ cd sandbox
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23){target=_blank}   
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank} 
  
-After testing, shut down sandbox using the following command.
- 
-```bash
-./sandbox down
-```
  
 ##Clone the auction demo application
 The auction app requires Python 3.6 or higher. Clone the repository using the following commands.
@@ -55,16 +50,21 @@ python3 -m venv venv
 
 Activate `venv`.
 
-```bash
- # bash/zsh shell
-. venv/bin/activate
-# or fish shell
-. venv/bin/activate.fish 
-```
+
+=== "bash"
+    ```bash
+    . venv/bin/activate
+    ```
+
+=== "fish"
+    ```bash 
+    . venv/bin/activate.fish 
+    ```
 
 Now install all requirements.
 
 ```bash
+cd auction-demo
 pip3 install -r requirements.txt
 ```
 
@@ -101,7 +101,15 @@ pytest
 
 This will run through all the tests in the `operations_test.py` file and will take a little over six minutes to execute.
 
-Congrats! You’re already up and running. Now let’s dig into the code.
+Congrats! You’re already up and running. 
+
+Whenever you're finished testing, you can use the following command to shutdown sandbox.
+
+```bash
+./sandbox down
+```
+
+Now let’s dig into the code.
 
 # Application overview
 The auction demo application uses a smart contract to auction off a non-fungible token. The smart contract covers four basic methods that are used to achieve this functionality. 
@@ -601,6 +609,6 @@ def closeAuction(client: AlgodClient, appID: int, closer: Account):
 This method issues a delete application transaction using the `ApplicationDeleteTxn` function. 
 
 
-The full source for `operations.py` is available in the [auction repository](https://github.com/algorand/auction-demo/blob/main/auction/operations.py).
+The full source for `operations.py` is available in the [auction repository](https://github.com/algorand/auction-demo/blob/main/auction/operations.py){: target="_blank}.
 
 Congratulations! You successfully completed the guide to launch Alice’s auction dApp on Algorand. Now that you know the fundamentals. You can jump further into the details of [smart contract development](../../get-details/dapps/smart-contracts/apps/index.md) and [PyTeal](../../get-details/dapps/pyteal/index.md) or you can first continue onto the [tokenization section](../tokenization/nft.md) where you’ll learn how to create NFTs, FTs, and security tokens. 
