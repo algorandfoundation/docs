@@ -29,6 +29,25 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 === "Go"
     ```go
+    creator := account.Address.String()
+	assetName := "fungible@arc3"
+	unitName := "FUNGIBLE"
+	assetURL := "https://path/to/my/fungible/asset/metadata.json"
+	assetMetadataHash := metadataHash
+	totalIssuance := uint64(10000)  // Fungible tokens have totalIssuance greater than 1
+	decimals := uint32(2)           // Fungible tokens typically have decimals greater than 0
+	manager := account.Address.String() // OPTIONAL: FOR DEMO ONLY, USED TO DESTROY ASSET WITHIN THIS SCRIPT
+	reserve := ""
+	freeze := ""
+	clawback := ""
+	defaultFrozen := false
+	note := []byte(nil)
+
+    	txn, err := transaction.MakeAssetCreateTxn(
+		creator, note, txParams, totalIssuance, decimals,
+		defaultFrozen, manager, reserve, freeze, clawback,
+		unitName, assetName, assetURL, assetMetadataHash)
+
     ```
 
 Let’s imagine that Alice wants to create a loyalty point program for her buyers. She’ll represent these points as a fungible asset on Algorand and will call it AliceCoin. Owners of AliceCoin can use them to buy future artwork or trade it in for priority access to some of Alice’s art events. Let’s mint AliceCoin on TestNet. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) FT standard. 
@@ -43,6 +62,7 @@ Let’s imagine that Alice wants to create a loyalty point program for her buyer
     [Run code](https://replit.com/@Algorand/CreateFTJava/){: target="_blank"}
 
 === "Go"
+    [Run code](https://replit.com/@Algorand/CreateFTGo/){: target="_blank"}
 
 # Other fungible token resources 
 - [Search the developer blog](../../../blog/?query=fts){: target="blank"} for more FT-related guides, code prototypes, and explanations from the community.

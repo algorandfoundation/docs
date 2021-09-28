@@ -29,4 +29,25 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
     [![Replit](../../imgs/replit-512.png){: width='48px' } Run code](){: target="_blank"}
 
 === "Go"
+    ```go
+    creator := account.Address.String()
+	  assetName := "restricted@arc3"
+	  unitName := "RESTRICT"
+	  assetURL := "https://path/to/my/security/asset/metadata.json"
+	  assetMetadataHash := metadataHash
+	  totalIssuance := uint64(1000)        // Security tokens are typically fungible
+	  decimals := uint32(2)                // Security tokens typically have some precision
+	  manager := account.Address.String()  // Address able to change mutable asset data
+	  reserve := account.Address.String()  // Address where non-minted assets will reside
+	  freeze := account.Address.String()   // Address able un/freeze the asset
+	  clawback := account.Address.String() // Address able to remove asset from account
+	  defaultFrozen := false
+	  note := []byte(nil)
+
+      txn, err := transaction.MakeAssetCreateTxn(
+		creator, note, txParams, totalIssuance, decimals,
+		defaultFrozen, manager, reserve, freeze, clawback,
+		unitName, assetName, assetURL, assetMetadataHash)
+    ```
+
 
