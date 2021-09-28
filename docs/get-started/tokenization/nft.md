@@ -32,13 +32,13 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 	assetName := "nftasset@arc3"
 	unitName := "NFTUNIT"
 	assetURL := "https://path/to/my/nft/asset/metadata.json"
-	assetMetadataHash := base64("base64EncodedHashOfmetadata.json")
-	totalIssuance := uint64(1)      // NFTs have totalIssuance of exactly 1
-	decimals := uint32(0)           // NFTs have decimals of exactly 0
-	manager := account.Address.String()
-	reserve := account.Address.String()
-	freeze := account.Address.String()
-	clawback := account.Address.String()
+	assetMetadataHash := metadatHash
+	totalIssuance := uint64(1)          // NFTs have totalIssuance of exactly 1
+	decimals := uint32(0)               // NFTs have decimals of exactly 0
+	manager := ""
+	reserve := ""
+	freeze := ""
+	clawback := ""
 	defaultFrozen := false
 	note := []byte(nil)
 
@@ -61,7 +61,7 @@ Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation
     [Run code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/CreateNFTGo){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/CreateNFTGo#Main.go){: target="_blank"}
 
 Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](https://developer.algorand.org/ecosystem-projects/?tags=block-explorers) to find your newly created NFT on TestNet.
 
@@ -103,9 +103,9 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 	unitName := "FRACTION"
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	assetMetadataHash := metadataHash
-	totalIssuance := uint64(1)      // Fractionalized NFTs have totalIssuance of exactly 1
-	decimals := uint32(2)           // Fractionalized NFTs have decimals greater than 0
-	manager := account.Address.String() // OPTIONAL: FOR DEMO ONLY, USED TO DESTROY ASSET WITHIN THIS SCRIPT
+	totalIssuance := uint64(1)          // Fractionalized NFTs have totalIssuance of exactly 1
+	decimals := uint32(2)               // Fractionalized NFTs have decimals greater than 0
+	manager := ""
 	reserve := ""
 	freeze := ""
 	clawback := ""
