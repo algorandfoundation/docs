@@ -148,8 +148,6 @@ Maybe Alice should think about fractionalizing her artwork for her next auction!
  
 To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}. 
 
-The code snippet below demonstrates a fractional NFT where 10 tokens are created, each representing one-tenth (0.1) ownership of the singular digital artwork.
-
 === "JavaScript"
 	```javascript
     const from = alice.addr;

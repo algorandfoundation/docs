@@ -43,8 +43,8 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
     const reserveAddr = undefined;  
     const freezeAddr = undefined;
     const clawbackAddr = undefined;
-    const total = 100000;               // Fungible tokens have totalIssuance greater than 1
-    const decimals = 0;                 // Fungible tokens typically have decimals greater than 0
+    const total = 10000;               // Fungible tokens have totalIssuance greater than 1
+    const decimals = 2;                 // Fungible tokens typically have decimals greater than 0
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
         creator,
         total,
@@ -72,8 +72,8 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
         Address reserve = null;
         Address freeze = null;
         Address clawback = null;      
-        BigInteger assetTotal = BigInteger.valueOf(100000); // Fungible tokens have totalIssuance greater than 1
-        Integer decimals = 0;                               // Fungible tokens typically have decimals greater than 0
+        BigInteger assetTotal = BigInteger.valueOf(10000); // Fungible tokens have totalIssuance greater than 1
+        Integer decimals = 2;                               // Fungible tokens typically have decimals greater than 0
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
                 .sender(creator)
                 .assetTotal(assetTotal)
