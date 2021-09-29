@@ -5,9 +5,8 @@ This section is a quick start guide for interacting with Algorand network using 
 # Sandbox Install
 
 !!! Prerequisites
-
-- Docker Compose ([install guide](https://docs.docker.com/compose/install/))
-- Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
+    - Docker Compose ([install guide](https://docs.docker.com/compose/install/){:target="_blank"})
+    - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){:target="_blank"})
 
 Algorand provides a docker instance for setting up a node, which can be used to get started developing. To install and use this instance, follow these instructions.
 
@@ -17,21 +16,21 @@ cd sandbox
 ./sandbox up testnet
 ```
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=21){:target="\_blank"}
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=21){:target="_blank"}
 
-[More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
+[More Information](https://developer.algorand.org/articles/introducing-sandbox-20/){:target="_blank"}
 
-This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/).
+This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](../../get-details/algorand-networks/){:target="_blank"}.
 
 !!! Warning
-The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup)
+    The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](../../run-a-node/setup/install/#sync-node-network-using-fast-catchup){:target="_blank"}
 .
 
 # Install SDK For Runtime
 
 Algorand provides an SDK for Java. The instructions for installing the SDK are as follows. The Java SDK is available in the MVN repository and can be used in your Maven project by including the following dependency.
 
-Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation).
+Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}.
 
 ```java
 <dependency>
@@ -41,18 +40,18 @@ Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for
 </dependency>
 ```
 
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=98){\_blank}
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=98){:target="_blank"}
 
-[`More Information`](https://github.com/algorand/java-algorand-sdk#installation)
+[`More Information`](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}
 
 The GitHub repository contains additional documentation and examples.
 
-See the [Java SDK reference documentation](https://algorand.github.io/java-algorand-sdk/) for more information on packages and methods.
+See the [Java SDK reference documentation](https://algorand.github.io/java-algorand-sdk/){:target="_blank"} for more information on packages and methods.
 
 The SDK is installed and can now interact with the Sandbox created earlier.
 
 !!! Info
-Web based solutions require the AlgoSigner Chrome plugin or other web-based private key management software. For more information see [community wallets](https://developer.algorand.org/docs/community/#wallets).
+    Web based solutions require the AlgoSigner Chrome plugin or other web-based private key management software. For more information see [community wallets](../../../../ecosystem-projects/#wallets){:target="_blank"}.
 
 # Create an Account on Algorand
 
@@ -92,27 +91,27 @@ class GettingStarted{
 }
 ```
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=139){:target="\_blank"}
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=139){:target="_blank"}
 
-[More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
+[More Information](../../get-details/accounts/create/#standalone){:target="_blank"}
 
 !!! Warning
-Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
+    Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](../../../../ecosystem-projects/#wallets){:target="_blank"}. For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/){:target="_blank"}, click [here](https://github.com/algorand/algorand-wallet){:target="_blank"}.
 
 # Fund the Account
 
-The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/). The
+The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}. The
 
 !!! Info
-All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](https://developer.algorand.org/docs/features/accounts/#minimum-balance).
+    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](../../get-details/accounts/#minimum-balance){:target="_blank"}.
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=178){:target="\_blank"}
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=178){:target="_blank"}
 
 # Viewing the Transaction
 
-To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet) and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
+To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=209){:target="\_blank"}
+[Watch Video](https://youtu.be/_EEMXHrbMzU?t=209){:target="_blank"}
 
 # Build First Transaction
 
@@ -226,7 +225,7 @@ public void gettingStartedExample(Account myAccount) throws Exception {
 
 [`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=288){:target="\_blank"}
 !!! Info
-Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/).
+    Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/){: target="_blank"}.
 
 # Sign First Transaction
 
@@ -238,13 +237,13 @@ Before the transaction is considered valid, it must be signed by a private key. 
         System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
 ```
 
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=401){:target="\_blank"}
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=401){:target="_blank"}
 !!! Info
-Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures).
+    Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](../../get-details/transactions/signatures){:target="_blank"}.
 
 # Submit the Transaction
 
-The signed transaction can now be submitted to the network. `waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation)
+The signed transaction can now be submitted to the network. `waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
 
 ```java
         // Submit the transaction to the network
@@ -275,8 +274,8 @@ The signed transaction can now be submitted to the network. `waitForConfirmation
 }
 ```
 
-[`Run Code`](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java)
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=410){:target="\_blank"}
+[`Run Code`](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="_blank"}
+[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=410){:target="_blank"}
 
 # Complete Example
 
@@ -464,11 +463,11 @@ class GettingStarted{
  
 ```
 
-[Run Code](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="\_blank"}
+[Run Code](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="_blank"}
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU){:target="\_blank"}
+[Watch Video](https://youtu.be/_EEMXHrbMzU){:target="_blank"}
 !!! Warning
-In order for this transaction to be successful, the account must be funded.
+    In order for this transaction to be successful, the account must be funded.
 
 # Setting Up Your Editor/Framework
 
