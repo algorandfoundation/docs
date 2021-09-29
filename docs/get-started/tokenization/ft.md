@@ -34,18 +34,19 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 === "JavaScript"
     ```javascript
+    const creator = alice.addr;
     const defaultFrozen = false;    
-    const unitName = "ALICECOI"; 
-    const assetName = "Alice's Artwork Coins@arc3";
-    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+    const unitName = "ALICE"; 
+    const assetName = "Alice's Coins@arc3";
+    const url = "https://path/to/my/fungible/asset/metadata.json";
     const managerAddr = undefined; 
     const reserveAddr = undefined;  
     const freezeAddr = undefined;
     const clawbackAddr = undefined;
-    const decimals = 0; 
-    const total = 100000; 
+    const total = 100000;               // Fungible tokens have totalIssuance greater than 1
+    const decimals = 0;                 // Fungible tokens typically have decimals greater than 0
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-        from: alice.addr,
+        creator,
         total,
         decimals,
         assetName,
@@ -62,18 +63,19 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 === "Java"
     ```java
+        String creator = aliceAccount.getAddress().toString();
         boolean defaultFrozen = false;
-        String unitName = "ALICECOI";
-        String assetName = "Alice's Artwork Coins@arc3";
-        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        String unitName = "ALICE";
+        String assetName = "Alice's Coins@arc3";
+        String url = "https://path/to/my/fungible/asset/metadata.json";
         Address manager = null;  
         Address reserve = null;
         Address freeze = null;
         Address clawback = null;      
-        BigInteger assetTotal = BigInteger.valueOf(100000);
-        Integer decimals = 0;
+        BigInteger assetTotal = BigInteger.valueOf(100000); // Fungible tokens have totalIssuance greater than 1
+        Integer decimals = 0;                               // Fungible tokens typically have decimals greater than 0
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
-                .sender(aliceAccount.getAddress().toString())
+                .sender(creator)
                 .assetTotal(assetTotal)
                 .assetDecimals(decimals)
                 .assetUnitName(unitName)
@@ -124,7 +126,7 @@ Let’s imagine that Alice wants to create a loyalty point program for her buyer
     [Run code](https://replit.com/@Algorand/CreateFTJava/){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/CreateFTGo/){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/createFTGo#main.go){: target="_blank"}
 
 # Other fungible token resources 
 - [Search the developer blog](../../../../blog/?query=fts){: target="blank"} for more FT-related guides, code prototypes, and explanations from the community.
