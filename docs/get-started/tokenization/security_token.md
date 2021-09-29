@@ -17,16 +17,19 @@ Having centralized control mechanisms on an asset may sound contradictory to eve
 So how can we solve for this use case without encroaching on the promise of decentralization for the rest of the ecosystem? Algorand does this by offering several _optional-to-use_ configuration settings on Algorand Standard Assets (ASAs). Specifically, when you create an ASA, you can specify a manager, reserve, freeze, and clawback address, OR you can leave any or all of them blank, which the protocol will interpret as immutable from that point forward.  Embedding this configuration option within the broader decentralized and transparent Algorand ecosystem, offers users a choice to stick with assets that have no central control mechanisms, or to trust a specific issuer knowing exactly the type of control they have over the asset.
 
 # How to create security tokens
-Creating security tokens is the same as creating NFTs or FTs, with the extra configuration settings specified. Run the accompanying code in your favorite SDK to see an example of using the freeze and clawback capabilities.
+Creating security tokens is the same as creating NFTs or FTs, with the extra configuration settings specified. 
 
 === "Python"
-    [Run code](https://replit.com/@Algorand/CreateSecurityTokenPython#main.py)){: target="_blank"}
+    ```python
+    ```
 
 === "JavaScript"
-    [Run code](https://replit.com/@Algorand/ASASecurityTokensJS){: target="_blank"}
+    ```javascript
+    ```
 
 === "Java"
-    [Run code](){: target="_blank"}
+    ```java
+    ```
 
 === "Go"
     ```go
@@ -49,5 +52,19 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 		defaultFrozen, manager, reserve, freeze, clawback,
 		unitName, assetName, assetURL, assetMetadataHash)
     ```
+
+Run the accompanying code in your favorite SDK to see an example of using the freeze and clawback capabilities.
+
+=== "Python"
+    [Run code](https://replit.com/@Algorand/CreateSecurityTokenPython#main.py){: target="_blank"}
+
+=== "JavaScript"
+    [Run code](https://replit.com/@Algorand/ASASecurityTokensJS){: target="_blank"}
+
+=== "Java"
+    [Run code](https://replit.com/@Algorand/ASASecurityTokensJava#Main.java){: target="_blank"}
+
+=== "Go"
+    [Run code](){: target="_blank"}
 
 

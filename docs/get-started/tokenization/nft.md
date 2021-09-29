@@ -63,7 +63,7 @@ Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation
 === "Go"
     [Run code](https://replit.com/@Algorand/CreateNFTGo#Main.go){: target="_blank"}
 
-Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](https://developer.algorand.org/ecosystem-projects/?tags=block-explorers) to find your newly created NFT on TestNet.
+Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](../../../../ecosystem-projects/?tags=block-explorers){: target="_blank"} to find your newly created NFT on TestNet.
 
 <center>
 ![Alice creates an NFT](../../imgs/tokenization-alice-bob-nft.png){: style="width:500px"}
