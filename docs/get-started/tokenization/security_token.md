@@ -38,18 +38,19 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 
 === "JavaScript"
     ```javascript   
+    const creator = alice.addr;
     const defaultFrozen = false;
     const unitName = "RESTRICT";
     const assetName = "restricted@arc3";
-    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";   
-    const total = 1000; // Security tokens are typically fungible
-    const decimals = 2; // Security tokens typically have some precision     
-    const managerAddr = account.addr; // Address able to change mutable asset data
-    const reserveAddr = account.addr; // Address where non-minted assets will reside
-    const freezeAddr = account.addr;  // Address able un/freeze the asset 
+    const url = "https://path/to/my/fractional/asset/metadata.json";   
+    const total = 10000; // Security tokens are typically fungible
+    const decimals = 2;  // Security tokens typically have some precision     
+    const managerAddr = account.addr;  // Address able to change mutable asset data
+    const reserveAddr = account.addr;  // Address where non-minted assets will reside
+    const freezeAddr = account.addr;   // Address able un/freeze the asset 
     const clawbackAddr = account.addr; // Address able to remove asset from account
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-        from: alice.addr,
+        creator,
         total,
         decimals,
         assetName,
@@ -67,16 +68,17 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 
 === "Java"
     ```java
+        String creator = aliceAccount.getAddress().toString();
         boolean defaultFrozen = false;
         String unitName = "RESTRICT";
         String assetName = "restricted@arc3";
-        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
-        BigInteger assetTotal = BigInteger.valueOf(1000); // Security tokens are typically fungible
-        Integer decimals = 2; // Security tokens typically have some precision
-        Address manager = account.getAddress(); // Address able to change mutable asset data
-        Address reserve = account.getAddress(); // Address where non-minted assets will reside
-        Address freeze = account.getAddress(); // Address able un/freeze the asset
-        Address clawback = account.getAddress(); // Address able to remove asset from account
+        String url = "https://path/to/my/fractional/asset/metadata.json";
+        BigInteger assetTotal = BigInteger.valueOf(10000); // Security tokens are typically fungible
+        Integer decimals = 2;                              // Security tokens typically have some precision
+        Address manager = account.getAddress();            // Address able to change mutable asset data
+        Address reserve = account.getAddress();            // Address where non-minted assets will reside
+        Address freeze = account.getAddress();             // Address able un/freeze the asset
+        Address clawback = account.getAddress();           // Address able to remove asset from account
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
                 .sender(alice.getAddress().toString())
                 .assetTotal(assetTotal)
@@ -98,7 +100,7 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
     creator := account.Address.String()
 	  assetName := "restricted@arc3"
 	  unitName := "RESTRICT"
-	  assetURL := "https://path/to/my/security/asset/metadata.json"
+	  assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	  assetMetadataHash := metadataHash
 	  totalIssuance := uint64(10000)       // Security tokens are typically fungible
 	  decimals := uint32(2)                // Security tokens typically have some precision
@@ -127,6 +129,6 @@ Run the accompanying code in your favorite SDK to see an example of using the fr
     [Run code](https://replit.com/@Algorand/ASASecurityTokensJava#Main.java){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/ASASecurityTokensGo#main.go){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/createSecurityTokenGo#main.go){: target="_blank"}
 
 
