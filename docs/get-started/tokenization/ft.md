@@ -21,10 +21,59 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 === "JavaScript"
     ```javascript
+    const defaultFrozen = false;    
+    const unitName = "ALICECOI"; 
+    const assetName = "Alice's Artwork Coins@arc3";
+    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+    const managerAddr = undefined; 
+    const reserveAddr = undefined;  
+    const freezeAddr = undefined;
+    const clawbackAddr = undefined;
+    const decimals = 0; 
+    const total = 100000; 
+    const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
+        from: alice.addr,
+        total,
+        decimals,
+        assetName,
+        unitName,
+        assetURL: url,
+        assetMetadataHash: metadata,
+        defaultFrozen,
+        freeze: freezeAddr,
+        manager: managerAddr,
+        clawback: clawbackAddr,
+        reserve: reserveAddr,
+        suggestedParams: params,});	
     ```
 
 === "Java"
     ```java
+        boolean defaultFrozen = false;
+        String unitName = "ALICECOI";
+        String assetName = "Alice's Artwork Coins@arc3";
+        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        Address manager = null;  
+        Address reserve = null;
+        Address freeze = null;
+        Address clawback = null;      
+        BigInteger assetTotal = BigInteger.valueOf(100000);
+        Integer decimals = 0;
+        Transaction tx = Transaction.AssetCreateTransactionBuilder()
+                .sender(aliceAccount.getAddress().toString())
+                .assetTotal(assetTotal)
+                .assetDecimals(decimals)
+                .assetUnitName(unitName)
+                .assetName(assetName)
+                .url(url)
+                .metadataHash(assetMetadataHash)
+                .manager(manager)
+                .reserve(reserve)
+                .freeze(freeze)
+                .defaultFrozen(defaultFrozen)
+                .clawback(clawback)
+                .suggestedParams(params)
+                .build();		
     ```
 
 === "Go"
