@@ -17,6 +17,19 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 === "Python"
     ```python
+    txn = AssetConfigTxn(sender=accounts[1]['pk'],
+                         sp=params,
+                         total=10000,			// Fungible tokens have totalIssuance greater than 1
+                         default_frozen=False,
+                         unit_name="ALICE",
+                         asset_name="Alice's Coins@arc3",
+                         manager="",
+                         reserve="",
+                         freeze="",
+                         clawback="",
+                         url="https://path/to/my/fungible/asset/metadata.json",
+                         metadata_hash=json_metadata_hash,
+                         decimals=2)			// Fungible tokens typically have decimals greater than 0
     ```
 
 === "JavaScript"
@@ -79,13 +92,13 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "fungible@arc3"
-	unitName := "FUNGIBLE"
+	assetName := "Alice's Coins@arc3"
+	unitName := "ALICE"
 	assetURL := "https://path/to/my/fungible/asset/metadata.json"
 	assetMetadataHash := metadataHash
 	totalIssuance := uint64(10000)  // Fungible tokens have totalIssuance greater than 1
 	decimals := uint32(2)           // Fungible tokens typically have decimals greater than 0
-	manager := account.Address.String() // OPTIONAL: FOR DEMO ONLY, USED TO DESTROY ASSET WITHIN THIS SCRIPT
+	manager := ""
 	reserve := ""
 	freeze := ""
 	clawback := ""

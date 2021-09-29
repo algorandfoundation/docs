@@ -21,6 +21,19 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 
 === "Python"
     ```python
+    txn = AssetConfigTxn(sender=account['pk'],
+                        sp=params,
+                        total=10000,                // Security tokens are typically fungible
+                        default_frozen=False,
+                        unit_name="RESTRICT",
+                        asset_name="restricted@arc3",
+                        manager=account['pk'],      // Address able to change mutable asset data
+                        reserve=account['pk'],      // Address where non-minted assets will reside
+                        freeze=account['pk'],       // Address able un/freeze the asset
+                        clawback=account['pk'],     // Address able to remove asset from account
+                        url="https://path/to/my/fractional/asset/metadata.json",
+                        metadata_hash=json_metadata_hash,
+                        decimals=2)                 // Security tokens typically have some precision
     ```
 
 === "JavaScript"
@@ -87,7 +100,7 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 	  unitName := "RESTRICT"
 	  assetURL := "https://path/to/my/security/asset/metadata.json"
 	  assetMetadataHash := metadataHash
-	  totalIssuance := uint64(1000)        // Security tokens are typically fungible
+	  totalIssuance := uint64(10000)       // Security tokens are typically fungible
 	  decimals := uint32(2)                // Security tokens typically have some precision
 	  manager := account.Address.String()  // Address able to change mutable asset data
 	  reserve := account.Address.String()  // Address where non-minted assets will reside
@@ -108,12 +121,12 @@ Run the accompanying code in your favorite SDK to see an example of using the fr
     [Run code](https://replit.com/@Algorand/CreateSecurityTokenPython#main.py){: target="_blank"}
 
 === "JavaScript"
-    [Run code](https://replit.com/@Algorand/ASASecurityTokensJS){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASASecurityTokensJS#main.js){: target="_blank"}
 
 === "Java"
     [Run code](https://replit.com/@Algorand/ASASecurityTokensJava#Main.java){: target="_blank"}
 
 === "Go"
-    [Run code](){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASASecurityTokensGo#main.go){: target="_blank"}
 
 

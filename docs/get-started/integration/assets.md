@@ -25,16 +25,16 @@ To get you started quickly, we recommend checking out the SDK getting started pa
 And for ASAs, the following code will show you how opt-in, transfer, and close out ASA balances.
 
 === "Python"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationPython){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASAIntegrationPython#main.py){: target="_blank"}
 
 === "JavaScript"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationsJS){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASAIntegrationsJS#main.js){: target="_blank"}
 
 === "Java"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationsJava){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASAIntegrationsJava#Main.go){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationsGo){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASAIntegrationsGo#main.go){: target="_blank"}
 
 Continue on for further explanations of these features and links to more details.
 

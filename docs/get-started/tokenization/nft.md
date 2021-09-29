@@ -16,6 +16,19 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 
 === "Python"
     ```python
+    txn = AssetConfigTxn(sender=accounts[1]['pk'],
+                         sp=params,
+                         total=1,			// NFTs have totalIssuance of exactly 1
+                         default_frozen=False,
+                         unit_name="ALICEART",
+                         asset_name="Alice's Artwork@arc3",
+                         manager="",
+                         reserve="",
+                         freeze="",
+                         clawback="",
+                         url="https://path/to/my/nft/asset/metadata.json",
+                         metadata_hash=json_metadata_hash,
+                         decimals=0)		// NFTs have decimals of exactly 0
     ```
 
 === "JavaScript"
@@ -78,8 +91,8 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "nftasset@arc3"
-	unitName := "NFTUNIT"
+	assetName := "Alice's Artwork@arc3"
+	unitName := "ALICEART"
 	assetURL := "https://path/to/my/nft/asset/metadata.json"
 	assetMetadataHash := metadatHash
 	totalIssuance := uint64(1)          // NFTs have totalIssuance of exactly 1
@@ -134,7 +147,7 @@ Maybe Alice should think about fractionalizing her artwork for her next auction!
 To create a fractional NFT, keep the total value of the ASA at 1 and use the decimal field to split it into the desired number of shares (must be powers of 10). The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}
 
 === "JavaScript"
-	```
+	```javascript
     const defaultFrozen = false;    
     const unitName = "FRACTION"; 
     const assetName = "fractional@arc3";
@@ -162,11 +175,24 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
     ```
 
 === "Python"
-    ```
+    ```python
+    txn = AssetConfigTxn(sender=accounts[1]['pk'],
+                         sp=params,
+                         total=10000,       // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+                         default_frozen=False,
+                         unit_name="ALICEART",
+                         asset_name="Alice's Artwork@arc3",
+                         manager="",
+                         reserve="",
+                         freeze="",
+                         clawback="",
+                         url="https://path/to/my/nft/asset/metadata.json",
+                         metadata_hash=json_metadata_hash,
+                         decimals=2)		// Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units
     ```
 
 === "Java"
-    ```
+    ```java
 	    boolean defaultFrozen = false;
         String unitName = "ALICEART";
         String assetName = "Alice's Artwork@arc3";
@@ -197,12 +223,12 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "fractional@arc3"
-	unitName := "FRACTION"
+	assetName := "Alice's Artwork@arc3"
+	unitName := "ALICEART"
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	assetMetadataHash := metadataHash
-	totalIssuance := uint64(1)          // Fractionalized NFTs have totalIssuance of exactly 1
-	decimals := uint32(2)               // Fractionalized NFTs have decimals greater than 0
+	totalIssuance := uint64(10000)      // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+	decimals := uint32(2)               // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units
 	manager := ""
 	reserve := ""
 	freeze := ""
