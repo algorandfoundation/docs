@@ -17,6 +17,19 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 === "Python"
     ```python
+    txn = AssetConfigTxn(sender=accounts[1]['pk'],
+                         sp=params,
+                         total=10000,			// Fungible tokens have totalIssuance greater than 1
+                         default_frozen=False,
+                         unit_name="ALICE",
+                         asset_name="Alice's Coins@arc3",
+                         manager="",
+                         reserve="",
+                         freeze="",
+                         clawback="",
+                         url="https://path/to/my/fungible/asset/metadata.json",
+                         metadata_hash=json_metadata_hash,
+                         decimals=2)			// Fungible tokens typically have decimals greater than 0
     ```
 
 === "JavaScript"
