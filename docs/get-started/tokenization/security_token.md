@@ -59,12 +59,12 @@ Run the accompanying code in your favorite SDK to see an example of using the fr
     [Run code](https://replit.com/@Algorand/CreateSecurityTokenPython#main.py){: target="_blank"}
 
 === "JavaScript"
-    [Run code](https://replit.com/@Algorand/ASASecurityTokensJS){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASASecurityTokensJS#main.js){: target="_blank"}
 
 === "Java"
     [Run code](https://replit.com/@Algorand/ASASecurityTokensJava#Main.java){: target="_blank"}
 
 === "Go"
-    [Run code](){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASASecurityTokensGo#main.go){: target="_blank"}
 
 
