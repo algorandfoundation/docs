@@ -1,7 +1,7 @@
 title: PyTeal
 
 [PyTeal](https://github.com/algorand/pyteal) is a python language binding for Algorand Smart Contracts (ASC) that abstracts away the complexities of writing smart contracts. PyTeal allows smart contracts and smart signatures to be written in Python and then compiled to TEAL. Note that the TEAL code is not automatically compiled to byte code, but that can be done with any of the SDKs, including Python. The TEAL code can also be compiled using the `goal` command-line tool or submitted to the blockchain to allow the node to compile it.
-Complete installation instructions and developer guides are available in the [PyTeal documentation]((https://pyteal.readthedocs.io/en/latest/)). 
+Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/). 
 
 To quickly get PyTeal installed and running, see the [Getting started tutorial](../../../get-started/dapps/pyteal.md) for PyTeal.
 
