@@ -36,7 +36,7 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 	assetMetadataHash := metadataHash
 	totalIssuance := uint64(10000)  // Fungible tokens have totalIssuance greater than 1
 	decimals := uint32(2)           // Fungible tokens typically have decimals greater than 0
-	manager := account.Address.String() // OPTIONAL: FOR DEMO ONLY, USED TO DESTROY ASSET WITHIN THIS SCRIPT
+	manager := ""
 	reserve := ""
 	freeze := ""
 	clawback := ""
