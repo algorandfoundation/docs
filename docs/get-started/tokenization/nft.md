@@ -115,7 +115,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
                          clawback="",
                          url="https://path/to/my/nft/asset/metadata.json",
                          metadata_hash=json_metadata_hash,
-                         decimals=0)		// Fractionalized NFTs have decimals greater than 0
+                         decimals=2)		// Fractionalized NFTs have decimals greater than 0
     ```
 
 === "Java"
