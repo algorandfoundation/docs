@@ -43,8 +43,8 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "fungible@arc3"
-	unitName := "FUNGIBLE"
+	assetName := "Alice's Coins@arc3"
+	unitName := "ALICE"
 	assetURL := "https://path/to/my/fungible/asset/metadata.json"
 	assetMetadataHash := metadataHash
 	totalIssuance := uint64(10000)  // Fungible tokens have totalIssuance greater than 1

@@ -25,8 +25,8 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
                         sp=params,
                         total=10000,                // Security tokens are typically fungible
                         default_frozen=False,
-                        unit_name="ALICEOI",
-                        asset_name="Alice's Artwork Coins@arc3",
+                        unit_name="RESTRICT",
+                        asset_name="restricted@arc3",
                         manager=account['pk'],      // Address able to change mutable asset data
                         reserve=account['pk'],      // Address where non-minted assets will reside
                         freeze=account['pk'],       // Address able un/freeze the asset
