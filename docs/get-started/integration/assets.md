@@ -34,7 +34,7 @@ And for ASAs, the following code will show you how opt-in, transfer, and close o
     [Run code](https://replit.com/@Algorand/ASAIntegrationsJava#Main.go){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationsGo#main.go){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/ASAIntegrationGo#main.go){: target="_blank"}
 
 Continue on for further explanations of these features and links to more details.
 

@@ -33,18 +33,19 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 
 === "JavaScript"
     ```javascript 
+    const creator = alice.addr;
     const defaultFrozen = false;    
     const unitName = "ALICEART"; 
     const assetName = "Alice's Artwork@arc3";
-    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+    const url = "https://path/to/my/nft/asset/metadata.json";
     const managerAddr = undefined; 
     const reserveAddr = undefined;  
     const freezeAddr = undefined;
     const clawbackAddr = undefined;
-    const decimals = 0; 
-    const total = 1; 
+    const total = 1;                // NFTs have totalIssuance of exactly 1
+    const decimals = 0;             // NFTs have decimals of exactly 0
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-        from: alice.addr,
+        creator,
         total,
         decimals,
         assetName,
@@ -61,18 +62,19 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 
 === "Java"
     ```java
+        String creator = aliceAccount.getAddress().toString()
         boolean defaultFrozen = false;
         String unitName = "ALICEART";
         String assetName = "Alice's Artwork@arc3";
-        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        String url = "https://path/to/my/nft/asset/metadata.json";
         Address manager = null;  
         Address reserve = null;
         Address freeze = null;
         Address clawback = null;      
-        BigInteger assetTotal = BigInteger.valueOf(1);
-        Integer decimals = 0;
+        BigInteger assetTotal = BigInteger.valueOf(1);  // NFTs have totalIssuance of exactly 1
+        Integer decimals = 0;                           // NFTs have decimals of exactly 0
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
-                .sender(aliceAccount.getAddress().toString())
+                .sender(creator)
                 .assetTotal(assetTotal)
                 .assetDecimals(decimals)
                 .assetUnitName(unitName)
@@ -104,7 +106,7 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 	defaultFrozen := false
 	note := []byte(nil)
 
-    	txn, err := transaction.MakeAssetCreateTxn(
+    txn, err := transaction.MakeAssetCreateTxn(
 		creator, note, txParams, totalIssuance, decimals,
 		defaultFrozen, manager, reserve, freeze, clawback,
 		unitName, assetName, assetURL, assetMetadataHash)
@@ -123,7 +125,7 @@ Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation
     [Run code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/CreateNFTGo#Main.go){: target="_blank"}
+    [Run code](https://replit.com/@Algorand/createNFTGo#main.go){: target="_blank"}
 
 Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](../../../../ecosystem-projects/?tags=block-explorers){: target="_blank"} to find your newly created NFT on TestNet.
 
@@ -144,22 +146,23 @@ A fractional NFT is a unique asset that has been divided into multiple, equal sh
 
 Maybe Alice should think about fractionalizing her artwork for her next auction!
  
-To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}
+To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}. 
 
 === "JavaScript"
 	```javascript
+    const from = alice.addr;
     const defaultFrozen = false;    
     const unitName = "FRACTION"; 
     const assetName = "fractional@arc3";
-    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+    const url = "https://path/to/my/nft/asset/metadata.json";
     const managerAddr = undefined; 
     const reserveAddr = undefined;  
     const freezeAddr = undefined;
     const clawbackAddr = undefined;
-    const decimals = 1;     // Decimals MUST be equal to the logarithm in base 10 of total number of units: 10
-    const total = 10;       // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...(total) * .1(each) = 1.0 
+    const total = 10;        // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...(total) * .1(each) = 1.0 
+    const decimals = 1;      // Decimals MUST be equal to the logarithm in base 10 of total number of units: 10
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-        from: alice.addr,
+        creator,
         total,
         decimals,
         assetName,
@@ -186,25 +189,26 @@ To create a fractional NFT, the total units must be a power of 10, greater than 
                          reserve="",
                          freeze="",
                          clawback="",
-                         url="https://path/to/my/nft/asset/metadata.json",
+                         url="https://path/to/my/fractional/asset/metadata.json",
                          metadata_hash=json_metadata_hash,
                          decimals=1)		// Decimals MUST be equal to the logarithm in base 10 of total number of units
     ```
 
 === "Java"
     ```java
-	    boolean defaultFrozen = false;
+	    String creator = aliceAccount.getAddress().toString()
+        boolean defaultFrozen = false;
         String unitName = "ALICEART";
         String assetName = "Alice's Artwork@arc3";
-        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        String url = "https://path/to/my/fractional/asset/metadata.json";
         Address manager = null;  
         Address reserve = null;
         Address freeze = null;
         Address clawback = null;      
         BigInteger assetTotal = BigInteger.valueOf(10); // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...
-        Integer decimals = 1; // Decimals MUST be equal to the logarithm in base 10 of total number of units
+        Integer decimals = 1;                           // Decimals MUST be equal to the logarithm in base 10 of total number of units
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
-                .sender(aliceAccount.getAddress().toString())
+                .sender(creator)
                 .assetTotal(assetTotal)
                 .assetDecimals(decimals)
                 .assetUnitName(unitName)
@@ -228,7 +232,7 @@ To create a fractional NFT, the total units must be a power of 10, greater than 
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	assetMetadataHash := metadataHash
 	totalIssuance := uint64(10)      // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...
-	decimals := uint32(1)               // Decimals MUST be equal to the logarithm in base 10 of total number of units
+	decimals := uint32(1)            // Decimals MUST be equal to the logarithm in base 10 of total number of units
 	manager := ""
 	reserve := ""
 	freeze := ""
@@ -236,7 +240,7 @@ To create a fractional NFT, the total units must be a power of 10, greater than 
 	defaultFrozen := false
 	note := []byte(nil)
 
-    	txn, err := transaction.MakeAssetCreateTxn(
+    txn, err := transaction.MakeAssetCreateTxn(
 		creator, note, txParams, totalIssuance, decimals,
 		defaultFrozen, manager, reserve, freeze, clawback,
 		unitName, assetName, assetURL, assetMetadataHash)
