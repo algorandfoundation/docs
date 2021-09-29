@@ -21,6 +21,19 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 
 === "Python"
     ```python
+    txn = AssetConfigTxn(sender=account['pk'],
+                        sp=params,
+                        total=10000,                // Security tokens are typically fungible
+                        default_frozen=False,
+                        unit_name="ALICEOI",
+                        asset_name="Alice's Artwork Coins@arc3",
+                        manager=account['pk'],      // Address able to change mutable asset data
+                        reserve=account['pk'],      // Address where non-minted assets will reside
+                        freeze=account['pk'],       // Address able un/freeze the asset
+                        clawback=account['pk'],     // Address able to remove asset from account
+                        url="https://path/to/my/fractional/asset/metadata.json",
+                        metadata_hash=json_metadata_hash,
+                        decimals=2)                 // Security tokens typically have some precision
     ```
 
 === "JavaScript"
@@ -38,7 +51,7 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
 	  unitName := "RESTRICT"
 	  assetURL := "https://path/to/my/security/asset/metadata.json"
 	  assetMetadataHash := metadataHash
-	  totalIssuance := uint64(1000)        // Security tokens are typically fungible
+	  totalIssuance := uint64(10000)       // Security tokens are typically fungible
 	  decimals := uint32(2)                // Security tokens typically have some precision
 	  manager := account.Address.String()  // Address able to change mutable asset data
 	  reserve := account.Address.String()  // Address where non-minted assets will reside

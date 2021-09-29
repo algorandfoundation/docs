@@ -16,6 +16,19 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 
 === "Python"
     ```python
+    txn = AssetConfigTxn(sender=accounts[1]['pk'],
+                         sp=params,
+                         total=1,			// NFTs have totalIssuance of exactly 1
+                         default_frozen=False,
+                         unit_name="ALICEART",
+                         asset_name="Alice's Artwork Coins@arc3",
+                         manager="",
+                         reserve="",
+                         freeze="",
+                         clawback="",
+                         url="https://path/to/my/nft/asset/metadata.json",
+                         metadata_hash=json_metadata_hash,
+                         decimals=0)		// NFTs have decimals of exactly 0
     ```
 
 === "JavaScript"
@@ -90,6 +103,19 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 
 === "Python"
     ```
+    txn = AssetConfigTxn(sender=accounts[1]['pk'],
+                         sp=params,
+                         total=1,			// Fractionalized NFTs have totalIssuance of exactly 1
+                         default_frozen=False,
+                         unit_name="ALICEART",
+                         asset_name="Alice's Artwork Coins@arc3",
+                         manager="",
+                         reserve="",
+                         freeze="",
+                         clawback="",
+                         url="https://path/to/my/nft/asset/metadata.json",
+                         metadata_hash=json_metadata_hash,
+                         decimals=0)		// Fractionalized NFTs have decimals greater than 0
     ```
 
 === "Java"
