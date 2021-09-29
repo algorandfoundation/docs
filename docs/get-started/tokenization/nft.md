@@ -144,7 +144,7 @@ A fractional NFT is a unique asset that has been divided into multiple, equal sh
 
 Maybe Alice should think about fractionalizing her artwork for her next auction!
  
-To create a fractional NFT, keep the total value of the ASA at 1 and use the decimal field to split it into the desired number of shares (must be powers of 10). The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}
+To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}
 
 === "JavaScript"
 	```javascript
@@ -156,8 +156,8 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
     const reserveAddr = undefined;  
     const freezeAddr = undefined;
     const clawbackAddr = undefined;
-    const decimals = 1;     // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
-    const total = 10;       // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units: 10(total) * .1(each) = 1.0 
+    const decimals = 1;     // Decimals MUST be equal to the logarithm in base 10 of total number of units: 10
+    const total = 10;       // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...(total) * .1(each) = 1.0 
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
         from: alice.addr,
         total,
@@ -178,7 +178,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
     ```python
     txn = AssetConfigTxn(sender=accounts[1]['pk'],
                          sp=params,
-                         total=10000,       // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+                         total=10,       // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...
                          default_frozen=False,
                          unit_name="ALICEART",
                          asset_name="Alice's Artwork@arc3",
@@ -188,7 +188,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
                          clawback="",
                          url="https://path/to/my/nft/asset/metadata.json",
                          metadata_hash=json_metadata_hash,
-                         decimals=2)		// Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units
+                         decimals=1)		// Decimals MUST be equal to the logarithm in base 10 of total number of units
     ```
 
 === "Java"
@@ -201,8 +201,8 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
         Address reserve = null;
         Address freeze = null;
         Address clawback = null;      
-        BigInteger assetTotal = BigInteger.valueOf(10); // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
-        Integer decimals = 1; // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units : 10(total) * .1(each) = 1.0 
+        BigInteger assetTotal = BigInteger.valueOf(10); // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+        Integer decimals = 1; // Decimals MUST be equal to the logarithm in base 10 of total number of units
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
                 .sender(aliceAccount.getAddress().toString())
                 .assetTotal(assetTotal)
@@ -227,8 +227,8 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 	unitName := "ALICEART"
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	assetMetadataHash := metadataHash
-	totalIssuance := uint64(10000)      // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
-	decimals := uint32(2)               // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units
+	totalIssuance := uint64(10)      // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+	decimals := uint32(1)               // Decimals MUST be equal to the logarithm in base 10 of total number of units
 	manager := ""
 	reserve := ""
 	freeze := ""
