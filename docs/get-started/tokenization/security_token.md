@@ -37,11 +37,60 @@ Creating security tokens is the same as creating NFTs or FTs, with the extra con
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript   
+    const defaultFrozen = false;
+    const unitName = "RESTRICT";
+    const assetName = "restricted@arc3";
+    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";   
+    const total = 1000; // Security tokens are typically fungible
+    const decimals = 2; // Security tokens typically have some precision     
+    const managerAddr = account.addr; // Address able to change mutable asset data
+    const reserveAddr = account.addr; // Address where non-minted assets will reside
+    const freezeAddr = account.addr;  // Address able un/freeze the asset 
+    const clawbackAddr = account.addr; // Address able to remove asset from account
+    const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
+        from: alice.addr,
+        total,
+        decimals,
+        assetName,
+        unitName,
+        assetURL: url,
+        assetMetadataHash: metadata,
+        defaultFrozen,
+        freeze: freezeAddr,
+        manager: managerAddr,
+        clawback: clawbackAddr,
+        reserve: reserveAddr,
+        suggestedParams: params,
+    });
     ```
 
 === "Java"
     ```java
+        boolean defaultFrozen = false;
+        String unitName = "RESTRICT";
+        String assetName = "restricted@arc3";
+        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        BigInteger assetTotal = BigInteger.valueOf(1000); // Security tokens are typically fungible
+        Integer decimals = 2; // Security tokens typically have some precision
+        Address manager = account.getAddress(); // Address able to change mutable asset data
+        Address reserve = account.getAddress(); // Address where non-minted assets will reside
+        Address freeze = account.getAddress(); // Address able un/freeze the asset
+        Address clawback = account.getAddress(); // Address able to remove asset from account
+        Transaction tx = Transaction.AssetCreateTransactionBuilder()
+                .sender(alice.getAddress().toString())
+                .assetTotal(assetTotal)
+                .assetDecimals(decimals)
+                .assetUnitName(unitName)
+                .assetName(assetName)
+                .url(url)
+                .metadataHash(assetMetadataHash)
+                .manager(manager)
+                .reserve(reserve)
+                .freeze(freeze)
+                .defaultFrozen(defaultFrozen)
+                .clawback(clawback)
+                .suggestedParams(params).build();
     ```
 
 === "Go"

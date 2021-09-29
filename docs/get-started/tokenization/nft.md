@@ -32,11 +32,60 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
     ```
 
 === "JavaScript"
-    ```javascript
+    ```javascript 
+    const defaultFrozen = false;    
+    const unitName = "ALICEART"; 
+    const assetName = "Alice's Artwork@arc3";
+    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+    const managerAddr = undefined; 
+    const reserveAddr = undefined;  
+    const freezeAddr = undefined;
+    const clawbackAddr = undefined;
+    const decimals = 0; 
+    const total = 1; 
+    const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
+        from: alice.addr,
+        total,
+        decimals,
+        assetName,
+        unitName,
+        assetURL: url,
+        assetMetadataHash: metadata,
+        defaultFrozen,
+        freeze: freezeAddr,
+        manager: managerAddr,
+        clawback: clawbackAddr,
+        reserve: reserveAddr,
+        suggestedParams: params,});
     ```
 
 === "Java"
     ```java
+        boolean defaultFrozen = false;
+        String unitName = "ALICEART";
+        String assetName = "Alice's Artwork@arc3";
+        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        Address manager = null;  
+        Address reserve = null;
+        Address freeze = null;
+        Address clawback = null;      
+        BigInteger assetTotal = BigInteger.valueOf(1);
+        Integer decimals = 0;
+        Transaction tx = Transaction.AssetCreateTransactionBuilder()
+                .sender(aliceAccount.getAddress().toString())
+                .assetTotal(assetTotal)
+                .assetDecimals(decimals)
+                .assetUnitName(unitName)
+                .assetName(assetName)
+                .url(url)
+                .metadataHash(assetMetadataHash)
+                .manager(manager)
+                .reserve(reserve)
+                .freeze(freeze)
+                .defaultFrozen(defaultFrozen)
+                .clawback(clawback)
+                .suggestedParams(params)
+                .build();	
     ```
 
 === "Go"
@@ -98,7 +147,31 @@ Maybe Alice should think about fractionalizing her artwork for her next auction!
 To create a fractional NFT, keep the total value of the ASA at 1 and use the decimal field to split it into the desired number of shares (must be powers of 10). The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}
 
 === "JavaScript"
-    ```javascript
+	```javascript
+    const defaultFrozen = false;    
+    const unitName = "FRACTION"; 
+    const assetName = "fractional@arc3";
+    const url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+    const managerAddr = undefined; 
+    const reserveAddr = undefined;  
+    const freezeAddr = undefined;
+    const clawbackAddr = undefined;
+    const decimals = 1;     // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+    const total = 10;       // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units: 10(total) * .1(each) = 1.0 
+    const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
+        from: alice.addr,
+        total,
+        decimals,
+        assetName,
+        unitName,
+        assetURL: url,
+        assetMetadataHash: metadata,
+        defaultFrozen,
+        freeze: freezeAddr,
+        manager: managerAddr,
+        clawback: clawbackAddr,
+        reserve: reserveAddr,
+        suggestedParams: params,});    
     ```
 
 === "Python"
@@ -120,6 +193,31 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 
 === "Java"
     ```java
+	    boolean defaultFrozen = false;
+        String unitName = "ALICEART";
+        String assetName = "Alice's Artwork@arc3";
+        String url = "https://s3.amazonaws.com/your-bucket/metadata.json";
+        Address manager = null;  
+        Address reserve = null;
+        Address freeze = null;
+        Address clawback = null;      
+        BigInteger assetTotal = BigInteger.valueOf(10); // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+        Integer decimals = 1; // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units : 10(total) * .1(each) = 1.0 
+        Transaction tx = Transaction.AssetCreateTransactionBuilder()
+                .sender(aliceAccount.getAddress().toString())
+                .assetTotal(assetTotal)
+                .assetDecimals(decimals)
+                .assetUnitName(unitName)
+                .assetName(assetName)
+                .url(url)
+                .metadataHash(assetMetadataHash)
+                .manager(manager)
+                .reserve(reserve)
+                .freeze(freeze)
+                .defaultFrozen(defaultFrozen)
+                .clawback(clawback)
+                .suggestedParams(params)
+                .build();	
     ```
 
 === "Go"
