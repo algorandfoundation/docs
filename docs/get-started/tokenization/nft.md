@@ -105,7 +105,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
     ```python
     txn = AssetConfigTxn(sender=accounts[1]['pk'],
                          sp=params,
-                         total=1,			// Fractionalized NFTs have totalIssuance of exactly 1
+                         total=10000,       // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
                          default_frozen=False,
                          unit_name="ALICEART",
                          asset_name="Alice's Artwork Coins@arc3",
@@ -115,7 +115,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
                          clawback="",
                          url="https://path/to/my/nft/asset/metadata.json",
                          metadata_hash=json_metadata_hash,
-                         decimals=2)		// Fractionalized NFTs have decimals greater than 0
+                         decimals=2)		// Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units
     ```
 
 === "Java"
@@ -129,8 +129,8 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 	unitName := "FRACTION"
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	assetMetadataHash := metadataHash
-	totalIssuance := uint64(1)          // Fractionalized NFTs have totalIssuance of exactly 1
-	decimals := uint32(2)               // Fractionalized NFTs have decimals greater than 0
+	totalIssuance := uint64(10000)      // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
+	decimals := uint32(2)               // Fractionalized NFTs MUST be equal to the logarithm in base 10 of total number of units
 	manager := ""
 	reserve := ""
 	freeze := ""
