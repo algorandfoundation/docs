@@ -21,7 +21,7 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
                          total=1,			// NFTs have totalIssuance of exactly 1
                          default_frozen=False,
                          unit_name="ALICEART",
-                         asset_name="Alice's Artwork Coins@arc3",
+                         asset_name="Alice's Artwork@arc3",
                          manager="",
                          reserve="",
                          freeze="",
@@ -42,8 +42,8 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "nftasset@arc3"
-	unitName := "NFTUNIT"
+	assetName := "Alice's Artwork@arc3"
+	unitName := "ALICEART"
 	assetURL := "https://path/to/my/nft/asset/metadata.json"
 	assetMetadataHash := metadatHash
 	totalIssuance := uint64(1)          // NFTs have totalIssuance of exactly 1
@@ -108,7 +108,7 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
                          total=10000,       // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
                          default_frozen=False,
                          unit_name="ALICEART",
-                         asset_name="Alice's Artwork Coins@arc3",
+                         asset_name="Alice's Artwork@arc3",
                          manager="",
                          reserve="",
                          freeze="",
@@ -125,8 +125,8 @@ To create a fractional NFT, keep the total value of the ASA at 1 and use the dec
 === "Go"
     ```go
     creator := account.Address.String()
-	assetName := "fractional@arc3"
-	unitName := "FRACTION"
+	assetName := "Alice's Artwork@arc3"
+	unitName := "ALICEART"
 	assetURL := "https://path/to/my/fractional/asset/metadata.json"
 	assetMetadataHash := metadataHash
 	totalIssuance := uint64(10000)      // Fractionalized NFTs MUST be a power of 10 larger than 1: 10, 100, 1000, ...
