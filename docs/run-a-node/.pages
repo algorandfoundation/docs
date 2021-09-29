@@ -1,5 +1,6 @@
-title: Run a Node
+title: Run a node
 arrange:
   - setup
   - operations
   - participate
+  - reference

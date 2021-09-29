@@ -1,0 +1,8 @@
+title: Smart contracts and signatures
+
+arrange:
+  - index.md
+  - apps
+  - smartsigs
+  - frontend
+  - test-and-deploy
