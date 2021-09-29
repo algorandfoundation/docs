@@ -20,7 +20,7 @@ NFTs are created using Algorand Standard Assets (ASAs), which are built into the
 
 === "JavaScript"
     ```javascript
-	//test
+	  test
     ```
 
 === "Java"
