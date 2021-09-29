@@ -30,7 +30,7 @@ The node can also be set up to connect to multiple relays using a `;` separated 
 ```
 
 !!! warning
-	Using the above process will prevent the node from connecting to any of the Algorand networks. See the [Phonebook](artifacts#phonebookjson) documentation for more information on how nodes connect to relays.
+	Using the above process will prevent the node from connecting to any of the Algorand networks. See the [Phonebook](../artifacts#phonebookjson) documentation for more information on how nodes connect to relays.
 
 
 

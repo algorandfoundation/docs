@@ -2,7 +2,7 @@ title: Algorand node types
 
 The Algorand network is comprised of two distinct types of nodes, **relay nodes**, and **non-relay nodes**. Relay nodes are primarily used for communication routing to a set of connected non-relay nodes. Relay nodes communicate with other relay nodes and route blocks to all connected non-relay nodes. Non-relay nodes only connect to relay nodes and can also participate in consensus. Non-relay nodes may connect to several relay nodes but never connect to another non-relay node.
 
-In addition to the two node types, nodes can be configured to be [**archival**](#archival-mode) and [**indexed**](#indexer-mode). Archival nodes store the entire ledger and if the indexer is turned on, the search range via the API REST endpoint is increased. These additional configuration options are described below.
+In addition to the two node types, nodes can be configured to be [**archival**](#archival-mode) and [**indexed**](../indexer/). Archival nodes store the entire ledger and if the indexer is turned on, the search range via the API REST endpoint is increased. These additional configuration options are described below.
 
 Both node types use the same install procedure. To setup a node for a specific type, requires a few configuration parameter changes as described below. The default install will set the node up as a non-relay node in non-archival and non-indexed mode.
 
