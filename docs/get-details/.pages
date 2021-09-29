@@ -1,0 +1,14 @@
+title: Get details
+
+arrange:
+    - index.md
+    - accounts
+    - transactions
+    - asa.md
+    - atomic_transfers.md
+    - dapps
+    - indexer.md
+    - walletconnect
+    - parameter_tables.md
+    - algorand-networks
+    - algorand_consensus.md

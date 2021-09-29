@@ -1,9 +1,10 @@
 arrange:
   - index.md
-  - build-apps
-  - features
+  - get-started
+  - get-details
+  - sdks
+  - rest-apis
+  - clis
   - run-a-node
-  - reference
-  - algorand_consensus.md
-  - community.md
   - about.md
+  - archive

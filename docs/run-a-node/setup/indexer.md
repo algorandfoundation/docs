@@ -1,13 +1,13 @@
-title: Install the Indexer 🆕
+title: Install the indexer
 
-The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgeSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../reference/rest-apis/indexer.md) for searching the database and another Indexer to be responsible for loading the ledger data.
+The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgeSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../../rest-apis/indexer) for searching the database and another Indexer to be responsible for loading the ledger data.
 
 
 The V2 Indexer is network agnostic, meaning it can point at BetaNet, TestNet, or MainNet. 
 
 The source code for the Indexer is provided on [github](https://github.com/algorand/indexer).
 
-For details on Indexer usage, read the [Searching the Blockchain](../../features/indexer.md) feature guide and the [REST API Indexer reference](../../reference/rest-apis/indexer.md). See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
+For details on Indexer usage, read the [Searching the Blockchain](../../../get-details/indexer) feature guide and the [REST API Indexer reference](../../../rest-apis/indexer). See [Indexer README](https://github.com/algorand/indexer) for more details on running the Indexer.
 
 
 # Indexer V2
@@ -99,16 +99,16 @@ The two Additional REST calls are:
 /v1/transaction/{txid}
 ```
 This call allows quickly locating a transaction using the txid
-See [REST API Reference](../../reference/rest-apis/algod/v1.md#get-v1transactiontxid) for more details.
+See [REST API Reference](../../../rest-apis/algod/v1#get-v1transactiontxid) for more details.
 
 ```
 /v1/account/{account}/transactions?fromDate=YYYY-MM-DD&toDate=YYYY-MM-DD) 
 ```
 
 This call allows locating all transactions within a date range. Date parameters support RFC3339 (ie 2006-01-02T15:04:05Z07:00).
-See [REST API Reference](../../reference/rest-apis/algod/v1.md#get-v1accountaddresstransactions) for more details.
+See [REST API Reference](../../../rest-apis/algod/v1#get-v1accountaddresstransactions) for more details.
 
-To turn on indexing for a node, the `isIndexerActive` configuration parameter must be set to `true`. The [Node Configuration](../../reference/node/config.md) guide describes setting node configuration properties.
+To turn on indexing for a node, the `isIndexerActive` configuration parameter must be set to `true`. The [Node Configuration](../../reference/config) guide describes setting node configuration properties.
 
 !!! warning
      Turning on indexing with a node will increase the disk space required by the node.

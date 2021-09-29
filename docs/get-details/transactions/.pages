@@ -1,0 +1,6 @@
+title: Transactions
+arrange:
+  - index.md
+  - signatures.md
+  - offline_transactions.md
+  - payment_prompts.md

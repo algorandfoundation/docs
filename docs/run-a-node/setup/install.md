@@ -1,10 +1,10 @@
-title: Install a Node
+title: Install a node
 # Overview
 This guide explains how to install the Algorand Node software on Linux Distributions and Mac OS. When installing on Linux, three methods are covered: *RPM installs*, *Debian installs* and *Other Linux Distributions*. The *Other Linux Distributions* method has been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 3) and allows manually setting data directories and requires manual updates. The *RPM* and *Debian* installs use fixed directories and automatically update.
 
 A node installation consists of two folders: the binaries (bin) and the data (data) folders. The bin folder can be created anywhere, but Algorand recommends `~/node`, if not using *RPM* or *Debian* installs. This location is referenced later in the documentation. Remember to replace this location in the documentation below with the correct location. It is assumed that this folder is dedicated to Algorand binaries and is archived before each update. Note that nothing is currently deleted, the binaries for Algorand are just overwritten.
 
-When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/node/artifacts.md) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
+When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/artifacts) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
 ```
 export ALGORAND_DATA="$HOME/node/data"
@@ -20,7 +20,7 @@ export ALGORAND_DATA=/var/lib/algorand
 ```
 
 !!! info
-    When installing with the *Debian* or *RPM* packages, `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. See [REST Endpoints](../../reference/sdks/index.md#rest-endpoints) for more details.
+    When installing with the *Debian* or *RPM* packages, `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. 
 
 
 # Installation Overview

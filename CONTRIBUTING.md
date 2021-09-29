@@ -41,7 +41,7 @@ The Algorand technical documentation is intimately tied to updates in [go-algora
 If you have a step-by-step guide for developers or sample application code, we encourage you to [submit it](https://developer.algorand.org/pages/submissions/) as a [Tutorial](https://developer.algorand.org/tutorials/) or [Solution](https://developer.algorand.org/solutions/), respectively, on the [Algorand Developer Portal](https://developer.algorand.org/). Tutorials and Solutions can be more personalized and do not follow the same [charter](#charter) and [tenets](#tenets) as the documentation. View the Style Guide for Tutorials and Solutions [here](https://developer.algorand.org/pages/style-guide).
 
 ### Community Projects
-Finally, if you developed a tool or application that would benefit members of the Algorand community, feel free to submit a PR updating the [Community Projects](./docs/community.md) page. Include the name of your project, a logo, and a description under the appropriate Project category.  If your category does not exist, please suggest a header and we can update as needed through the PR process. 
+Finally, if you developed a tool or application that would benefit members of the Algorand community, feel free to submit a PR updating the [Community Projects](https://developer.algorand.org/ecosystem-projects/) page. Include the name of your project, a logo, and a description under the appropriate Project category.  If your category does not exist, please suggest a header and we can update as needed through the PR process. 
 
 The Community page is displayed [here](https://developer.algorand.org/docs/community/) in production.
 

@@ -1,4 +1,4 @@
-title: Renew Participation Keys
+title: Renew participation keys
 
 The process of renewing a participation key is simply creating a new participation key and registering it online before the previous key expires.
 
@@ -18,7 +18,7 @@ The validity ranges of participation keys can overlap. For any account, at any t
 <center>*Example key rotation window* </center>
 
 !!! info
-	`goal` supplies single commands to renew all participation keys on a node ([`goal account renewallpartkeys`](../../reference/cli/goal/account/renewallpartkeys.md)) or renew the participation key for a specific account ([`goal account renewpartkey`](../../reference/cli/goal/account/renewpartkey.md)). It is recommended that you only use these for testing purposes or for very low-stake accounts, since both of them require your private keys to be online.
+	`goal` supplies single commands to renew all participation keys on a node ([`goal account renewallpartkeys`](../../../clis/goal/account/renewallpartkeys)) or renew the participation key for a specific account ([`goal account renewpartkey`](../../../clis/goal/account/renewpartkey)). It is recommended that you only use these for testing purposes or for very low-stake accounts, since both of them require your private keys to be online.
 
 # Removing Old Keys
 
