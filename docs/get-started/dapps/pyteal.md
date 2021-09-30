@@ -65,7 +65,6 @@ Activate `venv`.
 Now install all requirements.
 
 ```bash
-cd auction-demo
 pip3 install -r requirements.txt
 ```
 
