@@ -1,10 +1,31 @@
 title: Install a node
 # Overview
-This guide explains how to install the Algorand Node software on Linux Distributions and Mac OS. When installing on Linux, three methods are covered: *RPM installs*, *Debian installs* and *Other Linux Distributions*. The *Other Linux Distributions* method has been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 3) and allows manually setting data directories and requires manual updates. The *RPM* and *Debian* installs use fixed directories and automatically update.
+This guide explains how to install the Algorand Node software on Linux distributions and Mac OS. When installing on Linux, two installation methods are covered: by package manager and by updater script. The package manager method has been verified on Debian, Ubuntu, Fedora, and CentOS, while the updater script method has been verified on the same Linux distributions, as well as on Raspbian (Raspberry Pi 3), openSUSE Leap, Manjaro, Mageia, Alpine, and Solus. The package manager method uses fixed directories and automatically updates, while the updater script allows manually setting data directories and requires manual updates.
 
-A node installation consists of two folders: the binaries (bin) and the data (data) folders. The bin folder can be created anywhere, but Algorand recommends `~/node`, if not using *RPM* or *Debian* installs. This location is referenced later in the documentation. Remember to replace this location in the documentation below with the correct location. It is assumed that this folder is dedicated to Algorand binaries and is archived before each update. Note that nothing is currently deleted, the binaries for Algorand are just overwritten.
+!!! Info
+    If you want to run Algorand Node in MS Windows, [Rand Labs](https://github.com/randlabs/algorand-windows-node/) provides the installation binaries.
 
-When installing for the first time a `data` directory will need to be specified unless using the *RPM* or *Debian* install. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/artifacts) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
+
+### Package manager installation overview
+
+See [Node Artifacts](../../reference/artifacts) reference for a detailed list of some of files that are installed by this method. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. The binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is recommended to add to shell config files the following environment variable that points to the data directory:
+
+```
+export ALGORAND_DATA=/var/lib/algorand
+```
+
+Note that the environment variable set by this command is not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
+
+Use this option when installing in the following operating systems: Debian, Ubuntu, Fedora, CentOS, and other Debian and Red Hat based Linux distributions.
+
+!!! info
+    `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints.
+
+
+### Updater script installation overview
+A node installation consists of two folders: the binaries (bin) and the data (data) folders. The bin folder can be created anywhere, but Algorand recommends `~/node`. This location is referenced later in the documentation. Remember to replace this location in the documentation below with the correct location. It is assumed that this folder is dedicated to Algorand binaries and is archived before each update. Note that nothing is currently deleted, the binaries for Algorand are just overwritten.
+
+When installing for the first time a `data` directory will need to be specified Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/artifacts) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
 ```
 export ALGORAND_DATA="$HOME/node/data"
@@ -13,26 +34,117 @@ export PATH="$HOME/node:$PATH"
 
 Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
 
-When installing with *Debian* or *RPM* packages the binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. With these installs, it is again recommended to add the following to shell config files.
+Use this option when installing in the following operating systems: macOS, Raspbian, openSUSE Leap, Manjaro, Mageia, Alpine, Solus, etc. Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process.
+
+
+# Installation with a package manager
+
+## Debian based distributions (Debian, Ubuntu, Linux Mint, ...)
+Nodes have been verified on Ubuntu 18.04 and 20.04, as well as on Debian 11. Other Debian-based distros should work as well (use apt-get install rather than apt install).
+
++ Open a terminal and run the following commands.
 
 ```
-export ALGORAND_DATA=/var/lib/algorand
+sudo apt-get update
+sudo apt-get install -y gnupg2 curl software-properties-common
+curl -O https://releases.algorand.com/key.pub
+sudo apt-key add key.pub
+sudo add-apt-repository "deb [arch=amd64] https://releases.algorand.com/deb/ stable main"
+sudo apt-get update
+
+# To get both algorand and the devtools:
+sudo apt-get install -y algorand-devtools
+
+# Or, to only install algorand:
+sudo apt-get install -y algorand
+
+algod -v
 ```
 
-!!! info
-    When installing with the *Debian* or *RPM* packages, `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. 
+These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`.
+
+This install defaults to the Algorand MainNet network. See [switching networks](../operations/switch_networks.md) for details on changing to another network.
+
+> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
+
+!!! Note 
+    Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use `sudo -u algorand -E goal account listpartkeys` (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or `sudo -u algorand -E goal account listpartkey -d /var/lib/algorand` (otherwise). *Never run `goal` as `root` (e.g., `sudo goal account listpartkeys`).* Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
 
 
-# Installation Overview
-Installing a new node is generally a 3 to 4-step process and will depend on the operating system. Each install option is listed in this guide and is accessible from the table of contents or select from the list below:
+## Red Hat based distributions (Fedora, CentOS, ...)
+Installing on Fedora and CentOS are described below.
 
-1. Installing on a Mac
-2. Installing with Debian
-3. Installing on Other Linux Distros
++ To install to CentOS 7, open a terminal and run the following commands.
+
+```
+curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
+sudo rpmkeys --import rpm_algorand.pub
+sudo yum install yum-utils
+sudo yum-config-manager --add-repo https://releases.algorand.com/rpm/stable/algorand.repo
+
+# To get both algorand and the devtools:
+sudo yum install algorand-devtools
+
+# Or, to only install algorand:
+sudo yum install algorand
+```
+
++ To install to Fedora or CentOS 8 Stream, open a terminal and run the following commands.
+
+```
+curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
+sudo rpmkeys --import rpm_algorand.pub
+dnf install -y 'dnf-command(config-manager)'
+dnf config-manager --add-repo=https://releases.algorand.com/rpm/stable/algorand.repo
+dnf install algorand
+```
+
+These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`.
+
+This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
+
+> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
 
 
-# Installing on a Mac
-Verified on OSX v10.13.4 / High Sierra.
+## Installing the Devtools
+Beginning with the 2.1.5 release, there is now a new package called `algorand-devtools` that contains the developer tools.  The package contains the following binaries, some of which are new (as of 2.1.5) and some of which have been removed from the `algorand` package to decrease its size:
+
+- carpenter
+- catchupsrv
+- msgpacktool
+- tealcut
+- tealdbg
+
+Installing the devtools is simple and no additional entries need to be added for either `apt` or `yum` to be aware of them.  Simply install the tools as usual via the respective package manager. Since the `algorand` package is a dependency of `algorand-devtools` and the two former cannot be older than the latter, one of two possible scenarios will occur upon downloading the devtools:
+
+- If `algorand` has not been previously installed, it will automatically download it.
+- If `algorand` is installed but older than the devtools, it will automatically upgrade it.
+
+See the examples above to understand how to install the deb and rpm packages.
+
+
+## Start Node
++ Installs by a package manager automatically start the node. Starting and stopping a node should be done using `systemctl` commands:
+
+```
+sudo systemctl start algorand
+```
+
+```
+sudo systemctl stop algorand
+```
+
+The status of the node can be checked by running:
+
+```
+goal node status -d /var/lib/algorand
+```
+
+
+# Installation with the updater script
+
+## Installing on a Mac
+Verified on OSX v10.13.4 (High Sierra) and 10.15.7 (Catalina).
 
 + Create a folder to hold the install package and files.
 
@@ -71,93 +183,12 @@ When the installer runs, it will pull down the latest update package from S3 and
     export PATH="$HOME/node:$PATH"
     ```
 
-# Installing the Devtools
-
-Beginning with the 2.1.5 release, there is now a new package called `algorand-devtools` that contains the developer tools.  The package contains the following binaries, some of which are new (as of 2.1.5) and some of which have been removed from the `algorand` package to decrease its size:
-
-- carpenter
-- catchupsrv
-- msgpacktool
-- tealcut
-- tealdbg
-
-Installing the devtools is simple and no additional entries need to be added for either `apt` or `yum` to be aware of them.  Simply install the tools as usual via the respective package manager. Since the `algorand` package is a dependency of `algorand-devtools` and the two former cannot be older than the latter, one of two possible scenarios will occur upon downloading the devtools:
-
-- If `algorand` has not been previously installed, it will automatically download it.
-- If `algorand` is installed but older than the devtools, it will automatically upgrade it.
-
-See the examples below to understand how to install the deb and rpm packages.
-
 !!! Note
-    If installing using the updater script (see the section *Installing with Other Linux Distros*), then all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
+    If installing using the updater script then all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
 
-# Installing with Debian packages (Debian, Ubuntu, ...)
-Nodes have been verified on Ubuntu 18.04. Other Debian-based distros should work as well (use apt-get install rather than apt install).
 
-+ Open a terminal and run the following commands.
-
-```
-sudo apt-get update
-sudo apt-get install -y gnupg2 curl software-properties-common
-curl -O https://releases.algorand.com/key.pub
-sudo apt-key add key.pub
-sudo add-apt-repository "deb [arch=amd64] https://releases.algorand.com/deb/ stable main"
-sudo apt-get update
-
-# To get both algorand and the devtools:
-sudo apt-get install -y algorand-devtools
-
-# Or, to only install algorand:
-sudo apt-get install -y algorand
-
-algod -v
-```
-
-These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`.
-
-This install defaults to the Algorand MainNet network. See [switching networks](../operations/switch_networks.md) for details on changing to another network.
-
-> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
-
-!!! Note 
-    Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use `sudo -u algorand -E goal account listpartkeys` (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or `sudo -u algorand -E goal account listpartkey -d /var/lib/algorand` (otherwise). *Never run `goal` as `root` (e.g., `sudo goal account listpartkeys`).* Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
-
-# Installing with RPM
-Installing on Fedora and Centos are described below.
-
-+ To install to CentOS 7, open a terminal and run the following commands.
-
-```
-curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
-sudo rpmkeys --import rpm_algorand.pub
-sudo yum install yum-utils
-sudo yum-config-manager --add-repo https://releases.algorand.com/rpm/stable/algorand.repo
-
-# To get both algorand and the devtools:
-sudo yum install algorand-devtools
-
-# Or, to only install algorand:
-sudo yum install algorand
-```
-
-+ To install to Fedora or CentOS 8 Stream, open a terminal and run the following commands.
-
-```
-curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
-sudo rpmkeys --import rpm_algorand.pub
-dnf install -y 'dnf-command(config-manager)'
-dnf config-manager --add-repo=https://releases.algorand.com/rpm/stable/algorand.repo
-dnf install algorand
-```
-
-These commands will install and configure `algod` as a service and place the algorand binaries in the `/usr/bin` directory. These binaries will be in the path so the `algod` and `goal` commands can be executed from anywhere. Additionally, every node has a data directory, in this case, it will be set to `/var/lib/algorand`.
-
-This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
-
-> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
-
-# Installing with Other Linux Distros
-Nodes have been verified on Ubuntu, CentOS, Fedora, Raspian (Raspberry Pi 1-4). Other modern distros should work as well.
+## Installing on Linux
+Nodes have been verified on Ubuntu, CentOS, Fedora, Raspbian (Raspberry Pi 1-4), openSUSE Leap, Manjaro, Mageia, Alpine, and Solus. Other modern distros should work as well.
 
 + Create a temporary folder to hold the install package and files.
 
@@ -194,8 +225,31 @@ When the installer runs, it will pull down the latest update package from S3 and
     export PATH="$HOME/node:$PATH"
     ```
 
-# Installing algod as a systemd service
+!!! Note
+    If installing using the updater script then all the binaries are downloaded together, i.e., there is not a separate devtools archive file or package.
 
+
+## Start Node
++ Installs by the updater script require that the node be started manually. This can be done with the following command:
+
+```
+goal node start
+```
+
+This will start the node and it can be verified by running:
+
+```
+pgrep algod
+```
+
+The node can be manually stopped by running:
+
+```
+goal node stop
+```
+
+
+## Installing algod as a systemd service
 When installing using the updater script, there are several shell scripts that are bundled into the tarball that will are helpful in running `algod`. One of those is the `systemd-setup.sh` script to create a system service.
 
 ```
@@ -240,6 +294,7 @@ All that's left now is to start the service using `systemctl`. If preferred, it 
 sudo systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
 ```
 
+
 # Configure Telemetry
 Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. Telemetry can be enabled by following the commands below replacing &lt;name&gt; with your desired hostname (e.g. 'SarahsLaptop').
 
@@ -257,43 +312,6 @@ Telemetry can also be provided without providing a hostname:
     Telemetry can be disabled at any time by using the `./diagcfg telemetry disable` command.
 
 Running the `diagcfg` commands will create and update the logging configuration settings stored in ~/.algorand/logging.config.
-
-# Start Node
-
-+ The *Debian* and *RPM* installs automatically start the node. Starting and stopping a node installed with one of these packages should be done using `systemctl` commands:
-
-```
-sudo systemctl start algorand
-```
-
-```
-sudo systemctl stop algorand
-```
-
-
-With these installs, the status of the node can be checked by running:
-
-```
-goal node status -d /var/lib/algorand
-```
-
-+ The *Mac* or *Other Linux Distros* installs require that the node be be started manually. This can be done  with the following command:
-
-```
-goal node start
-```
-
-This will start the node and it can be verified by running:
-
-```
-pgrep algod
-```
-
-The node can be manually stopped by running:
-
-```
-goal node stop
-```
 
 
 # Sync Node with Network
