@@ -8,13 +8,13 @@ It is possible to set up a relay for a personal network that does not require DN
 Follow the [install instructions](../../run-a-node/setup/install.md) for the specific operating system that the relay will run on.
 
 # Edit the Configuration File
-Edit the configuration file for the node as described in the [configuration](../config) guide. Set the property `NetAddress` to `":4161"` and save the file. Make sure the file is named `config.json`.
+Edit the configuration file for the node as described in the [configuration](../config) guide. Set the property `NetAddress` to `":4161"` for TestNet and to `":4160"` for MainNet. Then save the file. Make sure the file is named `config.json`.
 
 !!! warning
 	As a precaution, it is not recommended that relay nodes interact with accounts or participate in consensus.
 
 # Start the Node
-Start the node as described in the [install](../../run-a-node/setup/install.md) guide. The node will now listen for incoming traffic on port 4161. Other nodes can now connect to this relay.
+Start the node as described in the [install](../../run-a-node/setup/install.md) guide. The node will now listen for incoming traffic on port 4161 (for TestNet) or on port 4160 (for MainNet). Other nodes can now connect to this relay.
 
 # Connect a Node to Relay
 Any node can connect to this relay by specifying it in the `goal node start` command. 
@@ -22,6 +22,8 @@ Any node can connect to this relay by specifying it in the `goal node start` com
 ```
 ./goal node start -d data -p "ipaddress:4161"
 ```
+
+(4161 needs to be replaced by 4160 for MainNet.)
 
 The node can also be set up to connect to multiple relays using a `;` separated list of relays.
 
