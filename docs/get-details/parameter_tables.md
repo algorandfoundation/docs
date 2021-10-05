@@ -59,6 +59,8 @@ title: Algorand parameter tables
 |Max combined size of arguments|2048 bytes|[reference](./dapps/smart-contracts/apps/index.md#passing-arguments-to-stateful-smart-contracts)|MaxAppTotalArgLen||
 |Max number of global state keys|64|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxGlobalSchemaEntries||
 |Max number of local state keys|16|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxLocalSchemaEntries||
+|Max number of log messages|32|[reference](./dapps/smart-contracts/apps/index.md#TODO)|MaxLogCalls||
+|Max size of log messages|1024|[reference](./dapps/smart-contracts/apps/index.md#TODO)|MaxLogSize||
 |Max key size|64 bytes|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxAppKeyLen||
 |Max []byte value size|128 bytes|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxAppBytesValueLen||
 |Max key + value size|128 bytes|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxAppSumKeyValueLens||
