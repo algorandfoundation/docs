@@ -68,6 +68,11 @@ Now install all requirements.
 cd auction-demo
 pip3 install -r requirements.txt
 ```
+run the sandbox to avoid the exception
+```
+./sandbox up nightly
+````
+
 
 Run the `example.py` file. This will run a simple 30-second auction.
 
