@@ -52,14 +52,14 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 [TEAL overview](dapps/avm/teal/index.md)- An overview of the TEAL language.
 
+# Parameters
+[Overview](parameter_tables.md) - Table containing all Algorand blockchain parameters.
+
 # Searching the Blockchain (Indexer V2)
 [Overview](indexer) - How to use Indexer v2 functionality to efficiently query data on the blockchain.
 
 # WalletConnect
 [Overview](walletconnect/index.md) - Guide on using the wallet connect API.
-
-# Parameters
-[Overview](parameter_tables.md) - Table containing all Algorand blockchain parameters.
 
 # Algorand networks
 [Overview](algorand-networks/index.md) - List of all Algorand networks.
