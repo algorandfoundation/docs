@@ -55,8 +55,8 @@ title: Algorand parameter tables
 |Max extra app pages |3|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxExtraAppProgramPages|an application can "pay" for additional pages via minimum balance|
 |Max cost of approval TEAL code|700|[reference](./dapps/avm/teal/index.md#dynamic-operational-cost-of-teal-opcodes)|MaxAppProgramCost||
 |Max cost of clear TEAL code|700|[reference](./dapps/avm/teal/index.md#dynamic-operational-cost-of-teal-opcodes)|MaxAppProgramCost||
-|Max number of scratch variables|256][reference](./dapps/avm/teal/specification/#scratch-space)|||
-|Max depth of stack|1000][reference](./dapps/avm/teal/specification/#the-stack)|MaxStackDepth||
+|Max number of scratch variables|256|[reference](./dapps/avm/teal/specification/#scratch-space)|||
+|Max depth of stack|1000|[reference](./dapps/avm/teal/specification/#the-stack)|MaxStackDepth||
 |Max number of arguments|16|[reference](./dapps/smart-contracts/apps/index.md#passing-arguments-to-stateful-smart-contracts)|MaxAppArgs||
 |Max combined size of arguments|2048 bytes|[reference](./dapps/smart-contracts/apps/index.md#passing-arguments-to-stateful-smart-contracts)|MaxAppTotalArgLen||
 |Max number of global state keys|64|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxGlobalSchemaEntries||
