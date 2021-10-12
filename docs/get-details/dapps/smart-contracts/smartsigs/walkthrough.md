@@ -156,4 +156,4 @@ $ python3 -c "import base64;print(base64.b64encode((123).to_bytes(8,'big')).deco
 
 The example above converts the integer value of 123 to a base64 encoded string. TEAL currently does not support negative numbers. 
 
-Each SDK provides facilities for passing parameters as well. These processes are described in the [Interact with smart signatures](../frontend/stateless-sdks) Usage documentation.
+Each SDK provides facilities for passing parameters as well. These processes are described in the [Interact with smart signatures](../../frontend/apps/) Usage documentation.
