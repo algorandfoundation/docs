@@ -12,7 +12,9 @@ Test a program offline
 
 
 
-Test a TEAL program offline under various conditions and verbosity.
+Test a TEAL program offline under various conditions and verbosity. 
+
+!!! info If you are passing an ASA as a Foreign Asset in an app call, the creator's address must be passed in `--dryrun-accounts` flag or tealdbg will not be able to find the asset.
 
 
 
@@ -29,6 +31,7 @@ goal clerk dryrun [flags]
 
 
 ```
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
 
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api instead of running
 
