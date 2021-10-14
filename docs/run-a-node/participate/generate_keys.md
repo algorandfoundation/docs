@@ -16,7 +16,7 @@ _[Read more about how Participation Keys function in the Algorand Consensus Prot
 
 To generate a participation key, use the [`goal account addpartkey`](../../../clis/goal/account/addpartkey) command on the node where the participation key will reside. This command takes the address of the participating account, a range of rounds, and an optional key dilution parameter.  It then generates a [VRF key pair](../../../get-details/algorand_consensus#verifiable-random-function) and, using optimizations, generates a set of single-round voting keys for each round of the range specified. The VRF private key is what is passed into the VRF to determine if you are selected to propose or vote on a block in any given round. 
 
-```zsh tab="goal"
+```zsh
 $ goal account addpartkey -a <address-of-participating-account> --roundFirstValid=<partkey-first-round> --roundLastValid=<partkey-last-round> --keyDilution=<key-dilution-value> 
 Participation key generation successful
 ```
@@ -30,7 +30,7 @@ This creates a participation key in the ledger directory of the node, which is w
 
 The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) command will check for any participation keys that live on the node and display pertinent information about them. 
 
-```zsh tab="goal"
+```zsh
 $ goal account listpartkeys
 Registered	Filename                                                                        	Parent address                                              	 First round	  Last round	   First key
 no        	BH55E5RMBD4GYWXGX5W5PJ5JAHPGM5OXKDQH5DC4O2MGI7NW4H6Q.10000.10111.partkey        	BH55E5RMBD4GYWXGX5W5PJ5JAHPGM5OXKDQH5DC4O2MGI7NW4H6VOE4CP4  	       10000	       10111	    240821.0
@@ -49,7 +49,7 @@ If the key you generated does not show up, check that it was correctly placed in
 
 Use [`goal account partkeyinfo`](../../../clis/goal/account/partkeyinfo) to dump all the information about each participation key that lives on the node. This information is used to generate the online key registration transaction [described in the next section](./online.md).
 
-```zsh tab="goal"
+```zsh
 $ goal account partkeyinfo
 Dumping participation key info from /home/ubuntu/node/data...
 ------------------------------------------------------------------
