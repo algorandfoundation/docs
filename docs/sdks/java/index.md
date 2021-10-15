@@ -36,7 +36,7 @@ Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for
 <dependency>
     <groupId>com.algorand</groupId>
     <artifactId>algosdk</artifactId>
-    <version>1.8.0</version>
+    <version>1.10.0</version>
 </dependency>
 ```
 
