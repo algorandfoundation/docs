@@ -140,8 +140,11 @@ Before the transaction is considered valid, it must be signed by a private key. 
 The signed transaction can now be submitted to the network. `wait_for_confirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation){target=_blank}.
 ​
 ```python
-import json
-import base64
+
+    # top of source file elided...  
+
+    import json
+    import base64
 
     #submit transaction
     txid = algod_client.send_transaction(signed_txn)
@@ -159,7 +162,7 @@ import base64
     print("Decoded note: {}".format(base64.b64decode(
         confirmed_txn["txn"]["txn"]["note"]).decode()))
     
-    # utility function for waiting on a transaction confirmation
+# utility function for waiting on a transaction confirmation
 def wait_for_confirmation(client, transaction_id, timeout):
     """
     Wait until the transaction is confirmed or rejected, or until 'timeout'
