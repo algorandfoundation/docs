@@ -12,7 +12,7 @@ If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Ge
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
     - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)) 
  
-Algorand provides a docker instance for setting up a node, which can be used to get started developing. To install and use this instance, follow these instructions.
+Algorand provides a docker instance for setting up a node or private network, which can be used to get started developing. To install and use this instance, follow these instructions.
 ​
 ```bash
 git clone https://github.com/algorand/sandbox.git
@@ -25,12 +25,7 @@ cd sandbox
 
 This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/).
 ​
-​To use Indexer in the sandbox, start it to the default private network as follows. 
- 
-```bash
-./sandbox up
-```
- 
+
 !!! Info 
     The Indexer allows quick searching of the entire  blockchain for transactions, assets, applications and accounts in a timely manner. To learn more about this capability, see [Searching the Blockchain](https://developer.algorand.org/docs/features/indexer/). When running Algorand Sandbox for TestNet, BetaNet or MainNet, you will not have access to the Sandbox Algorand Indexer. 
  
@@ -63,7 +58,6 @@ The SDK is installed with the specific runtime and can now interact with the San
 
 ​
 !!! Info
-   
    Using a Web Runtime requires the AlgoSigner or plugin or other web-based private key management software. For more information see [community wallets](https://developer.algorand.org/docs/community/#wallets). 
 ​
 # Create an Account on Algorand
@@ -115,7 +109,7 @@ To view the transaction, click on the transaction link in the dispenser or copy 
 [Watch Video](https://youtu.be/WuhaGp2yrak?t=326){:target="_blank"}
 ​​
 # Connect Your Client
-Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively.
+Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value with server address `http://localhost` and port `4001`.
  
 ```javascript
 async function firstTransaction() {
