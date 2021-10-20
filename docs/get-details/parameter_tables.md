@@ -42,13 +42,13 @@ title: Algorand parameter tables
 |Max URL size|96 bytes|[reference](./asa.md)|MaxAssetURLBytes||
 |Metadata hash|32 bytes|[reference](./asa.md)||padded with zeros|
 
-## Stateless smart contract constraints
+## Smart signature constraints
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
 |Max size of compiled TEAL code combined with arguments|1000 bytes|[reference](./dapps/avm/teal/specification.md#execution-environment-for-logicsigs)|LogicSigMaxSize||
 |Max cost of TEAL code|20000|[reference](./dapps/avm/teal/specification.md#execution-environment-for-logicsigs)|LogicSigMaxCost||
 
-## Stateful smart contract constraints
+## Smart contract constraints
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
 |Page size of compiled approval + clear TEAL code|2048 bytes|[reference](./dapps/avm/teal/index.md#dynamic-operational-cost-of-teal-opcodes)|MaxAppProgramLen|by default, each application has a single page|
