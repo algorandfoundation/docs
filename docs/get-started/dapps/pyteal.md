@@ -13,7 +13,7 @@ This guide is organized into two sections. The first section helps you launch th
 All of the code for this guide is [located here](https://github.com/algorand/auction-demo){: target="_blank"}. Clone the repo and follow along!
 
 #Launching the application
-Algorand provides a docker instance for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have docker installed, then run this code to launch a sandbox node with a private network, i.e. your own local blockchain that runs the Algorand protocol.
+Algorand provides a [Docker instance](https://docs.docker.com/get-docker/) for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have docker installed, then run this code to launch a [sandbox node](https://github.com/algorand/sandbox) with a private network, i.e. your own local blockchain that runs the Algorand protocol.
 
 <center>
 ![Sandbox node guy](../../imgs/sandbox-node-guy.png){: style="width:200px"}
@@ -21,7 +21,8 @@ Algorand provides a docker instance for running a node, which is the fastest way
 </center>
 
 ##Install Sandbox
- 
+
+Install the sandbox and start your private network. 
  
 ```bash
 git clone https://github.com/algorand/sandbox.git
@@ -30,6 +31,7 @@ cd sandbox
 ```
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23){target=_blank}   
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank} 
+[`Follow Sandbox tutorial`](https://developer.algorand.org/tutorials/exploring-the-algorand-sandbox/){target=_blank}
  
  
 ##Clone the auction demo application
