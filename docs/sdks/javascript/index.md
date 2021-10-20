@@ -20,8 +20,6 @@ cd sandbox
 ./sandbox up testnet
 ```
  
-​[Watch Video](https://youtu.be/WuhaGp2yrak?t=21){:target="_blank"}
- 
 [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
 ​
 
@@ -73,8 +71,8 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 ​
 ```javascript
 const algosdk = require('algosdk');
-const createAccount =  function (){
-    try{  
+const createAccount = function() {
+    try {  
         const myaccount = algosdk.generateAccount();
         console.log("Account Address = " + myaccount.addr);
         let account_mnemonic = algosdk.secretKeyToMnemonic(myaccount.sk);
