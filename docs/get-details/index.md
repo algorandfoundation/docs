@@ -64,5 +64,5 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 # Algorand networks
 [Overview](algorand-networks/index.md) - List of all Algorand networks.
 
-# Algorand consensu
+# Algorand consensus
 [Overview](algorand_consensus.md) - A high-level guide on the Algorand consensus protocol.
