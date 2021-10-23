@@ -1,2 +1,3 @@
 mkdocs-material==7.1.8
 mkdocs-awesome-pages-plugin==2.5.0
+importlib-metadata>=3.10
