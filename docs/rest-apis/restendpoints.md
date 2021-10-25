@@ -45,7 +45,7 @@ _**KMD REST Endpoints**_
 !!! info
     All examples in this section assume the data directory is ~/node/data
 
-This API arise described using the [Open API Specification version 2 (OAS 2)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md). The `kmd` daemon serves it's API from the _kmd.net_ files found in the _~/node/data_ and _~/node/data/kmd-{version}_ directories. The `kmd` daemons provide their API specifications in a [swagger json](https://github.com/algorand/go-algorand/blob/master/daemon/kmd/api/swagger.json) format available from this endpoint:
+This API is described using the [Open API Specification version 2 (OAS 2)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md). The `kmd` daemon serves it's API from the _kmd.net_ files found in the _~/node/data_ and _~/node/data/kmd-{version}_ directories. The `kmd` daemons provide their API specifications in a [swagger json](https://github.com/algorand/go-algorand/blob/master/daemon/kmd/api/swagger.json) format available from this endpoint:
 
 Algorand Key Management Daemon (`kmd`)
 
