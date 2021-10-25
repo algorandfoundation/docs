@@ -120,7 +120,18 @@ This install defaults to the Algorand MainNet network. See [switching networks](
 > Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
 
 !!! Note 
-    Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use `sudo -u algorand -E goal account listpartkeys` (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or `sudo -u algorand -E goal account listpartkey -d /var/lib/algorand` (otherwise). *Never run `goal` as `root` (e.g., `sudo goal account listpartkeys`).* Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
+    Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use 
+    ```bash
+    sudo -u algorand -E goal account listpartkeys
+    ``` 
+    (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or 
+    ```bash
+    sudo -u algorand -E goal account listpartkey -d /var/lib/algorand
+    ``` 
+    (otherwise).
+    
+!!! Warning
+     *Never run `goal` as `root`* (e.g., do *not* run `sudo goal account listpartkeys`). Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
 
 # Installing with RPM
 Installing on Fedora and Centos are described below.
@@ -241,22 +252,86 @@ sudo systemctl start algorand@$(systemd-escape $ALGORAND_DATA)
 ```
 
 # Configure Telemetry
-Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. Telemetry can be enabled by following the commands below replacing &lt;name&gt; with your desired hostname (e.g. 'SarahsLaptop').
+Algod is instrumented to provide telemetry which is used for insight into the software's performance and usage. Telemetry is disabled by default and so no data will be shared with Algorand Inc. Enabling telemetry provides data to Algorand to improve the software and help to identify issues. 
 
+## Enable Telemetry
+
+Telemetry can be enabled by following the command below *as the user running `algod`* (replacing `<name>` with your desired hostname, e.g. 'SarahsLaptop'):
+
+```bash
+diagcfg telemetry name -n <name>
 ```
-cd ~/node
-./diagcfg telemetry name -n <name>
+
+If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
+
+```bash
+sudo -u algorand -H -E diagcfg telemetry name -n <name>
 ```
+
+(The option `-H` is necessary to ensure `$HOME` is set to the home directory of the `algorand` user.)
+
 Telemetry can also be provided without providing a hostname:
 
-```
-./diagcfg telemetry enable
+```bash
+diagcfg telemetry enable
 ```
 
-!!! info
-    Telemetry can be disabled at any time by using the `./diagcfg telemetry disable` command.
+If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
 
-Running the `diagcfg` commands will create and update the logging configuration settings stored in ~/.algorand/logging.config.
+```bash
+sudo -u algorand -H -E diagcfg telemetry enable
+```
+
+!!! Note
+    After enabling (or disabling) telemetry, the node needs to be restarted.
+
+!!! Warning
+    Do *not* run `diagcfg` as the `root` user: it would only enable telemetry for nodes run as the `root` user (and nodes should usually not be run as the `root` user). In particular, do *not* run `sudo diagcfg ...`.
+
+## Disable Telemetry
+
+Telemetry can be disabled at any time by using (*as the user running `algod`*):
+
+```bash
+diagcfg telemetry disable
+```
+
+If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
+
+```bash
+sudo -u algorand -H -E diagcfg telemetry
+```
+
+## Technical Details and Checking Telemetry is Enabled
+
+Running the `diagcfg` commands will create and update the logging configuration settings stored in `~/.algorand/logging.config` (and `data/logging.config` if the parameter `-d data` is provided).
+
+To check if telemetry is enabled, run (*as the user running `algod`*):
+
+```bash
+diagcfg telemetry
+```
+
+If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
+
+```bash
+sudo -u algorand -H -E diagcfg telemetry
+```
+
+It is also possible to check whether `algod` is connected to the telemetry server by running:
+
+```bash
+sudo netstat -an | grep :9243
+```
+
+If a single node/`algod` is running and telemetry is enabled, the output should look like:
+
+```plain
+tcp        0      0 xxx.xxx.xxx.xxx:yyyyy        18.214.74.184:9243      ESTABLISHED
+```
+
+When telemetry is disabled, the above command prints nothing.
+
 
 # Start Node
 
