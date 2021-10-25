@@ -3,7 +3,7 @@ Algorand maintains SDK support in [JavaScript](../../../sdks/javascript/#install
 
 # Algod, Indexer and KMD REST Endpoints
 
-Integration with the Algorand protocol daemon (`algod`), Algorand key management daemon (`kmd`) or Algorand Indexer daemon (`algorand-indexer`) are provided using a set of REST APIs.
+Integration with the Algorand protocol daemon (`algod`), Algorand key management daemon (`kmd`) or Algorand Indexer daemon (`algorand-indexer`) is performed using a set of REST APIs.
 
 All REST methods and models are fully described within reference documention.
 
@@ -16,7 +16,7 @@ All REST methods and models are fully described within reference documention.
 _**Algod REST Endpoints**_
 
 !!! info
-Algorand provides endpoints for [Open API Specification version 2 (OAS2)](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md) and [OAS3](https://github.com/OAI/OpenAPI-Specification/tree/main/versions).
+    Algorand provides endpoints for [Open API Specification version 2 (OAS2)](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/2.0.md) and [OAS3](https://github.com/OAI/OpenAPI-Specification/tree/main/versions).
 
 These APIs are described using the [Open API Specification version 3 (OAS3)](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md).
 
@@ -30,7 +30,7 @@ OAS2 Algod specfile [here](https://github.com/algorand/go-algorand/blob/master/d
 
 _**Indexer REST Endpoints**_
 
-The `algorand-indexer` daemon provides its API from the _host:port_ defined by the _--server_ flag specified at start up. The default port is 8089.
+The `algorand-indexer` daemon provides its API from the _host:port_ defined by the _--server_ flag specified at start up. The default port is 8980.
 
 [Indexer REST Endpoints OAS3 specfile](https://www.github.com/algorand/indexer/blob/develop/api/indexer.oas3.yml?raw=true)(.yml)
 
@@ -43,7 +43,7 @@ OAS2 Indexer specfile [here](https://github.com/algorand/indexer/blob/develop/ap
 _**KMD REST Endpoints**_
 
 !!! info
-All examples in this section assume the data directory is ~/node/data
+    All examples in this section assume the data directory is ~/node/data
 
 This API arise described using the [Open API Specification version 2 (OAS 2)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md). The `kmd` daemon serves it's API from the _kmd.net_ files found in the _~/node/data_ and _~/node/data/kmd-{version}_ directories. The `kmd` daemons provide their API specifications in a [swagger json](https://github.com/algorand/go-algorand/blob/master/daemon/kmd/api/swagger.json) format available from this endpoint:
 
@@ -54,7 +54,7 @@ curl http://$(cat ~/node/data/kmd-v0.5/kmd.net)/swagger.json
 ```
 
 !!! info
-The `kmd` daemon is only automatically started when using the `goal` command line tool with specific commands requiring key management access. Also, this daemon times out after 60 seconds of being idle. If you require API access to `kmd` you will need to manually start the process with `goal` using the command: `goal kmd start -d <data-dir>`.
+    The `kmd` daemon is only automatically started when using the `goal` command line tool with specific commands requiring key management access. If you require API access to `kmd` you will need to manually start the process with `goal` using the command: `goal kmd start -d <data-dir>`. If the kmd is started with the above command it never times out and stops running unless a timeout flag is specified with the -t flag. The default of 0 is no timeout.
 
 # Security Token
 
@@ -72,4 +72,4 @@ Each SDK provides a method for setting these headers. Most REST tools provide a 
 curl http://$(cat ~/node/data/algod.net)/v2/blocks/16486179 -H "X-Algo-API-Token: $(cat ~/node/data/algod.token)"
 ```
 
-In the above example, the block information will be displayed if the block exists on the local node. If the node is a non-Archival node, older blocks will not be available.
+In the above example, the block information will be displayed if the block exists on the local node. If the node is a non-Archival node, blocks older than 1000 blocks will not be available.
