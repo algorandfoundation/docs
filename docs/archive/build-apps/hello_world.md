@@ -46,7 +46,7 @@ In order to send a transaction, you first need an [account](../../../get-details
     System.out.println("My Address: " + myAccount.getAddress());
     System.out.println("My Passphrase: " + myAccount.toMnemonic());
     ```
-==="Go"
+=== "Go"
     ```go
     import (
         "fmt"
