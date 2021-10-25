@@ -31,10 +31,11 @@ Make sure to identify the correct key (i.e. make sure it is _not_ the currently 
 
 Restart the node to clear the old key from memory:
 
-```bash tab="Debian/RPM"
-$ sudo systemctl restart algorand
-```
-
-```bash tab="Mac/Other Linux Distros"
-$ goal node restart
-```
+=== "Debian/RPM"
+    ```bash 
+    $ sudo systemctl restart algorand
+    ```
+==="Mac/Other Linux Distros"
+    ```bash
+    $ goal node restart
+    ```
