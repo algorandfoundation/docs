@@ -7,11 +7,11 @@ Integration with the Algorand protocol daemon (`algod`), Algorand key management
 
 All REST methods and models are fully described within reference documention.
 
-- [Algod REST APIs](https://developer.algorand.org/docs/rest-apis/algod/v2/)
+- [Algod REST APIs](../../rest-apis/algod/v2/)
 
-- [Indexer REST APIs](https://developer.algorand.org/docs/rest-apis/indexer/)
+- [Indexer REST APIs](../../rest-apis/indexer/)
 
-- [KMD REST APIs](https://developer.algorand.org/docs/rest-apis/kmd/)
+- [KMD REST APIs](../../rest-apis/kmd/)
 
 _**Algod REST Endpoints**_
 
@@ -44,6 +44,7 @@ _**KMD REST Endpoints**_
 
 !!! info
     All examples in this section assume the data directory is ~/node/data
+
 
 This API is described using the [Open API Specification version 2 (OAS 2)](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md). The `kmd` daemon serves it's API from the _kmd.net_ files found in the _~/node/data_ and _~/node/data/kmd-{version}_ directories. The `kmd` daemons provide their API specifications in a [swagger json](https://github.com/algorand/go-algorand/blob/master/daemon/kmd/api/swagger.json) format available from this endpoint:
 
