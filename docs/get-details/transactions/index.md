@@ -8,14 +8,22 @@ At the end of this section are several useful transaction-related how-tos.
 	When you are given a transaction to sign, understanding its underlying representation will help you verify that the details of the transaction are correct.
 
 # Transaction Types
-There are [five transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 1) [Payment](#payment-transaction), 2) [Key Registration](#key-registration-transaction), 3) [Asset Configuration](#asset-configuration-transaction), 4) [Asset Freeze](#asset-freeze-transaction), 5) [Asset Transfer](#asset-transfer-transaction).
+There are [six transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 
 
-These five transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](../atomic_transfers#creating-an-asset) and [destroy an asset](../atomic_transfers#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
+- [Payment](#payment-transaction)
+- [Key Registration](#key-registration-transaction)
+- [Asset Configuration](#asset-configuration-transaction)
+- [Asset Freeze](#asset-freeze-transaction)
+- [Asset Transfer](#asset-transfer-transaction)
+- [Application Call](#application-call-transaction)
+
+
+These six transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](../atomic_transfers#creating-an-asset) and [destroy an asset](../atomic_transfers#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
 
 Note that all of the transactions shown in this guide are not yet authorized and would fail if submitted to the network. The next section will explain how to [authorize transactions](signatures) before sending them to the network.
 
 # Transaction Walkthroughs
-The following sections describe the five types of Algorand transactions through example transactions that represent common use cases. Each transaction is displayed using the `goal clerk inspect` command which takes a signed or unsigned transaction file (msgpack-encoded) as input and outputs a human-readable json object. 
+The following sections describe the six types of Algorand transactions through example transactions that represent common use cases. Each transaction is displayed using the `goal clerk inspect` command which takes a signed or unsigned transaction file (msgpack-encoded) as input and outputs a human-readable json object. 
 
 ## Payment Transaction
 
@@ -340,10 +348,219 @@ An Asset Freeze Transaction is issued by the Freeze Address and results in the a
   }
 }
 ```
-An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](transactions#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](transactions#assetfrozen) field is set to `true`.
+An asset freeze transaction is identified by `"type": "afrz"`. In this example, the [freeze manager](transactions#freezeaddr) `"EW64GC..."` (i.e. the sender) freezes the asset `168103` for the account represented by address `"QC7XT7..."`. To unfreeze the asset, the [`"afrz"`](transactions#assetfrozen) field is set to `false`.
 
 ### See also
 - [Freezing an Asset](../asa#freezing-an-asset)
+
+
+## Application Call Transaction
+
+An Application Call Transaction is submitted to the network with at an AppId and an OnComplete method. The AppId specifies which App to call and the OnComplete method is used to in the contract to determine what branch of logic to execute.
+
+Application Call transactions may include other fields needed by the logic such as:
+
+*ApplicationArgs* - To pass arbitrary arguments to an application (or in the future to call an ABI method)
+
+*Accounts* - To pass accounts that may require some balance checking or opt-in status
+
+*ForeignApps* - To pass apps and allow state access to an external application (or in the future to call an ABI method)
+
+*ForeignAssets* - To pass ASAs for parameter checking
+
+Details for smart contract authoring can be found on the [Smart Contract Details](../dapps/smart-contracts/apps) page
+
+
+### Application Create Transaction
+When an application is to be created; the OnComplete method is set to NoOp, no AppId is set, and the Approval/Clear programs and Schema are passed.  The approval program may do additional checking during setup by checking that the AppId == 0
+
+```json
+{
+  "txn": {
+    "apap": "BYEB",
+    "apgs": {
+      "nbs": 1,
+      "nui": 1
+    },
+    "apls": {
+      "nbs": 1,
+      "nui": 1
+    },
+    "apsu": "BYEB",
+    "fee": 1000,
+    "fv": 12774,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 13774,
+    "note": "poeVkF5j4MU=",
+    "snd": "FOZF4CMXLU2KDWJ5QARE3J2U7XELSXL7MWGNWUHD7OPKGQAI4GPSMGNLCE",
+    "type": "appl"
+  }
+}
+```
+
+- The Approval program (`apap`) and Clear program (`apsu`) are set to `#pragma version 5; int 1`
+- The Apps global and local state both have bytes/ints set to 1
+- The OnComplete (`apan`) is set to NoOp (0 value so it is omited from output)
+
+Assuming all the balance and signature checks pass, this will create an Application with a new AppId and subsequent calls 
+
+
+### Application Update Transaction
+
+An Application Update transaction may be submitted and approved assuming the logic of the Approval program allows it. This is done by specifying the AppId to update and passing the new logic for Approval and Clear programs.
+
+
+```json
+{
+  "txn": {
+    "apan": 4,
+    "apap": "BYEB",
+    "apid": 51,
+    "apsu": "BYEB",
+    "fee": 1000,
+    "fv": 12973,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 13973,
+    "note": "ATFKEwKGqLk=",
+    "snd": "FOZF4CMXLU2KDWJ5QARE3J2U7XELSXL7MWGNWUHD7OPKGQAI4GPSMGNLCE",
+    "type": "appl"
+  }
+}
+```
+
+- The AppId (`apid`) is set to the app being updated (51 here)
+- The OnComplete (`apan`) is set to UpdateApplication (4)
+
+### Application Delete Transaction
+An application may be deleted as long as the logic in the Approval Program allows for it.
+
+```json
+{
+  "txn": {
+    "apan": 5,
+    "apid": 51,
+    "fee": 1000,
+    "fv": 13555,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 14555,
+    "note": "V/RAbQ57DnI=",
+    "snd": "FOZF4CMXLU2KDWJ5QARE3J2U7XELSXL7MWGNWUHD7OPKGQAI4GPSMGNLCE",
+    "type": "appl"
+  }
+}
+```
+
+- The AppId (`apid`) is set to the app being deleted (51 here)
+- The OnComplete (`apan`) is set to DeleteApplication (5)
+
+
+### Application Opt-In Transaction
+An Application Opt-In transaction must be submitted by an account in order for the local state for that account to be used. If no local state is required, this transaction is not necessary for a given account. 
+
+
+```json
+{
+  "txn": {
+    "apan": 1,
+    "apid": 51,
+    "fee": 1000,
+    "fv": 13010,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 14010,
+    "note": "SEQpWAYkzoU=",
+    "snd": "LNTMAFSF43V7RQ7FBBRAWPXYZPVEBGKPNUELHHRFMCAWSARPFUYD2A623I",
+    "type": "appl"
+  }
+}
+```
+
+- The AppId (`apid`) is set to the app being opted into (51 here)
+- The OnComplete (`apan`) is set to OptIn (1) 
+
+
+### Application Close Out Transaction
+An Application Close Out transaction is used when an account wants to opt out of a contract gracefully and remove its local state from its balance record.  This transaction _may_ fail according to the logic in the Approval program.
+
+```json
+{
+  "txn": {
+    "apan": 2,
+    "apid": 51,
+    "fee": 1000,
+    "fv": 13166,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 14166,
+    "note": "HFL7S60gOdM=",
+    "snd": "LNTMAFSF43V7RQ7FBBRAWPXYZPVEBGKPNUELHHRFMCAWSARPFUYD2A623I",
+    "type": "appl"
+  }
+}
+```
+
+- The AppId (`apid`) is set to the app being closed out of (51 here)
+- The OnComplete (`apan`) is set to CloseOut (2)
+
+
+### Application Clear State Transaction
+An Application Clear State transaction is used to force removal of the local state from the balance record of the sender. Given a well formed transaction this method will _always_ succeed. The Clear program is used by the application to perform any book keeping necessary to remove the Account from it's records.
+
+```json
+{
+  "txn": {
+    "apan": 3,
+    "apid": 51,
+    "fee": 1000,
+    "fv": 13231,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 14231,
+    "note": "U93ZQy24zJ0=",
+    "snd": "LNTMAFSF43V7RQ7FBBRAWPXYZPVEBGKPNUELHHRFMCAWSARPFUYD2A623I",
+    "type": "appl"
+  }
+}
+```
+
+- The AppId (`apid`) is set to the app being cleared (51 here)
+- The OnComplete (`apan`) is set to ClearState (3)
+
+### Application NoOp Transaction
+
+Application NoOp Transactions make up a majority of the Application Call methods in practice.  The logic in a smart contract will often branch to appropriate logic given the contents of the ApplicationArgs array passed.
+
+```json
+{
+  "txn": {
+    "apaa": [
+      "ZG9jcw==",
+      "AAAAAAAAAAE="
+    ],
+    "apas": [
+      16
+    ],
+    "apat": [
+      "4RLXQGPZVVRSXQF4VKZ74I6BCUD7TUVROOUBCVRKY37LQSHXORZV4KCAP4"
+    ],
+    "apfa": [
+      10
+    ],
+    "apid": 51,
+    "fee": 1000,
+    "fv": 13376,
+    "gh": "ALXYc8IX90hlq7olIdloOUZjWfbnA3Ix1N5vLn81zI8=",
+    "lv": 14376,
+    "note": "vQXvgqySYPY=",
+    "snd": "LNTMAFSF43V7RQ7FBBRAWPXYZPVEBGKPNUELHHRFMCAWSARPFUYD2A623I",
+    "type": "appl"
+  }
+}
+```
+
+- The AppId (`apid`) is set to the app being called (51 here)
+- The ApplicationArgs (`apaa`) contains to the string "docs" and the integer 1
+- The Accounts (`apat`) contains the address "4RLXQGPZVVRSXQF4VKZ74I6BCUD7TUVROOUBCVRKY37LQSHXORZV4KCAP4"
+- The ForeignAssets (`apas`) contains the ASA id 16 
+- The ForeignApps (`apfa`) contains the AppId 10
+- The OnComplete (`apan`) is set to NoOp (0 value so omitted from the output)
 
 # Sending a Transaction in the Future
 
