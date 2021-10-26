@@ -28,7 +28,7 @@ Starting from version 2 TEAL evaluator can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcode availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](./opcodes.md) for details.
+3. Opcode availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](../opcodes) for details.
 
 ## Execution Environment for LogicSigs
 
@@ -90,7 +90,7 @@ Many instructions accept values to designate Accounts, Assets, or Applications. 
 
 Many programs need only a few dozen instructions. The instruction set has some optimization built in. `intc`, `bytec`, and `arg` take an immediate value byte, making a 2-byte op to load a value onto the stack, but they also have single byte versions for loading the most common constant values. Any program will benefit from having a few common values loaded with a smaller one byte opcode. Cryptographic hashes and `ed25519verify` are single byte opcodes with powerful libraries behind them. These operations still take more time than other ops (and this is reflected in the cost of each op and the cost limit of a program) but are efficient in compiled code space.
 
-This summary is supplemented by more detail in the [opcodes document](./opcodes.md).
+This summary is supplemented by more detail in the [opcodes document](../opcodes).
 
 Some operations 'panic' and immediately fail the program.
 A transaction checked by a program that panics is not valid.
@@ -319,7 +319,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 61 | CreatedApplicationID | uint64 | ApplicationID allocated by the creation of an application (itxn only). LogicSigVersion >= 5. |
 
 
-Additional details in the [opcodes document](./opcodes.md#txn) on the `txn` op.
+Additional details in the [opcodes document](../opcodes#txn) on the `txn` op.
 
 **Global Fields**
 
@@ -410,7 +410,7 @@ App fields used in the `app_params_get` opcode.
 | Op | Description |
 | --- | --- |
 | `balance` | get balance for account A, in microalgos. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted. |
-| `min_balance` | get minimum required balance for account A, in microalgos. Required balance is affected by [ASA](../../../asa/#assets-overview) and [App](../../smart-contracts/apps/#minimum-balance-requirement-for-a-smart-contract) usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. |
+| `min_balance` | get minimum required balance for account A, in microalgos. Required balance is affected by [ASA](https://developer.algorand.org/docs/features/asa/#assets-overview) and [App](https://developer.algorand.org/docs/features/asc1/stateful/#minimum-balance-requirement-for-a-smart-contract) usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes. |
 | `app_opted_in` | check if account A opted in for the application B => {0 or 1} |
 | `app_local_get` | read from account A from local state of the current application key B => value |
 | `app_local_get_ex` | read from account A from local state of the application B key C => [*... stack*, value, 0 or 1] |
