@@ -453,7 +453,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 `goal node status -w 1000`
 
-5) Notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed so sync from that point to the current block. **Once there is a Sync Time of 0, the node is synced and if fully usable. **
+5) Notice that the 5 Catchpoint status lines will disappear when completed, and then only a few more minutes are needed to sync from that point to the current block. **Once there is a Sync Time of 0, the node is synced and if fully usable. **
 
 ```
 Last committed block: 4431453
