@@ -1044,7 +1044,7 @@ The following code shows how to generate a multisignature account composed of th
 	# create a multisig account
 	version = 1  # multisig version
 	threshold = 2  # how many signatures are necessary
-	msig = Multisig(version, threshold, [account_1, account_2])
+	msig = Multisig(version, threshold, [account_1, account_2, account_3])
 	print("Multisig Address: ", msig.address())
 	print("Please go to: https://bank.testnet.algorand.network/ to fund multisig account.", msig.address())
 	```
