@@ -170,11 +170,12 @@ Call the _status_ method from the algod client to check the details of your conn
         }
         fmt.Printf("%s\n", statusJSON)
     ```
+
 === "cURL"
     ```bash 
     curl -i -X GET \
-       -H "X-Algo-API-Token:<algod-token>" \
-     'http://<algod-address>:<algod-port>/v2/status'
+     -H "X-Algo-API-Token:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+     'http://localhost:4001/v2/status'
     ```
 
 === "goal"
@@ -283,8 +284,8 @@ The _/v2/transactions/params_ endpoint returns information about the identity of
 === "cURL"
     ```bash 
     curl -i -X GET \
-       -H "X-Algo-API-Token:<algod-token>" \
-     'http://<algod-address>:<algod-port>/v2/transactions/params'
+     -H "X-Algo-API-Token:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+     'http://localhost:4001/v2/status/v2/transactions/params'
     ```
 
 === "goal"
