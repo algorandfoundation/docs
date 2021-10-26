@@ -39,7 +39,7 @@ If you have the `ALGORAND_DATA` environment variable set, you can just run:
 ```
 
 # update.sh, updater, and updatekey.json
-These are the primary files used for installing and updating the node software. They can executed manually or put them in a CRON job and have it execute more regularly. The process for doing this is explained in the installation guide.
+These are the primary files used for installing and updating the node software. They can be executed manually or put them in a CRON job and have it execute more regularly. The process for doing this is explained in the installation guide.
 
 # Node Data files
 As part of the installation process, a data directory is created. The node stores its local copy of the blockchain in this directory. Log files and configuration files are also stored here. Each of the configuration files is described below.
