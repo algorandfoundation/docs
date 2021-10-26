@@ -1,8 +1,8 @@
 title: Offline signatures
 
-This section explains how to authorize transactions with private keys that are kept **offline**. In particular, this guide shows how to create and save transactions to a file that can then be transferred to an offline device for signing. To learn about the structure of transactions and how to authorize them in general visit the [Transactions Structure]() and [Authorizing Transactions](signatures) sections, respectively.
+This section explains how to authorize transactions with private keys that are kept **offline**. In particular, this guide shows how to create and save transactions to a file that can then be transferred to an offline device for signing. To learn about the structure of transactions and how to authorize them in general visit the [Transactions Structure](../../transactions/) and [Authorizing Transactions](../../transactions/signatures/) sections, respectively.
 
-The same methodology described here can also be used to work with [LogicSignatures](../dapps/pyteal/smart-contracts/smartsigs/modes#logic-signatures) and [Multisignatures](signatures#multisignatures). All objects in the following examples use msgpack to store the transaction object ensuring interoperability with the SDKs and `goal`.
+The same methodology described here can also be used to work with [LogicSignatures](../../transactions/signatures/#logic-signatures) and [Multisignatures](../../transactions/signatures/#multisignatures). All objects in the following examples use msgpack to store the transaction object ensuring interoperability with the SDKs and `goal`.
 
 !!! info
     Storing keys _offline_ is also referred to as placing them in **cold storage**. An _online_ device that stores private keys is often referred to as a **hot wallet**.  
