@@ -67,8 +67,8 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     ```js
     from algosdk.v2client import algod
 
-    const algodServer = "https://api.host.com";
-    const port = "";
+    const algodServer = "http://localhost";
+    const port = "4001";
     const token = {
         'X-API-Key': "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     };
@@ -78,7 +78,7 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     ```Python
     from algosdk.v2client import algod
 
-    algod_address = "https://api.host.com"
+    algod_address = "http://localhost:4001"
     algod_token = ""
     headers = {
         "X-API-Key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -91,8 +91,8 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     ```Java 
     import com.algorand.algosdk.v2.client.common.AlgodClient;
 
-    final String ALGOD_API_ADDR = "https://api.host.com";
-    final Integer ALGOD_PORT = 443;
+    final String ALGOD_API_ADDR = "http://localhost";
+    final Integer ALGOD_PORT = 4001;
 
     final String[] ALGOD_API_KEY_HEADERS = {"X-API-Key"};
     final String[] ALGOD_API_KEY_VALUES = {"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"};
@@ -113,7 +113,7 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
         "github.com/algorand/go-algorand-sdk/client/v2/algod" 
     )
 
-    const algodAddress = "https://api.host.com"
+    const algodAddress = "http://localhost:4001"
     const apiKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
     func main() {
