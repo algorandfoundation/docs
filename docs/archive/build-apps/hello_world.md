@@ -347,7 +347,7 @@ await algodClient.sendRawTransaction(signedTxn).do();
 
 ```python tab="Python"
 txid = algod_client.send_transaction(signed_txn)
-print("Successfully sent transaction with txID: {}".format(txid)
+print("Successfully sent transaction with txID: {}".format(txid))
 ```
 
 ```java tab="Java"
