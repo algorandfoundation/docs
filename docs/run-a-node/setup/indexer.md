@@ -80,11 +80,10 @@ $ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] p
 
 
 ## REST API Token and Server
+
 When starting the Indexer, a REST API is exposed. To control access to this API you can you use the `--token` parameter, which allows specifying any desired token. REST API clients will be required to pass this token in their calls in order to return successful searches. The REST API defaults to serving on port 8980. This can be changed by supply a [host:port] value to the Indexer with the `--server` option.
 
-[Click here for Indexer Rest Endpoint specfiles.](../../../reference/sdks/#algod-v2-and-indexer-rest-endpoints) 
-
-
+[Click here for Indexer Rest Endpoint specfiles.](../../../rest-apis/restendpoints/)
 
 # Indexer V1
 
@@ -98,6 +97,7 @@ The two Additional REST calls are:
 ```
 /v1/transaction/{txid}
 ```
+
 This call allows quickly locating a transaction using the txid
 See [REST API Reference](../../../rest-apis/algod/v1#get-v1transactiontxid) for more details.
 
@@ -114,4 +114,4 @@ To turn on indexing for a node, the `isIndexerActive` configuration parameter mu
      Turning on indexing with a node will increase the disk space required by the node.
 
 !!! info
-    Indexing on a node is only allowed with nodes that have archival mode turned on.
+    Indexing on a node is only allowed with nodes that have archival mode turned on. 
