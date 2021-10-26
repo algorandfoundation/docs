@@ -1,14 +1,18 @@
 title: Install a node
 # Overview
-This guide explains how to install the Algorand Node software on Linux distributions and Mac OS. When installing on Linux, two installation methods are covered: by package manager and by updater script. The package manager method has been verified on Debian, Ubuntu, Fedora, and CentOS, while the updater script method has been verified on the same Linux distributions, as well as on Raspbian (Raspberry Pi 3), openSUSE Leap, Manjaro, Mageia, Alpine, and Solus. The package manager method uses fixed directories and automatically updates, while the updater script allows manually setting data directories and requires manual updates.
+This guide explains how to install the Algorand Node software on Linux distributions and Mac OS. When installing on Linux, two installation methods are covered: by package manager and by updater script.
+
+[The package manager method](#installation-with-a-package-manager) uses fixed directories and automatically updates. It has been validated on Debian, Ubuntu, Fedora, and CentOS.
+
+[The updater script method](#installation-with-the-updater-script) allows manually setting data directories and requires manual updates. It has been tested on the same Linux distributions from above, as well as on Raspbian (Raspberry Pi 3), openSUSE Leap, Manjaro, Mageia, Alpine, and Solus.
 
 !!! Info
-    If you want to run Algorand Node in MS Windows, [Rand Labs](https://github.com/randlabs/algorand-windows-node/) provides the installation binaries.
+    Windows users may choose to use [Rand Labs](https://github.com/randlabs/algorand-windows-node/) installation binaries.
 
 
 ### Package manager installation overview
 
-See [Node Artifacts](../../reference/artifacts) reference for a detailed list of some of files that are installed by this method. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. The binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is recommended to add to shell config files the following environment variable that points to the data directory:
+See [Node Artifacts](../../reference/artifacts) reference for a detailed list of some of files that are installed by this method. An environment variable can be set that points to the data directory and goal will use that variable if no `-d` flag is specified. The binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is recommended to add to shell config files the following environment variable that points to the data directory:
 
 ```
 export ALGORAND_DATA=/var/lib/algorand
@@ -25,7 +29,9 @@ Use this option when installing in the following operating systems: Debian, Ubun
 ### Updater script installation overview
 A node installation consists of two folders: the binaries (bin) and the data (data) folders. The bin folder can be created anywhere, but Algorand recommends `~/node`. This location is referenced later in the documentation. Remember to replace this location in the documentation below with the correct location. It is assumed that this folder is dedicated to Algorand binaries and is archived before each update. Note that nothing is currently deleted, the binaries for Algorand are just overwritten.
 
-When installing for the first time a `data` directory will need to be specified Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/artifacts) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use this location if a specific `data` folder is not specified. Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
+When installing for the first time a `data` directory will need to be specified. Algorand recommends using a location under the `node` folder, e.g. `~/node/data`. See [Node Artifacts](../../reference/artifacts) reference for a detailed list of all files that are installed. An environment variable can be set that points to the data directory and goal will use that variable if no `-d` flag is specified.
+
+Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
 ```
 export ALGORAND_DATA="$HOME/node/data"
@@ -65,7 +71,8 @@ These commands will install and configure `algod` as a service and place the alg
 
 This install defaults to the Algorand MainNet network. See [switching networks](../operations/switch_networks.md) for details on changing to another network.
 
-> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
+!!! Note
+    Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
 
 !!! Note 
     Since the data directory `/var/lib/algorand` is owned by the user `algorand` and the daemon `algod` is run as the user `algorand`, some operations such as the ones related to wallets and accounts keys (`goal account ...` and `goal wallet ...`) need to be run as the user `algorand`. For example, to list participation keys, use `sudo -u algorand -E goal account listpartkeys` (assuming the environment variable `$ALGORAND_DATA` is set to `/var/lib/algorand`) or `sudo -u algorand -E goal account listpartkey -d /var/lib/algorand` (otherwise). *Never run `goal` as `root` (e.g., `sudo goal account listpartkeys`).* Running `goal` as `root` can compromise the permissions of files in `/var/lib/algorand`.
@@ -103,7 +110,8 @@ These commands will install and configure `algod` as a service and place the alg
 
 This install defaults to the Algorand MainNet network. See switching networks<LINK> for details on changing to another network.
 
-> Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
+!!! Note
+    Most tools are included in the node binary package and do not require a separate install. There are a few additional tools (such as `pingpong`) in a separate tools package (i.e., `tools_stable_linux-amd64_2.1.6.tar.gz`).
 
 
 ## Installing the Devtools
@@ -124,7 +132,7 @@ See the examples above to understand how to install the deb and rpm packages.
 
 
 ## Start Node
-+ Installs by a package manager automatically start the node. Starting and stopping a node should be done using `systemctl` commands:
+Installs by a package manager automatically start the node. Starting and stopping a node should be done using `systemctl` commands:
 
 ```
 sudo systemctl start algorand
@@ -230,7 +238,7 @@ When the installer runs, it will pull down the latest update package from S3 and
 
 
 ## Start Node
-+ Installs by the updater script require that the node be started manually. This can be done with the following command:
+Installs by the updater script require that the node be started manually. This can be done with the following command:
 
 ```
 goal node start
@@ -280,7 +288,8 @@ Group=@@GROUP@@
 ...
 ```
 
-> If `bindir` is not provided, the script will assume the current working directory.
+!!! Note
+    If `bindir` is not provided, the script will assume the current working directory.
 
 After installing, the script will also make `systemd` aware that the script is present on the system. However, if making changes after installation, be sure to run the following command to register those changes:
 
