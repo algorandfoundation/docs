@@ -28,7 +28,7 @@ Starting from version 2 TEAL evaluator can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcode availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](../docs/get-details/dapps/avm/teal/opcodes.md) for details.
+3. Opcode availability. For example, all stateful operations are only available in stateful mode. Refer to [opcodes document](../opcodes) for details.
 
 ## Execution Environment for LogicSigs
 
@@ -90,7 +90,7 @@ Many instructions accept values to designate Accounts, Assets, or Applications. 
 
 Many programs need only a few dozen instructions. The instruction set has some optimization built in. `intc`, `bytec`, and `arg` take an immediate value byte, making a 2-byte op to load a value onto the stack, but they also have single byte versions for loading the most common constant values. Any program will benefit from having a few common values loaded with a smaller one byte opcode. Cryptographic hashes and `ed25519verify` are single byte opcodes with powerful libraries behind them. These operations still take more time than other ops (and this is reflected in the cost of each op and the cost limit of a program) but are efficient in compiled code space.
 
-This summary is supplemented by more detail in the [opcodes document](../docs/get-details/dapps/avm/teal/opcodes.md).
+This summary is supplemented by more detail in the [opcodes document](../opcodes).
 
 Some operations 'panic' and immediately fail the program.
 A transaction checked by a program that panics is not valid.
@@ -319,7 +319,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 61 | CreatedApplicationID | uint64 | ApplicationID allocated by the creation of an application (itxn only). LogicSigVersion >= 5. |
 
 
-Additional details in the [opcodes document](../docs/get-details/dapps/avm/teal/opcodes.md#txn) on the `txn` op.
+Additional details in the [opcodes document](../opcodes#txn) on the `txn` op.
 
 **Global Fields**
 
