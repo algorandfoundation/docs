@@ -1,8 +1,8 @@
 title: Signatures
 
-In the [Transactions Section](), you learned how transactions are composed. In this section you will learn how to authorize them. 
+In the [Transactions Section](../../transactions), you learned how transactions are composed. In this section you will learn how to authorize them. 
 
-Before a transaction is sent to the network, it must first be authorized by the [sender](transactions#sender). Authorization occurs through the addition of a **signature** to the transaction object. Specifically, a transaction object, when signed, is wrapped in a [`SignedTxn`](transactions#signed-transaction) object that includes the [transaction](transactions#txn) and a type of [signature](transactions#sig). 
+Before a transaction is sent to the network, it must first be authorized by the [sender](../../transactions/#transaction-walkthroughs). Authorization occurs through the addition of a **signature** to the transaction object. Specifically, a transaction object, when signed, is wrapped in a [`SignedTxn`](../../transactions/transactions#signed-transaction) object that includes the [transaction](../../transactions/transactions#txn) and a type of [signature](../../transactions/transactions#sig). 
 
 There are three types of signatures:
 
@@ -13,7 +13,7 @@ There are three types of signatures:
 
 
 # Single Signatures
-A single signature corresponds to a signature from the private key of an [Algorand public/private key pair](../accounts#keys-and-addresses).
+A single signature corresponds to a signature from the private key of an [Algorand public/private key pair](../../accounts#keys-and-addresses).
 
 This is an example of a transaction signed by an Algorand private key displayed with `goal clerk inspect` command:
 
@@ -35,13 +35,10 @@ This is an example of a transaction signed by an Algorand private key displayed 
 ```
 This transaction sends 10 Algo from `"EW64GC..."` to `"QC7XT7..."` on TestNet. The transaction was signed with the private key that corresponds to the `"snd"` address of `"EW64GC..."`. The base64 encoded signature is shown as the value of the [`"sig"`](./transactions.md#sig) field.
 
-**Related How-To**
-
-- [Sign a transaction with your private key](../../archive/build-apps/hello_world#sign-the-transaction)
 
 # Multisignatures
 
-When the [sender](transactions#sender) of a transaction is the address of a [multisignature account](../accounts/create#multisignature) then authorization requires a subset of signatures, _equal to or greater than the threshold value_, from the associated private keys of the addresses that multisignature account is composed of. See [Multisignature Accounts](../accounts/create#multisignature) for details on how to configure a multisignature account.
+When the [sender](../../transactions/transactions#sender) of a transaction is the address of a [multisignature account](../../accounts/create#multisignature) then authorization requires a subset of signatures, _equal to or greater than the threshold value_, from the associated private keys of the addresses that multisignature account is composed of. See [Multisignature Accounts](../../accounts/create#multisignature) for details on how to configure a multisignature account.
 
 !!! important
 	Upon signing, either the signing agent or the transaction needs to know the composition of the multisignature account, i.e. the ordered addresses, threshold, and version. 
@@ -126,7 +123,7 @@ The two signatures are added underneath their respective addresses. Since 2 meet
 
 **How-To**
 
-Extend the example from the [Multisignature Account](../accounts/create#multisignature) section by creating, signing, and sending a transaction from a multisig account on TestNet.
+Extend the example from the [Multisignature Account](../../accounts/create#multisignature) section by creating, signing, and sending a transaction from a multisig account on TestNet.
 
 === "JavaScript"
     ```javascript
@@ -787,14 +784,14 @@ Extend the example from the [Multisignature Account](../accounts/create#multisig
 
 # Logic Signatures
 
-Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../dapps/pyteal/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../dapps/pyteal/smart-contracts/smartsigs/modes#delegated-account).
+Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-account).
 
-A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../dapps/pyteal/smart-contracts/smartsigs/modes#logic-signatures).
+A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../../dapps/smart-contracts/smartsigs/modes#logic-signatures).
 
 **Related How-To**
 
-- [Use LogicSigs with the SDKs](../dapps/pyteal/smart-contracts/frontend/stateless-sdks)
-- [Attach a LogicSig with `goal`](../dapps/pyteal/smart-contracts/smartsigs/walkthrough)
+- [Use LogicSigs with the SDKs](../../dapps/smart-contracts/frontend/smartsigs)
+- [Attach a LogicSig with `goal`](../../dapps/smart-contracts/smartsigs/walkthrough)
 
 !!! info
     Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
