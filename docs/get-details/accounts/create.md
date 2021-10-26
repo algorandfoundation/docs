@@ -938,11 +938,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 === "goal"
 	```text
-		$ goal account new
-		Created new account with address [ADDRESS]
-
-		$ goal account export -a address<PLACEHOLDER>
-		Exported key for account [ADDRESS]: [PASSPHRASE]
+    The CLI tool goal may not be used to create a standalone account. It is only used for creating wallet based accounts. 
 	```
 
 === "algokey"
