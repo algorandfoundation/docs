@@ -39,6 +39,7 @@ The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) comma
     no        	EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4.4595158.6000000.partkey	EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4  	     4595158	     6000000	    478.2927
     ```
 
+
 The output above is an example of `goal account listpartkeys` run from a particular node. It displays all partkeys and whether or not each key has been **registered**, the **filename** of the participation key, the **first** and **last** rounds of validity for the partkey, the **parent address** (i.e. the address of the participating account) and the **first key**. The first key refers to the key batch and the index in that batch (`<key-batch>.<index>`) of the latest key that has not been deleted. This is useful in verifying that your node is participating (i.e. the batch should continue to increment as keys are deleted). It can also help ensure that you don't store extra copies of registered participation keys that have past round keys intact. 
 
 If the key you generated does not show up, check that it was correctly placed in the ledger directory `ls $ALGORAND_DATA/<network-id>/ | grep <participating-account-address>`. If not, move it there and run this command again to confirm.
@@ -67,5 +68,6 @@ Use [`goal account partkeyinfo`](../../../clis/goal/account/partkeyinfo) to dump
     }
     ...
     ```
+
 
 Above is the example output from a particular node. Use these values to create the [key registration transaction](../../../get-details/transactions#register-account-online) that will place the account online.

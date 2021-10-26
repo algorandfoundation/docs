@@ -76,7 +76,7 @@ How do you know that anything that we are telling you here is true? You can chec
 > [The Algorand source code](https://github.com/algorand/go-algorand){: target="_blank" }
 
 # Forking (or lack of)
-Forking is when a blockchain diverges into two separate paths. It is a phenomenon particular to proof-of-work blockchains (see pow image). Sometimes this forking is intentional, like when a significant part of the community wants to change the fundamentals of the protocol. Other times this forking is accidental and occurs when two miners find a block at almost the same time. Eventually, one of the paths will be abandoned, which means that all transactions that occurred since that fork on the abandoned path (the orphaned chain) will be invalid. This has important implications for transaction finality, which we’ll talk about in a bit. 
+Forking is when a blockchain diverges into two separate paths. Sometimes this forking is intentional, like when a significant part of the community wants to change the fundamentals of the protocol. Other times this forking is accidental and occurs when two miners find a block at almost the same time. Eventually, one of the paths will be abandoned, which means that all transactions that occurred since that fork on the abandoned path (the orphaned chain) will be invalid. This has important implications for transaction finality, which we’ll talk about in a bit. 
 
 Since Algorand is pure proof-of-stake and uses a voting mechanism to validate blocks, forking is impossible. In a worst case scenario, if the committee is taking longer to reach agreement, the blockchain will slow down or temporarily stall. 
 
