@@ -369,7 +369,7 @@ Send the signed transaction to the network with your algod client.
 === "Python"
     ```python 
     txid = algod_client.send_transaction(signed_txn)
-    print("Successfully sent transaction with txID: {}".format(txid)
+    print("Successfully sent transaction with txID: {}".format(txid))
     ```
 
 === "Java"
