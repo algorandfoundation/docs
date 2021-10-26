@@ -1,6 +1,6 @@
 title: 2. Connect to Node
 
-The **algod IP address** and access **token** you obtained in the [Workspace Setup](setup) section gives your application the credentials to interface with the Algorand blockchain. Interfacing with the Algorand blockchain using the SDKs is accomplished through an **algod client**. If using the algod REST API directly, these credentials can be supplied with each request.
+The **algod IP address** and access **token** you obtained in the [Workspace Setup](./setup) section gives your application the credentials to interface with the Algorand blockchain. Interfacing with the Algorand blockchain using the SDKs is accomplished through an **algod client**. If using the algod REST API directly, these credentials can be supplied with each request.
 
 _Read more about the [node's algod process](../../../run-a-node/reference/artifacts#algod)._
 
@@ -70,7 +70,7 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     const algodServer = "https://api.host.com";
     const port = "";
     const token = {
-        'X-API-Key': "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        'X-API-Key': "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     };
     const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
     ```
@@ -81,7 +81,7 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     algod_address = "https://api.host.com"
     algod_token = ""
     headers = {
-        "X-API-Key": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "X-API-Key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     }
 
     algod_client = algod.AlgodClient(algod_token, algod_address, headers)
@@ -95,7 +95,7 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     final Integer ALGOD_PORT = 443;
 
     final String[] ALGOD_API_KEY_HEADERS = {"X-API-Key"};
-    final String[] ALGOD_API_KEY_VALUES = {"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"};
+    final String[] ALGOD_API_KEY_VALUES = {"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"};
 
     AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, "");
 
@@ -114,7 +114,7 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
     )
 
     const algodAddress = "https://api.host.com"
-    const apiKey = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    const apiKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
     func main() {
         var headers []*algod.Header
