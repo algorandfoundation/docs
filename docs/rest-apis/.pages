@@ -3,3 +3,4 @@ arrange:
   - algod
   - kmd.md
   - indexer.md
+  - restendpoints.md

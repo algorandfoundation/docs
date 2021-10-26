@@ -19,8 +19,8 @@ We hope these examples give you a little taste of what is possible with the inde
 
 # More indexer resources
 
-* [Detailed guide on how to use the indexer](../../get-details/indexer/)
-* [Install the indexer](../../run-a-node/setup/indexer/)
+* [Detailed guide on how to use the indexer](../../get-details/indexer.md)
+* [Install the indexer](../../run-a-node/setup/indexer.md)
 
 This concludes our getting started content. If you are looking to dive deeper on some of the features that were introduced, head on over to the “Get details” section of the docs. You will also discover some other layer-1 features that we did not cover here, like multisignature accounts, atomic transfers, and rekeying.
 
