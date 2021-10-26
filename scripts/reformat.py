@@ -124,7 +124,7 @@ if __name__ == "__main__":
         os.makedirs(args.doc_dir)
 
     # Don't break if a trailing slash is provided.
-    if args.doc_dir[-1] is '/':
+    if args.doc_dir[-1] == '/':
         args.doc_dir = args.doc_dir[:-1]
 
     # Check if we should regenerate the markdown files
