@@ -1062,22 +1062,54 @@ As a way of getting started writing smart contracts, the following boilerplate t
     ```
 
 # Minimum balance requirement for a smart contract
-When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used and additional 2KB pages requested when deploying the contract. The calculation for the amount for creation is as follows.
+When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used.
 
-100000*(1+ExtraProgramPages) + (28500)*schema.NumUint + (50000)*schema.NumByteSlice
+Calculation for increase in min-balance during creation or opt-in is as follows:
 
-100000 microAlgo base fee for opting in or creating multiplied by 1 plus the number of extra pages. 50000 microAlgos for each key byte-slice (byte-array value) and 28500 microAlgos for each integer value.
+=== "Application Create"
 
-Any user that opts into the smart contract will have their minimum balance increased by the following amount.
+    ```
+    100000*(1+ExtraProgramPages) + (25000+3500)*schema.NumUint + (25000+25000)*schema.NumByteSlice
+    ```
 
-100000 + (28500)*schema.NumUint + (50000*schema.NumByteSlice)
+    In words:
 
-100000 microAlgo base fee for opting in. 50000 microAlgos for each key byte-slice (byte-array value) and 28500 microAlgos for each integer value.
+    - 100000 microAlgo base fee for each page requested. 
+    - 25000 + 3500 = 28500 for each Uint in the *Global State* schema
+    - 25000 + 25000 = 50000 for each byte-slice in *Global State* the schema
 
-Note that global storage is actually stored in the creator account, so that account is responsible for the global storage minimum balance and when a user options in (including the creator) that account is responsible for the minimum balance of local storage. As an example, suppose a smart contract has one 1 global key-value-pair of type byteslice and one 1 local storage key-value pair of type integer. The creator would need an additional 150000 microAlgos in its balance.
+=== "Application Opt-In"
 
-100000 to create the contract +  50000 for the global byte slice.
+    ```
+    100000 + (25000+3500)*schema.NumUint + (25000+25000)*schema.NumByteSlice
+    ```
 
-Any account that opts into the contract would have its balance requirement raised 128500 microAlgos.
+    In words:
 
-100000 to opt into the contract + 28500 for the locally stored integer.
+    - 100000 microAlgo base fee of opt-in
+    - 25000 + 3500 = 28500 for each Uint in the *Local State* schema
+    - 25000 + 25000 = 50000 for each byte-slice in the *Local State* schema
+
+
+!!! note 
+    Global storage is actually stored in the creator account, so that account is responsible for the global storage minimum balance.  When an account opts-in, it is responsible for the minimum balance of local storage. 
+
+## Example
+
+Given a smart contract with 1 *global* key-value-pair of type byteslice and 1 *local* storage key-value pair of type integer and no Extra Pages. 
+
+
+=== "Creator"
+
+    The creator of the Application would have its minimum balance raised by *150000 microAlgos*.
+    ```
+    100000 + 50000  = 150000
+    ```
+
+=== "Account"
+
+    The account opting into the Application would have minimum balance raised *128500 microAlgos*.
+
+    ```
+    100000 + 28500 = 128500
+    ```
