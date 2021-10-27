@@ -35,7 +35,7 @@ cd auction-demo
 This will clone down the [sandbox](https://github.com/algorand/sandbox) repository to `./_sandbox` and start some docker containers. 
 
 !!!note
-The following command will default to the `release` configuration. Other configurations that are compatible with this demo are `beta, `nightly` and `dev`. This is because the app requires an unencrypted-default-wallet to sign transactions.
+    The following command will default to the `release` configuration. Other configurations that are compatible with this demo are `beta, `nightly` and `dev`. This is because the app requires an unencrypted-default-wallet to sign transactions.
 
 ```bash
 ./sandbox up
@@ -44,7 +44,7 @@ The following command will default to the `release` configuration. Other configu
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank} 
 
 !!!note 
-If the sandbox fails to start please follow setup directions [here](https://github.com/algorand/sandbox#algorand-sandbox).
+    If the sandbox fails to start please follow setup directions [here](https://github.com/algorand/sandbox#algorand-sandbox).
 
 
 ## Setup environment and run tests
