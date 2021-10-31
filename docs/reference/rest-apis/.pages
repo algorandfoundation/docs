@@ -1,5 +1,0 @@
-title: REST APIs
-arrange:
-  - algod
-  - kmd.md
-  - indexer.md

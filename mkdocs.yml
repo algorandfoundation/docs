@@ -9,6 +9,7 @@ theme:
 
 markdown_extensions:
   - admonition
+  - footnotes
   - pymdownx.arithmatex
   - pymdownx.betterem:
       smart_enable: all
@@ -22,10 +23,12 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences
+  - pymdownx.tabbed
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
   - codehilite
+  - attr_list
   - toc:
       permalink: true
       baselevel: 2
