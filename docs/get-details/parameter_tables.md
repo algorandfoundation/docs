@@ -1,6 +1,11 @@
 title: Algorand parameter tables
 [comment]: <> (generated from: https://docs.google.com/spreadsheets/d/12E_B6AYBfhrOoylO8NZysqKns4rHKklV8I0fejiwMXE)
 
+## MultiSignature
+|Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
+|-|-|-|-|-|
+|MultiSignature Max SubSignatures| 255| [reference](/docs/get-details/accounts/create/#multisignature)|||
+
 ## Minimum balance
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
