@@ -4,7 +4,7 @@ title: Algorand parameter tables
 ## MultiSignature
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
-|MultiSignature Max SubSignatures| 255| [reference](/docs/get-details/accounts/create/#multisignature)|||
+|MultiSignature Max SubSignatures| 255| [reference](/get-details/accounts/create/#multisignature)|||
 
 ## Minimum balance
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
