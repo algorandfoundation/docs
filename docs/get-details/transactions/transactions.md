@@ -67,7 +67,7 @@ Object Name: `AssetParams`
 |<a name="defaultfrozen">DefaultFrozen</a>|_required on creation_|bool|`"df"`| True to freeze holdings for this asset by default. |
 |<a name="unitname">UnitName</a>|_optional_|string|`"un"`| The name of a unit of this asset. Supplied on creation. Max size is 8 bytes. Example: USDT |
 |<a name="assetname">AssetName</a>|_optional_|string|`"an"`| The name of the asset. Supplied on creation. Max size is 32 bytes. Example: Tether|
-|<a name="url">URL</a>|_optional_|string|`"au"`| Specifies a URL where more information about the asset can be retrieved. Max size is 32 bytes. |
+|<a name="url">URL</a>|_optional_|string|`"au"`| Specifies a URL where more information about the asset can be retrieved. Max size is 96 bytes. |
 |<a name="metadatahash">MetaDataHash</a>|_optional_|[]byte|`"am"`| This field is intended to be a 32-byte hash of some metadata that is relevant to your asset and/or asset holders. The format of this metadata is up to the application. This field can _only_ be specified upon creation. An example might be the hash of some certificate that acknowledges the digitized asset as the official representation of a particular real-world asset.  |
 |<a name="manageraddr">ManagerAddr</a>|_optional_|Address|`"m"`| The address of the account that can manage the configuration of the asset and destroy it. |
 |<a name="reserveaddr">ReserveAddr</a>|_optional_|Address|`"r"`| The address of the account that holds the reserve (non-minted) units of the asset. This address has no specific authority in the protocol itself. It is used in the case where you want to signal to holders of your asset that the non-minted units of the asset reside in an account that is different from the default creator account (the sender). |
