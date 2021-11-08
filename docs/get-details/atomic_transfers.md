@@ -126,7 +126,7 @@ If using `goal`, the transaction files can be combined using an OS-level command
 
 === "Java"
 	``` java
-    // the Go SDK performs combining implicitly within grouping below
+    // the Java SDK performs combining implicitly within grouping below
     ```
 
 === "Go"

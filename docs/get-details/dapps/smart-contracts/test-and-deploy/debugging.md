@@ -137,10 +137,7 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
         if (data == null)
         {
             //compile
-            txns = [{
-                lsig: lsig,
-                txn: txn,
-            }];        
+            txns = [{ lsig: lsig, txn: txn }];        
         }
         else
         {
@@ -157,89 +154,6 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
         dryrunResponse = await algodclient.dryrun(dr).do();
         return dryrunResponse;
     }
-
-    // the dryrun response should look similar to this
-    // {
-    // "error": "",
-    // "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-    // "txns": [
-    // {
-    //     "disassembly": [
-    //         "// version 1",
-    //         "intcblock 123",
-    //         "arg_0",
-    //         "btoi",
-    //         "intc_0",
-    //         "==",
-    //         ""
-    //     ],
-    //     "logic-sig-messages": [
-    //         "PASS"
-    //     ],
-    //     "logic-sig-trace": [
-    //         {
-    //             "line": 1,
-    //             "pc": 1,
-    //             "stack": []
-    //         },
-    //         {
-    //             "line": 2,
-    //             "pc": 4,
-    //             "stack": []
-    //         },
-    //         {
-    //             "line": 3,
-    //             "pc": 5,
-    //             "stack": [
-    //                 {
-    //                     "bytes": "ew==",
-    //                     "type": 1,
-    //                     "uint": 0
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "line": 4,
-    //             "pc": 6,
-    //             "stack": [
-    //                 {
-    //                     "bytes": "",
-    //                     "type": 2,
-    //                     "uint": 123
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "line": 5,
-    //             "pc": 7,
-    //             "stack": [
-    //                 {
-    //                     "bytes": "",
-    //                     "type": 2,
-    //                     "uint": 123
-    //                 },
-    //                 {
-    //                     "bytes": "",
-    //                     "type": 2,
-    //                     "uint": 123
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "line": 6,
-    //             "pc": 8,
-    //             "stack": [
-    //                 {
-    //                     "bytes": "",
-    //                     "type": 2,
-    //                     "uint": 1
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
-    // ]
-    // }
     ```
 
 === "Python"
@@ -254,89 +168,6 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
         drr = DryrunRequest(txns=[lstx], sources=sources)
         dryrun_response = algod_client.dryrun(drr)
         return dryrun_response
-
-    # dryrun response should look similar to this
-    # {
-    # "error": "",
-    # "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-    # "txns": [
-    # {
-    # "disassembly": [
-    #     "// version 1",
-    #     "intcblock 123",
-    #     "arg_0",
-    #     "btoi",
-    #     "intc_0",
-    #     "==",
-    #     ""
-    # ],
-    # "logic-sig-messages": [
-    #     "PASS"
-    # ],
-    # "logic-sig-trace": [
-    #     {
-    #         "line": 1,
-    #         "pc": 1,
-    #         "stack": []
-    #     },
-    #     {
-    #         "line": 2,
-    #         "pc": 4,
-    #         "stack": []
-    #     },
-    #     {
-    #         "line": 3,
-    #         "pc": 5,
-    #         "stack": [
-    #             {
-    #                 "bytes": "AAAAAAAAAHs=",
-    #                 "type": 1,
-    #                 "uint": 0
-    #             }
-    #         ]
-    #     },
-    #     {
-    #         "line": 4,
-    #         "pc": 6,
-    #         "stack": [
-    #             {
-    #                 "bytes": "",
-    #                 "type": 2,
-    #                 "uint": 123
-    #             }
-    #         ]
-    #     },
-    #     {
-    #         "line": 5,
-    #         "pc": 7,
-    #         "stack": [
-    #             {
-    #                 "bytes": "",
-    #                 "type": 2,
-    #                 "uint": 123
-    #             },
-    #             {
-    #                 "bytes": "",
-    #                 "type": 2,
-    #                 "uint": 123
-    #             }
-    #         ]
-    #     },
-    #     {
-    #         "line": 6,
-    #         "pc": 8,
-    #         "stack": [
-    #             {
-    #                 "bytes": "",
-    #                 "type": 2,
-    #                 "uint": 1
-    #             }
-    #         ]
-    #     }
-    # ]
-    # }
-    # ]
-    # }
     ```
 
 === "Java"
@@ -366,88 +197,6 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
         dryrunResponse = client.TealDryrun().request(dr).execute();
         return dryrunResponse;
     } 
-    // response should look similar to this
-    // Dryrun repsonse : {
-    //   "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-    //   "error": "",
-    //   "txns": [{
-    //     "global-delta": [],
-    //     "local-deltas": [],
-    //     "disassembly": [
-    //       "// version 1",
-    //       "intcblock 123",
-    //       "arg_0",
-    //       "btoi",
-    //       "intc_0",
-    //       "==",
-    //       ""
-    //     ],
-    //     "logic-sig-messages": ["PASS"],
-    //     "app-call-messages": [],
-    //     "app-call-trace": [],
-    //     "logic-sig-trace": [
-    //       {
-    //         "stack": [],
-    //         "pc": 1,
-    //         "line": 1,
-    //         "scratch": []
-    //       },
-    //       {
-    //         "stack": [],
-    //         "pc": 4,
-    //         "line": 2,
-    //         "scratch": []
-    //       },
-    //       {
-    //         "stack": [{
-    //           "bytes": "ew==",
-    //           "type": 1,
-    //           "uint": 0
-    //         }],
-    //         "pc": 5,
-    //         "line": 3,
-    //         "scratch": []
-    //       },
-    //       {
-    //         "stack": [{
-    //           "bytes": "",
-    //           "type": 2,
-    //           "uint": 123
-    //         }],
-    //         "pc": 6,
-    //         "line": 4,
-    //         "scratch": []
-    //       },
-    //       {
-    //         "stack": [
-    //           {
-    //             "bytes": "",
-    //             "type": 2,
-    //             "uint": 123
-    //           },
-    //           {
-    //             "bytes": "",
-    //             "type": 2,
-    //             "uint": 123
-    //           }
-    //         ],
-    //         "pc": 7,
-    //         "line": 5,
-    //         "scratch": []
-    //       },
-    //       {
-    //         "stack": [{
-    //           "bytes": "",
-    //           "type": 2,
-    //           "uint": 1
-    //         }],
-    //         "pc": 8,
-    //         "line": 6,
-    //         "scratch": []
-    //       }
-    //     ]
-    //   }]
-    // }
     ```
 
 === "Go"
@@ -481,82 +230,88 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
         }
         return  result
     }
-    // the response should look similar to this...
-    // Result = {
-    // "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
-    // "txns": [
-    // {
-    //     "disassembly": [
-    //         "// version 1",
-    //         "intcblock 123",
-    //         "arg_0",
-    //         "btoi",
-    //         "intc_0",
-    //         "==",
-    //         ""
-    //     ],
-    //     "logic-sig-messages": [
-    //         "PASS"
-    //     ],
-    //     "logic-sig-trace": [
-    //         {
-    //             "line": 1,
-    //             "pc": 1
-    //         },
-    //         {
-    //             "line": 2,
-    //             "pc": 4
-    //         },
-    //         {
-    //             "line": 3,
-    //             "pc": 5,
-    //             "stack": [
-    //                 {
-    //                     "bytes": "AAAAAAAAAHs=",
-    //                     "type": 1
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "line": 4,
-    //             "pc": 6,
-    //             "stack": [
-    //                 {
-    //                     "type": 2,
-    //                     "uint": 123
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "line": 5,
-    //             "pc": 7,
-    //             "stack": [
-    //                 {
-    //                     "type": 2,
-    //                     "uint": 123
-    //                 },
-    //                 {
-    //                     "type": 2,
-    //                     "uint": 123
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "line": 6,
-    //             "pc": 8,
-    //             "stack": [
-    //                 {
-    //                     "type": 2,
-    //                     "uint": 1
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
 
-    // ]
-    // }   
     ```
+
+The response should look similar to this:
+
+```json
+{
+     "protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
+     "txns": [
+     {
+         "disassembly": [
+             "// version 1",
+             "intcblock 123",
+             "arg_0",
+             "btoi",
+             "intc_0",
+             "==",
+             ""
+         ],
+         "logic-sig-messages": [
+             "PASS"
+         ],
+         "logic-sig-trace": [
+             {
+                 "line": 1,
+                 "pc": 1
+             },
+             {
+                 "line": 2,
+                 "pc": 4
+             },
+             {
+                 "line": 3,
+                 "pc": 5,
+                 "stack": [
+                     {
+                         "bytes": "AAAAAAAAAHs=",
+                         "type": 1
+                     }
+                 ]
+             },
+             {
+                 "line": 4,
+                 "pc": 6,
+                 "stack": [
+                     {
+                         "type": 2,
+                         "uint": 123
+                     }
+                 ]
+             },
+             {
+                 "line": 5,
+                 "pc": 7,
+                 "stack": [
+                     {
+                         "type": 2,
+                         "uint": 123
+                     },
+                     {
+                         "type": 2,
+                         "uint": 123
+                     }
+                 ]
+             },
+             {
+                 "line": 6,
+                 "pc": 8,
+                 "stack": [
+                     {
+                         "type": 2,
+                         "uint": 1
+                     }
+                 ]
+             }
+         ]
+      } 
+   ]
+}   
+```
+
+To make the same request via the commandline use goal:
 
 === "goal"
 	```bash
@@ -593,5 +348,4 @@ The SDKs support debugging with the dryrun REST API. The dryrun response to this
 
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip)
-
 
