@@ -37,7 +37,7 @@ The TypeScript sample code below should allow a dApp developer to establish a co
   ```
 
 !!! Info
-  Developers are encouraged to watch the [walletconnect-monorepo](https://github.com/WalletConnect/walletconnect-monorepo/releases) for new releases. Rebuild and deploy your dApp to utilize new features and performance enhancements. 
+    Developers are encouraged to watch the [walletconnect-monorepo](https://github.com/WalletConnect/walletconnect-monorepo/releases) for new releases. Rebuild and deploy your dApp to utilize new features and performance enhancements. 
 
 ### Initiate Connection
 
