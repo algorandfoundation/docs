@@ -109,7 +109,7 @@ To view the transaction, click on the transaction link in the dispenser or copy 
 [Watch Video](https://youtu.be/WuhaGp2yrak?t=326){:target="_blank"}
 ​​
 # Connect Your Client
-Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value with server address `http://localhost` and port `4001`.
+Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value (64 "a"s) with server address `http://localhost` and port `4001`.
  
 ```javascript
 async function firstTransaction() {
