@@ -282,6 +282,58 @@ Lookup application.
 * lookup
 
 
+<a name="lookupapplicationlogsbyid"></a>
+### GET /v2/applications/{application-id}/logs
+
+**Description**
+Lookup application logs.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**application-id**  <br>*required*||integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
+|**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+|**Query**|**sender-address**  <br>*optional*|Only include transactions with this sender address.|string|
+|**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookupapplicationlogsbyid-response-200)|
+
+<a name="lookupapplicationlogsbyid-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**application-id**  <br>*required*|\[appidx\] application index.|integer|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**log-data**  <br>*optional*||< [ApplicationLogData](#applicationlogdata) > array|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
 <a name="searchforassets"></a>
 ### GET /v2/assets
 
@@ -729,6 +781,17 @@ Stores local state associated with an application.
 |**schema**  <br>*required*|\[hsch\] schema.|[ApplicationStateSchema](#applicationstateschema)|
 
 
+<a name="applicationlogdata"></a>
+### ApplicationLogData
+Stores the global information associated with an application.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**logs**  <br>*required*|\[lg\] Logs for the application being executed by the transaction.|< string (byte) > array|
+|**txid**  <br>*required*|Transaction ID|string|
+
+
 <a name="applicationparams"></a>
 ### ApplicationParams
 Stores the global information associated with an application.
@@ -1013,7 +1076,7 @@ Represents a TEAL value.
 
 <a name="transaction"></a>
 ### Transaction
-Contains all fields common to all transactions and serves as an envelope to all transactions type.
+Contains all fields common to all transactions and serves as an envelope to all transactions type. Represents both regular and inner transactions.
 
 Definition:
 data/transactions/signedtxn.go : SignedTxn
@@ -1038,12 +1101,14 @@ data/transactions/transaction.go : Transaction
 |**genesis-id**  <br>*optional*|\[gen\] genesis block ID.|string|
 |**global-state-delta**  <br>*optional*|\[gd\] Global state key/value changes for the application being executed by this transaction.|[StateDelta](#statedelta)|
 |**group**  <br>*optional*|\[grp\] Base64 encoded byte array of a sha512/256 digest. When present indicates that this transaction is part of a transaction group and the value is the sha512/256 hash of the transactions in that group.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**id**  <br>*required*|Transaction ID|string|
+|**id**  <br>*optional*|Transaction ID|string|
+|**inner-txns**  <br>*optional*|Inner transactions produced by application execution.|< [Transaction](#transaction) > array|
 |**intra-round-offset**  <br>*optional*|Offset into the round where this transaction was confirmed.|integer|
 |**keyreg-transaction**  <br>*optional*||[TransactionKeyreg](#transactionkeyreg)|
 |**last-valid**  <br>*required*|\[lv\] Last valid round for this transaction.|integer|
 |**lease**  <br>*optional*|\[lx\] Base64 encoded 32-byte array. Lease enforces mutual exclusion of transactions.  If this field is nonzero, then once the transaction is confirmed, it acquires the lease identified by the (Sender, Lease) pair of the transaction until the LastValid round passes.  While this transaction possesses the lease, no other transaction specifying this lease can be confirmed.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**local-state-delta**  <br>*optional*|\[ld\] Local state key/value changes for the application being executed by this transaction.|< [AccountStateDelta](#accountstatedelta) > array|
+|**logs**  <br>*optional*|\[lg\] Logs for the application being executed by this transaction.|< string (byte) > array|
 |**note**  <br>*optional*|\[note\] Free form data.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**payment-transaction**  <br>*optional*||[TransactionPayment](#transactionpayment)|
 |**receiver-rewards**  <br>*optional*|\[rr\] rewards applied to receiver account.|integer|
@@ -1051,7 +1116,7 @@ data/transactions/transaction.go : Transaction
 |**round-time**  <br>*optional*|Time when the block this transaction is in was confirmed.|integer|
 |**sender**  <br>*required*|\[snd\] Sender's address.|string|
 |**sender-rewards**  <br>*optional*|\[rs\] rewards applied to sender account.|integer|
-|**signature**  <br>*required*||[TransactionSignature](#transactionsignature)|
+|**signature**  <br>*optional*||[TransactionSignature](#transactionsignature)|
 |**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl)|
 
 
