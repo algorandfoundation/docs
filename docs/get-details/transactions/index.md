@@ -8,7 +8,7 @@ At the end of this section are several useful transaction-related how-tos.
 	When you are given a transaction to sign, understanding its underlying representation will help you verify that the details of the transaction are correct.
 
 # Transaction Types
-There are [six transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 1) [Payment](#payment-transaction), 2) [Key Registration](#key-registration-transaction), 3) [Asset Configuration](#asset-configuration-transaction), 4) [Asset Freeze](#asset-freeze-transaction), 5) [Asset Transfer](#asset-transfer-transaction), 6) [Application Call](https://developer.algorand.org/docs/get-details/transactions/transactions/?from_query=application%20call#application-call-transaction)
+There are [five transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 1) [Payment](#payment-transaction), 2) [Key Registration](#key-registration-transaction), 3) [Asset Configuration](#asset-configuration-transaction), 4) [Asset Freeze](#asset-freeze-transaction), 5) [Asset Transfer](#asset-transfer-transaction)
 
 These five transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](../atomic_transfers#creating-an-asset) and [destroy an asset](../atomic_transfers#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
 
@@ -344,9 +344,6 @@ An asset freeze transaction is identified by `"type": "afrz"`. In this example, 
 
 ### See also
 - [Freezing an Asset](../asa#freezing-an-asset)
-
-## Application Call Transaction
-An application call transaction allows you to call a smart contract. An application call transaction is identified by `"type": "appl"`. 
 
 # Sending a Transaction in the Future
 
