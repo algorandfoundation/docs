@@ -14,11 +14,11 @@ Use **third-party API services** to access native Algorand REST APIs for the mai
 
 ## 3. Run your Algorand node
 
-You can decide to **run your own [Algorand node](https://github.com/algorand/go-algorand)**, which contains the full implementation of the Algorand software. This solution is more complex to set up and is also less flexible. Unlike the Sandbox, you can't throw away a network and set up a new one when you want to. Setting up an Algorand node takes much more time than setting up a local, private network using the Sandbox.
+You can decide to **run your own [Algorand node](https://github.com/algorand/go-algorand)**, which contains the full implementation of the Algorand software. This solution is more complex to set up and is also less flexible. Unlike the sandbox, you can't throw away a network and set up a new one when you want to. Setting up an Algorand node takes much more time than setting up a local, private network using the sandbox.
 
 ## Recommendation?
 
-If you only want to try out Algorand code snippets, you can get started quickly with a third-party API service. However, to continue learning about Algorand and its smart signatures/smart contracts, it's recommended to install the Algorand sandbox. Also, the sandbox comes with the [indexer software](https://developer.algorand.org/docs/rest-apis/indexer/#create-publication-overlay) which runs locally so you can quickly look up applications, assets, transactions, and accounts.
+If you only want to try out Algorand code snippets, you can get started quickly with a third-party API service. However, to continue learning about Algorand and its smart signatures/smart contracts, installing the Algorand sandbox is recommended. Also, the sandbox comes with the [indexer software](https://developer.algorand.org/docs/rest-apis/indexer/#create-publication-overlay), which runs locally so you can quickly lookup applications, assets, transactions, and accounts.
 
 Here are steps to install the Algorand sandbox:
 
