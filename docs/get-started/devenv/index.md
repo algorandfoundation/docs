@@ -1,12 +1,12 @@
 title: Set up your development environment
 
-To start building on Algorand, you need to prepare your development environment. A development environment consists of getting access to an Algorand node. You need access to a node to submit new transactions, read blockchain data, and manage wallets.
+To start building on Algorand, you need to prepare your development environment. A development environment requires getting access to an Algorand node. You need access to a node to submit new transactions, read blockchain data, and manage wallets.
 
 Let's take a look at the different options you have.
 
 ## 1. Sandbox
 
-The most-used option is setting up the **[Algorand sandbox](https://github.com/algorand/sandbox)**. The sandbox allows developers to create local, private networks. Moreover, you can quickly remove a network, reset its state, or spin up a new network. The only requirement for using the Algorand sandbox is installing Docker and Docker-Compose. Additionally, you can choose to connect to a real network and catch up to the latest round.
+The most-used option is setting up the **[Algorand sandbox](https://github.com/algorand/sandbox)**. The sandbox allows developers to create local, private networks. Moreover, you can quickly remove a network, reset its state, or spin up a new network. The only requirement for using the Algorand sandbox is installing Docker and Docker-Compose. Additionally, you can choose to connect to a real network and the sandbox will take care of catching up to the latest round.
 
 ## 2. Third-party API services
 
@@ -18,9 +18,9 @@ You can decide to **run your own [Algorand node](https://github.com/algorand/go-
 
 ## Recommendation?
 
-If you only want to try out Algorand code snippets, you can get started quickly with a third-party API service. However, to continue learning about Algorand and its smart signatures/smart contracts, installing the Algorand sandbox is recommended. Also, the sandbox comes with the [indexer software](https://developer.algorand.org/docs/rest-apis/indexer/#create-publication-overlay), which runs locally so you can quickly lookup applications, assets, transactions, and accounts.
+If you only want to try out Algorand code snippets, you can get started quickly with a third-party API service. However, to continue learning about Algorand and its smart signatures/smart contracts, installing the Algorand sandbox is recommended. Also, in local private networks, the sandbox comes with the [indexer software](https://developer.algorand.org/docs/rest-apis/indexer/#create-publication-overlay), which runs locally so you can quickly lookup applications, assets, transactions, and accounts.
 
-Here are steps to install the Algorand sandbox:
+Once you have the prerequisites detailed on the [sandbox README](https://github.com/algorand/sandbox#getting-started), you can install the Algorand sandbox:
 
 ```sh
 // clone the sandbox from GitHub
