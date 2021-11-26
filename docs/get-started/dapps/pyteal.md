@@ -12,27 +12,30 @@ This guide is organized into two sections. The first section helps you launch th
 
 All of the code for this guide is [located here](https://github.com/algorand/auction-demo){: target="_blank"}. Clone the repo and follow along!
 
-#Launching the application
-Algorand provides a docker instance for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have docker installed, then run this code to launch a sandbox node with a private network, i.e. your own local blockchain that runs the Algorand protocol.
+# Launching the application
+Algorand provides a [Docker instance](https://docs.docker.com/get-docker/) for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have Docker installed, then run this code to launch a [sandbox node](https://github.com/algorand/sandbox) with a private network, i.e. your own local blockchain that runs the Algorand protocol.
 
 <center>
 ![Sandbox node guy](../../imgs/sandbox-node-guy.png){: style="width:200px"}
 <figcaption style="font-size:12px">Sandbox node to the rescue!</figcaption>
 </center>
 
+
+## Prerequisites
+- [Docker](https://www.docker.com/products/docker-desktop){: target="_blank"}
+- [Python 3.6 or higher](https://www.python.org/downloads/){: target="_blank"}
  
- 
-##Clone the auction demo application
-The auction app requires Python 3.6 or higher. Clone the repository using the following commands.
+## Clone the auction demo application
+Clone the repository using the following commands.
  
 ```bash
 git clone https://github.com/algorand/auction-demo
 cd auction-demo
 ```
 
-##Install Sandbox
- 
-This command will clone down the [sandbox](https://github.com/algorand/sandbox) repository to `./_sandbox` and start some docker containers. 
+## Install Sandbox
+
+Run the following script directly from your terminal if you are on Mac or Linux. If you are on Windows, run from a terminal that supports bash, such as Git Bash. This command will clone down the [sandbox](https://github.com/algorand/sandbox) repository to `./_sandbox` and start some docker containers. 
 
 ```bash
 ./sandbox up
@@ -40,12 +43,12 @@ This command will clone down the [sandbox](https://github.com/algorand/sandbox) 
 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23){target=_blank}   
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank} 
+[`Follow Sandbox tutorial`](https://developer.algorand.org/tutorials/exploring-the-algorand-sandbox/){target=_blank}
 
 !!!note
-    The above command will default to the `release` configuration. Other configurations that are compatible with this demo are `beta, `nightly` and `dev`. This is because the app requires an unencrypted-default-wallet to sign transactions.
+    The above command will default to the `release` configuration. Other configurations that are compatible with this demo are `beta`, `nightly` and `dev`. This is because the app requires an unencrypted-default-wallet to sign transactions.
 
-    If the sandbox fails to start please follow setup directions [here](https://github.com/algorand/sandbox#algorand-sandbox).
-
+    If the sandbox fails to start please follow setup directions [here](https://github.com/algorand/sandbox#algorand-sandbox){: target="_blank"}.
 
 ## Setup environment and run tests
 Install the required dependencies for the project. We recommend using a Python virtual environment to do this. The following commands will activate the virtual environment and then install all dependencies, including PyTeal and the Algorand Python SDK. 
@@ -56,7 +59,7 @@ Setup Python environment (one time).
 python3 -m venv venv
 ```
 
-Activate `venv`.
+Activate `venv`. Replace `bin` with `Scripts` on Windows.
 
 
 === "bash"
@@ -241,7 +244,7 @@ Let’s follow the “setup” path to the `on_setup` code.
         Approve(),
     )
 ```
-This code verifies that the start time has not passed and uses a smart contract transaction to opt the smart contract into the NFT that will be auctioned. It is important to note that this transaction will be grouped with two other transactions - one payment transaction to fund the smart contract with a algos to cover minimum balance requirements and transaction fees, the application transaction that triggers the setup, and an asset transfer transaction that will move the NFT from the seller’s account to the smart contract.
+This code verifies that the start time has not passed and uses a smart contract transaction to opt the smart contract into the NFT that will be auctioned. It is important to note that this transaction will be grouped with two other transactions - one payment transaction to fund the smart contract with some algos to cover [minimum balance requirements](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#minimum-balance-requirement-for-a-smart-contract){: target="_blank"} and transaction fees, the application transaction that triggers the setup, and an asset transfer transaction that will move the NFT from the seller’s account to the smart contract.
 
 ## Bid in the auction
 Back to the auction! Let’s now check out the `on_bid` scenario which will be evaluated if a user supplied “bid” with a `NoOp` application transaction. 
@@ -392,7 +395,7 @@ def createAuctionApp(
             a bid that is equal to or greater than this amount, the auction will
             fail, meaning the bid amount will be refunded to the lead bidder and
             the NFT will return to the seller.
-        minBidIncrement: The minimum different required between a new bid and
+        minBidIncrement: The minimum difference required between a new bid and
             the current leading bid.
 
     Returns:

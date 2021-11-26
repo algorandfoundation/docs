@@ -1,6 +1,6 @@
 title: Interact with smart contracts
 
-This guide covers using smart contracts with the Algorand SDKs. Smart contracts are also referred to as stateful smart contracts. Smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
+This guide covers using smart contracts with the Algorand SDKs. Smart contracts are also referred to as smart contracts. Smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
 
 
 !!! info
@@ -8,7 +8,7 @@ This guide covers using smart contracts with the Algorand SDKs. Smart contracts 
 
 # Application lifecycle
 
-This guide follows an application throughout its [lifecycle](../apps/index.md#the-lifecycle-of-a-stateful-smart-contract) from initial creation, to usage, to modification and finally deletion. The application stores the number of times it is called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
+This guide follows an application throughout its [lifecycle](../apps/index.md#the-lifecycle-of-a-smart-contract) from initial creation, to usage, to modification and finally deletion. The application stores the number of times it is called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
 
 # Environment setup
 
