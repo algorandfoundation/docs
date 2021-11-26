@@ -79,7 +79,9 @@ Before sending transactions to the Algorand network, the account must be funded 
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance, see [Account Overview](../../get-details/accounts/index.md#minimum-balance){target=_blank}.  
 
 # Connect Your Client
-Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. Code beyond this point will be put into the ***first_transaction_example*** function to create a single script.
+Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algod_token` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value and the `algod_address` corresponds to `http://localhost:4001`.
+
+Code beyond this point will be put into the ***first_transaction_example*** function to create a single script.
 
 ```python
 from algosdk.v2client import algod
