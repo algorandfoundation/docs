@@ -116,6 +116,8 @@ Fungible tokens, like NFTs, are implemented as Algorand Standard Assets (ASAs). 
 
 Let’s imagine that Alice wants to create a loyalty point program for her buyers. She’ll represent these points as a fungible asset on Algorand and will call it AliceCoin. Owners of AliceCoin can use them to buy future artwork or trade it in for priority access to some of Alice’s art events. Let’s mint AliceCoin on TestNet. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) FT standard. 
 
+Notice that we didn't set the [mutable asset parameters](https://developer.algorand.org/docs/get-details/asa/#mutable-asset-parameters) `manager`, `reserve`, `freeze`, and `clawback`. When you set them to `undefined` or an empty string, the protocol will interpret them as immutable from that point forward. That means you can change these asset parameters anymore. You can find all asset parameters [here](https://developer.algorand.org/docs/get-details/asa/#asset-parameters)
+
 === "Python"
     [Run code](https://replit.com/@Algorand/CreateFTPython/){: target="_blank"}
 
