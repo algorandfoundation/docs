@@ -12,7 +12,9 @@ Non-fungible tokens, or NFTs for short, are unique assets represented on the blo
 Remember that Alice wants to use blockchain to help her scale and grow her business, because it provides important properties that she cannot achieve otherwise (trust, transparency, efficiency, low costs). The first step for her is to represent her unique art pieces on-chain as NFTs. Let's go ahead and learn how to create an NFT on Algorand.
 
 # How to create NFTs
-NFTs are created using Algorand Standard Assets (ASAs), which are built into the protocol and activated using a special type of transaction. You do not need to write smart contract code, which may be the case on some other blockchains. You just need to specify a few parameters to identify it as an NFT (e.g. total count of 1) and attach metadata so that potential owners have the information they need to validate the integrity of the asset. The relevant code snippet in each of the SDKs is as follows:
+NFTs are created using Algorand Standard Assets (ASAs), which are built into the protocol and activated using a special type of transaction. You do not need to write smart contract code, which may be the case on some other blockchains. You just need to specify a few parameters to identify it as an NFT and attach metadata so that potential owners have the information they need to validate the integrity of the asset. For instance, you need to set the total amount of units you want to create for this asset to 1 and set the number of decimals to 0. This ensures you create exactly one unit of your ASA and you can't divide the newly minted asset.
+
+The relevant code snippet in each of the SDKs is as follows. Note that this is not a full code snippet, a complete tutorial to send your first transaction on the Algorand blockchain using an SDK can be found [here](https://developer.algorand.org/docs/sdks/javascript/).
 
 === "Python"
     ```python
@@ -146,7 +148,7 @@ A fractional NFT is a unique asset that has been divided into multiple, equal sh
 
 Maybe Alice should think about fractionalizing her artwork for her next auction!
  
-To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}. 
+To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}. In the below example, Alice creates 10 units with a decimal set to 1. This means that 10 people can own 0.1 pieces of the NFT if she sells out all shares.
 
 === "JavaScript"
 	```javascript
