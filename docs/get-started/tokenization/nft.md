@@ -12,9 +12,9 @@ Non-fungible tokens, or NFTs for short, are unique assets represented on the blo
 Remember that Alice wants to use blockchain to help her scale and grow her business, because it provides important properties that she cannot achieve otherwise (trust, transparency, efficiency, low costs). The first step for her is to represent her unique art pieces on-chain as NFTs. Let's go ahead and learn how to create an NFT on Algorand.
 
 # How to create NFTs
-NFTs are created using Algorand Standard Assets (ASAs), which are built into the protocol and activated using a special type of transaction. You do not need to write smart contract code, which may be the case on some other blockchains. You just need to specify a few parameters to identify it as an NFT and attach metadata so that potential owners have the information they need to validate the integrity of the asset. For instance, you need to set the total amount of units you want to create for this asset to 1 and set the number of decimals to 0. This ensures you create exactly one unit of your ASA and you can't divide the newly minted asset.
+NFTs are created using Algorand Standard Assets (ASAs), which are built into the protocol and activated using a special type of transaction. You do not need to write smart contract code, which may be the case on some other blockchains. You just need to specify a few parameters to identify it as an NFT and attach metadata so that potential owners have the information they need to validate the integrity of the asset. For instance, you need to set the total amount of units you want to create for this asset to 1 and set the number of decimals to 0. This ensures you create precisely one unit of your ASA and can't divide the newly minted asset.
 
-The relevant code snippet in each of the SDKs is as follows. Note that this is not a full code snippet, a complete tutorial to send your first transaction on the Algorand blockchain using an SDK can be found [here](https://developer.algorand.org/docs/sdks/javascript/).
+The relevant code snippet in each of the SDKs is as follows. Note that this is not a complete code snippet. You can find a complete tutorial to send your first transaction on the Algorand blockchain using an SDK [here](https://developer.algorand.org/docs/sdks/javascript/).
 
 === "Python"
     ```python
