@@ -89,7 +89,7 @@ const createAccount = function() {
     Make sure to save your account's address and passphrase at a separate place, as they will be used later on.    ​
 
 !!! Warning 
-    Never share nnemonic private keys. Production environments require stringent private key management. For more information on key management in community wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
+    Never share mnemonic private keys. Production environments require stringent private key management. For more information on key management in community wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
 
 ​
 # Fund the Account
@@ -166,7 +166,7 @@ To interact with the Algorand blockchain, you can send different types of transa
     Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/get-details/transactions/).
 ​
 # Sign First Transaction
-Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction. Once signed, we can extract the transaction ID. You'll use the `txId` to look up the status of the transaction in the following sections.
+Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction. Now, you can extract the transaction ID. Actually, you can even extract the transaction ID before signing the transaction. You'll use the `txId` to look up the status of the transaction in the following sections of this guide.
 ​
 ```javascript 
         // Sign the transaction
