@@ -148,7 +148,7 @@ A fractional NFT is a unique asset that has been divided into multiple, equal sh
 
 Maybe Alice should think about fractionalizing her artwork for her next auction!
  
-To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}. In the below example, Alice creates 10 units with a decimal set to 1. This means that 10 people can own 0.1 pieces of the NFT if she sells out all shares.
+To create a fractional NFT, the total units must be a power of 10, greater than 1, and the number of decimals must be equal to the logarithm in base 10 of the total number of units. The fractional NFT standard is defined as part of [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md){: target="_blank"}. In the below example, Alice creates 10 units with a decimal set to 1. This means that 10 people can own 0.1 pieces of the NFT if she sells all units.
 
 === "JavaScript"
 	```javascript
