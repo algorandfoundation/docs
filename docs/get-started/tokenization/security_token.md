@@ -121,7 +121,7 @@ To give some additional background information, here's a short explanation of ea
 
 - Manager address: The manager account is the only account that can authorize transactions to [re-configure](https://developer.algorand.org/docs/get-details/asa/#modifying-an-asset) or [destroy](https://developer.algorand.org/docs/get-details/asa/#destroying-an-asset) an asset.
 - Reserve address: Specifying a reserve account signifies that non-minted assets will reside in that account instead of the default creator account. Assets transferred from this account are "minted" units of the asset. If you specify a new reserve address, you must make sure the new account has opted into the asset and then issue a transaction to transfer all assets to the new reserve.
-- Freeze address: The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset.
+- Freeze address: The freeze account is allowed to freeze or unfreeze the asset holdings for a specific account. When an account is frozen it cannot send or receive the frozen asset. However, you can still send your asset holdings to the manager account using an "asset close" transaction.
 - Clawback address: The clawback address represents an account that is allowed to transfer assets from and to any asset holder (assuming they have opted-in). Use this if you need the option to revoke assets from an account (like if they breach certain contractual obligations tied to holding the asset).
 
 You can find more information about immutable and mutable asset parameters in the [asset docs](https://developer.algorand.org/docs/get-details/asa/#asset-parameters).
