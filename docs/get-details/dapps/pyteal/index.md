@@ -309,13 +309,13 @@ def approval_program():
        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
    )
    # Mode.Application specifies that this is a smart contract
-   return compileTeal(program, Mode.Application, version=3)
+   return compileTeal(program, Mode.Application, version=5)
  
  
 def clear_state_program():
    program = Return(Int(1))
    # Mode.Application specifies that this is a smart contract
-   return compileTeal(program, Mode.Application, version=3)
+   return compileTeal(program, Mode.Application, version=5)
 
 # print out the results
 print(approval_program())
@@ -718,12 +718,12 @@ def approval_program():
         [Txn.on_completion() == OnComplete.NoOp, handle_noop]
     )
     # Mode.Application specifies that this is a smart contract
-    return compileTeal(program, Mode.Application, version=3)
+    return compileTeal(program, Mode.Application, version=5)
 
 def clear_state_program():
     program = Return(Int(1))
     # Mode.Application specifies that this is a smart contract
-    return compileTeal(program, Mode.Application, version=3)
+    return compileTeal(program, Mode.Application, version=5)
 
     
 # create new application
@@ -866,7 +866,7 @@ def donation_escrow(benefactor):
         Txn.rekey_to() == Global.zero_address()        
     )
     # Mode.Signature specifies that this is a smart signature
-    return compileTeal(program, Mode.Signature, version=3)
+    return compileTeal(program, Mode.Signature, version=5)
 ```
 
 This is a very simplistic smart signature. The code for the complete signature is defined in the `donatation_escrow` function. This function takes an Algorand address as a parameter. This address represents the beneficiary of the escrow. The entire program is a set of conditions anded together using the [`And` logical expression](https://pyteal.readthedocs.io/en/latest/api.html#pyteal.And). This expression takes two or more arguments that are logically anded and produces a 0 (logically false) or 1 (logically true). In this sample, a set of transaction fields are compared to expected values. The transaction type is first verified to be a payment transaction, the transaction fee is compared to make sure it is less than 1000 microAlgos, the transaction receiver is compared to the benefactor’s address, the group size is verified to guarantee that this transaction is not submitted with other transactions in a group, and the rekey field of the transaction is verified to be the zero address. The zero address is used to verify that the rekey field is not set. This prevents the escrow from being rekeyed to another account. This sample uses transaction fields and global properties. See the PyTeal documentation for additional [transaction fields](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#id1) and [global properties](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#global-parameters). The entire program is compiled to TEAL using the `compileTeal` PyTeal function. This function compiles the program as defined by the program variable. The `compileTeal` method also sets the Mode.Signature. This lets PyTeal know this is for a smart signature and not a smart contract. The version parameter instructs PyTeal on which version of TEAL to produce when compiling. 
@@ -890,7 +890,7 @@ def donation_escrow(benefactor):
         Txn.rekey_to() == Global.zero_address()
     )
     # Mode.Signature specifies that this is a smart signature
-    return compileTeal(program, Mode.Signature, version=3)
+    return compileTeal(program, Mode.Signature, version=5)
 
 test_benefactor = "CZHGG36RBYTTK36N3ZC7MENGFOL3R6D4NNEJQU3G43U5GH457SU34ZGRLY"
 print( donation_escrow(test_benefactor))
@@ -1146,7 +1146,7 @@ def donation_escrow(benefactor):
     )
 
     # Mode.Signature specifies that this is a smart signature
-    return compileTeal(program, Mode.Signature, version=3)
+    return compileTeal(program, Mode.Signature, version=5)
 
 def main() :
     # initialize an algodClient
