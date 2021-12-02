@@ -37,7 +37,7 @@ The TypeScript sample code below should allow a dApp developer to establish a co
   ```
 
 !!! Info
-  Developers are encouraged to watch the [walletconnect-monorepo](https://github.com/WalletConnect/walletconnect-monorepo/releases) for new releases. Rebuild and deploy your dApp to utilize new features and performance enhancements. 
+    Developers are encouraged to watch the [walletconnect-monorepo](https://github.com/WalletConnect/walletconnect-monorepo/releases) for new releases. Rebuild and deploy your dApp to utilize new features and performance enhancements. 
 
 ### Initiate Connection
 
@@ -97,9 +97,11 @@ const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
 });
 
 // Sign transaction
-// txns is an array of algosdk.Transaction
+// txns is an array of algosdk.Transaction like below
+// i.e txns = [txn, ...someotherTxns], but we've only built one transaction in our case
+const txns = [txn]
 const txnsToSign = txns.map(txn => {
-  const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn.txn)).toString("base64");
+  const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
 
   return {
     txn: encodedTxn,

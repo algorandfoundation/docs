@@ -13,12 +13,13 @@ This guide is organized into two sections. The first section helps you launch th
 All of the code for this guide is [located here](https://github.com/algorand/auction-demo){: target="_blank"}. Clone the repo and follow along!
 
 # Launching the application
-Algorand provides a docker instance for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have Docker installed, then run this code to launch a sandbox node with a private network, i.e. your own local blockchain that runs the Algorand protocol.
+Algorand provides a [Docker instance](https://docs.docker.com/get-docker/) for running a node, which is the fastest way to set up your dApp’s connection point to the blockchain. Make sure you have Docker installed, then run this code to launch a [sandbox node](https://github.com/algorand/sandbox) with a private network, i.e. your own local blockchain that runs the Algorand protocol.
 
 <center>
 ![Sandbox node guy](../../imgs/sandbox-node-guy.png){: style="width:200px"}
 <figcaption style="font-size:12px">Sandbox node to the rescue!</figcaption>
 </center>
+
 
 ## Prerequisites
 - [Docker](https://www.docker.com/products/docker-desktop){: target="_blank"}
@@ -42,12 +43,12 @@ Run the following script directly from your terminal if you are on Mac or Linux.
 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23){target=_blank}   
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank} 
+[`Follow Sandbox tutorial`](https://developer.algorand.org/tutorials/exploring-the-algorand-sandbox/){target=_blank}
 
 !!!note
     The above command will default to the `release` configuration. Other configurations that are compatible with this demo are `beta`, `nightly` and `dev`. This is because the app requires an unencrypted-default-wallet to sign transactions.
 
     If the sandbox fails to start please follow setup directions [here](https://github.com/algorand/sandbox#algorand-sandbox){: target="_blank"}.
-
 
 ## Setup environment and run tests
 Install the required dependencies for the project. We recommend using a Python virtual environment to do this. The following commands will activate the virtual environment and then install all dependencies, including PyTeal and the Algorand Python SDK. 

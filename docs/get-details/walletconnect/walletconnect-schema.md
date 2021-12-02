@@ -153,14 +153,15 @@ interface AlgoSignTxnResponse {
 }
 ```
 
-In this response, result is an array with the same length as the request params. For every integer i such that 0 <= i < result.length:
+In this response, result is an array with the same length as the request params. For every integer `i` such that `0 <= i < result.length`:
 
 - If the transaction at index `i` in the group should be signed by the wallet (i.e. `params[0][i].signers` is not an empty array) : `result[i]` will be a base64-encoded string containing the msgpack-encoded signed transaction `params[i].txn`.
 - Otherwise: `result[i]` will be null, since the wallet was not requested to sign this transaction.
 
-If the wallet does not approve signing every transaction whose signature is being requested, the request must fail. A failure this should be indicated in the rejection message as described [here](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0001.md#error-standards).
+If the wallet does not approve signing every transaction whose signature is being requested, the request must fail. A failure like this should be indicated in the rejection message as described [here](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0001.md#error-standards).
 
 # Future Additions
 
 Possible future additions to the schema may include:
+
 - A request type for wallets to sign a LogicSig program, resulting in a delegated LogicSig spending program for an account.
