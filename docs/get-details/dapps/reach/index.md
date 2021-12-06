@@ -170,7 +170,7 @@ Note: **After installing reach, the images must be downloaded. This can be accom
 For more information on version mismatches click [here](https://zet.hashnode.dev/reach-version-mismatch). 
 
 
-### ## Initialize dApp
+## Initialize dApp
 
 The easiest way to get started is to use the `reach init` command to generate ‘Hello World’ backend index.rsh and frontend `index.mjs` files.  
 
@@ -199,7 +199,7 @@ Goodbye, Alice and Bob!
 ```
 
 
-**_# Environment Variables_**
+**_Environment Variables_**
 
 Environment variables are used by the Backend. This makes it easier to control the deployment and execution of your dApp. For example, to see debug messages, set the REACH_DEBUG  environment variable to any non-empty variable.  
 
@@ -374,20 +374,19 @@ A few of the more used functions are below. See all [Account related functions h
 * **transfer(from:acc, to:acc, amount, token?) => **Performs a transfer between _from_ and _to_ accounts. If a token is not provided, then the transfer is of network tokens; otherwise, it is of the designated non-network token. The returned Promise will only be resolved after the transfer completes.
 
 
-### ## _Contracts_
+## _Contracts_
 
- \
-Reach contracts are accounts with three extra capacities:  \
- \
-1) They persistently store values (called the consensus state).  \
-2) They may receive publications. \
-3) When they receive publications, they systematically process them and may modify their consensus state, make publications, and may transfer network tokens and non-network tokens in response to the reception. \
- \
+ 
+Reach contracts are accounts with three extra capacities:  
+ 
+1) They persistently store values (called the consensus state).  
+2) They may receive publications. 
+3) When they receive publications, they systematically process them and may modify their consensus state, make publications, and may transfer network tokens and non-network tokens in response to the reception. 
+ 
 In addition to values, consensus state may contain a fixed number of mappings between an address and a value. These mappings are referred to as "linear state" because their size is linear in the number of participants in the contract. The creation of a contract is called deployment. Furthermore, a contract may provide views of its consensus state, which are labeled functions and values which may be hierarchically organized, such as NFT.owner or scoreOfPlayer. These views are visible in sub-trees of the computation graph.
 
 A participant is a logical actor which takes part in a DApp. It is associated with an account on the consensus network.
 
- \
 In order to interact with a deployed contract, one must construct a contract handle from an account. 
 
 These functions create and interact with contract representations. See more information on contracts [here](https://docs.reach.sh/ref-frontends-js-ctc.html)
@@ -401,20 +400,17 @@ These functions create and interact with contract representations. See more info
 
 See more information on [Network Utilities](https://docs.reach.sh/ref-frontends-js-network.html) , [Provider Info](https://docs.reach.sh/ref-frontends-js-provider.html), [Utilities](https://docs.reach.sh/ref-frontends-js-utils.html) and [Ask.mjs](https://docs.reach.sh/ref-frontends-js-ask_mjs.html)
 
- \
+ 
 
 
 
 ## Sample dApp Solution
 
-The following solution is for a game simulation called Morra. The object of the game is to throw fingers with an opponent and guess the total number of fingers shown.  \
- \
-The backend [index.rsh](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra2/index.rsh) contains the logic for the rules of the game to determine a winner.  
+The following solution is for a game simulation called Morra. The object of the game is to throw fingers with an opponent and guess the total number of fingers shown.  
+ 
+The backend [index.rsh](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra2/index.rsh) contains the logic for the rules of the game to determine a winner.    
 
-  
-
-
-```
+```javascript
 'reach 0.1';
 
 const [ isFingers, ZERO, ONE, TWO, THREE, FOUR, FIVE ] = makeEnum(6);
@@ -448,8 +444,7 @@ const winner = (fingersA, fingersB, guessA, guessB) => {
 ```
 
 
-
-## ## Verification \
+## Verification 
 
 
 Writing smart contracts can seem really hard. Writing a fully decentralized, distributed, trustless system is super difficult but how can one be sure that the contract does what it is supposed to do? How does one know that the contract doesn’t lock away 1000 ALGO for its owners after a certain point of time. Also the smart contract should not spend more money than it has. It would be preferable to avoid a situation like the infamous [DAO hack](https://www.gemini.com/cryptopedia/the-dao-hack-makerdao).
@@ -522,10 +517,10 @@ forall(UInt, (fingerA) =>
 ```
 
 
-Define the Interfaces for a Player and Bob and Alice.  The interface is simply a list of the methods and properties where the logic is provided in the frontend. Also a deadline is defined for a timeout value. 
+Define the Interfaces for a Player and Bob and Alice.  The interface is simply a list of the methods and properties where the logic is provided in the frontend. Also, a deadline is defined for a timeout value. 
 
 
-```
+```javascript
 // added a timeout function
 const Player =
      { ...hasRandom,
@@ -554,7 +549,7 @@ const DEADLINE = 30;
 Alice proposes a wager amount, Bob accepts the wager within the timeout period.  The interact statements in backend call functions defined in the frontend.
 
 
-```
+```javascript
 export const main =
  Reach.App(
    {},
@@ -613,11 +608,11 @@ Each round is played until a winner is declared via a while loop. Alice wants to
 ```
 
 
-Bob provides his fingers and his guess. Alice declassifies her secret information. The total on the fingers thrown between both players is calculated by adding the fingers thrown for Alice and Bob. Finally a winner is determined.  \
+Bob provides his fingers and his guess. Alice declassifies her secret information. The total on the fingers thrown between both players is calculated by adding the fingers thrown for Alice and Bob. Finally, a winner is determined.  
   
 
 
-```
+```javascript
 
        B.only(() => {
 
@@ -683,8 +678,7 @@ Bob provides his fingers and his guess. Alice declassifies her secret informatio
 
 The frontend instantiates an instance of the Reach stdlib and funds Bob and Alice’s accounts. A getBalance call is used to show the balance on each account before they play. 
 
-
-```
+```javascript
 import { loadStdlib } from '@reach-sh/stdlib';
 import * as backend from './build/index.main.mjs';
 
@@ -705,7 +699,7 @@ import * as backend from './build/index.main.mjs';
 Alice deploys the contract and Bob attaches to it. 
 
 
-```
+```javascript
  const ctcAlice = accAlice.contract(backend);
  const ctcBob = accBob.contract(backend, ctcAlice.getInfo());
 ```
@@ -714,7 +708,7 @@ Alice deploys the contract and Bob attaches to it.
 The Player has methods to getFingers, get Guess, seeWinning, seeOutcome, informTimout. 
 
 
-```
+```javascript
  const FINGERS = [0, 1, 2, 3, 4, 5];
  const GUESS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; 
  const OUTCOME = ['Bob wins', 'Draw', 'Alice wins'];
@@ -763,7 +757,7 @@ The Player has methods to getFingers, get Guess, seeWinning, seeOutcome, informT
 Backends are deployed for Alice and Bob with wager for Alice and acceptWager for Bob. 
 
 
-```
+```javascript
  await Promise.all([
    backend.Alice(ctcAlice, {
      ...Player('Alice'),
@@ -785,7 +779,7 @@ Backends are deployed for Alice and Bob with wager for Alice and acceptWager for
 Balances are displayed at the end of the game. 
 
 
-```
+```javascript
  const afterAlice = await getBalance(accAlice);
  const afterBob = await getBalance(accBob);
 
@@ -830,28 +824,24 @@ Alice went from 10 to 14.9999.
 Bob went from 10 to 4.9999.
 ```
 
-
-
-### ## Auditing
+## Auditing
 
 Without Reach, an auditor looks at the blockchain program and proves that program is correct by doing their own analysis. They're actually doing the verification of a version of the program. So, what happens if a minor change to the program is added? The audit is useless as it was for a prior version. 
 
 When auditing dApps written in Reach, the compiler verifies. An auditor would just need to verify if enough assertions are provided for the Reach compiler. On subsequent updates, the auditor would just need to check and make sure that the right assertions were included for the updates, rather than doing a complete new audit for the entire new version.
 
-
-### ## Mathematical proofs
+## Mathematical proofs
 
 Reach performs a runtime check as well as compile-time check using mathematical proofs.
 
 Verification shows that _no flaw_ exists, and _no attack_ is possible. Reach provides automatic verifications to ensure and guarantees that your applications are free from entire categories of errors. This ensures the program does not lose funds, lock away funds or overspend funds. 
 
-
-### ## Cryptographic Commitment Scheme
+## Cryptographic Commitment Scheme
 
 Reach provides tools to add custom verifications to a program, like ensuring that information is known only to one party.  Or that the implementation of a sensitive algorithm is correct. In our sample app, Alice’s fingers and prediction guess needs to be protected until Bob reveals his hand. Otherwise Bob would have an unfair advantage.  We need Alice to be able to publish her hand, but also keep it secret. This is a job for a cryptographic commitment scheme. Reach’s standard library comes with makeCommitment to make this easier for you. Using this our implementation is now secure and doesn’t contain any exploits for either Alice or Bob to guarantee a win. When  publishing information that needs to be a  secret, the  makeCommitment and checkCommitment commands facilitate this by applying a salt value when committing.  
 
 
-### ## Time outs and non-participation.
+## Time outs and non-participation.
 
 Non-participation means one party ceases to continue playing their role in an application. In traditional client-server programs, there is typically no need to consider the consequences of non-participation. IE. Let a website sit idle, if logged in, it may log out or info entered is cached and it will be there upon return.  If after Alice has paid her wager, Bob never accepts and the application doesn’t continue. In this case, Alice’s network tokens would be locked inside of the contract and lost to her. 
 
@@ -859,12 +849,12 @@ Similarly, if after Bob accepted and paid his wager, Alice stopped participating
 
 In Reach, non-participation is handled through a "timeout" mechanism whereby each consensus transfer can be paired with a step that occurs for all participants if the originator of the consensus transfer fails to make the required publication before a particular time. We’ll integrate this mechanism into our version Morra and deliberately insert non-participation into our JavaScript testing program to watch the consequences play out.
 
-**## Logging on the backend.**
+**Logging on the backend.**
 
 The **hasConsoleLogger **method is used to provide logging.** **First define logging in the participant interface in `index.rsh`: 
 
 
-```
+```javascript
 // added a wager function for Alice      
 const Alice =
        { ...Player,
@@ -885,7 +875,7 @@ Then call the interact.log function to display a variable value … in the front
 **In index.mjs :  `...stdlib.hasConsoleLogger `**as shown below.
 
 
-```
+```javascript
  await Promise.all([
    backend.Alice(ctcAlice, {
      ...Player('Alice'),
@@ -905,28 +895,26 @@ Then call the interact.log function to display a variable value … in the front
 
 Then on the backend use the following code to display the value. All backend numbers are BigNumbers, so the front end may need formatting functions. 
 
-** \
-`interact.log(_variable);  \
-`**
+
+`interact.log(_variable);`
 
 When this is run, it will generate something similar to this:
 
 
-```
+```javascript
 BigNumber { _hex: '0x03', _isBigNumber: true }
 ```
 
 
 
-### ## Platform Specific code
+## Platform Specific code
 
 Most of the time, platform specific code is not needed, as the abstractions have already been made for common functions across blockchains. However, blockchain-specific code may be needed for functions that are specific to a blockchain, such as the number of rounds to wait for a transaction. Code written in .rsh backend has no notion of which chain it is running on so Blockchain specific code would need to go in the frontend. Also,  env variables could be used to control your logic as well, or you can [branch on stdlib.connector](https://github.com/reach-sh/reach-lang/blob/c6b38366a16388126feb1b53579f8bcf9537ef4f/examples/chicken-race/index.mjs#L6) . In this example, if the stdlib.connector is ALGO, then the howManyRounds const will be set to 3, otherwise 10.
 
- \
 
 
 
-```
+```javascript
 import * as backend from './build/index.main.mjs';
 (async () => {
 const stdlib = await loadStdlib();
@@ -935,18 +923,18 @@ const howManyRounds = stdlib.connector === 'ALGO' ? 3 : 10;
 
 
 
-### ## Flow commands
+## Flow commands
 
 [Common reach app](https://docs.reach.sh/guide-ctransfers.html) flow commands include: 
 
 
 
-* **Each - **Used for loops for each participant.
-* **Only - **Used for just 1 participant. 
-* **Forks - **Used for many participants that result in different outcomes.
-* **Parallel reduce - **Used for while loops with a  fork. 
-* **Race - **Used when First one to end wins.
-* **Publish or Pay - **Publish to blockchain, or Pay from one account to another.
+* Each - Used for loops for each participant.
+* Only - Used for just 1 participant. 
+* Forks - Used for many participants that result in different outcomes.
+* Parallel reduce - Used for while loops with a  fork. 
+* Race - Used when First one to end wins.
+* Publish or Pay - Publish to blockchain, or Pay from one account to another.
 
 **Pay** and **Publish** without a **Race** are for when **one participant** wants to do **one thing**.
 
@@ -957,7 +945,7 @@ A **Fork** is for when **many participants** want to **each do a different thin
 **parallelReduce**  is needed if the situation is where a **race or fork**, **and the options are available repeatedly** after small diversions. For example, in an auction, bidders repeatedly provide new bids as they compete to be the highest bidder before a time limit is reached.
 
 
-## # RPC
+## RPC
 
 The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. It is easy to implement a client library yourself. An example frontend written using the Reach RPC Server is shown in the [tutorial section on RPC-based frontends](https://docs.reach.sh/tut-7-rpc.html).
 
@@ -968,7 +956,7 @@ For example for calling stdlib methods:
 Using JavaScript (local) 
 
 
-```
+```javascript
 const stdlib = await loadStdlib();
 const startingBalance = stdlib.parseCurrency(10);
 ```
@@ -977,7 +965,7 @@ const startingBalance = stdlib.parseCurrency(10);
 Using JavaScript RPC
 
 
-```
+```javascript
 const { rpc, rpcCallbacks } = await mkRPC();
 const startingBalance = await rpc(`/stdlib/parseCurrency`,  10);
 ```
@@ -986,7 +974,7 @@ const startingBalance = await rpc(`/stdlib/parseCurrency`,  10);
 Using Python RPC
 
 
-```
+```python
 rpc, rpc_callbacks = mk_rpc()
 starting_balance = rpc('/stdlib/parseCurrency', 10)
 ```
@@ -995,7 +983,7 @@ starting_balance = rpc('/stdlib/parseCurrency', 10)
 Using Go RPC
 
 
-```
+```golang
 rpc, rpcCallbacks := reachrpc.Mk()
  fmtc := func(i jsono) string {
    return rpc("/stdlib/formatCurrency", i, 4).(string)
@@ -1036,7 +1024,7 @@ const { rpc, rpcCallbacks } = await mkRPC(opts);</code>
 Python RPC options
 
 
-```
+```python
 opts = {
    "host": <host>,
    "port": <port>,
@@ -1050,7 +1038,7 @@ opts = {
 Go RPC options
 
 
-```
+```golang
 rpc, rpc_callbacks = mk_rpc(opts)
 opts := map[string]string{
  "host": <host>,
@@ -1073,8 +1061,7 @@ The options are as follows:
 * timeout — This value sets the number of seconds to wait for the Reach RPC Server instance to respond to its first request. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TIMEOUT. If that is not present, it must default to 5 seconds.
 * key — This value sets the API key for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_KEY.
 
-
-### ## Debugging RPC:
+### Debugging RPC:
 
 
 ```
@@ -1092,7 +1079,7 @@ JavaScript
 index.rsh
 
 
-```
+```javascript
 const Alice =
        { ...Player,
          wager: UInt,
@@ -1110,7 +1097,7 @@ const Bob =
 ...
 
 
-```
+```javascript
        A.only(() => {   
          const _fingersA = interact.getFingers();
          const _guessA = interact.getGuess(_fingersA); 
@@ -1120,7 +1107,7 @@ const Bob =
 index.mjs
 
 
-```
+```javascript
  await Promise.all([
    backend.Alice(ctcAlice, {
      ...Player('Alice'),
@@ -1139,14 +1126,14 @@ index.mjs
 
 
 
-### ## RPC logging
+### RPC logging
 
 In index.mjs add log: console.log
 
 JavaScript RPC logging
 
 
-```
+```javascript
    //  log: console.log,
  await Promise.all([
    rpcCallbacks(`/backend/Alice`, ctcAlice, { 
@@ -1170,7 +1157,7 @@ JavaScript RPC logging
 and on the Backend in index.rsh add  `interact.log(variable);`
 
 
-```
+```javascript
        A.only(() => {   
          const _fingersA = interact.getFingers();
          interact.log(_fingersA);         
@@ -1180,7 +1167,7 @@ and on the Backend in index.rsh add  `interact.log(variable);`
 
 
 
-### # RPC Server
+### RPC Server
 
 To start an instance of the Reach RPC Server, use this command:
 
@@ -1212,7 +1199,7 @@ All `/backend` methods are interactive RPC methods that accept three arguments:
     * `ctcId` — A contract RPC handle to provide as the contract to the backend
     * `values` — An object containing the non-function components of the participant interact interface of the backend.
     * `methods` — An object whose keys correspond to the function components of the participant interact interface of the backend, but whose values are true.
-* As a special case, if `values` contain `stdlib.hasRandom` bound to true, then the JavaScript standard library’s implementation of hasRandom is provided to the backend. \
+* As a special case, if `values` contain `stdlib.hasRandom` bound to true, then the JavaScript standard library’s implementation of hasRandom is provided to the backend. 
 As the backend executes, any of the components of `methods` invoked will be executed as interactive RPC callbacks as described by the Reach RPC Protocol Specification. Reach RPC Client libraries _should_ expose a function that hides the details of the construction of the `values` and `methods` objects and implements interactive RPC callback handlers automatically.
 * `/kont` handles interactive RPC continuation completion during an interactive RPC method. It should not be invoked directly by frontends.
 * `/stop` quits the server.
@@ -1222,13 +1209,13 @@ See current Information on the [RPC Server ](https://docs.reach.sh/ref-backends-
 More information can be found on the [RPC Client](https://docs.reach.sh/ref-backends-rpc-client.html) and [Reach RPC Tutorial](https://docs.reach.sh/tut-7-rpc.html) 
 
 
-### # Python RPC Install and Run:
+### Python RPC Install and Run:
 
 The backend index.rsh file will require no changes for all of the RPC examples that follow.  It just needs to be copied into the same folder as the frontend code.
 
 Next, open a terminal in that directory and install the Reach Python RPC client:
 
-**## Run and Install the Python RPC Client…**
+**Run and Install the Python RPC Client…**
 
 Run this command from the same folder as index.py and index.rsh.
 
@@ -1248,7 +1235,7 @@ Run this command from the same folder as index.py and index.rsh.
 A Python venv is a "virtual environment" that sandboxes dependencies to avoid cluttering your system directories.
 
 
-```
+```bash
 (venv) $ pip install --upgrade reach-rpc-client
 
 (venv) $ REACH_CONNECTOR_MODE=ALGO ./reach rpc-run python3 -u ./index.py
@@ -1269,7 +1256,7 @@ Sample Python frontend code** [index.py](https://github.com/algorand-devrel/Reac
  
 
 
-```
+```python
 import random
 from threading import Thread
 from reach_rpc import mk_rpc
@@ -1372,12 +1359,12 @@ if __name__ == '__main__':
 
 
 
-### ## JavaScript RPC Install and Run
+### JavaScript RPC Install and Run
 
 Install and Run steps in folder where index.mjs is:
 
 
-```
+```bash
 npm install --save @reach-sh/rpc-client
 ```
 
@@ -1385,22 +1372,21 @@ npm install --save @reach-sh/rpc-client
 Once installed, add the following import line to your JavaScript file which will connect to the [Reach RPC Server](https://docs.reach.sh/ref-backends-rpc.html):
 
 
-```
+```javascript
 import { mkRPC } from '@reach-sh/rpc-client';
 ```
 
 
 You may need to set the environment variable for NODE_TLS_REJECT_UNAUTHORIZED if you get this error on line
 
- \
-RPC /stdlib/parseCurrency [10] \
+
+RPC /stdlib/parseCurrency [10] 
 
 
-(node:50468) UnhandledPromiseRejectionWarning: Error: self signed certificate** \
-**
+(node:50468) UnhandledPromiseRejectionWarning: `Error: self signed certificate`
 
 
-```
+```bash
 $ export NODE_TLS_REJECT_UNAUTHORIZED='0'
 ```
 
@@ -1408,19 +1394,15 @@ $ export NODE_TLS_REJECT_UNAUTHORIZED='0'
 Run with 
 
 
-```
+```bash
 $ reach rpc-run node index.mjs
 ```
 
 
-Sample JavaScript frontend code **[index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-js/index.mjs)** for the game Morra that was used in the getting started guide [link]: \
+Sample JavaScript frontend code **[index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-js/index.mjs)** for the game Morra that was used in the getting started guide [link]: 
 
 
-** \
-**
-
-
-```
+```javascript
 import { mkRPC } from '@reach-sh/rpc-client';
 
 (async () => {
@@ -1514,14 +1496,15 @@ import { mkRPC } from '@reach-sh/rpc-client';
 
 Install and Run from the folder with index.go:
 
+```bash
 $ go get github.com/reach-sh/reach-lang/rpc-client/go
-
 $ ./reach rpc-run go run index.go
-
-Sample Gi frontend code [index.go](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-go/index.go)  for the game Morra that was used in the getting started guide [link]:
-
-
 ```
+
+Sample Gio frontend code [index.go](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-go/index.go)  for the game Morra that was used in the getting started guide [link
+
+
+```golang
 ​​package main
 
 import (
@@ -1658,10 +1641,8 @@ func main() {
 
 
 
-### C#
+## C#
 
-
-###  \
 A C# client library example for the [Reach RPC protocol](https://docs.reach.sh/ref-backends-rpc.html) may be installed by copying the code at <code>[https://github.com/reach-sh/reach-lang/tree/master/rpc-client/cs](https://github.com/reach-sh/reach-lang/tree/master/rpc-client/cs)</code>.
 
 
@@ -1684,14 +1665,13 @@ On Algorand, 'MainNet' will connect to MainNet, and 'TestNet' to TestNet. Free A
 
 More information on using providers with Reach can be [found here.](https://docs.reach.sh/ref-frontends-js-provider.html) 
 
-After the provider is selected, one needs to replace creating a new test account w funds, with account functions discussed above. ** \
-**
+After the provider is selected, one needs to replace creating a new test account w funds, with account functions discussed above.
 
-To deploy to Algorand TestNet see example environment variables below: \
-
+To deploy to Algorand TestNet see example environment variables below: 
 
 
-```
+
+```bash
 REACH_CONNECTOR_MODE=ALGO-live
 ALGO_SERVER='https://testnet.algoexplorerapi.io'
 ALGO_INDEXER_SERVER='https://testnet.algoexplorerapi.io/idx2'
