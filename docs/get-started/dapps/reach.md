@@ -1,4 +1,4 @@
-<!-- # Build dApps with Reach -->
+title: Build with Reach
 
 Alice and Bob are now ready to kick-off development of their Algorand-powered auction dApp! This guide will take you through the steps to build the dApp, which includes setting up a development environment, writing the dApp code which can contain multiple smart contracts, deploying it, and writing the functions to interact with it.
 
@@ -205,9 +205,9 @@ Carla has 9.999009 ALGO and 0 of the NFT
 ```
 
 
-## Basic Functions of the auction
+## Basic Functions of the Auction
 
-The** Backend**,<code> <strong>[index.rsh](https://github.com/reach-sh/reach-lang/blob/master/examples/simple-nft-auction/index.rsh)</strong></code>, defines the interface for functions coded in the frontend. The Creator is a Participant that has getSale, seeBid and timeout functions.  A participant is an “actor” which takes part in the application (dApp). A participant is associated with an account (address) on the consensus network. A participant can have persistently stored values, called its local state. 
+The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. The Creator is a Participant that has getSale, seeBid and timeout functions.  A participant is an “actor” which takes part in the application (dApp). A participant is associated with an account (address) on the consensus network. A participant can have persistently stored values, called its local state. 
 
 The Bidder is a ParticipantClass that has seeParams and getBid functions. A participant class is a category of Participant, it is like a Participant, but can occur many times in a single application. Example: an application where users vote for their favorite puppy. There can be many voters voting, but they are all voters. All voters would be a member of the “voter participant class”. In the auction dApp we have a participant class of bidders, with each bidder having the ability to place a bid.  
 
@@ -332,7 +332,7 @@ Maybe can be some or none: (evaluate the return of a function)   The transfer is
 ```
 
 
-The **Frontend,  [Index.mjs](https://github.com/reach-sh/reach-lang/blob/master/examples/simple-nft-auction/index.mjs)**, Create test accounts for Alice, Bob, and Carla with a balance of 100 algos. The Creator deploys the contract. The code snippet below creates an instance of the reach stdlib with `loadStdlib(process.env)`. The method `stdlib.parseCurrency(10)` will parse the native currency and return a balance. The code below creates an NFT using `stdlib.launchToken(accCreator, "beepboop", "NFT", { supply: 1 })`
+The **Frontend,  [Index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs)**, Create test accounts for Alice, Bob, and Carla with a balance of 100 algos. The Creator deploys the contract. The code snippet below creates an instance of the reach stdlib with `loadStdlib(process.env)`. The method `stdlib.parseCurrency(10)` will parse the native currency and return a balance. The code below creates an NFT using `stdlib.launchToken(accCreator, "beepboop", "NFT", { supply: 1 })`
 
 
 ```javascript
@@ -359,7 +359,7 @@ const names = ["Creator", "Alice", "Bob", "Carla"];
 ```
 
 
-Provide the  logic for the `interact` methods. Interact methods are called from the backend for the frontend to execute. Functions in [index.mjs](https://github.com/reach-sh/reach-lang/blob/master/examples/simple-nft-auction/index.mjs) include: showBalance, getSale, seeBid, timeout, showOutcome and showBalance. The showBalance method uses `stdlib.balanceOf(acc)` It also shows the balance of the NFT Asset using `stdlib.balanceOf(acc, theNFT.id)`. The seeBid function shows the bid and who saw it. The getSale function sets the parameters of the sale including the NFT Asset ID and reserve price and length in Blocks.
+Provide the  logic for the `interact` methods. Interact methods are called from the backend for the frontend to execute. Functions in [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) include: showBalance, getSale, seeBid, timeout, showOutcome and showBalance. The showBalance method uses `stdlib.balanceOf(acc)` It also shows the balance of the NFT Asset using `stdlib.balanceOf(acc, theNFT.id)`. The seeBid function shows the bid and who saw it. The getSale function sets the parameters of the sale including the NFT Asset ID and reserve price and length in Blocks.
 
 
 ```javascript
@@ -441,6 +441,6 @@ Verification is a key feature to Reach. It is facilitated by the use of assert s
 
 ## Remote Procedure Calls (RPC)
 
-The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. It is easy to implement a client library yourself. Example frontends written using the Reach RPC Server can be found in the get details Reach page. [[link](https://docs.reach.sh/ref-backends-rpc.html)]
+The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. It is easy to implement a client library yourself. Example frontends written using the Reach RPC Server can be found in the [get details Reach page](..//..//get-details/dapps/reach/index.md).
 
 Complete code for this auction simulation can be found [here](https://github.com/algorand/reach-auction). 

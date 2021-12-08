@@ -1,40 +1,40 @@
-# Reach (get details)
+title: Reach
 
-It’s all about the tools! Developers often need to pick and choose carefully which new technologies to learn when re-tooling or building dApps.  Often, the desire is to use the best tools resulting in rapid development and quality of the solution. The challenge a developer typically has is spending resources to learn new tools while avoiding what many developer's fear most… investing time on a technology that becomes a white elephant. Ouch. Fear not, [Reach](https://reach.sh/) deploying to [Algorand](https://www.algorand.com/) is here to stay. Why?  With Reach, the automatic verification of a dApp, alone, is one great reason. This protects against blockchain attacks, guarantees contract balance is zero and prevents locked away tokens by the contract that are inaccessible. Reach facilitates blockchain properties, like token linearity. As such, auditing becomes very easy to accomplish. Also, using high level languages to build dApps instead of low level assembly language is attractive for many professional developers. A Reach dApp is blockchain ignostic. Frontends can be built in languages such at Python, Go, JavaScript and C#. The focus for a developer using Reach is the business logic. In other words, Reach takes care of the internals on contract storage, protocol diagrams, state validation and network details in general. 
+It’s all about the tools! Developers often need to pick and choose carefully which new technologies to learn when re-tooling or building dApps.  The desire is to use the best tools resulting in rapid development and quality of the solution. The challenge a developer typically has is spending resources to learn new tools while avoiding what many developer's fear most… investing time on a technology that becomes a white elephant. Ouch. Fear not, [Reach](https://reach.sh/) deploying to [Algorand](https://www.algorand.com/) is here to stay. Why?  With Reach, the automatic verification of a dApp, alone, is one great reason. This protects against blockchain attacks, guarantees contract balance is zero and prevents locked away tokens by the contract that are inaccessible. Reach facilitates blockchain properties, like token linearity. As such, auditing becomes very easy to accomplish. 
+
+And there are more reasons to uese Reach. Using high level languages to build dApps instead of low level assembly language is attractive for many professional developers. A Reach dApp is blockchain agnostic. Frontends can be built in languages such as Python, Go, JavaScript and C#. The focus for a developer using Reach is the business logic. In other words, Reach takes care of the internals on contract storage, protocol diagrams, state validation and network details in general. 
 
 This guide will cover a Reach overview, installation and Command Line Interface (CLI), environment variables, accounts, frontend and backend components. Also this document covers verification, auditing, mathematical proofs, cryptographic commitment scheme, timeouts and non-participation, logging, platform specific code, flow commands, Remote Procedure Calls (RPC) as well as debugging and how to deploy to TestNet and MainNet.
 
 
-## # Reach overview:
+## Reach overview:
 
 Reach is a Cross-Blockchain deployment and development tool.  The Reach frontend and backend provide a separation of concerns as a traditional Client / Server or N-tier architecture solution would do. This provides the ability to interact between the backend calling functions in the frontend. Reach deploys the dApp to the Algorand blockchain and provides verification via mathematical proofs and assertions. 
 
-**## Building the dApp, Backend and Frontend**
+## Building the dApp, Backend and Frontend
 
 The Backend provides the implementation of the dApp and determines what is published to the blockchain and how. The backend handles solution implementation, Frontend interfaces, Participant definitions, verification and commitment as well as dApp logic. The code for completed backend for the Morra solution below can be found in [index.rsh](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra2/index.rsh).
 
-The Frontend provides a User Interface including prompts and a web and/or mobile app  frontend.  It provides functions on accounts such as creating accounts, interact method logic, dApp deployment and any blockchain specific code. The frontend can be created in a variety of high level languages using RPC such as JavaScript, Python, Go and C# and deployed to platforms such as iOS, Android, websites and console apps. The code for the completed frontend for the Morra solution below can be found in [index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra2/index.mjs).
+The Frontend provides a User Interface including prompts and a web and/or mobile app  frontend.  It provides functions on accounts such as creating accounts, interact method logic, dApp deployment and any blockchain-specific code. The frontend can be created in a variety of high level languages using RPC such as JavaScript, Python, Go and C# and deployed to platforms such as iOS, Android, websites and console apps. The code for the completed frontend for the Morra solution below can be found in [index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra2/index.mjs).
 
 The dApp is compiled and deployed to the Algorand Blockchain.  **Figure 1-1** below shows how all of the parts work together. 
 
 
 
-<p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image1.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
-
-![alt_text](images/image1.png "image_tooltip")
+![Reach with Algorand](../../../imgs/reachdetails.png)
 
 
 **Figure 1-1** – Reach with Algorand
 
-**## Reach dApp Life Cycle:**
+## Reach dApp Life Cycle:
 
 The Application Life  Cycle for creating a dApp with Reach is done entirely within the product, unlike other blockchain development environments that typically include several different tools. 
 
 
 
 * **Protocol Design** – Reach programming language
-* **Smart Contract **– Reach compiler
+* **Smart Contract**– Reach compiler
 * **Middleware** – Reach API
 * **Frontend** – Build with JavaScript or RPC language support for Python, JavaScript, Go and C#
 * **Testing** – Reach Run
@@ -42,137 +42,58 @@ The Application Life  Cycle for creating a dApp with Reach is done entirely with
 * **Deployment** – Reach compiler configurations to deploy to Algorand Blockchain
 
 
-## # Install Reach and Command Line Interface
+## Install Reach and Command Line Interface
 
 Reach can be installed on Windows or Mac OS. Docker install is a prerequisite. 
 
 [Install Docker](https://www.docker.com/products/docker-desktop) 
 
- \
+
 For Windows: Enable the [Windows Subsystem for Linux ](https://docs.microsoft.com/en-us/windows/wsl/install)feature
 
- \
 In terminal run these commands:
+```
+mkdir -p ~/reach/project && cd ~/reach/project
 
-`mkdir -p ~/reach/project && cd ~/reach/project`
+curl https://docs.reach.sh/reach -o reach ; chmod +x reach
+```
 
-`curl https://docs.reach.sh/reach -o reach ; chmod +x reach`
-
- \
-Detailed Reach install instructions can be found in the [reach docs](https://reach.sh/) or in the getting started guide [link].** \
-**
+Detailed Reach install instructions can be found in the [reach docs](https://reach.sh/) or in the [getting started guide](..//..//..//get-started/dapps/reach.md).
 
 Reach supports a [command line interface for development](https://docs.reach.sh/ref-usage.html). Reach Commands are as follows. 
 
 
-<table>
-  <tr>
-   <td><strong>compile</strong>
-   </td>
-   <td>Compile an app.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>clean</strong>
-   </td>
-   <td>Delete compiled artifacts.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>init</strong>
-   </td>
-   <td>Set up source files for a simple app.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>run</strong>
-   </td>
-   <td>Run a simple app.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>down</strong>
-   </td>
-   <td>Halt any Dockerized devnets for this app.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>scaffold</strong>
-   </td>
-   <td>Set up Docker scaffolding for a simple app.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>react</strong>
-   </td>
-   <td>Run a simple react app.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>rpc-server</strong>
-   </td>
-   <td>Run an RPC server + frontend with development configuration.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>devnet</strong>
-   </td>
-   <td>Run only the devnet
-   </td>
-  </tr>
-  <tr>
-   <td><strong>upgrade</strong>
-   </td>
-   <td>Upgrade Reach
-   </td>
-  </tr>
-  <tr>
-   <td><strong>update</strong>
-   </td>
-   <td>Update Reach Docker images
-   </td>
-  </tr>
-  <tr>
-   <td><strong>docket-reset</strong>
-   </td>
-   <td>Docker kill and rm all images
-   </td>
-  </tr>
-  <tr>
-   <td><strong>version</strong>
-   </td>
-   <td>Display version.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>hashes</strong>
-   </td>
-   <td>Display git hashes used to build each Docker image. The latest hashes can be confirmed in #releases Discord channel. All the hashes should be the same<strong>.</strong>
-   </td>
-  </tr>
-  <tr>
-   <td><strong>help</strong>
-   </td>
-   <td>Show this info.
-   </td>
-  </tr>
-</table>
+| Command      | Description                                                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| compile        | Compile an app.                                                                                                                                    |
+| clean        | Delete compiled artifacts.                                                                                                                                    |
+| init         | Set up source files for a simple app.                                                                                                                         |
+| run          | Run a simple app.                                                                                                                                             |
+| down         | Halt any Dockerized devnets for this app.                                                                                                                     |
+| scaffold     | Set up Docker scaffolding for a simple app.                                                                                                                   |
+| react        | Run a simple react app.                                                                                                                                       |
+| rpc-server   | Run an RPC server + frontend with development configuration.                                                                                                  |
+| devnet       | Run only the devnet                                                                                                                                           |
+| upgrade      | Upgrade Reach                                                                                                                                                 |
+| update       | Update Reach Docker images                                                                                                                                    |
+| docket-reset | Docker kill and rm all images                                                                                                                                 |
+| version      | Display version.                                                                                                                                              |
+| hashes       | Display git hashes used to build each Docker image. The latest hashes can be confirmed in #releases Discord channel. All the hashes should be the same.|
+| help         | Show this info.                                                                                                                                               |
 
 
-** \
-Note: **After installing reach, the images must be downloaded. This can be accomplished by running 
+**Note:** After installing reach, the images must be downloaded. This can be accomplished by running 
 
-`./reach update`  \
- \
-`./reach hashes` provides hashes of the individual components of Reach. The list of hashes  should all be the same and the most recent can be verified in the #releases channel on the [Reach discord Server](https://discord.gg/WCDcMGSSPk). 
+`./reach update`  
 
- \
+`./reach hashes` provides hashes of the individual components of Reach. The list of hashes should all be the same and the most recent can be verified in the #releases channel on the [Reach discord Server](https://discord.gg/WCDcMGSSPk). 
+
 For more information on version mismatches click [here](https://zet.hashnode.dev/reach-version-mismatch). 
 
 
-## Initialize dApp
+### Initialize dApp
 
-The easiest way to get started is to use the `reach init` command to generate ‘Hello World’ backend index.rsh and frontend `index.mjs` files.  
+The easiest way to get started is to use the `reach init` command to generate ‘Hello World’ backend `index.rsh` and frontend `index.mjs` files.  
 
 
 ```
@@ -184,12 +105,11 @@ writing index.mjs
 
 The code generated can be found here for the **Backend** [index.rsh](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra0/index.mjs) and the **Frontend** [index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra0/index.mjs)
 
- \
 Run the Hello World application
 
-`$ ./reach run \
-`Output should say something like this:
+`$ ./reach run` 
 
+Output should say something like this:
 
 ```
 Hello, Alice and Bob!
@@ -197,151 +117,61 @@ Launching...
 Starting backends...
 Goodbye, Alice and Bob!
 ```
-
-
-**_Environment Variables_**
+### Environment Variables
 
 Environment variables are used by the Backend. This makes it easier to control the deployment and execution of your dApp. For example, to see debug messages, set the REACH_DEBUG  environment variable to any non-empty variable.  
 
 
-<table>
-  <tr>
-   <td><strong><code>REACH_VERSION</code></strong>
-   </td>
-   <td>Signifies what version of Reach 
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_CONNECTOR_MODE</code></strong>
-   </td>
-   <td>Specifies which context to run in and determines which blockchain to deploy to. 
-<ul>
-
-<li><strong><code>ALGO-live</code></strong>, uses a live Algorand network node, specified by the environment variables documented in the Algorand connector section.
-
-<li><strong><code>ALGO-browser</code></strong>, uses the Algorand Wallet Reach Browser Spec <a href="https://github.com/reach-sh/ARCs/blob/reach-wallet/ARCs/arc-0011.md">ARC-0011</a> .
-
-<li><strong><code>ALGO-devnet</code></strong>, which uses a Dockerized private Algorand network.
-</ul>
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_DEBUG</code></strong>
-   </td>
-   <td>If set to any non-empty value, enables debug messages from the Reach standard library, which will appear in the console.
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_RPC_KEY</code></strong>
-   </td>
-   <td>Used to determine the RPC server key. If not defined, it defaults to <code>opensesame</code>, and a warning will appear in the console stating that the development key is being used.
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_RPC_PORT</code></strong>
-   </td>
-   <td>Used to determine which port to bind to. It defaults to <code>3000</code>.
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_RPC_TLS_CRT</code></strong>
-   </td>
-   <td>Used to determine the path to the TLS <code>crt</code> file, which must be in the <code>./tls</code> directory. It defaults to <code>reach-server.crt</code>.
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_RPC_TLS_PASSPHRASE</code></strong>
-   </td>
-   <td>Used to determine the TLS passphrase. It defaults to <code>rpc-demo</code>.
-   </td>
-  </tr>
-  <tr>
-   <td><strong><code>REACH_RPC_TLS_REJECT_UNVERIFIED</code></strong>
-   </td>
-   <td>This value determines whether to verify the TLS certificate of the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TLS_REJECT_UNVERIFIED. If that is not present, it must default to true. To disable verification, set this value to the string: "0"; any other value will be considered to mean "enable".
-   </td>
-  </tr>
-</table>
-
-
+| Variable                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| REACH_VERSION                      | Signifies what version of Reach                                                                                                                                                                                                                                                                                                                                                                                                   |
+| REACH_CONNECTOR_MODE              | Specifies which context to run in and determines which blockchain to deploy to. **ALGO-live**, uses a live Algorand network node, specified by the environment variables documented in the Algorand connector section **ALGO-browser**, uses the Algorand Wallet Reach Browser Spec [ARC-0011](https://github.com/reach-sh/ARCs/blob/reach-wallet/ARCs/arc-0011.md). **ALGO-devnet**, which uses a Dockerized private Algorand network. |
+| REACH_DEBUG                        | If set to any non-empty value, enables debug messages from the Reach standard library, which will appear in the console.  |                                                                                                                                                                                                                                                                                                        |
+| REACH_RPC_KEY                     | Used to determine the RPC server key. If not defined, it defaults to opensesame, and a warning will appear in the console stating that the development key is being used.                                                                                                                                                                                                                                                         |
+| REACH_RPC_PORT                    | Used to determine which port to bind to. It defaults to 3000.                                                                                                                                                                                                                                                                                                                                                                     |
+| REACH_RPC_TLS_CRT                | Used to determine the path to the TLS crt file, which must be in the ./tls directory. It defaults to reach-server.crt.                                                                                                                                                                                                                                                                                                            |
+| REACH_RPC_TLS_PASSPHRASE         | Used to determine the TLS passphrase. It defaults to rpc-demo.                                                                                                                                                                                                                                                                                                                                                                    |
+| REACH_RPC_TLS_REJECT_UNVERIFIED | This value determines whether to verify the TLS certificate of the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TLS_REJECT_UNVERIFIED. If that is not present, it must default to true. To disable verification, set this value to the string: "0"; any other value will be considered to mean "enable".                               |
  
 
 Backends must respect the following environment variables:
 
  
+| Variable                 | Description                                                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| ALGO_TOKEN              | Used as the API token for your algod.                                                                            |
+| ALGO_SERVER             | Used as the address of your algod.                                                                               |
+| ALGO_PORT               | Used as the port of your algod.                                                                                  |
+| ALGO_INDEXER_TOKEN     | Used as the API token for your indexer.                                                                          |
+| ALGO_INDEXER_SERVER    | Used as the address of your indexer.                                                                             |
+| ALGO_INDEXER_PORT      | Used as the port of your indexer.                                                                                |
+| ALGO_FAUCET_PASSPHRASE | Used as the mnemonic for the faucet of your network. This is useful if you are running your own testing network. |
 
 
-<table>
-  <tr>
-   <td><strong>ALGO_TOKEN</strong>
-   </td>
-   <td>Used as the API token for your algod.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>ALGO_SERVER</strong>
-   </td>
-   <td>Used as the address of your algod.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>ALGO_PORT</strong>
-   </td>
-   <td>Used as the port of your algod.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>ALGO_INDEXER_TOKEN</strong>
-   </td>
-   <td>Used as the API token for your indexer.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>ALGO_INDEXER_SERVER</strong>
-   </td>
-   <td>Used as the address of your indexer.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>ALGO_INDEXER_PORT</strong>
-   </td>
-   <td>Used as the port of your indexer.
-   </td>
-  </tr>
-  <tr>
-   <td><strong>ALGO_FAUCET_PASSPHRASE</strong>
-   </td>
-   <td>Used as the mnemonic for the faucet of your network. This is useful if you are running your own testing network. 
-   </td>
-  </tr>
-</table>
+Sometimes it may be convenient to use the reach run command, preceded by setting the **REACH_CONNECTOR_MODE**, especially when testing multiple blockchain deployments.
 
+```
+$ REACH_CONNECTOR_MODE=ALGO ./reach run
 
-** ** ** **
-
-Sometimes it may be convenient to use the reach run command, preceded by setting the **REACH_CONNECTOR_MODE **, especially when testing multiple blockchain deployments.
-
-**  $ REACH_CONNECTOR_MODE=ALGO ./reach run**
-
-**  $ REACH_CONNECTOR_MODE=ALGO-devnet ./reach run**
-
+$ REACH_CONNECTOR_MODE=ALGO-devnet ./reach run**
+```
 Environment variables can also be set like this:
 
 
 ```
-export REACH_CONNECTOR_MODE="ALGO-devnet"
+`export REACH_CONNECTOR_MODE="ALGO-devnet"`
 ```
 
 
- More information here in [Reach Docs](https://docs.reach.sh/ref-usage.html).
+More information here in [Reach Docs](https://docs.reach.sh/ref-usage.html).
 
 
-### # Front End Support in JavaScript (local).
+### Front End Support in JavaScript (local).
 
-The Reach JavaScript standard library, [@reach-sh/stdlib](https://www.npmjs.com/package/@reach-sh/stdlib) , can be included in your application by using the following code: 
+The Reach JavaScript standard library, [@reach-sh/stdlib](https://www.npmjs.com/package/@reach-sh/stdlib) can be included in your application by using the following code: 
 
 
-```
+```javascript
 import { loadStdlib } from '@reach-sh/stdlib';
 import * as backend from './build/index.main.mjs';
 // const reach = loadStdlib(process.env);
@@ -350,10 +180,7 @@ import * as backend from './build/index.main.mjs';
 ...
 ```
 
-
-
-###  \
-## **_Accounts_**
+## Accounts
 
 Several functions are available for the JavaScript frontends. The dispenser faucet is built in when creating a new account with funds for dev/private networks. For example, to create a new test account, `newTestAccount(10)`, will send 10 Algos from the faucet to a new account. 
 
@@ -363,18 +190,18 @@ A few of the more used functions are below. See all [Account related functions h
 
 
 
-* **getDefaultAccount()  **The meaning of "default account" varies between contexts. When running in the browser, the default account will be connected to a wallet such as AlgoSigner. When running in node.js while connected to one of reach’s standard devnets, the default account will be connected to a faucet on the devnet. This promise will be rejected with an exception if no sensible default account can be accessed for the current context.
-* **newAccountFromSecret(secret: string) **Returns a Promise for a Reach account abstraction for an account specified by the given secret.
-* **newAccountFromMnemonic(phrase: string) **Returns a Promise for a Reach account abstraction for an account specified by the given mnemonic phrase.
-* **newTestAccount(balance) **Returns a Promise for a Reach account abstraction for a new account with a given balance of network tokens. This can only be used in private testing scenarios, as it uses a private faucet to issue network tokens.
-* **createAccount() **The new account will be generated having an empty balance of network tokens.
-* **acc.getAddress() **Returns the account’s address as a string.
-* **acc.setDebugLabel(string) **An account may set a distinguishing label to use in debug logs. If no label is provided, then the first four digits of the account address will be used. 
-* **balanceOf(acc, token?) => **Returns a Promise for the balance of network tokens (or non-network tokens if token is provided) held by the account provided by the acc argument.
-* **transfer(from:acc, to:acc, amount, token?) => **Performs a transfer between _from_ and _to_ accounts. If a token is not provided, then the transfer is of network tokens; otherwise, it is of the designated non-network token. The returned Promise will only be resolved after the transfer completes.
+* **getDefaultAccount()** The meaning of "default account" varies between contexts. When running in the browser, the default account will be connected to a wallet such as AlgoSigner. When running in node.js while connected to one of reach’s standard devnets, the default account will be connected to a faucet on the devnet. This promise will be rejected with an exception if no sensible default account can be accessed for the current context.
+* **newAccountFromSecret(secret: string)** Returns a Promise for a Reach account abstraction for an account specified by the given secret.
+* **newAccountFromMnemonic(phrase: string)** Returns a Promise for a Reach account abstraction for an account specified by the given mnemonic phrase.
+* **newTestAccount(balance)** Returns a Promise for a Reach account abstraction for a new account with a given balance of network tokens. This can only be used in private testing scenarios, as it uses a private faucet to issue network tokens.
+* **createAccount()** The new account will be generated having an empty balance of network tokens.
+* **acc.getAddress()** Returns the account’s address as a string.
+* **acc.setDebugLabel(string)** An account may set a distinguishing label to use in debug logs. If no label is provided, then the first four digits of the account address will be used. 
+* **balanceOf(acc, token?) =>** Returns a Promise for the balance of network tokens (or non-network tokens if token is provided) held by the account provided by the acc argument.
+* **transfer(from:acc, to:acc, amount, token?) =>** Performs a transfer between _from_ and _to_ accounts. If a token is not provided, then the transfer is of network tokens; otherwise, it is of the designated non-network token. The returned Promise will only be resolved after the transfer completes.
 
 
-## _Contracts_
+## Contracts
 
  
 Reach contracts are accounts with three extra capacities:  
@@ -393,14 +220,13 @@ These functions create and interact with contract representations. See more info
 
 
 
-* **acc.contract(bin)** => ctc Returns a Reach contract abstraction based on the bin argument provided with access to the account acc.. This bin argument is the JavaScript `"input.main.mjs"` module which is located in the `build` folder when the backend index.rsh file is compiled. This file contains the TEAL code. This function does not block on the completion of deployment. To wait for deployment, see ctc.getInfo.
+* **acc.contract(bin)** => ctc Returns a Reach contract abstraction based on the bin argument provided with access to the account acc.. This bin argument is the JavaScript `"input.main.mjs"` module which is located in the `build` folder when the backend `index.rsh` file is compiled. This file contains the TEAL code. This function does not block on the completion of deployment. To wait for deployment, see ctc.getInfo.
 * **acc.contract(bin, ctcInfo)** => ctc Returns a Reach contract abstraction based on a deployed Reach DApp contract provided in the ctcInfo argument (or a Promise for ctcInfo) and the bin argument. This bin argument is the `"input.mjs"` module produced by the JavaScript backend.
 * **ctc.getInfo()** => Promise&lt;ctcInfo> Returns a Promise for an object that may be given to attach to construct a Reach contract abstraction representing this contract. This object may be stringified with JSON.stringify for printing and parsed again with JSON.parse without any loss of information. The Promise will only be resolved after the contract is actually deployed on the network. If you are using {deployMode: 'firstMsg'}, avoid blocking on this Promise with await until after the first publish has occurred. Awaiting getInfo too early may cause your program to enter a state of deadlock.
-* **ctc.getViews()** => Object Returns an object representing the views of the contract. This object mirrors the view hierarchy, so if `X.Y` is a view, then ctc.getViews().X.Y is a _view function_. A view function accepts the arguments of the view and returns a Promise that results in the value of the view wrapped in a Maybe type (because the view may not be bound.) For example, if `NFT.owner` is a view with no arguments that represents the Address that owns an NFT, then await ctc.getViews().NFT.owner() is either ['Some', Owner] or ['None', null].
+* **ctc.getViews()** => Object Returns an object representing the views of the contract. This object mirrors the view hierarchy, so if `X.Y` is a view, then ctc.getViews().X.Y is a _view function_. A view function accepts the arguments of the view and returns a Promise that results in the value of the view wrapped in a Maybe type (because the view may not be bound.) For example, if `NFT.owner` is a view with no arguments that represents the Address that owns an NFT, then `await ctc.getViews().NFT.owner()` is either ['Some', Owner] or ['None', null].
 
-See more information on [Network Utilities](https://docs.reach.sh/ref-frontends-js-network.html) , [Provider Info](https://docs.reach.sh/ref-frontends-js-provider.html), [Utilities](https://docs.reach.sh/ref-frontends-js-utils.html) and [Ask.mjs](https://docs.reach.sh/ref-frontends-js-ask_mjs.html)
+See more information on [Network Utilities](https://docs.reach.sh/ref-frontends-js-network.html) , [Provider Info](https://docs.reach.sh/ref-frontends-js-provider.html), [Utilities](https://docs.reach.sh/ref-frontends-js-utils.html) and [Ask.mjs](https://docs.reach.sh/ref-frontends-js-ask.html)
 
- 
 
 
 
@@ -443,8 +269,7 @@ const winner = (fingersA, fingersB, guessA, guessB) => {
 };
 ```
 
-
-## Verification 
+### Verification 
 
 
 Writing smart contracts can seem really hard. Writing a fully decentralized, distributed, trustless system is super difficult but how can one be sure that the contract does what it is supposed to do? How does one know that the contract doesn’t lock away 1000 ALGO for its owners after a certain point of time. Also the smart contract should not spend more money than it has. It would be preferable to avoid a situation like the infamous [DAO hack](https://www.gemini.com/cryptopedia/the-dao-hack-makerdao).
@@ -489,10 +314,10 @@ assert(f(forall(UInt)) <= 50);
 ```
 
 
-The following code is used for verification by using asset statements.
+The following code is used for verification by using assert statements.
 
 
-```
+```javascript
 // assert 
 // Alice throws a 0, AND Bob throws a 2,
 // and Alice guesses 0 and Bob guesses 2
@@ -550,6 +375,7 @@ Alice proposes a wager amount, Bob accepts the wager within the timeout period. 
 
 
 ```javascript
+
 export const main =
  Reach.App(
    {},
@@ -574,7 +400,7 @@ export const main =
 Each round is played until a winner is declared via a while loop. Alice wants to be able to publish her fingers and her guess, but also keep it secret,  `makeCommitment` is used for this.   Bob does not know the values for Alice, but Alice does know the values using `unknowable`. 
 
 
-```
+```javascript
      var outcome = DRAW;     
      invariant(balance() == 2 * wager && isOutcome(outcome) );
      // loop until we have a winner
@@ -824,34 +650,38 @@ Alice went from 10 to 14.9999.
 Bob went from 10 to 4.9999.
 ```
 
-## Auditing
+### Auditing
 
 Without Reach, an auditor looks at the blockchain program and proves that program is correct by doing their own analysis. They're actually doing the verification of a version of the program. So, what happens if a minor change to the program is added? The audit is useless as it was for a prior version. 
 
 When auditing dApps written in Reach, the compiler verifies. An auditor would just need to verify if enough assertions are provided for the Reach compiler. On subsequent updates, the auditor would just need to check and make sure that the right assertions were included for the updates, rather than doing a complete new audit for the entire new version.
 
-## Mathematical proofs
+### Mathematical proofs
 
 Reach performs a runtime check as well as compile-time check using mathematical proofs.
 
 Verification shows that _no flaw_ exists, and _no attack_ is possible. Reach provides automatic verifications to ensure and guarantees that your applications are free from entire categories of errors. This ensures the program does not lose funds, lock away funds or overspend funds. 
 
-## Cryptographic Commitment Scheme
+### Cryptographic Commitment Scheme
 
 Reach provides tools to add custom verifications to a program, like ensuring that information is known only to one party.  Or that the implementation of a sensitive algorithm is correct. In our sample app, Alice’s fingers and prediction guess needs to be protected until Bob reveals his hand. Otherwise Bob would have an unfair advantage.  We need Alice to be able to publish her hand, but also keep it secret. This is a job for a cryptographic commitment scheme. Reach’s standard library comes with makeCommitment to make this easier for you. Using this our implementation is now secure and doesn’t contain any exploits for either Alice or Bob to guarantee a win. When  publishing information that needs to be a  secret, the  makeCommitment and checkCommitment commands facilitate this by applying a salt value when committing.  
 
 
-## Time outs and non-participation.
+### Timeouts and non-participation.
 
-Non-participation means one party ceases to continue playing their role in an application. In traditional client-server programs, there is typically no need to consider the consequences of non-participation. IE. Let a website sit idle, if logged in, it may log out or info entered is cached and it will be there upon return.  If after Alice has paid her wager, Bob never accepts and the application doesn’t continue. In this case, Alice’s network tokens would be locked inside of the contract and lost to her. 
+Non-participation means one party ceases to continue playing their role in an application. In traditional client-server programs, there is typically no need to consider the consequences of non-participation. IE. Let a website sit idle, if logged in, it may log out or info entered is cached and it will be there upon return.  If after Alice has paid her wager, Bob never accepts and the application dosen’t continue. In this case, Alice’s network tokens would be locked inside of the contract and lost to her. 
 
 Similarly, if after Bob accepted and paid his wager, Alice stopped participating and never submitted her hand, then both their funds would be locked away forever. In each of these cases, both parties would be greatly hurt and their fear of that outcome would introduce an additional cost to transacting, which would lower the value they got from participating in the application.
 
 In Reach, non-participation is handled through a "timeout" mechanism whereby each consensus transfer can be paired with a step that occurs for all participants if the originator of the consensus transfer fails to make the required publication before a particular time. We’ll integrate this mechanism into our version Morra and deliberately insert non-participation into our JavaScript testing program to watch the consequences play out.
 
-**Logging on the backend.**
+The time argument can be expressed in `absoluteTime(amt)`, `relativeTime(time)`, `relativeSecs(amt)` or `absoluteSecs(secs)`.  Also `timeremaining()` can be used in conjunction with the `makeDeadline(UInt)` function. 
 
-The **hasConsoleLogger **method is used to provide logging.** **First define logging in the participant interface in `index.rsh`: 
+
+
+### Logging on the backend
+
+The **hasConsoleLogger** method is used to provide logging. First define logging in the participant interface in `index.rsh`: 
 
 
 ```javascript
@@ -872,7 +702,9 @@ const Bob =
 
 Then call the interact.log function to display a variable value … in the frontend.
 
-**In index.mjs :  `...stdlib.hasConsoleLogger `**as shown below.
+In `index.mjs`
+
+`...stdlib.hasConsoleLogger ` as shown below.
 
 
 ```javascript
@@ -895,6 +727,7 @@ Then call the interact.log function to display a variable value … in the front
 
 Then on the backend use the following code to display the value. All backend numbers are BigNumbers, so the front end may need formatting functions. 
 
+In `index.rsh`
 
 `interact.log(_variable);`
 
@@ -906,8 +739,7 @@ BigNumber { _hex: '0x03', _isBigNumber: true }
 ```
 
 
-
-## Platform Specific code
+### Platform Specific code
 
 Most of the time, platform specific code is not needed, as the abstractions have already been made for common functions across blockchains. However, blockchain-specific code may be needed for functions that are specific to a blockchain, such as the number of rounds to wait for a transaction. Code written in .rsh backend has no notion of which chain it is running on so Blockchain specific code would need to go in the frontend. Also,  env variables could be used to control your logic as well, or you can [branch on stdlib.connector](https://github.com/reach-sh/reach-lang/blob/c6b38366a16388126feb1b53579f8bcf9537ef4f/examples/chicken-race/index.mjs#L6) . In this example, if the stdlib.connector is ALGO, then the howManyRounds const will be set to 3, otherwise 10.
 
@@ -923,7 +755,7 @@ const howManyRounds = stdlib.connector === 'ALGO' ? 3 : 10;
 
 
 
-## Flow commands
+### Flow commands
 
 [Common reach app](https://docs.reach.sh/guide-ctransfers.html) flow commands include: 
 
@@ -951,7 +783,7 @@ The Reach RPC Server provides access to compiled JavaScript backends via an HTTP
 
 When using RPC the stdlib functions listed above would be replaced by corresponding RPC Calls in JavaScript. Go or Python. 
 
-For example for calling stdlib methods:
+For example, for calling stdlib methods:
 
 Using JavaScript (local) 
 
@@ -991,34 +823,23 @@ rpc, rpcCallbacks := reachrpc.Mk()
 ```
 
 
-## RPC Options:
+### RPC Options:
 
-In lieu of using environment variables on the client platform, the RPC Client Standard Options can be passed in as a dictionary object when instantiating the RPC object.
+Instead of using environment variables on the client platform, the RPC Client Standard Options can be passed in as a dictionary object when instantiating the RPC object.
 
 JavaScript RPC options
 
+```javascript
+var opts = {
+   host: <host>,
+   port: <port>,
+   key: <API key>,
+   verify: '0',
+   timeout: 10
+ };
+const { rpc, rpcCallbacks } = await mkRPC(opts);
+```
 
-<table>
-  <tr>
-   <td><code>var opts = {</code>
-<p>
-<code>   host: &lt;host>,</code>
-<p>
-<code>   port: &lt;port>,</code>
-<p>
-<code>   key: &lt;API key>,</code>
-<p>
-<code>   verify: '0', \
-   timeout: 10 \
- }; \
-const { rpc, rpcCallbacks } = await mkRPC(opts);</code>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-  </tr>
-</table>
 
 
 Python RPC options
@@ -1055,11 +876,11 @@ The options are as follows:
 
 
 
-* host — This value sets the hostname to contact for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_SERVER.
-* port — This value sets the TCP port to contact for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_PORT.
-* verify — This value determines whether to verify the TLS certificate of the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TLS_REJECT_UNVERIFIED. If that is not present, it must default to true. To disable verification, set this value to the string: "0"; any other value will be considered to mean "enable".
-* timeout — This value sets the number of seconds to wait for the Reach RPC Server instance to respond to its first request. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TIMEOUT. If that is not present, it must default to 5 seconds.
-* key — This value sets the API key for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_KEY.
+* **host** — This value sets the hostname to contact for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_SERVER.
+* **port** — This value sets the TCP port to contact for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_PORT.
+* **verify** — This value determines whether to verify the TLS certificate of the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TLS_REJECT_UNVERIFIED. If that is not present, it must default to true. To disable verification, set this value to the string: "0"; any other value will be considered to mean "enable".
+* **timeout** — This value sets the number of seconds to wait for the Reach RPC Server instance to respond to its first request. If it is not present, the client library must default to the value of the environment variable REACH_RPC_TIMEOUT. If that is not present, it must default to 5 seconds.
+* **key** — This value sets the API key for the Reach RPC Server instance. If it is not present, the client library must default to the value of the environment variable REACH_RPC_KEY.
 
 ### Debugging RPC:
 
@@ -1076,7 +897,7 @@ export REACH_DEBUG=  or unset REACH_DEBUG //turns off debugging
 
 JavaScript
 
-index.rsh
+`index.rsh`
 
 
 ```javascript
@@ -1128,7 +949,7 @@ index.mjs
 
 ### RPC logging
 
-In index.mjs add log: console.log
+In `index.mjs` add log: console.log
 
 JavaScript RPC logging
 
@@ -1154,7 +975,7 @@ JavaScript RPC logging
 ```
 
 
-and on the Backend in index.rsh add  `interact.log(variable);`
+and on the Backend in `index.rsh` add  `interact.log(variable);`
 
 
 ```javascript
@@ -1190,11 +1011,11 @@ Those methods instead accept and produce account RPC handles, which are random s
 * `/forget/acc` accepts an account RPC handle and deletes it from the Reach RPC Server’s memory.
 * `/acc/$METHOD` where `$METHOD` is a method of an account representation of the JavaScript standard library. \
 All `/acc` methods are synchronous value RPC methods that accept and produce the same arguments and return values as the corresponding function, encoded as JSON objects, except they accept an additional first argument, which is the account RPC handle returned by a prior RPC method invocation; and, a method that accepts a backend (like `/acc/attach` (i.e. acc.attach) or `/acc/deploy` (i.e. acc.deploy) does not accept a backend argument, but has it implicitly provided by the Reach RPC Server. \
-Furthermore, those that produce contract representations, instead produce contract RPC handles. For example, `/acc/deploy` does not return a contract representation like acc.deploy, but instead returns a contract RPC handle.
+Furthermore, those that produce contract representations, instead produce contract RPC handles. For example, `/acc/deploy` does not return a contract representation like `acc.deploy`, but instead returns a contract RPC handle.
 * `/forget/ctc` accepts a contract RPC handle and deletes it from the Reach RPC Server’s memory.
-* `/ctc/$METHOD` where `$METHOD` is a method of a contract representation of the JavaScript standard library. \
+* `/ctc/$METHOD` where `$METHOD` is a method of a contract representation of the JavaScript standard library. 
 All `/ctc` methods are synchronous value RPC methods that accept and produce the same arguments and return values as the corresponding function, encoded as JSON objects, except they accept an additional first argument, which is the contract RPC handle returned by a prior RPC method invocation.
-* `/backend/$PARTICIPANT` where `$PARTICIPANT` is a participant of the backend compiled by the JavaScript backend. \
+* `/backend/$PARTICIPANT` where `$PARTICIPANT` is a participant of the backend compiled by the JavaScript backend. 
 All `/backend` methods are interactive RPC methods that accept three arguments:
     * `ctcId` — A contract RPC handle to provide as the contract to the backend
     * `values` — An object containing the non-function components of the participant interact interface of the backend.
@@ -1217,19 +1038,11 @@ Next, open a terminal in that directory and install the Reach Python RPC client:
 
 **Run and Install the Python RPC Client…**
 
-Run this command from the same folder as index.py and index.rsh.
+Run this command from the same folder as `index.py` and `index.rsh`.
 
-
-<table>
-  <tr>
-   <td><code>$  ([ -d ./venv ] || python3 -m venv ./venv) && source ./venv/bin/activate</code>
-   </td>
-  </tr>
-  <tr>
-   <td>
-   </td>
-  </tr>
-</table>
+```bash
+$  ([ -d ./venv ] || python3 -m venv ./venv) && source ./venv/bin/activate
+```
 
 
 A Python venv is a "virtual environment" that sandboxes dependencies to avoid cluttering your system directories.
@@ -1242,19 +1055,13 @@ A Python venv is a "virtual environment" that sandboxes dependencies to avoid cl
 
 ```
 
-
-Note: to exit the venv environment use: \
- 
-
+Note: to exit the venv environment use:
 
 ```
 $ deactivate
 ```
 
-
-Sample Python frontend code** [index.py](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-py/index.py) **for the game Morra that was used in the getting started guide [link]: \
- 
-
+Sample Python frontend code [index.py](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-py/index.py)
 
 ```python
 import random
@@ -1361,7 +1168,7 @@ if __name__ == '__main__':
 
 ### JavaScript RPC Install and Run
 
-Install and Run steps in folder where index.mjs is:
+Install and Run steps in folder where `index.mjs` is:
 
 
 ```bash
@@ -1377,7 +1184,7 @@ import { mkRPC } from '@reach-sh/rpc-client';
 ```
 
 
-You may need to set the environment variable for NODE_TLS_REJECT_UNAUTHORIZED if you get this error on line
+You may need to set the environment variable for NODE_TLS_REJECT_UNAUTHORIZED if you get this error on this line: 
 
 
 RPC /stdlib/parseCurrency [10] 
@@ -1398,9 +1205,7 @@ Run with
 $ reach rpc-run node index.mjs
 ```
 
-
-Sample JavaScript frontend code **[index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-js/index.mjs)** for the game Morra that was used in the getting started guide [link]: 
-
+Sample JavaScript frontend code **[index.mjs](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-js/index.mjs): 
 
 ```javascript
 import { mkRPC } from '@reach-sh/rpc-client';
@@ -1492,17 +1297,16 @@ import { mkRPC } from '@reach-sh/rpc-client';
 
 
 
-### ## **Go RPC** Install and Run
+### Go RPC Install and Run
 
-Install and Run from the folder with index.go:
+Install and Run from the folder with `index.go`:
 
 ```bash
 $ go get github.com/reach-sh/reach-lang/rpc-client/go
 $ ./reach rpc-run go run index.go
 ```
 
-Sample Gio frontend code [index.go](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-go/index.go)  for the game Morra that was used in the getting started guide [link
-
+Sample Go frontend code [index.go](https://github.com/algorand-devrel/Reach-Morra-Game/blob/main/morra3/client-go/index.go).
 
 ```golang
 ​​package main
@@ -1641,15 +1445,15 @@ func main() {
 
 
 
-## C#
+### C\#
 
 A C# client library example for the [Reach RPC protocol](https://docs.reach.sh/ref-backends-rpc.html) may be installed by copying the code at <code>[https://github.com/reach-sh/reach-lang/tree/master/rpc-client/cs](https://github.com/reach-sh/reach-lang/tree/master/rpc-client/cs)</code>.
 
 
-### Please inspect the tutorial example program for usage: <code>[https://github.com/reach-sh/reach-lang/tree/master/examples/tut-7-rpc/client-cs/index.cs](https://github.com/reach-sh/reach-lang/tree/master/examples/tut-7-rpc/client-cs/index.cs)</code>.
+See the tutorial example program for usage: [https://github.com/reach-sh/reach-lang/tree/master/examples/tut-7-rpc/client-cs/index.cs](https://github.com/reach-sh/reach-lang/tree/master/examples/tut-7-rpc/client-cs/index.cs).
 
 
-## # TestNet/MainNet
+## TestNet/MainNet
 
 In order to deploy to TestNET/MainNet, the provider selection needs to be done first. This function allows you to choose which particular consensus network API provider to connect to.
 
@@ -1681,7 +1485,6 @@ REACH_RPC_TLS_REJECT_UNVERIFIED=0
 REACH_RPC_KEY=opensesame
 REACH_RPC_TIMEOUT=20
 ```
-
 
 Complete code for this Morra Game simulation can be found here: 
 
