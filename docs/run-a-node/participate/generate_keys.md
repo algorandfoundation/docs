@@ -53,7 +53,7 @@ If the key you generated does not show up, check that it was correctly placed in
 Use [`goal account partkeyinfo`](../../../clis/goal/account/partkeyinfo) to dump all the information about each participation key that lives on the node. This information is used to generate the online key registration transaction [described in the next section](./online.md).
 
 === "goal"
-    ```zsh 
+    ```zsh
     $ goal account partkeyinfo
     Dumping participation key info from /opt/data...
 
