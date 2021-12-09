@@ -33,7 +33,6 @@ The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) comma
 
 === "goal"
     ```zsh
-    o
     $ goal account listpartkeys
     Registered  Account      ParticipationID   Last Used  First round  Last round
     yes         TUQ4...NLQQ  GOWHR456...              27            0     3000000
