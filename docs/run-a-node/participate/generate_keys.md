@@ -33,10 +33,10 @@ The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) comma
 
 === "goal"
     ```zsh
+    o
     $ goal account listpartkeys
-    Registered	Filename                                                                        	Parent address                                              	 First round	  Last round	   First key
-    no        	BH55E5RMBD4GYWXGX5W5PJ5JAHPGM5OXKDQH5DC4O2MGI7NW4H6Q.10000.10111.partkey        	BH55E5RMBD4GYWXGX5W5PJ5JAHPGM5OXKDQH5DC4O2MGI7NW4H6VOE4CP4  	       10000	       10111	    240821.0
-    no        	EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4.4595158.6000000.partkey	EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4  	     4595158	     6000000	    478.2927
+    Registered  Account      ParticipationID   Last Used  First round  Last round
+    yes         TUQ4...NLQQ  GOWHR456...              27            0     3000000
     ```
 
 
@@ -55,18 +55,19 @@ Use [`goal account partkeyinfo`](../../../clis/goal/account/partkeyinfo) to dump
 === "goal"
     ```zsh 
     $ goal account partkeyinfo
-    Dumping participation key info from /home/ubuntu/node/data...
-    ------------------------------------------------------------------
-    File: EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4.6000000.9000000.partkey
-    {
-      "acct": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
-      "first": 6000000,
-      "last": 9000000,
-      "sel": "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=",
-      "vote": "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=",
-      "voteKD": 1730
-    }
-    ...
+    Dumping participation key info from /opt/data...
+
+    Participation ID:          GOWHR456IK3LPU5KIJ66CRDLZM55MYV2OGNW7QTZYF5RNZEVS33A
+    Parent address:            TUQ4HOIR3G5Z3BZUN2W2XTWVJ3AUUME4OKLINJFAGKBO4Y76L4UT5WNLQQ
+    Last vote round:           11
+    Last block proposal round: 12
+    Effective first round:     1
+    Effective last round:      3000000
+    First round:               0
+    Last round:                3000000
+    Key dilution:              10000
+    Selection key:             l6MsaTt7AiCAdG+69LG/wjaprsI1vImZuGN6gQ1jS88=
+    Voting key:                Rleu99r3UqlwuuhaxCTrTQUuq1C9qk5uJd2WQQEG+6U=
     ```
 
 
