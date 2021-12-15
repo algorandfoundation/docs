@@ -29,16 +29,17 @@ To confirm everything is installed try to run the following three commands and s
 
 If you’re using Windows, consult [the guide to using Reach on Windows](https://docs.reach.sh/guide-windows.html).
 
-Once confirmed that reach prerequisite are installed, choose a directory for this project such as:
+Once confirmed that reach prerequisite are installed, choose a directory and clone the repo example so you can follow along:
 
 ```
-  $ mkdir -p ~/reach && cd ~/reach
+  $ mkdir -p ~/reach/ && cd ~/reach/
+  $ git clone https://github.com/algorand/reach-auction
 ```
 
 Navigate to the project folder
 
 ``` bash
-cd reach_auction
+cd reach-auction
 ```
 
 Next, download Reach by running
@@ -97,24 +98,10 @@ All of the hashes listed should be the same and then visit the #releases channel
 
 More information: Detailed Reach install instructions can be found in the [reach docs](https://reach.sh/). 
 
-## Clone the Reach Auction demo application
-
-Clone the repository using the following commands. 
-
-
-```bash
-// git clone algorand/reach-auction 
-```
-
 
 
 ## Setup environments and run tests
 
-Navigate to your project folder
-
-```
-cd  ~/reach/auction
-```
 
 Sometimes it may be convenient to use the reach run command, preceded by setting the **REACH_CONNECTOR_MODE **, especially when testing multiple blockchain deployments.
 
@@ -148,16 +135,15 @@ The sample app shown below is an auction. Alice and Bob think through the featur
 
 ## The frontend and backend files that compose the Reach dApp.
 
-Copy these two files if not done already, into your  `~/reach/auction folder. `
-
-
 [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh)  is the Backend which provides the implementation of the solution in. It also determines what is published to the blockchain and how. It also defines the interfaces to the frontend.
 
 [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) is the Frontend provides a User Interface including prompts and a web and/or mobile app  frontend. It creates accounts and provides the logic of `interact` methods.
 
 # The dApp
 
-A build folder is created in your project by the Reach compiler when using `./`reach run`. `
+A build folder is created in your project by the Reach compiler when using 
+
+`./reach run`
 
 This folder contains a file called `index.main.mjs`. The file contains an asynchronous function for each participant. For example, if a Reach program contains a participant named 'Alice' in the Reach.App, then the JavaScript backend will include a function named Alice (i.e. backend.Alice). The Promise returned by these functions is resolved when the Reach program terminates (i.e. reaches exit();). 
 
@@ -359,7 +345,7 @@ const names = ["Creator", "Alice", "Bob", "Carla"];
 ```
 
 
-Provide the  logic for the `interact` methods. Interact methods are called from the backend for the frontend to execute. Functions in [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) include: showBalance, getSale, seeBid, timeout, showOutcome and showBalance. The showBalance method uses `stdlib.balanceOf(acc)` It also shows the balance of the NFT Asset using `stdlib.balanceOf(acc, theNFT.id)`. The seeBid function shows the bid and who saw it. The getSale function sets the parameters of the sale including the NFT Asset ID and reserve price and length in Blocks.
+Provide the logic for the `interact` methods. Interact methods are called from the backend for the frontend to execute. Functions in [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) include: showBalance, getSale, seeBid, timeout, showOutcome and showBalance. The showBalance method uses `stdlib.balanceOf(acc)` It also shows the balance of the NFT Asset using `stdlib.balanceOf(acc, theNFT.id)`. The seeBid function shows the bid and who saw it. The getSale function sets the parameters of the sale including the NFT Asset ID and reserve price and length in Blocks.
 
 
 ```javascript
