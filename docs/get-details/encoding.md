@@ -80,7 +80,15 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 
 === "Java"
     ```java
-    todo
+    import com.algorand.algosdk.crypto.Address;
+
+    //...
+
+    String address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4";
+    Address pk = new Address(address);
+    String addr = new Address(pk.getBytes());
+
+    // addr == address
     ```
 
 ### Byte Arrays
@@ -165,12 +173,17 @@ Given an integer `1337`, you may encode it as:
     decoded := int64(binary.BigEndian.Uint64(encoded))
 
     // val == decoded
-
     ```
 
 === "Java"
     ```java
-    todo
+    long val = 1337;
+
+    byte[] encoded = Encoder.encodeUint64(val);
+
+    BigInteger decoded = Encoder.decodeUint64(encoded);
+
+    //decoded.toLong() == val
     ```
 
 
@@ -180,7 +193,7 @@ Given an integer `1337`, you may encode it as:
 
 Sometimes an application needs to transmit a transaction or transaction group between the front end and back end.
 
-Transaction on front end <=> Transaction on a server
+This can be done by msgpack encoding the transaction object on one side and msgpack decoding it on the other side.
 
 ### Signed Transaction
 
@@ -216,14 +229,4 @@ Given a blob ``, you may decode it as:
     ```python
     blob = ""
     signedTxn = encoding.future_msgpack_decode(blob)
-    ```
-
-=== "Go"
-    ```go
-    todo
-    ```
-
-=== "Java"
-    ```java
-    todo
     ```
