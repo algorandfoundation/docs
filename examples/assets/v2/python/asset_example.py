@@ -225,10 +225,7 @@ params.flat_fee = True
 
 account_info = algod_client.account_info(accounts[3]['pk'])
 holding = None
-idx = 0
-for my_account_info in account_info['assets']:
-    scrutinized_asset = account_info['assets'][idx]
-    idx = idx + 1    
+for scrutinized_asset in account_info['assets']: 
     if (scrutinized_asset['asset-id'] == asset_id):
         holding = True
         break
