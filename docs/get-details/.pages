@@ -9,6 +9,7 @@ arrange:
     - dapps
     - indexer.md
     - walletconnect
+    - encoding.md
     - parameter_tables.md
     - algorand-networks
     - algorand_consensus.md

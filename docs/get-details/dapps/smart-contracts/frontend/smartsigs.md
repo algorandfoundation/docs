@@ -348,6 +348,7 @@ Contract Accounts are created by compiling the TEAL logic within the smart signa
 
 * Load the Program Bytes into the SDK.
 * Create a Logic Signature based on the program.
+* Fund the contract address (as any other account the minimum balance is 0.1 ALGO).
 * Create the Transaction.
 * Set the `from` transaction property to the contract address.
 * Sign the Transaction with the Logic Signature.
