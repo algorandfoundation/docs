@@ -112,6 +112,7 @@ Transactions are used to interact with the Algorand network. To create a payment
 # build transaction
 from algosdk.future.transaction import PaymentTxn
 
+
     params = algod_client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
     params.flat_fee = True
@@ -139,11 +140,12 @@ Before the transaction is considered valid, it must be signed by a private key. 
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](../../get-details/transactions/signatures.md#single-signatures){target=_blank}. 
     
 # Submit the Transaction
-The signed transaction can now be submitted to the network. `wait_for_confirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation){target=_blank}.
+The signed transaction can now be submitted to the network. `wait_for_confirmation` SDK Method is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
 ​
 ```python
 import json
 import base64
+from algosdk.future.transaction import wait_for_confirmation
 
     #submit transaction
     txid = algod_client.send_transaction(signed_txn)
@@ -161,36 +163,8 @@ import base64
     print("Decoded note: {}".format(base64.b64decode(
         confirmed_txn["txn"]["txn"]["note"]).decode()))
     
-    # utility function for waiting on a transaction confirmation
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
+```
 
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return 
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:  
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
-``` 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=480){target=_blank}  
 
 # Complete Example
@@ -202,6 +176,7 @@ import base64
 from algosdk import account, mnemonic
 from algosdk.v2client import algod
 from algosdk.future.transaction import PaymentTxn
+from algosdk.future.transaction import wait_for_confirmation
 
 def generate_algorand_keypair():
     private_key, address = account.generate_account()
@@ -253,35 +228,6 @@ def first_transaction_example(private_key, my_address):
     account_info = algod_client.account_info(my_address)
     print("Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
 
-# utility function for waiting on a transaction confirmation
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
-
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return 
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:  
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
 #replace private_key and my_address with your private key and your address
 first_transaction_example(private_key, my_address)​
