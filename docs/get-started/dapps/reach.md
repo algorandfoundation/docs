@@ -1,8 +1,8 @@
 title: Build with Reach
 
-Alice and Bob are now ready to kick-off development of their Algorand-powered auction dApp! This guide will take you through the steps to build the dApp, which includes setting up a development environment, writing the dApp code which can contain multiple smart contracts, deploying it, and writing the functions to interact with it.
+Alice and Bob are now ready to kick-off development of their Algorand-powered auction [dApp](https://developer.algorand.org/docs/get-started/dapps/)! This guide will take you through the steps to build the dApp, which includes setting up a development environment, writing the dApp code which can contain multiple smart contracts, deploying it, and writing the functions to interact with it.
 
-A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Reach on Algorand. This guide does _not_ cover all the details of the dApp backend and frontend code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building _any_ dApp on Algorand using Reach. So don’t worry if you don’t understand what everything does in the solution. This is expected! After you feel comfortable with the basics, you can head over to the detailed Reach documentation and work on becoming an expert in the Reach dApp language.
+A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Reach on Algorand. This guide does not cover all the details of the dApp backend and frontend code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand using Reach. So don’t worry if you don’t understand what everything does in the solution. This is expected! After you feel comfortable with the basics, you can head over to the detailed Reach documentation and work on becoming an expert in the Reach language.
 
 Now let’s get started. 
 
@@ -93,7 +93,6 @@ devnet-eth: fb449c94
 ```
 
 
-
 All of the hashes listed should be the same and then visit the #releases channel on the [Reach Discord Server](https://discord.gg/9kbHPfwbwn) to see the current hashes.
 
 More information: Detailed Reach install instructions can be found in the [reach docs](https://reach.sh/). 
@@ -133,19 +132,23 @@ The sample app shown below is an auction. Alice and Bob think through the featur
 4. For each bid, if the new bid is higher than the previous bid, the previous bid will be refunded to the previous bidder and the new bid will be recorded and held by the contract.
 5. At the end of a successful auction, where the reserve price was met, the highest bidder will receive the artwork and the seller will receive the full bid amount.
 
-## The frontend and backend files that compose the Reach dApp.
+## Reach architecture
 
-[index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh)  is the Backend which provides the implementation of the solution in. It also determines what is published to the blockchain and how. It also defines the interfaces to the frontend.
+Reach programs contain all properties of a dApp. The backend, often found in a file such as [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh), controls what data is published to the consensus network (a blockchain) and defines interfaces that can interact with the frontend. The frontend is often contained within a file such as [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) and provides a graphical representation of the interface for its participants. i.e. Alice and Bob. The user interface may be in the form of a command line, or more preferably, a web or mobile app.
 
-[index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) is the Frontend provides a User Interface including prompts and a web and/or mobile app  frontend. It creates accounts and provides the logic of `interact` methods.
+In Reach, developers think about their participants and how they will interact with one another, as well as, with the contract. Developers codify the business logic of their application and the Reach compiler builds the smart contract. Reach abstracts the heavy lifting of smart contract development, allowing developers to focus their energy on participant interaction.
 
-# The dApp
+# The dApp Backend
 
 A build folder is created in your project by the Reach compiler when using 
 
 `./reach run`
 
-This folder contains a file called `index.main.mjs`. The file contains an asynchronous function for each participant. For example, if a Reach program contains a participant named 'Alice' in the Reach.App, then the JavaScript backend will include a function named Alice (i.e. backend.Alice). The Promise returned by these functions is resolved when the Reach program terminates (i.e. reaches exit();). 
+This folder contains a file called `index.main.mjs`. This file contains the smart contract bytecode that a machine is able to read. Additionally, `index.main.mjs` is a backend JavaScript file that contains an asynchronous function for each participant, as defined in `index.mjs`. 
+
+You can imagine that `index.mjs` mirrors `index.main.mjs`. The `index.mjs` provides frontend interactivity and `index.main.mjs` enables functionality in the backend. For example, if a Reach program contains a participant named 'Alice' in the Reach.App, then the JavaScript backend will include a function named Alice (i.e. backend.Alice).
+
+## Run the Reach Application
 
 Run the auction
 
@@ -193,10 +196,13 @@ Carla has 9.999009 ALGO and 0 of the NFT
 
 ## Basic Functions of the Auction
 
-The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. The Creator is a Participant that has getSale, seeBid and timeout functions.  A participant is an “actor” which takes part in the application (dApp). A participant is associated with an account (address) on the consensus network. A participant can have persistently stored values, called its local state. 
+The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. The `Creator` is a Participant that has getSale, seeBid and timeout functions.  A participant is an "actor" which takes part in the application (dApp). A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as, a set of accounts and contracts. 
 
-The Bidder is a ParticipantClass that has seeParams and getBid functions. A participant class is a category of Participant, it is like a Participant, but can occur many times in a single application. Example: an application where users vote for their favorite puppy. There can be many voters voting, but they are all voters. All voters would be a member of the “voter participant class”. In the auction dApp we have a participant class of bidders, with each bidder having the ability to place a bid.  
+`Bidder` is a ParticipantClass that has seeParams and getBid functions. A participant class is a category of Participant, it is like a Participant, but can occur many times in a single application. 
 
+Imagine an application where users vote for their favorite puppy. There can be many voters who participate in the act of voting, and yet, collectively, they are all voters. In this example, all voters are members of the “voter participant class”. Similarly, in the auction dApp, we have a participant class of bidders. Every bidder within this class has the ability to place a bid.
+
+`index.rsh`
 
 ```javascript
 'reach 0.1';
@@ -206,7 +212,7 @@ const common = {
  showOutcome: Fun([Address], Null)
 };
 const Params = Tuple(Token, UInt, UInt);
-
+// Creator is a Participant that has getSale, seeBid and timeout functions.  A participant is an “actor” who takes part in the application (dApp). Participants are associated with an account (address) on the consensus network.
 export const main = Reach.App(() => {
  const Creator = Participant('Creator', {
    ...common,
@@ -214,6 +220,7 @@ export const main = Reach.App(() => {
    seeBid: Fun([Address, UInt], Null),
    timeout: Fun([], Null),
  });
+ // Bidder is a ParticipantClass that has seeParams and getBid functions. 
  const Bidder = ParticipantClass('Bidder', {
    ...common,
    seeParams: Fun([Params], Null),
@@ -223,17 +230,17 @@ export const main = Reach.App(() => {
 ```
 
 
-The functions in the frontend are called from the backend using the interact interface. Notice in the code below, `interact.getSale()` which returns nftID, reservePrice and lenInBlocks.  The Creator of the auction publishes the auction params for NFT id,  reservePrice and lenInBlocks and commits to the blockchain. The Bidder sees the params. If the entire DApp is waiting for a single participant to act, such as when at a play the entire theater  waits in anticipation for the stage hands to draw the curtains, then you either need a pay or publish. If the single participant is sharing information, then you need a publish; but if they are only paying a previously known amount, then you need a pay. This kind of transfer always explicitly names the party acting, as in:
-
 ## Publish Information and Pay
 
-Publish will write information to the blockchain, such as the reserve price.
+The next section introduces `.pay()` and `.publish()` functionality, allowing participants to pay the contract and each other. They also enable the contract to pay out any remaining funds before exiting. Pay or Publish are often needed when the entire dApp is waiting for a single participant to act. If a participant is sharing information, then you need `publish()`. When paying a previously known amount, use `pay()`. This kind of transfer always explicitly names the acting participant.
+
+Publish writes information to the blockchain. In this case, it is writing the nft ID, reserve price, and length in blocks.
 
 ```
 Creator.publish(nftId, reservePrice, lenInBlocks);
 ```
 
-This snippet makes a payment amount transaction from the creator for the specified NFT:
+Here, the creator makes a payment amount transaction for the specified NFT:
 
 
 ```
@@ -242,6 +249,7 @@ Creator.pay([[amt, nftId]]);
 
 The code below publishes information and pays. The `lastConsensusTime()` primitive returns the network time of the last publication of the dApp.  This may not be available if there was no such previous publication, such as at the beginning of an application before the first publication. The `Bidder.interact.seeParams` interacts with the frontend to display the  NFTId, reservePrice and the end time to bid. 
 
+`index.rsh`
 
 ```javascript
  Creator.only(() => {
@@ -254,24 +262,33 @@ The code below publishes information and pays. The `lastConsensusTime()` primiti
  const end = lastConsensusTime() + lenInBlocks;
  Bidder.interact.seeParams([nftId, reservePrice, end]);
 ```
+Recall the functions, `getSale()` and `seeParams()` were created in the participant interact interface. Further into the workshop, the same functions will be used by the frontend. The participant interact interface enables the frontend to retrieve functionality from the backend. 
+In the code above, `interact.getSale()` returns nftID, reservePrice and lenInBlocks. The Creator of the auction publishes the auction params for NFT id, reservePrice and lenInBlocks and commits to the blockchain. The Bidder sees the params.
 
+## Consensus Transfer Patterns
+
+In the next snippet, the rules for the outcome of the bidding are defined. The consensus transfer uses `parallelReduce`, which facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached. A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account. Additional consensus transfer patterns are discussed in the reach documentation [here](https://docs.reach.sh/guide-ctransfers.html). In the logic below, if the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder. The Maybe Computation can be some or none: (evaluate the return of a function). 
 
 A Consensus Network is a Network protocol that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as a set of accounts and contracts. 
 
 Rules for the outcome of the bidding are next. The consensus transfer uses parallelReduce, which facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached. A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account. Additional consensus transfer patterns are discussed in the reach documentation [here](https://docs.reach.sh/guide-ctransfers.html).  In the logic below, if the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder. 
 
+`index.rsh`
 
 ```javascript
+// parallelReduce facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached
  const [ highestBidder, lastPrice, currentPrice ] =
    parallelReduce([ Creator, 0, reservePrice ])
      .invariant(balance(nftId) == amt && balance() == lastPrice)
      .while(lastConsensusTime() <= end)
+     // If the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder.
      .case(Bidder,
        (() => {
          const mbid = highestBidder != this
            ? declassify(interact.getBid(currentPrice))
            : MUInt.None();
          return ({
+           // The Maybe Computation can be some or none: (evaluate the return of a function).
            when: maybe(mbid, false, ((b) => b > currentPrice)),
            msg : fromSome(mbid, 0)
          });
@@ -279,6 +296,7 @@ Rules for the outcome of the bidding are next. The consensus transfer uses paral
        ((bid) => bid),
        ((bid) => {
          require(bid > currentPrice);
+         // A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account.
          transfer(lastPrice).to(highestBidder);
          Creator.interact.seeBid(this, bid);
          return [ this, bid, bid ];
@@ -292,6 +310,7 @@ Rules for the outcome of the bidding are next. The consensus transfer uses paral
 
 Timeouts prevent participants from stalling transactions in their local steps. A timeout can be calculated in reference to the passage of time or the passage of blocks. When the contract times out, the Creator interacts with the timeout object in the frontend, publishes data to the participants and Reach returns the highest bidder, the last price and the current price. The time argument can be expressed in `absoluteTime(amt)`, `relativeTime(time)`, `relativeSecs(amt)` or `absoluteSecs(secs)`.  Also `timeremaining()` can be used in conjunction with the `makeDeadline(UInt)` function. 
 
+`index.rsh`
 
 ```javascript
      .timeout(absoluteTime(end), () => {
@@ -304,8 +323,9 @@ Timeouts prevent participants from stalling transactions in their local steps. A
 
 ## Transfers
 
-Maybe can be some or none: (evaluate the return of a function)   The transfer is made from the Bidder to the Creator for the bid amount lastPrice on the NFT. The NFT is transferred to the highest bidder.  Each can see the results with showOutcome. 
+The transfer is made from the Bidder to the Creator for the bid amount lastPrice on the NFT. The NFT is transferred to the highest bidder.  Each can see the results with `showOutcome`. 
 
+`index.rsh`
 
 ```javascript
  transfer(lastPrice).to(Creator);
@@ -317,11 +337,16 @@ Maybe can be some or none: (evaluate the return of a function)   The transfer is
 });
 ```
 
+## Frontend
 
-The **Frontend,  [Index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs)**, Create test accounts for Alice, Bob, and Carla with a balance of 100 algos. The Creator deploys the contract. The code snippet below creates an instance of the reach stdlib with `loadStdlib(process.env)`. The method `stdlib.parseCurrency(10)` will parse the native currency and return a balance. The code below creates an NFT using `stdlib.launchToken(accCreator, "beepboop", "NFT", { supply: 1 })`
+The **Frontend**, often created as `index.mjs`, is where test accounts for Alice, Bob, and Carla are created. An instance of the reach stdlib (standard library) is imported.  For testing purposes, each participant is given a balance of 10 algos.  An NFT is created. 
+Finally, the Creator deploys the contract. 
 
+
+`index.mjs`
 
 ```javascript
+// Import and instance of the reach stdlib
 import { loadStdlib } from '@reach-sh/stdlib/loader.mjs';
 import * as backend from './build/index.main.mjs';
 
@@ -330,23 +355,26 @@ const names = ["Creator", "Alice", "Bob", "Carla"];
 
 (async () => {
  const stdlib = await loadStdlib(process.env);
+  // Each participant is given a balance of 10 algos. Parse the native currency and return a balance
  const startingBalance = stdlib.parseCurrency(10);
  const [ accCreator, ...accBidders ] =
    await stdlib.newTestAccounts(1+N, startingBalance);
- // We're including this for automation, but it would be better if the NFT is
- // assumed to already exist, or if it this contract actually created it.
+ // Create an NFT.
  const theNFT = await stdlib.launchToken(accCreator, "beepboop", "NFT", { supply: 1 });
 
  await Promise.all( [ accCreator, ...accBidders ].map(async (acc, i) => {
    acc.setDebugLabel(names[i]);
  }));
-
+// Deploy the contract
  const ctcCreator = accCreator.contract(backend);
 ```
+
+## Interact Logic
 
 
 Provide the logic for the `interact` methods. Interact methods are called from the backend for the frontend to execute. Functions in [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) include: showBalance, getSale, seeBid, timeout, showOutcome and showBalance. The showBalance method uses `stdlib.balanceOf(acc)` It also shows the balance of the NFT Asset using `stdlib.balanceOf(acc, theNFT.id)`. The seeBid function shows the bid and who saw it. The getSale function sets the parameters of the sale including the NFT Asset ID and reserve price and length in Blocks.
 
+`index.mjs`
 
 ```javascript
  const showBalance = async (acc, i) => {
@@ -379,8 +407,9 @@ Provide the logic for the `interact` methods. Interact methods are called from t
 ```
 
 
-The bidders attach to the contract that the Creator deployed using `acc.contract(backend, ctcCreator.getInfo())` . Console messages are displayed for the bidding process showing the bid with and random amount `stdlib.parseCurrency(Math.random() * 10)`.  The showOutcome function displays who won the bidding using `stdlib.addressEq(winner, acc)` In the getBid function, if the `currentPrice` is less than the bid, then the new price is returned as well as who placed the bid.  Finally, If the bidder did not win, they opt out of the asset using `theNFT.optOut(acc)`. 
+The bidders attach to the contract that the Creator deployed using `acc.contract(backend, ctcCreator.getInfo())` . Console messages are displayed for the bidding process showing the bid with and random amount `stdlib.parseCurrency(Math.random() * 10)`.  The showOutcome function displays who won the bidding using `stdlib.addressEq(winner, acc)` In the getBid function, if the `currentPrice` is less than the bid, then the new price is returned as well as who placed the bid.  Finally, if the bidder did not win, they opt out of the asset using `theNFT.optOut(acc)`. 
 
+`index.mjs`
 
 ```javascript
    ...accBidders.map(async (acc, i) => {
@@ -419,14 +448,14 @@ The bidders attach to the contract that the Creator deployed using `acc.contract
 })();
 ```
 
+You have learned how to build a basic Reach app which consists of backend and frontend code. The backend defines the interface for frontend functions as well as the participants and interacting with the frontend functions and persisting local storage at the account level. The frontend deploys the dApp to the blockchain and provides the logic around account creation, funding and basic functions of your solution such as getting a bid, and creating an NFT. 
 
-## Verification 
 
+## Learn More
 
-Verification is a key feature to Reach. It is facilitated by the use of assert statements. For more details on verification, auditing, mathematical proofs, cryptographic commitment schemes and timeouts see the Reach [documentation](https://docs.reach.sh/guide-assert.html). For the technical among us, dig deeper into verification with [loop invariants](https://docs.reach.sh/guide-loop-invs.html).
+Verification and Remote Procedure Calls (RPC) are key features to Reach. Reach's verification engine ensures that invariants about the state of a program assumed by programmers are held by all possible executions of the program. In other words, the verification process provides smart contracts without holes in the logic.  The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. Example frontends written using the Reach RPC Server can be found in the Reach RPC documentation.
 
-## Remote Procedure Calls (RPC)
+If you'd like to learn more about developing Algorand dApps using Reach, as well as more advanced concepts, see  [verification](https://docs.reach.sh/guide/assert/#guide-assert) and [Reach RPC](https://docs.reach.sh/rpc/) Server for more details.  For auditing, mathematical proofs, cryptographic commitment schemes, loop invariants,  timeouts and more see the Reach [documentation](https://docs.reach.sh/). 
 
-The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. It is easy to implement a client library yourself. Example frontends written using the Reach RPC Server can be found in the [get details Reach page](..//..//get-details/dapps/reach/index.md).
 
 Complete code for this auction simulation can be found [here](https://github.com/algorand/reach-auction). 
