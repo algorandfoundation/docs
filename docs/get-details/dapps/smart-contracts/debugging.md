@@ -5,7 +5,7 @@ Smart contracts can be debugged using two different methods. The first is an int
 # Using the TEAL debugger
 Algorand provides the `tealdbg` command-line tool to launch an interactive session to debug smart contracts. This tool is explained in the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
-This debugger can debug local smart contracts or connect remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options.
+This debugger can debug local smart contracts or connect remotely to an on-chain smart contract. The examples below illustrate using the debugger locally, which will be the predominant use case for developers when they are developing smart contracts. For more information on the `tealdbg` utility and how you can use it remotely, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) which covers in detail the different debugging options. The `tealdbg` command can also be called through a [sandbox](https://github.com/algorand/sandbox) with `./sandbox tealdbg {OPTIONS}`.
 
 The debugger process supports both Chrome Developer Tools and a simple Web Frontend.
 
@@ -20,7 +20,7 @@ $ tealdbg debug program.teal
 2020/08/25 14:05:38 devtools://devtools/bundled/js_app.html?experiments=true&v8only=false&ws=localhost:9392/091d04a69152223ae84c8b40271c3d62f8490ea9b795aae95868932163f89735
 ```
 
-This will launch the debugger process and return an endpoint that is listening for connections. This process can be connected to directly with the Chrome Developer Tools. The simplest way to do this is to enter `chrome://inspect/` into the address bar of the browser, click “Configure” to add “localhost:9392”, and select the Algorand TEAL Debugger in the Remote Target Section (click on the inspect link).
+This will launch the debugger process and return an endpoint that is listening for connections. This process can be connected to directly with the Chrome Developer Tools (CDT). The simplest way to do this is to enter `chrome://inspect/` into the address bar of the browser, click “Configure” to add “localhost:9392”, and select the Algorand TEAL Debugger in the Remote Target Section (click on the inspect link).
 
 !!! note "A note about ports"
     You may have to pass a specific port to the tealdbg command line tool to prevent it from trying to use a port that is already being used. For example if you have the sandbox running and you'd like to run the tealdbg on the host machine.
@@ -128,7 +128,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 === "goal"
     ```sh
 
-    $ goal app call --app-id {appid} --from {ACCOUNT} --out=dryrun.msgp --dryrun-dump
+    $ goal app call --app-id {appid} --from {ACCOUNT} --out=dryrun.json --dryrun-dump
 
     ```
 
@@ -170,8 +170,8 @@ One or more transactions that are stored in a file can be debugged by dumping th
 
 ```
 #generate calls
-$ goal app call --app-id 1  --app-arg "str:test1" --from [ACCOUNT] --out=unsginedtransaction1.tx  
-$ goal app call --app-id 1  --app-arg "str:test2" --from [ACCOUNT] --out=unsginedtransaction2.tx
+$ goal app call --app-id 1  --app-arg "str:test1" --from {ACCOUNT} --out=unsginedtransaction1.tx  
+$ goal app call --app-id 1  --app-arg "str:test2" --from {ACCOUNT} --out=unsginedtransaction2.tx
 
 # atomically group them
 $ cat unsginedtransaction1.tx unsginedtransaction2.tx  > combinedtransactions.tx
@@ -186,10 +186,10 @@ $ goal clerk sign -i split-1.tx -o signout-1.tx
 $ cat signout-0.tx signout-1.tx  > signout.tx
 
 # generate context debug file
-$ goal clerk dryrun -t signout.tx --dryrun-dump  -o dryrun.msgp
+$ goal clerk dryrun -t signout.tx --dryrun-dump  -o dryrun.json
 
 # debug first transaction. Change index to 1 to debug second transaction
-$ tealdbg debug program.teal -d dryrun.msgp --group-index 0
+$ tealdbg debug program.teal -d dryrun.json --group-index 0
 ```
 
 A similar flow may be implemented in any of the sdks, passing the list of transactions to the `create_dryrun` function will produce the DryrunDump object and either write the object out to a file as shown above or send it directly to the [/v2/teal/dryrun](/rest-apis/algod/v2/#post-v2tealdryrun) endpoint
@@ -197,7 +197,7 @@ A similar flow may be implemented in any of the sdks, passing the list of transa
 Debugging a smart signature functions identically to the process described above except the state is not required. For example, a smart signature may act as an escrow account. The following call exports the transaction for debugging purposes. This call will not execute on the blockchain as it is not submitted to the network but is written to the output file.
 
 ```
-$ goal clerk send -a=0 -c=[ACCOUNT_1] --to=[ACCOUNT_2] --from-program=stateless.teal --out=statelesstx.tx --dryrun-dump
+$ goal clerk send -a=0 -c={ACCOUNT_1} --to={ACCOUNT_2} --from-program=stateless.teal --out=statelesstx.tx --dryrun-dump
 ```
 
 This contract can then be debugged by using the following command.
