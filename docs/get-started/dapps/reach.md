@@ -242,7 +242,7 @@ Publish writes information to the blockchain. In this case, it is writing the nf
 Creator.publish(nftId, reservePrice, lenInBlocks);
 ```
 
-Here, the creator uses pay for a specified NFT (quantity of 1), pay is used to pay to the dApp so it can be later transferred (IE the dApp is waiting for a  participant to act):
+Here, the creator uses pay for a specified NFT (quantity of 1), pay is used to pay to the dApp so it can be later transferred (IE the dApp is waiting for a  participant to act). In other words, the creator is paying amt (of 1 in this case) for the NFT to the contract so it can be later transferred from the contract to a new owner:
 
 
 ```
@@ -255,7 +255,7 @@ The code below the creator publishes information and pays 1 NFT while the dApp i
 
 ```javascript
  Creator.only(() => {
-   // declassify reads local state
+   // Binding the value of getSale to the result of interacting with the participant. This happens in a local step. declassify declassifies the argument, in this case that means the value of getSale
    const [ nftId, reservePrice, lenInBlocks ] = declassify(interact.getSale());
  });
  Creator.publish(nftId, reservePrice, lenInBlocks);
