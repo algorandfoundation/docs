@@ -117,7 +117,7 @@ export REACH_CONNECTOR_MODE="ALGO-devnet"
 ```
 
 
-# Application OverView
+# Application Overview
 
 
 ## Alice and Bob’s auction design
@@ -138,7 +138,7 @@ Reach programs contain all properties of a dApp. The backend, often found in a f
 
 In Reach, developers think about their participants and how they will interact with one another, as well as, with the contract. Developers codify the business logic of their application and the Reach compiler builds the smart contract. Reach abstracts the heavy lifting of smart contract development, allowing developers to focus their energy on participant interaction.
 
-# The dApp Backend
+# The dApp 
 
 A build folder is created in your project by the Reach compiler when using 
 
@@ -192,15 +192,17 @@ Carla saw that 2KRZLQILBKY43A5OC56TP3SJBBSP35MV5X4GSVZDUOHYYEQK2JU5TN27BI won
 Alice has 9.999009 ALGO and 0 of the NFT
 Carla has 9.999009 ALGO and 0 of the NFT
 ```
+# Backend
 
+The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend.  A participant is an "actor" which takes part in the application (dApp). A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as, a set of accounts and contracts. 
 
 ## Basic Functions of the Auction
 
-The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. The `Creator` is a Participant that has getSale, seeBid and timeout functions.  A participant is an "actor" which takes part in the application (dApp). A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as, a set of accounts and contracts. 
+`Creator` is a Participant that has getSale, seeBid and timeout functions.  
 
 `Bidder` is a ParticipantClass that has seeParams and getBid functions. A participant class is a category of Participant, it is like a Participant, but can occur many times in a single application. 
 
-Imagine an application where users vote for their favorite puppy. There can be many voters who participate in the act of voting, and yet, collectively, they are all voters. In this example, all voters are members of the “voter participant class”. Similarly, in the auction dApp, we have a participant class of bidders. Every bidder within this class has the ability to place a bid.
+Imagine an application where users vote for their favorite color. There can be many voters who participate in the act of voting, and yet, collectively, they are all voters. In this example, all voters are members of the “voter participant class”. Similarly, in the auction dApp, we have a participant class of bidders. Every bidder within this class has the ability to place a bid.
 
 `index.rsh`
 
@@ -228,31 +230,32 @@ export const main = Reach.App(() => {
  });
  deploy();
 ```
-
+The above code simply defines a specific dApp participant, the creator of the auction, and a participant class of dApp actors, the bidders in the auction. This code also exposes the interfaces that the UI should provide as input to the backend of the dApp.
 
 ## Publish Information and Pay
 
 The next section introduces `.pay()` and `.publish()` functionality, allowing participants to pay the contract and each other. They also enable the contract to pay out any remaining funds before exiting. Pay or Publish are often needed when the entire dApp is waiting for a single participant to act. If a participant is sharing information, then you need `publish()`. When paying a previously known amount, use `pay()`. This kind of transfer always explicitly names the acting participant.
 
-Publish writes information to the blockchain. In this case, it is writing the nft ID, reserve price, and length in blocks.
+Publish writes information to the blockchain. In this case, it is writing the nft ID, reserve price, and length of the Auction in blocks.
 
 ```
 Creator.publish(nftId, reservePrice, lenInBlocks);
 ```
 
-Here, the creator makes a payment amount transaction for the specified NFT:
+Here, the creator uses pay for a specified NFT (quantity of 1), pay is used to pay to the dApp so it can be later transferred (IE the dApp is waiting for a  participant to act):
 
 
 ```
 Creator.pay([[amt, nftId]]);
 ```
 
-The code below publishes information and pays. The `lastConsensusTime()` primitive returns the network time of the last publication of the dApp.  This may not be available if there was no such previous publication, such as at the beginning of an application before the first publication. The `Bidder.interact.seeParams` interacts with the frontend to display the  NFTId, reservePrice and the end time to bid. 
+The code below the creator publishes information and pays 1 NFT while the dApp is waiting for a participant to act. The `lastConsensusTime()` primitive returns the network time of the last publication of the dApp.  This may not be available if there was no such previous publication, such as at the beginning of an application before the first publication. The `Bidder.interact.seeParams` interacts with the frontend to display the  NFTId, reservePrice and the end time to bid.  Using interact communicates with the frontend to use these parameters from the UI.
 
-`index.rsh`
+
 
 ```javascript
  Creator.only(() => {
+   // declassify reads local state
    const [ nftId, reservePrice, lenInBlocks ] = declassify(interact.getSale());
  });
  Creator.publish(nftId, reservePrice, lenInBlocks);
@@ -269,9 +272,7 @@ In the code above, `interact.getSale()` returns nftID, reservePrice and lenInBlo
 
 In the next snippet, the rules for the outcome of the bidding are defined. The consensus transfer uses `parallelReduce`, which facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached. A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account. Additional consensus transfer patterns are discussed in the reach documentation [here](https://docs.reach.sh/guide-ctransfers.html). In the logic below, if the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder. The Maybe Computation can be some or none: (evaluate the return of a function). 
 
-A Consensus Network is a Network protocol that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as a set of accounts and contracts. 
 
-Rules for the outcome of the bidding are next. The consensus transfer uses parallelReduce, which facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached. A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account. Additional consensus transfer patterns are discussed in the reach documentation [here](https://docs.reach.sh/guide-ctransfers.html).  In the logic below, if the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder. 
 
 `index.rsh`
 
@@ -304,7 +305,7 @@ Rules for the outcome of the bidding are next. The consensus transfer uses paral
 
      
 ```
-
+In the above code, the parallelReduce facilitates many bidders acting simultaneously as long as the auction has not been completed. First it uses the interact interface to retrieve a specific bidders offer and then if this value is higher than the current price, the contract transfers the current last price to the previous high bidder, transfers the new bid to the contract and displays this result to the front end using the interact interface’s seeBid method.
 
 ## Timeouts
 
@@ -331,7 +332,7 @@ The transfer is made from the Bidder to the Creator for the bid amount lastPrice
  transfer(lastPrice).to(Creator);
  transfer(amt, nftId).to(highestBidder);
  commit();
-
+// “each” participant listed can access the ShowOutcome method 
  each([Creator, Bidder], () => interact.showOutcome(highestBidder));
  exit();
 });
@@ -339,7 +340,7 @@ The transfer is made from the Bidder to the Creator for the bid amount lastPrice
 
 ## Frontend
 
-The **Frontend**, often created as `index.mjs`, is where test accounts for Alice, Bob, and Carla are created. An instance of the reach stdlib (standard library) is imported.  For testing purposes, each participant is given a balance of 10 algos.  An NFT is created. 
+The **Frontend**, often created as `index.mjs`, is where test accounts for Alice, Bob, and Carla are created. An instance of the reach stdlib (standard library) is imported. The standard library contains utility functions that can be called from the frontend such as `parseCurrency` and `launchToken`. For testing purposes, each participant is given a balance of 10 algos.  An NFT is created. 
 Finally, the Creator deploys the contract. 
 
 
@@ -348,6 +349,7 @@ Finally, the Creator deploys the contract.
 ```javascript
 // Import and instance of the reach stdlib
 import { loadStdlib } from '@reach-sh/stdlib/loader.mjs';
+// The following line is crucial to connect to the backend
 import * as backend from './build/index.main.mjs';
 
 const N = 3;
@@ -372,7 +374,12 @@ const names = ["Creator", "Alice", "Bob", "Carla"];
 ## Interact Logic
 
 
-Provide the logic for the `interact` methods. Interact methods are called from the backend for the frontend to execute. Functions in [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) include: showBalance, getSale, seeBid, timeout, showOutcome and showBalance. The showBalance method uses `stdlib.balanceOf(acc)` It also shows the balance of the NFT Asset using `stdlib.balanceOf(acc, theNFT.id)`. The seeBid function shows the bid and who saw it. The getSale function sets the parameters of the sale including the NFT Asset ID and reserve price and length in Blocks.
+Interact methods are expressions that only occur in a participant’s local step. They are called from the backend for the frontend to execute. In other words, interact methods receive an evaluation of an expression and output a value. 
+In this program, interact methods include: `showBalance`, `getSale`, `seeBid`, `timeout`, `showOutcome` and `showBalance`. 
+
+`showBalance` uses `stdlib.balanceOf(acc)` shows the native currency balance. It also can be used to show the balance of a specific ASA or NFT token using `stdlib.balanceOf(acc, theNFT.id)`. 
+The `getSale` function sets the parameters of the sale including the NFT Asset ID, reserve price, and length in Blocks. The seeBid function shows the bid and who saw it.
+
 
 `index.mjs`
 
