@@ -36,5 +36,3 @@ You can use the SDKs to interact with the network by connecting to one of the RE
 
 There are also community supported SDKs [available](https://developer.algorand.org/ecosystem-projects/?tags=sdk) for other popular languages like Rust, C# and Dart.
 
-
-

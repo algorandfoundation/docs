@@ -5,4 +5,4 @@ arrange:
   - apps
   - smartsigs
   - frontend
-  - test-and-deploy
+  - debugging.md 
