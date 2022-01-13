@@ -2,15 +2,16 @@ title: Build with Reach
 
 Alice and Bob are now ready to kick-off development of their Algorand-powered auction [dApp](https://developer.algorand.org/docs/get-started/dapps/)! This guide will take you through the steps to build the dApp, which includes setting up a development environment, writing the dApp code which can contain multiple smart contracts, deploying it, and writing the functions to interact with it.
 
-A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Reach on Algorand. This guide does not cover all the details of the dApp backend and frontend code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand using Reach. So don’t worry if you don’t understand what everything does in the solution. This is expected! After you feel comfortable with the basics, you can head over to the detailed Reach documentation and work on becoming an expert in the Reach language.
+A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Reach on Algorand. This guide does not cover all the details of the dApp backend and frontend code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand using Reach. So don’t worry if you don’t understand what everything does in the solution. This is expected! After you feel comfortable with the basics, you can head over to the detailed [Reach documentation](https://docs.reach.sh/) and work on becoming an expert in the Reach language.
 
 Now let’s get started. 
 
 # Organization
 
-This guide is organized into two sections. The first section helps you launch the dApp and run an auction simulation. The second section provides a deeper dive into the different components of the auction application.
+This guide is organized into two sections. This document is the first section which helps you launch the dApp and run an auction simulation. The second section will provide a deeper dive into the different components of a reach application.
 
-All of the code for this guide is located here for [Auction using Reach](https://github.com/algorand/reach-auction). The  `index.mjs` and `index.rsh` files are included, so follow along!
+
+All of the code for this guide is located [here] (https://github.com/algorand/reach-auction). The `index.mjs` and `index.rsh` files are included, so follow along!
 
 ## Install Reach
 
@@ -134,7 +135,7 @@ The sample app shown below is an auction. Alice and Bob think through the featur
 
 ## Reach architecture
 
-Reach programs contain all properties of a dApp. The backend, often found in a file such as [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh), controls what data is published to the consensus network (a blockchain) and defines interfaces that can interact with the frontend. The frontend is often contained within a file such as [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) and provides a graphical representation of the interface for its participants. i.e. Alice and Bob. The user interface may be in the form of a command line, or more preferably, a web or mobile app.
+Reach programs contain all properties of a dApp. The **backend**, often found in a file such as [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh), controls what data is published to the consensus network (a blockchain) and defines interfaces that can interact with the **frontend**. The frontend is often contained within a file such as [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) and provides a graphical representation of the interface for its participants. i.e. Alice and Bob. The user interface may be in the form of a command line, or more preferably, a web or mobile app.
 
 In Reach, developers think about their participants and how they will interact with one another, as well as, with the contract. Developers codify the business logic of their application and the Reach compiler builds the smart contract. Reach abstracts the heavy lifting of smart contract development, allowing developers to focus their energy on participant interaction.
 
@@ -144,7 +145,7 @@ A build folder is created in your project by the Reach compiler when using
 
 `./reach run`
 
-This folder contains a file called `index.main.mjs`. This file contains the smart contract bytecode that a machine is able to read. Additionally, `index.main.mjs` is a backend JavaScript file that contains an asynchronous function for each participant, as defined in `index.mjs`. 
+This folder contains a file called `index.main.mjs`. This file contains the smart contract bytecode that the blockchain is able to read. Additionally, `index.main.mjs` is a backend JavaScript file that contains an asynchronous function for each participant, as defined in `index.mjs`. 
 
 You can imagine that `index.mjs` mirrors `index.main.mjs`. The `index.mjs` provides frontend interactivity and `index.main.mjs` enables functionality in the backend. For example, if a Reach program contains a participant named 'Alice' in the Reach.App, then the JavaScript backend will include a function named Alice (i.e. backend.Alice).
 
@@ -194,7 +195,7 @@ Carla has 9.999009 ALGO and 0 of the NFT
 ```
 # Backend
 
-The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend.  A participant is an "actor" which takes part in the application (dApp). A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as, a set of accounts and contracts. 
+The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. A participant is an "actor" which takes part in the application (dApp). A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as, a set of accounts and contracts. 
 
 ## Basic Functions of the Auction
 
@@ -203,6 +204,7 @@ The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/inde
 `Bidder` is a ParticipantClass that has seeParams and getBid functions. A participant class is a category of Participant, it is like a Participant, but can occur many times in a single application. 
 
 Imagine an application where users vote for their favorite color. There can be many voters who participate in the act of voting, and yet, collectively, they are all voters. In this example, all voters are members of the “voter participant class”. Similarly, in the auction dApp, we have a participant class of bidders. Every bidder within this class has the ability to place a bid.
+
 
 `index.rsh`
 
@@ -270,7 +272,7 @@ In the code above, `interact.getSale()` returns nftID, reservePrice and lenInBlo
 
 ## Consensus Transfer Patterns
 
-In the next snippet, the rules for the outcome of the bidding are defined. The consensus transfer uses `parallelReduce`, which facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached. A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account. Additional consensus transfer patterns are discussed in the reach documentation [here](https://docs.reach.sh/guide-ctransfers.html). In the logic below, if the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder. The Maybe Computation can be some or none: (evaluate the return of a function). 
+In the next snippet, the rules for the outcome of the bidding are defined. The consensus transfer uses `parallelReduce`, which facilitates bidders repeatedly providing new bids as they compete to be the highest bidder before a time limit is reached. A consensus transfer occurs when a single participant (called the originator) makes a publication of a set of public values from its local state and transfers zero or more network tokens to the contract account. Additional consensus transfer patterns are discussed in the reach documentation [here](https://docs.reach.sh/guide-ctransfers.html). In the logic below, if the bid is greater than the currentPrice, the transfer is made to the highest bidder. It will also refund the previous high bidder. The Maybe computation can be some or none: (evaluate the return of a function). 
 
 
 
@@ -289,7 +291,7 @@ In the next snippet, the rules for the outcome of the bidding are defined. The c
            ? declassify(interact.getBid(currentPrice))
            : MUInt.None();
          return ({
-           // The Maybe Computation can be some or none: (evaluate the return of a function).
+           // The Maybe computation can be some or none: (evaluate the return of a function).
            when: maybe(mbid, false, ((b) => b > currentPrice)),
            msg : fromSome(mbid, 0)
          });
@@ -332,7 +334,7 @@ The transfer is made from the Bidder to the Creator for the bid amount lastPrice
  transfer(lastPrice).to(Creator);
  transfer(amt, nftId).to(highestBidder);
  commit();
-// “each” participant listed can access the ShowOutcome method 
+// “each” participant listed can access the ShowOutcome method and see the outcome. 
  each([Creator, Bidder], () => interact.showOutcome(highestBidder));
  exit();
 });
@@ -340,8 +342,9 @@ The transfer is made from the Bidder to the Creator for the bid amount lastPrice
 
 ## Frontend
 
-The **Frontend**, often created as `index.mjs`, is where test accounts for Alice, Bob, and Carla are created. An instance of the reach stdlib (standard library) is imported. The standard library contains utility functions that can be called from the frontend such as `parseCurrency` and `launchToken`. For testing purposes, each participant is given a balance of 10 algos.  An NFT is created. 
-Finally, the Creator deploys the contract. 
+The **Frontend**, often created as `index.mjs`, is where test accounts for Alice, Bob, and Carla are created. 
+
+An instance of the reach stdlib (standard library) is imported. The standard library contains utility functions that can be called from the frontend such as `parseCurrency` and `launchToken`. For testing purposes, each participant is given a balance of 10 algos.  An NFT is created. Finally, the Creator deploys the contract. 
 
 
 `index.mjs`
@@ -378,7 +381,10 @@ Interact methods are expressions that only occur in a participant’s local step
 In this program, interact methods include: `showBalance`, `getSale`, `seeBid`, `timeout`, `showOutcome` and `showBalance`. 
 
 `showBalance` uses `stdlib.balanceOf(acc)` shows the native currency balance. It also can be used to show the balance of a specific ASA or NFT token using `stdlib.balanceOf(acc, theNFT.id)`. 
-The `getSale` function sets the parameters of the sale including the NFT Asset ID, reserve price, and length in Blocks. The seeBid function shows the bid and who saw it.
+
+The `getSale` function sets the parameters of the sale including the NFT Asset ID, reserve price, and length in Blocks. 
+
+The `seeBid` function shows the bid and who saw it.
 
 
 `index.mjs`
