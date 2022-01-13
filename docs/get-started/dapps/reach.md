@@ -238,20 +238,20 @@ The above code simply defines a specific dApp participant, the creator of the au
 
 The next section introduces `.pay()` and `.publish()` functionality, allowing participants to pay the contract and each other. They also enable the contract to pay out any remaining funds before exiting. Pay or Publish are often needed when the entire dApp is waiting for a single participant to act. If a participant is sharing information, then you need `publish()`. When paying a previously known amount, use `pay()`. This kind of transfer always explicitly names the acting participant.
 
-Publish writes information to the blockchain. In this case, it is writing the nft ID, reserve price, and length of the Auction in blocks.
+Publish writes information to the blockchain. In this case, it is writing the nft ID, reserve price, and length in blocks.
 
 ```
 Creator.publish(nftId, reservePrice, lenInBlocks);
 ```
 
-Here, the creator uses pay for a specified NFT (quantity of 1), pay is used to pay to the dApp so it can be later transferred (IE the dApp is waiting for a  participant to act). In other words, the creator is paying amt (of 1 in this case) for the NFT to the contract so it can be later transferred from the contract to a new owner:
+Here, the creator uses pay to transfer a specific NFT(quantity of 1) to the ownership of the dApps smart contract. Later, the contract will transfer this NFT to a winning bidder of the auction.
 
 
 ```
 Creator.pay([[amt, nftId]]);
 ```
 
-The code below the creator publishes information and pays 1 NFT while the dApp is waiting for a participant to act. The `lastConsensusTime()` primitive returns the network time of the last publication of the dApp.  This may not be available if there was no such previous publication, such as at the beginning of an application before the first publication. The `Bidder.interact.seeParams` interacts with the frontend to display the  NFTId, reservePrice and the end time to bid.  Using interact communicates with the frontend to use these parameters from the UI.
+The code below the creator publishes information and pays 1 NFT while the dApp is waiting for a participant to act. The `lastConsensusTime()` primitive returns the network time of the last publication of the dApp.  This may not be available if there was no such previous publication, such as at the beginning of an application before the first publication. The `Bidder.interact.seeParams` method interacts with the frontend to display the NFTId, reservePrice and the end time to bid.  Using interact communicates with the frontend to use these parameters from the UI.
 
 
 
@@ -380,7 +380,7 @@ const names = ["Creator", "Alice", "Bob", "Carla"];
 Interact methods are expressions that only occur in a participant’s local step. They are called from the backend for the frontend to execute. In other words, interact methods receive an evaluation of an expression and output a value. 
 In this program, interact methods include: `showBalance`, `getSale`, `seeBid`, `timeout`, `showOutcome` and `showBalance`. 
 
-`showBalance` uses `stdlib.balanceOf(acc)` shows the native currency balance. It also can be used to show the balance of a specific ASA or NFT token using `stdlib.balanceOf(acc, theNFT.id)`. 
+The `showBalance` method uses `stdlib.balanceOf(acc)` to display the Algo balance of the interacting bidder. It can also be used to show the balance of a specific ASA or NFT token using `stdlib.balanceOf(acc, theNFT.id)`. 
 
 The `getSale` function sets the parameters of the sale including the NFT Asset ID, reserve price, and length in Blocks. 
 
@@ -466,7 +466,7 @@ You have learned how to build a basic Reach app which consists of backend and fr
 
 ## Learn More
 
-Verification and Remote Procedure Calls (RPC) are key features to Reach. Reach's verification engine ensures that invariants about the state of a program assumed by programmers are held by all possible executions of the program. In other words, the verification process provides smart contracts without holes in the logic.  The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. Example frontends written using the Reach RPC Server can be found in the Reach RPC documentation.
+Verification and Remote Procedure Calls (RPC) are key features to Reach. Reach's verification engine ensures that invariants about the state of a program assumed by programmers are held by all possible executions of the program. In other words, the verification process provides smart contracts that are resilient to common logic errors that lead to mistakes.  The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. Example frontends written using the Reach RPC Server can be found in the Reach RPC documentation.
 
 If you'd like to learn more about developing Algorand dApps using Reach, as well as more advanced concepts, see  [verification](https://docs.reach.sh/guide/assert/#guide-assert) and [Reach RPC](https://docs.reach.sh/rpc/) Server for more details.  For auditing, mathematical proofs, cryptographic commitment schemes, loop invariants,  timeouts and more see the Reach [documentation](https://docs.reach.sh/). 
 
