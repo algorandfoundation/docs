@@ -4,14 +4,25 @@ Alice and Bob are now ready to kick-off development of their Algorand-powered au
 
 A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Reach on Algorand. This guide does not cover all the details of the dApp backend and frontend code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand using Reach. So don’t worry if you don’t understand what everything does in the solution. This is expected! After you feel comfortable with the basics, you can head over to the detailed [Reach documentation](https://docs.reach.sh/) and work on becoming an expert in the Reach language.
 
+All of the code for this guide is located [here] (https://github.com/algorand/reach-auction). The `index.mjs` and `index.rsh` files are included, so follow along!
+
 Now let’s get started. 
+
+## Reach architecture
+
+Using high level languages to build dApps instead of low level assembly language is attractive for many professional developers. Frontends can be built in languages such as Python, Go, JavaScript and C#. The focus for a developer using Reach is the business logic. Reach takes care of the internals on contract storage, protocol diagrams, state validation and network details in general. 
+
+Reach programs contain all properties of a dApp. The **backend**, often found in a file such as [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh), controls what data is published to the consensus network (a blockchain) and defines interfaces that can interact with the **frontend**. The frontend is often contained within a file such as [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) and provides a graphical representation of the interface for its participants. i.e. Alice and Bob. The user interface may be in the form of a command line, or more preferably, a web or mobile app.
+
+In Reach, developers think about their participants and how they will interact with one another, as well as, with the contract. Developers codify the business logic of their application and the Reach compiler builds the smart contract. Reach abstracts the heavy lifting of smart contract development, allowing developers to focus their energy on participant interaction. With Reach, the automatic verification of a dApp, alone, is one great reason to consider using Reach vs PyTeal. This protects against blockchain attacks, guarantees contract balance is zero and prevents locked away tokens by the contract that are inaccessible. Reach facilitates blockchain properties, like token linearity. As such, auditing also becomes very easy to accomplish.
+
 
 # Organization
 
 This guide is organized into two sections. This document is the first section which helps you launch the dApp and run an auction simulation. The second section will provide a deeper dive into the different components of a reach application.
 
 
-All of the code for this guide is located [here] (https://github.com/algorand/reach-auction). The `index.mjs` and `index.rsh` files are included, so follow along!
+
 
 ## Install Reach
 
@@ -48,13 +59,6 @@ Next, download Reach by running
 $ curl https://docs.reach.sh/reach -o reach ; chmod +x reach
 ```
 
-Confirm the download worked by running
-
-
-``` bash
-$ ./reach version
-```
-
 
 Since Reach is Dockerized, when first used, the images it uses need to be downloaded. This will happen automatically when used for the first time, but can be done manually now by running
 
@@ -63,38 +67,6 @@ Since Reach is Dockerized, when first used, the images it uses need to be downlo
   $ ./reach update
 ```
 
-
-You’ll know that everything is in order if you can run
-
-
-```
-  $ ./reach compile --help
-```
-
-
-To determine the current version is installed, run
-
-
-```
-  $ ./reach hashes
-```
-
-
-Output should look similar to:
-
-```
-reach: fb449c94
-reach-cli: fb449c94
-react-runner: fb449c94
-rpc-server: fb449c94
-runner: fb449c94
-devnet-algo: fb449c94
-devnet-cfx: fb449c94
-devnet-eth: fb449c94
-```
-
-
-All of the hashes listed should be the same and then visit the #releases channel on the [Reach Discord Server](https://discord.gg/9kbHPfwbwn) to see the current hashes.
 
 More information: Detailed Reach install instructions can be found in the [reach docs](https://reach.sh/). 
 
@@ -123,23 +95,14 @@ export REACH_CONNECTOR_MODE="ALGO-devnet"
 
 ## Alice and Bob’s auction design
 
-The sample app shown below is an auction. Alice and Bob think through the features for their dApp. They list off the following requirements:
+The sample dApp shown below is an auction. This involves the potential buyer sending the bid in algos. If the bid is successful, the dApp will hold the algos. Bidding is only allowed between the beginning and end times of the auction. If the bid supplants a previous bid, the contract automatically refunds the previous higher bidder’s algos. The requirements are listed [here](https://developer.algorand.org/docs/get-started/dapps/#alice-and-bobs-auction-design).
 
+<center>
+![Auction close](../../imgs/dapp-close.png){: style="width:500px" align=center }
+<figcaption style="font-size:12px">Close out the auction: Carla receives the NFT and Alice gets paid 2000 Algos.</figcaption>
+</center>
 
-
-1. Sellers must be able to create a new auction for each piece of artwork. The artwork must be held by the contract after the auction begins and until the auction closes.
-2. The auction can be closed before it begins, in which case the artwork will be returned to the seller.
-3. Sellers can specify a reserve price, which if not met, will return the artwork to them.
-4. For each bid, if the new bid is higher than the previous bid, the previous bid will be refunded to the previous bidder and the new bid will be recorded and held by the contract.
-5. At the end of a successful auction, where the reserve price was met, the highest bidder will receive the artwork and the seller will receive the full bid amount.
-
-## Reach architecture
-
-Reach programs contain all properties of a dApp. The **backend**, often found in a file such as [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh), controls what data is published to the consensus network (a blockchain) and defines interfaces that can interact with the **frontend**. The frontend is often contained within a file such as [index.mjs](https://github.com/algorand/reach-auction/blob/main/index.mjs) and provides a graphical representation of the interface for its participants. i.e. Alice and Bob. The user interface may be in the form of a command line, or more preferably, a web or mobile app.
-
-In Reach, developers think about their participants and how they will interact with one another, as well as, with the contract. Developers codify the business logic of their application and the Reach compiler builds the smart contract. Reach abstracts the heavy lifting of smart contract development, allowing developers to focus their energy on participant interaction.
-
-# The dApp 
+## The dApp 
 
 A build folder is created in your project by the Reach compiler when using 
 
@@ -340,7 +303,7 @@ The transfer is made from the Bidder to the Creator for the bid amount lastPrice
 });
 ```
 
-## Frontend
+# Frontend
 
 The **Frontend**, often created as `index.mjs`, is where test accounts for Alice, Bob, and Carla are created. 
 
