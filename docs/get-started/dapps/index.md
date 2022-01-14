@@ -39,4 +39,4 @@ Alice and Bob think through the features for their dApp. They list off the follo
 4. For each bid, if the new bid is higher than the previous bid, the previous bid will be refunded to the previous bidder and the new bid will be recorded and held by the contract.
 5. At the end of a successful auction, where the reserve price was met, the highest bidder will receive the artwork and the seller will receive the full bid amount.
 
-Now onto the next section where you will learn how to build the auction dApp using Python and the PyTeal library. 
+Now onto the next sections where you will learn how to build the auction dApp using [Python and the PyTeal library](https://developer.algorand.org/docs/get-started/dapps/pyteal/) and then using [Reach](https://developer.algorand.org/docs/get-started/dapps/reach/). 
