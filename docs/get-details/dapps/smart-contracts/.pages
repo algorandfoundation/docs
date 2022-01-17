@@ -4,5 +4,6 @@ arrange:
   - index.md
   - apps
   - smartsigs
+  - abi
   - frontend
   - test-and-deploy
