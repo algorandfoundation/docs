@@ -5,6 +5,9 @@ The ABI (Application Binary Interface) is a specification that defines the encod
 
 The specification is defined in [ARC4](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md).
 
+At a high level, the ABI allows contracts to define an API with rich types and offer an interface description so clients know exactly what the contract is expecting to be passed. 
+
+
 # DataTypes
 
 Encoding for the datatypes is specified [here](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#encoding)
@@ -23,6 +26,10 @@ The datatypes specified are:
 |string| A variable-length byte array (byte[]) assumed to contain UTF-8 encoded content|
 |(T1,T2,...,TN)| A tuple of the types T1, T2, …, TN, N >= 0|
 |reference type | account, asset, application only for arguments, in which case they are an alias for uint8. See section "Reference Types" below|
+
+The encoding and decoding of these types should be handled by the SDKs for calling methods and reading out return values.  
+
+Because stack types in the AVM are limited to uint64 and bytes, a smart contract may rely on ABI types defined in PyTeal to encode or decode the data passed in the application args. 
 
 ## Reference Types
 
@@ -50,6 +57,11 @@ Method selector (in hex): 8aa3b61f
 
 Once the method selector is known, it is used in the smart contract logic to route to the appropriate logic that implements the `add` method. 
 
+The `method` pseudo-opcode can be used in a contract to do the above work and produce a *method selector* given the *method signature* string.
+
+```
+method "add(uint64,uint64)uint64"
+```
 
 ## Implementing a method
 
@@ -63,6 +75,7 @@ The return value of the method _must_ be logged with the prefix `151f7c75` which
 # API
 
 The API of a smart contract can be published as an [interface description object](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#interface-description). A user may read this object and instantiate a client that handles the encoding/decoding of the arguments and return values using one of the SDKs. 
+
 
 TODO: link to atomic transaction composer docs
 
