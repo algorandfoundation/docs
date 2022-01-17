@@ -2,9 +2,9 @@ title: Smart contract details
 
 Algorand smart contracts are pieces of logic that reside on the Algorand blockchain and are remotely callable. These contracts are primarily responsible for implementing the logic associated with a distributed application. Smart contracts are referred to as stateful smart contracts or applications in the Algorand documentation. Smart contracts can generate asset and payment transactions allowing them to function as Escrow accounts on the Algorand blockchain. Smart contracts can also store values on the blockchain. This storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Like smart signatures, smart contracts are written in Python using PyTeal or TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. The recommended approach for writing smart contracts is to use the Python SDK with the PyTeal library.  
 
-See the [*PyTeal Documentation*](../../pyteal/index.md) for information on building smart contracts in Python.
+See the [*PyTeal Documentation*](../pyteal/index.md) for information on building smart contracts in Python.
 
-See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../../avm/teal/opcodes.md) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../../avm/teal/index.md).
+See the [*TEAL Reference Guide*](../avm/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../avm/teal/opcodes.md) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../avm/teal/index.md).
 
 !!! important "A note about PyTeal"
     Where possible, TEAL code snippets are accompanied by their counterparts in PyTeal. Here are a few things to be aware of when comparing across these two languages:
@@ -34,7 +34,7 @@ Calls to smart contracts are implemented using `ApplicationCall` transactions. T
 
 The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a smart contract is shown below. In the following sections, details on the individual capabilities of a smart contract will be explained.
 
-<center>![Smart Contract](../../../../imgs/stateful-1.png)</center>
+<center>![Smart Contract](../../../imgs/stateful-1.png)</center>
 <center>*Smart Contract*</center>
 
 The `goal` calls shown above in the orange boxes represent all the specific calls that can be made against a smart contract and are described later in this document. These calls are also available in the SDKs. The teal-colored boxes represent the two required TEAL programs, the blue boxes are the state variables (local and global), and the yellow boxes represent the TEAL opcodes used to modify state. Modifying state is detailed in later section.
@@ -46,7 +46,7 @@ The arguments array is used to pass standard arguments to the contract. The argu
 
 The other three arrays are limited to 8 total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction. Many opcodes that make use of these arrays take an integer parameter as an index into these arrays. The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. Most of the opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
 
-<center>![Smart Contract](../../../../imgs/stateful-2.png)</center>
+<center>![Smart Contract](../../../imgs/stateful-2.png)</center>
 <center>*Smart Contract Arrays*</center>
 
 # Using a smart contract as an escrow
@@ -768,7 +768,7 @@ Smart contracts have access to many global variables. These variables are set fo
     ```
 
 # Atomic transfers and transaction properties
-The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using TEAL.
+The [TEAL opcodes](../avm/teal/opcodes.md) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using TEAL.
 
 === "Teal"
 
@@ -820,7 +820,7 @@ The above TEAL will be true if there are two transactions submitted at once usin
     print(compileTeal(program, Mode.Application))
     ```
 
-In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
+In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
 
 If any transaction in a group of transactions is a call to a smart contract, the opcodes `gtxna` and `gtxnsa` can be used to access any of the transactions array values.
 
@@ -893,7 +893,7 @@ It is also possible to get an Asset’s configuration information within a smart
     print(compileTeal(program, Mode.Application))
     ```
 
-This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
+This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
 
 # Creating an asset or contract within a group of transactions
 The Algorand Protocol assigns an identifier (ID) when creating an asset (ASA) or a smart contract. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. When creating either in an atomic transfer TEAL can be used to retrieve these IDs. For example, to store the asset ID or another smart contract ID in the contract’s state for later usage. 

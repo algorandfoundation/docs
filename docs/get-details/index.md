@@ -38,9 +38,9 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 [Smart Contract Overview](dapps/smart-contracts/index.md) - An overview of smart contracts and smart signatures.
 
-[Smart Contracts](dapps/smart-contracts/apps/index.md) 🔷 - A detailed guide on smart contracts.
+[Smart Contracts](dapps/smart-contracts/smart-contracts.md) 🔷 - A detailed guide on smart contracts.
 
-[Smart Signatures](dapps/smart-contracts/smartsigs/index.md) - A detailed guide of smart signatures. 
+[Smart Signatures](dapps/smart-contracts/smart-signatures.md) - A detailed guide of smart signatures. 
 
 [Interact with smart contracts](dapps/smart-contracts/frontend/apps.md) - A detailed guide on interacting with smart contracts using the SDKs.
 

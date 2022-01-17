@@ -19,5 +19,3 @@ Each network page, contains the following information:
 - **FeeSink Address** ([M](mainnet#feesink-address), [T](testnet#feesink-address), [B](betanet#feesink-address)) - Read more about special accounts [here](../accounts#special-accounts).
 - **RewardsPool Address** ([M](mainnet#rewardspool-address), [T](testnet#rewardspool-address), [B](betanet#rewardspool-address)) - Read more about special accounts [here](../accounts#special-accounts).
 - **Faucet** ([T](testnet#faucet), [B](betanet#faucet)) - Link to a faucet (TestNet and BetaNet only).
-
-

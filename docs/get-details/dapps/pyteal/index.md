@@ -19,7 +19,7 @@ PyTeal supports both smart signatures and smart contracts. The following section
 # Building PyTeal smart contracts
 On Algorand, smart contracts are small programs that contain logic that is evaluated when the contract is deployed or called. These contracts have a set of functions (opcodes) that can be called that make use of on-chain data (such as balances), additional arguments, additional transactions, and stored values to evaluate to either true or false. Additionally, as part of the logic on-chain variables can be stored on a per contract or per account basis. If the contract runs successfully these variables will be updated per the logic. If the contract fails the variable changes will be rolled back. For example, you may have a voting contract that stores whether a specific account has voted or not and a vote total for all the candidates in an election. The user may call the smart contract to vote and the logic may check to see if the specific account has voted already and if not allow the vote to be processed and increment the vote totals. The voting account would also be marked as having voted. If the account had already voted the call would fail. 
 
-Smart contracts also have an Algorand address, which allows the contract to hold Algorand assets(ASAs) and Algos. Any account in the network can send ASAs or Algos to this address unimpeded. The only way either of these forms of value is allowed to leave the contract is when the logic within the contract performs a payment or asset transaction and the logic returns true. For more information on smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
+Smart contracts also have an Algorand address, which allows the contract to hold Algorand assets(ASAs) and Algos. Any account in the network can send ASAs or Algos to this address unimpeded. The only way either of these forms of value is allowed to leave the contract is when the logic within the contract performs a payment or asset transaction and the logic returns true. For more information on smart contracts, see the [smart contract documentation](../smart-contracts/smart-contracts.md).
 
 Smart contracts are often referred to as applications on Algorand because they usually contain the bulk of blockchain logic that a distributed application will require. Once a contract is written it is deployed using an application creation transaction. This process will be described in the next section. 
 
@@ -141,7 +141,7 @@ def approval_program():
 
 All four of these transaction types simply return a 0, which will cause the transactions to fail. This contract now handles all application transactions but the standard NoOp type. Do remember that deploying the contract for the first time is actually a NoOp transaction type, but this case is accounted for in the `handle_creation` function. The NoOp transaction type is the primary location where application logic will be implemented in most smart contracts. This example requires an add and a deduct function, to increment and decrement the counter respectively, to be handled for NoOp application transactions. Which of these two methods is executed will depend on the first parameter to the stateful smart contract. In addition, we want to verify that application transactions are not grouped with any other transactions.
 
-For more information on passing parameters to smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md). 
+For more information on passing parameters to smart contracts, see the [smart contract documentation](../smart-contracts/smart-contracts.md). 
 
 ```python
 from pyteal import *
@@ -328,7 +328,7 @@ This program can be executed to illustrate compiling the PyTeal and printing out
 $ python3 samplecontract.py
 ```
 
-This example of a smart contract is very simple. Using PyTeal, more sophisticated contracts can be created. To learn more about what can be done in smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md). The documentation also contains many PyTeal code snippets that can be used within smart contracts.
+This example of a smart contract is very simple. Using PyTeal, more sophisticated contracts can be created. To learn more about what can be done in smart contracts, see the [smart contract documentation](../smart-contracts/smart-contracts.md). The documentation also contains many PyTeal code snippets that can be used within smart contracts.
 
 # Deploying and calling the smart contract
 This section explains how to deploy and call the smart contract developed in the previous section.
@@ -440,7 +440,7 @@ def read_global_state(client, addr, app_id):
 
 ```
 
-Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the account’s record. In this example, the function `read_global_state` uses the Python SDK function `acount_info` to connect to the Algorand node and retrieve the account information. The function then locates the created application within this record. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
+Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the account’s record. In this example, the function `read_global_state` uses the Python SDK function `acount_info` to connect to the Algorand node and retrieve the account information. The function then locates the created application within this record. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/smart-contracts.md).
 
 As covered earlier in this guide, to deploy the contract an application creation transaction must be created and submitted to the blockchain. The SDKs provide a method for creating this transaction. The following code illustrates creating and submitting this transaction.
 
@@ -481,7 +481,7 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
 
 This function is a simple example of creating an application creation transaction, which when submitted will deploy a smart contract. This example is very generic and can be used to deploy any smart contract. First, the creator’s address is resolved from the private key passed to the function, the transaction type is set to a NoOp application transaction, and the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction.
 
-The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction.  This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s.  More information on state values can be found in the [smart contract documentation](../smart-contracts/apps/index.md#modifying-state-in-smart-contract).
+The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction.  This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s.  More information on state values can be found in the [smart contract documentation](../smart-contracts/smart-contracts.md#modifying-state-in-smart-contract).
 
 The passed-in private key is then used to sign the transaction and the ID of the transaction is retrieved. This ID is unique and can be used to look up the transaction later.
 
@@ -1011,7 +1011,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     return pmtx 
 ```
 
-The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSig` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smartsigs/index.md).
+The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSig` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smart-signatures.md).
 
 The solution can be completed by adding a main function to put the utility functions to use.
 
@@ -1182,4 +1182,4 @@ main()
 
 ```
 
-For more information on smart signatures, see the [developer documentation](../smart-contracts/smartsigs/index.md).
+For more information on smart signatures, see the [developer documentation](../smart-contracts/smart-signatures.md).

@@ -40,7 +40,7 @@ TEAL provides operators to work with data that is on the stack. For example, the
 <center>*Operators*</center>
 
 # Argument passing
-TEAL supports program arguments. Smart contracts and smart signatures handle these parameters with different opcodes. For information on passing parameters to smart contracts, see the smart contract [Overview](../../smart-contracts/apps/index.md) documentation. Passing parameters to a smart signature is explained in the [Interact with smart signatures](../../smart-contracts/frontend/smartsigs.md) documentation. The [CLI smart signatures](../../smart-contracts/smartsigs/walkthrough.md) documentation explains a simple example of passing a parameter to a smart signature with the `goal` command-line tool. 
+TEAL supports program arguments. Smart contracts and smart signatures handle these parameters with different opcodes. For information on passing parameters to smart contracts, see the smart contract [Overview](../../smart-contracts/smart-contracts.md) documentation. Passing parameters to a smart signature is explained in the [Interact with smart signatures](../../smart-contracts/frontend/smartsigs.md) documentation. The [CLI smart signatures](../../smart-contracts/smart-signatures.md) documentation explains a simple example of passing a parameter to a smart signature with the `goal` command-line tool. 
 
 The diagram below shows an example of logic that is loading a parameter onto the stack within a smart signature. 
 

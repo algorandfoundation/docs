@@ -2,7 +2,7 @@ title: Smart contracts and signatures
 
 arrange:
   - index.md
-  - apps
-  - smartsigs
+  - smart-contracts.md 
+  - smart-signatures.md
   - frontend
   - test-and-deploy

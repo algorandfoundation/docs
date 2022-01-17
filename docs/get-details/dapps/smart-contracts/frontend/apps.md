@@ -8,7 +8,7 @@ This guide covers using smart contracts with the Algorand SDKs. Smart contracts 
 
 # Application lifecycle
 
-This guide follows an application throughout its [lifecycle](../apps/index.md#the-lifecycle-of-a-smart-contract) from initial creation, to usage, to modification and finally deletion. The application stores the number of times it is called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
+This guide follows an application throughout its [lifecycle](./../smart-contracts.md#the-lifecycle-of-a-smart-contract) from initial creation, to usage, to modification and finally deletion. The application stores the number of times it is called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
 
 # Environment setup
 
@@ -82,7 +82,7 @@ An `algod` client connection is also required. The following connects using Sand
 
 # Declarations
 
-All smart contracts are comprised of state storage, an approval program and a clear program. Details of each are found within the [stateful smart contract guide](../apps/index.md).
+All smart contracts are comprised of state storage, an approval program and a clear program. Details of each are found within the [stateful smart contract guide](../smart-contracts.md).
 
 ## State storage
 Begin by defining the application's _global_schema_ and _local_schema_ storage requirements. These values are immutable once the application is created, so they must specify the maximum number required by the initial application and any future updates. 
