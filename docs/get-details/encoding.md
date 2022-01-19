@@ -193,7 +193,7 @@ Given an integer `1337`, you may encode it as:
 
 Sometimes an application needs to transmit a transaction or transaction group between the front end and back end. This can be done by msgpack encoding the transaction object on one side and msgpack decoding it on the other side. Often the msgpack'd bytes will be base64 encoded so that they can be safely transmitted in some json payload so we use that encoding here.
 
-Essentially encoding is: 
+Essentially the encoding is: 
 
 `tx_byte_str = base64encode(msgpack_encode(tx_obj))` 
 
