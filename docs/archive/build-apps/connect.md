@@ -111,14 +111,15 @@ For example, if the API key header is `X-API-Key`, the client can be instantiate
 
     import (
         "github.com/algorand/go-algorand-sdk/client/v2/algod" 
+        "github.com/algorand/go-algorand-sdk/client/v2/common" 
     )
 
     const algodAddress = "http://localhost:4001"
     const apiKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
     func main() {
-        var headers []*algod.Header
-        headers = append(headers, &algod.Header{"X-API-Key", apiKey})
+        var headers []*common.Header
+        headers = append(headers, &common.Header{"X-API-Key", apiKey})
 
         algodClient, err := algod.MakeClientWithHeaders(algodAddress, "", headers)
         if err != nil {
