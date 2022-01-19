@@ -75,11 +75,3 @@ The return value of the method _must_ be logged with the prefix `151f7c75` which
 # API
 
 The API of a smart contract can be published as an [interface description object](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#interface-description). A user may read this object and instantiate a client that handles the encoding/decoding of the arguments and return values using one of the SDKs. 
-
-
-TODO: link to atomic transaction composer docs
-
-
-# Examples
-
-...
