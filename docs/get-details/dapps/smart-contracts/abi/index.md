@@ -44,7 +44,7 @@ A *method signature* is defined as a name, argument types, and return type. The 
 
 For example:
 
-A *method signature* for an `add` method that takes 2 uint64s and returns 1 uint64
+A *method signature* for an `add` method that takes 2 uint64s and returns 1 uint128
 ```
 Method signature: add(uint64,uint64)uint128
 ```
