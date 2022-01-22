@@ -63,7 +63,7 @@ Object Name: `AssetParams`
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
 |<a name="total">Total</a>|_required on creation_|uint64|`"t"`| The total number of base units of the asset to create. This number cannot be changed.|
-|<a name="decimals">Decimals</a>|_required on creation_|uint32|`"dc"`| The number of digits to use after the decimal point when displaying the asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths. |
+|<a name="decimals">Decimals</a>|_required on creation_|uint32|`"dc"`| The number of digits to use after the decimal point when displaying the asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths, if 3, the base unit of the asset is in thousandths, and so on up to 19 decimal places |
 |<a name="defaultfrozen">DefaultFrozen</a>|_required on creation_|bool|`"df"`| True to freeze holdings for this asset by default. |
 |<a name="unitname">UnitName</a>|_optional_|string|`"un"`| The name of a unit of this asset. Supplied on creation. Max size is 8 bytes. Example: USDT |
 |<a name="assetname">AssetName</a>|_optional_|string|`"an"`| The name of the asset. Supplied on creation. Max size is 32 bytes. Example: Tether|
