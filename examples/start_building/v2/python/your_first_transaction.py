@@ -1,22 +1,37 @@
 import json
 import time
 import base64
-from algosdk import mnemonic
+from algosdk import account
+
 from algosdk.v2client import algod
-from algosdk.future.transaction import PaymentTxn
-from algosdk.future.transaction import wait_for_confirmation
+from algosdk.future import transaction
+
 
 def getting_started_example():
 	algod_address = "http://localhost:4001"
 	algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	algod_client = algod.AlgodClient(algod_token, algod_address)
 
-	passphrase = "price clap dilemma swim genius fame lucky crack torch hunt maid palace ladder unlock symptom rubber scale load acoustic drop oval cabbage review abstract embark"
-
-	# generate a public/private key pair
-	private_key = mnemonic.to_private_key(passphrase)
-	my_address = mnemonic.to_public_key(passphrase)
+    # Generate new account for this transaction
+	secret_key, my_address = account.generate_account()
+    
 	print("My address: {}".format(my_address))
+
+    # Check your balance. It should be 0 microAlgos
+
+	account_info = algod_client.account_info(my_address)
+	print("Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
+
+    # Fund the created account
+	print('Fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account=' + format(my_address))
+
+	completed = ""
+	while completed.lower() != 'yes':
+		completed = input("Type 'yes' once you funded the account: ");
+
+	print('Fund transfer in process...')
+    # Wait for the faucet to transfer funds
+	time.sleep(10)	
 
 	account_info = algod_client.account_info(my_address)
 	print("Account balance: {} microAlgos".format(account_info.get('amount')))
@@ -26,19 +41,19 @@ def getting_started_example():
 	# comment out the next two (2) lines to use suggested fees
 	params.flat_fee = True
 	params.fee = 1000
-	receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
+	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
-
-	unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	amount = 1000000
+	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, receiver, note)
 
 	# sign transaction
-	signed_txn = unsigned_txn.sign(mnemonic.to_private_key(passphrase))
+	signed_txn = unsigned_txn.sign(secret_key)
 	txid = algod_client.send_transaction(signed_txn)
 	print("Signed transaction with txID: {}".format(txid))
 
     # wait for confirmation	
 	try:
-		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+		confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)  
 	except Exception as err:
 		print(err)
 		return
@@ -47,6 +62,14 @@ def getting_started_example():
 		json.dumps(confirmed_txn, indent=4)))
 	print("Decoded note: {}".format(base64.b64decode(
 		confirmed_txn["txn"]["txn"]["note"]).decode()))
+	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
+	print("Amount transfered: {} microAlgos".format(amount) )    
+	print("Fee: {} microAlgos".format(params.fee) ) 
+	closetoamt = account_info.get('amount') - (params.fee + amount)
+	print("Close to Amount: {} microAlgos".format(closetoamt) + "\n")
+
+	account_info = algod_client.account_info(my_address)
+	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
 
 
 getting_started_example()

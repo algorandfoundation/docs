@@ -110,7 +110,7 @@ Transactions are used to interact with the Algorand network. To create a payment
 ​
 ```python
 # build transaction
-from algosdk.future.transaction import PaymentTxn
+from algosdk.future import transaction
 
 
     params = algod_client.suggested_params()
@@ -119,8 +119,8 @@ from algosdk.future.transaction import PaymentTxn
     params.fee = 1000
     receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
     note = "Hello World".encode()
-
-    unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	amount = 1000000
+    unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, None, note)
 ```
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=398){target=_blank}  
 ​
@@ -145,7 +145,7 @@ The signed transaction can now be submitted to the network. `wait_for_confirmati
 ```python
 import json
 import base64
-from algosdk.future.transaction import wait_for_confirmation
+
 
     #submit transaction
     txid = algod_client.send_transaction(signed_txn)
@@ -153,7 +153,7 @@ from algosdk.future.transaction import wait_for_confirmation
 
     # wait for confirmation	
     try:
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+        confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)  
     except Exception as err:
         print(err)
         return
@@ -162,6 +162,14 @@ from algosdk.future.transaction import wait_for_confirmation
         json.dumps(confirmed_txn, indent=4)))
     print("Decoded note: {}".format(base64.b64decode(
         confirmed_txn["txn"]["txn"]["note"]).decode()))
+	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
+	print("Amount transfered: {} microAlgos".format(amount) )    
+	print("Fee: {} microAlgos".format(params.fee) ) 
+	closetoamt = account_info.get('amount') - (params.fee + amount)
+	print("Close to Amount: {} microAlgos".format(closetoamt) + "\n")
+
+	account_info = algod_client.account_info(my_address)
+	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
     
 ```
 
@@ -175,8 +183,8 @@ import json
 import base64
 from algosdk import account, mnemonic
 from algosdk.v2client import algod
-from algosdk.future.transaction import PaymentTxn
-from algosdk.future.transaction import wait_for_confirmation
+from algosdk.future import transaction
+
 
 def generate_algorand_keypair():
     private_key, address = account.generate_account()
@@ -204,7 +212,7 @@ def first_transaction_example(private_key, my_address):
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
 
-	unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, 1000000, None, note)
 
 	# sign transaction
 	signed_txn = unsigned_txn.sign(private_key))
@@ -215,7 +223,7 @@ def first_transaction_example(private_key, my_address):
 
     # wait for confirmation	
 	try:
-		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+		confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)  
 	except Exception as err:
 		print(err)
 		return
@@ -225,8 +233,15 @@ def first_transaction_example(private_key, my_address):
 	print("Decoded note: {}".format(base64.b64decode(
 		confirmed_txn["txn"]["txn"]["note"]).decode()))
     
-    account_info = algod_client.account_info(my_address)
-    print("Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
+	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
+	print("Amount transfered: {} microAlgos".format(amount) )    
+	print("Fee: {} microAlgos".format(params.fee) ) 
+	closetoamt = account_info.get('amount') - (params.fee + amount)
+	print("Close to Amount: {} microAlgos".format(closetoamt) + "\n")
+
+	account_info = algod_client.account_info(my_address)
+	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
+
 
 
 #replace private_key and my_address with your private key and your address

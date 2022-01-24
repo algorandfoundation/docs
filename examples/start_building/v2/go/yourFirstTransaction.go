@@ -3,60 +3,18 @@ package main
 import (
 	"context"
 	json "encoding/json"
-	"errors"
+	// "errors"
 	"fmt"
-	"strings"
-
+	// "strings"
+	"github.com/algorand/go-algorand-sdk/future"
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
-	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
+	// "github.com/algorand/go-algorand-sdk/client/v2/common/models"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/transaction"
 )
 
-// Utility function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (models.PendingTransactionInfoResponse, error) {
-	pt := new(models.PendingTransactionInfoResponse)
-	if client == nil || txID == "" || timeout < 0 {
-		fmt.Printf("Bad arguments for waitForConfirmation")
-		var msg = errors.New("Bad arguments for waitForConfirmation")
-		return *pt, msg
 
-	}
-
-	status, err := client.Status().Do(context.Background())
-	if err != nil {
-		fmt.Printf("error getting algod status: %s\n", err)
-		var msg = errors.New(strings.Join([]string{"error getting algod status: "}, err.Error()))
-		return *pt, msg
-	}
-	startRound := status.LastRound + 1
-	currentRound := startRound
-
-	for currentRound < (startRound + timeout) {
-
-		*pt, _, err = client.PendingTransactionInformation(txID).Do(context.Background())
-		if err != nil {
-			fmt.Printf("error getting pending transaction: %s\n", err)
-			var msg = errors.New(strings.Join([]string{"error getting pending transaction: "}, err.Error()))
-			return *pt, msg
-		}
-		if pt.ConfirmedRound > 0 {
-			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-			return *pt, nil
-		}
-		if pt.PoolError != "" {
-			fmt.Printf("There was a pool error, then the transaction has been rejected!")
-			var msg = errors.New("There was a pool error, then the transaction has been rejected")
-			return *pt, msg
-		}
-		fmt.Printf("waiting for confirmation\n")
-		status, err = client.StatusAfterBlock(currentRound).Do(context.Background())
-		currentRound++
-	}
-	msg := errors.New("Tx not found in round range")
-	return *pt, msg
-}
 
 // TODO: insert aditional utility functions here
 
@@ -99,6 +57,7 @@ func main() {
 		fmt.Printf("Error getting account info: %s\n", err)
 		return
 	}
+	var startingAmount uint64 = accountInfo.Amount
 	fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
 	fmt.Println("--> Ensure balance greater than 0, press ENTER key to continue...")
 	fmt.Scanln()
@@ -111,14 +70,16 @@ func main() {
 	}
 	fromAddr := myAddress
 	toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-	var amount uint64 = 9000000
+	// close to dispenser
+	closeToAddr := "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
+	var amount uint64 = 1000000
 	var minFee uint64 = 1000
 	note := []byte("DevPortal - My First Transaction with Go SDK")
 	genID := txParams.GenesisID
 	genHash := txParams.GenesisHash
 	firstValidRound := uint64(txParams.FirstRoundValid)
 	lastValidRound := uint64(txParams.LastRoundValid)
-	txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
+	txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, closeToAddr, genID, genHash)
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -141,7 +102,7 @@ func main() {
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
 	// Wait for confirmation
-	confirmedTxn, err := waitForConfirmation(txID, algodClient, 4)
+	confirmedTxn, err := future.WaitForConfirmation(algodClient, txID, 4)
 	if err != nil {
 		fmt.Printf("Error wating for confirmation on txID: %s\n", txID)
 		return
@@ -153,6 +114,11 @@ func main() {
 		fmt.Printf("Can not marshall txn data: %s\n", err)
 	}
 	fmt.Printf("Transaction information: %s\n", txnJSON)
+	fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
+	fmt.Printf("Amount sent: %d microAlgos\n", confirmedTxn.Transaction.Txn.Amount)
+	fmt.Printf("Fee: %d microAlgos\n", confirmedTxn.Transaction.Txn.Fee)	
+	amountAndFee := uint64 (confirmedTxn.Transaction.Txn.Amount + confirmedTxn.Transaction.Txn.Fee)
+	fmt.Printf("Close to Amount: %d microAlgos\n", startingAmount - amountAndFee)		
 	fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 
 	// TODO: insert additional codeblocks here
