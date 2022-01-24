@@ -75,3 +75,94 @@ The return value of the method _must_ be logged with the prefix `151f7c75` which
 # API
 
 The API of a smart contract can be published as an [interface description object](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#interface-description). A user may read this object and instantiate a client that handles the encoding/decoding of the arguments and return values using one of the SDKs. 
+
+
+A full example of a contract json file might look like:
+```json
+{
+    "name":"super-awesome-contract",
+    "networks":{
+        "MainNet":{
+            "appID": 123456
+        }
+    },
+    "methods":[
+        {
+            "name":"add",
+            "desc":"Add 2 integers",
+            "args":[ { "type":"uint64" }, { "type":"uint64" } ],
+            "returns": {"type":"uint64"}
+        },
+        {
+            "name":"sub",
+            "desc":"Subtract 2 integers",
+            "args":[ { "type":"uint64" }, { "type":"uint64" } ],
+            "returns": {"type":"uint64"}
+        },
+        {
+            "name":"mul",
+            "desc":"Multiply 2 integers",
+            "args":[ { "type":"uint64" }, { "type":"uint64" } ],
+            "returns": {"type":"uint64"}
+        },
+        {
+            "name":"div",
+            "desc":"Divide 2 integers, throw away the remainder",
+            "args":[ { "type":"uint64" }, { "type":"uint64" } ],
+            "returns": {"type":"uint64"}
+        },
+        {
+            "name":"qrem",
+            "desc":"Divide 2 integers, return both the quotient and remainder",
+            "args":[ { "type":"uint64" }, { "type":"uint64" } ],
+            "returns": {"type":"(uint64,uint64)"}
+        },
+        {
+            "name":"reverse",
+            "desc":"Reverses a string",
+            "args":[ { "type":"string" } ],
+            "returns": {"type":"string"}
+        },
+        {
+            "name":"txntest",
+            "desc":"just check it",
+            "args":[{"type":"uint64"}, {"type": "pay"}, {"type":"uint64"}],
+            "returns":{"type": "uint64"}
+        },
+        {
+            "name":"concat_strings",
+            "desc":"concat some strings",
+            "args":[{"type":"string[]"}],
+            "returns":{"type": "string"}
+        },
+        {
+            "name":"manyargs",
+            "desc":"Try to send 20 arguments",
+            "args":[
+                {"type":"uint64"}, {"type": "uint64"}, {"type":"uint64"},{"type":"uint64"},
+                {"type":"uint64"}, {"type": "uint64"}, {"type":"uint64"},{"type":"uint64"},
+                {"type":"uint64"}, {"type": "uint64"}, {"type":"uint64"},{"type":"uint64"},
+                {"type":"uint64"}, {"type": "uint64"}, {"type":"uint64"},{"type":"uint64"},
+                {"type":"uint64"}, {"type": "uint64"}, {"type":"uint64"},{"type":"uint64"}
+            ],
+            "returns":{"type": "uint64"}
+        },
+        {
+            "name":"min_bal",
+            "desc":"Get the minimum balance for given account",
+            "args":[
+                {"type":"account"}
+            ],
+            "returns":{"type":"uint64"}
+        },
+        {
+            "name":"tupler",
+            "desc":"",
+            "args":[
+                {"type":"(string,uint64,string)"}
+            ],
+            "returns":{"type":"uint64"}
+        }
+    ]
+}
+```
