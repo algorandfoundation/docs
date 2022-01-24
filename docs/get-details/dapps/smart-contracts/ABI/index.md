@@ -69,7 +69,7 @@ method "add(uint64,uint64)uint64"
 
 The initial handling logic of the contract should route to the correct method given a match against the method selector passed and the known method selector of the application method.
 
-The return value of the method _must_ be logged with the prefix `151f7c75` which is hash("return")[:4].  Only the last logged element with this prefix is considered the return value of this method call.
+The return value of the method _must_ be logged with the prefix `151f7c75` which is the result of `sha256("return")[:4]`.  Only the last logged element with this prefix is considered the return value of this method call.
 
 
 # API
