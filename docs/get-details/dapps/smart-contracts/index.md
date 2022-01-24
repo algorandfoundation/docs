@@ -19,7 +19,7 @@ To provide a standard method for exposing an API and encoding/decoding data type
 
 For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](../pyteal).
 For more information on using smart contracts with the SDKs see the [Interacting with smart contracts documentation](./frontend/smartsigs.md).
-
+For more information on debugging a smart contract, see the [debugging](./debugging.md) page.
 
 # Smart signatures
 Smart signatures contain logic that is used to sign transactions, primarily for signature delegation. The logic of the smart signature is submitted with a transaction. While the logic in the smart signature is stored on the chain as part of resolving the transaction, the logic is not remotely callable. Any new transaction that relies on the same smart signature would resubmit the logic. When the logic is submitted to a node the AVM evaluates the logic, where it either fails or succeeds. If a smart signature’s logic fails when executed by the AVM, the associated transaction will not be executed. 
@@ -30,5 +30,7 @@ Once a transaction that is signed with a smart signature, is submitted it is eva
 
 For more information on smart signatures, see the [smart signature documentation](./smartsigs). For more information on building contracts in PyTeal see the [build with Python documentation](../pyteal).
 For more information on using smart signatures with the SDKs see the [Interacting with smart signature documentation](./frontend/smartsigs.md).
+For more information on debugging a smart contract, see the [debugging](./debugging.md) page.
+
 
 For more information on the [AVM](../avm) or the [TEAL language](../avm/teal) see the developer documentation.
