@@ -129,6 +129,8 @@ This file may be msgpack or json and can be created using goal or the SDKs
     ```sh
 
     $ goal app call --app-id {appid} --from {ACCOUNT} --out=dryrun.json --dryrun-dump
+    # or if you already have a transaction file
+    $ goal clerk dryrun --dryrun-dump -t transaction.txn -o dryrun.json
 
     ```
 
