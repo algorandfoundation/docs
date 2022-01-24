@@ -160,7 +160,7 @@ fmt.Scanln()
 
 # Build transaction
 
-Communication with the Algorand network is performed using transactions. Create a payment transaction sending 9 ALGO from your account to the TestNet faucet address:
+Communication with the Algorand network is performed using transactions. Create a payment transaction sending 1 ALGO from your account to the TestNet faucet address:
 
 ```go linenums="62"
 // Construct the transaction
@@ -171,6 +171,7 @@ if err != nil {
 }
 fromAddr := myAddress
 toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
+
 closeToAddr := "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 
 var amount uint64 = 1000000

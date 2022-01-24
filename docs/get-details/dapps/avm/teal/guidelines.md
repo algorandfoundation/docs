@@ -6,7 +6,7 @@ The following list of guidelines should be followed when working with TEAL.
 
 * TEAL code should validate as many `txn` fields as possible. Things not checked could become set to anything.
 
-* Always verify that the `RekeyTo` property of any transaction is set to the `ZeroAddress` unless the contract is specifically involved ina rekeying operation. 
+* Always verify that the `RekeyTo` property of any transaction is set to the `ZeroAddress` unless the contract is specifically involved in a rekeying operation. 
 
 * Version 2 of smart contracts must have the first line of code specified with `#pragma version 2`. If this is not in the code, the contract will be interpreted as a version 1 contract. Also, when upgrading version 1 contracts make sure to check for rekeying transactions as this could cause the account to be easily rekeyed to another account.
 

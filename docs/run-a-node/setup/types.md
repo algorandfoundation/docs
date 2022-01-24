@@ -10,7 +10,7 @@ Both node types use the same install procedure. To setup a node for a specific t
 Classifying a node as a participation node is not a configuration parameter but a dynamic operation where the node is hosting participation keys for one or more online accounts. This process is described in [Participate in Consensus](../participate/index.md). Technically both non-relay and relay nodes can participate in consensus, but Algorand recommends *only* non-relay nodes participate in consensus. 
 
 !!! info
-    Non-relays nodes do not have to participate in consensus. They still have access to the ledger and can be used with applications that need to connect to the network to submit transactions and read block data. 
+    Non-relay nodes do not have to participate in consensus. They still have access to the ledger and can be used with applications that need to connect to the network to submit transactions and read block data. 
 
 
 # Archival Mode
