@@ -7,3 +7,4 @@ arrange:
   - ABI
   - frontend
   - test-and-deploy
+  - debugging.md 

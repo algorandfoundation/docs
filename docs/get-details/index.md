@@ -46,7 +46,7 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 [Interact with smart signatures](dapps/smart-contracts/frontend/smartsigs.md) - A detailed guide on interacting with smart signatures using the SDKs.
 
-[Smart contract debugging](dapps/smart-contracts/test-and-deploy/debugging.md) - Tools and methods for debugging TEAL code.
+[Smart contract debugging](dapps/smart-contracts/debugging.md) - Tools and methods for debugging TEAL code.
 
 [AVM](dapps/avm/index.md) - Overview of the Algorand Virtual Machine.
 
