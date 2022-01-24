@@ -8,7 +8,14 @@ Algorand Smart Contracts (ASC1) are small programs that serve various functions 
 
 
 # Smart contracts
-Smart contracts are contracts that once deployed are remotely callable from any node in the Algorand blockchain. These contracts are triggered by a specific type of transaction called an application transaction. These contracts typically handle the primary decentralized logic of a dApp and can modify data associated with the contract on a global basis or a per-user basis. This data is referred to either as global or local state. When an application transaction is processed these state variables can be modified by the contract. Smart contracts can create and execute many different types of Algorand transactions as part of the execution of the logic. Smart contracts can also hold Algos or ASAs balances and can be used as on-chain escrow accounts. Smart contracts have access to many on-chain values, such as balance lookups, asset configurations, and the latest block time. 
+Smart contracts are contracts that, once deployed, are remotely callable from any node in the Algorand blockchain. Once deployed, the on-chain instantiation of the contract is referred to as an Application and assigned an Application Id. These applications are triggered by a specific type of transaction called an Application Call transaction.  These on-chain applications handle the primary decentralized logic of a dApp. 
+
+- Applications can [modify state](./apps/#modifying-state-in-smart-contract) associated with the application (global state) or a per application+account (local state) basis. 
+- Applications can [access](./apps/#using-assets-in-smart-contracts) on-chain values, such as account balances, asset configuration parameters, or the latest block time. Calls to the smart con 
+- Applications can [execute transactions](./apps/#inner-transactions) as part of the execution of the logic. One type of transaction they can perform, as of AVM 1.1, is an Application Call transaction which allows one application to call another.  This ability to call other applications enables composability between applications. 
+- Applications have an associated [Application Account](./apps/#using-a-smart-contract-as-an-escrow) that can hold Algos or ASAs balances and can be used as on-chain escrow accounts. 
+
+To provide a standard method for exposing an API and encoding/decoding data types from application call transactions, the [ABI](ABI/index.md) should be used. 
 
 For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](../pyteal).
 For more information on using smart contracts with the SDKs see the [Interacting with smart contracts documentation](./frontend/smartsigs.md).
