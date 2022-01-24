@@ -6,4 +6,4 @@ arrange:
   - smartsigs
   - abi
   - frontend
-  - test-and-deploy
+  - debugging.md 
