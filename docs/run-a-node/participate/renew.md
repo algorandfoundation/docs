@@ -35,7 +35,7 @@ Restart the node to clear the old key from memory:
     ```bash 
     $ sudo systemctl restart algorand
     ```
-==="Mac/Other Linux Distros"
+=== "Mac/Other Linux Distros"
     ```bash
     $ goal node restart
     ```
