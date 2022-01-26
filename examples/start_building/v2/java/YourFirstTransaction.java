@@ -95,7 +95,6 @@ class GettingStarted{
                 .amount(1000000) // 1 algo = 1000000 microalgos
                 .receiver(new Address(RECEIVER))
                 .suggestedParams(params)
-                .closeRemainderTo(RECEIVER) 
                 .build();
            
             // Sign the transaction
@@ -123,9 +122,7 @@ class GettingStarted{
             System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
             System.out.println("Amount: " + new String(pTrx.txn.tx.amount.toString())); 
             System.out.println("Fee: " + new String(pTrx.txn.tx.fee.toString())); 
-            if (pTrx.closingAmount != null){
-             System.out.println("Closing Amount: " + new String(pTrx.closingAmount.toString()));                 
-            }          
+      
             printBalance(myAccount);
 
         } catch (Exception e) {

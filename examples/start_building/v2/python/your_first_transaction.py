@@ -44,7 +44,7 @@ def getting_started_example():
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
 	amount = 1000000
-	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, receiver, note)
+	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, None, note)
 
 	# sign transaction
 	signed_txn = unsigned_txn.sign(secret_key)
@@ -65,9 +65,6 @@ def getting_started_example():
 	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
 	print("Amount transfered: {} microAlgos".format(amount) )    
 	print("Fee: {} microAlgos".format(params.fee) ) 
-	closetoamt = account_info.get('amount') - (params.fee + amount)
-	print("Close to Amount: {} microAlgos".format(closetoamt) + "\n")
-
 	account_info = algod_client.account_info(my_address)
 	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
 

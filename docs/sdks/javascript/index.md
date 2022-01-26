@@ -156,9 +156,8 @@ To interact with the Algorand blockchain, you can send different types of transa
         const note = enc.encode("Hello World");
         let amount = 1000000; // equals 1 ALGO
         let sender = myAccount.addr;
-        let closeout = receiver; //closeRemainderTo - return remainder to TestNet faucet
 
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeout, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
 ```
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386){:target="_blank"}
 
@@ -204,7 +203,6 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
         accountInfo = await algodClient.accountInformation(myAccount.addr).do();
         console.log("Transaction Amount: %d microAlgos", confirmedTxn.txn.txn.amt);        
         console.log("Transaction Fee: %d microAlgos", confirmedTxn.txn.txn.fee);
-        console.log("Close To Amount: %d microAlgos", closeoutamt);
         console.log("Account balance: %d microAlgos", accountInfo.amount);
 
 ```
@@ -273,9 +271,8 @@ async function firstTransaction() {
         const enc = new TextEncoder();
         const note = enc.encode("Hello World");
         let amount = 1000000;
-        let closeout = receiver; //closeRemainderTo
         let sender = myAccount.addr;
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeout, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
         // WARNING! all remaining funds in the sender account above will be sent to the closeRemainderTo Account 
         // In order to keep all remaning funds in the sender account after tx, set closeout parameter to undefined.
         // For more info see: 
@@ -299,7 +296,6 @@ async function firstTransaction() {
         console.log("Transaction Amount: %d microAlgos", confirmedTxn.txn.txn.amt);        
         console.log("Transaction Fee: %d microAlgos", confirmedTxn.txn.txn.fee);
         let closeoutamt = startingAmount - confirmedTxn.txn.txn.amt - confirmedTxn.txn.txn.fee;        
-        console.log("Close To Amount: %d microAlgos", closeoutamt);
         console.log("Account balance: %d microAlgos", accountInfo.amount);
     }
     catch (err) {

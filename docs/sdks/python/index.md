@@ -236,8 +236,7 @@ def first_transaction_example(private_key, my_address):
 	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
 	print("Amount transfered: {} microAlgos".format(amount) )    
 	print("Fee: {} microAlgos".format(params.fee) ) 
-	closetoamt = account_info.get('amount') - (params.fee + amount)
-	print("Close to Amount: {} microAlgos".format(closetoamt) + "\n")
+
 
 	account_info = algod_client.account_info(my_address)
 	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")

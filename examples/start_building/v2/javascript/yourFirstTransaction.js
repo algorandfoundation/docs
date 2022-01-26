@@ -23,12 +23,6 @@ async function yourFirstTransaction() {
         console.log("Press any key when the account is funded");
         await keypress();
 
-        // Generate a public/private key pair
-        // const passphrase = "price clap dilemma swim genius fame lucky crack torch hunt maid palace ladder unlock symptom rubber scale load acoustic drop oval cabbage review abstract embark";
-        // let myAccount = algosdk.mnemonicToSecretKey(passphrase);
-        // console.log("My address: %s", myAccount.addr);
-        // console.log("My passphrase: " + passphrase);
-
         // Add funds
         // TestNet Faucet: https://bank.testnet.algorand.network/
         // BetaNet Faucet: https://bank.betanet.algodev.network/
@@ -52,12 +46,11 @@ async function yourFirstTransaction() {
 
         // receiver defined as TestNet faucet address 
         const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
-        const closeout = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
         let amount = 1000000;       
         const enc = new TextEncoder();
         let note = enc.encode("Hello World");
 
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, amount, closeout, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, amount, undefined, note, params);
 
         // Sign the transaction
         let signedTxn = txn.signTxn(myAccount.sk);

@@ -176,7 +176,6 @@ public void gettingStartedExample(Account myAccount) throws Exception {
             .amount(1000000) // 1 algo = 1000000 microalgos
             .receiver(new Address(RECEIVER))
             .suggestedParams(params)
-            .closeRemainderTo(RECEIVER) // WARNING! all remaining funds in the sender account will be sent to the closeRemainderTo Account, omit RECEIVER account when in use otherwise all funds from the sender account will be sent to that account.
             .build();
         // CloseRemainder can be used to reset sender account to 0.
         // Normally this would be omitted. For more info see:
@@ -223,9 +222,7 @@ The signed transaction can now be submitted to the network. The SDK `waitForConf
         System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
         System.out.println("Amount: " + new String(pTrx.txn.tx.amount.toString()));
         System.out.println("Fee: " + new String(pTrx.txn.tx.fee.toString()));
-        if (pTrx.closingAmount != null){
-            System.out.println("Closing Amount: " + new String(pTrx.closingAmount.toString()));
-        }
+
         printBalance(myAccount);
     } catch (Exception e) {
         System.err.println("Exception when calling algod#transactionInformation: " + e.getMessage());

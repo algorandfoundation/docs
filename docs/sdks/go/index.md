@@ -150,7 +150,7 @@ if err != nil {
     fmt.Printf("Error getting account info: %s\n", err)
     return
 }
-var startingAmount uint64 = accountInfo.Amount
+
 fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
 fmt.Println("--> Ensure balance greater than 0, press ENTER key to continue...")
 fmt.Scanln()
@@ -180,7 +180,7 @@ genID := txParams.GenesisID
 genHash := txParams.GenesisHash
 firstValidRound := uint64(txParams.FirstRoundValid)
 lastValidRound := uint64(txParams.LastRoundValid)
-txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, closeToAddr, genID, genHash)
+txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
 if err != nil {
     fmt.Printf("Error creating transaction: %s\n", err)
     return
@@ -248,8 +248,7 @@ fmt.Printf("Transaction information: %s\n", txnJSON)
 fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 fmt.Printf("Amount sent: %d microAlgos\n", confirmedTxn.Transaction.Txn.Amount)
 fmt.Printf("Fee: %d microAlgos\n", confirmedTxn.Transaction.Txn.Fee)	
-amountAndFee := uint64 (confirmedTxn.Transaction.Txn.Amount + confirmedTxn.Transaction.Txn.Fee)
-fmt.Printf("Close to Amount: %d microAlgos\n", startingAmount - amountAndFee)		
+		
 fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 
 ```
