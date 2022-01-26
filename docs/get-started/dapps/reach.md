@@ -4,7 +4,7 @@ Alice and Bob are now ready to kick-off development of their Algorand-powered au
 
 A few tips before getting started. The goal of this guide is to get you up and running with a working prototype that represents a real use case, as quickly as possible. We use a hands-on example to teach you basic design principles and best practices for building dApps with Reach on Algorand. This guide does not cover all the details of the dApp backend and frontend code. This is intentional so that you can focus on solidifying higher-level concepts that will be the foundation for building any dApp on Algorand using Reach. So don’t worry if you don’t understand what everything does in the solution. This is expected! After you feel comfortable with the basics, you can head over to the detailed [Reach documentation](https://docs.reach.sh/) and work on becoming an expert in the Reach language.
 
-All of the code for this guide is located [here] (https://github.com/algorand/reach-auction). The `index.mjs` and `index.rsh` files are included, so follow along!
+All of the code for this guide is located [here](https://github.com/algorand/reach-auction). The `index.mjs` and `index.rsh` files are included, so follow along!
 
 Now let’s get started. 
 
@@ -431,7 +431,7 @@ You have learned how to build a basic Reach app which consists of backend and fr
 
 Verification and Remote Procedure Calls (RPC) are key features to Reach. Reach's verification engine ensures that invariants about the state of a program assumed by programmers are held by all possible executions of the program. In other words, the verification process provides smart contracts that are resilient to common logic errors that lead to mistakes.  The Reach RPC Server provides access to compiled JavaScript backends via an HTTPS-accessible JSON-based RPC protocol. The server allows frontends to be written in any programming language. Reach provides client libraries for JavaScript, Python, and Go. Example frontends written using the Reach RPC Server can be found in the Reach RPC documentation.
 
-If you'd like to learn more about developing Algorand dApps using Reach, as well as more advanced concepts, see  [verification](https://docs.reach.sh/guide/assert/#guide-assert) and [Reach RPC](https://docs.reach.sh/rpc/) Server for more details.  For auditing, mathematical proofs, cryptographic commitment schemes, loop invariants,  timeouts and more see the Reach [documentation](https://docs.reach.sh/). 
+If you'd like to learn more about developing Algorand dApps using Reach, as well as more advanced concepts, see  [verification](https://docs.reach.sh/guide/assert/#guide-assert) and [Reach RPC](https://docs.reach.sh/rpc/) Server for more details. For auditing, mathematical proofs, cryptographic commitment schemes, loop invariants, timeouts and more see the Reach [documentation](https://docs.reach.sh/). 
 
 
 Complete code for this auction simulation can be found [here](https://github.com/algorand/reach-auction). 
