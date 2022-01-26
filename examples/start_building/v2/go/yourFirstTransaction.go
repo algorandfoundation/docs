@@ -3,12 +3,9 @@ package main
 import (
 	"context"
 	json "encoding/json"
-	// "errors"
 	"fmt"
-	// "strings"
 	"github.com/algorand/go-algorand-sdk/future"
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
-	// "github.com/algorand/go-algorand-sdk/client/v2/common/models"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/transaction"
