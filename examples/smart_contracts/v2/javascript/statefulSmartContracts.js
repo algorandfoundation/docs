@@ -1,3 +1,7 @@
+/* IMPORTANT: The approvalProgramSourceInitial and 
+approvalProgramSourceRefactored is executed by the creator account, 
+if you are using a different account, change the hard-coded address */
+
 const algosdk = require('algosdk');
 
 // user declared account mnemonics
@@ -547,10 +551,10 @@ async function main() {
     await updateApp(algodClient, creatorAccount, appId, approvalProgram, clearProgram);
 
     // call application with arguments
-    let ts = new Date(new Date().toUTCString());
-    console.log(ts)
+    let timestamp = new Date().toUTCString();
+    console.log(new Date(timestamp));
     let appArgs = [];
-    appArgs.push(new Uint8Array(Buffer.from(ts)));
+    appArgs.push(new Uint8Array(Buffer.from(timestamp)));
     await callApp(algodClient, userAccount, appId, appArgs);
 
     // read local state of application from user account

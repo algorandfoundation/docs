@@ -215,7 +215,7 @@ def first_transaction_example(private_key, my_address):
 	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, 1000000, None, note)
 
 	# sign transaction
-	signed_txn = unsigned_txn.sign(private_key))
+	signed_txn = unsigned_txn.sign(private_key)
 
     # submit transaction
 	txid = algod_client.send_transaction(signed_txn)

@@ -1,6 +1,6 @@
 title: Interact with smart contracts
 
-This guide covers using smart contracts with the Algorand SDKs. Smart contracts are also referred to as smart contracts. Smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
+This guide covers using smart contracts with the Algorand SDKs. Smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
 
 
 !!! info

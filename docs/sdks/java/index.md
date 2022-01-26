@@ -99,7 +99,9 @@ class GettingStarted{
 
 # Fund the Account
 
-The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}. 
+
+The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}.
+
 
 !!! Info
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](../../get-details/accounts/#minimum-balance){:target="_blank"}.

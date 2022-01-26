@@ -1,5 +1,6 @@
 title: SDKs
 arrange:
+  - index.md
   - python
   - javascript
   - go

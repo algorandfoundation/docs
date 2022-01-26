@@ -23,13 +23,13 @@ If you only want to try out Algorand code snippets, you can get started quickly 
 Once you have the prerequisites detailed on the [sandbox README](https://github.com/algorand/sandbox#getting-started), you can install the Algorand sandbox:
 
 ```sh
-// clone the sandbox from GitHub
+# clone the sandbox from GitHub
 git clone https://github.com/algorand/sandbox.git
 
-// enter the sandbox folder
+# enter the sandbox folder
 cd sandbox
 
-// run the sandbox executable to start a private network
+# run the sandbox executable to start a private network
 ./sandbox up
 ```
 

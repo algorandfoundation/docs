@@ -73,7 +73,7 @@ python3 -c "import algosdk.encoding as e; print(e.encode_address(e.checksum(b'ap
 WCS6TVPJRBSARHLN2326LRU5BYVJZUKI2VJ53CAWKYYHDE455ZGKANWMGM
 ```
 ## Inner transactions
-To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to 16 inner transactions within one call to the smart contract. If any of these transactions fail, then the smart contract will also fail. Inner transactions currently support payment and all asset transaction types. To generate an inner transaction the `itxn_begin`, `itxn_field` and `itxn_submit` opcodes must be used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field’ opcode is used to set specific transaction properties and the `itxn_submit` opcode is used to submit the transaction. As an example, the following TEAL generates a simple payment transaction.
+To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to 16 inner transactions within one call to the smart contract. If any of these transactions fail, then the smart contract will also fail. Inner transactions currently support payment and all asset transaction types. To generate an inner transaction the `itxn_begin`, `itxn_field` and `itxn_submit` opcodes must be used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties and the `itxn_submit` opcode is used to submit the transaction. As an example, the following TEAL generates a simple payment transaction.
 
 ```teal
 itxn_begin
@@ -1057,7 +1057,7 @@ As a way of getting started writing smart contracts, the following boilerplate t
         return program
 
     with open('boilerplate_approval_pyteal.teal', 'w') as f:
-        compiled = compileTeal(approval_program(), Mode.Application, version=5))
+        compiled = compileTeal(approval_program(), Mode.Application, version=5)
         f.write(compiled)
     ```
 
