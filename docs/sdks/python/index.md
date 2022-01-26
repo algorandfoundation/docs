@@ -110,7 +110,8 @@ Transactions are used to interact with the Algorand network. To create a payment
 ​
 ```python
 # build transaction
-from algosdk.future.transaction import PaymentTxn
+from algosdk.future import transaction
+
 
     params = algod_client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
@@ -118,8 +119,8 @@ from algosdk.future.transaction import PaymentTxn
     params.fee = 1000
     receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
     note = "Hello World".encode()
-
-    unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	amount = 1000000
+    unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, None, note)
 ```
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=398){target=_blank}  
 ​
@@ -139,11 +140,12 @@ Before the transaction is considered valid, it must be signed by a private key. 
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](../../get-details/transactions/signatures.md#single-signatures){target=_blank}. 
     
 # Submit the Transaction
-The signed transaction can now be submitted to the network. `wait_for_confirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. For more information, see [Wait for Confirmation](https://developer.algorand.org/docs/build-apps/hello_world/#wait-for-confirmation){target=_blank}.
+The signed transaction can now be submitted to the network. `wait_for_confirmation` SDK Method is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
 ​
 ```python
 import json
 import base64
+
 
     #submit transaction
     txid = algod_client.send_transaction(signed_txn)
@@ -151,7 +153,7 @@ import base64
 
     # wait for confirmation	
     try:
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+        confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)  
     except Exception as err:
         print(err)
         return
@@ -160,37 +162,16 @@ import base64
         json.dumps(confirmed_txn, indent=4)))
     print("Decoded note: {}".format(base64.b64decode(
         confirmed_txn["txn"]["txn"]["note"]).decode()))
-    
-    # utility function for waiting on a transaction confirmation
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
+	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
+	print("Amount transfered: {} microAlgos".format(amount) )    
+	print("Fee: {} microAlgos".format(params.fee) ) 
 
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return 
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:  
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
-``` 
+
+	account_info = algod_client.account_info(my_address)
+	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
+    
+```
+
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=480){target=_blank}  
 
 # Complete Example
@@ -201,7 +182,8 @@ import json
 import base64
 from algosdk import account, mnemonic
 from algosdk.v2client import algod
-from algosdk.future.transaction import PaymentTxn
+from algosdk.future import transaction
+
 
 def generate_algorand_keypair():
     private_key, address = account.generate_account()
@@ -229,7 +211,7 @@ def first_transaction_example(private_key, my_address):
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
 
-	unsigned_txn = PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, 1000000, None, note)
 
 	# sign transaction
 	signed_txn = unsigned_txn.sign(private_key)
@@ -240,7 +222,7 @@ def first_transaction_example(private_key, my_address):
 
     # wait for confirmation	
 	try:
-		confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+		confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)  
 	except Exception as err:
 		print(err)
 		return
@@ -250,38 +232,15 @@ def first_transaction_example(private_key, my_address):
 	print("Decoded note: {}".format(base64.b64decode(
 		confirmed_txn["txn"]["txn"]["note"]).decode()))
     
-    account_info = algod_client.account_info(my_address)
-    print("Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
+	print("Starting Account balance: {} microAlgos".format(account_info.get('amount')) )
+	print("Amount transfered: {} microAlgos".format(amount) )    
+	print("Fee: {} microAlgos".format(params.fee) ) 
 
-# utility function for waiting on a transaction confirmation
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
 
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return 
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:  
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
+	account_info = algod_client.account_info(my_address)
+	print("Final Account balance: {} microAlgos".format(account_info.get('amount')) + "\n")
+
+
 
 #replace private_key and my_address with your private key and your address
 first_transaction_example(private_key, my_address)​

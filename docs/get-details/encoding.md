@@ -191,42 +191,104 @@ Given an integer `1337`, you may encode it as:
 
 ### Transaction
 
-Sometimes an application needs to transmit a transaction or transaction group between the front end and back end.
+Sometimes an application needs to transmit a transaction or transaction group between the front end and back end. This can be done by msgpack encoding the transaction object on one side and msgpack decoding it on the other side. Often the msgpack'd bytes will be base64 encoded so that they can be safely transmitted in some json payload so we use that encoding here.
 
-This can be done by msgpack encoding the transaction object on one side and msgpack decoding it on the other side.
+Essentially the encoding is: 
 
-### Signed Transaction
+`tx_byte_str = base64encode(msgpack_encode(tx_obj))` 
 
-After making a request for a transaction to be signed by a wallet, the returned data structure is 
+and decoding is:
 
-```ts
-{
-    TxId string // base32 encoded transaction id
-    blob string // base64 encoded byte array
-}
-```
+`tx_obj = msgpack_decode(base64decode(tx_byte_str))`
 
-Sometimes you may want to inspect the transaction to, for example, validate that it was signed by the correct public key as in a web3 login.
 
-The blob can be decoded with the same base64 decoding of a [byte array](#byte-arrays).  From the resulting byte array, an object may representing the signed transaction may be created using the msgpack decode method for each sdk.
+*Example*
 
-From there you may inspect the signature field to check the transaction was signed correctly.
-
-*Example:*
-
-Given a blob ``, you may decode it as:
+Create a payment transaction from one acount to another using suggested parameters and amount 10000, we write the msgpack encoded bytes
 
 === "JavaScript"
     ```js
-    import algosdk from 'algosdk'
 
-    const blob = ""
-    const decoded =  Buffer.from(blob, "base64")
-    const signedTxn = algosdk.decodeSignedTransaction(decoded)
+    const sp = await client.getTransactionParams().do()
+    const pay_txn = algosdk.makePaymentTxnWithSuggestedParams(acct1.addr, acct2.addr, 10000, undefined, undefined, sp)
+
+    const pay_txn_bytes = algosdk.encodeObj(pay_txn.get_obj_for_encoding())
+    fs.writeFileSync("pay.txn", Buffer.from(pay_txn_bytes).toString("base64"))
+
+    const spay_txn_bytes = pay_txn.signTxn(acct1.sk)
+    fs.writeFileSync("signed_pay.txn", Buffer.from(spay_txn_bytes).toString("base64"))
+
+
+    const recovered_pay_txn = algosdk.decodeUnsignedTransaction(Buffer.from(fs.readFileSync("pay.txn").toString(), "base64"))
+    console.log(recovered_pay_txn)
+
+    const recovered_signed_pay_txn = algosdk.decodeSignedTransaction(Buffer.from(fs.readFileSync("signed_pay.txn").toString(), "base64"))
+    console.log(recovered_signed_pay_txn)
+
     ```
 
 === "Python"
-    ```python
-    blob = ""
-    signedTxn = encoding.future_msgpack_decode(blob)
+    ```py
+
+    sp = client.suggested_params()
+    pay_txn = transaction.PaymentTxn(addr1, sp, addr2, 10000)
+    with open("pay.txn", "w") as f:
+        f.write(encoding.msgpack_encode(pay_txn))
+
+    spay_txn = pay_txn.sign(pk1)
+    with open("signed_pay.txn", "w") as f:
+        f.write(encoding.msgpack_encode(spay_txn))
+
+
+    with open("pay.txn", "r") as f:
+        recovered_txn = encoding.future_msgpack_decode(f.read())
+
+    print(recovered_txn)
+
+    with open("signed_pay.txn", "r") as f:
+        recovered_signed_txn = encoding.future_msgpack_decode(f.read())
+
+    print(recovered_signed_txn)
+
+    ```
+
+=== "Go"
+    ```go
+
+	// Error handling omitted for brevity
+	sp, _ := client.SuggestedParams().Do(context.Background())
+
+	pay_txn, _ := future.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 10000, nil, "", sp)
+
+	var pay_txn_bytes = make([]byte, 1e3)
+	base64.StdEncoding.Encode(pay_txn_bytes, msgpack.Encode(pay_txn))
+	f, _ := os.Create("pay.txn")
+	f.Write(pay_txn_bytes)
+
+	_, spay_txn, _ := crypto.SignTransaction(acct1.PrivateKey, pay_txn)
+
+	var spay_txn_bytes = make([]byte, 1e3)
+	base64.StdEncoding.Encode(spay_txn_bytes, spay_txn)
+	f2, _ := os.Create("signed_pay.txn")
+	f2.Write(spay_txn_bytes)
+
+	var (
+		recovered_pay_txn   = types.Transaction{}
+		recovered_pay_bytes = make([]byte, 1e3)
+	)
+	b64_pay_bytes, _ := os.ReadFile("pay.txn")
+	base64.StdEncoding.Decode(recovered_pay_bytes, b64_pay_bytes)
+
+	msgpack.Decode(recovered_pay_bytes, &recovered_pay_txn)
+	log.Printf("%+v", recovered_pay_txn)
+
+	var (
+		recovered_signed_pay_txn   = types.SignedTxn{}
+		recovered_signed_pay_bytes = make([]byte, 1e3)
+	)
+	b64_signed_pay_bytes, _ := os.ReadFile("signed_pay.txn")
+	base64.StdEncoding.Decode(recovered_signed_pay_bytes, b64_signed_pay_bytes)
+
+	msgpack.Decode(recovered_signed_pay_bytes, &recovered_signed_pay_txn)
+	log.Printf("%+v", recovered_signed_pay_txn)
     ```

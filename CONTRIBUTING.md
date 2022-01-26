@@ -49,7 +49,7 @@ The Community page is displayed [here](https://developer.algorand.org/docs/commu
 First search [open issues](https://github.com/algorand/docs/issues) to make sure the issue has not been filed already. If it has not, open a new issue using one of the following three templates or Other, if your request does not fall into any of these categories:
 
 1. [Fixing Errors and Inaccuracies](https://github.com/algorand/docs/issues/new?assignees=&labels=minor+update&template=fixing-errors-or-inaccuracies.md&title=)
-2. [Small Improvements for Clarity of Message](https://github.com/algorand/docs/issues/new?assignees=&labels=&template=large-additions-or-modifications.md&title=)
+2. [Small Improvements for Clarity of Message](https://github.com/algorand/docs/issues/new?assignees=&labels=documentation&template=small-improvements-for-clarity-of-message.md&title=)
 3. [Large Additions or Modifications](https://github.com/algorand/docs/issues/new?assignees=&labels=&template=large-additions-or-modifications.md&title=)
 
 
