@@ -36,7 +36,7 @@ Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for
 <dependency>
     <groupId>com.algorand</groupId>
     <artifactId>algosdk</artifactId>
-    <version>1.10.0</version>
+    <version>1.11.0</version>
 </dependency>
 ```
 
@@ -67,9 +67,8 @@ class GettingStarted{
             Account myAccount1 = new Account();
             System.out.println("My Address: " + myAccount1.getAddress());
             System.out.println("My Passphrase: " + myAccount1.toMnemonic());
-            System.out.println("Navigate to this link:  https://dispenser.testnet.aws.algodev.network/");
-            System.out.println("Copy TestNet Account Address to Dispense Funds to: ");
-            System.out.println(myAccount1.getAddress().toString());
+            System.out.println("Navigate to this link and dispense funds:  https://dispenser.testnet.aws.algodev.network?account=" + myAccount1.getAddress().toString());            
+
             System.out.println("PRESS ENTER KEY TO CONTINUE...");
             scan.nextLine();
             return myAccount1;
@@ -100,7 +99,9 @@ class GettingStarted{
 
 # Fund the Account
 
+
 The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}.
+
 
 !!! Info
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](../../get-details/accounts/#minimum-balance){:target="_blank"}.
@@ -115,7 +116,7 @@ To view the transaction, open the [Algorand Blockchain Explorer](https://testnet
 
 # Build First Transaction
 
-Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code, which also includes some utility functions, `connectToNetwork` , `waitForConfirmation` and `PrintBalance`. Add this code to the GettingStarted class above.
+Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code, which also includes some utility functions, `connectToNetwork` ,  and `PrintBalance`. Add this code to the GettingStarted class above.
 
 ```java
 package com.algorand.javatest.firsttransaction;
@@ -130,6 +131,7 @@ import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
+import com.algorand.algosdk.v2.client.Utils;
 import org.json.JSONObject;
 private AlgodClient client = null;
     // utility function to connect to a node
@@ -141,46 +143,7 @@ private AlgodClient client = null;
         ALGOD_PORT, ALGOD_API_TOKEN);
     return client;
 }
-/**
-    * utility function to wait on a transaction to be confirmed
-    * the timeout parameter indicates how many rounds do you wish to check pending transactions for
-    */
-private PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
-throws Exception {
-    if (myclient == null || txID == null || timeout < 0) {
-        throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
-    }
-    Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
-    if (!resp.isSuccessful()) {
-        throw new Exception(resp.message());
-    }
-    NodeStatusResponse nodeStatusResponse = resp.body();
-    Long startRound = nodeStatusResponse.lastRound + 1;
-    Long currentRound = startRound;
-    while (currentRound < (startRound + timeout)) {
-        // Check the pending transactions
-        Response < PendingTransactionResponse > resp2 = myclient.PendingTransactionInformation(txID).execute();
-        if (resp2.isSuccessful()) {
-            PendingTransactionResponse pendingInfo = resp2.body();
-            if (pendingInfo != null) {
-                if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
-                    // Got the completed Transaction
-                    return pendingInfo;
-                }
-                if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
-                    // If there was a pool error, then the transaction has been rejected!
-                    throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
-                }
-            }
-        }
-        resp = myclient.WaitForBlock(currentRound).execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        currentRound++;
-    }
-    throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
-}
+
 private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
         String myAddress = myAccount.getAddress().toString();
         Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
@@ -215,11 +178,7 @@ public void gettingStartedExample(Account myAccount) throws Exception {
             .amount(1000000) // 1 algo = 1000000 microalgos
             .receiver(new Address(RECEIVER))
             .suggestedParams(params)
-            .closeRemainderTo(RECEIVER) // WARNING! all remaining funds in the sender account will be sent to the closeRemainderTo Account, omit RECEIVER account when in use otherwise all funds from the sender account will be sent to that account.
             .build();
-        // CloseRemainder can be used to reset sender account to 0.
-        // Normally this would be omitted. For more info see:
-        // https://developer.algorand.org/docs/reference/transactions/#payment-transaction
         // more code below
 ```
 
@@ -243,7 +202,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 
 # Submit the Transaction
 
-The signed transaction can now be submitted to the network. `waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
+The signed transaction can now be submitted to the network. The SDK `waitForConfirmation` utility function is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
 
 ```java
         // Submit the transaction to the network
@@ -254,19 +213,15 @@ The signed transaction can now be submitted to the network. `waitForConfirmation
         }
         String id = rawtxresponse.body().txId;
         // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+        PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
         System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
         // Read the transaction
         JSONObject jsonObj2 = new JSONObject(pTrx.toString());
         System.out.println("Transaction information (with notes): " + jsonObj2.toString(2));
         System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-        System.out.println("Transaction information (with notes): " + jsonObj2.toString(2));
-        System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
         System.out.println("Amount: " + new String(pTrx.txn.tx.amount.toString()));
         System.out.println("Fee: " + new String(pTrx.txn.tx.fee.toString()));
-        if (pTrx.closingAmount != null){
-            System.out.println("Closing Amount: " + new String(pTrx.closingAmount.toString()));
-        }
+
         printBalance(myAccount);
     } catch (Exception e) {
         System.err.println("Exception when calling algod#transactionInformation: " + e.getMessage());
@@ -296,6 +251,7 @@ import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import org.json.JSONObject;
+import com.algorand.algosdk.v2.client.Utils;
 
 
 class GettingStarted{
@@ -337,46 +293,6 @@ class GettingStarted{
             ALGOD_PORT, ALGOD_API_TOKEN);
         return client;
     }
-    /**
-      * utility function to wait on a transaction to be confirmed
-      * the timeout parameter indicates how many rounds do you wish to check pending transactions for
-      */
-    private PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
-    throws Exception {
-        if (myclient == null || txID == null || timeout < 0) {
-            throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
-        }
-        Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        NodeStatusResponse nodeStatusResponse = resp.body();
-        Long startRound = nodeStatusResponse.lastRound + 1;
-        Long currentRound = startRound;
-        while (currentRound < (startRound + timeout)) {
-            // Check the pending transactions                 
-            Response < PendingTransactionResponse > resp2 = myclient.PendingTransactionInformation(txID).execute();
-            if (resp2.isSuccessful()) {
-                PendingTransactionResponse pendingInfo = resp2.body();
-                if (pendingInfo != null) {
-                    if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
-                        // Got the completed Transaction
-                        return pendingInfo;
-                    }
-                    if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
-                        // If there was a pool error, then the transaction has been rejected!
-                        throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
-                    }
-                }
-            }
-            resp = myclient.WaitForBlock(currentRound).execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            currentRound++;
-        }
-        throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
-    }
 
     private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
         String myAddress = myAccount.getAddress().toString();
@@ -416,7 +332,6 @@ class GettingStarted{
                 .amount(1000000) // 1 algo = 1000000 microalgos
                 .receiver(new Address(RECEIVER))
                 .suggestedParams(params)
-                .closeRemainderTo(RECEIVER) 
                 .build();
            
             // Sign the transaction
@@ -435,7 +350,7 @@ class GettingStarted{
             String id = rawtxresponse.body().txId;
 
             // Wait for transaction confirmation
-            PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
 
             System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
             // Read the transaction
