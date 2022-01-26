@@ -136,7 +136,7 @@ Before moving on to the next step, make sure your account has been funded by the
         //Check your balance
         let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
         console.log("Account balance: %d microAlgos", accountInfo.amount);
-        let startingAmount = accountInfo.amount;
+
 
 ```
 
@@ -259,7 +259,7 @@ async function firstTransaction() {
         //Check your balance
         let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
         console.log("Account balance: %d microAlgos", accountInfo.amount);
-        let startingAmount = accountInfo.amount;
+
         // Construct the transaction
         let params = await algodClient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
@@ -273,10 +273,7 @@ async function firstTransaction() {
         let amount = 1000000;
         let sender = myAccount.addr;
         let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
-        // WARNING! all remaining funds in the sender account above will be sent to the closeRemainderTo Account 
-        // In order to keep all remaning funds in the sender account after tx, set closeout parameter to undefined.
-        // For more info see: 
-        // https://developer.algorand.org/docs/reference/transactions/#payment-transaction
+
 
         // Sign the transaction
         let signedTxn = txn.signTxn(myAccount.sk);
@@ -295,7 +292,7 @@ async function firstTransaction() {
         accountInfo = await algodClient.accountInformation(myAccount.addr).do();
         console.log("Transaction Amount: %d microAlgos", confirmedTxn.txn.txn.amt);        
         console.log("Transaction Fee: %d microAlgos", confirmedTxn.txn.txn.fee);
-        let closeoutamt = startingAmount - confirmedTxn.txn.txn.amt - confirmedTxn.txn.txn.fee;        
+     
         console.log("Account balance: %d microAlgos", accountInfo.amount);
     }
     catch (err) {

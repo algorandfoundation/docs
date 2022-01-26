@@ -179,9 +179,6 @@ public void gettingStartedExample(Account myAccount) throws Exception {
             .receiver(new Address(RECEIVER))
             .suggestedParams(params)
             .build();
-        // CloseRemainder can be used to reset sender account to 0.
-        // Normally this would be omitted. For more info see:
-        // https://developer.algorand.org/docs/reference/transactions/#payment-transaction
         // more code below
 ```
 
@@ -335,7 +332,6 @@ class GettingStarted{
                 .amount(1000000) // 1 algo = 1000000 microalgos
                 .receiver(new Address(RECEIVER))
                 .suggestedParams(params)
-                .closeRemainderTo(RECEIVER) 
                 .build();
            
             // Sign the transaction

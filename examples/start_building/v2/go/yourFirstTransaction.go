@@ -69,7 +69,7 @@ func main() {
 	}
 	fromAddr := myAddress
 	toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-	// close to dispenser
+
 	var amount uint64 = 1000000
 	var minFee uint64 = 1000
 	note := []byte("DevPortal - My First Transaction with Go SDK")

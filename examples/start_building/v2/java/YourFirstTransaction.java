@@ -157,10 +157,3 @@ class GettingStarted{
 
 
 // System.out.println("Navigate to this link:  https://dispenser.testnet.aws.algodev.network/?account=" + myAccount1.getAddress().toString());      
-
-
-//   .closeRemainderTo(RECEIVER) // WARNING! all remaining funds in the sender account will be sent to the closeRemainderTo Account, omit RECEIVER account when in use otherwise all funds from the sender account will be sent to that account.
-//   .build();
-// CloseRemainder can be used to reset sender account to 0.
-// Normally this would be omitted. For more info see: 
-// https://developer.algorand.org/docs/reference/transactions/#payment-transaction
