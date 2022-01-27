@@ -187,7 +187,8 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     # This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
     # The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-    txn = TransactionWithSigner(PaymentTxn(addr, sp, addr, 10000), signer)
+    ptxn = PaymentTxn(addr, sp, addr, 10000)
+    txn = TransactionWithSigner(ptxn, signer)
     atc.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
 
     ```
