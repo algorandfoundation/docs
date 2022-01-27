@@ -1,8 +1,8 @@
 title: SDKs
 arrange:
   - index.md
-  - atc.md
   - python
   - javascript
   - go
   - java
+  - atc.md
