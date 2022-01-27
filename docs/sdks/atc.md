@@ -170,7 +170,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     c = Contract.from_json(js)
 
     # Using the app id from the "sandnet" network, which is hardcoded in the json file
-    app_id = c.networks["sandnet"].app_id
+    app_id = c.networks[genesis_hash].app_id
 
     # Utility function to get the Method object for a given method name
     def get_method(name: str) -> Method:
@@ -211,7 +211,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     }
 
     const commonParams = {
-        appID:contract.networks["sandnet"].appID,
+        appID:contract.networks[genesis_hash].appID,
         sender:acct.addr,
         suggestedParams:sp,
         signer: algosdk.makeBasicAccountTransactionSigner(acct)
@@ -265,7 +265,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     }
 
 	mcp := future.AddMethodCallParams{
-		AppID:           contract.Networks["sandnet"].AppID,
+		AppID:           contract.Networks[genesis_hash].AppID,
 		Sender:          acct.Address,
 		SuggestedParams: sp,
 		OnComplete:      types.NoOpOC,
