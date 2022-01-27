@@ -9,7 +9,7 @@ The Atomic Transaction Composer is a convenient way to build out an atomic group
     The following code examples are snippits to demonstrate usage. The full code for the below snippits is available [here](https://github.com/algorand-devrel/demo-abi).
 
 
-## Create ATC
+## Create Atomic Transaction Composer 
 
 To use the Atomic Transaction Composer, first initialize the composer: 
 
@@ -170,16 +170,40 @@ The call to add a transaction may may be performed multiple times, each time add
 
 ## Calling ABI Methods
 
+When calling an [ABI](../get-details/dapps/smart-contracts/ABI/index.md) compliant application, the Atomic Transaction Composer will handle encoding and decoding of the arguments passed and the return value.  It will also make sure that any [reference types](../get-details/dapps/smart-contracts/ABI/index.md#reference-types) are packed into the transaction group appropriately.  Additionally, since it knows the method signature and types required, it will do some type checking to make sure the arguments passed are valid for the method call. 
+
+In order to call the methods, a Contract or Interface is constructed. Typically this will be done using a [json file](../get-details/dapps/smart-contracts/ABI/index.md#reference-type) that describes the api for the application.   
+
+Once the Contract object is constructed, it can be used to look up and pass method objects into the Atomic Transaction Composers `add_method_call`
+
 === Python
 
     ```py
+    from algosdk.abi import Contract
 
-    signer = AccountTransactionSigner(sk)
+    with open("path/to/contract.json") as f:
+        js = f.read()
+    c = Contract.from_json(js)
 
+    # Using the app id from the "sandnet" network, which is hardcoded in the json file
+    app_id = c.networks["sandnet"].app_id
+
+    # Utility function to get the Method object for a given method name
+    def get_method(name: str) -> Method:
+        for m in c.methods:
+            if m.name == name:
+                return m
+        raise Exception("No method with the name {}".format(name))
+
+
+
+    # Simple call to the `add` method, method_args can be any type but _must_ 
+    # match those in the method signature of the contract
     comp.add_method_call(app_id, get_method("add"), addr, sp, signer, method_args=[1,1])
 
+    # This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
+    # The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
     txn = TransactionWithSigner(PaymentTxn(addr, sp, addr, 10000), signer)
-
     comp.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
 
     ```
@@ -189,7 +213,7 @@ The call to add a transaction may may be performed multiple times, each time add
     ```js
 
     // Read in the local contract.json file
-    const buff = fs.readFileSync("../contract.json")
+    const buff = fs.readFileSync("path/to/contract.json")
 
     // Parse the json file into an object, pass it to create an ABIContract object
     const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
@@ -202,83 +226,53 @@ The call to add a transaction may may be performed multiple times, each time add
         return m
     }
 
-    const sp = await client.getTransactionParams().do()
     const commonParams = {
-        appID:contract.networks["default"].appID,
+        appID:contract.networks["sandnet"].appID,
         sender:acct.addr,
         suggestedParams:sp,
         signer: algosdk.makeBasicAccountTransactionSigner(acct)
     }
 
-    const comp = new algosdk.AtomicTransactionComposer()
 
-    // Simple ABI Calls with standard arguments, return type
+    // Simple call to the `add` method, method_args can be any type but _must_ 
+    // match those in the method signature of the contract
     comp.addMethodCall({
         method: getMethodByName("add"), methodArgs: [1,1], ...commonParams
     })
 
-    // Transaction being passed as an argument, this removes the transaction from the 
-    // args list, but includes it in the atomic grouped transaction
+    // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
+    // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
+    txn = {
+        txn: new Transaction({ from: acct.addr, to: acct.addr, amount: 10000, ...sp }),
+        signer: algosdk.makeBasicAccountTransactionSigner(acct)
+    }
     comp.addMethodCall({
         method: getMethodByName("txntest"), 
-        methodArgs: [
-            10000,
-            {
-                txn: new Transaction({
-                    from: acct.addr,
-                    to: acct.addr,
-                    amount: 10000,
-                    ...sp
-                }),
-                signer: algosdk.makeBasicAccountTransactionSigner(acct)
-            },
-            1000
-        ], 
+        methodArgs: [ 10000, txn, 1000 ], 
         ...commonParams
     })
+
     ```
 
 === Go
 
     ```go
 
-	f, err := os.Open("../contract.json")
-	if err != nil {
-		log.Fatalf("Failed to open contract file: %+v", err)
-	}
-
-	b, err := ioutil.ReadAll(f)
-	if err != nil {
-		log.Fatalf("Failed to read file: %+v", err)
-	}
-
+    // Read in contract json file and marshal into Contract
+	f, _ := os.Open("path/to/contract.json")
+	b, _ := ioutil.ReadAll(f)
 	contract := &abi.Contract{}
-	if err := json.Unmarshal(b, contract); err != nil {
-		log.Fatalf("Failed to marshal contract: %+v", err)
-	}
+	_ = json.Unmarshal(b, contract)
 
-	mcp := future.AddMethodCallParams{
-		AppID:           contract.Networks["default"].AppID,
-		Sender:          acct.Address,
-		SuggestedParams: sp,
-		OnComplete:      types.NoOpOC,
-		Signer:          signer,
-	}
 
-	atc.AddMethodCall(combine(mcp, getMethod(contract, "add"), []interface{}{1, 1}))
-	// Txn arg, uint return
-	txn, _ := future.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
-	stxn := future.TransactionWithSigner{Txn: txn, Signer: signer}
-	atc.AddMethodCall(combine(mcp, getMethod(contract, "txntest"), []interface{}{10000, stxn, 1000}))
-
-    func getMethod(c *abi.Contract, name string) (m abi.Method) {
+    // Utility function to get a Method given the name 
+    func getMethod(c *abi.Contract, name string) (abi.Method, error) {
         for _, m = range c.Methods {
             if m.Name == name {
-                return
+                return m, nil
             }
         }
-        log.Fatalf("No method named: %s", name)
-        return
+        return abi.Method{}, fmt.Errorf("No method named: %s", name)
     }
 
     func combine(mcp future.AddMethodCallParams, m abi.Method, a []interface{}) future.AddMethodCallParams {
@@ -286,6 +280,26 @@ The call to add a transaction may may be performed multiple times, each time add
         mcp.MethodArgs = a
         return mcp
     }
+
+	mcp := future.AddMethodCallParams{
+		AppID:           contract.Networks["sandnet"].AppID,
+		Sender:          acct.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+	}
+
+    // Simple call to the `add` method, method_args can be any type but _must_ 
+    // match those in the method signature of the contract
+	atc.AddMethodCall(combine(mcp, getMethod(contract, "add"), []interface{}{1, 1}))
+
+
+    // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
+    // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
+	txn, _ := future.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
+	stxn := future.TransactionWithSigner{Txn: txn, Signer: signer}
+	atc.AddMethodCall(combine(mcp, getMethod(contract, "txntest"), []interface{}{10000, stxn, 1000}))
+
     ```
 
 === Java
@@ -305,15 +319,22 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 === Python
 
     ```py
-    resp = comp.execute(client, 2)
+    # Other options:
+    # txngroup = comp.build_group()
+    # txids = comp.submit(client)
 
-    for result in dryrun.abi_results:
-        print(result.return_value)
+    result = comp.execute(client, 2)
+    for res in result.abi_results:
+        print(res.return_value)
     ```
 
 === JavaScript
 
     ```js
+    // Other options:
+    // const txgroup = comp.buildGroup()
+    // const txids = comp.submit(client)
+
     const result = await comp.execute(client, 2)
     for(const idx in result.methodResults){
         console.log(result.methodResults[idx])
@@ -323,6 +344,10 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 === Go 
 
     ```go
+    // Other options:
+    // txgroup := atc.BuildGroup()
+    // txids := atc.Submit(client)
+
 	ret, err := atc.Execute(client, context.Background(), 2)
 	if err != nil {
 		log.Fatalf("Failed to execute call: %+v", err)
@@ -336,4 +361,5 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 === Java
 
     ```java
+
     ```
