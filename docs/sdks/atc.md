@@ -13,39 +13,31 @@ The Atomic Transaction Composer is a convenient way to build out an atomic group
 
 To use the Atomic Transaction Composer, first initialize the composer: 
 
-=== Python
-
+=== "Python"
     ```py
     from algosdk.atomic_transaction_composer import AtomicTransactionComposer
 
-    comp = AtomicTransactionComposer()
+    atc = AtomicTransactionComposer()
     ```
 
-=== JavaScript
-
+=== "JavaScript"
     ```js
     import algosdk from 'algosdk'
 
-    const comp = new algosdk.AtomicTransactionComposer()
+    const atc = new algosdk.AtomicTransactionComposer()
     ```
-===
 
-=== Go
-
+=== "Go"
     ```go
 	    import "github.com/algorand/go-algorand-sdk/future"
         //...
     	var atc = future.AtomicTransactionComposer{}
     ```
-===
 
-=== Java
-
+=== "Java"
     ```java
-        AtomicTransactionComposer comp = new AtomicTransactionComposer();
+        AtomicTransactionComposer atc = new AtomicTransactionComposer();
     ```
-===
-
 
 ## Add individual transactions
 
@@ -53,8 +45,7 @@ Individual transactions being passed to the composer must be wrapped in a `Trans
 
 Constructing a Transaction with Signer and adding it to the transaction composer can be done as follows:
 
-=== Python
-
+=== "Python"
     ```py
 
     #...
@@ -74,15 +65,12 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     tws = TransactionWithSigner(ptxn, signer)
 
     # Pass TransactionWithSigner to ATC
-    comp.add_transaction(tws)
-
+    atc.add_transaction(tws)
     ```
 
-=== JavaScript
-
+=== "JavaScript"
     ```js
-
-    //...
+    // ...
 
     // Returns Account object
     const acct = get_account()
@@ -90,9 +78,8 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     // Create signer object
     const signer = algosdk.makeBasicAccountTransactionSigner(acct)
 
-   // Get suggested params from the client
-   const sp = await client.getTransactionParams().do()
-
+    // Get suggested params from the client
+    const sp = await client.getTransactionParams().do()
 
     // Create a transaction
     const ptxn = new Transaction({
@@ -106,12 +93,11 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     const tws = {txn: ptxn, signer: signer}
 
     // Pass TransactionWithSigner to ATC
-    comp.addTransaction(tws)
+    atc.addTransaction(tws)
 
     ```
 
-=== Go 
-
+=== "Go"
     ```go
 
     // ...
@@ -133,12 +119,11 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 
     // Pass TransactionWithSigner to atc
 
-    comp.AddTransaction(tws)
+    atc.AddTransaction(tws)
 
     ```
 
-=== Java
-
+=== "Java"
     ```java
 
     // ...
@@ -161,7 +146,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	TransactionWithSigner tws = new TransactionWithSigner(ptxn, signer);
 
     // Pass TransactionWithSigner to atc
-    comp.addTransaction(tws);
+    atc.addTransaction(tws);
 
     ```
 
@@ -176,8 +161,7 @@ In order to call the methods, a Contract or Interface is constructed. Typically 
 
 Once the Contract object is constructed, it can be used to look up and pass method objects into the Atomic Transaction Composers `add_method_call`
 
-=== Python
-
+=== "Python"
     ```py
     from algosdk.abi import Contract
 
@@ -199,17 +183,16 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     # Simple call to the `add` method, method_args can be any type but _must_ 
     # match those in the method signature of the contract
-    comp.add_method_call(app_id, get_method("add"), addr, sp, signer, method_args=[1,1])
+    atc.add_method_call(app_id, get_method("add"), addr, sp, signer, method_args=[1,1])
 
     # This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
     # The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
     txn = TransactionWithSigner(PaymentTxn(addr, sp, addr, 10000), signer)
-    comp.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
+    atc.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
 
     ```
 
-=== JavaScript
-
+=== "JavaScript"
     ```js
 
     // Read in the local contract.json file
@@ -236,7 +219,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     // Simple call to the `add` method, method_args can be any type but _must_ 
     // match those in the method signature of the contract
-    comp.addMethodCall({
+    atc.addMethodCall({
         method: getMethodByName("add"), methodArgs: [1,1], ...commonParams
     })
 
@@ -246,7 +229,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
         txn: new Transaction({ from: acct.addr, to: acct.addr, amount: 10000, ...sp }),
         signer: algosdk.makeBasicAccountTransactionSigner(acct)
     }
-    comp.addMethodCall({
+    atc.addMethodCall({
         method: getMethodByName("txntest"), 
         methodArgs: [ 10000, txn, 1000 ], 
         ...commonParams
@@ -254,8 +237,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     ```
 
-=== Go
-
+=== "Go"
     ```go
 
     // Read in contract json file and marshal into Contract
@@ -302,8 +284,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     ```
 
-=== Java
-
+=== "Java"
     ```java
     ```
 
@@ -316,33 +297,30 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
     - Execute will perform submit then wait for confirmation given a number of rounds. It will return the resulting confirmed round, list of transaction ids and any parsed ABI return values if relevant.  
 
 
-=== Python
-
+=== "Python"
     ```py
     # Other options:
-    # txngroup = comp.build_group()
-    # txids = comp.submit(client)
+    # txngroup = atc.build_group()
+    # txids = atc.submit(client)
 
-    result = comp.execute(client, 2)
+    result = atc.execute(client, 2)
     for res in result.abi_results:
         print(res.return_value)
     ```
 
-=== JavaScript
-
+=== "JavaScript"
     ```js
     // Other options:
-    // const txgroup = comp.buildGroup()
-    // const txids = comp.submit(client)
+    // const txgroup = atc.buildGroup()
+    // const txids = atc.submit(client)
 
-    const result = await comp.execute(client, 2)
+    const result = await atc.execute(client, 2)
     for(const idx in result.methodResults){
         console.log(result.methodResults[idx])
     }
     ```
 
-=== Go 
-
+=== "Go"
     ```go
     // Other options:
     // txgroup := atc.BuildGroup()
@@ -358,8 +336,7 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 	}
     ```
 
-=== Java
-
+=== "Java"
     ```java
 
     ```
