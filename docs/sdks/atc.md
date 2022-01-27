@@ -284,10 +284,6 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     ```
 
-=== "Java"
-    ```java
-    ```
-
 ## Execution 
 
 Once all the transactions are added to the atomic group the Atomic Transaction Composer allows several ways to perform the transactions. 
@@ -334,9 +330,4 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 	for _, r := range ret.MethodResults {
 		log.Printf("%s returned %+v", r.TxID, r.ReturnValue)
 	}
-    ```
-
-=== "Java"
-    ```java
-
     ```
