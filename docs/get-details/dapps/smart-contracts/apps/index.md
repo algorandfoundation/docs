@@ -73,7 +73,7 @@ python3 -c "import algosdk.encoding as e; print(e.encode_address(e.checksum(b'ap
 WCS6TVPJRBSARHLN2326LRU5BYVJZUKI2VJ53CAWKYYHDE455ZGKANWMGM
 ```
 ## Inner transactions
-To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to 16 groups of inner transactions (totalling 256 inner transactions) within one call to the smart contract. If any of these transactions fail, then the smart contract will also fail. Inner transactions support all the same transaction types as a regular account can make. To generate an inner transaction the `itxn_begin`, `itxn_field`, `itxn_next` and `itxn_submit` opcodes are used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties. The `itxn_next` opcode moves to the next transaction in the same group as the previous, and the `itxn_submit` opcode is used to submit the transaction or transaction group. As an example, the following TEAL generates a simple payment transaction.
+To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to a total of 256 inner transactions with one call. If any of these transactions fail, then the smart contract will also fail. Groups of transactions can also be made using inner transactions, which are primarily used when calling other smart contracts that will verify the calling groups transactions. Inner transactions support all the same transaction types as a regular account can make. To generate an inner transaction the `itxn_begin`, `itxn_field`, `itxn_next` and `itxn_submit` opcodes are used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties. The `itxn_next` opcode moves to the next transaction in the same group as the previous, and the `itxn_submit` opcode is used to submit the transaction or transaction group. As an example, the following TEAL generates a simple payment transaction.
 
 ```teal
 itxn_begin
@@ -220,6 +220,9 @@ itxn_submit
 ## Application call
 A smart contract can call other smart contracts using any of the `OnComplete` types. This allows a smart contract to create, opt in, close out, clear state, delete, or just call other smart contracts. To call an existing smart contract the following teal can be used.
 
+!!! note
+    Smart contracts may only call other smart contracts which are TEAL version 6 or higher.
+
 ```teal
 itxn_begin
 int appl
@@ -232,7 +235,7 @@ itxn_submit
 ```
 
 ## Grouped inner transaction
-A smart contract can make inner transactions consisting of grouped transactions. This allows for creating transactions that conform to particular smart signature or smart contract constraints. An example of a grouped inner transaction is the need for a paymet transaction and an application call to an existing smart contract.
+A smart contract can make inner transactions consisting of grouped transactions. This allows for creating groups of transactions which will be verified by other smart contracts. An example of a grouped inner transaction would be when the calling application is required to send a paymet transaction and an application call together to another smart contract.
 
 ```teal
 // This imaginary scenario requires a buyer to pay 1 Algo whilst calling the
