@@ -265,26 +265,8 @@ itxn_submit
 
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
 
-## Setting transaction properties
-The following table list all setting properties within an inner transaciton.
-
-| Payment and Asset Transfers | Asset Freeze       | Asset Configuration | Application Call   |
-|-----------------------------|--------------------|---------------------|--------------------|
-| Sender                      | FreezeAsset        | ConfigAssetTotal    | ApplicationID      |
-| Fee                         | FreezeAssetAccount | ConfigAssetDecimals | OnCompletion       |
-| Receiver                    | FreezeAssetFrozen  | ConfigAssetUnitName | ApplicationArgs    |
-| Amount                      | TypeEnum           | ConfigAssetName     | Accounts           |
-| CloseRemainderTo            |                    | ConfigAssetURL      | ApprovalProgram    |
-| Type                        |                    | ConfigAssetManager  | ClearStateProgram  |
-| TypeEnum                    |                    | ConfigAssetReserve  | RekeyTo            |
-| XferAsset                   |                    | ConfigAssetFreeze   | Assets             |
-| AssetAmount                 |                    | ConfigAssetClawback | Applications       |
-| AssetSender                 |                    | ConfigAsset         | GlobalNumUint      |
-| AssetReceiver               |                    | TypeEnum            | GlobalNumByteSlice |
-| AssetCloseTo                |                    |                     | LocalNumUint       |
-|                             |                    |                     | LocalNumByteSlice  |
-|                             |                    |                     | ExtraProgramPages  |
-
+## Allowed transaction properties
+Since TEAL 6 all application types can be used within inner transactions. If you're using TEAL 5 you will only be able to make payment and asset transfer transactions, with some properties such as `RekeyTo` not being allowed.
 
 # Modifying state in smart contract
 Smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. The TEAL language provides several opcodes for facilitating reading and writing to state.
