@@ -268,22 +268,22 @@ All inner transactions will be stored as inner transactions within the outer app
 ## Setting transaction properties
 The following table list all setting properties within an inner transaciton.
 
-| Payment and Asset Transfers | Asset Freeze       | Asset Configuration | Application Call |
-|-----------------------------|--------------------|---------------------|------------------|
-| Sender                      | FreezeAsset        | ConfigAssetTotal    | ApplicationID
-| Fee                         | FreezeAssetAccount | ConfigAssetDecimals | OnCompletion
-| Receiver                    | FreezeAssetFrozen  | ConfigAssetUnitName | ApplicationArgs
-| Amount                      | TypeEnum           | ConfigAssetName     | Accounts
-| CloseRemainderTo            |                    | ConfigAssetURL      | ApprovalProgram
-| Type                        |                    | ConfigAssetManager  | ClearStateProgram
-| TypeEnum                    |                    | ConfigAssetReserve  | RekeyTo
-| XferAsset                   |                    | ConfigAssetFreeze   | Assets
-| AssetAmount                 |                    | ConfigAssetClawback | Applications
-| AssetSender                 |                    | ConfigAsset         | GlobalNumUint
-| AssetReceiver               |                    | TypeEnum            | GlobalNumByteSlice
-| AssetCloseTo                |                    |                     | LocalNumUint
-|                             |                    |                     | LocalNumByteSlice
-|                             |                    |                     | ExtraProgramPages
+| Payment and Asset Transfers | Asset Freeze       | Asset Configuration | Application Call   |
+|-----------------------------|--------------------|---------------------|--------------------|
+| Sender                      | FreezeAsset        | ConfigAssetTotal    | ApplicationID      |
+| Fee                         | FreezeAssetAccount | ConfigAssetDecimals | OnCompletion       |
+| Receiver                    | FreezeAssetFrozen  | ConfigAssetUnitName | ApplicationArgs    |
+| Amount                      | TypeEnum           | ConfigAssetName     | Accounts           |
+| CloseRemainderTo            |                    | ConfigAssetURL      | ApprovalProgram    |
+| Type                        |                    | ConfigAssetManager  | ClearStateProgram  |
+| TypeEnum                    |                    | ConfigAssetReserve  | RekeyTo            |
+| XferAsset                   |                    | ConfigAssetFreeze   | Assets             |
+| AssetAmount                 |                    | ConfigAssetClawback | Applications       |
+| AssetSender                 |                    | ConfigAsset         | GlobalNumUint      |
+| AssetReceiver               |                    | TypeEnum            | GlobalNumByteSlice |
+| AssetCloseTo                |                    |                     | LocalNumUint       |
+|                             |                    |                     | LocalNumByteSlice  |
+|                             |                    |                     | ExtraProgramPages  |
 
 
 # Modifying state in smart contract
