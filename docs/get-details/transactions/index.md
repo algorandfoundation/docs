@@ -675,7 +675,7 @@ Here are three example scenarios and how the round range may be calculated for e
 
 # Fees
 
-Fees for transactions on Algorand are set as a function of network congestion and based on the size in bytes of the transaction.  Every transaction must at least cover the minimum fee (1000uA or 0.001A). 
+Fees for transactions on Algorand are set as a function of network congestion and based on the size in bytes of the transaction.  Every transaction must at least cover the minimum fee (1000µA or 0.001A). 
 
 For a transaction serialized to bytes (`txn_in_bytes`) and current congestion based fee per byte (`fee_per_byte`) the fee can be computed as follows:
 
@@ -683,9 +683,11 @@ For a transaction serialized to bytes (`txn_in_bytes`) and current congestion ba
 fee = max(current_fee_per_byte*len(txn_in_bytes), min_fee)
 ```
 
-If the network *is not* congested, the fee_per_byte will be 0 and the minimum fee for a transaction is used. 
+If the network *is not* congested, the fee per byte will be 0 and the minimum fee for a transaction is used. 
 
-If network *is* congested the fee for a given transaction will be the product of the size in bytes of the transaction and the current fee_per_byte. 
+If network *is* congested the fee per byte will be non zero and for a given transaction will be the product of the size in bytes of the transaction and the current fee per byte. If the product is less than the min fee, the min fee is used. 
+
+# Setting a fee 
 
 There are two primary ways to set fees on a transaction.
 
@@ -696,7 +698,7 @@ The SDK provides a method to get the suggested parameters from an the algod REST
 When using the SDK to build a transaction, if the suggested parameters are passed to one of the helper methods, the fee for the transaction will be set based on the above computation.
 
 ## Flat Fee
-You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../reference/rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
+You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
 
 # Pooled transaction fees
 
@@ -712,6 +714,16 @@ For atomic transactions, the fees set on all transactions in the group are summe
 
 !!! info
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
+
+An example of setting a pooled fee on a group of two transactions in javascript:
+
+```js
+const suggestedParams = await client.getTransactionParams().do()
+suggestedParams.flatFee = true;
+suggestedParams.fee = 2 * algosdk.ALGORAND_MIN_TX_FEE;
+```
+
+Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 
 
 # Setting First and Last Valid
 
