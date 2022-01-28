@@ -157,7 +157,13 @@ To interact with the Algorand blockchain, you can send different types of transa
         let amount = 1000000; // equals 1 ALGO
         let sender = myAccount.addr;
 
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+            from: sender, 
+            to: receiver, 
+            amount: amount, 
+            node: note, 
+            suggestedParams: params
+        });
 ```
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386){:target="_blank"}
 
@@ -272,7 +278,13 @@ async function firstTransaction() {
         const note = enc.encode("Hello World");
         let amount = 1000000;
         let sender = myAccount.addr;
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+            from: sender, 
+            to: receiver, 
+            amount: amount, 
+            note: note, 
+            suggestedParams: params
+        });
 
 
         // Sign the transaction
