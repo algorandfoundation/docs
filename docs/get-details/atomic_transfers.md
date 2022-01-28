@@ -30,6 +30,9 @@ To implement an atomic transfer, generate all of the transactions that will be i
 
 Below you will find examples for creating and sending group transactions to the network in each of the available SDKs and with `goal`. 
 
+!!! tip
+    The following processes may be simplified with the SDKs use of the [atomic transaction composer](../sdks/atc.md).
+
 # Step-by-step guide
 
 ## Create transactions
