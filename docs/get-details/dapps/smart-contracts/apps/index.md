@@ -235,7 +235,7 @@ itxn_submit
 ```
 
 ## Grouped inner transaction
-A smart contract can make inner transactions consisting of grouped transactions. This allows for creating groups of transactions which will be verified by other smart contracts. An example of a grouped inner transaction would be when the calling application is required to send a paymet transaction and an application call together to another smart contract.
+A smart contract can make inner transactions consisting of grouped transactions. This allows for creating groups of transactions which will be verified by other smart contracts. An example of a grouped inner transaction would be when the calling application is required to send a payment transaction and an application call together to another smart contract.
 
 ```teal
 // This imaginary scenario requires a buyer to pay 1 Algo whilst calling the
