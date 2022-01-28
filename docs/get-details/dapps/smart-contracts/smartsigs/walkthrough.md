@@ -38,14 +38,14 @@ goal clerk send -f C3MKH24QL3GHSD5CDQ47ZNQZMNZRX4MUTV6LVPAXMWAXMIISYSOWPGH674 -a
 The `-f` option specifies the account that signed the logic signature and the -t option specifies the receiver of the transaction. The transaction fee is paid by the account that signed the logic signature. 
 
 # Compiling TEAL options
-Compiling a teal program using the `goal clerk compile` compiles and writes the binary raw bytes to a file with the same name as the source file with a `.tok` extension. Specifying the `-n` option will compile the TEAL program but not write out the binary. The console will display the compiled TEAL's address.
+Compiling a teal program using the `goal clerk compile` compiles and writes the binary raw bytes to a file with the same name as the source file with a `.tok` extension. Specifying the `-n` option will compile the TEAL program, but not write out the binary. The console will display the compiled TEAL's address.
 
 ```
 $ goal clerk compile -n simple.teal
 simple.teal: KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
 ```
 
-In the example above without the `-n` option the binary is written to a file named simple.teal.tok. Supplying the `-o` option allows the binary to be written to a specific location and filename.
+Removing the `-n` option writes the binary to a file named simple.teal.tok. Supplying the `-o` option allows the binary to be written to a specific location and filename.
 
 ```
 goal clerk compile  simple.teal -o /tmp/mytealbinary.tealc
