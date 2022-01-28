@@ -148,7 +148,7 @@ To interact with the Algorand blockchain, you can send different types of transa
         // Construct the transaction
         let params = await algodClient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
-        params.fee = 1000;
+        params.fee = algosdk.ALGORAND_MIN_TX_FEE;
         params.flatFee = true;
 
         const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
@@ -263,7 +263,7 @@ async function firstTransaction() {
         // Construct the transaction
         let params = await algodClient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
-        params.fee = 1000;
+        params.fee = algosdk.ALGORAND_MIN_TX_FEE;
         params.flatFee = true;
 
         // receiver defined as TestNet faucet address 

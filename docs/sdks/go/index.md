@@ -174,7 +174,7 @@ toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
 
 
 var amount uint64 = 1000000
-var minFee uint64 = 1000
+var minFee uint64 = transaction.MinTxnFee 
 note := []byte("Hello World")
 genID := txParams.GenesisID
 genHash := txParams.GenesisHash
