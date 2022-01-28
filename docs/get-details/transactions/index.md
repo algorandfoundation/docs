@@ -675,18 +675,43 @@ Here are three example scenarios and how the round range may be calculated for e
 
 # Fees
 
-There are two primary ways to set the fee for a transaction. 
+Fees for transactions on Algorand are set as a function of network congestion and based on the size in bytes of the transaction.  Every transaction must at least cover the minimum fee (1000uA or 0.001A). 
+
+For a transaction serialized to bytes (`txn_in_bytes`) and current congestion based fee per byte (`fee_per_byte`) the fee can be computed as follows:
+
+```py
+fee = max(current_fee_per_byte*len(txn_in_bytes), min_fee)
+```
+
+If the network *is not* congested, the fee_per_byte will be 0 and the minimum fee for a transaction is used. 
+
+If network *is* congested the fee for a given transaction will be the product of the size in bytes of the transaction and the current fee_per_byte. 
+
+There are two primary ways to set fees on a transaction.
 
 ## Suggested Fee
 
-The SDK provides a method to get the [**suggested fee** per byte (`fee`)](../../rest-apis/algod/v1#transactionfee) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
+The SDK provides a method to get the suggested parameters from an the algod REST server, including the [**suggested fee** per byte (`fee`)](../../rest-apis/algod/v2#transactionparams) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
 
-For larger transactions (> 1 KB in size), the resulting total fee will be greater than the network minimum, which in certain network conditions, may be more than you need to pay to get the transaction processed into the blockchain quickly. In particular, when blocks have enough room for all transactions, the minimum transaction fee will generally suffice. In this network scenario, set the fee (per byte) to 0 if you want to ensure that the minimum fee is chosen instead. 
-
-In the future as more transactions are added to the network (and blocks are full), the minimum transaction fee may not guarantee that your transaction is processed as quickly as other transactions with higher fees set. In this case, using the returned suggested fee, which is based on the current transaction load, is the preferred method.
+When using the SDK to build a transaction, if the suggested parameters are passed to one of the helper methods, the fee for the transaction will be set based on the above computation.
 
 ## Flat Fee
-You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`minFee`)](../../reference/rest-apis/algod/v1#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
+You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../reference/rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
+
+# Pooled transaction fees
+
+The Algorand protocol supports pooled fees, where one transaction can pay the fees of other transactions within the same atomic group. 
+
+For atomic transactions, the fees set on all transactions in the group are summed. This sum is compared against the protocol determined expected fee for the group and may proceed as long as the sum of the fees is at least the required fee for the group.
+
+<center>![Atomic Pooled Fees](../imgs/atomic_transfers-3.png)</center>
+<center>*Atomic Pooled Fees*</center>
+
+!!! note
+    [Inner transactions](/get-details/dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees.
+
+!!! info
+    Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
 
 # Setting First and Last Valid
 

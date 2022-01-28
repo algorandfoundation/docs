@@ -349,12 +349,3 @@ The transaction group is now broadcast to the network.
 	``` goal
     goal clerk rawsend -f signout.tx -d data -w yourwallet
     ```
-
-# Pooled transaction fees
-The Algorand protocol supports pooled fees where one transaction can pay the fees of other transactions within an atomic group. For atomic transactions, the protocol sums the number of transactions and calculates the total amount of required fees, then calculates the amount of fees submitted by all transactions. If the collected fees are greater than or equal to the required amount, the transaction fee requirement is considered met.
-
-<center>![Atomic Pooled Fees](../imgs/atomic_transfers-2.png)</center>
-<center>*Atomic Pooled Fees*</center>
-
-!!! info
-    Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
