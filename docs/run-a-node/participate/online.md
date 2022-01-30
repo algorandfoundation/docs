@@ -2,7 +2,7 @@ title: Register online
 
 This section assumes that you have already [generated a participation key](generate_keys.md) for the account you plan to mark online. 
 
-Registering an account online requires authorizing a [key registration transaction](../../get-details/transactions/index.md#key-registration-transaction) with details of the participation key that will vote on the account's behalf. Once the transaction is processed by the blockchain, the Verifiable Random Function public key (referred to as the VRF public the key) is written into the account’s data and the account will start participating in consensus with that key. This VRF public key is how the account is associated with the specific participation keys.
+Registering an account online requires authorizing a [key registration transaction](../../get-details/transactions/index.md#key-registration-transaction) with details of the participation key that will vote on the account's behalf. Once the transaction is processed by the blockchain, the Verifiable Random Function public key (referred to as the VRF public key) is written into the account’s data and the account will start participating in consensus with that key. This VRF public key is how the account is associated with the specific participation keys.
 
 !!! info "Important"
 	The moment a key registration transaction is confirmed by the network it takes 320 rounds for the change to take effect. In other words, if a key registration is confirmed in round 1000, the account will not start participating until round 1320.

@@ -858,7 +858,8 @@ Use these methods to import a 25-word account-level mnemonic.
 
 # Standalone 
 
-A standalone account is an Algorand address and private key pair that is _not_ stored on disk. The private key is most often in the [25-word mnemonic form](#transformation-private-key-to-25-word-mnemonic).
+A standalone account is an Algorand address and private key pair that is _not_ stored on disk. The
+private key is most often in the [25-word mnemonic form](../#transformation-private-key-to-25-word-mnemonic).
 
 
 **Reasons you might want to use standalone accounts**

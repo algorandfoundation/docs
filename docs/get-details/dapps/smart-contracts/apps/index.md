@@ -73,7 +73,7 @@ python3 -c "import algosdk.encoding as e; print(e.encode_address(e.checksum(b'ap
 WCS6TVPJRBSARHLN2326LRU5BYVJZUKI2VJ53CAWKYYHDE455ZGKANWMGM
 ```
 ## Inner transactions
-To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to 16 inner transactions within one call to the smart contract. If any of these transactions fail, then the smart contract will also fail. Inner transactions currently support payment and all asset transaction types. To generate an inner transaction the `itxn_begin`, `itxn_field` and `itxn_submit` opcodes must be used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties and the `itxn_submit` opcode is used to submit the transaction. As an example, the following TEAL generates a simple payment transaction.
+To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to a total of 256 inner transactions with one call. If any of these transactions fail, then the smart contract will also fail. Groups of transactions can also be made using inner transactions, which are primarily used when calling other smart contracts that will verify the calling groups transactions. Inner transactions support all the same transaction types as a regular account can make. To generate an inner transaction the `itxn_begin`, `itxn_field`, `itxn_next` and `itxn_submit` opcodes are used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties. The `itxn_next` opcode moves to the next transaction in the same group as the previous, and the `itxn_submit` opcode is used to submit the transaction or transaction group. As an example, the following TEAL generates a simple payment transaction.
 
 ```teal
 itxn_begin
@@ -86,7 +86,7 @@ itxn_field Receiver
 itxn_submit
 ```
 
-In this example, the type is set to pay using the TypeEnum field, the amount is set to 5000 microalgos using the Amount field, and the receiver is set to the caller of the smart contract using the Receiver field. Inner transactions do not support all transaction properties. See the table at the end of this section for a complete list of settable transaction properties. Fees for these transactions are paid by the smart contract and are set automatically the minimum transaction fee. Inner transaction fees are eligible for fee pooling similar to any other transaction. This allows either the application call or any other transaction in a group of transactions to pay the fee for inner transactions. Inner transactions are evaluated during the AVM execution allowing changes to be visible within the contract. For example, if the ‘balance’ opcode is used before and after a ‘pay’ transaction is submitted, the balance change would be visible to the executing contract. 
+In this example, the type is set to pay using the TypeEnum field, the amount is set to 5000 microalgos using the Amount field, and the receiver is set to the caller of the smart contract using the Receiver field. Fees for these transactions are paid by the smart contract and are set automatically the minimum transaction fee. Inner transaction fees are eligible for [fee pooling](https://developer.algorand.org/docs/get-details/transactions/#fees) similar to any other transaction. This allows either the application call or any other transaction in a group of transactions to pay the fee for inner transactions. Inner transactions are evaluated during the AVM execution allowing changes to be visible within the contract. For example, if the ‘balance’ opcode is used before and after a ‘pay’ transaction is submitted, the balance change would be visible to the executing contract.
 
 !!!note
     Inner transactions also have access to the Sender field. It is not required to set this field as all inner transactions default the sender to the contract address. If another account is rekeyed to the smart contract address, setting sender to the address that has been rekeyed allows the contract to spend from that account. The recipient of an inner transaction must be in the accounts array. Additionally, if the sender of an inner transaction is not the contract, the sender must also be in the accounts array.
@@ -217,25 +217,59 @@ itxn_field ConfigAsset
 itxn_submit
 ```
 
+## Application call
+A smart contract can call other smart contracts using any of the `OnComplete` types. This allows a smart contract to create, opt in, close out, clear state, delete, or just call other smart contracts. To call an existing smart contract the following teal can be used.
+
+!!! note
+    Smart contracts may only call other smart contracts which are TEAL version 6 or higher.
+
+```teal
+itxn_begin
+int appl
+itxn_field TypeEnum
+int 1234
+itxn_field ApplicationID
+itn NoOp
+itxn_field OnCompletion
+itxn_submit
+```
+
+## Grouped inner transaction
+A smart contract can make inner transactions consisting of grouped transactions. This allows for creating groups of transactions which will be verified by other smart contracts. An example of a grouped inner transaction would be when the calling application is required to send a payment transaction and an application call together to another smart contract.
+
+```teal
+// This imaginary scenario requires a buyer to pay 1 Algo whilst calling the
+// smart contract with the argument "buy". The imaginary smart contract could
+// then send us something in exchange.
+itxn_begin
+
+// Send a 1 Algo payment to the smart contract's address.
+int pay
+itxn_field TypeEnum
+int 1234
+app_params_get AppAddress
+itxn_field Receiver
+int 1000000
+itxn_field Amount
+
+// Call the smart contract within the same group with the argument "buy".
+itxn_next
+int appl
+itxn_field TypeEnum
+int 1234
+itxn_field ApplicationID
+int NoOp
+itxn_field OnCompletion
+byte "buy"
+itxn_field ApplicationArgs
+
+itxn_submit
+```
+
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
-## Setting transaction properties
-The following table list all setting properties within an inner transaciton.
 
-| Payment and Asset Transfers | Asset Freeze       | Asset Configuration |
-|-----------------------------|--------------------|---------------------|
-| Sender                      | FreezeAsset        | ConfigAssetTotal    |
-| Fee                         | FreezeAssetAccount | ConfigAssetDecimals |
-| Receiver                    | FreezeAssetFrozen  | ConfigAssetUnitName |
-| Amount                      | TypeEnum           | ConfigAssetName     |
-| CloseRemainderTo            |                    | ConfigAssetURL      |
-| Type                        |                    | ConfigAssetManager  |
-| TypeEnum                    |                    | ConfigAssetReserve  |
-| XferAsset                   |                    | ConfigAssetFreeze   |
-| AssetAmount                 |                    | ConfigAssetClawback |
-| AssetSender                 |                    | ConfigAsset         |
-| AssetReceiver               |                    | TypeEnum            |
-| AssetCloseTo                |                    |                     |
-
+## Allowed transaction properties
+Since TEAL 6 all application types can be used within inner transactions. If you're using TEAL 5 you will only be able to make payment and asset transfer transactions, with some properties such as `RekeyTo` not being allowed.
 
 # Modifying state in smart contract
 Smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. The TEAL language provides several opcodes for facilitating reading and writing to state.
