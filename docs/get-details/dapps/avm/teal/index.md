@@ -194,7 +194,7 @@ The second clause of the pseudo logic is implemented with the following TEAL.
 ```teal
 
 // The following six lines of teal check if the 
-// transaction is reciever is set to addr1 and that the CloseRemainderTo
+// transaction is receiver is set to addr1 and that the CloseRemainderTo
 // transaction property is also set to addr1.
 // Once completed the stack will have the 0 or 1 
 // from the previous clause and a 1 or 0 from the 
