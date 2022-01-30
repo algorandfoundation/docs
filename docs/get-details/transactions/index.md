@@ -719,7 +719,7 @@ For atomic transactions, the fees set on all transactions in the group are summe
 <center>*Atomic Pooled Fees*</center>
 
 !!! note
-    [Inner transactions](/get-details/dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees.
+    [Inner transactions](/get-details/dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested inner transactions as well.
 
 !!! info
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
@@ -736,4 +736,6 @@ Here we're directly setting the fee to be 2x the min fee since we want to cover 
 
 # Setting First and Last Valid
 
-Unless you have specific security concerns or logical constraints embedded within a specific Algorand Smart Contract, it is generally recommended that you set your default range to the maximum, currently 1000. This will give you an ample window of validity time to submit your transaction. 
+Unless you have specific security concerns, generally the maximum default range of 1000 rounds is acceptable. This will give you an ample window of validity time to submit your transaction. 
+
+One occasion where the maximum range may not be appropriate is when you want to be sure transaction fee is low and the network conditions may change before the transaction is submitted.  In this case, a lower valid round range can limit potentially submitting the transaction during a window of higher congestion.
