@@ -701,7 +701,13 @@ The SDK provides a method to get the suggested parameters from an the algod REST
 When using the SDK to build a transaction, if the suggested parameters are passed to one of the helper methods, the fee for the transaction will be set based on the above computation.
 
 ## Flat Fee
-You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
+You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs or as a constant in the SDK.  
+
+Flat fees may be useful for:
+* for applications that want to guarantee showing a specific rounded fee to users 
+* for transactions that are meant to be sent in the future where the network traffic conditions are unknown
+* for transactions that are not urgent and may be retried later if they are rejected
+* etc
 
 # Pooled transaction fees
 
