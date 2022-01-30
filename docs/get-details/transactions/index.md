@@ -687,6 +687,9 @@ If the network *is not* congested, the fee per byte will be 0 and the minimum fe
 
 If network *is* congested the fee per byte will be non zero and for a given transaction will be the product of the size in bytes of the transaction and the current fee per byte. If the product is less than the min fee, the min fee is used. 
 
+Note that fees are independent of the type of transaction (payment, ASA transfer, application call, ...) and a fortiori independent of the complexity of the smart contract code in case of application calls.
+Only the size of the serialized transaction matters.
+
 # Setting a fee 
 
 There are two primary ways to set fees on a transaction.
