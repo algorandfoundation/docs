@@ -47,7 +47,7 @@ The relevant code snippet in each of the SDKs is as follows. Note that this is n
     const total = 1;                // NFTs have totalIssuance of exactly 1
     const decimals = 0;             // NFTs have decimals of exactly 0
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-        creator,
+        from:creator,
         total,
         decimals,
         assetName,
@@ -118,16 +118,16 @@ The relevant code snippet in each of the SDKs is as follows. Note that this is n
 Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) NFT standard. Choose your favorite SDK to run the full code example for creating an NFT on TestNet and watch the step-by-step video guide.
 
 === "Python"
-    [Run code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}
+    [Run Python code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}
 
 === "JavaScript"
-    [Run code](https://replit.com/@Algorand/CreateNFTJavaScript#index.js){: target="_blank"}
+    [Run JavaScript code](https://replit.com/@Algorand/CreateNFTJavaScript#index.js){: target="_blank"}
 
 === "Java"
-    [Run code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
+    [Run Java code](https://replit.com/@Algorand/CreateNFTJava#Main.java){: target="_blank"}
 
 === "Go"
-    [Run code](https://replit.com/@Algorand/createNFTGo#main.go){: target="_blank"}
+    [Run Go code](https://replit.com/@Algorand/createNFTGo#main.go){: target="_blank"}
 
 Once created, the asset will have a unique ID on the Algorand blockchain. If you ran the code above, you can use a [block explorer](../../../../ecosystem-projects/?tags=block-explorers){: target="_blank"} to find your newly created NFT on TestNet.
 
@@ -164,7 +164,7 @@ To create a fractional NFT, the total units must be a power of 10, greater than 
     const total = 10;        // Total MUST be a power of 10 larger than 1: 10, 100, 1000, ...(total) * .1(each) = 1.0 
     const decimals = 1;      // Decimals MUST be equal to the logarithm in base 10 of total number of units: 10
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-        creator,
+        from:creator,
         total,
         decimals,
         assetName,
@@ -176,7 +176,7 @@ To create a fractional NFT, the total units must be a power of 10, greater than 
         manager: managerAddr,
         clawback: clawbackAddr,
         reserve: reserveAddr,
-        suggestedParams: params,});    
+        suggestedParams: params});
     ```
 
 === "Python"
