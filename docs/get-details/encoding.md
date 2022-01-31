@@ -292,3 +292,32 @@ Create a payment transaction from one acount to another using suggested paramete
 	msgpack.Decode(recovered_signed_pay_bytes, &recovered_signed_pay_txn)
 	log.Printf("%+v", recovered_signed_pay_txn)
     ```
+
+
+
+### Blocks
+
+One type that commonly needs to be decoded are the blocks themselves. Since some fields are raw byte arrays (like state deltas) the msgpack format should be used.
+
+=== "Python"
+    ```py
+
+    from algosdk import encoding
+    from algosdk.v2client.algod import AlgodClient
+    import msgpack
+
+    client = AlgodClient("a"*64, "http://localhost:4001")
+
+    # Get the block in msgpack format
+    block = client.block_info(round_num=1234, response_format='msgpack')
+
+    # Be sure to specify `raw=True` or msgpack will try to decode as utf8
+    res = msgpack.unpackb(block, raw=True)
+
+    # Lets get the 4th transaction
+    txn = res[b'block'][b'txns'][3]
+
+    # Grab the byte value for the key `KEY`
+    address = encoding.encode_address(txn[b'dt'][b'gd'][b'KEY'][b'bs'])
+
+    ```
