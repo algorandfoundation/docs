@@ -356,7 +356,7 @@ An asset freeze transaction is identified by `"type": "afrz"`. In this example, 
 
 ## Application Call Transaction
 
-An Application Call Transaction is submitted to the network with at an AppId and an OnComplete method. The AppId specifies which App to call and the OnComplete method is used to in the contract to determine what branch of logic to execute.
+An Application Call Transaction is submitted to the network with an AppId and an OnComplete method. The AppId specifies which App to call and the OnComplete method is used in the contract to determine what branch of logic to execute.
 
 Application Call transactions may include other fields needed by the logic such as:
 
@@ -368,11 +368,11 @@ Application Call transactions may include other fields needed by the logic such 
 
 *ForeignAssets* - To pass ASAs for parameter checking
 
-Details for smart contract authoring can be found on the [Smart Contract Details](../dapps/smart-contracts/apps) page
+Details for smart contract authoring can be found on the [Smart Contract Details](../dapps/smart-contracts/apps) page.
 
 
 ### Application Create Transaction
-When an application is to be created; the OnComplete method is set to NoOp, no AppId is set, and the Approval/Clear programs and Schema are passed.  The approval program may do additional checking during setup by checking that the AppId == 0
+When an application is to be created, the OnComplete method is set to NoOp, no AppId is set, and the Approval/Clear programs and Schema are passed.  The approval program may do additional checking during setup by checking that the AppId == 0.
 
 ```json
 {
@@ -400,9 +400,9 @@ When an application is to be created; the OnComplete method is set to NoOp, no A
 
 - The Approval program (`apap`) and Clear program (`apsu`) are set to `#pragma version 5; int 1`
 - The Apps global and local state both have bytes/ints set to 1
-- The OnComplete (`apan`) is set to NoOp (0 value so it is omited from output)
+- The OnComplete (`apan`) is set to NoOp (0 value so it is omitted from output)
 
-Assuming all the balance and signature checks pass, this will create an Application with a new AppId and subsequent calls 
+Assuming all the balance and signature checks pass, this will create an Application with a new AppId and subsequent calls.
 
 
 ### Application Update Transaction
