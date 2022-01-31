@@ -8,11 +8,11 @@ The specification is defined in [ARC4](https://github.com/algorandfoundation/ARC
 At a high level, the ABI allows contracts to define an API with rich types and offer an interface description so clients know exactly what the contract is expecting to be passed. 
 
 
-# DataTypes
+# Data Types
 
-Encoding for the datatypes is specified [here](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#encoding)
+Encoding for the data types is specified [here](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#encoding).
 
-The datatypes specified are: 
+The data types specified are:
 
 | Type | Description | 
 | ---- | ----------- |
@@ -33,23 +33,23 @@ Because stack types in the AVM are limited to uint64 and bytes, a smart contract
 
 ## Reference Types
 
-Reference types may be specified in the method signature referring to some transaction parameters that must be passed.  The value encoded is a uint8 reference to the index of element in the relevant array (i.e. for account, the index in the foreign accounts array)
+Reference types may be specified in the method signature referring to some transaction parameters that must be passed.  The value encoded is a uint8 reference to the index of element in the relevant array (i.e. for account, the index in the foreign accounts array).
 
 
 # Methods
 
 Methods may be exposed by the smart contract and called by submitting an ApplicationCall transaction to the existing application id. 
 
-A *method signature* is defined as a name, argument types, and return type. The stringified version is then hashed and the first 4 bytes are taken as a *method selector*
+A *method signature* is defined as a name, argument types, and return type. The stringified version is then hashed and the first 4 bytes are taken as a *method selector*.
 
 For example:
 
-A *method signature* for an `add` method that takes 2 uint64s and returns 1 uint128
+A *method signature* for an `add` method that takes 2 uint64s and returns 1 uint128:
 ```
 Method signature: add(uint64,uint64)uint128
 ```
 
-The string version of the *method signature* is hashed and the first 4 bytes are its *method selector*
+The string version of the *method signature* is hashed and the first 4 bytes are its *method selector*:
 ```
 SHA-512/256 hash (in hex): 8aa3b61f0f1965c3a1cbfa91d46b24e54c67270184ff89dc114e877b1753254a
 Method selector (in hex): 8aa3b61f
@@ -74,7 +74,7 @@ The return value of the method _must_ be logged with the prefix `151f7c75` which
 
 # API
 
-The API of a smart contract can be published as an [interface description object](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#interface-description). A user may read this object and instantiate a client that handles the encoding/decoding of the arguments and return values using one of the SDKs. 
+The API of a smart contract can be published as an [interface description object](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0004.md#interface-description). A user may read this object and instantiate a client that handles the encoding/decoding of the arguments and returns values using one of the SDKs.
 
 
 A full example of a contract json file might look like:

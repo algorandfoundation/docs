@@ -111,12 +111,13 @@ Transactions are used to interact with the Algorand network. To create a payment
 ```python
 # build transaction
 from algosdk.future import transaction
+from algosdk import constants
 
 
     params = algod_client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
     params.flat_fee = True
-    params.fee = 1000
+    params.fee = constants.MIN_TXN_FEE 
     receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
     note = "Hello World".encode()
 	amount = 1000000
@@ -180,7 +181,7 @@ The complete example below illustrates how to quickly submit your first transact
 ```python
 import json
 import base64
-from algosdk import account, mnemonic
+from algosdk import account, mnemonic, constants
 from algosdk.v2client import algod
 from algosdk.future import transaction
 
@@ -206,7 +207,7 @@ def first_transaction_example(private_key, my_address):
 	# build transaction
 	params = algod_client.suggested_params()
 	# comment out the next two (2) lines to use suggested fees
-	params.flat_fee = True
+	params.flat_fee = constants.MIN_TXN_FEE 
 	params.fee = 1000
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
