@@ -715,7 +715,7 @@ The Algorand protocol supports pooled fees, where one transaction can pay the fe
 
 For atomic transactions, the fees set on all transactions in the group are summed. This sum is compared against the protocol determined expected fee for the group and may proceed as long as the sum of the fees is at least the required fee for the group.
 
-<center>![Atomic Pooled Fees](../imgs/atomic_transfers-3.png)</center>
+<center>![Atomic Pooled Fees](/docs/imgs/atomic_transfers-2.png)</center>
 <center>*Atomic Pooled Fees*</center>
 
 !!! note

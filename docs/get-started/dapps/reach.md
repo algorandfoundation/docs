@@ -314,7 +314,7 @@ An instance of the reach stdlib (standard library) is imported. The standard lib
 
 ```javascript
 // Import and instance of the reach stdlib
-import { loadStdlib } from '@reach-sh/stdlib/loader.mjs';
+import { loadStdlib } from '@reach-sh/stdlib';
 // The following line is crucial to connect to the backend
 import * as backend from './build/index.main.mjs';
 
