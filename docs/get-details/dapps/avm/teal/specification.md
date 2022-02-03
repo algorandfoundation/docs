@@ -16,7 +16,7 @@ The maximum stack depth is currently 1000.
 
 In addition to the stack there are 256 positions of scratch space,
 also uint64-bytes union values, each initialized as uint64
-zero. Scratch space is acccesed by the `load(s)` and `store(s)` ops
+zero. Scratch space is accessed by the `load(s)` and `store(s)` ops
 moving data from or to scratch space, respectively.
 
 ## Execution Modes
@@ -429,7 +429,7 @@ App fields used in the `app_params_get` opcode.
 
 The following opcodes allow for "inner transactions". Inner
 transactions allow stateful applications to have many of the effects
-of a true top-level transaction, programatically.  However, they are
+of a true top-level transaction, programmatically.  However, they are
 different in significant ways.  The most important differences are
 that they are not signed, duplicates are not rejected, and they do not
 appear in the block in the usual away. Instead, their effects are
@@ -440,7 +440,7 @@ account that has been rekeyed to that hash.
 
 Currently, inner transactions may perform `pay`, `axfer`, `acfg`, and
 `afrz` effects.  After executing an inner transaction with
-`itxn_submit`, the effects of the transaction are visible begining
+`itxn_submit`, the effects of the transaction are visible beginning
 with the next instruction with, for example, `balance` and
 `min_balance` checks.
 
@@ -448,7 +448,7 @@ Of the transaction Header fields, only a few fields may be set:
 `Type`/`TypeEnum`, `Sender`, and `Fee`. For the specific fields of
 each transaction types, any field, except `RekeyTo` may be set.  This
 allows, for example, clawback transactions, asset opt-ins, and asset
-creates in addtion to the more common uses of `axfer` and `acfg`.  All
+creates in addition to the more common uses of `axfer` and `acfg`.  All
 fields default to the zero value, except those described under
 `itxn_begin`.
 
@@ -457,7 +457,7 @@ setting is used when `itxn_submit` executes. (For this purpose `Type`
 and `TypeEnum` are considered to be the same field.) `itxn_field`
 fails immediately for unsupported fields, unsupported transaction
 types, or improperly typed values for a particular field. `itxn_field`
-makes aceptance decisions entirely from the field and value provided,
+makes acceptance decisions entirely from the field and value provided,
 never considering previously set fields. Illegal interactions between
 fields, such as setting fields that belong to two different
 transaction types, are rejected by `itxn_submit`.
