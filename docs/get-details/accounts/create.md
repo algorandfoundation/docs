@@ -852,7 +852,7 @@ Use these methods to import a 25-word account-level mnemonic.
 		}
 		fmt.Printf("Account Mnemonic: %s\n", mn)
 		importedAccount, err := kmdClient.ImportKey(exampleWalletHandleToken, account.PrivateKey)
-		fmt.Println("Account Sucessfully Imported: ", importedAccount)
+		fmt.Println("Account Successfully Imported: ", importedAccount)
 	}
 	```
 

@@ -10,7 +10,7 @@ As part of the installer, a `genesisfiles` directory is created under the node's
 !!! info
     The genesis file for *Debian* and *RPM* installs are stored in the `/var/lib/algorand/genesis/` directory.
 
-The network can be switched by either replacing the current genesis file located in the `data` directory with the specific network `genesis.json` or by creating a new `data` directory and copying the specific network `genesis.json` file to the new `data` directory. Replacing the current genesis file will not destroy the current network data, but will prevent running multiple networks on the same node. To run multipe networks at the same time multiple data directories are required.
+The network can be switched by either replacing the current genesis file located in the `data` directory with the specific network `genesis.json` or by creating a new `data` directory and copying the specific network `genesis.json` file to the new `data` directory. Replacing the current genesis file will not destroy the current network data, but will prevent running multiple networks on the same node. To run multiple networks at the same time multiple data directories are required.
 
 # Using a new Data Directory
 To construct a new data directory follow the steps described below that depend on the type of install that was used with the current node.

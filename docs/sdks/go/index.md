@@ -290,5 +290,5 @@ The Algorand community provides many editors, frameworks, and plugins that can b
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-go/)
 * [Algorand VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
 * [Algo Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
-* [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
+* [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
 * [Algo Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
