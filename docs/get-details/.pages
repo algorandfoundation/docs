@@ -6,6 +6,7 @@ arrange:
     - transactions
     - asa.md
     - atomic_transfers.md
+    - atc.md
     - dapps
     - indexer.md
     - walletconnect
