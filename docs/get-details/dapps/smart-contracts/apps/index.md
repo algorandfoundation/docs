@@ -21,12 +21,12 @@ Smart contracts are implemented using two programs:
 
 In either program, if a global or local state variable is modified and the program fails, the state changes will not be applied. 
 
-Having two programs allows an account to clear the contract from its state, whether the logic passes or not. When the clear call is made to the contract, whether the logic passes or fails, the contract will still be removed from the balance record for the specified account. Note the similarity to the CloseOut transaction call which can fail to remove the contract from the account, which is described below.
+Having two programs allows an account to clear the contract from its state, whether the logic passes or not. When the clear call is made to the contract, whether the logic passes or fails, the contract will be removed from the account's balance record. Note the similarity to the CloseOut transaction call which can fail to remove the contract from the account, which is described below.
 
 Calls to smart contracts are implemented using `ApplicationCall` transactions. These transaction types are as follows:
 
-* NoOp - Generic application calls to execute the `ApprovalProgram`
-* OptIn - Accounts use this transaction to opt into the smart contract to participate (local storage usage).
+* NoOp - Generic application calls to execute the `ApprovalProgram`.
+* OptIn - Accounts use this transaction to begin participating in a smart contract.  Participation enables local storage usage.
 * DeleteApplication - Transaction to delete the application.
 * UpdateApplication - Transaction to update TEAL Programs for a contract.
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
@@ -42,7 +42,7 @@ The `goal` calls shown above in the orange boxes represent all the specific call
 # Smart contract arrays
 A set of arrays can be passed with any application transaction, which instructs the protocol to load additional data for use in the contract. These arrays are the *applications* array, the *accounts* array, the *assets* array, and the *arguments* array. The application array is used to pass other smart contract IDs that can be used to read state for the specific contracts. The accounts array allows additional accounts to be passed to the contract for balance information and local storage. The assets array is used to pass a list of asset IDs that can be used to retrieve configuration and asset balance information. 
 
-The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a size limit of 2KB for the total of arguments. See [Passing Arguments To Smart Contracts](#passing-arguments-to-smart-contracts) for more details on arguments.
+The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a 2KB total size limit. See [Passing Arguments To Smart Contracts](#passing-arguments-to-smart-contracts) for more details on arguments.
 
 The other three arrays are limited to 8 total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction. Many opcodes that make use of these arrays take an integer parameter as an index into these arrays. The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. Most of the opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
 
@@ -65,7 +65,7 @@ Max local byteslices:  0
 Max local integers:    0
 ```
 
-The application address will be shown as the Application account. This addressed can also be retrieved with the SDKs or calculated by using the following code and the smart contract’s application id.
+The application address will be shown as the Application account. This address can also be retrieved with the SDKs or calculated by using the following code and the smart contract’s application id.
 
 ```bash
 # app ID of 1’s address
@@ -73,7 +73,7 @@ python3 -c "import algosdk.encoding as e; print(e.encode_address(e.checksum(b'ap
 WCS6TVPJRBSARHLN2326LRU5BYVJZUKI2VJ53CAWKYYHDE455ZGKANWMGM
 ```
 ## Inner transactions
-To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to 16 inner transactions within one call to the smart contract. If any of these transactions fail, then the smart contract will also fail. Inner transactions currently support payment and all asset transaction types. To generate an inner transaction the `itxn_begin`, `itxn_field` and `itxn_submit` opcodes must be used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties and the `itxn_submit` opcode is used to submit the transaction. As an example, the following TEAL generates a simple payment transaction.
+To fund this account, any other account in the Algorand network can send algos to the specified account. In order for funds to leave the smart contract, the logic within the contract must submit an inner transaction. In addition, the smart contract’s logic must return true. A smart contract can issue up to a total of 256 inner transactions with one call. If any of these transactions fail, then the smart contract will also fail. Groups of transactions can also be made using inner transactions, which are primarily used when calling other smart contracts that will verify the calling groups transactions. Inner transactions support all the same transaction types as a regular account can make. To generate an inner transaction the `itxn_begin`, `itxn_field`, `itxn_next` and `itxn_submit` opcodes are used. The `itxn_begin` opcode signifies the beginning of an inner transaction. The `itxn_field` opcode is used to set specific transaction properties. The `itxn_next` opcode moves to the next transaction in the same group as the previous, and the `itxn_submit` opcode is used to submit the transaction or transaction group. As an example, the following TEAL generates a simple payment transaction.
 
 ```teal
 itxn_begin
@@ -86,7 +86,7 @@ itxn_field Receiver
 itxn_submit
 ```
 
-In this example, the type is set to pay using the TypeEnum field, the amount is set to 5000 microalgos using the Amount field, and the receiver is set to the caller of the smart contract using the Receiver field. Inner transactions do not support all transaction properties. See the table at the end of this section for a complete list of settable transaction properties. Fees for these transactions are paid by the smart contract and are set automatically the minimum transaction fee. Inner transaction fees are eligible for fee pooling similar to any other transaction. This allows either the application call or any other transaction in a group of transactions to pay the fee for inner transactions. Inner transactions are evaluated during the AVM execution allowing changes to be visible within the contract. For example, if the ‘balance’ opcode is used before and after a ‘pay’ transaction is submitted, the balance change would be visible to the executing contract. 
+In this example, the type is set to pay using the TypeEnum field, the amount is set to 5000 microalgos using the Amount field, and the receiver is set to the caller of the smart contract using the Receiver field. Fees for these transactions are paid by the smart contract and are set automatically to the minimum transaction fee. Inner transaction fees are eligible for [fee pooling](https://developer.algorand.org/docs/get-details/transactions/#fees) similar to any other transaction. This allows either the application call or any other transaction in a group of transactions to pay the fee for inner transactions. Inner transactions are evaluated during AVM execution, allowing changes to be visible within the contract. For example, if the ‘balance’ opcode is used before and after a ‘pay’ transaction is submitted, the balance change would be visible to the executing contract.
 
 !!!note
     Inner transactions also have access to the Sender field. It is not required to set this field as all inner transactions default the sender to the contract address. If another account is rekeyed to the smart contract address, setting sender to the address that has been rekeyed allows the contract to spend from that account. The recipient of an inner transaction must be in the accounts array. Additionally, if the sender of an inner transaction is not the contract, the sender must also be in the accounts array.
@@ -217,25 +217,59 @@ itxn_field ConfigAsset
 itxn_submit
 ```
 
+## Application call
+A smart contract can call other smart contracts using any of the `OnComplete` types. This allows a smart contract to create, opt in, close out, clear state, delete, or just call other smart contracts. To call an existing smart contract the following teal can be used.
+
+!!! note
+    Smart contracts may only call other smart contracts which are TEAL version 6 or higher.
+
+```teal
+itxn_begin
+int appl
+itxn_field TypeEnum
+int 1234
+itxn_field ApplicationID
+itn NoOp
+itxn_field OnCompletion
+itxn_submit
+```
+
+## Grouped inner transaction
+A smart contract can make inner transactions consisting of grouped transactions. This allows for creating groups of transactions which will be verified by other smart contracts. An example of a grouped inner transaction would be when the calling application is required to send a payment transaction and an application call together to another smart contract.
+
+```teal
+// This imaginary scenario requires a buyer to pay 1 Algo whilst calling the
+// smart contract with the argument "buy". The imaginary smart contract could
+// then send us something in exchange.
+itxn_begin
+
+// Send a 1 Algo payment to the smart contract's address.
+int pay
+itxn_field TypeEnum
+int 1234
+app_params_get AppAddress
+itxn_field Receiver
+int 1000000
+itxn_field Amount
+
+// Call the smart contract within the same group with the argument "buy".
+itxn_next
+int appl
+itxn_field TypeEnum
+int 1234
+itxn_field ApplicationID
+int NoOp
+itxn_field OnCompletion
+byte "buy"
+itxn_field ApplicationArgs
+
+itxn_submit
+```
+
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
-## Setting transaction properties
-The following table list all setting properties within an inner transaciton.
 
-| Payment and Asset Transfers | Asset Freeze       | Asset Configuration |
-|-----------------------------|--------------------|---------------------|
-| Sender                      | FreezeAsset        | ConfigAssetTotal    |
-| Fee                         | FreezeAssetAccount | ConfigAssetDecimals |
-| Receiver                    | FreezeAssetFrozen  | ConfigAssetUnitName |
-| Amount                      | TypeEnum           | ConfigAssetName     |
-| CloseRemainderTo            |                    | ConfigAssetURL      |
-| Type                        |                    | ConfigAssetManager  |
-| TypeEnum                    |                    | ConfigAssetReserve  |
-| XferAsset                   |                    | ConfigAssetFreeze   |
-| AssetAmount                 |                    | ConfigAssetClawback |
-| AssetSender                 |                    | ConfigAsset         |
-| AssetReceiver               |                    | TypeEnum            |
-| AssetCloseTo                |                    |                     |
-
+## Allowed transaction properties
+Since TEAL 6 all application types can be used within inner transactions. If you're using TEAL 5 you will only be able to make payment and asset transfer transactions, with some properties such as `RekeyTo` not being allowed.
 
 # Modifying state in smart contract
 Smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. The TEAL language provides several opcodes for facilitating reading and writing to state.
@@ -739,7 +773,7 @@ Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication
     ```
 
 # Delete smart contract
-To delete a smart contract, an `ApplicationCall` transaction of type `DeleteApplication` must be submitted to the blockchain. The `ApprovalProgram` handles this transaction type and if the call returns true the application will be deleted. This can be done using `goal` or the SDKs. 
+To delete a smart contract, an `ApplicationCall` transaction of type `DeleteApplication` must be submitted to the blockchain. The `ApprovalProgram` handles this transaction type and if the call returns true, the application will be deleted. This can be done using `goal` or the SDKs. 
 
 ```bash
 $ goal app delete --app-id=[APPID] --from [ADDRESS]
@@ -748,7 +782,7 @@ $ goal app delete --app-id=[APPID] --from [ADDRESS]
 When making this call the `--app-id` and the `--from` options are required. Anyone can delete a smart contract. If this is not desired, logic in the program must reject the call. Using a method described in [Update Smart Contract](#update-smart-contract) must be supplied. 
 
 # Global values in smart contracts
-Smart contracts have access to many global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, a contract may only allow accounts to opt in after a start date, which is set when the contract is created and stored in global storage.
+Smart contracts have access to many global variables. These variables are set for the blockchain, like the minimum transaction fee (MinTxnFee). As another example of Global variable use, in the [Atomic Transfers and Transaction Properties](#atomic-transfers-and-transaction-properties) section of this guide, `GroupSize` is used to show how to get the number of transactions that are grouped within a smart contract call. Smart contracts also have access to the `LatestTimestamp` global which represents the latest confirmed block's Unix timestamp. This is not the current time, but the time when the last block was confirmed. This can be used to set times on when the contract is allowed to do certain things. For example, a contract may only allow accounts to opt in after a start date, which is set when the contract is created and stored in global storage.
 
 === "Teal"
 
@@ -874,7 +908,7 @@ Smart contract applications can work in conjunction with assets. In addition to 
     print(compileTeal(program, Mode.Application))
     ```
 
-This opcode takes two parameters. The first represents an index into the accounts array where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
+This opcode takes two parameters. The first parameter represents an index into the accounts array, where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
 
 It is also possible to get an Asset’s configuration information within a smart contract if the asset ID is passed with the transaction in the assets array. This can be done with `goal` by supplying the `--foreign-asset` parameter. The value of the parameter should be the asset ID. To read the configuration, the `asset_params_get` opcode must be used. This opcode should be supplied with one parameter, which is the index into the assets array or the actual asset ID.
 
@@ -896,9 +930,9 @@ It is also possible to get an Asset’s configuration information within a smart
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
 
 # Creating an asset or contract within a group of transactions
-The Algorand Protocol assigns an identifier (ID) when creating an asset (ASA) or a smart contract. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. When creating either in an atomic transfer TEAL can be used to retrieve these IDs. For example, to store the asset ID or another smart contract ID in the contract’s state for later usage. 
+The Algorand Protocol assigns an identifier (ID) when creating an asset (ASA) or a smart contract. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. TEAL can retrieve these IDs, enabling a smart contract to store the asset ID or another smart contract ID in its state for later usage. 
 
-This operation can be performed by using one of two opcodes (`gaid` and `gaids`). With the `gaid` opcode, the specific transaction to read must be passed to the command. The `gaids` opcode will use the last value on the stack as the transaction index.
+The ID retrieval operation can be performed by using one of two opcodes (`gaid` and `gaids`). With the `gaid` opcode, the specific transaction to read must be passed to the command. The `gaids` opcode will use the last value on the stack as the transaction index.
 
 ```teal
 // Get the created id of the asset created in the first tx
@@ -909,7 +943,7 @@ gaids
 ```
 
 # Sharing data between contracts
-In additon to reading another contract's state, data can be passed between contracts. Algorand’s AVM gives smart contracts access to scratch space that can be used to temporarily store values, while the contract is executing. TEAL allows other contracts to read this scratch space. Scratch space can only be read by other transactions that the specific transaction is grouped with atomically. Grouped transactions execute in the order they are grouped, contracts can not read scratch space for transactions that occur after the current contract transaction. 
+In addition to reading another contract's state, data can be passed between contracts. Algorand’s AVM gives smart contracts access to scratch space that can be used to temporarily store values, while the contract is executing. TEAL allows other contracts to read this scratch space. Scratch space can only be read by other transactions that the specific transaction is grouped with atomically. Grouped transactions execute in the order they are grouped, contracts can not read scratch space for transactions that occur after the current contract transaction. 
 
 This operation can be performed by using one of two opcodes (`gload` and `gloads`). With the `gload` opcode, the specific transaction to read and the slot number must be passed to the command. The `gloads` opcode will use the last value on the stack as the transaction index and must be passed the slot number to read.
 
@@ -926,7 +960,7 @@ In the second transaction read the stored value.
 
 ```teal
 // read the first 
-// transactions 10th
+// transaction's 10th
 // slot of scratch space
 gload 0 10
 ```
@@ -1069,26 +1103,26 @@ Calculation for increase in min-balance during creation or opt-in is as follows:
 === "Application Create"
 
     ```
-    100000*(1+ExtraProgramPages) + (25000+3500)*schema.NumUint + (25000+25000)*schema.NumByteSlice
+    100,000*(1+ExtraProgramPages) + (25,000+3,500)*schema.NumUint + (25,000+25,000)*schema.NumByteSlice
     ```
 
     In words:
 
-    - 100000 microAlgo base fee for each page requested. 
-    - 25000 + 3500 = 28500 for each Uint in the *Global State* schema
-    - 25000 + 25000 = 50000 for each byte-slice in *Global State* the schema
+    - 100,000 microAlgo base fee for each page requested. 
+    - 25,000 + 3,500 = 28,500 for each Uint in the *Global State* schema
+    - 25,000 + 25,000 = 50,000 for each byte-slice in *Global State* the schema
 
 === "Application Opt-In"
 
     ```
-    100000 + (25000+3500)*schema.NumUint + (25000+25000)*schema.NumByteSlice
+    100,000 + (25,000+3,500)*schema.NumUint + (25,000+25,000)*schema.NumByteSlice
     ```
 
     In words:
 
-    - 100000 microAlgo base fee of opt-in
-    - 25000 + 3500 = 28500 for each Uint in the *Local State* schema
-    - 25000 + 25000 = 50000 for each byte-slice in the *Local State* schema
+    - 100,000 microAlgo base fee of opt-in
+    - 25,000 + 3,500 = 28,500 for each Uint in the *Local State* schema
+    - 25,000 + 25,000 = 50,000 for each byte-slice in the *Local State* schema
 
 
 !!! note 
@@ -1101,15 +1135,15 @@ Given a smart contract with 1 *global* key-value-pair of type byteslice and 1 *l
 
 === "Creator"
 
-    The creator of the Application would have its minimum balance raised by *150000 microAlgos*.
+    The creator of the Application would have its minimum balance raised by *150,000 microAlgos*.
     ```
-    100000 + 50000  = 150000
+    100,000 + 50,000  = 150,000
     ```
 
 === "Account"
 
-    The account opting into the Application would have minimum balance raised *128500 microAlgos*.
+    The account opting into the Application would have minimum balance raised *128,500 microAlgos*.
 
     ```
-    100000 + 28500 = 128500
+    100,000 + 28,500 = 128,500
     ```

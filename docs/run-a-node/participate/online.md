@@ -17,7 +17,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
     from algosdk import encoding
     ...
     def write_unsigned():
-        # setup connectionon
+        # setup connection
         algod_client = connect_to_network()
 
         # get suggested parameters

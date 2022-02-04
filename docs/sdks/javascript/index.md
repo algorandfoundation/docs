@@ -148,7 +148,7 @@ To interact with the Algorand blockchain, you can send different types of transa
         // Construct the transaction
         let params = await algodClient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
-        params.fee = 1000;
+        params.fee = algosdk.ALGORAND_MIN_TX_FEE;
         params.flatFee = true;
 
         const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
@@ -157,7 +157,13 @@ To interact with the Algorand blockchain, you can send different types of transa
         let amount = 1000000; // equals 1 ALGO
         let sender = myAccount.addr;
 
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+            from: sender, 
+            to: receiver, 
+            amount: amount, 
+            node: note, 
+            suggestedParams: params
+        });
 ```
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386){:target="_blank"}
 
@@ -263,7 +269,7 @@ async function firstTransaction() {
         // Construct the transaction
         let params = await algodClient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
-        params.fee = 1000;
+        params.fee = algosdk.ALGORAND_MIN_TX_FEE;
         params.flatFee = true;
 
         // receiver defined as TestNet faucet address 
@@ -272,7 +278,13 @@ async function firstTransaction() {
         const note = enc.encode("Hello World");
         let amount = 1000000;
         let sender = myAccount.addr;
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, undefined, note, params);
+        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+            from: sender, 
+            to: receiver, 
+            amount: amount, 
+            note: note, 
+            suggestedParams: params
+        });
 
 
         // Sign the transaction
@@ -324,7 +336,7 @@ The Algorand community provides many editors, frameworks, and plugins that can b
 
 * [Algorand Studio VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
 
-* [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
+* [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
 
 * [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/) and [Algo Builder Tutorial series](https://developer.algorand.org/tutorials/algorand-builder-tutorial-part1-creating-local-network-and-deploying-asa/)
 

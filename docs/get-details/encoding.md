@@ -41,7 +41,7 @@ The encoding used for Addresses and Transaction Ids is [Base32](https://en.wikip
 
 In Algorand a [public key](./accounts/#transformation-public-key-to-algorand-address) is a 32 byte array. 
 
-The Address developers or users are typically showin is a 58 byte string corresponding to a base32 encoding of the byte array of the public key + a checksum.
+The Address developers or users are typically shown is a 58 byte string corresponding to a base32 encoding of the byte array of the public key + a checksum.
 
 Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, encoding to and from the public key format can be done as follows:
 === "JavaScript"
@@ -204,7 +204,7 @@ and decoding is:
 
 *Example*
 
-Create a payment transaction from one acount to another using suggested parameters and amount 10000, we write the msgpack encoded bytes
+Create a payment transaction from one account to another using suggested parameters and amount 10000, we write the msgpack encoded bytes
 
 === "JavaScript"
     ```js
@@ -291,4 +291,33 @@ Create a payment transaction from one acount to another using suggested paramete
 
 	msgpack.Decode(recovered_signed_pay_bytes, &recovered_signed_pay_txn)
 	log.Printf("%+v", recovered_signed_pay_txn)
+    ```
+
+
+
+### Blocks
+
+One type that commonly needs to be decoded are the blocks themselves. Since some fields are raw byte arrays (like state deltas) the msgpack format should be used.
+
+=== "Python"
+    ```py
+
+    from algosdk import encoding
+    from algosdk.v2client.algod import AlgodClient
+    import msgpack
+
+    client = AlgodClient("a"*64, "http://localhost:4001")
+
+    # Get the block in msgpack format
+    block = client.block_info(round_num=1234, response_format='msgpack')
+
+    # Be sure to specify `raw=True` or msgpack will try to decode as utf8
+    res = msgpack.unpackb(block, raw=True)
+
+    # Lets get the 4th transaction
+    txn = res[b'block'][b'txns'][3]
+
+    # Grab the byte value for the key `KEY`
+    address = encoding.encode_address(txn[b'dt'][b'gd'][b'KEY'][b'bs'])
+
     ```
