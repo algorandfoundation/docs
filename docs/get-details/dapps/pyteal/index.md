@@ -5,8 +5,8 @@ Complete installation instructions and developer guides are available in the [Py
 
 To quickly get PyTeal installed and running, see the [Getting started tutorial](../../../get-started/dapps/pyteal.md) for PyTeal.
 
-!!! note
- This document refers to stateful smart contracts as smart contracts and stateless smart contracts as smart signatures.
+!!!note
+This document refers to stateful smart contracts as smart contracts and stateless smart contracts as smart signatures.
 
 # PyTeal overview
 
@@ -25,10 +25,10 @@ Smart contracts also have an Algorand address, which allows the contract to hold
 
 Smart contracts are often referred to as applications on Algorand because they usually contain the bulk of blockchain logic that a distributed application will require. Once a contract is written it is deployed using an application creation transaction. This process will be described in the next section.
 
-When building smart contracts in PyTeal it is important to realize that a smart contract actually consists of two programs. These are called the approval and the clear programs. In PyTeal both of these programs are generally created in the same Python file. So the beginning of a  PyTeal program will contain logic similar to the following:
+When building smart contracts in PyTeal it is important to realize that a smart contract actually consists of two programs. These are called the approval and the clear programs. In PyTeal both of these programs are generally created in the same Python file. So the beginning of a PyTeal program will contain logic similar to the following:
 
 !!!info
-       The following sample builds a simple counter smart contract that either adds or deducts one from a global counter based on how the contract is called.
+The following sample builds a simple counter smart contract that either adds or deducts one from a global counter based on how the contract is called.
 
 ```python
 #samplecontract.py
@@ -54,7 +54,7 @@ All communication with Algorand smart contracts is achieved through a special tr
 <center>![Stateful Smart Contract](../../../imgs/sccalltypes.png)</center>
 <center>*Application Transaction Types*</center>
 
-Most smart contract logic will be implemented with a NoOp transaction type. The other subtypes are primarily less used or once-only transaction types. For example, Algorand allows smart contracts to be updated. Code must be implemented in the contract to prevent this if it is an unwanted feature. Smart contracts can also be deleted, although this can be disabled as well. The Optin transaction type is submitted by an account that wants to opt into the smart contract. Note that this is only required by contracts that store per account values. It is also possible to have smart contracts that store values for certain accounts but not others. In this case, if logic is encountered in the contract that attempts to store values for a particular account. It will fail unless the account has opted into the contract. The CloseOut application transaction is used to gracefully exit a smart contract. It is primarily an opt-out type of operation that allows the smart contract to do cleanup when an account wishes to leave the contract. This transaction can fail based on the logic, which would lock the user into the contract forever. To circumvent this issue, Algorand also has a Clear application transaction type. This type of transaction allows an ungraceful exit from the contract. This transaction may still fail but the blockchain will still clear any data associated with the contract from the account. Only the Clear transaction will call the clear program. All others will call the approval program.  
+Most smart contract logic will be implemented with a NoOp transaction type. The other subtypes are primarily less used or once-only transaction types. For example, Algorand allows smart contracts to be updated. Code must be implemented in the contract to prevent this if it is an unwanted feature. Smart contracts can also be deleted, although this can be disabled as well. The Optin transaction type is submitted by an account that wants to opt into the smart contract. Note that this is only required by contracts that store per account values. It is also possible to have smart contracts that store values for certain accounts but not others. In this case, if logic is encountered in the contract that attempts to store values for a particular account. It will fail unless the account has opted into the contract. The CloseOut application transaction is used to gracefully exit a smart contract. It is primarily an opt-out type of operation that allows the smart contract to do cleanup when an account wishes to leave the contract. This transaction can fail based on the logic, which would lock the user into the contract forever. To circumvent this issue, Algorand also has a Clear application transaction type. This type of transaction allows an ungraceful exit from the contract. This transaction may still fail but the blockchain will still clear any data associated with the contract from the account. Only the Clear transaction will call the clear program. All others will call the approval program.
 
 Within PyTeal, a developer can switch on the type of transaction. This is the preferred way of building a PyTeal contract. Sections of code should be created that handle any of the transaction types they may encounter. The above example's approval program can be changed to the following to handle the different application transaction types.
 
@@ -331,15 +331,15 @@ This section explains how to deploy and call the smart contract developed in the
 
 In the previous section, the development of a simple smart contract was explained. This smart contract can be deployed in many different ways, but generally, this will be done using one of the Algorand SDKs ([Python](../../../sdks/python/index.md), [JavaScript](../../../sdks/javascript/index.md), [Go](../../../sdks/go/index.md), and [Java](../../../sdks/java/index.md)). This section will add additional code to the previous section’s example using the Python SDK to illustrate deploying the example contract.
 
-!!! note
- This example expects the developer to use the sandbox install. Additionally, one account should be set up and funded. See the [Python SDK](../../../sdks/python/index.md) getting started guide for more details.
+!!!note
+This example expects the developer to use the sandbox install. Additionally, one account should be set up and funded. See the [Python SDK](../../../sdks/python/index.md) getting started guide for more details.
 
 Before getting into the details of deploying the contract, a couple of global variables must be added to the PyTeal Python example.
 
 ```python
 # user declared account mnemonics
 creator_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
-# user declared algod connection parameters. 
+# user declared algod connection parameters.
 # Node must have EnableDeveloperAPI set to true in its config
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -347,7 +347,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are the Algorand mobile wallet, AlgoSigner, MyAlgo Wallet, and Aikon ORE. When using the Algorand mobile wallet, transactions can be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
 
-The algod_address and algod_token values are the default values to connect to a sandbox installed node. Also note that in this example, the sandbox node is connected to the Algorand TestNet network (eg  `./sandbox up testnet`).
+The algod_address and algod_token values are the default values to connect to a sandbox installed node. Also note that in this example, the sandbox node is connected to the Algorand TestNet network (eg `./sandbox up testnet`).
 
 In this example, the TEAL for the smart contract will be compiled programmatically by the node. The `EnableDeveloperAPI` configuration parameter must be set to `true` in the node’s configuration to allow this operation. For more information on changing node configuration parameters, see the [developer documentation](../../../run-a-node/reference/config.md). When using the sandbox install, this value is automatically set to true.
 
@@ -358,7 +358,7 @@ Next, a few helper functions need to be added to the sample.
 def compile_program(client, source_code):
     compile_response = client.compile(source_code)
     return base64.b64decode(compile_response['result'])
-    
+
 # helper function that converts a mnemonic passphrase into a private signing key
 def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
@@ -371,7 +371,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
     number of rounds have passed.
     Args:
         transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
+        timeout (int): maximum number of rounds to wait
     Returns:
         dict: pending transaction information, or throws an error if the transaction
             is not confirmed or rejected in the next timeout rounds
@@ -383,13 +383,13 @@ def wait_for_confirmation(client, transaction_id, timeout):
         try:
             pending_txn = client.pending_transaction_info(transaction_id)
         except Exception:
-            return 
+            return
         if pending_txn.get("confirmed-round", 0) > 0:
             return pending_txn
-        elif pending_txn["pool-error"]:  
+        elif pending_txn["pool-error"]:
             raise Exception(
                 'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
+        client.status_after_block(current_round)
         current_round += 1
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
@@ -450,7 +450,7 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
 
     # get node suggested parameters
     params = client.suggested_params()
-   
+
     # create unsigned transaction
     txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
                                             approval_program, clear_program, \
@@ -476,7 +476,7 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
 
 This function is a simple example of creating an application creation transaction, which when submitted will deploy a smart contract. This example is very generic and can be used to deploy any smart contract. First, the creator’s address is resolved from the private key passed to the function, the transaction type is set to a NoOp application transaction, and the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction.
 
-The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction.  This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s.  More information on state values can be found in the [smart contract documentation](../smart-contracts/apps/index.md#modifying-state-in-smart-contract).
+The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction. This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. More information on state values can be found in the [smart contract documentation](../smart-contracts/apps/index.md#modifying-state-in-smart-contract).
 
 The passed-in private key is then used to sign the transaction and the ID of the transaction is retrieved. This ID is unique and can be used to look up the transaction later.
 
@@ -495,7 +495,7 @@ def main() :
     # declare application state storage (immutable)
     local_ints = 0
     local_bytes = 0
-    global_ints = 1 
+    global_ints = 1
     global_bytes = 0
     global_schema = transaction.StateSchema(global_ints, global_bytes)
     local_schema = transaction.StateSchema(local_ints, local_bytes)
@@ -518,7 +518,7 @@ def main() :
 
     print("--------------------------------------------")
     print("Deploying Counter application......")
-    
+
     # create new application
     app_id = create_app(algod_client, creator_private_key, approval_program_compiled, clear_state_program_compiled, global_schema, local_schema)
 
@@ -538,7 +538,7 @@ To begin with, a function can be added to support calling the smart contract.
 
 ```python
 # call application
-def call_app(client, private_key, index, app_args) : 
+def call_app(client, private_key, index, app_args) :
     # declare sender
     sender = account.address_from_private_key(private_key)
 
@@ -561,7 +561,7 @@ def call_app(client, private_key, index, app_args) :
     print("Application called")
 ```
 
-This function operates similarly to the `create_app` function we defined earlier. In this case, we use the Python SDK’s `ApplicationNoOpTxn` function to create a standard NoOp application transaction. The address of the account sending the call is specified, followed by the network suggested parameters, the application id of the smart contract, and any arguments to the call. The arguments will be used to specify either the Add or Deduct methods.  
+This function operates similarly to the `create_app` function we defined earlier. In this case, we use the Python SDK’s `ApplicationNoOpTxn` function to create a standard NoOp application transaction. The address of the account sending the call is specified, followed by the network suggested parameters, the application id of the smart contract, and any arguments to the call. The arguments will be used to specify either the Add or Deduct methods.
 
 The `main` function can then be modified to call the smart contract after deploying by adding the following to the bottom of the `main` function.
 
@@ -597,7 +597,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 def compile_program(client, source_code):
     compile_response = client.compile(source_code)
     return base64.b64decode(compile_response['result'])
-    
+
 # helper function that converts a mnemonic passphrase into a private signing key
 def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
@@ -610,7 +610,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
     number of rounds have passed.
     Args:
         transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
+        timeout (int): maximum number of rounds to wait
     Returns:
         dict: pending transaction information, or throws an error if the transaction
             is not confirmed or rejected in the next timeout rounds
@@ -622,13 +622,13 @@ def wait_for_confirmation(client, transaction_id, timeout):
         try:
             pending_txn = client.pending_transaction_info(transaction_id)
         except Exception:
-            return 
+            return
         if pending_txn.get("confirmed-round", 0) > 0:
             return pending_txn
-        elif pending_txn["pool-error"]:  
+        elif pending_txn["pool-error"]:
             raise Exception(
                 'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
+        client.status_after_block(current_round)
         current_round += 1
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
@@ -680,7 +680,7 @@ def approval_program():
 
     scratchCount = ScratchVar(TealType.uint64)
 
-    add = Seq([ 
+    add = Seq([
         scratchCount.store(App.globalGet(Bytes("Count"))),
         App.globalPut(Bytes("Count"), scratchCount.load() + Int(1)),
         Return(Int(1))
@@ -721,7 +721,7 @@ def clear_state_program():
     # Mode.Application specifies that this is a smart contract
     return compileTeal(program, Mode.Application, version=5)
 
-    
+
 # create new application
 def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema):
     # define sender as creator
@@ -757,7 +757,7 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
 
 
 # call application
-def call_app(client, private_key, index, app_args) : 
+def call_app(client, private_key, index, app_args) :
     # declare sender
     sender = account.address_from_private_key(private_key)
 
@@ -789,7 +789,7 @@ def main() :
     # declare application state storage (immutable)
     local_ints = 0
     local_bytes = 0
-    global_ints = 1 
+    global_ints = 1
     global_bytes = 0
     global_schema = transaction.StateSchema(global_ints, global_bytes)
     local_schema = transaction.StateSchema(local_ints, local_bytes)
@@ -804,16 +804,16 @@ def main() :
     with open("./clear.teal", "w") as f:
         clear_state_program_teal = clear_state_program()
         f.write(clear_state_program_teal)
-        
+
     # compile program to binary
     approval_program_compiled = compile_program(algod_client, approval_program_teal)
-            
+
     # compile program to binary
     clear_state_program_compiled = compile_program(algod_client, clear_state_program_teal)
 
     print("--------------------------------------------")
     print("Deploying Counter application......")
-    
+
     # create new application
     app_id = create_app(algod_client, creator_private_key, approval_program_compiled, clear_state_program_compiled, global_schema, local_schema)
 
@@ -838,13 +838,13 @@ For more information on using the SDKs to deploy and interact with smart contrac
 
 Smart signatures are small programs that are submitted as part of a transaction and evaluated at submission time. These types of signatures can be used as an escrow-type of account or can be used to delegate a portion of the authority for a specific account.
 
-When used as an escrow, they can hold Algos or Algorand assets (ASAs). When used this way any transaction can send Algos or ASAs to the escrow but the logic in the signature determines when value leaves the escrow. In this respect, they act very similarly to smart contracts, but the logic must be supplied with every transaction.  
+When used as an escrow, they can hold Algos or Algorand assets (ASAs). When used this way any transaction can send Algos or ASAs to the escrow but the logic in the signature determines when value leaves the escrow. In this respect, they act very similarly to smart contracts, but the logic must be supplied with every transaction.
 
 When used as a delegate, the logic can be signed by a specific account. The logic is then evaluated when a transaction is submitted from the signing account that is signed by the logic and not the private key of the sender. This is often used to allow restricted access to an account. For example, a mortgage company may provide logic to an account to remove a certain number of Algos from the account once a month. The user then signs this logic and once a month the mortgage company can submit a transaction from the signing account, but the transaction is signed by the smart signature and not the private key of the account.
 
 Any time a smart signature is used the complete logic must be submitted as part of the transaction where the logic is used. The logic is recorded as part of the transaction but this is after the fact.
 
-PyTeal supports building smart signatures in Python. For example, assume an escrow account is needed. This escrow can be funded by anyone but only a specific account is the beneficiary of the escrow and that account can withdraw funds at any time.  
+PyTeal supports building smart signatures in Python. For example, assume an escrow account is needed. This escrow can be funded by anyone but only a specific account is the beneficiary of the escrow and that account can withdraw funds at any time.
 
 ```python
 #sample_smart_sig.py
@@ -860,7 +860,7 @@ def donation_escrow(benefactor):
         Txn.fee() <= Fee,
         Txn.receiver() == Addr(benefactor),
         Global.group_size() == Int(1),
-        Txn.rekey_to() == Global.zero_address()        
+        Txn.rekey_to() == Global.zero_address()
     )
     # Mode.Signature specifies that this is a smart signature
     return compileTeal(program, Mode.Signature, version=5)
@@ -899,7 +899,7 @@ This sample can be executed using the following command.
 python3 sample_smart_sig.py
 ```
 
-This will print out the compiled TEAL. The Algorand address of the escrow can be retrieved by first saving the produced TEAL to a file and then compiled to byte code using the `goal` command-line tool. In the next section,  using this smart signature with a transaction will be demonstrated.
+This will print out the compiled TEAL. The Algorand address of the escrow can be retrieved by first saving the produced TEAL to a file and then compiled to byte code using the `goal` command-line tool. In the next section, using this smart signature with a transaction will be demonstrated.
 
 ```bash
 $ python3 smart_sig.py > test.teal
@@ -911,9 +911,9 @@ test.teal: ZNJNTBMZKTCSO2RF4AJ3TLVFCZ5ZTHKAUBGR5AHJ23IHRFGK6GRIUVH2MU
 
 As stated in the previous section, smart signatures are used in conjunction with a transaction submission. In the previous section, a sample escrow was created. With escrows, any account can fund these accounts. These funds can not leave the escrow unless the logic evaluates to true. Once you have the escrow address, simple payment transactions can be used to fund it. To remove funds, a payment transaction can also be used but the transaction needs to be signed with the logic, not a private key. The following example illustrates:
 
-* Compiling the escrow
-* Funding the escrow with a simple payment transaction
-* Dispensing funds using a payment transaction to the beneficiary signed with the logic
+- Compiling the escrow
+- Funding the escrow with a simple payment transaction
+- Dispensing funds using a payment transaction to the beneficiary signed with the logic
 
 A few global variables are created and some utility functions are added to the previous section’s sample. The `benefactor_mnemonic` is the backup phrase for the address of the benefactor and the `sender_mnemonic` represents the account that will fund the escrow. Mnemonics should never be included in the source of a production environment. It is done here for learning purposes only. Key management should be handled by a proper wallet.
 
@@ -937,7 +937,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 def compile_smart_signature(client, source_code):
     compile_response = client.compile(source_code)
     return compile_response['result'], compile_response['hash']
-    
+
 # helper function that converts a mnemonic passphrase into a private signing key
 def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
@@ -950,7 +950,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
     number of rounds have passed.
     Args:
         transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
+        timeout (int): maximum number of rounds to wait
     Returns:
         dict: pending transaction information, or throws an error if the transaction
             is not confirmed or rejected in the next timeout rounds
@@ -962,19 +962,19 @@ def wait_for_confirmation(client, transaction_id, timeout):
         try:
             pending_txn = client.pending_transaction_info(transaction_id)
         except Exception:
-            return 
+            return
         if pending_txn.get("confirmed-round", 0) > 0:
             return pending_txn
-        elif pending_txn["pool-error"]:  
+        elif pending_txn["pool-error"]:
             raise Exception(
                 'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
+        client.status_after_block(current_round)
         current_round += 1
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 ```
 
-The  `compile_smart_contract`, `get_private_key_from_mnemonic`, and `wait_for_confirmation` functions are explained in [Deploying and calling a smart contract](#deploying-the-contract).
+The `compile_smart_contract`, `get_private_key_from_mnemonic`, and `wait_for_confirmation` functions are explained in [Deploying and calling a smart contract](#deploying-the-contract).
 
 A utility function is then added to create and submit a simple payment transaction.
 
@@ -1006,7 +1006,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
     pmtx = wait_for_confirmation(algod_client, tx_id, 10)
-    return pmtx 
+    return pmtx
 ```
 
 The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSig` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smartsigs/index.md).
@@ -1046,7 +1046,7 @@ def main() :
 
 ```
 
-The main function first makes a connection to the sandbox installed node, then the benefactor’s address is recovered. The `donation_escrow` built in the previous section is called to produce the TEAL for the smart signature.  This TEAL is then compiled, returning both the base64 encoded bytes of the program and the address of the escrow.
+The main function first makes a connection to the sandbox installed node, then the benefactor’s address is recovered. The `donation_escrow` built in the previous section is called to produce the TEAL for the smart signature. This TEAL is then compiled, returning both the base64 encoded bytes of the program and the address of the escrow.
 
 A simple payment transaction is then created to fund the escrow with a little over 2 Algos. Finally, 1 Algo is dispensed from the escrow to the benefactor using a payment transaction signed by the smart signature. The complete example is shown below.
 
@@ -1072,7 +1072,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 def compile_smart_signature(client, source_code):
     compile_response = client.compile(source_code)
     return compile_response['result'], compile_response['hash']
-    
+
 # helper function that converts a mnemonic passphrase into a private signing key
 def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
@@ -1085,7 +1085,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
     number of rounds have passed.
     Args:
         transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait    
+        timeout (int): maximum number of rounds to wait
     Returns:
         dict: pending transaction information, or throws an error if the transaction
             is not confirmed or rejected in the next timeout rounds
@@ -1097,13 +1097,13 @@ def wait_for_confirmation(client, transaction_id, timeout):
         try:
             pending_txn = client.pending_transaction_info(transaction_id)
         except Exception:
-            return 
+            return
         if pending_txn.get("confirmed-round", 0) > 0:
             return pending_txn
-        elif pending_txn["pool-error"]:  
+        elif pending_txn["pool-error"]:
             raise Exception(
                 'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)                   
+        client.status_after_block(current_round)
         current_round += 1
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
@@ -1127,7 +1127,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
     pmtx = wait_for_confirmation(algod_client, tx_id, 10)
-    return pmtx 
+    return pmtx
 
 """Basic Donation Escrow"""
 
