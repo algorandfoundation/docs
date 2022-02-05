@@ -122,7 +122,7 @@ For three-argument ops, `A` is the element two below the top, `B` is the penulti
 | `<=` | A less than or equal to B => {0 or 1} |
 | `>=` | A greater than or equal to B => {0 or 1} |
 | `&&` | A is not zero and B is not zero => {0 or 1} |
-| `\|\|` | A is not zero or B is not zero => {0 or 1} |
+| <code>\|\|</code> | A is not zero or B is not zero => {0 or 1} |
 | `shl` | A times 2^B, modulo 2^64 |
 | `shr` | A divided by 2^B |
 | `sqrt` | The largest integer B such that B^2 <= X |
@@ -135,7 +135,7 @@ For three-argument ops, `A` is the element two below the top, `B` is the penulti
 | `itob` | converts uint64 X to big endian bytes |
 | `btoi` | converts bytes X as big endian to uint64 |
 | `%` | A modulo B. Fail if B == 0. |
-| `\|` | A bitwise-or B |
+| <code>\|</code> | A bitwise-or B |
 | `&` | A bitwise-and B |
 | `^` | A bitwise-xor B |
 | `~` | bitwise invert value X |
