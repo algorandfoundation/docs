@@ -6,7 +6,7 @@ Complete installation instructions and developer guides are available in the [Py
 To quickly get PyTeal installed and running, see the [Getting started tutorial](../../../get-started/dapps/pyteal.md) for PyTeal.
 
 !!!note
-This document refers to stateful smart contracts as smart contracts and stateless smart contracts as smart signatures.
+    This document refers to stateful smart contracts as smart contracts and stateless smart contracts as smart signatures.
 
 # PyTeal overview
 
@@ -28,7 +28,7 @@ Smart contracts are often referred to as applications on Algorand because they u
 When building smart contracts in PyTeal it is important to realize that a smart contract actually consists of two programs. These are called the approval and the clear programs. In PyTeal both of these programs are generally created in the same Python file. So the beginning of a PyTeal program will contain logic similar to the following:
 
 !!!info
-The following sample builds a simple counter smart contract that either adds or deducts one from a global counter based on how the contract is called.
+    The following sample builds a simple counter smart contract that either adds or deducts one from a global counter based on how the contract is called.
 
 ```python
 #samplecontract.py
@@ -332,7 +332,7 @@ This section explains how to deploy and call the smart contract developed in the
 In the previous section, the development of a simple smart contract was explained. This smart contract can be deployed in many different ways, but generally, this will be done using one of the Algorand SDKs ([Python](../../../sdks/python/index.md), [JavaScript](../../../sdks/javascript/index.md), [Go](../../../sdks/go/index.md), and [Java](../../../sdks/java/index.md)). This section will add additional code to the previous section’s example using the Python SDK to illustrate deploying the example contract.
 
 !!!note
-This example expects the developer to use the sandbox install. Additionally, one account should be set up and funded. See the [Python SDK](../../../sdks/python/index.md) getting started guide for more details.
+    This example expects the developer to use the sandbox install. Additionally, one account should be set up and funded. See the [Python SDK](../../../sdks/python/index.md) getting started guide for more details.
 
 Before getting into the details of deploying the contract, a couple of global variables must be added to the PyTeal Python example.
 
