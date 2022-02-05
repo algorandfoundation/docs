@@ -939,7 +939,7 @@ Revoking an asset for an account removes a specific number of the asset from the
         // not be possible.
         // We will now clawback the 10 assets in account3. account2
         // is the clawbackaccount and must sign the transaction
-        // The sender will be be the clawback adress.
+        // The sender will be be the clawback address.
         // the recipient will also be be the creator in this case
         // that is account3
         sender = recoveredAccount2.addr;
@@ -1196,7 +1196,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
             System.out.println("Account 3 must do a transaction for an amount of 0, ");
             System.out.println("with a assetCloseTo to the creator account, to clear it from its accountholdings");
             System.out.println("Account 1  = " + acct1.getAddress().toString());            
-            System.out.println("Nothing should print after this, Account 1 asset is sucessfully deleted");
+            System.out.println("Nothing should print after this, Account 1 asset is successfully deleted");
             printAssetHolding(acct1, assetID);
             printCreatedAsset(acct1, assetID);
         } catch (Exception e) {

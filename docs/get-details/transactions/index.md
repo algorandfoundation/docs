@@ -356,7 +356,7 @@ An asset freeze transaction is identified by `"type": "afrz"`. In this example, 
 
 ## Application Call Transaction
 
-An Application Call Transaction is submitted to the network with at an AppId and an OnComplete method. The AppId specifies which App to call and the OnComplete method is used to in the contract to determine what branch of logic to execute.
+An Application Call Transaction is submitted to the network with an AppId and an OnComplete method. The AppId specifies which App to call and the OnComplete method is used in the contract to determine what branch of logic to execute.
 
 Application Call transactions may include other fields needed by the logic such as:
 
@@ -368,11 +368,11 @@ Application Call transactions may include other fields needed by the logic such 
 
 *ForeignAssets* - To pass ASAs for parameter checking
 
-Details for smart contract authoring can be found on the [Smart Contract Details](../dapps/smart-contracts/apps) page
+Details for smart contract authoring can be found on the [Smart Contract Details](../dapps/smart-contracts/apps) page.
 
 
 ### Application Create Transaction
-When an application is to be created; the OnComplete method is set to NoOp, no AppId is set, and the Approval/Clear programs and Schema are passed.  The approval program may do additional checking during setup by checking that the AppId == 0
+When an application is to be created, the OnComplete method is set to NoOp, no AppId is set, and the Approval/Clear programs and Schema are passed.  The approval program may do additional checking during setup by checking that the AppId == 0.
 
 ```json
 {
@@ -400,9 +400,9 @@ When an application is to be created; the OnComplete method is set to NoOp, no A
 
 - The Approval program (`apap`) and Clear program (`apsu`) are set to `#pragma version 5; int 1`
 - The Apps global and local state both have bytes/ints set to 1
-- The OnComplete (`apan`) is set to NoOp (0 value so it is omited from output)
+- The OnComplete (`apan`) is set to NoOp (0 value so it is omitted from output)
 
-Assuming all the balance and signature checks pass, this will create an Application with a new AppId and subsequent calls 
+Assuming all the balance and signature checks pass, this will create an Application with a new AppId and subsequent calls.
 
 
 ### Application Update Transaction
@@ -675,19 +675,67 @@ Here are three example scenarios and how the round range may be calculated for e
 
 # Fees
 
-There are two primary ways to set the fee for a transaction. 
+Fees for transactions on Algorand are set as a function of network congestion and based on the size in bytes of the transaction.  Every transaction must at least cover the minimum fee (1000µA or 0.001A). 
+
+For a transaction serialized to bytes (`txn_in_bytes`) and current congestion based fee per byte (`fee_per_byte`) the fee can be computed as follows:
+
+```py
+fee = max(current_fee_per_byte*len(txn_in_bytes), min_fee)
+```
+
+If the network *is not* congested, the fee per byte will be 0 and the minimum fee for a transaction is used. 
+
+If network *is* congested the fee per byte will be non zero and for a given transaction will be the product of the size in bytes of the transaction and the current fee per byte. If the product is less than the min fee, the min fee is used. 
+
+Note that fees are independent of the type of transaction (payment, ASA transfer, application call, ...) and a fortiori independent of the complexity of the smart contract code in case of application calls.
+Only the size of the serialized transaction matters.
+
+# Setting a fee 
+
+There are two primary ways to set fees on a transaction.
 
 ## Suggested Fee
 
-The SDK provides a method to get the [**suggested fee** per byte (`fee`)](../../rest-apis/algod/v1#transactionfee) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
+The SDK provides a method to get the suggested parameters from an the algod REST server, including the [**suggested fee** per byte (`fee`)](../../rest-apis/algod/v2#transactionparams) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
 
-For larger transactions (> 1 KB in size), the resulting total fee will be greater than the network minimum, which in certain network conditions, may be more than you need to pay to get the transaction processed into the blockchain quickly. In particular, when blocks have enough room for all transactions, the minimum transaction fee will generally suffice. In this network scenario, set the fee (per byte) to 0 if you want to ensure that the minimum fee is chosen instead. 
-
-In the future as more transactions are added to the network (and blocks are full), the minimum transaction fee may not guarantee that your transaction is processed as quickly as other transactions with higher fees set. In this case, using the returned suggested fee, which is based on the current transaction load, is the preferred method.
+When using the SDK to build a transaction, if the suggested parameters are passed to one of the helper methods, the fee for the transaction will be set based on the above computation.
 
 ## Flat Fee
-You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`minFee`)](../../reference/rest-apis/algod/v1#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs.  Flat fees may be useful for applications that want to guarantee showing a specific rounded fee to users or for a transaction that is meant to be sent in the future where the network traffic conditions are unknown.
+You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs or as a constant in the SDK.  
+
+Flat fees may be useful for:
+* for applications that want to guarantee showing a specific rounded fee to users 
+* for transactions that are meant to be sent in the future where the network traffic conditions are unknown
+* for transactions that are not urgent and may be retried later if they are rejected
+* etc
+
+# Pooled transaction fees
+
+The Algorand protocol supports pooled fees, where one transaction can pay the fees of other transactions within the same atomic group. 
+
+For atomic transactions, the fees set on all transactions in the group are summed. This sum is compared against the protocol determined expected fee for the group and may proceed as long as the sum of the fees is at least the required fee for the group.
+
+<center>![Atomic Pooled Fees](/docs/imgs/atomic_transfers-2.png)</center>
+<center>*Atomic Pooled Fees*</center>
+
+!!! note
+    [Inner transactions](/get-details/dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested inner transactions as well.
+
+!!! info
+    Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
+
+An example of setting a pooled fee on a group of two transactions in javascript:
+
+```js
+const suggestedParams = await client.getTransactionParams().do()
+suggestedParams.flatFee = true;
+suggestedParams.fee = 2 * algosdk.ALGORAND_MIN_TX_FEE;
+```
+
+Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 
 
 # Setting First and Last Valid
 
-Unless you have specific security concerns or logical constraints embedded within a specific Algorand Smart Contract, it is generally recommended that you set your default range to the maximum, currently 1000. This will give you an ample window of validity time to submit your transaction. 
+Unless you have specific security concerns, generally the maximum default range of 1000 rounds is acceptable. This will give you an ample window of validity time to submit your transaction. 
+
+One occasion where the maximum range may not be appropriate is when you want to be sure transaction fee is low and the network conditions may change before the transaction is submitted.  In this case, a lower valid round range can limit potentially submitting the transaction during a window of higher congestion.

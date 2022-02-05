@@ -111,12 +111,13 @@ Transactions are used to interact with the Algorand network. To create a payment
 ```python
 # build transaction
 from algosdk.future import transaction
+from algosdk import constants
 
 
     params = algod_client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
     params.flat_fee = True
-    params.fee = 1000
+    params.fee = constants.MIN_TXN_FEE 
     receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
     note = "Hello World".encode()
 	amount = 1000000
@@ -180,7 +181,7 @@ The complete example below illustrates how to quickly submit your first transact
 ```python
 import json
 import base64
-from algosdk import account, mnemonic
+from algosdk import account, mnemonic, constants
 from algosdk.v2client import algod
 from algosdk.future import transaction
 
@@ -206,7 +207,7 @@ def first_transaction_example(private_key, my_address):
 	# build transaction
 	params = algod_client.suggested_params()
 	# comment out the next two (2) lines to use suggested fees
-	params.flat_fee = True
+	params.flat_fee = constants.MIN_TXN_FEE 
 	params.fee = 1000
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
@@ -263,5 +264,5 @@ The Algorand community provides many editors, frameworks, and plugins that can b
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/){target=_blank}  
 * [Algorand Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/){target=_blank}  
 * [Algorand Studio VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/){target=_blank}  
-* [AlgoDEA InteliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/){target=_blank}  
+* [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/){target=_blank}  
 * [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/){target=_blank}  

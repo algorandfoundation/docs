@@ -5,7 +5,7 @@ Algorand maintains SDK support in [JavaScript](../../../sdks/javascript/#install
 
 Integration with the Algorand protocol daemon (`algod`), Algorand key management daemon (`kmd`) or Algorand Indexer daemon (`algorand-indexer`) is performed using a set of REST APIs.
 
-All REST methods and models are fully described within reference documention.
+All REST methods and models are fully described within reference documentation.
 
 - [Algod REST APIs](../../rest-apis/algod/v2/)
 

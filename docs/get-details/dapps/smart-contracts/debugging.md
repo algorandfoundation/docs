@@ -1,4 +1,4 @@
-title: Smart contract debugging
+title: Debugging smart contracts
 
 Smart contracts can be debugged using two different methods. The first is an interactive debugger that uses the `tealdbg` command-line tool to launch a debug session where the smart contract can be examined as the contract is being evaluated. The second method uses the `goal clerk dryrun-remote` command which outputs a line by line result of the evaluation of the smart contract.  These two methods are described below.
 
@@ -43,10 +43,27 @@ The Scope pane contains the current stack and is useful for determining what val
 
 The debugging session runs in a mock version of the ledger so the context including; balance records of the accounts, application parameters, and assets used during program evaluation must be supplied.  Exactly what context is needed for a debug session will depend on the type of contract that is being debugged and what opcodes are used in the program. 
 
-Most frequently, a `Dryrun Dump` file is used to pass all this context information in a single payload. 
+Most frequently, a [Dryrun Dump](#creating-a-dryrun-dump-file) file is used to pass all this context information in a single payload. 
+
+It can be supplied directly by calling `tealdbg` with arguments including: 
+
+    - Transaction(s) - Supply one or more transactions to the debug session.
+    - Balance Records - Account balance records of accounts used in the contract. Needed when debugging smart contracts that make use of state. 
+    - Latest Timestamp - Set the latest timestamp for debugging smart contracts that make use of time values.
+    - Protocol - Set the protocol of consensus that the debug session uses when evaluating the contract.
+    - Round - Set the current round for the debug session.
+    Group Index - If using more than one transaction, the specific index that is being processed can be set.
+    - Mode - The debugger can debug both smart signatures (Signature) and smart contracts (Application). The mode can be set to determine which type is being processed. By default, the debugger scans the program to determine the type of contract.
+    - Application ID - Manually set the application ID of the current smart contract.
+    - Program - Pass the program to debug
+
+To learn more about setting individual context items, see the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
+
+The context can also be read directly from an instance of the Indexer. See the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) for more information.
+
+## Creating a dryrun dump file
 
 This file may be msgpack or json and can be created using goal or the SDKs
-
 
 === "Python"
     ```py
@@ -134,26 +151,6 @@ This file may be msgpack or json and can be created using goal or the SDKs
 
     ```
 
-
-
-This can be supplied directly by calling `tealdbg` with arguments including: 
-
-
-    - Transaction(s) - Supply one or more transactions to the debug session.
-    - Balance Records - Account balance records of accounts used in the contract. Needed when debugging smart contracts that make use of state. 
-    - Latest Timestamp - Set the latest timestamp for debugging smart contracts that make use of time values.
-    - Protocol - Set the protocol of consensus that the debug session uses when evaluating the contract.
-    - Round - Set the current round for the debug session.
-    Group Index - If using more than one transaction, the specific index that is being processed can be set.
-    - Mode - The debugger can debug both smart signatures (Signature) and smart contracts (Application). The mode can be set to determine which type is being processed. By default, the debugger scans the program to determine the type of contract.
-    - Application ID - Manually set the application ID of the current smart contract.
-    - Program - Pass the program to debug
-
-To learn more about setting individual context items, see the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
-
-The context can also be read directly from an instance of the Indexer. See the `tealdbg` [documentation](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md) for more information.
-
-
 ## Calling the debugger with context
 
 ```
@@ -211,10 +208,7 @@ $ tealdbg debug stateless.teal -d statelesstx.tx
 The `tealdbg` utility has many more options for setting specific context items. For information on these capabilities, see the project’s [README](https://github.com/algorand/go-algorand/blob/master/cmd/tealdbg/README.md).
 
 
-# Using dryrun for debugging a TEAL program
-
-The SDKs and the `goal` command-line tool provide the functionality to do a test run of a TEAL smart contract.
-
+# Dryrun REST endpoint 
 
 !!! important "enabling dryrun-remote"
     The dryrun REST API is only available on a node if it has been enabled in the node's configuration. This can be done using the following commands.
@@ -223,3 +217,100 @@ The SDKs and the `goal` command-line tool provide the functionality to do a test
     $ algocfg set -p EnableDeveloperAPI -v true
     $ goal node restart
     ```
+
+Using the [Dryrun](/docs/rest-apis/algod/v2.md#post-v2tealdryrun) REST endpoint to debug programs can be very helpful for debugging or even running unit tests.
+
+The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has the same contents as the dryrun dump file. After Sending the Dryrun Request object to the server the response will contain evaluation results for all the transactions that invoked smart contracts including a Stack Trace, cost, logs (if successful) and errors encountered.
+
+
+=== "Python"
+    ```py
+    # ... 
+    # Create the dryrun request object
+    dryrun_request = create_dryrun(client, txns)
+
+    # Pass dryrun request to algod server
+    dryrun_response = client.dryrun(dryrun_request)
+
+    # Inspect the response to check result 
+    ```
+
+=== "JavaScript"
+    ```js
+    // ... 
+    // Create the dryrun request object
+    const dryrunRequest = algosdk.createDryrun(client, txns)
+
+    // Pass dryrun request to algod server
+    const dryrunResponse = await client.dryrun(dryrunRequest).do()
+
+    // Inspect the response to check result 
+    ```
+
+=== "Go"
+    ```go
+    // ... 
+    // Create the dryrun request object
+    dryrunRequest, _ := future.CreateDryrun(client, txns, nil, context.Background())
+
+    // Pass dryrun request to algod server
+    dryrunResponse, _ := client.TealDryrun(dryrunRequest).Do(context.Background())
+
+    // Inspect the response to check result 
+    ```
+
+
+=== "Shell"
+    ```sh
+    # With a dryrun object as dryrun.msgp 
+
+    $ curl -XPOST "http://localhost:4001/v2/teal/dryrun" \
+        -H "X-Algo-API-Token: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
+        --data-binary @dryrun.msgp
+
+    ```
+
+Example of DryrunResponse payload:
+
+```js
+{
+	"error": "error string if failure occurred",
+	"protocol-version": "",
+    "txns":[
+        {
+            "app-call-messages":["string array of messages", "will contain reject if relevant"],
+            "app-call-trace":[
+                {
+                    "line":1,
+                    "pc":2,
+                    "stack":[{ // Each stack value at this pc
+                        "type":1 //1 is bytes, 2 is int
+                        "bytes":"the bytes on the stack" 
+                        "int":0 
+                    }]
+                },
+                // ...
+            ],
+            "cost": 1337,
+
+            // Disassembled program line by line.
+            "disassembly":["disassembled", "program", "broken", "out", "by", "line"],
+
+            // The changes to the global state ths program would have caused
+            "global-delta": {},
+
+            // The changes to local state this program would have caused
+            "local-deltas":[{}],
+
+            // Any messages caused by the logic sig evaluation
+            "logic-sig-messages":[],
+
+            // Any trace from a logic sig
+            "logic-sig-trace":[],
+
+            // Any logs from application call output
+            "logs":["base64", "encoding", "of", "logged", "bytes"],
+        }
+    ]
+}
+```

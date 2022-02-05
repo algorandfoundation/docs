@@ -100,7 +100,7 @@ return
 ```
 
 # Dynamic operational cost of TEAL opcodes
-Smart signature are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, smart contracts and smart signatures are also limited in opcode cost. This cost is evaluated when a smart contract runs and is representative of it’s computational expense. Every opcode executed by the AVM has a numeric value that represents its computational cost. Most opcodes have a computational cost of 1. Some, such as `SHA256` (cost 35) or `ed25519verify` (cost 1900) have substantially larger copmutational costs. 
+Smart signature are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, smart contracts and smart signatures are also limited in opcode cost. This cost is evaluated when a smart contract runs and is representative of it’s computational expense. Every opcode executed by the AVM has a numeric value that represents its computational cost. Most opcodes have a computational cost of 1. Some, such as `SHA256` (cost 35) or `ed25519verify` (cost 1900) have substantially larger computational costs. 
 Smart signatures are limited to 20,000 for total computational cost. Smart contracts invoked by a single application transaction are limited to 700 for either of the programs associated with the contract. However, if the smart contract is invoked via a group of application transactions, the computational budget is considered pooled. The total opcode budget will be 700 multiplied by the number of application transactions within the group. So if the maximum transaction group size is used and all are application transactions, the computational budget would be 700x16=11200.. The [TEAL Opcodes](opcodes) reference lists the opcode cost for every opcode.
 
 # Example walkthrough of a TEAL program
@@ -194,7 +194,7 @@ The second clause of the pseudo logic is implemented with the following TEAL.
 ```teal
 
 // The following six lines of teal check if the 
-// transaction is reciever is set to addr1 and that the CloseRemainderTo
+// transaction receiver is set to addr1 and that the CloseRemainderTo
 // transaction property is also set to addr1.
 // Once completed the stack will have the 0 or 1 
 // from the previous clause and a 1 or 0 from the 
