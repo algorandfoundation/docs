@@ -1,34 +1,37 @@
 title: PyTeal
 
-[PyTeal](https://github.com/algorand/pyteal) is a python language binding for Algorand Smart Contracts (ASC) that abstracts away the complexities of writing smart contracts. PyTeal allows smart contracts and smart signatures to be written in Python and then compiled to TEAL. Note that the TEAL code is not automatically compiled to byte code, but that can be done with any of the SDKs, including Python. The TEAL code can also be compiled using the `goal` command-line tool or submitted to the blockchain to allow the node to compile it.
-Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/).
+[PyTeal](https://github.com/algorand/pyteal) is a python library for generating [TEAL](../avm/teal/index.md) programs that provides a convenient and familiar syntax. 
 
 To quickly get PyTeal installed and running, see the [Getting started tutorial](../../../get-started/dapps/pyteal.md) for PyTeal.
 
-!!!note
-    This document refers to stateful smart contracts as smart contracts and stateless smart contracts as smart signatures.
+Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/).
 
 # PyTeal overview
 
 This section assumes the reader is familiar with Smart Contracts and Smart Signatures.
-When building a dApp that makes use of smart contracts or smart signatures (smartsigs), PyTeal makes implementing these much simpler than writing the TEAL manually. Generally, developers install PyTeal, write the Python contract or smartsignature code using their preferred editor, and then use PyTeal’s `compileProgram` method to produce the TEAL code. The TEAL code can then be deployed to the blockchain.
 
-In most applications, these contracts and smartsigs will only be a portion of the dApp’s architecture. Generally, developers will build functionality in the dApp that resides on the blockchain and some sort of front end to interact with the backend smart contracts, transactions, accounts, and assets. PyTeal can be used to produce both smart contracts and smart signatures. These can be pre-built and used by the dApp or the building of the contracts and smartsigs can be integrated into the dApp front end logic and then deployed as part of the normal operation of the application. For example, a front end may provide something like an exchange that allows limit orders to be created based on a template and then deployed once a user opens an order. In this case, the complete limit order may be implemented as part of a smart contract that is deployed when the order is opened by the dApp. For more information on deployment models see [What is a dApp](../../../get-started/dapps/index.md) in the developer documentation.
+When building a dApp that makes use of smart contracts or smart signatures (smartsigs), PyTeal makes implementation of more complex logic much simpler than writing the TEAL manually. 
 
-PyTeal supports both smart signatures and smart contracts. The following sections explain both of these scenarios.
+Generally, developers install PyTeal, write the contract in Python using their preferred editor, and then use PyTeal’s `compileProgram` method to produce the TEAL code. The TEAL code can then be compiled into bytecode and deployed to the blockchain.
+
+For most applications, these contracts will only be a portion of the dApp’s architecture. Typically, developers will build functionality in the dApp that resides on the blockchain and some front end to interact with the smart contracts. 
+
+The PyTeal contracts can be pre-compiled into TEAL and used directly or the logic to generate TEAL dynamically may be integrated into the dApp front end workflow. For example, a front end may provide something like an exchange that allows limit orders to be created based on a template and then deployed once a user opens an order. In this case, the complete limit order may be implemented as part of a smart contract that is deployed when the order is opened by the dApp. For more information on deployment models see [What is a dApp](../../../get-started/dapps/index.md) in the developer documentation.
 
 # Building PyTeal smart contracts
 
-On Algorand, smart contracts are small programs that contain logic that is evaluated when the contract is deployed or called. These contracts have a set of functions (opcodes) that can be called that make use of on-chain data (such as balances), additional arguments, additional transactions, and stored values to evaluate to either true or false. Additionally, as part of the logic on-chain variables can be stored on a per contract or per account basis. If the contract runs successfully these variables will be updated per the logic. If the contract fails the variable changes will be rolled back. For example, you may have a voting contract that stores whether a specific account has voted or not and a vote total for all the candidates in an election. The user may call the smart contract to vote and the logic may check to see if the specific account has voted already and if not allow the vote to be processed and increment the vote totals. The voting account would also be marked as having voted. If the account had already voted the call would fail.
+On Algorand, smart contracts are small programs that are evaluated when the contract is deployed or called. These contracts make use of a set of functions [(opcodes)](../avm/teal/opcodes.md) to be evaluated against the context it was called with. This context includes the current state of its storage values, the transactions in the group, any arguments and references to accounts, assets, or other applications.
 
-Smart contracts also have an Algorand address, which allows the contract to hold Algorand assets(ASAs) and Algos. Any account in the network can send ASAs or Algos to this address unimpeded. The only way either of these forms of value is allowed to leave the contract is when the logic within the contract performs a payment or asset transaction and the logic returns true. For more information on smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
+Besides evaluating the logic to approve or reject a transaction, the contracts may cause side effects. Side effects a contract may produce include changes to an Applications global or local state, or producing their own [transactions](../../transactions/transactions.md). These transactions are [atomic](../../atomic_transfers.md) with the outer group the application was invoked with.  The transactions produced during contract evaluation are by default sent from the Applications associated account.
 
-Smart contracts are often referred to as applications on Algorand because they usually contain the bulk of blockchain logic that a distributed application will require. Once a contract is written it is deployed using an application creation transaction. This process will be described in the next section.
-
-When building smart contracts in PyTeal it is important to realize that a smart contract actually consists of two programs. These are called the approval and the clear programs. In PyTeal both of these programs are generally created in the same Python file. So the beginning of a PyTeal program will contain logic similar to the following:
+For more information on smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
 
 !!!info
     The following sample builds a simple counter smart contract that either adds or deducts one from a global counter based on how the contract is called.
+
+## Hello PyTeal
+
+When building smart contracts in PyTeal it is important to realize that a smart contract actually consists of two programs. These are called the approval and the clear programs. In PyTeal both of these programs are generally created in the same Python file. So the beginning of a PyTeal program will contain logic similar to the following:
 
 ```python
 #samplecontract.py
@@ -45,11 +48,46 @@ def clear_state_program():
     program = Return(Int(1))
     # Mode.Application specifies that this is a smart contract
     return compileTeal(program, Mode.Application, version=5)
+
+print(approval_program())
 ```
 
-In the above example, a function is defined to return each of the two programs. The `compileTeal` function compiles the program as defined by the program variable. In this case, we are just returning a one for both programs. The `compileTeal` method also sets the Mode.Application. This lets PyTeal know this is for a smart contract and not a smart signature. The version parameter instructs PyTeal on which version of TEAL to produce when compiling.
+In the above example, a function is defined to return each of the two programs. The `compileTeal` function compiles the program set to the `program` variable. In this case, we are just returning the integer 1 for both programs. The other arguments passed to `compileTeal` set the mode (Application or Signature) and version of TEAL to produce. The output from calling the `compileTeal` method is a string representing the compiled TEAL source.
 
-All communication with Algorand smart contracts is achieved through a special transaction type, called an application transaction. Application transactions have six subtypes. The specific subtype will determine which of the two programs to call.
+Running the program, the output should look something like:
+```teal
+#pragma version 5
+int 1
+return
+```
+
+This output represents the TEAL source for the program. The TEAL source must be compiled to bytecode in order to make use of it on-chain.  This can be done using [goal](../../../clis/goal/clerk/compile.md) or one of the SDKs through the [REST](../../../rest-apis/algod/v2.md#post-v2tealcompile) interface.
+
+
+## A note about PyTeal Expressions
+
+Before going further, it is important to have the right mental model for thinking about PyTeal contracts.
+
+    A PyTeal program is a PyTeal Expression composed of other PyTeal Expressions. 
+    
+Reread that sentence.
+
+When first starting to write contracts using PyTeal, the most common point of confusion comes from trying to include _Python_ native expressions in the the _PyTeal_ Expression tree.  In the above example the entire program was `Return(Int(1))`.  Here `Return` is a PyTeal Expression that takes as an argument another PyTeal Expression. The argument we pass it is the PyTeal Expression `Int(1)`. 
+
+If we were to call `print(program)` we'd see our tiny Expression tree:
+```
+(Return (Int: 1))
+```
+As a counter example, if instead of passing `Int(1)`, we make the program be `Return(1)`, PyTeal would throw an error complaining that `1` is not a valid PyTeal Expression.  
+
+!!! note
+    If you ever see any python error like `...has no attribute 'type_of'` PyTeal is probably trying to tell you you included something that is _not_ a valid PyTeal Expression
+
+While _only_ PyTeal Expressions may be included in the Expression tree representing the program, the Expressions may be generated as part of running the Python program. This allows the author to make use of Python scripting logic to generate a the PyTeal Expression tree based on more complex logic. 
+
+
+
+## Writing PyTeal 
 
 <center>![Stateful Smart Contract](../../../imgs/sccalltypes.png)</center>
 <center>*Application Transaction Types*</center>
