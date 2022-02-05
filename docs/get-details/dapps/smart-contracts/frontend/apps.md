@@ -648,12 +648,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
                 print(f"local_state of account {addr} for app_id {app_id}: ", local_state['key-value'])
 
     # read app global state
-    def read_global_state(client, addr, app_id) :   
-        results = client.account_info(addr)
-        apps_created = results['created-apps']
-        for app in apps_created :
-            if app['id'] == app_id :
-                print(f"global_state for app_id {app_id}: ", app['params']['global-state'])
+    def read_global_state(client, app_id):
+        app = client.application_info(app_id)
+        global_state = app['params']['global-state'] if "global-state" in app["params"] else []
+        print(f"global_state for app_id {app_id}: ", global_state)
     ```
 
 === "JavaScript"
