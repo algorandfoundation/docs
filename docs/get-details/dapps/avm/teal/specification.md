@@ -198,7 +198,7 @@ these results may contain leading zero bytes.
 
 | Op | Description |
 | --- | --- |
-| `b\|` | A bitwise-or B, where A and B are byte-arrays, zero-left extended to the greater of their lengths |
+| <code>b|</code> | A bitwise-or B, where A and B are byte-arrays, zero-left extended to the greater of their lengths |
 | `b&` | A bitwise-and B, where A and B are byte-arrays, zero-left extended to the greater of their lengths |
 | `b^` | A bitwise-xor B, where A and B are byte-arrays, zero-left extended to the greater of their lengths |
 | `b~` | X with all bits inverted |
