@@ -8,11 +8,11 @@ Complete installation instructions and developer guides are available in the [Py
 
 # PyTeal overview
 
-This section assumes the reader is familiar with Smart Contracts and Smart Signatures.
+This section assumes the reader is familiar with [Smart Contracts](../smart-contracts/index.md#smart-contracts) and [Smart Signatures](../smart-contracts/index.md#smart-signatures).
 
 When building a dApp that makes use of smart contracts or smart signatures (smartsigs), PyTeal makes implementation of more complex logic much simpler than writing the TEAL manually. 
 
-Generally, developers install PyTeal, write the contract in Python using their preferred editor, and then use PyTeal’s `compileProgram` method to produce the TEAL code. The TEAL code can then be compiled into bytecode and deployed to the blockchain.
+Generally, developers install PyTeal, write the contract in Python using their preferred editor, and then use PyTeal’s `compileProgram` method to produce the TEAL code. The TEAL source can be compiled into bytecode and deployed to the blockchain.
 
 For most applications, these contracts will only be a portion of the dApp’s architecture. Typically, developers will build functionality in the dApp that resides on the blockchain and some front end to interact with the smart contracts. 
 
@@ -26,8 +26,6 @@ Besides evaluating the logic to approve or reject a transaction, the contracts m
 
 For more information on smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
 
-!!!info
-    The following sample builds a simple counter smart contract that either adds or deducts one from a global counter based on how the contract is called.
 
 ## Hello PyTeal
 
@@ -78,7 +76,8 @@ If we were to call `print(program)` we'd see our tiny Expression tree:
 ```
 (Return (Int: 1))
 ```
-As a counter example, if instead of passing `Int(1)`, we make the program be `Return(1)`, PyTeal would throw an error complaining that `1` is not a valid PyTeal Expression.  
+
+As a counter example, if instead of passing `Int(1)`, we make the program `Return(1)`, PyTeal would throw an error complaining that `1` is not a valid PyTeal Expression.  
 
 !!! note
     If you ever see any python error like `...has no attribute 'type_of'` PyTeal is probably trying to tell you you included something that is _not_ a valid PyTeal Expression
@@ -86,19 +85,48 @@ As a counter example, if instead of passing `Int(1)`, we make the program be `Re
 While _only_ PyTeal Expressions may be included in the Expression tree representing the program, the Expressions may be generated as part of running the Python program. This allows the author to make use of Python scripting logic to generate a the PyTeal Expression tree based on more complex logic. 
 
 
+## Writing a simple PyTeal Contract
 
-## Writing PyTeal 
+Here we'll start updating our example to allow a more complex logical flow, showing how to build up a PyTeal contract using PyTeal Expressions.
 
-<center>![Stateful Smart Contract](../../../imgs/sccalltypes.png)</center>
-<center>*Application Transaction Types*</center>
-
-Most smart contract logic will be implemented with a NoOp transaction type. The other subtypes are primarily less used or once-only transaction types. For example, Algorand allows smart contracts to be updated. Code must be implemented in the contract to prevent this if it is an unwanted feature. Smart contracts can also be deleted, although this can be disabled as well. The Optin transaction type is submitted by an account that wants to opt into the smart contract. Note that this is only required by contracts that store per account values. It is also possible to have smart contracts that store values for certain accounts but not others. In this case, if logic is encountered in the contract that attempts to store values for a particular account. It will fail unless the account has opted into the contract. The CloseOut application transaction is used to gracefully exit a smart contract. It is primarily an opt-out type of operation that allows the smart contract to do cleanup when an account wishes to leave the contract. This transaction can fail based on the logic, which would lock the user into the contract forever. To circumvent this issue, Algorand also has a Clear application transaction type. This type of transaction allows an ungraceful exit from the contract. This transaction may still fail but the blockchain will still clear any data associated with the contract from the account. Only the Clear transaction will call the clear program. All others will call the approval program.
-
-Within PyTeal, a developer can switch on the type of transaction. This is the preferred way of building a PyTeal contract. Sections of code should be created that handle any of the transaction types they may encounter. The above example's approval program can be changed to the following to handle the different application transaction types.
+Below is a simple logical switch statement used to route evaluation to different set of logic based on a Transaction's [`OnComplete`](../../transactions/transactions.md#application-call-transaction) value.  
 
 ```python
 def approval_program():
-   # Mode.Application specifies that this is a smart contract
+    program = Cond(
+        [Txn.application_id() == Int(0), handle_creation],
+        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
+        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
+        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
+        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
+        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
+    )
+
+    return compileTeal(program, Mode.Application, version=5)
+```
+
+The `program` variable is set to a [PyTeal `Cond` Expression](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=Cond#chaining-tests-cond) which is an example of a Control Flow statement. Other Control flow statements are documented in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#).
+
+A `Cond` expression allows several conditions to be evaluated in order, taking a number of arguments as [`Condition Expression`, `Body Expression`].  The `Condition Expression` must evaluate to True or False. For a given invocation, the fist Condition that evaluates True will pass flow of the program to its corresponding `Body Expression`.  If none of the conditions are true the smart contract will return an `err` and fail.  The body for each condition here should reference some other variable or method defined in your PyTeal contract.
+
+!!! note
+    For control flow statements like `Cond`, the Body Expression of each condition _MUST_ evaluate to the same type. The current types that are allowed are `none`, `any`, `uint64` or `bytes`
+
+In the above example, most of the conditions check the transaction type using the `on_completion` transaction field. The result of a statement like `Txn.on_completion() == OnComplete.NoOp` is itself a PyTeal Expression, in this case evaluating to True or False.  
+
+!!! note
+    Using `Txn` is shorthand for `The transaction that invoked this contract` and should be used inspect transaction fields. Other transactions in the group including the one referenced by `Txn` are available using `Gtxn[n]` where n is the index of the Transaction in the group.  All other transaction fields can be examined using these transaction references, see the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html) for a complete list.
+
+The only condition above that does _not_ check the `on_completion` field is the first one, which only checks the `application_id` field. An `application_id` of `0` on the `Txn` tells us that this is meant to Create the Application. If the program succeeds, it will be assigned an application ID and further invocations will use that ID to call it. In this example the `handle_creation` Expression should handle any initialization necessary for this contract.
+
+### First handler
+
+```python
+def approval_program():
+    handle_creation = Seq(
+        App.globalPut(Bytes("Count"), Int(0)),
+        Return(Int(1))
+    )
 
     program = Cond(
         [Txn.application_id() == Int(0), handle_creation],
@@ -109,55 +137,29 @@ def approval_program():
         [Txn.on_completion() == OnComplete.NoOp, handle_noop]
     )
     return compileTeal(program, Mode.Application, version=5)
-
 ```
 
-The `program` variable is changed to use the [PyTeal `Cond` expression](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=Cond#chaining-tests-cond). This expression allows several conditions to be chained and the first to return true will then evaluate its second parameter, known as the condition body. If none of the conditions are true the smart contract will return an `err` and fail. The conditions are the first parameter to each condition and the body is the second parameter. In the above example, most of the conditions check the transaction type using the `on_completion` transaction field. This field will map to one of the subtypes of application transactions described above. The body for each condition here will point to another location in your PyTeal contract.
+Here we defined the `handle_creation` variable to be a Sequence of Expressions using [`Seq`](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
 
-When a smart contract is deployed, it actually is a special case of a `NoOp` transaction type. The Algorand SDKs provide functions to create this special type of transaction. For example, the Python SDK uses the function named `ApplicationCreateTxn`. When the contract is first created, the contract’s ID will be equal to 0. Once created, all smart contracts will have a unique ID and a unique Algorand address. This is why the first condition checked in the example above is checking the ID of the current smart contract. If this value is 0, the logic will know this is the first execution of the contract. This is a perfect place to add code to the contract to initialize any global variables the contract will use. More details on deploying a contract will be covered in the next section of this guide.
+The first expression stores a global variable named Count, and its value is set to 0. More information about storing state variables is available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
 
-The `Txn` object is used to access transaction fields for the current transaction. Many fields can be examined. See the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html) for a complete list.
+This second expression is the familiar `Return` expression which exits the program with the return value. In this case, it returns a value of 1, indicating success. 
 
-The example also uses the arithmetic expression `==` to check equality. See the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/arithmetic_expression.html) for additional arithmetic expressions.
+When this specific smart contract is first deployed it will store a global variable named Count with a value of 0 and immediately return success. 
+
+### Handle other OnComplete values
+
+Because our program requires no Local State, opting-in to this contract is not required so we can reject any opt-ins. Similarly, since there is no need to opt-in, there is no reason to allow a close-out, so those can be rejected as well.  Finally, the contract can deny application transactions that attempt to delete or update the contract.
 
 ```python
 
 def approval_program():
-    # Mode.Application specifies that this is a smart contract
-
     handle_creation = Seq([
         App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
+        Return(Int(1)) # Could also be Approve()
     ])
 
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-    return compileTeal(program, Mode.Application, version=5)
-```
-
-The [`Seq` expression](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq) is used here when the contract is created. This expression is used to provide a sequence of expressions. In this example, the first expression stores a global variable named Count, and its value is set to 0. This expression is followed by the `Return` expression which exits the program with the return value. In this case, it returns a value of 1, indicating success. So when this specific smart contract is first deployed it will store a global variable named Count with a value of 0 and immediately return success. The `Seq` expression is a flow control expression much like the `Cond` or `Return` expression. PyTeal contains many different flow expressions which are explained in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#).
-
-As stated earlier, global variables can be stored for a contract. In addition, for any account that opts into the contract, local variables can be stored for each account. To read more about how to do this with PyTeal see the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
-
-Opting into this contract is not required as no local variables are stored. The logic can reject the opt-in application transaction. Also, if no opt-in is allowed, close-out application transactions are not useful either, so those can be rejected as well. Finally, the contract can deny application transactions that attempt to delete or update the contract.
-
-```python
-
-def approval_program():
-    # Mode.Application specifies that this is a smart contract
-
-    handle_creation = Seq([
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
-    ])
-
-    handle_optin = Return(Int(0))
+    handle_optin = Return(Int(0)) # Could also be Reject()
 
     handle_closeout = Return(Int(0))
 
@@ -178,9 +180,15 @@ def approval_program():
 
 ```
 
-All four of these transaction types simply return a 0, which will cause the transactions to fail. This contract now handles all application transactions but the standard NoOp type. Do remember that deploying the contract for the first time is actually a NoOp transaction type, but this case is accounted for in the `handle_creation` function. The NoOp transaction type is the primary location where application logic will be implemented in most smart contracts. This example requires an add and a deduct function, to increment and decrement the counter respectively, to be handled for NoOp application transactions. Which of these two methods is executed will depend on the first parameter to the stateful smart contract. In addition, we want to verify that application transactions are not grouped with any other transactions.
+All four of these transaction types simply return a 0, which will cause the transactions to fail. This contract now handles all application transactions but the standard NoOp type. 
 
-For more information on passing parameters to smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
+### Handle NoOp 
+
+Typically the OnCompletion value is set to `NoOp` to make calls to any application. Different logic handling is often achieved by inspecting other transaction fields, especially `application_args`.
+
+Our example requires an add and a deduct function, to increment and decrement the counter respectively, to be handled for NoOp application transactions. 
+
+Which of these two methods is executed will depend on the first element in the `application_args` passed.  For more information on passing parameters to smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
 
 ```python
 from pyteal import *
@@ -188,8 +196,6 @@ from pyteal import *
 """Basic Counter Application"""
 
 def approval_program():
-    # Mode.Application specifies that this is a smart contract
-
     handle_creation = Seq([
         App.globalPut(Bytes("Count"), Int(0)),
         Return(Int(1))
@@ -203,15 +209,13 @@ def approval_program():
 
     handle_deleteapp = Return(Int(0))
 
-    handle_noop = Cond(
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Add")
-        ), add],
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Deduct")
-        ), deduct],
+    handle_noop = Seq(
+        # First, lets fail immediately if this transaction is grouped with any others
+        Assert(Global.group_size() == Int(1)), 
+        Cond(
+            [Txn.application_args[0] == Bytes("Add"), add], 
+            [Txn.application_args[0] == Bytes("Deduct"), deduct]
+        )
     )
 
     program = Cond(
@@ -226,14 +230,19 @@ def approval_program():
 
 ```
 
-In the example, another `Cond` expression is used to handle the NoOp transaction. The condition expression only has two options. The expression for each option is actually created using a logical `And` arithmetic expression. The `And` expression first checks the global group size variable to verify that is set to 1, indicating the application call is not grouped with any other transactions. This is logically Anded with an expression that checks that the first argument passed with the application transaction is either the string Add or Deduct. The body of each condition will be added next. PyTeal has access to many global variables like group size. See the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#global-parameters) for more information.
+In the example, we've implemented the `handle_noop` body as a Seq containing 2 Expressions.
+
+The first is an `Assert` that will immediately Reject the Transaction if, in this case, the number of transactions in the group is not exactly 1. The `Global.group_size()` illustrates the use of a PyTeal global variables. See the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#global-parameters) for other global variables available.
+
+The second Expression in the Sequence is another `Cond` expression is used to route to the correct Expression based on the first argument passed with the application transaction. If neither of these conditions evaluate to True, the transaction is rejected.
+
+
+### Implement functionality
 
 The final step for the approval program is to implement the add and deduct functions for the smart contract.
 
 ```python
 def approval_program():
-    # Mode.Application specifies that this is a smart contract
-
     handle_creation = Seq([
         App.globalPut(Bytes("Count"), Int(0)),
         Return(Int(1))
@@ -247,32 +256,38 @@ def approval_program():
 
     handle_deleteapp = Return(Int(0))
 
+    # Declare the ScratchVar as a Python variable _outside_ the expression tree
     scratchCount = ScratchVar(TealType.uint64)
 
-    add = Seq([
-        scratchCount.store(App.globalGet(Bytes("Count"))),
+    add = Seq(
+        # The initial `store` for the scratch var sets the value to 
+        # whatever is in the `Count` global state variable
+        scratchCount.store(App.globalGet(Bytes("Count"))), 
+        # Increment the value stored in the scratch var 
+        # and update the global state variable 
         App.globalPut(Bytes("Count"), scratchCount.load() + Int(1)),
         Return(Int(1))
-    ])
+    )
 
-     deduct = Seq([
+     deduct = Seq(
+        # The initial `store` for the scratch var sets the value to 
+        # whatever is in the `Count` global state variable
         scratchCount.store(App.globalGet(Bytes("Count"))),
+        # Check if the value would be negative by decrementing 
         If(scratchCount.load() > Int(0),
+            # If the value is > 0, decrement the value stored 
+            # in the scratch var and update the global state variable
             App.globalPut(Bytes("Count"), scratchCount.load() - Int(1)),
         ),
         Return(Int(1))
-    ])
+    )
 
-
-    handle_noop = Cond(
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Add")
-        ), add],
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Deduct")
-        ), deduct],
+    handle_noop = Seq(
+        Assert(Global.group_size() == Int(1)), 
+        Cond(
+            [Txn.application_args[0] == Bytes("Add"), add], 
+            [Txn.application_args[0] == Bytes("Deduct"), deduct]
+        )
     )
 
     program = Cond(
@@ -287,9 +302,19 @@ def approval_program():
 
 ```
 
-First, the contract is modified to create a temporary variable in scratch space. Smart contracts can store up to 256 temporary variables in scratch space. PyTeal provides a class that can be used to interface with these temporary variables. The scratch variable in this example happens to be an integer, byte arrays can also be stored. The implementation of the add and deduct functions rely on the `Seq` expression, guaranteeing an order of operations. First, the current value of the global variable Count is read for the contract and placed in scratch space. Next, the contract either increments this number or decrements and then stores the resultant back into the contract’s global variable. On the deduct, an additional `If` expression is used to verify the current global variable is above 0. Finally, both methods then exit the smart contract call, returning a 1, indicating that the transaction was successful.
+The contract is modified to create a temporary variable in scratch space. Critically, the declaration of this `ScratchVar` happens _outside_ the Expression tree since the statement `scratchCount = ScratchVar()` is _not_ a valid PyTeal Expression. Smart contracts can hold up to 256 temporary variables in scratch space.  The scratch variable in this example happens to be an integer, byte arrays can also be stored. 
 
-This sample application requires no local variables and user’s do not have to opt into the contract to call either of its methods. This means that if a clear transaction is submitted to the contract, it will execute the clear program and simply return 1, indicating success. The full example is presented below. Additionally, print commands are added to the contract to illustrate the output.
+First, the current value of the global variable Count is read for the contract and placed in scratch space. 
+Then, the contract either increments this number or decrements and then stores the result into the contract’s global variable. 
+
+On the deduct, an additional `If` expression is used to verify the current global variable is above 0. 
+
+Finally, both methods exit the smart contract call, returning a 1, indicating approval.
+
+
+### Final product
+
+Because no opt-in is allowed, a clear program need not do anything so we simply return 1, indicating success. The full example is presented below. 
 
 ```python
 #samplecontract.py
@@ -323,15 +348,12 @@ def approval_program():
          Return(Int(1))
     ])
 
-    handle_noop = Cond(
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Add")
-        ), add],
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Deduct")
-        ), deduct],
+    handle_noop = Seq(
+        Assert(Global.group_size() == Int(1)), 
+        Cond(
+            [Txn.application_args[0] == Bytes("Add"), add], 
+            [Txn.application_args[0] == Bytes("Deduct"), deduct]
+        )
     )
 
 
@@ -343,13 +365,12 @@ def approval_program():
         [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
         [Txn.on_completion() == OnComplete.NoOp, handle_noop]
     )
-    # Mode.Application specifies that this is a smart contract
+
     return compileTeal(program, Mode.Application, version=5)
 
 
 def clear_state_program():
     program = Return(Int(1))
-    # Mode.Application specifies that this is a smart contract
     return compileTeal(program, Mode.Application, version=5)
 
 # print out the results
