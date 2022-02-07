@@ -495,11 +495,7 @@ def read_global_state(client, app_id):
 
 ```
 
-<<<<<<< HEAD
-Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the account’s record. In this example, the function `read_global_state` uses the Python SDK function `account_info` to connect to the Algorand node and retrieve the account information. The function then locates the created application within this record. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
-=======
 Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the application data including the global state. In this example, the function `read_global_state` uses the Python SDK function `application_info` to connect to the Algorand node and retrieve the application information. The function then extracts the global state values if they exist, otherwise returns an empty array. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
->>>>>>> 5009bbf (Initial changes to read_global_state usage)
 
 As covered earlier in this guide, to deploy the contract an application creation transaction must be created and submitted to the blockchain. The SDKs provide a method for creating this transaction. The following code illustrates creating and submitting this transaction.
 
