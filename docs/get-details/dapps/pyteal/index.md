@@ -488,17 +488,14 @@ def format_state(state):
     return formatted
 
 # helper function to read app global state
-def read_global_state(client, addr, app_id):
-    results = client.account_info(addr)
-    apps_created = results['created-apps']
-    for app in apps_created:
-        if app['id'] == app_id:
-            return format_state(app['params']['global-state'])
-    return {}
+def read_global_state(client, app_id):
+    app = client.application_info(app_id)
+    global_state = app['params']['global-state'] if "global-state" in app['params'] else []
+    return format_state(global_state)
 
 ```
 
-Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the account’s record. In this example, the function `read_global_state` uses the Python SDK function `account_info` to connect to the Algorand node and retrieve the account information. The function then locates the created application within this record. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
+Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the application data including the global state. In this example, the function `read_global_state` uses the Python SDK function `application_info` to connect to the Algorand node and retrieve the application information. The function then extracts the global state values if they exist, otherwise returns an empty array. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
 
 As covered earlier in this guide, to deploy the contract an application creation transaction must be created and submitted to the blockchain. The SDKs provide a method for creating this transaction. The following code illustrates creating and submitting this transaction.
 
@@ -586,7 +583,7 @@ def main() :
     app_id = create_app(algod_client, creator_private_key, approval_program_compiled, clear_state_program_compiled, global_schema, local_schema)
 
     # read global state of application
-    print("Global state:", read_global_state(algod_client, account.address_from_private_key(creator_private_key), app_id))
+    print("Global state:", read_global_state(algod_client, app_id))
 ```
 
 First, a connection to the sandbox node is established. This is followed by recovering the account of the creator. Next, the amount of state to be used is defined. In this example, only one global integer is specified.
@@ -635,7 +632,7 @@ The `main` function can then be modified to call the smart contract after deploy
     call_app(algod_client, creator_private_key, app_id, app_args)
 
     # read global state of application
-    print("Global state:", read_global_state(algod_client, account.address_from_private_key(creator_private_key), app_id))
+    print("Global state:", read_global_state(algod_client, app_id))
 ```
 
 In this example, the Add string is added to the application arguments array and the smart contract is called. The updated global state is then printed out. The value should now be set to 1.
@@ -716,13 +713,10 @@ def format_state(state):
     return formatted
 
 # helper function to read app global state
-def read_global_state(client, addr, app_id):
-    results = client.account_info(addr)
-    apps_created = results['created-apps']
-    for app in apps_created:
-        if app['id'] == app_id:
-            return format_state(app['params']['global-state'])
-    return {}
+def read_global_state(client, app_id):
+    app = client.application_info(app_id)
+    global_state = app['params']['global-state'] if "global-state" in app['params'] else []
+    return format_state(global_state)
 
 
 """Basic Counter Application in PyTeal"""
@@ -881,7 +875,7 @@ def main() :
     app_id = create_app(algod_client, creator_private_key, approval_program_compiled, clear_state_program_compiled, global_schema, local_schema)
 
     # read global state of application
-    print("Global state:", read_global_state(algod_client, account.address_from_private_key(creator_private_key), app_id))
+    print("Global state:", read_global_state(algod_client, app_id))
 
     print("--------------------------------------------")
     print("Calling Counter application......")
@@ -889,7 +883,7 @@ def main() :
     call_app(algod_client, creator_private_key, app_id, app_args)
 
     # read global state of application
-    print("Global state:", read_global_state(algod_client, account.address_from_private_key(creator_private_key), app_id))
+    print("Global state:", read_global_state(algod_client, app_id))
 
 main()
 
