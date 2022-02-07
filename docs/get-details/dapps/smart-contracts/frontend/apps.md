@@ -694,7 +694,7 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
 
-    public void readGlobalState(AlgodClient client, Account account, Long appId) throws Exception {
+    public void readGlobalState(AlgodClient client, Long appId) throws Exception {
         Response<com.algorand.algosdk.v2.client.model.Application> appResponse = client.GetApplicationByID(appId).execute();
         List<TealKeyValue> globalState= appResponse.params.globalState;
         if !globalState.isEmpty() {
@@ -717,7 +717,7 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
 
-    func readGlobalState(client *algod.Client, account crypto.Account, index uint64) {
+    func readGlobalState(client *algod.Client, index uint64) {
         applicationInfo, _ := client.GetApplicationByID(index)
         globalState, _ := applicationInfo.Params.GlobalState
         if globalState {
