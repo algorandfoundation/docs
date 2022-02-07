@@ -673,10 +673,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
     async function readGlobalState(client, index){
         let applicationInfoResponse = await client.applicationInfo(index).do();
         let globalState = []
-        if applicationInfoResponse['params'].includes('global-state') {
-            let globalState = applicationInfoResponse['params']['global-state']
+        if(applicationInfoResponse['params'].includes('global-state')) {
+            globalState = applicationInfoResponse['params']['global-state']
         }
-        for (let n = 0; n < applicationInfoResponse['params']['global-state'].length; n++) {
+        for (let n = 0; n < globalState.length; n++) {
             console.log(applicationInfoResponse['params']['global-state'][n]);
         }
     }
@@ -696,8 +696,8 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
 
     public void readGlobalState(AlgodClient client, Long appId) throws Exception {
         Response<com.algorand.algosdk.v2.client.model.Application> appResponse = client.GetApplicationByID(appId).execute();
-        List<TealKeyValue> globalState= appResponse.params.globalState;
-        if !globalState.isEmpty() {
+        List<TealKeyValue> globalState= appResponse.body().params.globalState;
+        if(!globalState.isEmpty()){
             for (int i = 0; i < globalState.size(); i++) {
                 System.out.println("Application global state: " + globalState.get(i).toString());
             }
@@ -720,7 +720,7 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
     func readGlobalState(client *algod.Client, index uint64) {
         applicationInfo, _ := client.GetApplicationByID(index)
         globalState, _ := applicationInfo.Params.GlobalState
-        if globalState {
+        if globalState != nil {
             fmt.Println(globalState)
         }
     }
