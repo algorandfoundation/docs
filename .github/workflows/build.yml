@@ -1,0 +1,15 @@
+name: "Build workflow"
+on: [pull_request]
+jobs:
+  build-test:
+    runs-on: ubuntu-20.04
+    container: python:3.9-slim
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install pip dependencies
+        run: pip install -r requirements.txt
+      - name: Build and Test
+        run: mkdocs build
