@@ -91,6 +91,8 @@ The example application defined below may hold up to one each of `bytes` and `in
 
 === "Python"
 	```python
+    from algosdk.future import transaction
+
     # declare application state storage (immutable)
     local_ints = 1
     local_bytes = 1
