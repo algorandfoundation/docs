@@ -153,7 +153,7 @@ Lookup account transactions.
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
-|**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
+|**Query**|**sig-type**  <br>*optional*|SigType filters results using just the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
@@ -508,7 +508,7 @@ Lookup transactions for an asset.
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
-|**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
+|**Query**|**sig-type**  <br>*optional*|SigType filters results using just the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
@@ -607,7 +607,7 @@ Search for transactions.
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
-|**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
+|**Query**|**sig-type**  <br>*optional*|SigType filters results using just the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 

@@ -209,7 +209,7 @@ int 0
     // Result = ASABACI=
     ```
 
-Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogigSig method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. 
+Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSig method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. 
 
 The binary bytes are used in the SDKs as shown below. If using the `goal` command-line tool to compile the TEAL code, these same bytes can be retrieved using the following commands. 
 
@@ -435,9 +435,9 @@ int 123
         const sender = lsig.address();
         const receiver = "<receiver-address>";
         const amount = 10000;
-        const closeToRemaninder = undefined;
+        const closeToRemainder = undefined;
         const note = undefined;
-        const txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
+        const txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemainder, note, params)
 
         const rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
 

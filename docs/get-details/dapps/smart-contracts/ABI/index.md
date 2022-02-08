@@ -7,6 +7,8 @@ The specification is defined in [ARC4](https://github.com/algorandfoundation/ARC
 
 At a high level, the ABI allows contracts to define an API with rich types and offer an interface description so clients know exactly what the contract is expecting to be passed. 
 
+!!! note
+    When constructing Application Call transactions that are expected to encode arguments, using the [Atomic Transaction Composer](../../../atc.md) is recommended.
 
 # Data Types
 
