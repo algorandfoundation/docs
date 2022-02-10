@@ -1,11 +1,13 @@
 site_name: Algorand Developer Docs
 
-theme: 
-    name: material
-    font: Lato
-    palette:
-      primary: '#000000'
-      accent: '#5662DB'
+theme:
+  name: material
+  font: Lato
+  palette:
+    primary: "#000000"
+    accent: "#5662DB"
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
   - admonition
@@ -36,3 +38,7 @@ markdown_extensions:
 plugins:
   - search
   - awesome-pages
+
+repo_name: algorand/docs
+repo_url: https://github.com/algorand/docs
+edit_uri: edit/staging/docs/
