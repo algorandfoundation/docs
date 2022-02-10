@@ -8,6 +8,8 @@ theme:
     accent: "#5662DB"
   icon:
     repo: fontawesome/brands/github
+  features:
+    - navigation.sections
 
 markdown_extensions:
   - admonition
