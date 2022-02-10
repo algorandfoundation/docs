@@ -588,7 +588,7 @@ The `int 0` is the index into the accounts array. The actual address could also 
 
     previous_giver_logic = Seq(Return(Int(1))) 
 
-    program = Seq([
+    program = Seq(
         get_amount_given, 
         If(get_amount_given.hasValue(), previous_giver_logic, new_giver_logic),
     )
