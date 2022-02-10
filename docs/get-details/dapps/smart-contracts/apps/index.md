@@ -240,7 +240,7 @@ Assets can also be created by a smart contract. To create an asset with an inner
         TxnField.config_asset_manager: Global.current_application_address(),
         TxnField.config_asset_reserve: Global.current_application_address(),
         TxnField.config_asset_freeze: Global.current_application_address(),
-        TxnField.config_asset_clawback: Global.current_application_address(),
+        TxnField.config_asset_clawback: Global.current_application_address()
     }),
     InnerTxn.Submit(),
     # InnerTxn.created_asset_id() would represent the asset id that was just created
@@ -287,7 +287,7 @@ As with all assets, the mutable addresses can be changed. For example to change 
         TxnField.config_asset_manager: Txn.sender(),
         TxnField.config_asset_reserve: Txn.sender(),
         TxnField.config_asset_freeze: Txn.sender(),
-        TxnField.config_asset_clawback: Txn.sender(),
+        TxnField.config_asset_clawback: Txn.sender()
     }),
     InnerTxn.Submit(),
     #...
@@ -323,7 +323,7 @@ Assets managed by the contract can also be deleted. This can be done with the fo
     InnerTxnBuilder.Begin(),
     InnerTxnBuilder.SetFields({
         TxnField.type_enum: TxnType.AssetConfig,
-        TxnField.config_asset: Txn.assets[0],
+        TxnField.config_asset: Txn.assets[0]
     }),
     InnerTxn.Submit(),
     #...
@@ -353,15 +353,15 @@ A smart contract can make inner transactions consisting of grouped transactions.
     InnerTxnBuilder.Begin(),
     InnerTxnBuilder.SetFields({
         TxnField.type_enum: TxnType.Payment,
-        TxnField.reciever: addr.value()
+        TxnField.reciever: addr.value(),
         TxnField.amount: Int(1000000)
     })
     InnerTxn.Next(), # This indicates we're moving to constructing the next txn in the group
     InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.ApplicationCallTransaction,
+        TxnField.type_enum: TxnType.ApplicationCall,
         TxnField.application_id: Int(1234),
         TxnField.on_complete: OnComplete.NoOp,
-        TxnField.application_args: [Bytes("buy")],
+        TxnField.application_args: [Bytes("buy")]
     })
     InnerTxn.Submit()
     #...
@@ -418,7 +418,7 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
     #...
     InnerTxnBuilder.Begin(),
     InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.ApplicationCallTransaction,
+        TxnField.type_enum: TxnType.ApplicationCall,
         TxnField.application_id: Int(1234),
         TxnField.on_complete: OnComplete.NoOp,
     })
