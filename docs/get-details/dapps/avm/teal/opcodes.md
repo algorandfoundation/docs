@@ -1318,7 +1318,7 @@ bitlen interprets arrays as big-endian integers, unlike setbit/getbit
 - Opcode: 0xb3
 - Pops: _None_
 - Pushes: _None_
-- Execute the current inner transaction. Fail if 16 inner transactions have already been executed, or if the transaction itself fails.
+- Execute the current inner transaction. Fail if 256 inner transactions have already been executed, or if the transaction itself fails.
 - LogicSigVersion >= 5
 - Mode: Application
 
