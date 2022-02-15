@@ -11,5 +11,5 @@ jobs:
           fetch-depth: 0
       - name: Install pip dependencies
         run: pip install -r requirements.txt
-      - name: Build and Test
+      - name: Build
         run: mkdocs build
