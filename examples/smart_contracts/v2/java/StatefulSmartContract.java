@@ -1,3 +1,9 @@
+/* 
+IMPORTANT: The approvalProgramSourceInitial and approvalProgramSourceRefactored 
+are assumed to be executed by the creator with address 
+"ABU6EJ637L6BF3MHLPL5FADI7JSM36J3CZILNP256SQ77HCLE2OACD2C3Y".
+If you are using a different account, change the hard-coded address
+*/
 package com.algorand.javatest.smart_contracts;
 
 import com.algorand.algosdk.util.Encoder;

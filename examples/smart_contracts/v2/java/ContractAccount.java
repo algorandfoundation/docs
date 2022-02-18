@@ -11,18 +11,14 @@ import com.algorand.algosdk.util.Encoder;
 import com.algorand.algosdk.v2.client.common.AlgodClient;
 import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import com.algorand.algosdk.v2.client.model.CompileResponse;
-
+import com.algorand.algosdk.v2.client.Utils;
 
 public class ContractAccount {
     // Utility function to update changing block parameters
@@ -43,30 +39,6 @@ public class ContractAccount {
         return client;
     }
 
-    // utility function to wait on a transaction to be confirmed
-
-    public void waitForConfirmation(String txID) throws Exception {
-        if (client == null)
-            this.client = connectToNetwork();
-        Long lastRound = client.GetStatus().execute().body().lastRound;
-        while (true) {
-            try {
-                // Check the pending transactions
-                Response<PendingTransactionResponse> pendingInfo = client.PendingTransactionInformation(txID).execute();
-                if (pendingInfo.body().confirmedRound != null && pendingInfo.body().confirmedRound > 0) {
-                    // Got the completed Transaction
-                    System.out.println(
-                            "Transaction " + txID + " confirmed in round " + pendingInfo.body().confirmedRound);
-                    break;
-                }
-                lastRound++;
-                client.WaitForBlock(lastRound).execute();
-            } catch (Exception e) {
-                throw (e);
-            }
-        }
-    }
-
     public void contractAccountExample() throws Exception {
         // Initialize an algod client
         if (client == null)
@@ -84,7 +56,11 @@ public class ContractAccount {
         byte[] source = Files.readAllBytes(Paths.get("./samplearg.teal"));   
         //byte[] source = Files.readAllBytes(Paths.get("./<filename">));
         // compile
-        CompileResponse response = client.TealCompile().source(source).execute().body();
+        Response < CompileResponse > compileresponse = client.TealCompile().source(source).execute();
+        if (!compileresponse.isSuccessful()) {
+            throw new Exception(compileresponse.message());
+        }
+        CompileResponse response = compileresponse.body();
         // print results
         System.out.println("response: " + response);
         System.out.println("Hash: " + response.hash);
@@ -111,7 +87,7 @@ public class ContractAccount {
         String note = "Hello World";
         Transaction txn = Transaction.PaymentTransactionBuilder()
                 .sender(lsig
-                        .toAddress())
+                .toAddress())
                 .note(note.getBytes())
                 .amount(100000)
                 .receiver(new Address(RECEIVER))
@@ -134,10 +110,9 @@ public class ContractAccount {
             // }
             String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
             // Wait for transaction confirmation
-            waitForConfirmation(id);
-            System.out.println("Successfully sent tx with id: " + id);
-            // Read the transaction
-            PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body(); 
+            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
+            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
+
             JSONObject jsonObj = new JSONObject(pTrx.toString());
             System.out.println("Transaction information (with notes): " + jsonObj.toString(2)); // pretty print
             System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
@@ -151,5 +126,3 @@ public class ContractAccount {
     }
 }
 
-// resource
-// https://developer.algorand.org/docs/features/asc1/sdks/#account-delegation-sdk-usage

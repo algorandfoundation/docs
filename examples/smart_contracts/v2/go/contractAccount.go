@@ -5,40 +5,19 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/binary"
-	// "encoding/json"
+
 	"io/ioutil"
 	"log"
 	"os"
 	"fmt"
+	"github.com/algorand/go-algorand-sdk/future"
 
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/transaction"
 )
 
-// Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client) {
-	status, err := client.Status().Do(context.Background())
-	if err != nil {
-		fmt.Printf("error getting algod status: %s\n", err)
-		return
-	}
-	lastRound := status.LastRound
-	for {
-		pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
-		if err != nil {
-			fmt.Printf("error getting pending transaction: %s\n", err)
-			return
-		}
-		if pt.ConfirmedRound > 0 {
-			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-			break
-		}
-		fmt.Printf("waiting for confirmation\n")
-		lastRound++
-		status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
-	}
-}
+
 func main() {
 
 	// const algodToken = "<algod-token>"
@@ -106,8 +85,8 @@ func main() {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	txParams.FlatFee = true
-	txParams.Fee = 1000
+	// txParams.FlatFee = true
+	// txParams.Fee = 1000
 
 	// Make transaction
 	// const receiver = "<receiver-address>"
@@ -116,7 +95,7 @@ func main() {
 	const receiver = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ"
 	const fee = 1000
 	const amount = 100000
-	var minFee uint64 = 1000
+	var minFee uint64 = uint64(txParams.MinFee)
 	note := []byte("Hello World")
 	genID := txParams.GenesisID
 	genHash := txParams.GenesisHash
@@ -148,7 +127,15 @@ func main() {
 	if err != nil {
 		fmt.Printf("Sending failed with %v\n", err)
 	}
-    // Wait for transaction to be confirmed
-    waitForConfirmation(txID, algodClient)
-    fmt.Printf("Transaction ID: %v\n", transactionID)
+
+
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+	if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
+		return
+	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", transactionID ,confirmedTxn.ConfirmedRound)
+
+
 }

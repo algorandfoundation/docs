@@ -9,20 +9,17 @@ import com.algorand.algosdk.transaction.SignedTransaction;
 import com.algorand.algosdk.transaction.Transaction;
 import com.algorand.algosdk.util.Encoder;
 import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import java.util.Base64;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import com.algorand.algosdk.v2.client.model.CompileResponse;
+import com.algorand.algosdk.v2.client.Utils;
+import com.algorand.algosdk.v2.client.common.*;
+
 
 public class AccountDelegation {
     // Utility function to update changing block parameters
@@ -45,29 +42,7 @@ public class AccountDelegation {
         return client;
     }
 
-    // utility function to wait on a transaction to be confirmed
-
-    public void waitForConfirmation(String txID) throws Exception {
-        if (client == null)
-            this.client = connectToNetwork();
-        Long lastRound = client.GetStatus().execute().body().lastRound;
-        while (true) {
-            try {
-                // Check the pending transactions
-                Response<PendingTransactionResponse> pendingInfo = client.PendingTransactionInformation(txID).execute();
-                if (pendingInfo.body().confirmedRound != null && pendingInfo.body().confirmedRound > 0) {
-                    // Got the completed Transaction
-                    System.out.println(
-                            "Transaction " + txID + " confirmed in round " + pendingInfo.body().confirmedRound);
-                    break;
-                }
-                lastRound++;
-                client.WaitForBlock(lastRound).execute();
-            } catch (Exception e) {
-                throw (e);
-            }
-        }
-    }
+   
 
     public void accountDelegationExample() throws Exception {
         // Initialize an algod client
@@ -75,10 +50,11 @@ public class AccountDelegation {
             this.client = connectToNetwork();
         // import your private key mnemonic and address
         
-        final String SRC_ACCOUNT = "buzz genre work meat fame favorite rookie stay tennis demand panic busy hedgehog snow morning acquire ball grain grape member blur armor foil ability seminar";
-        // final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
+        final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
  
         Account src = new Account(SRC_ACCOUNT);
+        System.out.println("Sender: " + src.getAddress());
+ 
         // Set the receiver
         final String RECEIVER = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
         // final String RECEIVER = "<receiver-address>";
@@ -119,8 +95,14 @@ public class AccountDelegation {
 
         // sign the logic signature with an account sk
         src.signLogicsig(lsig);
-        TransactionParametersResponse params = client.TransactionParams().execute().body();
-        // create a transaction
+        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
+        if (!resp.isSuccessful()) {
+            throw new Exception(resp.message());
+        }
+        TransactionParametersResponse params = resp.body();
+        if (params == null) {
+            throw new Exception("Params retrieval error");
+        }        // create a transaction
 
         String note = "Hello World";
         Transaction txn = Transaction.PaymentTransactionBuilder()
@@ -149,12 +131,8 @@ public class AccountDelegation {
             // }
             String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
             // Wait for transaction confirmation
-            waitForConfirmation(id);
-
-            System.out.println("Successfully sent tx with id: " + id);
-            // Read the transaction
-            PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-  
+            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
+            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);  
             JSONObject jsonObj = new JSONObject(pTrx.toString());
             System.out.println("Transaction information (with notes): " + jsonObj.toString(2)); // pretty print
             System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
@@ -174,5 +152,3 @@ public class AccountDelegation {
 
 }
 
-// resource
-// https://developer.algorand.org/docs/features/asc1/sdks/#account-delegation-sdk-usage

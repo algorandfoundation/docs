@@ -1,7 +1,9 @@
-/* IMPORTANT: The approvalProgramSourceInitial and 
-approvalProgramSourceRefactored is executed by the creator account, 
-if you are using a different account, change the hard-coded address */
-
+/* 
+IMPORTANT: The approvalProgramSourceInitial and approvalProgramSourceRefactored 
+are assumed to be executed by the creator with address 
+"LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY".
+If you are using a different account, change the hard-coded address
+*/
 const algosdk = require('algosdk');
 
 // user declared account mnemonics
