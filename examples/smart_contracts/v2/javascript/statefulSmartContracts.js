@@ -5,13 +5,14 @@ if you are using a different account, change the hard-coded address */
 const algosdk = require('algosdk');
 
 // user declared account mnemonics
+// do not use mnemonics in prodcuction code, for demo purposes only
 creatorMnemonic = "Your 25-word mnemonic goes here";
 userMnemonic = "A second distinct 25-word mnemonic goes here";
 
 // user declared algod connection parameters
-algodAddress = "http://localhost:4001";
+algodAddress = "http://localhost";
 algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
+const port = 4001;
 // declare application state storage (immutable)
 localInts = 1;
 localBytes = 1;
@@ -19,7 +20,7 @@ globalInts = 1;
 globalBytes = 0;
 
 // user declared approval program (initial)
-var approvalProgramSourceInitial = `#pragma version 2
+var approvalProgramSourceInitial = `#pragma version 5
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -55,7 +56,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 bnz handle_optin
@@ -110,21 +111,21 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 `;
 
 // user declared approval program (refactored)
-approvalProgramSourceRefactored = `#pragma version 2
+approvalProgramSourceRefactored = `#pragma version 5
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -160,7 +161,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 bnz handle_optin
@@ -222,21 +223,21 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 `;
  
 // declare clear state program source
-clearProgramSource = `#pragma version 2
+clearProgramSource = `#pragma version 5
 int 1
 `;
 
@@ -249,22 +250,7 @@ async function compileProgram(client, programSource) {
     return compiledBytes;
 }
 
-// helper function to await transaction confirmation
-// Function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let status = (await algodclient.status().do());
-    let lastRound = status["last-round"];
-      while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-          //Got the completed Transaction
-          console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-          break;
-        }
-        lastRound++;
-        await algodclient.statusAfterBlock(lastRound).do();
-      }
-    };
+
 
 // create new application
 async function createApp(client, creatorAccount, approvalProgram, clearProgram, localInts, localBytes, globalInts, globalBytes) {
@@ -277,8 +263,8 @@ async function createApp(client, creatorAccount, approvalProgram, clearProgram, 
 	// get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete, 
@@ -294,7 +280,11 @@ async function createApp(client, creatorAccount, approvalProgram, clearProgram, 
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -311,8 +301,8 @@ async function optInApp(client, account, index) {
 	// get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationOptInTxn(sender, params, index);
@@ -326,7 +316,10 @@ async function optInApp(client, account, index) {
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -341,8 +334,8 @@ async function callApp(client, account, index, appArgs) {
     // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationNoOpTxn(sender, params, index, appArgs)
@@ -356,7 +349,10 @@ async function callApp(client, account, index, appArgs) {
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -402,8 +398,8 @@ async function updateApp(client, creatorAccount, index, approvalProgram, clearPr
 	// get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationUpdateTxn(sender, params, index, approvalProgram, clearProgram);
@@ -417,7 +413,10 @@ async function updateApp(client, creatorAccount, index, approvalProgram, clearPr
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -434,8 +433,8 @@ async function closeOutApp(client, account, index) {
     // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationCloseOutTxn(sender, params, index)
@@ -449,7 +448,10 @@ async function closeOutApp(client, account, index) {
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -463,8 +465,8 @@ async function deleteApp(client, creatorAccount, index) {
 	// get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationDeleteTxn(sender, params, index);
@@ -478,7 +480,10 @@ async function deleteApp(client, creatorAccount, index) {
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -494,8 +499,8 @@ async function clearApp(client, account, index) {
 	// get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // create unsigned transaction
     let txn = algosdk.makeApplicationClearStateTxn(sender, params, index);
@@ -509,7 +514,10 @@ async function clearApp(client, account, index) {
     await client.sendRawTransaction(signedTxn).do();
 
     // Wait for confirmation
-    await waitForConfirmation(client, txId);
+
+    const confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -521,7 +529,7 @@ async function clearApp(client, account, index) {
 async function main() {
     try {
     // initialize an algodClient
-    let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+    let algodClient = new algosdk.Algodv2(algodToken, algodAddress, port);
 
     // get accounts from mnemonic
     let creatorAccount = algosdk.mnemonicToSecretKey(creatorMnemonic);

@@ -1,28 +1,33 @@
 import base64
 import datetime
+import json
 
-from algosdk.future import transaction
 from algosdk import account, mnemonic
 from algosdk.v2client import algod
+from algosdk.future.transaction import *
 
 # user declared account mnemonics
+# never use mnemonics in code, for demo purposes
 creator_mnemonic = "Your 25-word mnemonic goes here"
 user_mnemonic = "A second distinct 25-word mnemonic goes here"
 
 # user declared algod connection parameters
+# TODO: REMOVE
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
 
 # declare application state storage (immutable)
 local_ints = 1
 local_bytes = 1
 global_ints = 1
 global_bytes = 0
-global_schema = transaction.StateSchema(global_ints, global_bytes)
-local_schema = transaction.StateSchema(local_ints, local_bytes)
+global_schema = StateSchema(global_ints, global_bytes)
+local_schema = StateSchema(local_ints, local_bytes)
 
+# REPLACE/Copy creator to below account addr's - IE, LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 # user declared approval program (initial)
-approval_program_source_initial = b"""#pragma version 2
+approval_program_source_initial = b"""#pragma version 5
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -58,7 +63,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 bnz handle_optin
@@ -113,14 +118,14 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
@@ -128,7 +133,7 @@ return
 """
 
 # user declared approval program (refactored)
-approval_program_source_refactored = b"""#pragma version 2
+approval_program_source_refactored = b"""#pragma version 5
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -164,7 +169,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 bnz handle_optin
@@ -226,21 +231,21 @@ return
 
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 """
  
 # declare clear state program source
-clear_program_source = b"""#pragma version 2
+clear_program_source = b"""#pragma version 5
 int 1
 """
 
@@ -254,17 +259,7 @@ def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
 
-# helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, txid) :
-    last_round = client.status().get('last-round')
-    txinfo = client.pending_transaction_info(txid)
-    while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
-        print("Waiting for confirmation...")
-        last_round += 1
-        client.status_after_block(last_round)
-        txinfo = client.pending_transaction_info(txid)
-    print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
-    return txinfo
+
 
 # create new application
 def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema) : 
@@ -272,28 +267,32 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     sender = account.address_from_private_key(private_key)
 
     # declare on_complete as NoOp
-    on_complete = transaction.OnComplete.NoOpOC.real
+    on_complete = OnComplete.NoOpOC.real
 
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
-                                            approval_program, clear_program, \
-                                            global_schema, local_schema)
+    txn = ApplicationCreateTxn(sender, params, on_complete, approval_program, clear_program, global_schema, local_schema)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
     tx_id = signed_txn.transaction.get_txid()
 
+
     # send transaction
     client.send_transactions([signed_txn])
 
+
     # await confirmation
-    wait_for_confirmation(client, tx_id)
+
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
+
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
@@ -311,11 +310,11 @@ def opt_in_app(client, private_key, index) :
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationOptInTxn(sender, params, index)
+    txn = ApplicationOptInTxn(sender, params, index)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -325,11 +324,14 @@ def opt_in_app(client, private_key, index) :
     client.send_transactions([signed_txn])
 
     # await confirmation
-    wait_for_confirmation(client, tx_id)
 
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
-    print("OptIn to app-id: ",transaction_response['txn']['txn']['apid'])    
+    print("OptIn to app-id: ")    
+    print(json.dumps(transaction_response['txn']['txn']['apid'], indent=2))
 
 # call application
 def call_app(client, private_key, index, app_args) : 
@@ -340,11 +342,11 @@ def call_app(client, private_key, index, app_args) :
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationNoOpTxn(sender, params, index, app_args)
+    txn = ApplicationNoOpTxn(sender, params, index, app_args)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -354,49 +356,51 @@ def call_app(client, private_key, index, app_args) :
     client.send_transactions([signed_txn])
 
     # await confirmation
-    wait_for_confirmation(client, tx_id)
 
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
     print("Called app-id: ",transaction_response['txn']['txn']['apid'])
     if "global-state-delta" in transaction_response :
-        print("Global State updated :\n",transaction_response['global-state-delta'])
+        print("Global State updated :\n")
+        print(json.dumps(transaction_response['global-state-delta'], indent=2))
     if "local-state-delta" in transaction_response :
-        print("Local State updated :\n",transaction_response['local-state-delta'])
-
+        print("Local State updated :\n")
+        print(json.dumps(transaction_response['local-state-delta'], indent=2))
 # read user local state
 def read_local_state(client, addr, app_id) :   
     results = client.account_info(addr)
     local_state = results['apps-local-state'][0]
     for index in local_state :
         if local_state[index] == app_id :
-            print(f"local_state of account {addr} for app_id {app_id}: ", local_state['key-value'])
-
+            print(f"local_state of account {addr} for app_id {app_id}: ")
 # read app global state
 def read_global_state(client, addr, app_id) :   
     results = client.account_info(addr)
     apps_created = results['created-apps']
     for app in apps_created :
         if app['id'] == app_id :
-            print(f"global_state for app_id {app_id}: ", app['params']['global-state'])
-
+            print(f"global_state for app_id {app_id}: ")
+            print(json.dumps(app['params']['global-state'], indent=2))
 # update existing application
 def update_app(client, private_key, app_id, approval_program, clear_program) : 
     # declare sender
     sender = account.address_from_private_key(private_key)
 
-#    # define initial value for key "timestamp"
-#    app_args = [b'initial value']
+    # define initial value for key "timestamp"
+    app_args = [b'initial value']
 
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationUpdateTxn(sender, params, app_id, \
-                                            approval_program, clear_program) #, app_args)
+    txn = ApplicationUpdateTxn(sender, params, app_id, \
+                                            approval_program, clear_program, app_args)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -406,8 +410,10 @@ def update_app(client, private_key, app_id, approval_program, clear_program) :
     client.send_transactions([signed_txn])
 
     # await confirmation
-    wait_for_confirmation(client, tx_id)
 
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
     app_id = transaction_response['txn']['txn']['apid']
@@ -421,11 +427,11 @@ def delete_app(client, private_key, index) :
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationDeleteTxn(sender, params, index)
+    txn = ApplicationDeleteTxn(sender, params, index)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -435,8 +441,10 @@ def delete_app(client, private_key, index) :
     client.send_transactions([signed_txn])
 
     # await confirmation
-    wait_for_confirmation(client, tx_id)
 
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
     print("Deleted app-id: ",transaction_response['txn']['txn']['apid'])    
@@ -449,11 +457,11 @@ def close_out_app(client, private_key, index) :
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationCloseOutTxn(sender, params, index)
+    txn = ApplicationCloseOutTxn(sender, params, index)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -463,11 +471,14 @@ def close_out_app(client, private_key, index) :
     client.send_transactions([signed_txn])
 
     # await confirmation
-    wait_for_confirmation(client, tx_id)
 
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
-    print("Closed out from app-id: ",transaction_response['txn']['txn']['apid'])
+    print("Closed out from app-id: ")
+    print(json.dumps(transaction_response['txn']['txn']['apid'], indent=2))
 
 # clear application
 def clear_app(client, private_key, index) : 
@@ -477,11 +488,11 @@ def clear_app(client, private_key, index) :
 	# get node suggested parameters
     params = client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create unsigned transaction
-    txn = transaction.ApplicationClearStateTxn(sender, params, index)
+    txn = ApplicationClearStateTxn(sender, params, index)
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -491,11 +502,14 @@ def clear_app(client, private_key, index) :
     client.send_transactions([signed_txn])
 
     # await confirmation
-    wait_for_confirmation(client, tx_id)
 
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("TXID: ", tx_id)
+    print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
-    print("Cleared app-id: ",transaction_response['txn']['txn']['apid'])    
+    print("Cleared app-id: ")    
+    print(json.dumps(transaction_response['txn']['txn']['apid'], indent=2))
 
 def main() :
     # initialize an algodClient
@@ -503,13 +517,21 @@ def main() :
 
     # define private keys
     creator_private_key = get_private_key_from_mnemonic(creator_mnemonic)
-    user_private_key = get_private_key_from_mnemonic(user_mnemonic)
 
-    # compile programs 
+    creatoraddress = account.address_from_private_key(creator_private_key)
+    print("Address :", creatoraddress)
+    user_private_key = get_private_key_from_mnemonic(user_mnemonic)
+    useraddress = account.address_from_private_key(user_private_key)
+    print("Address :", useraddress)
+
+    # compile programs
+    # Note: replace accounts with your creator account number in approval_program_source_initial
+    # and approval_program_source_refactored
     approval_program = compile_program(algod_client, approval_program_source_initial)
     clear_program = compile_program(algod_client, clear_program_source)
 
     # create new application
+    # limit 10 appid's per account
     app_id = create_app(algod_client, creator_private_key, approval_program, clear_program, global_schema, local_schema)
 
     # opt-in to application
@@ -549,9 +571,12 @@ def main() :
     read_local_state(algod_client, account.address_from_private_key(user_private_key), app_id)
 
     # delete application
+    # clears global storage only
+    # user must clear local
     delete_app(algod_client, creator_private_key, app_id)
 
     # clear application from user account
+    # clears local storage
     clear_app(algod_client, user_private_key, app_id)
 
 main()
