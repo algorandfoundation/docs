@@ -82,7 +82,7 @@ An `algod` client connection is also required. The following connects using Sand
 
 # Declarations
 
-All smart contracts are comprised of state storage, an approval program and a clear program. Details of each are found within the [stateful smart contract guide](../apps/index.md).
+All smart contracts are comprised of state storage, an approval program and a clear program. Details of each are found within the [smart contract guide](../apps/index.md).
 
 ## State storage
 Begin by defining the application's _global_schema_ and _local_schema_ storage requirements. These values are immutable once the application is created, so they must specify the maximum number required by the initial application and any future updates. 
@@ -380,8 +380,12 @@ Sign, send, await confirmation and display the results:
     # send transaction
     client.send_transactions([signed_txn])
 
-    # await confirmation
-    wait_for_confirmation(client, tx_id)
+
+    # wait for confirmation
+
+    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
+    print("txID: {}".format(tx_id), " confirmed in round: {}".format(
+    confirmed_txn.get("confirmed-round", 0)))   
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
@@ -398,8 +402,10 @@ Sign, send, await confirmation and display the results:
     // Submit the transaction
     await client.sendRawTransaction(signedTxn).do();
 
-    // Wait for confirmation
-    await waitForConfirmation(client, txId);
+    // Wait for transaction to be confirmed
+    confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -418,8 +424,9 @@ Sign, send, await confirmation and display the results:
     String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
     System.out.println("Successfully sent tx with ID: " + id);
 
-    // await confirmation
-    waitForConfirmation(id);
+    // Wait for transaction confirmation
+    PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
+    System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
 
     // display results
     PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
@@ -438,7 +445,13 @@ Sign, send, await confirmation and display the results:
     fmt.Printf("Submitted transaction %s\n", sendResponse)
 
     // Wait for confirmation
-    waitForConfirmation(txID, client)
+    confirmedTxn, err := future.WaitForConfirmation(client, txID, 4, context.Background())
+    if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
+        return
+    }
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
 
     // display results
     confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
