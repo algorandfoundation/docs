@@ -7,32 +7,11 @@ const algosdk = require('algosdk');
 // const server = "SERVER";
 // const port = PORT;
 
-//hackathon
-// const token = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1";
-// const server = "http://hackathon.algodev.network";
-// const port = 9100;
 
 // sandbox
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
-
-
-// Function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let response = await algodclient.status().do();
-    let lastround = response["last-round"];
-    while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-            //Got the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-            break;
-        }
-        lastround++;
-        await algodclient.statusAfterBlock(lastround).do();
-    }
-};
 
 
 // Function used to print created asset for account and assetid
@@ -79,6 +58,7 @@ const printAssetHolding = async function (algodclient, account, assetid) {
 // var account2_mnemonic = "PASTE your phrase for account 2";
 // var account3_mnemonic = "PASTE your phrase for account 3"
 
+// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 
 var account1_mnemonic = "canal enact luggage spring similar zoo couple stomach shoe laptop middle wonder eager monitor weather number heavy skirt siren purity spell maze warfare ability ten";
 var account2_mnemonic = "beauty nurse season autumn curve slice cry strategy frozen spy panic hobby strong goose employ review love fee pride enlist friend enroll clip ability runway";
@@ -112,8 +92,8 @@ console.log(recoveredAccount3.addr);
     // before every transaction in this example
     let params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
     console.log(params);
     let note = undefined; // arbitrary data to be stored in the transaction; here, none is stored
     // Asset creation specific parameters
@@ -150,19 +130,34 @@ console.log(recoveredAccount3.addr);
     let clawback = recoveredAccount2.addr;
 
     // signing and sending "txn" allows "addr" to create an asset
-    let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(addr, note,
-         totalIssuance, decimals, defaultFrozen, manager, reserve, freeze,
-        clawback, unitName, assetName, assetURL, assetMetadataHash, params);
+    let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(
+        addr, 
+        note,
+        totalIssuance, 
+        decimals, 
+        defaultFrozen, 
+        manager, 
+        reserve, 
+        freeze,
+        clawback, 
+        unitName, 
+        assetName, 
+        assetURL, 
+        assetMetadataHash, 
+        params);
 
     let rawSignedTxn = txn.signTxn(recoveredAccount1.sk)
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + tx.txId);
+
     let assetID = null;
     // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, tx.txId);
+    const ptx = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
     // Get the new asset's information from the creator account
-    let ptx = await algodclient.pendingTransactionInformation(tx.txId).do();
+    // let ptx = await algodclient.pendingTransactionInformation(tx.txId).do();
     assetID = ptx["asset-index"];
+    //Get the completed Transaction
+    console.log("Transaction " + tx.txId + " confirmed in round " + ptx["confirmed-round"]);
+    
    // console.log("AssetID = " + assetID);
     
     await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
@@ -203,8 +198,8 @@ console.log(recoveredAccount3.addr);
     
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
     // Asset configuration specific parameters
     // all other values are the same so we leave 
     // Them set.
@@ -212,16 +207,24 @@ console.log(recoveredAccount3.addr);
     manager = recoveredAccount1.addr;
 
     // Note that the change has to come from the existing manager
-    let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(recoveredAccount2.addr, note, 
-        assetID, manager, reserve, freeze, clawback, params);
+    let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
+        recoveredAccount2.addr, 
+        note, 
+        assetID, 
+        manager, 
+        reserve, 
+        freeze, 
+        clawback, 
+        params);
 
     // This transaction must be signed by the current manager
     rawSignedTxn = ctxn.signTxn(recoveredAccount2.sk)
     let ctx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + ctx.txId);
-    // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, ctx.txId);
-
+    // Wait for confirmation
+    let confirmedTxn = await algosdk.waitForConfirmation(algodclient, ctx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + ctx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+    
     // Get the asset information for the newly changed asset
     // use indexer or utiltiy function for Account info
  
@@ -261,8 +264,8 @@ console.log(recoveredAccount3.addr);
     // before every transaction in this example
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     let sender = recoveredAccount3.addr;
     let recipient = sender;
@@ -277,15 +280,23 @@ console.log(recoveredAccount3.addr);
 
 
     // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
-    let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
-         amount, note, assetID, params);
+    let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
+        sender, 
+        recipient, 
+        closeRemainderTo, 
+        revocationTarget,
+        amount, 
+        note, 
+        assetID, 
+        params);
 
     // Must be signed by the account wishing to opt in to the asset    
     rawSignedTxn = opttxn.signTxn(recoveredAccount3.sk);
     let opttx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + opttx.txId);
-    // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, opttx.txId);
+    // Wait for confirmation
+    confirmedTxn = await algosdk.waitForConfirmation(algodclient, opttx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + opttx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     //You should now see the new asset listed in the account information
     console.log("Account 3 = " + recoveredAccount3.addr);
@@ -311,8 +322,8 @@ console.log(recoveredAccount3.addr);
 
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     sender = recoveredAccount1.addr;
     recipient = recoveredAccount3.addr;
@@ -322,14 +333,23 @@ console.log(recoveredAccount3.addr);
     amount = 10;
 
     // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
-    let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
-         amount,  note, assetID, params);
+    let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
+        sender, 
+        recipient, 
+        closeRemainderTo, 
+        revocationTarget,
+        amount,  
+        note, 
+        assetID, 
+        params);
     // Must be signed by the account sending the asset  
     rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
     let xtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + xtx.txId);
-    // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, xtx.txId);
+
+    // Wait for confirmation
+    confirmedTxn = await algosdk.waitForConfirmation(algodclient, xtx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + xtx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // You should now see the 10 assets listed in the account information
     console.log("Account 3 = " + recoveredAccount3.addr);
@@ -366,23 +386,30 @@ console.log(recoveredAccount3.addr);
    // await getChangingParms(algodclient);
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     from = recoveredAccount2.addr;
     freezeTarget = recoveredAccount3.addr;
     freezeState = true;
 
     // The freeze transaction needs to be signed by the freeze account
-    let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(from, note,
-        assetID, freezeTarget, freezeState, params)
+    let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(
+        from, 
+        note,
+        assetID, 
+        freezeTarget, 
+        freezeState, 
+        params)
 
     // Must be signed by the freeze account   
     rawSignedTxn = ftxn.signTxn(recoveredAccount2.sk)
     let ftx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + ftx.txId);
-    // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, ftx.txId);
+
+    // Wait for confirmation
+    confirmedTxn = await algosdk.waitForConfirmation(algodclient, ftx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + ftx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // You should now see the asset is frozen listed in the account information
     console.log("Account 3 = " + recoveredAccount3.addr);
@@ -418,8 +445,8 @@ console.log(recoveredAccount3.addr);
     // before every transaction in this example
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;   
+    // params.fee = 1000;
+    // params.flatFee = true;   
     
     sender = recoveredAccount2.addr;
     recipient = recoveredAccount1.addr;
@@ -434,9 +461,10 @@ console.log(recoveredAccount3.addr);
     // Must be signed by the account that is the clawback address    
     rawSignedTxn = rtxn.signTxn(recoveredAccount2.sk)
     let rtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + rtx.txId);
-    // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, rtx.txId);
+    // Wait for confirmation
+    confirmedTxn = await algosdk.waitForConfirmation(algodclient, rtx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + rtx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // You should now see 0 assets listed in the account information
     // for the third account
@@ -468,8 +496,8 @@ console.log(recoveredAccount3.addr);
 
     params = await algodclient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
 
     // The address for the from field must be the manager account
     // Which is currently the creator addr1
@@ -477,14 +505,20 @@ console.log(recoveredAccount3.addr);
     note = undefined;
     // if all assets are held by the asset creator,
     // the asset creator can sign and issue "txn" to remove the asset from the ledger. 
-    let dtxn = algosdk.makeAssetDestroyTxnWithSuggestedParams(addr, note, assetID, params);
+    let dtxn = algosdk.makeAssetDestroyTxnWithSuggestedParams(
+        addr, 
+        note, 
+        assetID, 
+        params);
     // The transaction must be signed by the manager which 
     // is currently set to account1
     rawSignedTxn = dtxn.signTxn(recoveredAccount1.sk)
     let dtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    console.log("Transaction : " + dtx.txId);
-    // wait for transaction to be confirmed
-    await waitForConfirmation(algodclient, dtx.txId);
+
+    // Wait for confirmation
+    confirmedTxn = await algosdk.waitForConfirmation(algodclient, dtx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + dtx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
     // The account3 and account1 should no longer contain the asset as it has been destroyed
     console.log("Asset ID: " + assetID);
@@ -521,5 +555,6 @@ console.log(recoveredAccount3.addr);
     console.log(e);
     console.trace();
 });
+
 
 
