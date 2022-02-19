@@ -161,7 +161,7 @@ To interact with the Algorand blockchain, you can send different types of transa
             from: sender, 
             to: receiver, 
             amount: amount, 
-            node: note, 
+            note: note, 
             suggestedParams: params
         });
 ```

@@ -10,7 +10,7 @@ The most-used option is setting up the **[Algorand sandbox](https://github.com/a
 
 ## 2. Third-party API services
 
-Use **third-party API services** to access native Algorand REST APIs for the mainnet, testnet, and betanet. This is an excellent choice if you don't want to set up a local network using Docker, and just want to experiment with Algorand development initially. Existing service providers are [Purestake](https://developer.purestake.io/) and [Rand Labs](https://randlabs.io/products?product=api). Bear in mind that the free tiers for both service providers come with certain limitations, like the number of requests per second (more information on both websites). You can access these services via an API key and Algorand node address.
+Use **third-party API services** to access native Algorand REST APIs for the mainnet, testnet, and betanet. This is an excellent choice if you don't want to set up a local network using Docker, and just want to experiment with Algorand development initially. Existing service providers are [Purestake](https://developer.purestake.io/), [Bloq](https://www.bloq.com/products/platform/bloq-connect/), and [Rand Labs](https://randlabs.io/products?product=api). Bear in mind that the free tiers for both service providers come with certain limitations, like the number of requests per second (more information on both websites). You can access these services via an API key and Algorand node address.
 
 ## 3. Run your Algorand node
 

@@ -661,12 +661,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
                 print(f"local_state of account {addr} for app_id {app_id}: ", local_state['key-value'])
 
     # read app global state
-    def read_global_state(client, addr, app_id) :   
-        results = client.account_info(addr)
-        apps_created = results['created-apps']
-        for app in apps_created :
-            if app['id'] == app_id :
-                print(f"global_state for app_id {app_id}: ", app['params']['global-state'])
+    def read_global_state(client, app_id):
+        app = client.application_info(app_id)
+        global_state = app['params']['global-state'] if "global-state" in app["params"] else []
+        print(f"global_state for app_id {app_id}: ", global_state)
     ```
 
 === "JavaScript"
@@ -685,15 +683,14 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
     }
 
     // read global state of application
-    async function readGlobalState(client, account, index){
-        let accountInfoResponse = await client.accountInformation(account.addr).do();
-        for (let i = 0; i < accountInfoResponse['created-apps'].length; i++) { 
-            if (accountInfoResponse['created-apps'][i].id == index) {
-                console.log("Application's global state:");
-                for (let n = 0; n < accountInfoResponse['created-apps'][i]['params']['global-state'].length; n++) {
-                    console.log(accountInfoResponse['created-apps'][i]['params']['global-state'][n]);
-                }
-            }
+    async function readGlobalState(client, index){
+        let applicationInfoResponse = await client.applicationInfo(index).do();
+        let globalState = []
+        if(applicationInfoResponse['params'].includes('global-state')) {
+            globalState = applicationInfoResponse['params']['global-state']
+        }
+        for (let n = 0; n < globalState.length; n++) {
+            console.log(applicationInfoResponse['params']['global-state'][n]);
         }
     }
     ```
@@ -710,12 +707,12 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
 
-    public void readGlobalState(AlgodClient client, Account account, Long appId) throws Exception {
-        Response<com.algorand.algosdk.v2.client.model.Account> acctResponse = client.AccountInformation(account.getAddress()).execute();
-        List<Application> createdApplications = acctResponse.body().createdApps;
-        for (int i = 0; i < createdApplications.size(); i++) {
-            if (createdApplications.get(i).id.equals(appId)) {
-                System.out.println("Application global state: " + createdApplications.get(i).params.globalState.toString());
+    public void readGlobalState(AlgodClient client, Long appId) throws Exception {
+        Response<com.algorand.algosdk.v2.client.model.Application> appResponse = client.GetApplicationByID(appId).execute();
+        List<TealKeyValue> globalState= appResponse.body().params.globalState;
+        if(!globalState.isEmpty()){
+            for (int i = 0; i < globalState.size(); i++) {
+                System.out.println("Application global state: " + globalState.get(i).toString());
             }
         }
     }
@@ -733,13 +730,11 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
 
-    func readGlobalState(client *algod.Client, account crypto.Account, index uint64) {
-        accountInfo, _ := client.AccountInformation(account.Address.String()).Do(context.Background())
-        for _, ap := range accountInfo.CreatedApps {
-            if ap.Id == index {
-                fmt.Printf("Global state for app-id %d:\n", ap.Id)
-                fmt.Println(ap.Params.GlobalState)
-            }
+    func readGlobalState(client *algod.Client, index uint64) {
+        applicationInfo, _ := client.GetApplicationByID(index)
+        globalState, _ := applicationInfo.Params.GlobalState
+        if globalState != nil {
+            fmt.Println(globalState)
         }
     }
     ```
