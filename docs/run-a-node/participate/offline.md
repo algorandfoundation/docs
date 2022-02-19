@@ -69,7 +69,7 @@ Use the appropriate [authorization method](../../../get-details/transactions/sig
 !!! tip
     It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
 
-Once the transaction is signed, wait for the network to reach the transaction's first valid round and then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) and [wait for confirmation](../../../archive/build-apps/hello_world#wait-for-confirmation). 
+Once the transaction is signed, wait for the network to reach the transaction's first valid round and then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) and the SDK Method "wait for confirmation". 
 
 **See also**
 
