@@ -5,8 +5,6 @@ import os
 import base64
 import json
 
-
-
 # Read a file
 def load_resource(res):
     dir_path = os.path.dirname(os.path.realpath(__file__))

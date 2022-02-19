@@ -49,9 +49,9 @@ public class AccountDelegation {
         if (client == null)
             this.client = connectToNetwork();
         // import your private key mnemonic and address
-        
+        //  do not use mnemonics in production code, for demo purposes
         final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";
- 
+         
         Account src = new Account(SRC_ACCOUNT);
         System.out.println("Sender: " + src.getAddress());
  

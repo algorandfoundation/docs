@@ -9,7 +9,7 @@ const port = 4001;
 // Import the filesystem module 
 const fs = require('fs'); 
 // import your private key mnemonic
-// mnemonics should not be used in prodcution code, for demo purposes only
+// mnemonics should not be used in production code, for demo purposes only
 let PASSPHRASE = "<25-word-mnemonic>";
 
 let  myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);

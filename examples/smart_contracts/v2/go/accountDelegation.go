@@ -34,6 +34,7 @@ func main() {
         return
     }	
     // Get private key for sender address
+    // Do not use mnemonics in production code. For demo purposes only
     PASSPHRASE := "<25-word-mnemonic>"
     sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
     pk := sk.Public()
