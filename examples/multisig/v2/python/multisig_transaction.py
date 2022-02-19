@@ -6,14 +6,10 @@ import base64
 from algosdk.future.transaction import *
 
 # Change these values with mnemonics
-# mnemonic1 = "PASTE phrase for account 1"
-# mnemonic2 = "PASTE phrase for account 2"
-# mnemonic3 = "PASTE phrase for account 3"
+mnemonic1 = "PASTE phrase for account 1"
+mnemonic2 = "PASTE phrase for account 2"
+mnemonic3 = "PASTE phrase for account 3"
 # never use mnemonics in production code, replace for demo purposes only
-
-mnemonic1 = "patrol target joy dial ethics flip usual fatigue bulb security prosper brand coast arch casino burger inch cricket scissors shoe evolve eternal calm absorb school"
-mnemonic2 = "genius inside turtle lock alone blame parent civil depend dinosaur tag fiction fun skill chief use damp daughter expose pioneer today weasel box about silly"
-mnemonic3 = "off canyon mystery cable pluck emotion manual legal journey grit lunch include friend social monkey approve lava steel school mango auto cactus huge ability basket"
 
 # For ease of reference, add account public and private keys to
 # an accounts dict.

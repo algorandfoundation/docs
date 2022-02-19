@@ -7,7 +7,7 @@ If you are using a different account, change the hard-coded address
 const algosdk = require('algosdk');
 
 // user declared account mnemonics
-// do not use mnemonics in prodcuction code, for demo purposes only
+// do not use mnemonics in production code, for demo purposes only
 creatorMnemonic = "Your 25-word mnemonic goes here";
 userMnemonic = "A second distinct 25-word mnemonic goes here";
 
