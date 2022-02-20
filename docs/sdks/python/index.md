@@ -195,7 +195,7 @@ def generate_algorand_keypair():
 # Write down the address, private key, and the passphrase for later usage
 generate_algorand_keypair()
 
-def first_transaction_example(private_key, my_address):
+def first_transaction_example(private_key, my_address, amount):
 	algod_address = "http://localhost:4001"
 	algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	algod_client = algod.AlgodClient(algod_token, algod_address)
@@ -212,7 +212,7 @@ def first_transaction_example(private_key, my_address):
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
 	note = "Hello World".encode()
 
-	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, None, note)
 
 	# sign transaction
 	signed_txn = unsigned_txn.sign(private_key)
@@ -243,8 +243,10 @@ def first_transaction_example(private_key, my_address):
 
 
 
-#replace private_key and my_address with your private key and your address
-first_transaction_example(private_key, my_address)​
+# replace private_key and my_address with your private key and your address.
+# also provide an amount to send in micro Algos.
+amount = 100000
+first_transaction_example(private_key, my_address, amount)​
 ```
 [`Run Code`](https://replit.com/@Algorand/gettingStartedPython#main.py){target=_blank}    
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=556){target=_blank}    
