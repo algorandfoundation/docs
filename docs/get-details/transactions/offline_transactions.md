@@ -31,7 +31,9 @@ Unsigned transactions require the transaction object to be created before writin
         // send signed transaction to node
         await algodClient.sendRawTransaction(signedTxn.blob).do();
         // Wait for transaction to be confirmed
-        let confirmedTxn = await waitForConfirmation(algodClient, tx.txId, 4);
+        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
+        //Get the completed Transaction
+        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
         var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
         console.log("Note field: ", string);       
     ```
@@ -63,6 +65,8 @@ Unsigned transactions require the transaction object to be created before writin
             txid = algod_client.send_transaction(signed_txn)
             # wait for confirmation              
             confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
+            print("TXID: ", txid)
+            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
         except Exception as err:
             print(err)
             return
@@ -117,9 +121,11 @@ Unsigned transactions require the transaction object to be created before writin
         }
         String id = rawtxresponse.body().txId;
         System.out.println("Successfully sent tx with ID: " + id);
+
         // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+        PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
         System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
+
         // Read the transaction
         JSONObject jsonObj = new JSONObject(pTrx.toString());
         System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
@@ -198,12 +204,16 @@ Unsigned transactions require the transaction object to be created before writin
             return
         }
         fmt.Printf("Submitted transaction %s\n", sendResponse)
+
         // Wait for confirmation
-        confirmedTxn, err := waitForConfirmation(txID, algodClient, 4)
+        confirmedTxn, err := future.WaitForConfirmation(algodClient,txID,  4, context.Background())
         if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
+            fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
             return
         }
+        fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+
         fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
     ```
 
@@ -271,8 +281,11 @@ Signed Transactions are similar, but require an account to sign the transaction 
         try:
             txid = algod_client.send_transaction(signed_txn)
             print("Signed transaction with txID: {}".format(txid))
-        # wait for confirmation
+            # wait for confirmation
             confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
+            print("TXID: ", txid)
+            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
+
         except Exception as err:
             print(err)
             return
@@ -386,12 +399,16 @@ Signed Transactions are similar, but require an account to sign the transaction 
             return
         }
         fmt.Printf("Submitted transaction %s\n", sendResponse)
+
         // Wait for confirmation
-        confirmedTxn, err := waitForConfirmation(sendResponse, algodClient, 4)
+        confirmedTxn, err := future.WaitForConfirmation(algodClient,sendResponse,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
             return
         }
+        fmt.Printf("Confirmed Transaction: %s in Round %d\n", sendResponse ,confirmedTxn.ConfirmedRound)
+
+
         fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
     ```
 

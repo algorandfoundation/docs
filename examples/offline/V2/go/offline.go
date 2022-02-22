@@ -3,13 +3,10 @@ package main
 import (
 	"context"
 	"crypto/ed25519"
-	"errors"
 	"fmt"
 	"io/ioutil"
-	"strings"
-
+	"github.com/algorand/go-algorand-sdk/future"
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
-	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/encoding/msgpack"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
@@ -20,53 +17,12 @@ import (
 const algodAddress = "http://localhost:4001"
 const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-// Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (models.PendingTransactionInfoResponse, error) {
-	pt := new(models.PendingTransactionInfoResponse)
-	if client == nil || txID == "" || timeout < 0 {
-		fmt.Printf("Bad arguments for waitForConfirmation")
-		var msg = errors.New("Bad arguments for waitForConfirmation")
-		return *pt, msg
 
-	}
-
-	status, err := client.Status().Do(context.Background())
-	if err != nil {
-		fmt.Printf("error getting algod status: %s\n", err)
-		var msg = errors.New(strings.Join([]string{"error getting algod status: "}, err.Error()))
-		return *pt, msg
-	}
-	startRound := status.LastRound + 1
-	currentRound := startRound
-
-	for currentRound < (startRound + timeout) {
-
-		*pt, _, err = client.PendingTransactionInformation(txID).Do(context.Background())
-		if err != nil {
-			fmt.Printf("error getting pending transaction: %s\n", err)
-			var msg = errors.New(strings.Join([]string{"error getting pending transaction: "}, err.Error()))
-			return *pt, msg
-		}
-		if pt.ConfirmedRound > 0 {
-			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-			return *pt, nil
-		}
-		if pt.PoolError != "" {
-			fmt.Printf("There was a pool error, then the transaction has been rejected!")
-			var msg = errors.New("There was a pool error, then the transaction has been rejected")
-			return *pt, msg
-		}
-		fmt.Printf("waiting for confirmation\n")
-		status, err = client.StatusAfterBlock(currentRound).Do(context.Background())
-		currentRound++
-	}
-	msg := errors.New("Tx not found in round range")
-	return *pt, msg
-}
 
 // utility function to recover account and return sk and address
+// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 func recoverAccount() (string, ed25519.PrivateKey) {
-	const passphrase = "price clap dilemma swim genius fame lucky crack torch hunt maid palace ladder unlock symptom rubber scale load acoustic drop oval cabbage review abstract embark"
+	const passphrase = "PASTE phrase for account"
 
 	sk, err := mnemonic.ToPrivateKey(passphrase)
 	if err != nil {
@@ -107,13 +63,13 @@ func saveUnsignedTransaction() {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	txParams.FlatFee = true
-	txParams.Fee = 1000
+	// txParams.FlatFee = true
+	// txParams.Fee = 1000
 
 	fromAddr := myAddress
 	toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-	var amount uint64 = 1000000
-	var minFee uint64 = 1000
+	var amount uint64 = 100000
+	var minFee uint64 = uint64(txParams.MinFee)
 	note := []byte("Hello World")
 	genID := txParams.GenesisID
 	genHash := txParams.GenesisHash
@@ -184,12 +140,14 @@ func readUnsignedTransaction() {
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
+
 	// Wait for confirmation
-	confirmedTxn, err := waitForConfirmation(txID, algodClient, 4)
+	confirmedTxn, err := future.WaitForConfirmation(algodClient,txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
 
 	fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 }
@@ -218,13 +176,13 @@ func saveSignedTransaction() {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	txParams.FlatFee = true
-	txParams.Fee = 1000
+	// txParams.FlatFee = true
+	// txParams.Fee = 1000
 
 	fromAddr := myAddress
 	toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-	var amount uint64 = 1000000
-	var minFee uint64 = 1000
+	var amount uint64 = 100000
+	var minFee uint64 = uint64(txParams.MinFee)
 	note := []byte("Hello World")
 	genID := txParams.GenesisID
 	genHash := txParams.GenesisHash
@@ -275,20 +233,22 @@ func readSignedTransaction() {
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
+
 	// Wait for confirmation
-	confirmedTxn, err := waitForConfirmation(sendResponse, algodClient, 4)
+	confirmedTxn, err := future.WaitForConfirmation(algodClient,sendResponse,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", sendResponse ,confirmedTxn.ConfirmedRound)
 
 	fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 }
 func main() {
-	// saveUnsignedTransaction()
-	// readUnsignedTransaction()
+	saveUnsignedTransaction()
+	readUnsignedTransaction()
 
-	saveSignedTransaction()
-	readSignedTransaction()
+	// saveSignedTransaction()
+	// readSignedTransaction()
 
 }

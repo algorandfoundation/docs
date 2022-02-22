@@ -20,66 +20,25 @@ async function setupClient() {
 }
 
 // recover acccounts for example
+// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 function recoverAccount1() {
-    // const passphrase = <your-25-word-mnemonic>;
-    const passphrase = "patrol target joy dial ethics flip usual fatigue bulb security prosper brand coast arch casino burger inch cricket scissors shoe evolve eternal calm absorb school";
+    const passphrase = "<your-25-word-mnemonic>";
     let myAccount = algosdk.mnemonicToSecretKey(passphrase);
     return myAccount;
 }
 function recoverAccount2() {
-    // const passphrase = <your-25-word-mnemonic>;
-    const passphrase = "genius inside turtle lock alone blame parent civil depend dinosaur tag fiction fun skill chief use damp daughter expose pioneer today weasel box about silly";
+    const passphrase = "<your-25-word-mnemonic>";
     let myAccount = algosdk.mnemonicToSecretKey(passphrase);
     return myAccount;
 }
 function recoverAccount3() {
-    // const passphrase = <your-25-word-mnemonic>;
-    const passphrase = "off canyon mystery cable pluck emotion manual legal journey grit lunch include friend social monkey approve lava steel school mango auto cactus huge ability basket";
+    const passphrase = "<your-25-word-mnemonic>";
     let myAccount = algosdk.mnemonicToSecretKey(passphrase);
     return myAccount;
 }
 
 
-/**
- * utility function to wait on a transaction to be confirmed
- * the timeout parameter indicates how many rounds do you wish to check pending transactions for
- */
-const waitForConfirmation = async function (algodclient, txId, timeout) {
-    // Wait until the transaction is confirmed or rejected, or until 'timeout'
-    // number of rounds have passed.
-    //     Args:
-    // txId(str): the transaction to wait for
-    // timeout(int): maximum number of rounds to wait
-    // Returns:
-    // pending transaction information, or throws an error if the transaction
-    // is not confirmed or rejected in the next timeout rounds
-    if (algodclient == null || txId == null || timeout < 0) {
-        throw "Bad arguments.";
-    }
-    let status = (await algodclient.status().do());
-    if (status == undefined) throw new Error("Unable to get node status");
-    let startround = status["last-round"] + 1;
-    let currentround = startround;
 
-    while (currentround < (startround + timeout)) {
-        let pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo != undefined) {
-            if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-                //Got the completed Transaction
-                return pendingInfo;
-            }
-            else {
-                if (pendingInfo["pool-error"] != null && pendingInfo["pool-error"].length > 0) {
-                    // If there was a pool error, then the transaction has been rejected!
-                    throw new Error("Transaction Rejected" + " pool error" + pendingInfo["pool-error"]);
-                }
-            }
-        }
-        await algodclient.statusAfterBlock(currentround).do();
-        currentround++;
-    }
-    throw new Error("Transaction not confirmed after " + timeout + " rounds!");
-};
 
 
 const keypress = async () => {
@@ -114,14 +73,14 @@ async function writeSignedMultisigTransctionToFile() {
     let multsigaddr = algosdk.multisigAddress(mparams);
     console.log("Multisig Address: " + multsigaddr);
     //Pause execution to allow using the dispenser on testnet to put tokens in account
-    console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
+    console.log('Dispense funds to this account on TestNet https://dispenser.testnet.aws.algodev.network/');
     // await keypress();
     try {
         // Get the relevant params from the algod
         let params = await algodClient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
-        params.fee = 1000;
-        params.flatFee = true;
+        // params.fee = 1000;
+        // params.flatFee = true;
 
         const receiver = account3.addr;
         let names = '{"firstName":"John", "lastName":"Doe"}';
@@ -181,7 +140,7 @@ async function readSignedMultisigTransctionFromFile() {
         // submit the transaction     
         let txId = (await algodClient.sendRawTransaction(twosigs).do());        
         // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, txId.txId, 4);
+        const confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId.txId, 4);
         //Get the completed Transaction
         console.log("Transaction " + txId.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
         // let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
@@ -280,7 +239,7 @@ async function readUnsignedMultisigTransctionFromFile() {
         //submit the transaction
         await algodClient.sendRawTransaction(twosigs).do();
         // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
+        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
         //Get the completed Transaction
         console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
         // let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);

@@ -427,35 +427,6 @@ def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
 
-# helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
-
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
 ```
 
@@ -463,7 +434,7 @@ The `compile_program` function is a utility function that allows passing the gen
 
 The ‘get_private_key_from_mnemonic` function is a utility function that takes a mnemonic (account backup phrase) and returns the private key of the specific account. This will be used in this sample to recover the private key of the funded account of the smart contract creator.
 
-The `wait_for_confirmation` function is a utility function that when called will wait until a specific transaction is confirmed on the Algorand blockchain. This will be used to confirm that the application creation transaction is successful and the smart contract is actively deployed.
+The `wait_for_confirmation` SDK function is a utility function that when called will wait until a specific transaction is confirmed on the Algorand blockchain. This will be used to confirm that the application creation transaction is successful and the smart contract is actively deployed.
 
 As the sample smart contract manipulates global variables, a couple of helper functions are needed to display the contents of these values.
 
@@ -523,8 +494,15 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     # send transaction
     client.send_transactions([signed_txn])
 
-    # await confirmation
-    wait_for_confirmation(client, tx_id, 5)
+    # wait for confirmation
+    try:
+        transaction_response = transaction.wait_for_confirmation(client, tx_id, 4)
+        print("TXID: ", tx_id)
+        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
+       
+    except Exception as err:
+        print(err)
+        return
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
@@ -540,7 +518,7 @@ The Python SDK’s `ApplicationCreateTxn` function is called to create the trans
 
 The passed-in private key is then used to sign the transaction and the ID of the transaction is retrieved. This ID is unique and can be used to look up the transaction later.
 
-The transaction is then submitted to the connected node and the `wait_for_confirmation` function is called to wait for the blockchain to process the transaction. Once the blockchain processes the transaction, a unique ID, called application ID, is returned for the smart contract. This can be used later to issue calls against the smart contract.
+The transaction is then submitted to the connected node and the `wait_for_confirmation` SDK function is called to wait for the blockchain to process the transaction. Once the blockchain processes the transaction, a unique ID, called application ID, is returned for the smart contract. This can be used later to issue calls against the smart contract.
 
 Now that all required functions are implemented, the main function can be created to deploy the contract.
 
@@ -615,9 +593,15 @@ def call_app(client, private_key, index, app_args) :
     # send transaction
     client.send_transactions([signed_txn])
 
-    # await confirmation
-    wait_for_confirmation(client, tx_id, 5)
-
+    # wait for confirmation
+    try:
+        transaction_response = transaction.wait_for_confirmation(client, tx_id, 5)
+        print("TXID: ", tx_id)
+        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
+       
+    except Exception as err:
+        print(err)
+        return
     print("Application called")
 ```
 
@@ -663,35 +647,6 @@ def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
 
-# helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
-
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
 # helper function that formats global state for printing
 def format_state(state):
@@ -802,8 +757,15 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     # send transaction
     client.send_transactions([signed_txn])
 
-    # await confirmation
-    wait_for_confirmation(client, tx_id, 5)
+    # wait for confirmation
+    try:
+        transaction_response = transaction.wait_for_confirmation(client, tx_id, 5)
+        print("TXID: ", tx_id)
+        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
+       
+    except Exception as err:
+        print(err)
+        return
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
@@ -831,9 +793,16 @@ def call_app(client, private_key, index, app_args) :
     # send transaction
     client.send_transactions([signed_txn])
 
-    # await confirmation
-    wait_for_confirmation(client, tx_id, 5)
 
+    # wait for confirmation
+    try:
+        transaction_response = transaction.wait_for_confirmation(client, tx_id, 4)
+        print("TXID: ", tx_id)
+        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
+       
+    except Exception as err:
+        print(err)
+        return
     print("Application called")
 
 def main() :
@@ -1000,38 +969,9 @@ def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
 
-# helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
 
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
-```
 
-The `compile_smart_contract`, `get_private_key_from_mnemonic`, and `wait_for_confirmation` functions are explained in [Deploying and calling a smart contract](#deploying-the-contract).
+The `compile_smart_contract` and `get_private_key_from_mnemonic` functions are explained in [Deploying and calling a smart contract](#deploying-the-contract).
 
 A utility function is then added to create and submit a simple payment transaction.
 
@@ -1043,13 +983,22 @@ def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
     unsigned_txn = transaction.PaymentTxn(add, params, rcv, amt)
     signed = unsigned_txn.sign(key)
     txid = algod_client.send_transaction(signed)
-    pmtx = wait_for_confirmation(algod_client, txid , 5)
+
+    # wait for confirmation
+    try:
+        pmtx = transaction.wait_for_confirmation(algod_client, txid, 5)
+        print("TXID: ", txid)
+        print("Result confirmed in round: {}".format(pmtx['confirmed-round']))
+       
+    except Exception as err:
+        print(err)
+        return
     return pmtx
 ```
 
 This function takes a creator mnemonic of the address that is creating the payment transaction as the first parameter. The amount to send and the receiver of the payment transaction are the next two parameters. The final parameter is a connection to a valid Algorand node. In this example, the sandbox installed node is used.
 
-In this function, the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction. The creator of the transaction’s address and private key are resolved from the mnemonic. The unsigned payment transaction is created using the Python SDK’s `PaymentTxn` method. This transaction is then signed with the recovered private key. As noted earlier, in a production application, the transaction should be signed by a valid wallet provider. The signed transaction is submitted to the node and the `wait_for_confirmation` utility function is called, which will return when the transaction is finalized on the blockchain.
+In this function, the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction. The creator of the transaction’s address and private key are resolved from the mnemonic. The unsigned payment transaction is created using the Python SDK’s `PaymentTxn` method. This transaction is then signed with the recovered private key. As noted earlier, in a production application, the transaction should be signed by a valid wallet provider. The signed transaction is submitted to the node and the `wait_for_confirmation` SDK utility function is called, which will return when the transaction is finalized on the blockchain.
 
 Another utility function is also added to create a payment transaction that is signed by the escrow logic. This function is very similar to the previous function.
 
@@ -1062,7 +1011,15 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     lsig = transaction.LogicSig(program)
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
-    pmtx = wait_for_confirmation(algod_client, tx_id, 10)
+    # wait for confirmation
+    try:
+        pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)
+        print("TXID: ", tx_id)
+        print("Result confirmed in round: {}".format(pmtx['confirmed-round']))
+       
+    except Exception as err:
+        print(err)
+        return    
     return pmtx
 ```
 
@@ -1116,10 +1073,9 @@ from algosdk.v2client import algod
 from pyteal import *
 
 # user declared account mnemonics
-#benefactor_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
-#sender_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
-benefactor_mnemonic = "finger dizzy engage favorite purpose blade hybrid fun calm rely pink oven make calm gaze absorb book hood floor observe venue cancel question abstract army"
-sender_mnemonic = "ecology average boost pony around voice daring story host brother elephant cargo drift fiber crystal bracket vivid lumber liar inquiry sketch phrase fade abstract exotic"
+benefactor_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
+sender_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
+
 
 # user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
 algod_address = "http://localhost:4001"
@@ -1135,35 +1091,7 @@ def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
 
-# helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, transaction_id, timeout):
-    """
-    Wait until the transaction is confirmed or rejected, or until 'timeout'
-    number of rounds have passed.
-    Args:
-        transaction_id (str): the transaction to wait for
-        timeout (int): maximum number of rounds to wait
-    Returns:
-        dict: pending transaction information, or throws an error if the transaction
-            is not confirmed or rejected in the next timeout rounds
-    """
-    start_round = client.status()["last-round"] + 1
-    current_round = start_round
 
-    while current_round < start_round + timeout:
-        try:
-            pending_txn = client.pending_transaction_info(transaction_id)
-        except Exception:
-            return
-        if pending_txn.get("confirmed-round", 0) > 0:
-            return pending_txn
-        elif pending_txn["pool-error"]:
-            raise Exception(
-                'pool error: {}'.format(pending_txn["pool-error"]))
-        client.status_after_block(current_round)
-        current_round += 1
-    raise Exception(
-        'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
 def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
     params = algod_client.suggested_params()
@@ -1172,7 +1100,7 @@ def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
     unsigned_txn = transaction.PaymentTxn(add, params, rcv, amt)
     signed = unsigned_txn.sign(key)
     txid = algod_client.send_transaction(signed)
-    pmtx = wait_for_confirmation(algod_client, txid , 5)
+    pmtx = transaction.wait_for_confirmation(algod_client, txid , 5)
     return pmtx
 
 def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
@@ -1183,7 +1111,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     lsig = transaction.LogicSig(program)
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
-    pmtx = wait_for_confirmation(algod_client, tx_id, 10)
+    pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)
     return pmtx
 
 """Basic Donation Escrow"""
