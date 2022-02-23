@@ -36,6 +36,8 @@ goal clerk send [flags]
 
   -c, --close-to string             Close account and send remainder to this address
 
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")

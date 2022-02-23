@@ -4,7 +4,7 @@ title: goal account listpartkeys
 
 
 
-List participation keys
+List participation keys summary
 
 
 
@@ -12,7 +12,7 @@ List participation keys
 
 
 
-List all participation keys tracked by algod, with additional information such as key validity period.
+List all participation keys tracked by algod along with summary of additional information. For detailed key information use 'partkeyinfo'.
 
 
 
@@ -30,7 +30,9 @@ goal account listpartkeys [flags]
 
 ```
 
-  -h, --help   help for listpartkeys
+  -c, --compatibility   Print output in compatibility mode. This option will be removed in a future release, please use REST API for tooling.
+
+  -h, --help            help for listpartkeys
 
 ```
 

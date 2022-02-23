@@ -30,6 +30,8 @@ goal clerk dryrun [flags]
 
 ```
 
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api instead of running
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")

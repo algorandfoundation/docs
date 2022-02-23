@@ -38,6 +38,8 @@ goal asset freeze [flags]
 
       --creator string              Account address for asset creator
 
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")

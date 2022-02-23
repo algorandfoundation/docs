@@ -1,10 +1,10 @@
-title: goal app create
+title: goal app method
 ---
-## goal app create
+## goal app method
 
 
 
-Create an application
+Invoke an ABI method
 
 
 
@@ -12,13 +12,13 @@ Create an application
 
 
 
-Issue a transaction that creates an application
+Invoke an ARC-4 ABI method on an App (stateful contract) with an application call transaction
 
 
 
 ```
 
-goal app create [flags]
+goal app method [flags]
 
 ```
 
@@ -30,7 +30,11 @@ goal app create [flags]
 
 ```
 
-      --creator string              Account to create the application
+      --app-id uint                 Application ID
+
+      --arg stringArray             Args to pass in for calling a method
+
+      --create                      Create an application in this method call
 
       --dryrun-accounts strings     additional accounts to include into dryrun request obj
 
@@ -38,25 +42,29 @@ goal app create [flags]
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
 
-      --extra-pages uint32          Additional program space for supporting larger TEAL assembly program. A maximum of 3 extra pages is allowed. A page is 1024 bytes.
+      --extra-pages uint32          Additional program space for supporting larger TEAL assembly program. A maximum of 3 extra pages is allowed. A page is 1024 bytes. Only valid when passed with --create.
 
       --fee uint                    The transaction fee (automatically determined by default), in microAlgos
 
       --firstvalid uint             The first round where the transaction may be committed to the ledger
 
-      --global-byteslices uint      Maximum number of byte slices that may be stored in the global key/value store. Immutable.
+  -f, --from string                 Account to call method from
 
-      --global-ints uint            Maximum number of integer values that may be stored in the global key/value store. Immutable.
+      --global-byteslices uint      Maximum number of byte slices that may be stored in the global key/value store. Immutable, only valid when passed with --create.
 
-  -h, --help                        help for create
+      --global-ints uint            Maximum number of integer values that may be stored in the global key/value store. Immutable, only valid when passed with --create.
+
+  -h, --help                        help for method
 
       --lastvalid uint              The last round where the transaction may be committed to the ledger
 
   -x, --lease string                Lease value (base64, optional): no transaction may also acquire this lease until lastvalid
 
-      --local-byteslices uint       Maximum number of byte slices that may be stored in local (per-account) key/value stores for this app. Immutable.
+      --local-byteslices uint       Maximum number of byte slices that may be stored in local (per-account) key/value stores for this app. Immutable, only valid when passed with --create.
 
-      --local-ints uint             Maximum number of integer values that may be stored in local (per-account) key/value stores for this app. Immutable.
+      --local-ints uint             Maximum number of integer values that may be stored in local (per-account) key/value stores for this app. Immutable, only valid when passed with --create.
+
+      --method string               Method to be called
 
   -N, --no-wait                     Don't wait for transaction to commit
 

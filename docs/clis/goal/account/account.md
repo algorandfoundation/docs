@@ -70,7 +70,7 @@ goal account [flags]
 * [goal account info](../info/)	 - Retrieve information about the assets and applications belonging to the specified account
 * [goal account installpartkey](../installpartkey/)	 - Install a participation key
 * [goal account list](../list/)	 - Show the list of Algorand accounts on this machine
-* [goal account listpartkeys](../listpartkeys/)	 - List participation keys
+* [goal account listpartkeys](../listpartkeys/)	 - List participation keys summary
 * [goal account marknonparticipating](../marknonparticipating/)
 * [goal account multisig](../multisig/multisig/)	 - Control and manage multisig accounts
 * [goal account new](../new/)	 - Create a new account
