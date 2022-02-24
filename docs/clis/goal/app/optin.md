@@ -32,6 +32,8 @@ goal app optin [flags]
 
       --app-id uint                 Application ID
 
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
@@ -72,7 +74,7 @@ goal app optin [flags]
 
       --app-account strings        Accounts that may be accessed from application logic
 
-      --app-arg strings            Args to encode for application transactions (all will be encoded to a byte slice). For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
+      --app-arg stringArray        Args to encode for application transactions (all will be encoded to a byte slice). For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
 
   -i, --app-input string           JSON file containing encoded arguments and inputs (mutually exclusive with app-arg-b64 and app-account)
 

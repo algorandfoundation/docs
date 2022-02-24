@@ -32,7 +32,7 @@ goal app [flags]
 
       --app-account strings        Accounts that may be accessed from application logic
 
-      --app-arg strings            Args to encode for application transactions (all will be encoded to a byte slice). For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
+      --app-arg stringArray        Args to encode for application transactions (all will be encoded to a byte slice). For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
 
   -i, --app-input string           JSON file containing encoded arguments and inputs (mutually exclusive with app-arg-b64 and app-account)
 
@@ -82,6 +82,7 @@ goal app [flags]
 * [goal app delete](../delete/)	 - Delete an application
 * [goal app info](../info/)	 - Look up current parameters for an application
 * [goal app interact](../interact/interact/)	 - Interact with an application
+* [goal app method](../method/)	 - Invoke an ABI method
 * [goal app optin](../optin/)	 - Opt in to an application
 * [goal app read](../read/)	 - Read local or global state for an application
 * [goal app update](../update/)	 - Update an application's programs
