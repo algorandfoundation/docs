@@ -47,7 +47,7 @@ Search for accounts.
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations.|integer|
 
@@ -57,6 +57,8 @@ Search for accounts.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#searchforaccounts-response-200)|
+|**400**|Response for errors|[Response 400](#searchforaccounts-response-400)|
+|**500**|Response for errors|[Response 500](#searchforaccounts-response-500)|
 
 <a name="searchforaccounts-response-200"></a>
 **Response 200**
@@ -66,6 +68,22 @@ Search for accounts.
 |**accounts**  <br>*required*||< [Account](#account) > array|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="searchforaccounts-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="searchforaccounts-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -104,6 +122,9 @@ Lookup account information.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupaccountbyid-response-200)|
+|**400**|Response for errors|[Response 400](#lookupaccountbyid-response-400)|
+|**404**|Response for errors|[Response 404](#lookupaccountbyid-response-404)|
+|**500**|Response for errors|[Response 500](#lookupaccountbyid-response-500)|
 
 <a name="lookupaccountbyid-response-200"></a>
 **Response 200**
@@ -112,6 +133,30 @@ Lookup account information.
 |---|---|---|
 |**account**  <br>*required*||[Account](#account)|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
+
+<a name="lookupaccountbyid-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountbyid-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountbyid-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -146,14 +191,14 @@ Lookup account transactions.
 |**Query**|**before-time**  <br>*optional*|Include results before the given time. Must be an RFC 3339 formatted string.|string (date-time)|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
-|**Query**|**sig-type**  <br>*optional*|SigType filters results using just the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
+|**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
@@ -163,6 +208,8 @@ Lookup account transactions.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupaccounttransactions-response-200)|
+|**400**|Response for errors|[Response 400](#lookupaccounttransactions-response-400)|
+|**500**|Response for errors|[Response 500](#lookupaccounttransactions-response-500)|
 
 <a name="lookupaccounttransactions-response-200"></a>
 **Response 200**
@@ -172,6 +219,22 @@ Lookup account transactions.
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
 |**transactions**  <br>*required*||< [Transaction](#transaction) > array|
+
+<a name="lookupaccounttransactions-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccounttransactions-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -202,7 +265,7 @@ Search for applications
 |---|---|---|---|
 |**Query**|**application-id**  <br>*optional*|Application ID|integer|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 
 
@@ -211,6 +274,7 @@ Search for applications
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#searchforapplications-response-200)|
+|**500**|Response for errors|[Response 500](#searchforapplications-response-500)|
 
 <a name="searchforapplications-response-200"></a>
 **Response 200**
@@ -220,6 +284,14 @@ Search for applications
 |**applications**  <br>*required*||< [Application](#application) > array|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="searchforapplications-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -257,6 +329,8 @@ Lookup application.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupapplicationbyid-response-200)|
+|**404**|Response for errors|[Response 404](#lookupapplicationbyid-response-404)|
+|**500**|Response for errors|[Response 500](#lookupapplicationbyid-response-500)|
 
 <a name="lookupapplicationbyid-response-200"></a>
 **Response 200**
@@ -265,6 +339,22 @@ Lookup application.
 |---|---|---|
 |**application**  <br>*optional*||[Application](#application)|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
+
+<a name="lookupapplicationbyid-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupapplicationbyid-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -294,7 +384,7 @@ Lookup application logs.
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**application-id**  <br>*required*||integer|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
@@ -348,7 +438,7 @@ Search for assets.
 |**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
 |**Query**|**creator**  <br>*optional*|Filter just assets with the given creator address.|string|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**name**  <br>*optional*|Filter just assets with the given name.|string|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**unit**  <br>*optional*|Filter just assets with the given unit.|string|
@@ -359,6 +449,8 @@ Search for assets.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#searchforassets-response-200)|
+|**400**|Response for errors|[Response 400](#searchforassets-response-400)|
+|**500**|Response for errors|[Response 500](#searchforassets-response-500)|
 
 <a name="searchforassets-response-200"></a>
 **Response 200**
@@ -368,6 +460,22 @@ Search for assets.
 |**assets**  <br>*required*||< [Asset](#asset) > array|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="searchforassets-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="searchforassets-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -405,7 +513,9 @@ Lookup asset information.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupassetbyid-response-200)|
-|**404**||[ErrorResponse](#errorresponse)|
+|**400**|Response for errors|[Response 400](#lookupassetbyid-response-400)|
+|**404**|Response for errors|[Response 404](#lookupassetbyid-response-404)|
+|**500**|Response for errors|[Response 500](#lookupassetbyid-response-500)|
 
 <a name="lookupassetbyid-response-200"></a>
 **Response 200**
@@ -414,6 +524,30 @@ Lookup asset information.
 |---|---|---|
 |**asset**  <br>*required*||[Asset](#asset)|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
+
+<a name="lookupassetbyid-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupassetbyid-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupassetbyid-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -446,7 +580,7 @@ Lookup the list of accounts who hold this asset
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 
@@ -456,6 +590,8 @@ Lookup the list of accounts who hold this asset
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupassetbalances-response-200)|
+|**400**|Response for errors|[Response 400](#lookupassetbalances-response-400)|
+|**500**|Response for errors|[Response 500](#lookupassetbalances-response-500)|
 
 <a name="lookupassetbalances-response-200"></a>
 **Response 200**
@@ -465,6 +601,22 @@ Lookup the list of accounts who hold this asset
 |**balances**  <br>*required*||< [MiniAssetHolding](#miniassetholding) > array|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="lookupassetbalances-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupassetbalances-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -501,14 +653,14 @@ Lookup transactions for an asset.
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**exclude-close-to**  <br>*optional*|Combine with address and address-role parameters to define what type of address to search for. The close to fields are normally treated as a receiver, if you would like to exclude them set this parameter to true.|boolean|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
-|**Query**|**sig-type**  <br>*optional*|SigType filters results using just the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
+|**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
@@ -518,6 +670,8 @@ Lookup transactions for an asset.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookupassettransactions-response-200)|
+|**400**|Response for errors|[Response 400](#lookupassettransactions-response-400)|
+|**500**|Response for errors|[Response 500](#lookupassettransactions-response-500)|
 
 <a name="lookupassettransactions-response-200"></a>
 **Response 200**
@@ -527,6 +681,22 @@ Lookup transactions for an asset.
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
 |**transactions**  <br>*required*||< [Transaction](#transaction) > array|
+
+<a name="lookupassettransactions-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupassettransactions-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -563,6 +733,24 @@ Lookup block.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Block](#block)|
+|**404**|Response for errors|[Response 404](#lookupblock-response-404)|
+|**500**|Response for errors|[Response 500](#lookupblock-response-500)|
+
+<a name="lookupblock-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupblock-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -600,14 +788,14 @@ Search for transactions.
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**exclude-close-to**  <br>*optional*|Combine with address and address-role parameters to define what type of address to search for. The close to fields are normally treated as a receiver, if you would like to exclude them set this parameter to true.|boolean|
-|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 |**Query**|**note-prefix**  <br>*optional*|Specifies a prefix which must be contained in the note field.|string|
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
-|**Query**|**sig-type**  <br>*optional*|SigType filters results using just the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
+|**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
 |**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
@@ -617,7 +805,8 @@ Search for transactions.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#searchfortransactions-response-200)|
-|**500**||[ErrorResponse](#errorresponse)|
+|**400**|Response for errors|[Response 400](#searchfortransactions-response-400)|
+|**500**|Response for errors|[Response 500](#searchfortransactions-response-500)|
 
 <a name="searchfortransactions-response-200"></a>
 **Response 200**
@@ -627,6 +816,22 @@ Search for transactions.
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
 |**transactions**  <br>*required*||< [Transaction](#transaction) > array|
+
+<a name="searchfortransactions-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="searchfortransactions-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -663,8 +868,9 @@ Lookup a single transaction.
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|(empty)|[Response 200](#lookuptransaction-response-200)|
-|**404**||[ErrorResponse](#errorresponse)|
-|**500**||[ErrorResponse](#errorresponse)|
+|**400**|Response for errors|[Response 400](#lookuptransaction-response-400)|
+|**404**|Response for errors|[Response 404](#lookuptransaction-response-404)|
+|**500**|Response for errors|[Response 500](#lookuptransaction-response-500)|
 
 <a name="lookuptransaction-response-200"></a>
 **Response 200**
@@ -673,6 +879,30 @@ Lookup a single transaction.
 |---|---|---|
 |**current-round**  <br>*required*|Round at which the results were computed.|integer|
 |**transaction**  <br>*required*||[Transaction](#transaction)|
+
+<a name="lookuptransaction-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookuptransaction-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookuptransaction-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
 
 
 **Consumes**
@@ -723,7 +953,7 @@ data/basics/userBalance.go : AccountData
 |**reward-base**  <br>*optional*|\[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.|integer|
 |**rewards**  <br>*required*|\[ern\] total rewards of MicroAlgos the account has received, including pending rewards.|integer|
 |**round**  <br>*required*|The round for which this information is relevant.|integer|
-|**sig-type**  <br>*optional*|Indicates what type of signature is used by this account, must be one of:<br>* sig<br>* msig<br>* lsig|enum (sig, msig, lsig)|
+|**sig-type**  <br>*optional*|Indicates what type of signature is used by this account, must be one of:<br>* sig<br>* msig<br>* lsig<br>* or null if unknown|enum (sig, msig, lsig)|
 |**status**  <br>*required*|\[onl\] delegation status of the account's MicroAlgos<br>* Offline - indicates that the associated account is delegated.<br>*  Online  - indicates that the associated account used as part of the delegation pool.<br>*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
 
 
@@ -804,7 +1034,7 @@ Stores the global information associated with an application.
 |**creator**  <br>*optional*|The address that created this application. This is the address where the parameters and global state for this application can be found.|string|
 |**extra-program-pages**  <br>*optional*|\[epp\] the amount of extra program pages available to this app.|integer|
 |**global-state**  <br>*optional*|[\gs\] global schema|[TealKeyValueStore](#tealkeyvaluestore)|
-|**global-state-schema**  <br>*optional*|[\lsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
+|**global-state-schema**  <br>*optional*|[\gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|[\lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
 
 
@@ -946,17 +1176,6 @@ Fields relating to voting for a protocol upgrade.
 |**upgrade-propose**  <br>*optional*|\[upgradeprop\] Indicates a proposed upgrade.|string|
 
 
-<a name="errorresponse"></a>
-### ErrorResponse
-An error response with optional data field.
-
-
-|Name|Schema|
-|---|---|
-|**data**  <br>*optional*|object|
-|**message**  <br>*required*|string|
-
-
 <a name="evaldelta"></a>
 ### EvalDelta
 Represents a TEAL value delta.
@@ -985,14 +1204,15 @@ Key-value pairs for StateDelta.
 A health check response.
 
 
-|Name|Schema|
-|---|---|
-|**data**  <br>*optional*|object|
-|**db-available**  <br>*required*|boolean|
-|**errors**  <br>*optional*|< string > array|
-|**is-migrating**  <br>*required*|boolean|
-|**message**  <br>*required*|string|
-|**round**  <br>*required*|integer|
+|Name|Description|Schema|
+|---|---|---|
+|**data**  <br>*optional*||object|
+|**db-available**  <br>*required*||boolean|
+|**errors**  <br>*optional*||< string > array|
+|**is-migrating**  <br>*required*||boolean|
+|**message**  <br>*required*||string|
+|**round**  <br>*required*||integer|
+|**version**  <br>*required*|Current version.|string|
 
 
 <a name="miniassetholding"></a>
@@ -1070,7 +1290,7 @@ Represents a TEAL value.
 |Name|Description|Schema|
 |---|---|---|
 |**bytes**  <br>*required*|\[tb\] bytes value.|string|
-|**type**  <br>*required*|\[tt\] value type.|integer|
+|**type**  <br>*required*|\[tt\] value type. Value `1` refers to **bytes**, value `2` refers to **uint**|integer|
 |**uint**  <br>*required*|\[ui\] uint value.|integer|
 
 

@@ -36,6 +36,8 @@ goal asset config [flags]
 
       --creator string              Account address for asset to configure (defaults to manager)
 
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
