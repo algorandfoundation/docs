@@ -158,7 +158,7 @@ Carla has 9.999009 ALGO and 0 of the NFT
 ```
 # Backend
 
-The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. A participant is an "actor" which takes part in the application (dApp). A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as, a set of accounts and contracts. 
+The Backend [index.rsh](https://github.com/algorand/reach-auction/blob/main/index.rsh) , defines the interface for functions coded in the frontend. A participant is an "actor" who takes part in the application (dApp) and can have persistently stored values, called its local state. Participants are associated with an account (address) on the consensus network. A Consensus Network is a Network protocol (a blockchain) that contains network tokens (ALGO, ETH, etc.), non-network tokens (ASA, ERC-20, etc.), as well as a set of accounts and contracts. 
 
 ## Basic Functions of the Auction
 

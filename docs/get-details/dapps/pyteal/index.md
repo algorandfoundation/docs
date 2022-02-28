@@ -461,7 +461,7 @@ def wait_for_confirmation(client, transaction_id, timeout):
 
 The `compile_program` function is a utility function that allows passing the generated TEAL code to a node that will compile and return the byte code. This returned byte code will be used with the application creation transaction (deploying the contract) later.
 
-The ‘get_private_key_from_mnemonic` function is a utility function that takes a mnemonic (account backup phrase) and returns the private key of the specific account. This will be used in this sample to recover the private key of the funded account of the smart contract creator.
+The `get_private_key_from_mnemonic` function is a utility function that takes a mnemonic (account backup phrase) and returns the private key of the specific account. This will be used in this sample to recover the private key of the funded account of the smart contract creator.
 
 The `wait_for_confirmation` function is a utility function that when called will wait until a specific transaction is confirmed on the Algorand blockchain. This will be used to confirm that the application creation transaction is successful and the smart contract is actively deployed.
 

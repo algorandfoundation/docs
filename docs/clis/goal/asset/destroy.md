@@ -36,6 +36,8 @@ goal asset destroy [flags]
 
       --creator string              Creator account address for asset to destroy
 
+      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api
 
       --dryrun-dump-format string   Dryrun dump format: json, msgp (default "json")
