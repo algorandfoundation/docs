@@ -1,3 +1,10 @@
+/* 
+IMPORTANT: The approvalProgramSourceInitial and approvalProgramSourceRefactored 
+are assumed to be executed by the creator with address 
+"5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4".
+If you are using a different account, change the hard-coded address
+*/
+
 package main
 
 import (
@@ -19,8 +26,10 @@ const algodAddress = "http://localhost:4001"
 const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 // user defined mnemonics
+// do not use mnemonics in production code - for demo purposes only
 const creatorMnemonic = "your 25-word mnemonic goes right here"
 const userMnemonic = "your second distinct 25-word mnemonic goes right here"
+
 
 // declare application state storage (immutable)
 const localInts = 1
@@ -29,7 +38,7 @@ const globalInts = 1
 const globalBytes = 0
 
 // user declared approval program (initial)
-const approvalProgramSourceInitial = `#pragma version 4
+const approvalProgramSourceInitial = `#pragma version 5
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -58,7 +67,7 @@ err
 handle_noop:
 // Handle NoOp
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 bnz handle_optin
@@ -102,20 +111,20 @@ int 1
 return
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 `
 
 // user declared approval program (refactored)
-const approvalProgramSourceRefactored = `#pragma version 4
+const approvalProgramSourceRefactored = `#pragma version 5
 // Handle each possible OnCompletion type. We don't have to worry about
 // handling ClearState, because the ClearStateProgram will execute in that
 // case, not the ApprovalProgram.
@@ -194,46 +203,24 @@ int 1
 return
 handle_deleteapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 handle_updateapp:
 // Check for creator
-addr 5XWY6RBNYHCSY2HK5HCTO62DUJJ4PT3G4L77FQEBUKE6ZYRGQAFTLZSQQ4
+addr LD6R3YLIIIEQK5VEYXNXBR775EV4DEOLZB6R7WUZGOTCB2SMJEZTFRPFPY
 txn Sender
 ==
 return
 `
 
 // declare clear state program source
-const clearProgramSource = `#pragma version 4
+const clearProgramSource = `#pragma version 5
 int 1
 `
 
-// Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client) {
-	status, err := client.Status().Do(context.Background())
-	if err != nil {
-		fmt.Printf("error getting algod status: %s\n", err)
-		return
-	}
-	lastRound := status.LastRound
-	for {
-		pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
-		if err != nil {
-			fmt.Printf("error getting pending transaction: %s\n", err)
-			return
-		}
-		if pt.ConfirmedRound > 0 {
-			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-			break
-		}
-		fmt.Printf("waiting for confirmation\n")
-		lastRound++
-		status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
-	}
-}
+
 
 // utility function to recover account and return sk and address
 func recoverAccount(passphrase string) crypto.Account {
@@ -276,12 +263,12 @@ func createApp(client *algod.Client, creatorAccount crypto.Account, approvalProg
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, nil,
-		nil, nil, nil, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
+		nil, nil, nil, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -303,15 +290,16 @@ func createApp(client *algod.Client, creatorAccount crypto.Account, approvalProg
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
 
 	appId = confirmedTxn.ApplicationIndex
 	fmt.Printf("Created new app-id: %d\n", appId)
@@ -327,8 +315,8 @@ func optInApp(client *algod.Client, account crypto.Account, index uint64) {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationOptInTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -353,15 +341,17 @@ func optInApp(client *algod.Client, account crypto.Account, index uint64) {
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
+
 	fmt.Printf("Oped-in to app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 }
 
@@ -373,8 +363,8 @@ func callApp(client *algod.Client, account crypto.Account, index uint64, appArgs
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -399,15 +389,16 @@ func callApp(client *algod.Client, account crypto.Account, index uint64, appArgs
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
 	fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 
 }
@@ -448,8 +439,8 @@ func updateApp(client *algod.Client, creatorAccount crypto.Account, index uint64
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationUpdateTx(index, nil, nil, nil, nil, approvalProgram, clearProgram, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -474,15 +465,16 @@ func updateApp(client *algod.Client, creatorAccount crypto.Account, index uint64
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
 	fmt.Printf("Updated app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 }
 
@@ -494,8 +486,8 @@ func closeOutApp(client *algod.Client, account crypto.Account, index uint64) {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -520,15 +512,17 @@ func closeOutApp(client *algod.Client, account crypto.Account, index uint64) {
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
+
 	fmt.Printf("Closed out from app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 }
 
@@ -540,8 +534,8 @@ func deleteApp(client *algod.Client, account crypto.Account, index uint64) {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -566,15 +560,16 @@ func deleteApp(client *algod.Client, account crypto.Account, index uint64) {
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
 	fmt.Printf("Deleted app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 }
 
@@ -586,8 +581,8 @@ func clearApp(client *algod.Client, account crypto.Account, index uint64) {
 		return
 	}
 	// comment out the next two (2) lines to use suggested fees
-	params.FlatFee = true
-	params.Fee = 1000
+	// params.FlatFee = true
+	// params.Fee = 1000
 
 	// create unsigned transaction
 	txn, err := future.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -612,15 +607,17 @@ func clearApp(client *algod.Client, account crypto.Account, index uint64) {
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
-	// Wait for confirmation
-	waitForConfirmation(txID, client)
 
-	// display results
-	confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
-		fmt.Printf("Error retrieving transaction %s\n", txID)
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
 	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+	// display results
+
 	fmt.Printf("Cleared local state for app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
 }
 

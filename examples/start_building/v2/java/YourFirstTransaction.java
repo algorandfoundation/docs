@@ -136,24 +136,5 @@ class GettingStarted{
         t.firstTransaction(myAccount1);
     }  
   } 
- 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // System.out.println("Navigate to this link:  https://dispenser.testnet.aws.algodev.network/?account=" + myAccount1.getAddress().toString());      

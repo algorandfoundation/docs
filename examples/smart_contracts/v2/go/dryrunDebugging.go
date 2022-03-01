@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"fmt"
+	"github.com/algorand/go-algorand-sdk/future"
 
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	modelsV2 "github.com/algorand/go-algorand-sdk/client/v2/common/models"
@@ -20,29 +21,7 @@ import (
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
-// Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client) {
-    status, err := client.Status().Do(context.Background())
-    if err != nil {
-        fmt.Printf("error getting algod status: %s\n", err)
-        return
-    }
-    lastRound := status.LastRound
-    for {
-        pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
-        if err != nil {
-            fmt.Printf("error getting pending transaction: %s\n", err)
-            return
-        }
-        if pt.ConfirmedRound > 0 {
-            fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-            break
-        }
-        fmt.Printf("waiting for confirmation\n")
-        lastRound++
-        status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
-    }
-}
+
 
 // prettyPrint prints Go structs
 func prettyPrint(data interface{}) {
@@ -56,7 +35,7 @@ func prettyPrint(data interface{}) {
     fmt.Printf("%s \n", p)
 }
 
-// dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/RREJECT and sig-trace
+// dryrunDebugging returns a response with disassembly, logic-sig-messages w PASS/REJECT and sig-trace
 func dryrunDebugging(lsig types.LogicSig, args [][]byte,tealFile []byte, client *algod.Client) modelsV2.DryrunResponse {
     // if tealFile is nil, use compile
 	txns := []types.SignedTxn{{}}
@@ -90,7 +69,6 @@ func main() {
     // sandbox
     const algodAddress = "http://localhost:4001"
     const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
- 
     // const algodToken = "<algod-token>"
     // const algodAddress = "<algod-address>"
     // Create an algod client
@@ -99,9 +77,9 @@ func main() {
         fmt.Printf("failed to make algod client: %s\n", err)
         return
     }	
-    // Get private key for sender address
-    // PASSPHRASE := "<25-word-mnemonic>"
-    PASSPHRASE := "buzz genre work meat fame favorite rookie stay tennis demand panic busy hedgehog snow morning acquire ball grain grape member blur armor foil ability seminar"		
+    // Get private key for sender address - 
+    // mnemonics should not be used in production code. Demo purposes only
+    PASSPHRASE := "<25-word-mnemonic>"
     sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
     pk := sk.Public()
     var a types.Address
@@ -119,7 +97,7 @@ func main() {
     // btoi
     // int 123
     // == 
-    // file, err := os.Open("<filename>")
+
     file, err := os.Open("./samplearg.teal")
     if err != nil {
         log.Fatal(err)
@@ -162,16 +140,16 @@ func main() {
         return
     }
     // comment out the next two (2) lines to use suggested fees
-    txParams.FlatFee = true
-    txParams.Fee = 1000
+    // txParams.FlatFee = true
+    // txParams.Fee = 1000
 
     // Make transaction
     // const receiver = "<receiver-address>"
     const receiver = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ"	
     // const fee = <fee>
     // const amount = <amount>
-    const fee = 1000
-    const amount = 1000000
+    var fee = uint64(txParams.MinFee)
+    const amount = 100000
     note := []byte("Hello World")
     genID := txParams.GenesisID
     genHash := txParams.GenesisHash
@@ -213,13 +191,21 @@ func main() {
     if err != nil {
         fmt.Printf("Sending failed with %v\n", err)
     }
-    // Wait for transaction to be confirmed
-    waitForConfirmation(txID, algodClient)
     fmt.Printf("Transaction ID: %v\n", transactionID)
-    }
-// output should look similar to this...
 
-// Compile Result = {
+    // Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(algodClient,txID,  4, context.Background())
+	if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
+		return
+	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+
+
+
+    }
+// the response should look similar to this...
+// Result = {
 // 	"protocol-version": "https://github.com/algorandfoundation/specs/tree/e5f565421d720c6f75cdd186f7098495caf9101f",
 // 	"txns": [
 // 		{

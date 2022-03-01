@@ -1,6 +1,6 @@
 package com.algorand.javatest.multisig;
 
-import java.io.Console;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import com.algorand.algosdk.account.Account;
 import com.algorand.algosdk.v2.client.common.AlgodClient;
 import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
 import com.algorand.algosdk.algod.client.ApiException;
 import com.algorand.algosdk.crypto.Address;
@@ -18,8 +17,10 @@ import com.algorand.algosdk.crypto.MultisigAddress;
 import com.algorand.algosdk.transaction.SignedTransaction;
 import com.algorand.algosdk.transaction.Transaction;
 import com.algorand.algosdk.util.Encoder;
+import java.util.Scanner;
 import org.json.JSONObject;
 import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
+import com.algorand.algosdk.v2.client.Utils;
 
 /**
  * Test Multisignature
@@ -28,26 +29,12 @@ import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 public class Multisig {
 
     public AlgodClient client = null;
-    public static void waitForEnter(String message) {
-        Console c = System.console();
-        if (c != null) {
-            // printf-like arguments
-            if (message != null)
-                c.format(message);
-            c.format("\nPress ENTER to proceed.\n");
-            c.readLine();
-        }
-    }
     
     // utility function to connect to a node
     private AlgodClient connectToNetwork() {
 
         // Initialize an algod client
-        // final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-        // final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
-
         // sandbox
-        // Initialize an algod client
         final String ALGOD_API_ADDR = "localhost";
         final Integer ALGOD_PORT = 4001;
         final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -57,52 +44,14 @@ public class Multisig {
 
     }
 
-    /**
-     * utility function to wait on a transaction to be confirmed
-     * the timeout parameter indicates how many rounds do you wish to check pending transactions for
-     */
-    public PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
-    throws Exception {
-        if (myclient == null || txID == null || timeout < 0) {
-            throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
-        }
-        Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        NodeStatusResponse nodeStatusResponse = resp.body();
-        Long startRound = nodeStatusResponse.lastRound + 1;
-        Long currentRound = startRound;
-        while (currentRound < (startRound + timeout)) {
-            // Check the pending transactions                 
-            Response < PendingTransactionResponse > resp2 = myclient.PendingTransactionInformation(txID).execute();
-            if (resp2.isSuccessful()) {
-                PendingTransactionResponse pendingInfo = resp2.body();
-                if (pendingInfo != null) {
-                    if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
-                        // Got the completed Transaction
-                        return pendingInfo;
-                    }
-                    if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
-                        // If there was a pool error, then the transaction has been rejected!
-                        throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
-                    }
-                }
-            }
-            resp = myclient.WaitForBlock(currentRound).execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            currentRound++;
-        }
-        throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
-    }
+ 
     
-
+    static Scanner scan = new Scanner(System.in);
     public void multisigExample() throws Exception {
+  
         if (client == null)
             this.client = connectToNetwork();
-
+        //  never use mnemonics in production code, replace for demo purposes only
         final String account1_mnemonic = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry";
         final String account2_mnemonic = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only";
         final String account3_mnemonic = "mirror zone together remind rural impose balcony position minimum quick manage climb quit draft lion device pluck rug siege robust spirit fine luggage ability actual";
@@ -128,10 +77,12 @@ public class Multisig {
 
         // Instantiate the Multisig Account
         MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
-
+      ;
         System.out.println("Multisignature Address: " + msa.toString());
-        // waitForEnter("Use TestNet Dispenser to add funds, wait for the transaction to be finalized and press enter");
-
+        System.out.println("Navigate to this link and dispense:  https://dispenser.testnet.aws.algodev.network?account=" + msa.toString());            
+        System.out.println("PRESS ENTER KEY TO CONTINUE...");     
+        scan.nextLine();
+ 
         // setup transaction   
         try {
             Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
@@ -142,7 +93,7 @@ public class Multisig {
             if (params == null) {
                 throw new Exception("Params retrieval error");
             }                      
-            BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
+            BigInteger amount = BigInteger.valueOf(100000); // 100000 microAlgos = .1 Algo
             // add some notes to the transaction
             byte[] notes = "These are some notes encoded in some way!".getBytes();
             // Setup Transaction
@@ -166,9 +117,8 @@ public class Multisig {
                 throw new Exception(rawtxresponse.message());
             }
             String id = rawtxresponse.body().txId;
-            System.out.println("Successfully sent tx with ID: " + id);
             // Wait for transaction confirmation
-            PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
 
             System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
             // Read the transaction

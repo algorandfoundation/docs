@@ -129,51 +129,10 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     ```javascript
     const algosdk = require('algosdk');
 
-    /**
-    * utility function to wait on a transaction to be confirmed
-    * the timeout parameter indicates how many rounds do you wish to check pending transactions for
-    */
-    const waitForConfirmation = async function (algodclient, txId, timeout) {
-        // Wait until the transaction is confirmed or rejected, or until 'timeout'
-        // number of rounds have passed.
-        //     Args:
-        // txId(str): the transaction to wait for
-        // timeout(int): maximum number of rounds to wait
-        // Returns:
-        // pending transaction information, or throws an error if the transaction
-        // is not confirmed or rejected in the next timeout rounds
-        if (algodclient == null || txId == null || timeout < 0) {
-            throw "Bad arguments.";
-        }
-        let status = (await algodclient.status().do());
-        if (status == undefined) throw new Error("Unable to get node status");
-        let startround = status["last-round"] + 1;
-        let currentround = startround;
 
-        while (currentround < (startround + timeout)) {
-            let pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-            if (pendingInfo != undefined) {
-                if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-                    //Got the completed Transaction
-                    return pendingInfo;
-                }
-                else {
-                    if (pendingInfo["pool-error"] != null && pendingInfo["pool-error"].length > 0) {
-                        // If there was a pool error, then the transaction has been rejected!
-                        throw new Error("Transaction Rejected" + " pool error" + pendingInfo["pool-error"]);
-                    }
-                }
-            }
-            await algodclient.statusAfterBlock(currentround).do();
-            currentround++;
-        }
-        throw new Error("Transaction not confirmed after " + timeout + " rounds!");
-    };
-    // enter token, server, and port
-    const token = <algod-token>;
-    const server = <algod-address>;
-    const port = <algod-port>;
-
+    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    const server = "http://localhost";
+    const port = 4001;
     const keypress = async () => {
         process.stdin.setRawMode(true)
         return new Promise(resolve => process.stdin.once('data', () => {
@@ -188,7 +147,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         let account1_mnemonic = "PASTE phrase for account 1";
         let account2_mnemonic = "PASTE phrase for account 2";
         let account3_mnemonic = "PASTE phrase for account 3"
-
+        // never use mnemonics in production code, replace for demo purposes only
 
         let account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
         let account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
@@ -211,23 +170,26 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         let multsigaddr = algosdk.multisigAddress(mparams);
         console.log("Multisig Address: " + multsigaddr);
         //Pause execution to allow using the dispenser on testnet to put tokens in account
-        console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
-        // await keypress();
+        console.log("Add funds to multisig account using the TestNet Dispenser: ");
+        console.log("https://dispenser.testnet.aws.algodev.network?account=" + multsigaddr);
+        console.log("Once funded, press any key to continue");
+        await keypress();
         try {
             let algodclient = new algosdk.Algodv2(token, server, port);
 
             // Get the relevant params from the algod
             let params = await algodclient.getTransactionParams().do();
             // comment out the next two lines to use suggested fee
-            params.fee = 1000;
-            params.flatFee = true;
+            // params.fee = 1000;
+            // params.flatFee = true;
 
             const receiver = account3.addr;
             let names = '{"firstName":"John", "lastName":"Doe"}';
             const enc = new TextEncoder();
             const note = enc.encode(names);
 
-            let txn = algosdk.makePaymentTxnWithSuggestedParams(multsigaddr, receiver, 1000000, undefined, note, params);
+
+            let txn = algosdk.makePaymentTxnWithSuggestedParams(multsigaddr, receiver, 100000, undefined, note, params);
             let txId = txn.txID().toString();
             // Sign with first signature
 
@@ -238,7 +200,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
             await algodclient.sendRawTransaction(twosigs).do();
 
             // Wait for confirmation
-            let confirmedTxn = await waitForConfirmation(algodclient, txId, 4);
+            const confirmedTxn = await algosdk.waitForConfirmation(algodclient, txId, 4);
             //Get the completed Transaction
             console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
             let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
@@ -247,6 +209,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
             console.log("Note field: ", string);
             const obj = JSON.parse(string);
             console.log("Note first name: %s", obj.firstName);
+
 
         } catch (err) {
             console.log(err.message);
@@ -262,15 +225,16 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     from algosdk import account, encoding, mnemonic
     from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
     import base64
+    from algosdk.future.transaction import *
 
     # Change these values with mnemonics
     mnemonic1 = "PASTE phrase for account 1"
     mnemonic2 = "PASTE phrase for account 2"
     mnemonic3 = "PASTE phrase for account 3"
-
+    # never use mnemonics in production code, replace for demo purposes only
 
     # For ease of reference, add account public and private keys to
-    # an accounts dictionary.
+    # an accounts dict.
 
     private_key_1 = mnemonic.to_private_key(mnemonic1)
     account_1 = mnemonic.to_public_key(mnemonic1)
@@ -281,35 +245,6 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     private_key_3 = mnemonic.to_private_key(mnemonic3)
     account_3 = mnemonic.to_public_key(mnemonic3)
 
-    # utility for waiting on a transaction confirmation
-    def wait_for_confirmation(client, transaction_id, timeout):
-        """
-        Wait until the transaction is confirmed or rejected, or until 'timeout'
-        number of rounds have passed.
-        Args:
-            transaction_id (str): the transaction to wait for
-            timeout (int): maximum number of rounds to wait    
-        Returns:
-            dict: pending transaction information, or throws an error if the transaction
-                is not confirmed or rejected in the next timeout rounds
-        """
-        start_round = client.status()["last-round"] + 1
-        current_round = start_round
-
-        while current_round < start_round + timeout:
-            try:
-                pending_txn = client.pending_transaction_info(transaction_id)
-            except Exception:
-                return 
-            if pending_txn.get("confirmed-round", 0) > 0:
-                return pending_txn
-            elif pending_txn["pool-error"]:  
-                raise Exception(
-                    'pool error: {}'.format(pending_txn["pool-error"]))
-            client.status_after_block(current_round)                   
-            current_round += 1
-        raise Exception(
-            'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
 
     # create a multisig account
@@ -318,13 +253,17 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     msig = Multisig(version, threshold, [account_1, account_2])
 
     print("Multisig Address: ", msig.address())
-    print("Please go to: https://bank.testnet.algorand.network/ to fund multisig account.", msig.address())
-    # input("Please go to: https://bank.testnet.algorand.network/ to fund multisig account." + '\n' + "Press Enter to continue...")
+    print('Go to the below link to fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account={}'.format(msig.address())) 
+
+    input("Press Enter to continue...")
 
     # Specify your node address and token. This must be updated.
-    algod_address = ""  # ADD ADDRESS
-    algod_token = ""  # ADD TOKEN
+    # algod_address = ""  # ADD ADDRESS
+    # algod_token = ""  # ADD TOKEN
 
+    # sandbox
+    algod_address = "http://localhost:4001"
+    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
     # Initialize an algod client
     algod_client = algod.AlgodClient(algod_token, algod_address)
@@ -332,9 +271,8 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     # get suggested parameters
     params = algod_client.suggested_params()
     # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
-
+    # params.flat_fee = True
+    # params.fee = 1000
 
     # create a transaction
     sender = msig.address()
@@ -343,7 +281,6 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     note = "Hello Multisig".encode()
     txn = PaymentTxn(sender, params, recipient, amount, None, note, None)
 
-
     # create a SignedTransaction object
     mtx = MultisigTransaction(txn, msig)
 
@@ -351,25 +288,35 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     mtx.sign(private_key_1)
     mtx.sign(private_key_2)
 
-    # send the transaction
-    txid = algod_client.send_raw_transaction(
-        encoding.msgpack_encode(mtx))
+    # print encoded transaction
+    # print(encoding.msgpack_encode(mtx))
+
+
         # wait for confirmation	
     try:
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
+    # send the transaction
+        txid = algod_client.send_raw_transaction(
+        encoding.msgpack_encode(mtx))    
+        print("TXID: ", txid)   
+        confirmed_txn = wait_for_confirmation(algod_client, txid, 6)  
+        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
         print("Transaction information: {}".format(
             json.dumps(confirmed_txn, indent=4)))
         print("Decoded note: {}".format(base64.b64decode(
             confirmed_txn["txn"]["txn"]["note"]).decode()))
     except Exception as err:
         print(err)
+
+
+
+
     ```
 
 === "Java"
     ```java
     package com.algorand.javatest.multisig;
 
-    import java.io.Console;
+
     import java.math.BigInteger;
     import java.util.ArrayList;
     import java.util.List;
@@ -378,7 +325,6 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     import com.algorand.algosdk.v2.client.common.AlgodClient;
     import com.algorand.algosdk.v2.client.common.Response;
     import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-    import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
     import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
     import com.algorand.algosdk.algod.client.ApiException;
     import com.algorand.algosdk.crypto.Address;
@@ -387,8 +333,10 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     import com.algorand.algosdk.transaction.SignedTransaction;
     import com.algorand.algosdk.transaction.Transaction;
     import com.algorand.algosdk.util.Encoder;
+    import java.util.Scanner;
     import org.json.JSONObject;
     import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
+    import com.algorand.algosdk.v2.client.Utils;
 
     /**
     * Test Multisignature
@@ -397,80 +345,39 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     public class Multisig {
 
         public AlgodClient client = null;
-        public static void waitForEnter(String message) {
-            Console c = System.console();
-            if (c != null) {
-                // printf-like arguments
-                if (message != null)
-                    c.format(message);
-                c.format("\nPress ENTER to proceed.\n");
-                c.readLine();
-            }
-        }
         
         // utility function to connect to a node
         private AlgodClient connectToNetwork() {
 
             // Initialize an algod client
-            final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
-            final Integer ALGOD_PORT = port<PLACEHOLDER>;
+            // final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
+            // final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
 
+
+            // sandbox
+            // Initialize an algod client
+            final String ALGOD_API_ADDR = "localhost";
+            final Integer ALGOD_PORT = 4001;
+            final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
             AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
             return client;
 
         }
 
-        /**
-        * utility function to wait on a transaction to be confirmed
-        * the timeout parameter indicates how many rounds do you wish to check pending transactions for
-        */
-        public PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
-        throws Exception {
-            if (myclient == null || txID == null || timeout < 0) {
-                throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
-            }
-            Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            NodeStatusResponse nodeStatusResponse = resp.body();
-            Long startRound = nodeStatusResponse.lastRound + 1;
-            Long currentRound = startRound;
-            while (currentRound < (startRound + timeout)) {
-                // Check the pending transactions                 
-                Response < PendingTransactionResponse > resp2 = myclient.PendingTransactionInformation(txID).execute();
-                if (resp2.isSuccessful()) {
-                    PendingTransactionResponse pendingInfo = resp2.body();
-                    if (pendingInfo != null) {
-                        if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
-                            // Got the completed Transaction
-                            return pendingInfo;
-                        }
-                        if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
-                            // If there was a pool error, then the transaction has been rejected!
-                            throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
-                        }
-                    }
-                }
-                resp = myclient.WaitForBlock(currentRound).execute();
-                if (!resp.isSuccessful()) {
-                    throw new Exception(resp.message());
-                }
-                currentRound++;
-            }
-            throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
-        }
+    
         
-
+        static Scanner scan = new Scanner(System.in);
         public void multisigExample() throws Exception {
+    
             if (client == null)
                 this.client = connectToNetwork();
+            //  never use mnemonics in production code, replace for demo purposes only
 
-            final String account1_mnemonic = <var>your-25-word-mnemonic</var>
-            final String account2_mnemonic = <var>your-25-word-mnemonic</var>
-            final String account3_mnemonic = <var>your-25-word-mnemonic</var>
+
+            final String account1_mnemonic = "<var>your-25-word-mnemonic</var>"
+            final String account2_mnemonic = "<var>your-25-word-mnemonic</var>"
+            final String account3_mnemonic = "<var>your-25-word-mnemonic</var>"
 
             Account act1 = new Account(account1_mnemonic);
             Account act2 = new Account(account2_mnemonic);
@@ -478,21 +385,19 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
             System.out.println("Account1: " + act1.getAddress());
             System.out.println("Account2: " + act2.getAddress());
             System.out.println("Account3: " + act3.getAddress());
-
             final String DEST_ADDR = act3.getAddress().toString();
-
             // List for Pks for multisig account
             List<Ed25519PublicKey> publicKeys = new ArrayList<>();
             publicKeys.add(act1.getEd25519PublicKey());
             publicKeys.add(act2.getEd25519PublicKey());
             publicKeys.add(act3.getEd25519PublicKey());
-
             // Instantiate the Multisig Account
             MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
-
+        ;
             System.out.println("Multisignature Address: " + msa.toString());
-            // waitForEnter("Use TestNet Dispenser to add funds, wait for the transaction to be finalized and press enter");
-
+            System.out.println("Navigate to this link and dispense:  https://dispenser.testnet.aws.algodev.network?account=" + msa.toString());            
+            System.out.println("PRESS ENTER KEY TO CONTINUE...");     
+            scan.nextLine();
             // setup transaction   
             try {
                 Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
@@ -503,7 +408,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
                 if (params == null) {
                     throw new Exception("Params retrieval error");
                 }                      
-                BigInteger amount = BigInteger.valueOf(1000000); // microAlgos
+                BigInteger amount = BigInteger.valueOf(100000); // 100000 microAlgos = .1 Algo
                 // add some notes to the transaction
                 byte[] notes = "These are some notes encoded in some way!".getBytes();
                 // Setup Transaction
@@ -527,23 +432,19 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
                     throw new Exception(rawtxresponse.message());
                 }
                 String id = rawtxresponse.body().txId;
-                System.out.println("Successfully sent tx with ID: " + id);
                 // Wait for transaction confirmation
-                PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+                PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
 
                 System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
                 // Read the transaction
                 JSONObject jsonObj = new JSONObject(pTrx.toString());
                 System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
                 System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-
-
             } catch (ApiException e) {
                 // This is generally expected, but should give us an informative error message.
                 System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
             }
-        }
-    
+        }  
         public static void main(String args[]) throws Exception {
             Multisig t = new Multisig();
             t.multisigExample();
@@ -559,12 +460,9 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         "context"
         "crypto/ed25519"
         "fmt"
-        "errors"
-        "strings"
         json "encoding/json"
-        // "io/ioutil"
-        "github.com/algorand/go-algorand-sdk/client/v2/algod"
-        "github.com/algorand/go-algorand-sdk/client/v2/common/models"
+        "github.com/algorand/go-algorand-sdk/future"
+        "github.com/algorand/go-algorand-sdk/client/v2/algod"	
         "github.com/algorand/go-algorand-sdk/crypto"
         "github.com/algorand/go-algorand-sdk/mnemonic"
         "github.com/algorand/go-algorand-sdk/transaction"
@@ -572,18 +470,24 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     )
 
     // UPDATE THESE VALUES
-    const algodAddress = "Your ADDRESS"
-    const algodToken = "Your TOKEN"
+    // const algodAddress = "Your ADDRESS"
+    // const algodToken = "Your TOKEN"
+
+    // sandbox
+    const algodAddress = "http://localhost:4001"
+    const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
     // Accounts to be used through examples
     func loadAccounts() (map[int][]byte, map[int]string) {
         // Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
-
+        // Change these values to use the accounts created previously.
 
         // Paste in mnemonic phrases for all three accounts
         mnemonic1 := "PASTE phrase for account 1"
         mnemonic2 := "PASTE phrase for account 2"
         mnemonic3 := "PASTE phrase for account 3"
+        // never use mnemonics in production code, replace for demo purposes only
+
 
         mnemonics := []string{mnemonic1, mnemonic2, mnemonic3}
         pks := map[int]string{1: "", 2: "", 3: ""}
@@ -607,49 +511,6 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         return sks, pks
     }
 
-    // Function that waits for a given txId to be confirmed by the network
-    func waitForConfirmation(txID string, client *algod.Client, timeout uint64) (models.PendingTransactionInfoResponse, error) {
-        pt := new(models.PendingTransactionInfoResponse)
-        if client == nil || txID == "" || timeout < 0 {
-            fmt.Printf("Bad arguments for waitForConfirmation")
-            var msg = errors.New("Bad arguments for waitForConfirmation")
-            return *pt, msg
-
-        }
-
-        status, err := client.Status().Do(context.Background())
-        if err != nil {
-            fmt.Printf("error getting algod status: %s\n", err)
-            var msg = errors.New(strings.Join([]string{"error getting algod status: "}, err.Error()))
-            return *pt, msg
-        }
-        startRound := status.LastRound + 1
-        currentRound := startRound
-
-        for currentRound < (startRound + timeout) {
-
-            *pt, _, err = client.PendingTransactionInformation(txID).Do(context.Background())
-            if err != nil {
-                fmt.Printf("error getting pending transaction: %s\n", err)
-                var msg = errors.New(strings.Join([]string{"error getting pending transaction: "}, err.Error()))
-                return *pt, msg
-            }
-            if pt.ConfirmedRound > 0 {
-                fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-                return *pt, nil
-            }
-            if pt.PoolError != "" {
-                fmt.Printf("There was a pool error, then the transaction has been rejected!")
-                var msg = errors.New("There was a pool error, then the transaction has been rejected")
-                return *pt, msg
-            }
-            fmt.Printf("waiting for confirmation\n")
-            status, err = client.StatusAfterBlock(currentRound).Do(context.Background())
-            currentRound++
-        }
-        msg := errors.New("Tx not found in round range")
-        return *pt, msg
-    }
 
     // PrettyPrint prints Go structs
     func PrettyPrint(data interface{}) {
@@ -677,8 +538,8 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
             return
         }
         // comment out the next two (2) lines to use suggested fees
-        txParams.FlatFee = true
-        txParams.Fee = 1000
+        // txParams.FlatFee = true
+        // txParams.Fee = 1000
         // Get pre-defined set of keys for example
         sks, pks := loadAccounts()
 
@@ -698,10 +559,12 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         }
 
         fromAddr, _ := ma.Address()
-        // Print multisig account
-        fmt.Printf("Here is your multisig address : %s \n", fromAddr.String())
-        fmt.Println("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account.")
+        // Fund account
+        fmt.Println("Fund multisig account using testnet faucet:\n--> https://dispenser.testnet.aws.algodev.network?account=" + fromAddr.String())
+        fmt.Println("--> Once funded, press ENTER key to continue...")
 
+
+        //	fmt.Scanln() // wait for Enter Key
 
         toAddr := addr3.String()
         var amount uint64 = 10000
@@ -740,15 +603,23 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
         fmt.Printf("Made 2-out-of-3 multisig transaction with TxID %s: %x\n", txid, twoOfThreeTxBytes)
 
+
+        // We can also merge raw, partially-signed multisig transactions:
+        // otherTxBytes := ... // generate another raw multisig transaction 
+        // txid, mergedTxBytes, err := crypto.MergeMultisigTransactions(twoOfThreeTxBytes, otherTxBytes)
+
         // Broadcast the transaction to the network
         txid, err = algodClient.SendRawTransaction(twoOfThreeTxBytes).Do(context.Background())
 
+
         // Wait for confirmation
-        confirmedTxn, err := waitForConfirmation(txid, algodClient, 4)
+        confirmedTxn, err := future.WaitForConfirmation(algodClient,txid,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
             return
         }
+        fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+
         txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
         if err != nil {
             fmt.Printf("Can not marshall txn data: %s\n", err)
@@ -758,6 +629,8 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
 
     }
+
+
     ```
 
 === "goal"
@@ -784,7 +657,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 # Logic Signatures
 
-Logic Signatures (or LogicSigs) authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-account).
+Logic signatures authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-account).
 
 A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../../dapps/smart-contracts/smartsigs/modes#logic-signatures).
 

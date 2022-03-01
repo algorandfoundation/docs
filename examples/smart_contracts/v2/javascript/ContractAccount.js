@@ -7,24 +7,10 @@ const algosdk = require('algosdk');
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
+
+
 // Import the filesystem module 
 const fs = require('fs'); 
-
-// Function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let response = await algodclient.status().do();
-    let lastround = response["last-round"];
-    while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-            //Got the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-            break;
-        }
-        lastround++;
-        await algodclient.statusAfterBlock(lastround).do();
-    }
-};
 
 // create an algod v2 client
 let algodclient = new algosdk.Algodv2(token, server, port);
@@ -34,8 +20,8 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // get suggested parameters
     let params = await algodclient.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
+    // params.fee = 1000;
+    // params.flatFee = true;
     console.log(params);
     // create logic sig
     // samplearg.teal
@@ -43,10 +29,10 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // It should not be used in production
     // arg_0
     // btoi
-    // int 123
+    // int 12345
     // ==
     // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-    var fs = require('fs'),
+    let  fs = require('fs'),
         path = require('path'),
         filePath = path.join(__dirname, 'samplearg.teal');
         // filePath = path.join(__dirname, '<filename>');
@@ -56,6 +42,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     console.log("Result = " + results.result);
     // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
     let program = new Uint8Array(Buffer.from(results.result, "base64"));
+    //let program = new Uint8Array(Buffer.from("AiABuWAtFyIS", "base64"));
     // Use this if no args
     // let lsig = algosdk.makeLogicSig(program);
 
@@ -63,9 +50,11 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // let args = ["<my string>"];
     // let lsig = algosdk.makeLogicSig(program, args);
     // Integer parameter
-    let args = [[123]];
-    let lsig = algosdk.makeLogicSig(program, args);
+
+    let args = getUint8Int(12345);
+    let lsig = new algosdk.LogicSigAccount(program, args);
     console.log("lsig : " + lsig.address());   
+    
 
     // create a transaction
     let sender = lsig.address();
@@ -83,9 +72,18 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
     console.log("Transaction : " + tx.txId);   
-    await waitForConfirmation(algodclient, tx.txId);
+    const confirmedTxn = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 
 })().catch(e => {
-    console.log(e.body.message);
+    console.log(e.message);
     console.log(e);
 });
+
+function getUint8Int(number) {
+    const buffer = Buffer.alloc(8);
+    const bigIntValue = BigInt(number);
+    buffer.writeBigUInt64BE(bigIntValue);
+    return  [Uint8Array.from(buffer)];
+}
