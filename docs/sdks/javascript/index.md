@@ -296,7 +296,7 @@ async function firstTransaction() {
         await algodClient.sendRawTransaction(signedTxn).do();
 
         // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, txId, 4);
+        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
         //Get the completed Transaction
         console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
         var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
