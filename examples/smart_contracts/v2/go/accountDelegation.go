@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"fmt"
+	"github.com/algorand/go-algorand-sdk/future"
 
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/crypto"
@@ -18,29 +19,7 @@ import (
 	"github.com/algorand/go-algorand-sdk/types"
 )
 
-// Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client) {
-    status, err := client.Status().Do(context.Background())
-    if err != nil {
-        fmt.Printf("error getting algod status: %s\n", err)
-        return
-    }
-    lastRound := status.LastRound
-    for {
-        pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
-        if err != nil {
-            fmt.Printf("error getting pending transaction: %s\n", err)
-            return
-        }
-        if pt.ConfirmedRound > 0 {
-            fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-            break
-        }
-        fmt.Printf("waiting for confirmation\n")
-        lastRound++
-        status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
-    }
-}
+
 
 func main() {
     // sandbox
@@ -55,8 +34,8 @@ func main() {
         return
     }	
     // Get private key for sender address
-    // PASSPHRASE := "<25-word-mnemonic>"
-    PASSPHRASE := "buzz genre work meat fame favorite rookie stay tennis demand panic busy hedgehog snow morning acquire ball grain grape member blur armor foil ability seminar"		
+    // Do not use mnemonics in production code. For demo purposes only
+    PASSPHRASE := "<25-word-mnemonic>"
     sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
     pk := sk.Public()
     var a types.Address
@@ -115,8 +94,8 @@ func main() {
         return
     }
     // comment out the next two (2) lines to use suggested fees
-    txParams.FlatFee = true
-    txParams.Fee = 1000
+    // txParams.FlatFee = true
+    // txParams.Fee = 1000
 
     // Make transaction
     // const receiver = "<receiver-address>"
@@ -124,7 +103,7 @@ func main() {
     // const fee = <fee>
     // const amount = <amount>
     const fee = 1000
-    const amount = 1000000
+    const amount = 200000
     note := []byte("Hello World")
     genID := txParams.GenesisID
     genHash := txParams.GenesisHash
@@ -157,7 +136,13 @@ func main() {
     if err != nil {
         fmt.Printf("Sending failed with %v\n", err)
     }
-    // Wait for transaction to be confirmed
-    waitForConfirmation(txID, algodClient)
-    fmt.Printf("Transaction ID: %v\n", transactionID)
+
+	// Wait for confirmation
+	confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+	if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
+		return
+	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", transactionID ,confirmedTxn.ConfirmedRound)
+
     }

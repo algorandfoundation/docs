@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"crypto/ed25519"
-	"encoding/json"
+	json "encoding/json"
 	"fmt"
 
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
@@ -11,12 +11,13 @@ import (
 	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/transaction"
 	"github.com/algorand/go-algorand-sdk/types"
+	"github.com/algorand/go-algorand-sdk/future"
 )
 
 // This atomic transfer example code requires three (3) acounts:
-//  - account1 requires a user-defined mnemonic and be funded with 1001000 microAlgos
-//  - account2 requires a user-defined mnemonic and be funded with 2001000 microAlgos
-//  - account3 auto-generated within the code, 1000000 microAlgos will be transfered here
+//  - account1 requires a user-defined mnemonic and be funded with 101000 microAlgos
+//  - account2 requires a user-defined mnemonic and be funded with 201000 microAlgos
+//  - account3 auto-generated within the code, 100000 microAlgos will be transfered here
 // For account1 and account2, replcace the string "Your 25-word mnemonic goes here" in the code below.
 // For account3, ensure you note the mnemonic generated for future.
 // Faucents available for funding accounts:
@@ -25,36 +26,31 @@ import (
 // Replace the algodToken and algodAddress parameters below to connect to your API host.
 
 // user declared account mnemonics for account1 and account2
+// never us mnemonics in code. This is for demo purposes only.
 const mnemonic1 = "Your 25-word mnemonic goes here"
 const mnemonic2 = "Your 25-word mnemonic goes here"
+
 
 // user declared algod connection parameters
 const algodAddress = "http://localhost:4001"
 const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-// Function that waits for a given txId to be confirmed by the network
-func waitForConfirmation(txID string, client *algod.Client) {
-	status, err := client.Status().Do(context.Background())
+
+// const algodToken = "ef920e2e7e002953f4b29a8af720efe8e4ecc75ff102b165e0472834b25832c1"
+// const algodAddress = "http://hackathon.algodev.network"
+
+// prettyPrint prints Go structs
+func prettyPrint(data interface{}) {
+	var p []byte
+	//    var err := error
+	p, err := json.MarshalIndent(data, "", "\t")
 	if err != nil {
-		fmt.Printf("error getting algod status: %s\n", err)
+		fmt.Println(err)
 		return
 	}
-	lastRound := status.LastRound
-	for {
-		pt, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
-		if err != nil {
-			fmt.Printf("error getting pending transaction: %s\n", err)
-			return
-		}
-		if pt.ConfirmedRound > 0 {
-			fmt.Printf("Transaction "+txID+" confirmed in round %d\n", pt.ConfirmedRound)
-			break
-		}
-		fmt.Printf("...waiting for confirmation\n")
-		lastRound++
-		status, err = client.StatusAfterBlock(lastRound).Do(context.Background())
-	}
+	fmt.Printf("%s \n", p)
 }
+
 
 // utility function to get address string
 func getAddress(mn string) string {
@@ -130,7 +126,7 @@ func main() {
 		return
 	}
 	txParams.FlatFee = true
-	var minFee uint64 = 1000
+	minFee := uint64(txParams.MinFee)
 	genID := txParams.GenesisID
 	genHash := txParams.GenesisHash
 	firstValidRound := uint64(txParams.FirstRoundValid)
@@ -141,7 +137,7 @@ func main() {
 	// from account 1 to account 3
 	fromAddr := account1
 	toAddr := account3
-	var amount uint64 = 1000000
+	var amount uint64 = 100000
 
 	tx1, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, nil, "", genID, genHash)
 	if err != nil {
@@ -153,7 +149,7 @@ func main() {
 	// from account 2 to account 1
 	fromAddr = account2
 	toAddr = account1
-	amount = 2000000
+	amount = 200000
 	tx2, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, nil, "", genID, genHash)
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
@@ -203,7 +199,21 @@ func main() {
 		fmt.Printf("failed to send transaction: %s\n", err)
 		return
 	}
-	waitForConfirmation(pendingTxID, algodClient)
+    fmt.Printf("Submitted transaction %s\n", pendingTxID)
+
+    confirmedTxn, err := future.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
+    if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", pendingTxID)
+        return
+    }
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID ,confirmedTxn.ConfirmedRound)
+
+
+	txnJSON, err := json.MarshalIndent(confirmedTxn.Transaction.Txn, "", "\t")
+	if err != nil {
+		fmt.Printf("Can not marshall txn data: %s\n", err)
+	}
+	fmt.Printf("Transaction information: %s\n", txnJSON)
 
 	// display account balances
 	fmt.Println("Final balances:")
@@ -218,12 +228,8 @@ func main() {
 		fmt.Printf("error getting pending transaction: %s\n", err)
 		return
 	}
-
-	txnJSON, err := json.MarshalIndent(confirmedTx.Transaction.Txn, "", "\t")
-	if err != nil {
-		fmt.Printf("Can not marshall txn data: %s\n", err)
-	}
-	fmt.Printf("Transaction information: %s\n", txnJSON)
+	fmt.Printf("Transaction information tx1: \n")
+    prettyPrint(confirmedTx.Transaction.Txn)
 
 	// tx2
 	confirmedTx, _, err = algodClient.PendingTransactionInformation(sTxID2).Do(context.Background())
@@ -231,10 +237,7 @@ func main() {
 		fmt.Printf("error getting pending transaction: %s\n", err)
 		return
 	}
+	fmt.Printf("Transaction information tx2: \n")
+    prettyPrint(confirmedTx.Transaction.Txn)
 
-	txnJSON, err = json.MarshalIndent(confirmedTx.Transaction.Txn, "", "\t")
-	if err != nil {
-		fmt.Printf("Can not marshall txn data: %s\n", err)
-	}
-	fmt.Printf("Transaction information: %s\n", txnJSON)
 }

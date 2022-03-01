@@ -1015,7 +1015,9 @@ The following code shows how to generate a multisignature account composed of th
 		let multsigaddr = algosdk.multisigAddress(mparams);
 		console.log("Multisig Address: " + multsigaddr);
 		// Fund TestNet account
-		console.log('Dispense funds to this account on TestNet https://bank.testnet.algorand.network/');
+		console.log("Add funds to multisig account using the TestNet Dispenser: ");
+		console.log("https://dispenser.testnet.aws.algodev.network?account=" + multsigaddr);
+
 	```
 
 === "Python"
@@ -1043,7 +1045,8 @@ The following code shows how to generate a multisignature account composed of th
 	threshold = 2  # how many signatures are necessary
 	msig = Multisig(version, threshold, [account_1, account_2, account_3])
 	print("Multisig Address: ", msig.address())
-	print("Please go to: https://bank.testnet.algorand.network/ to fund multisig account.", msig.address())
+	print('Go to the below link to fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account={}'.format(msig.address())) 
+
 	```
 
 === "Java"
@@ -1080,7 +1083,8 @@ The following code shows how to generate a multisignature account composed of th
 			// Instantiate the Multisig Account
 			MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
 
-			System.out.println("Multisignature Address: " + msa.toString());
+        	System.out.println("Navigate to this link and dispense:  https://dispenser.testnet.aws.algodev.network?account=" + msa.toString());            
+
 			// "Use TestNet Dispenser to add funds to this account");
 		}
 
@@ -1153,7 +1157,7 @@ The following code shows how to generate a multisignature account composed of th
 		fromAddr, _ := ma.Address()
 		// Print multisig account
 		fmt.Printf("Multisig address : %s \n", fromAddr)
-		fmt.Println("Please go to: https://bank.testnet.algorand.network/ to fund your multisig account.")
+		fmt.Println("Fund multisig account using testnet faucet:\n--> https://dispenser.testnet.aws.algodev.network?account=" + fromAddr.String())
 		fmt.Printf("sks = "  , sks)
 	}
 	```
@@ -1171,4 +1175,4 @@ The following code shows how to generate a multisignature account composed of th
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
 
 !!! info
-    Example multisignature code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
+    Example multisignature code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig/v2) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).

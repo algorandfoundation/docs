@@ -66,7 +66,7 @@ async function yourFirstTransaction() {
         console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
         let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
         console.log("Transaction information: %o", mytxinfo);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
+        let string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
         console.log("Note field: ", string);
 
     }

@@ -1,9 +1,8 @@
 const algosdk = require('algosdk');
 
-
-var client = null;
+let  client = null;
 async function setupClient() {
-    if( client == null){
+    if (client == null) {
         const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         const server = "http://localhost";
         const port = 4001;
@@ -15,37 +14,24 @@ async function setupClient() {
     return client;
 }
 // recover first account
-function recoverAccount1(){
+// never use mnemonics in code, for demo purposes only
+function recoverAccount1() {
     const passphrase = "Your 25-word mnemonic goes here";
     let myAccount = algosdk.mnemonicToSecretKey(passphrase);
     return myAccount;
 }
 // recover second account
-function recoverAccount2(){
-	const passphrase = "Your 25-word mnemonic goes here";
+function recoverAccount2() {
+    const passphrase = "Your 25-word mnemonic goes here";
     let myAccount = algosdk.mnemonicToSecretKey(passphrase);
     return myAccount;
 }
-// function used to wait for a tx confirmation
-const waitForConfirmation = async function (algodclient, txId) {
-    let status = (await algodclient.status().do());
-    let lastRound = status["last-round"];
-      while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-          //Got the completed Transaction
-          console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-          break;
-        }
-        lastRound++;
-        await algodclient.statusAfterBlock(lastRound).do();
-      }
-    }; 
-async function submitGroupTransactions(){
 
-    try{
-        // receiver Account C
-        const receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
+async function submitAtomicTransfer() {
+
+    try {
+        // Account C
+        const  myAccountC = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A";
         // sample show account A to C
         // B to A 
         // grouped
@@ -60,14 +46,21 @@ async function submitGroupTransactions(){
         // Account B
         let myAccountB = await recoverAccount2();
         console.log("My account B address: %s", myAccountB.addr)
+        //Check your balances
+        let accountInfo = await algodClient.accountInformation(myAccountA.addr).do();
+        console.log("Account A balance: %d microAlgos", accountInfo.amount);
+        accountInfo = await algodClient.accountInformation(myAccountB.addr).do();
+        console.log("Account B balance: %d microAlgos", accountInfo.amount);  
+        accountInfo = await algodClient.accountInformation(myAccountC).do();
+        console.log("Account C balance: %d microAlgos", accountInfo.amount);   
 
         // get suggested params from the network
         let params = await algodClient.getTransactionParams().do();
 
         // Transaction A to C 
-        let transaction1 = algosdk.makePaymentTxnWithSuggestedParams(myAccountA.addr, receiver, 1000000, undefined, undefined, params);  
+        let transaction1 = algosdk.makePaymentTxnWithSuggestedParams(myAccountA.addr, myAccountC, 100000, undefined, undefined, params);
         // Create transaction B to A
-        let transaction2 = algosdk.makePaymentTxnWithSuggestedParams(myAccountB.addr, myAccountA.addr, 1000000, undefined, undefined, params);  
+        let transaction2 = algosdk.makePaymentTxnWithSuggestedParams(myAccountB.addr, myAccountA.addr, 200000, undefined, undefined, params);
 
         // Store both transactions
         let txns = [transaction1, transaction2];
@@ -76,21 +69,30 @@ async function submitGroupTransactions(){
         let txgroup = algosdk.assignGroupID(txns);
 
         // Sign each transaction in the group 
-        let signedTx1 = transaction1.signTxn( myAccountA.sk )
-        let signedTx2 = transaction2.signTxn( myAccountB.sk )
-    
+        let signedTx1 = transaction1.signTxn(myAccountA.sk)
+        let signedTx2 = transaction2.signTxn(myAccountB.sk)
+
         // Combine the signed transactions
         let signed = []
-        signed.push( signedTx1 )
-        signed.push( signedTx2 )
+        signed.push(signedTx1)
+        signed.push(signedTx2)
 
         let tx = (await algodClient.sendRawTransaction(signed).do());
         console.log("Transaction : " + tx.txId);
 
         // Wait for transaction to be confirmed
-        await waitForConfirmation(algodClient, tx.txId)
+        confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
+        //Get the completed Transaction
+        console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+        accountInfo = await algodClient.accountInformation(myAccountA.addr).do();
+        console.log("Account A balance: %d microAlgos", accountInfo.amount);
+        accountInfo = await algodClient.accountInformation(myAccountB.addr).do();
+        console.log("Account B balance: %d microAlgos", accountInfo.amount);  
+        accountInfo = await algodClient.accountInformation(myAccountC).do();
+        console.log("Account C balance: %d microAlgos", accountInfo.amount);   
+
     } catch (err) {
-        console.log("err", err);  
+        console.log("err", err);
     }
 }
-submitGroupTransactions();
+submitAtomicTransfer();

@@ -20,6 +20,6 @@ https://github.com/algorand/go-algorand/releases/tag/v3.2.3-stable
 
 # Faucet
 
-You can dispense algos to your TestNet account by visiting [Algorand TestNet Dispenser](https://bank.testnet.algorand.network/).
+You can dispense algos to your TestNet account by visiting [Algorand TestNet Dispenser](https://dispenser.testnet.aws.algodev.network/).
 
 Click the Google sign-in link at the top of the Dispenser page and sign-in with your Google account. Complete the reCAPTCHA. Then copy and paste the address you would like to send money to into the empty text box. Click "Dispense". A `200` status code and a transaction ID means success. Run `goal account balance -a <algorand-address>` to view the new balance.

@@ -50,18 +50,18 @@ The example below illustrates Account A sending a transaction to Account C and A
 === "JavaScript"
 	``` javascript
     // Transaction A to C 
-    let transaction1 = algosdk.makePaymentTxnWithSuggestedParams(myAccountA.addr, myAccountC.addr, 1000000, undefined, undefined, params);  
+    let transaction1 = algosdk.makePaymentTxnWithSuggestedParams(myAccountA.addr, myAccountC.addr, 100000, undefined, undefined, params);  
     // Create transaction B to A
-    let transaction2 = algosdk.makePaymentTxnWithSuggestedParams(myAccountB.addr, myAccountA.addr, 2000000, undefined, undefined, params);  
+    let transaction2 = algosdk.makePaymentTxnWithSuggestedParams(myAccountB.addr, myAccountA.addr, 200000, undefined, undefined, params);  
     ```
 
 === "Python"
 	``` python  
     # from account 1 to account 3
-    txn_1 = transaction.PaymentTxn(account_1, params, account_3, 1000000)
+    txn_1 = transaction.PaymentTxn(account_1, params, account_3, 100000)
 
     # from account 2 to account 1
-    txn_2 = transaction.PaymentTxn(account_2, params, account_1, 2000000)
+    txn_2 = transaction.PaymentTxn(account_2, params, account_1, 200000)
     ```
 
 === "Java"
@@ -69,7 +69,7 @@ The example below illustrates Account A sending a transaction to Account C and A
     // Create the first transaction
     Transaction tx1 = Transaction.PaymentTransactionBuilder()
     .sender(acctA.getAddress())
-    .amount(1000000)
+    .amount(100000)
     .receiver(acctC.getAddress())
     .suggestedParams(params)
     .build();
@@ -77,7 +77,7 @@ The example below illustrates Account A sending a transaction to Account C and A
     // Create the second transaction
     Transaction tx2 = Transaction.PaymentTransactionBuilder()
     .sender(acctB.getAddress())
-    .amount(2000000)
+    .amount(200000)
     .receiver(acctA.getAddress())
     .suggestedParams(params)
     .build();
@@ -86,14 +86,14 @@ The example below illustrates Account A sending a transaction to Account C and A
 === "Go"
 	``` go
     // from account 1 to account 3
-    tx1, err := transaction.MakePaymentTxnWithFlatFee(account1, account3, minFee, 1000000, firstValidRound, lastValidRound, nil, "", genID, genHash)
+    tx1, err := transaction.MakePaymentTxnWithFlatFee(account1, account3, minFee, 100000, firstValidRound, lastValidRound, nil, "", genID, genHash)
     if err != nil {
         fmt.Printf("Error creating transaction: %s\n", err)
         return
     }
 
     // from account 2 to account 1
-    tx2, err := transaction.MakePaymentTxnWithFlatFee(account2, account1, minFee, 2000000, firstValidRound, lastValidRound, nil, "", genID, genHash)
+    tx2, err := transaction.MakePaymentTxnWithFlatFee(account2, account1, minFee, 200000, firstValidRound, lastValidRound, nil, "", genID, genHash)
     if err != nil {
         fmt.Printf("Error creating transaction: %s\n", err)
         return
@@ -102,9 +102,9 @@ The example below illustrates Account A sending a transaction to Account C and A
 
 === "goal"
 	``` goal
-    $ goal clerk send --from=my-account-a<PLACEHOLDER> --to=my-account-c<PLACEHOLDER> --fee=1000 --amount=1000000 --out=unsginedtransaction1.txn"
+    $ goal clerk send --from=my-account-a<PLACEHOLDER> --to=my-account-c<PLACEHOLDER> --fee=1000 --amount=100000 --out=unsginedtransaction1.txn"
 
-    $ goal clerk send --from=my-account-b<PLACEHOLDER> --to=my-account-a<PLACEHOLDER> --fee=1000 --amount=2000000 --out=unsginedtransaction2.txn"
+    $ goal clerk send --from=my-account-b<PLACEHOLDER> --to=my-account-a<PLACEHOLDER> --fee=1000 --amount=200000 --out=unsginedtransaction2.txn"
     ```
 
 At this point, these are just individual transactions. The next critical step is to combine them and then calculate the group ID.
@@ -316,7 +316,10 @@ The transaction group is now broadcast to the network.
     console.log("Transaction : " + tx.txId);
 
     // Wait for transaction to be confirmed
-    await waitForConfirmation(algodClient, tx.txId)
+    confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
+    //Get the completed Transaction
+    console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+
     ```
 
 === "Python"
@@ -324,15 +327,20 @@ The transaction group is now broadcast to the network.
     tx_id = algod_client.send_transactions(signed_group)
 
     # wait for confirmation
-    wait_for_confirmation(algod_client, tx_id) 
+
+    confirmed_txn = wait_for_confirmation(algod_client, tx_id, 4)
+    print("txID: {}".format(tx_id), " confirmed in round: {}".format(
+    confirmed_txn.get("confirmed-round", 0)))   
     ```
 
 === "Java"
 	``` java
     String id = client.RawTransaction().rawtxn(groupTransactionBytes).execute().body().txId;
     System.out.println("Successfully sent tx with ID: " + id);
-    // write transaction to node
-    waitForConfirmation(id);
+    // Wait for transaction confirmation
+    PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
+    System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
+
     ```
 
 === "Go"
@@ -342,7 +350,13 @@ The transaction group is now broadcast to the network.
         fmt.Printf("failed to send transaction: %s\n", err)
         return
     }
-    waitForConfirmation(pendingTxID, algodClient)
+    confirmedTxn, err := future.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
+    if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", pendingTxID)
+        return
+    }
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID ,confirmedTxn.ConfirmedRound)
+
     ```
 
 === "goal"

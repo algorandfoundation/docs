@@ -23,6 +23,8 @@ import org.json.JSONObject;
 import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import com.algorand.algosdk.v2.client.Utils;
+
 
 /**
  * Test Multisignature
@@ -59,59 +61,16 @@ public class MultisigOffline {
 
     }
 
-    /**
-     * utility function to wait on a transaction to be confirmed
-     * the timeout parameter indicates how many rounds do you wish to check pending transactions for
-     */
-    public PendingTransactionResponse waitForConfirmation(AlgodClient myclient, String txID, Integer timeout)
-    throws Exception {
-        if (myclient == null || txID == null || timeout < 0) {
-            throw new IllegalArgumentException("Bad arguments for waitForConfirmation.");
-        }
-        Response < NodeStatusResponse > resp = myclient.GetStatus().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        NodeStatusResponse nodeStatusResponse = resp.body();
-        Long startRound = nodeStatusResponse.lastRound + 1;
-        Long currentRound = startRound;
-        while (currentRound < (startRound + timeout)) {
-            // Check the pending transactions                 
-            Response < PendingTransactionResponse > resp2 = myclient.PendingTransactionInformation(txID).execute();
-            if (resp2.isSuccessful()) {
-                PendingTransactionResponse pendingInfo = resp2.body();
-                if (pendingInfo != null) {
-                    if (pendingInfo.confirmedRound != null && pendingInfo.confirmedRound > 0) {
-                        // Got the completed Transaction
-                        return pendingInfo;
-                    }
-                    if (pendingInfo.poolError != null && pendingInfo.poolError.length() > 0) {
-                        // If there was a pool error, then the transaction has been rejected!
-                        throw new Exception("The transaction has been rejected with a pool error: " + pendingInfo.poolError);
-                    }
-                }
-            }
-            resp = myclient.WaitForBlock(currentRound).execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            currentRound++;
-        }
-        throw new Exception("Transaction not confirmed after " + timeout + " rounds!");
-    }
     
 
     public void writeMultisigSignedTransaction() throws Exception {
         if (client == null)
             this.client = connectToNetwork();
 
-        final String account1_mnemonic = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry";
-        final String account2_mnemonic = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only";
-        final String account3_mnemonic = "mirror zone together remind rural impose balcony position minimum quick manage climb quit draft lion device pluck rug siege robust spirit fine luggage ability actual";
-
-        // final String account1_mnemonic = <var>your-25-word-mnemonic</var>
-        // final String account2_mnemonic = <var>your-25-word-mnemonic</var>
-        // final String account3_mnemonic = <var>your-25-word-mnemonic</var>
+        // Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+        final String account1_mnemonic = "<var>your-25-word-mnemonic</var>"
+        final String account2_mnemonic = "<var>your-25-word-mnemonic</var>"
+        final String account3_mnemonic = "<var>your-25-word-mnemonic</var>"
 
         Account act1 = new Account(account1_mnemonic);
         Account act2 = new Account(account2_mnemonic);
@@ -193,7 +152,7 @@ public class MultisigOffline {
             String id = rawtxresponse.body().txId;
             System.out.println("Successfully sent tx with ID: " + id);
             // Wait for transaction confirmation
-            PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
+            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
 
             System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
             // Read the transaction
@@ -212,13 +171,10 @@ public class MultisigOffline {
         if (client == null)
             this.client = connectToNetwork();
 
-        final String account1_mnemonic = "predict mandate aware dizzy limit match hazard fantasy victory auto fortune hello public dragon ostrich happy blue spray parrot island odor actress only ability hurry";
-        final String account2_mnemonic = "moon grid random garlic effort faculty fence gym write skin they joke govern home huge there claw skin way bid fit bean damp able only";
-        final String account3_mnemonic = "mirror zone together remind rural impose balcony position minimum quick manage climb quit draft lion device pluck rug siege robust spirit fine luggage ability actual";
-
-        // final String account1_mnemonic = <var>your-25-word-mnemonic</var>
-        // final String account2_mnemonic = <var>your-25-word-mnemonic</var>
-        // final String account3_mnemonic = <var>your-25-word-mnemonic</var>
+        // Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
+        final String account1_mnemonic = "<var>your-25-word-mnemonic</var>"
+        final String account2_mnemonic = "<var>your-25-word-mnemonic</var>"
+        final String account3_mnemonic = "<var>your-25-word-mnemonic</var>"
 
         Account act1 = new Account(account1_mnemonic);
         Account act2 = new Account(account2_mnemonic);

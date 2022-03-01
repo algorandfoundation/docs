@@ -134,7 +134,7 @@ Use the appropriate [authorization method](../../../get-details/transactions/sig
 !!! tip
     It is recommended that you authorize the transaction offline to protect the security of your private keys, especially for high-value participating accounts. 
 
-[Verify that the participation key is in the node's ledger directory](../generate_keys#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) the transaction and [wait for confirmation](../../../archive/build-apps/hello_world#wait-for-confirmation). 
+[Verify that the participation key is in the node's ledger directory](../generate_keys#check-that-the-key-exists-in-the-nodes-ledger-directory) prior to submitting the signed transaction. Once verified, wait for the network to reach the transaction's first valid round, then [submit](../../../archive/build-apps/hello_world#submit-the-transaction) the transaction and the SDK method "wait for confirmation". 
 
 # Check that the node is participating
 
