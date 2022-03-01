@@ -36,6 +36,8 @@ goal node create [flags]
 
       --destination string   Destination path for the new node
 
+      --full-config          Store full config file
+
   -h, --help                 help for create
 
   -H, --hosted               Configure the new node to run hosted by algoh
