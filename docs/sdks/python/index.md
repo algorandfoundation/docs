@@ -210,9 +210,10 @@ def first_transaction_example(private_key, my_address):
 	params.flat_fee = constants.MIN_TXN_FEE 
 	params.fee = 1000
 	receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA"
+	amount = 100000
 	note = "Hello World".encode()
 
-	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, 1000000, None, note)
+	unsigned_txn = transaction.PaymentTxn(my_address, params, receiver, amount, None, note)
 
 	# sign transaction
 	signed_txn = unsigned_txn.sign(private_key)
@@ -243,7 +244,7 @@ def first_transaction_example(private_key, my_address):
 
 
 
-#replace private_key and my_address with your private key and your address
+# replace private_key and my_address with your private key and your address.
 first_transaction_example(private_key, my_address)​
 ```
 [`Run Code`](https://replit.com/@Algorand/gettingStartedPython#main.py){target=_blank}    

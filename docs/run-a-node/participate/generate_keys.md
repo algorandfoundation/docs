@@ -25,7 +25,7 @@ To generate a participation key, use the [`goal account addpartkey`](../../../cl
 This creates a participation key in the ledger directory of the node, which is where it should ultimately live. Use the `-o` flag to specify a different directory in the case where you will eventually transfer your key to a different node's ledger directory.
 
 !!! tip
-	The Key Dilution parameter defaults to 10,000. To reduce the size of the participation key, set the key dilution value to roughly the square root of the range that the partkey is valid for.
+	The Key Dilution parameter defaults to 10,000. It determines the interval (number of rounds) for generating new ephemeral keys. For example, by default, your node would auto-generate a batch of 10,000 ephemeral keys every 10,000 rounds, with the first batch created upfront. To reduce the size of the participation key, set the key dilution value to roughly the square root of the range that the partkey is valid for.
 
 # Check that the key exists in the node's ledger directory
 

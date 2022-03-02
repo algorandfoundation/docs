@@ -42,7 +42,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="selectionpk">SelectionPK</a>|_required for online_|VrfPubkey|`"selkey"`| The VRF public key.|
 |<a name="votefirst">VoteFirst</a>|_required for online_|uint64|`"votefst"`|The first round that the *participation key* is valid. Not to be confused with the [FirstValid](#firstvalid) round of the keyreg transaction.|
 |<a name="votelast">VoteLast</a>|_required for online_|uint64|`"votelst"`|The last round that the *participation key* is valid. Not to be confused with the [LastValid](#lastvalid) round of the keyreg transaction.|
-|<a name="votekeydilution">VoteKeyDilution</a>|_required for online_|uint64|`"votekd"`|This is the dilution for the 2-level participation key. |
+|<a name="votekeydilution">VoteKeyDilution</a>|_required for online_|uint64|`"votekd"`|This is the dilution for the 2-level participation key. It determines the interval (number of rounds) for generating new ephemeral keys. |
 |<a name="nonparticipation">Nonparticipation</a>|_optional_|bool|`"nonpart"`| All new Algorand accounts are participating by default. This means that they earn rewards. Mark an account nonparticipating by setting this value to `true` and this account will no longer earn rewards. It is unlikely that you will ever need to do this and exists mainly for economic-related functions on the network.|
 
 # Asset Configuration Transaction

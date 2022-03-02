@@ -606,7 +606,7 @@ Here are three example scenarios and how the round range may be calculated for e
 	Calculate the average number of blocks produced in that time period, i.e. divide the total number of seconds by the average number of seconds it takes to produce a block. Assume for this example, that the average block time is 4.5 seconds.
 		
 	```
-	208920 seconds/4.25 seconds per block ~ 46,427 blocks
+	208920 seconds/4.5 seconds per block ~ 46,427 blocks
 	```
 
 	Calculate the first valid round for the transaction by addng the total number of blocks to the current block. Assume the current block (i.e. round) is round 5,000,000. Then:
