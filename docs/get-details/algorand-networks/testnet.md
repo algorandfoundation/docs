@@ -1,7 +1,7 @@
 title: TestNet
   
 # Version
-`v3.4.2-stable`
+`v3.4.2.stable`
 
 # Release Version
 https://github.com/algorand/go-algorand/releases/tag/v3.4.2-stable
