@@ -19,10 +19,12 @@ This section begins with an [overview](#assets-overview) of the asset implementa
 
 Here are several things to be aware of before getting started with assets.
 
-- A single Algorand account is permitted to create up to 1000 assets. 
 - For every asset an account creates or owns, its minimum balance is increased by 0.1 Algos (100,000 microAlgos). 
 - Before a new asset can be transferred to a specific account the receiver must opt-in to receive the asset. This process is described below in [Receiving an asset](#receiving-an-asset). 
-- If any transaction is issued that would violate the maximum number of assets for an account or not meet the minimum balance requirements, the transaction will fail.
+- If any transaction is issued that would violate the minimum balance requirements, the transaction will fail.
+
+!!! info
+    Prior to AVM 1.2, a single Algorand account was only permitted to create and optin to 1000 assets. These limits are now removed allowing an unlimited number of assets to be created and optin to by a single account.
 
 ## Asset parameters
 The type of asset that is created will depend on the parameters that are passed during asset creation and sometimes during asset re-configuration. View the full list of asset parameters in the [Asset Parameters Reference](../transactions/transactions#asset-parameters).

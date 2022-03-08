@@ -36,7 +36,7 @@ title: Algorand parameter tables
 ## ASA constraints
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
-|Max number of ASAs (create and opt-in)|1000|[reference](./asa.md)|MaxAssetsPerAccount||
+|Max number of ASAs (create and opt-in)|Unlimited|[reference](./asa.md)|MaxAssetsPerAccount||
 |Max asset name size|32 bytes|[reference](./asa.md)|MaxAssetNameBytes||
 |Max unit name size|8 bytes|[reference](./asa.md)|MaxAssetUnitNameBytes||
 |Max URL size|96 bytes|[reference](./asa.md)|MaxAssetURLBytes||
