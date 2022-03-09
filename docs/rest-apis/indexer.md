@@ -965,6 +965,7 @@ AccountParticipation describes the parameters used by this account in consensus 
 |Name|Description|Schema|
 |---|---|---|
 |**selection-participation-key**  <br>*required*|\[sel\] Selection public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**state-proof-key**  <br>*optional*|\[stprf\] Root of the state proof key (if any)  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**vote-first-valid**  <br>*required*|\[voteFst\] First round for which this participation is valid.|integer|
 |**vote-key-dilution**  <br>*required*|\[voteKD\] Number of subkeys in each batch of participation keys.|integer|
 |**vote-last-valid**  <br>*required*|\[voteLst\] Last round for which this participation is valid.|integer|
@@ -1426,6 +1427,7 @@ data/transactions/keyreg.go : KeyregTxnFields
 |---|---|---|
 |**non-participation**  <br>*optional*|\[nonpart\] Mark the account as participating or non-participating.|boolean|
 |**selection-participation-key**  <br>*optional*|\[selkey\] Public key used with the Verified Random Function (VRF) result during committee selection.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**state-proof-key**  <br>*optional*|\[sprfkey\] State proof key used in key registration transactions.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**vote-first-valid**  <br>*optional*|\[votefst\] First round this participation key is valid.|integer|
 |**vote-key-dilution**  <br>*optional*|\[votekd\] Number of subkeys in each batch of participation keys.|integer|
 |**vote-last-valid**  <br>*optional*|\[votelst\] Last round this participation key is valid.|integer|
