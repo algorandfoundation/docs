@@ -24,7 +24,7 @@ Here are several things to be aware of before getting started with assets.
 - If any transaction is issued that would violate the minimum balance requirements, the transaction will fail.
 
 !!! info
-    Prior to AVM 1.2, a single Algorand account was only permitted to create and optin to 1000 assets. These limits are now removed allowing an unlimited number of assets to be created and optin to by a single account.
+    Prior to AVM 1.1 (go-algorand 3.5.0), a single Algorand account was only permitted to create and optin to 1000 assets. These limits are now removed allowing an unlimited number of assets to be created and optin to by a single account.
 
 ## Asset parameters
 The type of asset that is created will depend on the parameters that are passed during asset creation and sometimes during asset re-configuration. View the full list of asset parameters in the [Asset Parameters Reference](../transactions/transactions#asset-parameters).
