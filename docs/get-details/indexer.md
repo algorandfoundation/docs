@@ -905,16 +905,16 @@ Results
 
 The ledger data will include the Algo balance and any extra account information such as `created-apps`, `created-assets`, `apps-local-state`, and `assets` by default. This can be excluded using the `exclude` parameter. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
 
-# Search applications created by a specific account
+# Lookup applications created by a specific account
 The `/accounts/{account-id}/created-apps` REST call allows for searching an account for all the applications it has created.
 
-# Search assets created by a specific account
+# Lookup assets created by a specific account
 The `/accounts/{account-id}/created-assets` REST call allows for searching an account for all the assets it has created.
 
-# Search assets by a specific account
+# Lookup assets for a specific account
 The `/accounts/{account-id}/assets` REST call allows for searching an account for all the assets it has opted into.
 
-# Search applications local state by a specific account
+# Lookup applications local state for a specific account
 The `/accounts/{account-id}/apps-local-state` REST call allows for searching an account for all the applications local state it has.
 
 # Search transactions for a specific account
