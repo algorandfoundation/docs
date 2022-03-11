@@ -397,6 +397,10 @@ The following REST calls support paginated results.
 
 * `/accounts` - Search for specific accounts.
 * `/accounts/{account-id}/transactions` - Search for transactions for a specific account.
+* `/accounts/{account-id}/created-apps` - Search for created applications for a specific account.
+* `/accounts/{account-id}/created-assets` - Search for created assets for a specific account.
+* `/accounts/{account-id}/assets` - Search for assets on a specific account.
+* `/accounts/{account-id}/apps-local-state` - Search for application local state for a specific account.
 * `/assets` - Search Assets.
 * `/assets/{asset-id}/balances` - Search Asset balances.
 * `/assets/{asset-id}/transactions` - Search for Transactions with a specific Asset.
@@ -522,7 +526,7 @@ If the round parameter is used and set to 50 a balance of 200 would be returned.
     $ curl localhost:8980/v2/accounts/7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI?round=50
     ```
 
-The round parameter results are inclusive of all transactions within the given round. This parameter is available in many of the REST calls. This can be very computationally expensive so for performance reasons, it is by default disabled on the `/accounts` REST call but can be enabled by using the `--dev-mode` flag when starting the Indexer.
+The round parameter results are inclusive of all transactions within the given round. This parameter is only available on the accounts REST calls. This can be very computationally expensive so for performance reasons, it is by default disabled on the `/accounts` REST call but can be enabled by using the `--dev-mode` flag when starting the Indexer.
 
 # Note field searching
 Every transaction has the ability to add up to a 1kb note in the note field. Several of the REST APIs provide the ability to search for a prefix that is present in the note field, meaning that the note starts with a specific string. This can be a very powerful way to quickly locate transactions that are specific to an application. The REST calls that support prefix searching are the following.
@@ -899,7 +903,19 @@ Results
 }
 ```
 
-The ledger data will include both Algo balance and if the account has any assets with their associated balances. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
+The ledger data will include the Algo balance and any extra account information such as `created-apps`, `created-assets`, `apps-local-state`, and `assets` by default. This can be excluded using the `exclude` parameter. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
+
+# Search applications created by a specific account
+The `/accounts/{account-id}/created-apps` REST call allows for searching an account for all the applications it has created.
+
+# Search assets created by a specific account
+The `/accounts/{account-id}/created-assets` REST call allows for searching an account for all the assets it has created.
+
+# Search assets by a specific account
+The `/accounts/{account-id}/assets` REST call allows for searching an account for all the assets it has opted into.
+
+# Search applications local state by a specific account
+The `/accounts/{account-id}/apps-local-state` REST call allows for searching an account for all the applications local state it has.
 
 # Search transactions for a specific account
 The `/accounts/{account-id}/transactions` REST call provides a powerful mechanism for searching for specific transactions for a given account. 
