@@ -930,6 +930,23 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
 
+=== "Java"
+    ```java
+    public static void main(String args[]) throws Exception {
+        LookupAccountCreatedApplications ex = new LookupAccountCreatedApplications();
+        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+        Response<TransactionResponse> response = indexerClientInstance
+            .lookupAccountCreatedApplications(account)
+            .execute();
+        if (!resonse.isSuccessful()) {
+            throw new Exception(response.message());
+        }
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println(jsonObj.toString(2));
+    }
+    ```
+
 === "Go"
     ```go
     address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
@@ -968,6 +985,23 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
     response = myindexer.lookupAccountCreatedAssets(address)
 
     print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
+=== "Java"
+    ```java
+    public static void main(String args[]) throws Exception {
+        LookupAccountCreatedAssets ex = new LookupAccountCreatedAssets();
+        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+        Response<TransactionResponse> response = indexerClientInstance
+            .lookupAccountCreatedAssets(account)
+            .execute();
+        if (!resonse.isSuccessful()) {
+            throw new Exception(response.message());
+        }
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println(jsonObj.toString(2));
+    }
     ```
 
 === "Go"
@@ -1010,6 +1044,23 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
 
+=== "Java"
+    ```java
+    public static void main(String args[]) throws Exception {
+        LookupAccountAssets ex = new LookupAccountAssets();
+        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+        Response<TransactionResponse> response = indexerClientInstance
+            .lookupAccountAssets(account)
+            .execute();
+        if (!resonse.isSuccessful()) {
+            throw new Exception(response.message());
+        }
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println(jsonObj.toString(2));
+    }
+    ```
+
 === "Go"
     ```go
     address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
@@ -1048,6 +1099,23 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
     response = myindexer.lookupAccountAppLocalStates(address)
 
     print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
+=== "Java"
+    ```java
+    public static void main(String args[]) throws Exception {
+        LookupAccountAppLocalStates ex = new LookupAccountAppLocalStates();
+        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
+        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+        Response<TransactionResponse> response = indexerClientInstance
+            .lookupAccountAppLocalStates(account)
+            .execute();
+        if (!resonse.isSuccessful()) {
+            throw new Exception(response.message());
+        }
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println(jsonObj.toString(2));
+    }
     ```
 
 === "Go"
