@@ -29,14 +29,14 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
     ```
 
 === "Python"
-	```python
+    ```python
     import json
     # requires Python SDK version 1.3 or higher
     from algosdk.v2client import indexer
 
     # instantiate indexer client
     myindexer = indexer.IndexerClient(indexer_token="", indexer_address="http://localhost:8980")
-    ```
+    ```  ```
 
 === "Java"
 	```java
@@ -921,6 +921,15 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
     });
     ```
 
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountCreatedApplications(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
 === "Go"
     ```go
     address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
@@ -950,6 +959,15 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
         console.log(e);
         console.trace();
     });
+    ```
+
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountCreatedAssets(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
     ```
 
 === "Go"
@@ -983,6 +1001,15 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
     });
     ```
 
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountAssets(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
 === "Go"
     ```go
     address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
@@ -1012,6 +1039,15 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
         console.log(e);
         console.trace();
     });
+    ```
+
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountAppLocalStates(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
     ```
 
 === "Go"
