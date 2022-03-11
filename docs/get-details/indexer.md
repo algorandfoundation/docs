@@ -36,7 +36,7 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 
     # instantiate indexer client
     myindexer = indexer.IndexerClient(indexer_token="", indexer_address="http://localhost:8980")
-    ```  ```
+    ```
 
 === "Java"
 	```java
