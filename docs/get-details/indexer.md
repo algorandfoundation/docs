@@ -908,14 +908,34 @@ The ledger data will include the Algo balance and any extra account information 
 # Lookup applications created by a specific account
 The `/accounts/{account-id}/created-apps` REST call allows for searching an account for all the applications it has created.
 
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps|json_pp
+    ```
+
 # Lookup assets created by a specific account
 The `/accounts/{account-id}/created-assets` REST call allows for searching an account for all the assets it has created.
+
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-assets|json_pp
+    ```
 
 # Lookup assets for a specific account
 The `/accounts/{account-id}/assets` REST call allows for searching an account for all the assets it has opted into.
 
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/assets|json_pp
+    ```
+
 # Lookup applications local state for a specific account
 The `/accounts/{account-id}/apps-local-state` REST call allows for searching an account for all the applications local state it has.
+
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/apps-local-state|json_pp
+    ```
 
 # Search transactions for a specific account
 The `/accounts/{account-id}/transactions` REST call provides a powerful mechanism for searching for specific transactions for a given account. 
