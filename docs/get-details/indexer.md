@@ -914,9 +914,8 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let response = await indexerClient.lookupAccountCreatedApplications(address).do();
         console.log(JSON.stringify(response, undefined, 2));
-        }
-    )().catch(e => {
-        console.log(e);
+    })().catch(e => {
+        console.error(e);
         console.trace();
     });
     ```
@@ -932,19 +931,14 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
 
 === "Java"
     ```java
-    public static void main(String args[]) throws Exception {
-        LookupAccountCreatedApplications ex = new LookupAccountCreatedApplications();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Response<TransactionResponse> response = indexerClientInstance
-            .lookupAccountCreatedApplications(account)
-            .execute();
-        if (!resonse.isSuccessful()) {
-            throw new Exception(response.message());
-        }
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println(jsonObj.toString(2));
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountCreatedApplications(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
     }
+    System.out.println(response.body().toString());
     ```
 
 === "Go"
@@ -959,7 +953,7 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
 
 === "cURL"
 	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps|json_pp
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps
     ```
 
 # Lookup assets created by a specific account
@@ -971,9 +965,8 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let response = await indexerClient.lookupAccountCreatedAssets(address).do();
         console.log(JSON.stringify(response, undefined, 2));
-        }
-    )().catch(e => {
-        console.log(e);
+    })().catch(e => {
+        console.error(e);
         console.trace();
     });
     ```
@@ -989,19 +982,14 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
 
 === "Java"
     ```java
-    public static void main(String args[]) throws Exception {
-        LookupAccountCreatedAssets ex = new LookupAccountCreatedAssets();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Response<TransactionResponse> response = indexerClientInstance
-            .lookupAccountCreatedAssets(account)
-            .execute();
-        if (!resonse.isSuccessful()) {
-            throw new Exception(response.message());
-        }
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println(jsonObj.toString(2));
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountCreatedAssets(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
     }
+    System.out.println(response.body().toString());
     ```
 
 === "Go"
@@ -1016,7 +1004,7 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
 
 === "cURL"
 	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-assets|json_pp
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-assets
     ```
 
 # Lookup assets for a specific account
@@ -1028,9 +1016,8 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let response = await indexerClient.lookupAccountAssets(address).do();
         console.log(JSON.stringify(response, undefined, 2));
-        }
-    )().catch(e => {
-        console.log(e);
+    })().catch(e => {
+        console.error(e);
         console.trace();
     });
     ```
@@ -1046,19 +1033,14 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
 
 === "Java"
     ```java
-    public static void main(String args[]) throws Exception {
-        LookupAccountAssets ex = new LookupAccountAssets();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Response<TransactionResponse> response = indexerClientInstance
-            .lookupAccountAssets(account)
-            .execute();
-        if (!resonse.isSuccessful()) {
-            throw new Exception(response.message());
-        }
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println(jsonObj.toString(2));
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountAssets(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
     }
+    System.out.println(response.body().toString());
     ```
 
 === "Go"
@@ -1073,7 +1055,7 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
 
 === "cURL"
 	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/assets|json_pp
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/assets
     ```
 
 # Lookup applications local state for a specific account
@@ -1085,9 +1067,8 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let response = await indexerClient.lookupAccountAppLocalStates(address).do();
         console.log(JSON.stringify(response, undefined, 2));
-        }
-    )().catch(e => {
-        console.log(e);
+    })().catch(e => {
+        console.error(e);
         console.trace();
     });
     ```
@@ -1103,19 +1084,14 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
 
 === "Java"
     ```java
-    public static void main(String args[]) throws Exception {
-        LookupAccountAppLocalStates ex = new LookupAccountAppLocalStates();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-        Response<TransactionResponse> response = indexerClientInstance
-            .lookupAccountAppLocalStates(account)
-            .execute();
-        if (!resonse.isSuccessful()) {
-            throw new Exception(response.message());
-        }
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println(jsonObj.toString(2));
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountAppLocalStates(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
     }
+    System.out.println(response.body().toString());
     ```
 
 === "Go"
@@ -1130,7 +1106,7 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
 
 === "cURL"
 	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/apps-local-state|json_pp
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/apps-local-state
     ```
 
 # Search transactions for a specific account
