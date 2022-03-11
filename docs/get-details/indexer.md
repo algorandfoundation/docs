@@ -908,6 +908,19 @@ The ledger data will include the Algo balance and any extra account information 
 # Lookup applications created by a specific account
 The `/accounts/{account-id}/created-apps` REST call allows for searching an account for all the applications it has created.
 
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountCreatedApplications(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+        }
+    )().catch(e => {
+        console.log(e);
+        console.trace();
+    });
+    ```
+
 === "cURL"
 	``` bash
     $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps|json_pp
@@ -915,6 +928,19 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
 
 # Lookup assets created by a specific account
 The `/accounts/{account-id}/created-assets` REST call allows for searching an account for all the assets it has created.
+
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountCreatedAssets(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+        }
+    )().catch(e => {
+        console.log(e);
+        console.trace();
+    });
+    ```
 
 === "cURL"
 	``` bash
@@ -924,6 +950,19 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
 # Lookup assets for a specific account
 The `/accounts/{account-id}/assets` REST call allows for searching an account for all the assets it has opted into.
 
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountAppLocalStates(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+        }
+    )().catch(e => {
+        console.log(e);
+        console.trace();
+    });
+    ```
+
 === "cURL"
 	``` bash
     $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/assets|json_pp
@@ -931,6 +970,19 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
 
 # Lookup applications local state for a specific account
 The `/accounts/{account-id}/apps-local-state` REST call allows for searching an account for all the applications local state it has.
+
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountCreatedAssets(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+        }
+    )().catch(e => {
+        console.log(e);
+        console.trace();
+    });
+    ```
 
 === "cURL"
 	``` bash
