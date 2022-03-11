@@ -921,6 +921,16 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
     });
     ```
 
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountCreatedApplications(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+
 === "cURL"
 	``` bash
     $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps|json_pp
@@ -942,6 +952,16 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
     });
     ```
 
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountCreatedAssets(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+
 === "cURL"
 	``` bash
     $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-assets|json_pp
@@ -954,13 +974,23 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
     ```javascript
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let response = await indexerClient.lookupAccountAppLocalStates(address).do();
+        let response = await indexerClient.lookupAccountAssets(address).do();
         console.log(JSON.stringify(response, undefined, 2));
         }
     )().catch(e => {
         console.log(e);
         console.trace();
     });
+    ```
+
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountAssets(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
     ```
 
 === "cURL"
@@ -975,13 +1005,23 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
     ```javascript
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let response = await indexerClient.lookupAccountCreatedAssets(address).do();
+        let response = await indexerClient.lookupAccountAppLocalStates(address).do();
         console.log(JSON.stringify(response, undefined, 2));
         }
     )().catch(e => {
         console.log(e);
         console.trace();
     });
+    ```
+
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountAppLocalStates(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
     ```
 
 === "cURL"
