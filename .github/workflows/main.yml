@@ -15,15 +15,13 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-test:
-    runs-on: ubuntu-20.04
-    container: python:3.9-slim
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          fetch-depth: 0
-      - name: Install pip dependencies
-        run: pip install -r requirements.txt
-      - name: Build
-        run: mkdocs gh-deploy --force
+          python-version: 3.x
+      - run: pip install -r requirements.txt
+      - run: pip install mkdocs-material 
+      - run: mkdocs gh-deploy --force
