@@ -1,4 +1,4 @@
-site_name: Algorand Developer Docs
+site_name: Brain Juice Blockchain
 
 theme:
   name: material
@@ -41,6 +41,6 @@ plugins:
   - search
   - awesome-pages
 
-repo_name: algorand/docs
-repo_url: https://github.com/algorand/docs
+repo_name: brainjuiceblockchain/docs
+repo_url: https://github.com/brainjuiceblockchain/docs
 edit_uri: edit/staging/docs/
