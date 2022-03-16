@@ -815,7 +815,9 @@ This call returns a list of accounts with associated data, the round number the 
 
 # Getting an account
 The `/accounts/{account-id}` can be used to look up ledger data for a specific account.
-For example:
+
+!!! note
+    You may recieve a 400 error if the account being requested has more than the indexer's `MaxAPIResourcesPerAccount` value. This is set at 100,000 by default. You can use the `exclude` parameter with the following values to reduce the number of resources being returned (`all`, `assets`, `created-assets`, `apps-local-state`, `created-apps`).
 
 === "JavaScript"
 	```javascript
