@@ -17,6 +17,9 @@ CLI_TOOLS="~/go/bin/" # path to goal, algokey, etc.
 # CLI DIAGCFG
 ./reformat.py -doc-dir ../docs/clis/diagcfg/ -cmd $CLI_TOOLS/diagcfg
 
+# CLI INDEXER
+./reformat.py -doc-dir ../docs/clis/indexer/ -cmd $CLI_TOOLS/algorand-indexer
+
 # REST KMD
 ./convert_swagger.py -target ../docs/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
 
