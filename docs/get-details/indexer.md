@@ -98,10 +98,11 @@ When searching large amounts of blockchain data often the results may be too lar
 
 | Search Type  | Maximum number of results per search  |
 | ------------- | ------------- |
-| Transaction Search | 1000 |
-| Account Search | 100 |
-| Asset Search | 100 |
-| Asset Balance Search | 1000 |
+| Transactions Search | 1,000 |
+| Accounts Search | 100 |
+| Assets Search | 100 |
+| Balances Search | 1,000 |
+| Applications Search | 100 |
 
 These values represent the maximum number of results that will be returned when searching for specific results. For example, the following will return the last 1000 transactions that exceeded 10 microAlgos. 
 
