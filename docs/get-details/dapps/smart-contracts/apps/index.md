@@ -353,17 +353,17 @@ A smart contract can make inner transactions consisting of grouped transactions.
     InnerTxnBuilder.Begin(),
     InnerTxnBuilder.SetFields({
         TxnField.type_enum: TxnType.Payment,
-        TxnField.reciever: addr.value(),
+        TxnField.receiver: addr.value(),
         TxnField.amount: Int(1000000)
     })
-    InnerTxn.Next(), # This indicates we're moving to constructing the next txn in the group
+    InnerTxnBuilder.Next(), # This indicates we're moving to constructing the next txn in the group
     InnerTxnBuilder.SetFields({
         TxnField.type_enum: TxnType.ApplicationCall,
         TxnField.application_id: Int(1234),
         TxnField.on_complete: OnComplete.NoOp,
         TxnField.application_args: [Bytes("buy")]
     })
-    InnerTxn.Submit()
+    InnerTxnBuilder.Submit()
     #...
     ```
 
