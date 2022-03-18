@@ -98,6 +98,7 @@ When searching large amounts of blockchain data often the results may be too lar
 
 | Search Type  | Maximum number of results per search  |
 | ------------- | ------------- |
+| API Resources Per Account | 1,000 |
 | Transactions Search | 1,000 |
 | Accounts Search | 100 |
 | Assets Search | 100 |
