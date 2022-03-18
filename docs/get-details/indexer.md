@@ -818,7 +818,7 @@ This call returns a list of accounts with associated data, the round number the 
 The `/accounts/{account-id}` can be used to look up ledger data for a specific account.
 
 !!! note
-    Whilst the `/accounts/{account-id}` endpoint has a default `maxAPIResourcePerAccount` of 0 (unlimited), if you're using a public endpoint you may find it's limited and returns a 400 error after an amount. You can use the `exclude` parameter with the following values to reduce the number of resources being returned (`all`, `assets`, `created-assets`, `apps-local-state`, `created-apps`). Alternatively you can use the dedicated endpoints to retrieve all account [assets](#lookup-assets-for-a-specific-account)/[applications](#lookup-applications-local-state-for-a-specific-account) and paginate the results.
+    You may receive a 400 error if the account being requested has more than the indexer's `MaxAPIResourcesPerAccount` value. This is set at 1,000 by default, meaning if the account has opted in to 800 assets and **over** 200 applications, it may return a 400 error. You can use the `exclude` parameter with the following values to reduce the number of resources being returned (`all`, `assets`, `created-assets`, `apps-local-state`, `created-apps`). Alternatively you can use the dedicated endpoints to retrieve all account [assets](#lookup-assets-for-a-specific-account)/[applications](#lookup-applications-local-state-for-a-specific-account) and paginate the results.
 
 === "JavaScript"
 	```javascript
