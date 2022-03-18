@@ -30,9 +30,11 @@ goal account info [flags]
 
 ```
 
-  -a, --address string   Account address to look up (required)
+  -a, --address string     Account address to look up (required)
 
-  -h, --help             help for info
+  -h, --help               help for info
+
+      --onlyShowAssetIds   Only show ASA IDs and not pull asset metadata
 
 ```
 
