@@ -46,6 +46,7 @@ Search for accounts.
 |**Query**|**auth-addr**  <br>*optional*|Include accounts configured to use this spending key.|string|
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
+|**Query**|**exclude**  <br>*optional*|Exclude additional items such as asset holdings, application local data stored for this account, asset parameters created by this account, and application parameters created by this account.|< enum (all, assets, created-assets, apps-local-state, created-apps, none) > array|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
@@ -113,6 +114,7 @@ Lookup account information.
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**account-id**  <br>*required*|account string|string|
+|**Query**|**exclude**  <br>*optional*|Exclude additional items such as asset holdings, application local data stored for this account, asset parameters created by this account, and application parameters created by this account.|< enum (all, assets, created-assets, apps-local-state, created-apps, none) > array|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 
@@ -151,6 +153,310 @@ Lookup account information.
 |**message**  <br>*required*|string|
 
 <a name="lookupaccountbyid-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
+<a name="lookupaccountapplocalstates"></a>
+### GET /v2/accounts/{account-id}/apps-local-state
+
+**Description**
+Lookup an account's asset holdings, optionally for a specific ID.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**account-id**  <br>*required*|account string|string|
+|**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookupaccountapplocalstates-response-200)|
+|**400**|Response for errors|[Response 400](#lookupaccountapplocalstates-response-400)|
+|**404**|Response for errors|[Response 404](#lookupaccountapplocalstates-response-404)|
+|**500**|Response for errors|[Response 500](#lookupaccountapplocalstates-response-500)|
+
+<a name="lookupaccountapplocalstates-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**apps-local-states**  <br>*required*||< [ApplicationLocalState](#applicationlocalstate) > array|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="lookupaccountapplocalstates-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountapplocalstates-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountapplocalstates-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
+<a name="lookupaccountassets"></a>
+### GET /v2/accounts/{account-id}/assets
+
+**Description**
+Lookup an account's asset holdings, optionally for a specific ID.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**account-id**  <br>*required*|account string|string|
+|**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookupaccountassets-response-200)|
+|**400**|Response for errors|[Response 400](#lookupaccountassets-response-400)|
+|**404**|Response for errors|[Response 404](#lookupaccountassets-response-404)|
+|**500**|Response for errors|[Response 500](#lookupaccountassets-response-500)|
+
+<a name="lookupaccountassets-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**assets**  <br>*required*||< [AssetHolding](#assetholding) > array|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="lookupaccountassets-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountassets-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountassets-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
+<a name="lookupaccountcreatedapplications"></a>
+### GET /v2/accounts/{account-id}/created-applications
+
+**Description**
+Lookup an account's created application parameters, optionally for a specific ID.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**account-id**  <br>*required*|account string|string|
+|**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookupaccountcreatedapplications-response-200)|
+|**400**|Response for errors|[Response 400](#lookupaccountcreatedapplications-response-400)|
+|**404**|Response for errors|[Response 404](#lookupaccountcreatedapplications-response-404)|
+|**500**|Response for errors|[Response 500](#lookupaccountcreatedapplications-response-500)|
+
+<a name="lookupaccountcreatedapplications-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**applications**  <br>*required*||< [Application](#application) > array|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="lookupaccountcreatedapplications-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountcreatedapplications-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountcreatedapplications-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
+<a name="lookupaccountcreatedassets"></a>
+### GET /v2/accounts/{account-id}/created-assets
+
+**Description**
+Lookup an account's created asset parameters, optionally for a specific ID.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**account-id**  <br>*required*|account string|string|
+|**Query**|**asset-id**  <br>*optional*|Asset ID|integer|
+|**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#lookupaccountcreatedassets-response-200)|
+|**400**|Response for errors|[Response 400](#lookupaccountcreatedassets-response-400)|
+|**404**|Response for errors|[Response 404](#lookupaccountcreatedassets-response-404)|
+|**500**|Response for errors|[Response 500](#lookupaccountcreatedassets-response-500)|
+
+<a name="lookupaccountcreatedassets-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**assets**  <br>*required*||< [Asset](#asset) > array|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="lookupaccountcreatedassets-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountcreatedassets-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupaccountcreatedassets-response-500"></a>
 **Response 500**
 
 |Name|Schema|
@@ -264,6 +570,7 @@ Search for applications
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Query**|**application-id**  <br>*optional*|Application ID|integer|
+|**Query**|**creator**  <br>*optional*|Filter just applications with the given creator address.|string|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
@@ -582,7 +889,6 @@ Lookup the list of accounts who hold this asset
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
-|**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 
 
 **Responses**
@@ -955,6 +1261,10 @@ data/basics/userBalance.go : AccountData
 |**round**  <br>*required*|The round for which this information is relevant.|integer|
 |**sig-type**  <br>*optional*|Indicates what type of signature is used by this account, must be one of:<br>* sig<br>* msig<br>* lsig<br>* or null if unknown|enum (sig, msig, lsig)|
 |**status**  <br>*required*|\[onl\] delegation status of the account's MicroAlgos<br>* Offline - indicates that the associated account is delegated.<br>*  Online  - indicates that the associated account used as part of the delegation pool.<br>*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
+|**total-apps-opted-in**  <br>*required*|The count of all applications that have been opted in, equivalent to the count of application local data (AppLocalState objects) stored in this account.|integer|
+|**total-assets-opted-in**  <br>*required*|The count of all assets that have been opted in, equivalent to the count of AssetHolding objects held by this account.|integer|
+|**total-created-apps**  <br>*required*|The count of all apps (AppParams objects) created by this account.|integer|
+|**total-created-assets**  <br>*required*|The count of all assets (AssetParams objects) created by this account.|integer|
 
 
 <a name="accountparticipation"></a>
@@ -965,6 +1275,7 @@ AccountParticipation describes the parameters used by this account in consensus 
 |Name|Description|Schema|
 |---|---|---|
 |**selection-participation-key**  <br>*required*|\[sel\] Selection public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**state-proof-key**  <br>*optional*|\[stprf\] Root of the state proof key (if any)  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**vote-first-valid**  <br>*required*|\[voteFst\] First round for which this participation is valid.|integer|
 |**vote-key-dilution**  <br>*required*|\[voteKD\] Number of subkeys in each batch of participation keys.|integer|
 |**vote-last-valid**  <br>*required*|\[voteLst\] Last round for which this participation is valid.|integer|
@@ -1075,7 +1386,6 @@ data/basics/userBalance.go : AssetHolding
 |---|---|---|
 |**amount**  <br>*required*|\[a\] number of units held.|integer|
 |**asset-id**  <br>*required*|Asset ID of the holding.|integer|
-|**creator**  <br>*required*|Address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.|string|
 |**deleted**  <br>*optional*|Whether or not the asset holding is currently deleted from its account.|boolean|
 |**is-frozen**  <br>*required*|\[f\] whether or not the holding is frozen.|boolean|
 |**opted-in-at-round**  <br>*optional*|Round during which the account opted into this asset holding.|integer|
@@ -1426,6 +1736,7 @@ data/transactions/keyreg.go : KeyregTxnFields
 |---|---|---|
 |**non-participation**  <br>*optional*|\[nonpart\] Mark the account as participating or non-participating.|boolean|
 |**selection-participation-key**  <br>*optional*|\[selkey\] Public key used with the Verified Random Function (VRF) result during committee selection.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**state-proof-key**  <br>*optional*|\[sprfkey\] State proof key used in key registration transactions.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**vote-first-valid**  <br>*optional*|\[votefst\] First round this participation key is valid.|integer|
 |**vote-key-dilution**  <br>*optional*|\[votekd\] Number of subkeys in each batch of participation keys.|integer|
 |**vote-last-valid**  <br>*optional*|\[votelst\] Last round this participation key is valid.|integer|

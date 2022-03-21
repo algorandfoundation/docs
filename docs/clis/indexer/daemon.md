@@ -30,49 +30,71 @@ indexer daemon [flags]
 
 ```
 
-  -d, --algod string             path to algod data dir, or $ALGORAND_DATA
+  -d, --algod string                           path to algod data dir, or $ALGORAND_DATA
 
-      --algod-net string         host:port of algod
+      --algod-net string                       host:port of algod
 
-      --algod-token string       api access token for algod
+      --algod-token string                     api access token for algod
 
-      --allow-migration          allow migrations to happen even when no algod connected
+      --allow-migration                        allow migrations to happen even when no algod connected
 
-  -c, --configfile string        file path to configuration file (indexer.yml)
+  -c, --configfile string                      file path to configuration file (indexer.yml)
 
-      --cpuprofile string        file to record cpu profile to
+      --cpuprofile string                      file to record cpu profile to
 
-      --dev-mode                 allow performance intensive operations like searching for accounts at a particular round
+      --default-accounts-limit uint32          set the default Limit parameter for querying accounts, if none is provided (default 100)
 
-  -n, --dummydb                  use dummy indexer db
+      --default-applications-limit uint32      set the default Limit parameter for querying applications, if none is provided (default 100)
 
-  -g, --genesis string           path to genesis.json (defaults to genesis.json in algod data dir if that was set)
+      --default-assets-limit uint32            set the default Limit parameter for querying assets, if none is provided (default 100)
 
-  -h, --help                     help for daemon
+      --default-balances-limit uint32          set the default Limit parameter for querying balances, if none is provided (default 1000)
 
-  -f, --logfile string           file to write logs to, if unset logs are written to standard out
+      --default-transactions-limit uint32      set the default Limit parameter for querying transactions, if none is provided (default 1000)
 
-  -l, --loglevel string          verbosity of logs: [error, warn, info, debug, trace] (default "info")
+      --dev-mode                               allow performance intensive operations like searching for accounts at a particular round
 
-      --max-conn uint32          set the maximum connections allowed in the connection pool, if the maximum is reached subsequent connections will wait until a connection becomes available, or timeout according to the read-timeout setting
+  -n, --dummydb                                use dummy indexer db
 
-      --metrics-mode string      configure the /metrics endpoint to [ON, OFF, VERBOSE] (default "OFF")
+  -g, --genesis string                         path to genesis.json (defaults to genesis.json in algod data dir if that was set)
 
-      --no-algod                 disable connecting to algod for block following
+  -h, --help                                   help for daemon
 
-      --pidfile string           file to write daemon's process id to
+  -f, --logfile string                         file to write logs to, if unset logs are written to standard out
 
-  -P, --postgres string          connection string for postgres database
+  -l, --loglevel string                        verbosity of logs: [error, warn, info, debug, trace] (default "info")
 
-      --read-timeout duration    set the maximum duration for reading the entire request (default 5s)
+      --max-accounts-limit uint32              set the maximum allowed Limit parameter for querying accounts (default 1000)
 
-  -S, --server string            host:port to serve API on (default :8980) (default ":8980")
+      --max-api-resources-per-account uint32   set the maximum total number of resources (created assets, created apps, asset holdings, and application local state) per account that will be allowed in REST API lookupAccountByID and searchForAccounts responses before returning a 400 Bad Request. Set zero for no limit (default: unlimited)
 
-  -t, --token string             an optional auth token, when set REST calls must use this token in a bearer format, or in a 'X-Indexer-API-Token' header
+      --max-applications-limit uint32          set the maximum allowed Limit parameter for querying applications (default 1000)
 
-  -v, --version                  print version and exit
+      --max-assets-limit uint32                set the maximum allowed Limit parameter for querying assets (default 1000)
 
-      --write-timeout duration   set the maximum duration to wait before timing out writes to a http response, breaking connection (default 30s)
+      --max-balances-limit uint32              set the maximum allowed Limit parameter for querying balances (default 10000)
+
+      --max-conn uint32                        set the maximum connections allowed in the connection pool, if the maximum is reached subsequent connections will wait until a connection becomes available, or timeout according to the read-timeout setting
+
+      --max-transactions-limit uint32          set the maximum allowed Limit parameter for querying transactions (default 10000)
+
+      --metrics-mode string                    configure the /metrics endpoint to [ON, OFF, VERBOSE] (default "OFF")
+
+      --no-algod                               disable connecting to algod for block following
+
+      --pidfile string                         file to write daemon's process id to
+
+  -P, --postgres string                        connection string for postgres database
+
+      --read-timeout duration                  set the maximum duration for reading the entire request (default 5s)
+
+  -S, --server string                          host:port to serve API on (default :8980) (default ":8980")
+
+  -t, --token string                           an optional auth token, when set REST calls must use this token in a bearer format, or in a 'X-Indexer-API-Token' header
+
+  -v, --version                                print version and exit
+
+      --write-timeout duration                 set the maximum duration to wait before timing out writes to a http response, breaking connection (default 30s)
 
 ```
 
