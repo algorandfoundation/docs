@@ -45,8 +45,8 @@ title: Algorand parameter tables
 ## Smart signature constraints
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
-|Max size of compiled TEAL code combined with arguments|1000 bytes|[reference](./dapps/avm/teal/specification.md#execution-environment-for-logicsigs)|LogicSigMaxSize||
-|Max cost of TEAL code|20000|[reference](./dapps/avm/teal/specification.md#execution-environment-for-logicsigs)|LogicSigMaxCost||
+|Max size of compiled TEAL code combined with arguments|1000 bytes|[reference](../dapps/avm/teal/specification#execution-environment-for-logicsigs)|LogicSigMaxSize||
+|Max cost of TEAL code|20000|[reference](../dapps/avm/teal/specification#execution-environment-for-logicsigs)|LogicSigMaxCost||
 
 ## Smart contract constraints
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
@@ -55,14 +55,14 @@ title: Algorand parameter tables
 |Max extra app pages |3|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxExtraAppProgramPages|an application can "pay" for additional pages via minimum balance|
 |Max cost of approval TEAL code|700|[reference](./dapps/avm/teal/index.md#dynamic-operational-cost-of-teal-opcodes)|MaxAppProgramCost||
 |Max cost of clear TEAL code|700|[reference](./dapps/avm/teal/index.md#dynamic-operational-cost-of-teal-opcodes)|MaxAppProgramCost||
-|Max number of scratch variables|256|[reference](./dapps/avm/teal/specification/#scratch-space)|||
-|Max depth of stack|1000|[reference](./dapps/avm/teal/specification/#the-stack)|MaxStackDepth||
+|Max number of scratch variables|256|[reference](../dapps/avm/teal/specification/#scratch-space)|||
+|Max depth of stack|1000|[reference](../dapps/avm/teal/specification/#the-stack)|MaxStackDepth||
 |Max number of arguments|16|[reference](./dapps/smart-contracts/apps/index.md#passing-arguments-to-stateful-smart-contracts)|MaxAppArgs||
 |Max combined size of arguments|2048 bytes|[reference](./dapps/smart-contracts/apps/index.md#passing-arguments-to-stateful-smart-contracts)|MaxAppTotalArgLen||
 |Max number of global state keys|64|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxGlobalSchemaEntries||
 |Max number of local state keys|16|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxLocalSchemaEntries||
-|Max number of log messages|32|[reference](./dapps/avm/teal/opcodes/#log)|MaxLogCalls||
-|Max size of log messages|1024|[reference](./dapps/avm/teal/opcodes/#log)|MaxLogSize||
+|Max number of log messages|32|[reference](../dapps/avm/teal/opcodes/#log)|MaxLogCalls||
+|Max size of log messages|1024|[reference](../dapps/avm/teal/opcodes/#log)|MaxLogSize||
 |Max key size|64 bytes|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxAppKeyLen||
 |Max []byte value size|128 bytes|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxAppBytesValueLen||
 |Max key + value size|128 bytes|[reference](./dapps/smart-contracts/apps/index.md#creating-the-smart-contract)|MaxAppSumKeyValueLens||

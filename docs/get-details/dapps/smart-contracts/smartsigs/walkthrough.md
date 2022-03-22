@@ -61,13 +61,13 @@ intcblock 0
 intc_0
 ```
 
-In the above examples, the TEAL program is compiled and can be used as a contract account as discussed in the [Usage Modes](modes) documentation. To use TEAL for account [delegation](modes#delegated-account), the program must be signed by an account or a multi-signature account. This can be done with `goal` using the `-s` option. The following will produce a LogicSig file.
+In the above examples, the TEAL program is compiled and can be used as a contract account as discussed in the [Usage Modes](../modes) documentation. To use TEAL for account [delegation](../modes#delegated-account), the program must be signed by an account or a multi-signature account. This can be done with `goal` using the `-s` option. The following will produce a LogicSig file.
 
 ```
 goal clerk compile  simple.teal -o /tmp/simple.lsig -s -d ~/node/data
 ```
 
-In the example above, the `-o` option is used to produce the logic signature file, which contains the raw program binary and the signature as discussed in the [Logic Signature](modes#logic-signatures) documentation. Using the `-a` option allows the TEAL program to be signed by a specific account.
+In the example above, the `-o` option is used to produce the logic signature file, which contains the raw program binary and the signature as discussed in the [Logic Signature](../modes#logic-signatures) documentation. Using the `-a` option allows the TEAL program to be signed by a specific account.
 
 ```
 goal clerk compile  simple.teal -o /tmp/simple.lsig -s -a LSJY4JD5J626BMJY2NMODBP64WDQP5OS4M6YF2F5BWQUS22I3YJYCXHHIA -d ~/node/data
@@ -87,7 +87,7 @@ LogicSig: {
 ```
 
 # Creating a multi-signature delegated logic sig
-In the previous section, a logic signature was created using a single account. As discussed in the [Logic Signature](modes#logic-signatures) documentation, LogicSigs can also be created using a multi-signature account. For example, a three account multi-signature account with a threshold level of 2 can be created using the following command.
+In the previous section, a logic signature was created using a single account. As discussed in the [Logic Signature](../modes#logic-signatures) documentation, LogicSigs can also be created using a multi-signature account. For example, a three account multi-signature account with a threshold level of 2 can be created using the following command.
 
 ```
 goal account multisig new -T 2 DFPKC2SJP3OTFVJFMCD356YB7BOT4SJZTGWLIPPFEWL3ZABUFLTOY6ILYE LSJY4JD5J626BMJY2NMODBP64WDQP5OS4M6YF2F5BWQUS22I3YJYCXHHIA YYKRMERAFXMXCDWMBNR6BUUWQXDCUR53FPUGXLUYS7VNASRTJW2ENQ7BMQ -d ~/node/data

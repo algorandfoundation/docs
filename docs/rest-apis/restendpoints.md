@@ -1,5 +1,5 @@
 title: REST Endpoints
-Algorand maintains SDK support in [JavaScript](../../../sdks/javascript/#install-sdk-for-runtime), [Python](../../../sdks/python/#install-sdk), [Java](../../../sdks/java/#install-sdk-for-runtime) and [Go](../../../sdks/go/#install-go-sdk). More languages are also available through [Community Provided SDKs](https://developer.algorand.org/ecosystem-projects/?from_query=sdk#net-sdk). The Algorand SDKs offer both standalone and network-connected development functionality.
+Algorand maintains SDK support in [JavaScript](../../sdks/javascript/#install-sdk-for-runtime), [Python](../../sdks/python/#install-sdk), [Java](../../sdks/java/#install-sdk-for-runtime) and [Go](../../sdks/go/#install-go-sdk). More languages are also available through [Community Provided SDKs](https://developer.algorand.org/ecosystem-projects/?from_query=sdk#net-sdk). The Algorand SDKs offer both standalone and network-connected development functionality.
 
 # Algod, Indexer and KMD REST Endpoints
 
