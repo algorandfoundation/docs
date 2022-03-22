@@ -56,8 +56,8 @@ Accounts on Algorand require a minimum balance of 100,000 microAlgos. This balan
 
 * [Parameters Table](../../../get-details/parameter_tables/){: target="_blank"}- A comprehensive list of fees and minimum balance requirements.
 * [Transaction fields](../../../get-details/transactions/){: target="_blank"}- The full list of required and optional transaction fields.
-* [Payment (Algos) transaction](../../.../get-details/transactions/transactions/#payment-transaction){: target="_blank"}
-* [Transfer (ASAs) transaction](../../../get-details/transactions/transactions/#asset-transfer-transaction){: target="_blank"}
+* [Payment (Algos) transaction](../../../get-details/transactions/#payment-transaction){: target="_blank"}
+* [Transfer (ASAs) transaction](../../../get-details/transactions/#asset-transfer-transaction){: target="_blank"}
 * [ASA transfer structure](../../../get-details/transactions/#transfer-an-asset){: target="_blank"}
 * [ASA opt-in structure](../../../get-details/transactions/#opt-in-to-an-asset){: target="_blank"}
 * [How to transfer ASAs](../../../get-details/asa/#transferring-an-asset){: target="_blank"}
@@ -106,7 +106,7 @@ The Algo balance can be found at the top level under `"amount"`, while multiple 
 If you are doing your own accounting of transactions and updates to balances, be aware that there are a couple of ways that balances can be updated outside of so-called “normal" transactions.
 
 ## Inner transactions
-Transactions can be sent from smart contracts and these are called [inner transactions](../../../get-details/dapps/avm/teal/specification/#inner-transactions){: target="_blank"}. These transactions can be found in the [`inner-txns`](../..//rest-apis/algod/v2/?from_query=inner%20transactions#pendingtransactionresponse){: target="_blank"} field of the application call transaction that triggered them. See sample output from `algod` and `indexer` APIs. 
+Transactions can be sent from smart contracts and these are called [inner transactions](../../../get-details/dapps/avm/teal/specification/#inner-transactions){: target="_blank"}. These transactions can be found in the [`inner-txns`](../../../rest-apis/algod/v2/#pendingtransactionresponse){: target="_blank"} field of the application call transaction that triggered them. See sample output from `algod` and `indexer` APIs. 
 
 === "algod"
     ```json

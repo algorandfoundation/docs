@@ -1498,7 +1498,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 Retrieve an asset's configuration information from the network using the SDKs or `goal`. Additional details are also added to the accounts that own the specific asset and can be listed with standard account information calls.
 
 !!! info
-    The code below illustrates getting asset information without the Indexer. If you have the Indexer installed use the Indexer API to [search for asset](../features/indexer/#search-assets) information.
+    The code below illustrates getting asset information without the Indexer. If you have the Indexer installed use the Indexer API to [search for asset](../../rest-apis/indexer/#search-assets) information.
 
 === "JavaScript"
 	``` javascript

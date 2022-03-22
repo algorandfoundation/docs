@@ -969,7 +969,7 @@ Since every transaction requires a threshold of signatures you can create an ext
 
 The keys that can sign for the multisignature account can be stored in separate locations and they can be generated with kmd, as standalone accounts, or with a mixture of both.
 
-Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](../../dapps/avm/teal) and [Algorand Smart Contracts](../../dapps/pyteal/smart-contracts).
+Multisignature accounts can also be used to create cryptographically secure governance structures for an account, where keys can be owned by multiple users and spending is authorized by a subset of those users. Pair this with Algorand Smart Contract functionality for the potential to realize even more complex governance structures such as authorizing spending from an account given a _specific_ subset of signatures. Read more about [TEAL](../../dapps/avm/teal) and [Algorand Smart Contracts](../../dapps/smart-contracts/).
 
 **Reasons you might _not_ want to use multisignature accounts**
 

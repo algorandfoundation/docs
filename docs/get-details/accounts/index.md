@@ -25,7 +25,7 @@ The **public key** is transformed into an Algorand address, by adding a 4-byte c
 	Since users almost never see the true public key, and the Algorand address is a unique mapping back to the public key, the use of the term **public key** is frequently (and inaccurately) used to mean **address**. 
 	
 !!! tip
-	Assuming the [Python SDK is installed](../../reference/sdks/#installation_1), it is possible to convert addresses to (base32-encoded) public keys and vice-versa using the following one-liners (here used on the address `VCMJKWOY5P5P7SKMZFFOCEROPJCZOTIJMNIYNUCKH7LRO45JMJP6UYBIJA`):
+	Assuming the [Python SDK is installed](../../sdks/python/#install-sdk), it is possible to convert addresses to (base32-encoded) public keys and vice-versa using the following one-liners (here used on the address `VCMJKWOY5P5P7SKMZFFOCEROPJCZOTIJMNIYNUCKH7LRO45JMJP6UYBIJA`):
 	```bash
 	python3 -c "import base64, sys, algosdk; [print(base64.b32encode(algosdk.encoding.decode_address(line.strip())).decode()) for line in sys.stdin if line.strip()]" <<< VCMJKWOY5P5P7SKMZFFOCEROPJCZOTIJMNIYNUCKH7LRO45JMJP6UYBIJA
 
