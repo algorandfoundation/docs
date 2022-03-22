@@ -752,9 +752,6 @@ When creating a smart contract, there is a limit of 64 key-value pairs that can 
 
 Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased up to 3 additional 2KB pages, which would result in an 8KB limit for both programs. Note the size increases will also increase the minimum balance requirement for creating the application. To request additional pages, the setting (`extra-pages`) is available when creating the smart contract using `goal`. These extra pages can also be requested using the SDKs. This setting allows setting up to 3 additional 2KB pages.
 
-!!! info    
-    Accounts can only opt into up to 50 smart contracts. Accounts may only create 10 smart contracts.
-
 # Opt into the smart contract
 Before any account, including the creator of the smart contract, can begin to make Application Transaction calls that use local state, it must first opt into the smart contract. This prevents accounts from being spammed with smart contracts. To opt in, an `ApplicationCall` transaction of type `OptIn` needs to be signed and submitted by the account desiring to opt into the smart contract. This can be done with the `goal` CLI or the SDKs.
 
@@ -807,9 +804,6 @@ Other contracts may have much more complex opt in logic. TEAL also provides an o
     ```
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array.
-
-!!! info
-    Accounts can only opt into up to 50 smart contracts. Accounts may only create 10 smart contracts.
 
 !!! info
     Applications that only use global state do not require accounts to opt in.
