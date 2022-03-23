@@ -1,10 +1,10 @@
 title: MainNet
   
 # Version
-`v3.4.2.stable`
+`v3.5.1.stable`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v3.4.2-stable
+https://github.com/algorand/go-algorand/releases/tag/v3.5.1-stable
 
 # Genesis ID
 `mainnet-v1.0`
