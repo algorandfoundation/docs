@@ -66,7 +66,7 @@ indexer daemon [flags]
 
       --max-accounts-limit uint32              set the maximum allowed Limit parameter for querying accounts (default 1000)
 
-      --max-api-resources-per-account uint32   set the maximum total number of resources (created assets, created apps, asset holdings, and application local state) per account that will be allowed in REST API lookupAccountByID and searchForAccounts responses before returning a 400 Bad Request. Set zero for no limit (default: unlimited)
+      --max-api-resources-per-account uint32   set the maximum total number of resources (created assets, created apps, asset holdings, and application local state) per account that will be allowed in REST API lookupAccountByID and searchForAccounts responses before returning a 400 Bad Request. Set zero for no limit (default 1000)
 
       --max-applications-limit uint32          set the maximum allowed Limit parameter for querying applications (default 1000)
 

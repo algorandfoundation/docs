@@ -36,7 +36,7 @@ title: Algorand parameter tables
 ## ASA constraints
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
-|Max number of ASAs (create and opt-in)|1000|[reference](./asa.md)|MaxAssetsPerAccount||
+|Max number of ASAs (create and opt-in)|Unlimited|[reference](./asa.md)|MaxAssetsPerAccount||
 |Max asset name size|32 bytes|[reference](./asa.md)|MaxAssetNameBytes||
 |Max unit name size|8 bytes|[reference](./asa.md)|MaxAssetUnitNameBytes||
 |Max URL size|96 bytes|[reference](./asa.md)|MaxAssetURLBytes||
@@ -70,5 +70,5 @@ title: Algorand parameter tables
 |Max number of foreign ASAs|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|MaxAppTxnForeignAssets||
 |Max number of foreign applications|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|MaxAppTxnForeignApps||
 |Max number of foreign accounts + ASAs + applications|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|zMaxAppTotalTxnReferences||
-|Max number of created applications|10|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsCreated||
-|Max number of opt-in applications|50|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsOptedIn||
+|Max number of created applications|Unlimited|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsCreated||
+|Max number of opt-in applications|Unlimited|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsOptedIn||

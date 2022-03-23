@@ -29,7 +29,7 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
     ```
 
 === "Python"
-	```python
+    ```python
     import json
     # requires Python SDK version 1.3 or higher
     from algosdk.v2client import indexer
@@ -98,10 +98,12 @@ When searching large amounts of blockchain data often the results may be too lar
 
 | Search Type  | Maximum number of results per search  |
 | ------------- | ------------- |
-| Transaction Search | 1000 |
-| Account Search | 100 |
-| Asset Search | 100 |
-| Asset Balance Search | 1000 |
+| API Resources Per Account | 1,000 |
+| Transactions Search | 1,000 |
+| Accounts Search | 100 |
+| Assets Search | 100 |
+| Balances Search | 1,000 |
+| Applications Search | 100 |
 
 These values represent the maximum number of results that will be returned when searching for specific results. For example, the following will return the last 1000 transactions that exceeded 10 microAlgos. 
 
@@ -397,6 +399,10 @@ The following REST calls support paginated results.
 
 * `/accounts` - Search for specific accounts.
 * `/accounts/{account-id}/transactions` - Search for transactions for a specific account.
+* `/accounts/{account-id}/created-apps` - Search for created applications for a specific account.
+* `/accounts/{account-id}/created-assets` - Search for created assets for a specific account.
+* `/accounts/{account-id}/assets` - Search for assets on a specific account.
+* `/accounts/{account-id}/apps-local-state` - Search for application local state for a specific account.
 * `/assets` - Search Assets.
 * `/assets/{asset-id}/balances` - Search Asset balances.
 * `/assets/{asset-id}/transactions` - Search for Transactions with a specific Asset.
@@ -522,7 +528,7 @@ If the round parameter is used and set to 50 a balance of 200 would be returned.
     $ curl localhost:8980/v2/accounts/7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI?round=50
     ```
 
-The round parameter results are inclusive of all transactions within the given round. This parameter is available in many of the REST calls. This can be very computationally expensive so for performance reasons, it is by default disabled on the `/accounts` REST call but can be enabled by using the `--dev-mode` flag when starting the Indexer.
+The round parameter results are inclusive of all transactions within the given round. This parameter is only available on the accounts REST calls. This can be very computationally expensive so for performance reasons, it is by default disabled on the `/accounts` REST call but can be enabled by using the `--dev-mode` flag when starting the Indexer.
 
 # Note field searching
 Every transaction has the ability to add up to a 1kb note in the note field. Several of the REST APIs provide the ability to search for a prefix that is present in the note field, meaning that the note starts with a specific string. This can be a very powerful way to quickly locate transactions that are specific to an application. The REST calls that support prefix searching are the following.
@@ -811,7 +817,9 @@ This call returns a list of accounts with associated data, the round number the 
 
 # Getting an account
 The `/accounts/{account-id}` can be used to look up ledger data for a specific account.
-For example:
+
+!!! note
+    You may receive a 400 error if the account being requested has more than the indexer's `MaxAPIResourcesPerAccount` value. This is set at 1,000 by default, meaning if the account has opted in to 800 assets and **over** 200 applications, it may return a 400 error. You can use the `exclude` parameter with the following values to reduce the number of resources being returned (`all`, `assets`, `created-assets`, `apps-local-state`, `created-apps`). Alternatively you can use the dedicated endpoints to retrieve all account [assets](#lookup-assets-for-a-specific-account)/[applications](#lookup-applications-local-state-for-a-specific-account) and paginate the results.
 
 === "JavaScript"
 	```javascript
@@ -899,7 +907,211 @@ Results
 }
 ```
 
-The ledger data will include both Algo balance and if the account has any assets with their associated balances. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
+The ledger data will include the Algo balance and any extra account information such as `created-apps`, `created-assets`, `apps-local-state`, and `assets` by default. This can be excluded using the `exclude` parameter. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
+
+# Lookup applications created by a specific account
+The `/accounts/{account-id}/created-apps` REST call allows for searching an account for all the applications it has created.
+
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountCreatedApplications(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+    })().catch(e => {
+        console.error(e);
+        console.trace();
+    });
+    ```
+
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountCreatedApplications(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
+=== "Java"
+    ```java
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountCreatedApplications(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
+    }
+    System.out.println(response.body().toString());
+    ```
+
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountCreatedApplications(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps
+    ```
+
+# Lookup assets created by a specific account
+The `/accounts/{account-id}/created-assets` REST call allows for searching an account for all the assets it has created.
+
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountCreatedAssets(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+    })().catch(e => {
+        console.error(e);
+        console.trace();
+    });
+    ```
+
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountCreatedAssets(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
+=== "Java"
+    ```java
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountCreatedAssets(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
+    }
+    System.out.println(response.body().toString());
+    ```
+
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountCreatedAssets(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-assets
+    ```
+
+# Lookup assets for a specific account
+The `/accounts/{account-id}/assets` REST call allows for searching an account for all the assets it has opted into.
+
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountAssets(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+    })().catch(e => {
+        console.error(e);
+        console.trace();
+    });
+    ```
+
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountAssets(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
+=== "Java"
+    ```java
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountAssets(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
+    }
+    System.out.println(response.body().toString());
+    ```
+
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountAssets(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/assets
+    ```
+
+# Lookup applications local state for a specific account
+The `/accounts/{account-id}/apps-local-state` REST call allows for searching an account for all the applications local state it has.
+
+=== "JavaScript"
+    ```javascript
+    (async () => {
+        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
+        let response = await indexerClient.lookupAccountAppLocalStates(address).do();
+        console.log(JSON.stringify(response, undefined, 2));
+    })().catch(e => {
+        console.error(e);
+        console.trace();
+    });
+    ```
+
+=== "Python"
+	```python
+    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
+
+    response = myindexer.lookupAccountAppLocalStates(address)
+
+    print(json.dumps(response, indent=2, sort_keys=True))
+    ```
+
+=== "Java"
+    ```java
+    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
+    Response<TransactionResponse> response = indexerClientInstance
+        .lookupAccountAppLocalStates(account)
+        .execute();
+    if (!resonse.isSuccessful()) {
+        throw new Exception(response.message());
+    }
+    System.out.println(response.body().toString());
+    ```
+
+=== "Go"
+    ```go
+    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
+
+    result, err := indexerClient.LookupAccountAppLocalStates(address).Do(context.Background())
+
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+
+=== "cURL"
+	``` bash
+    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/apps-local-state
+    ```
 
 # Search transactions for a specific account
 The `/accounts/{account-id}/transactions` REST call provides a powerful mechanism for searching for specific transactions for a given account. 
