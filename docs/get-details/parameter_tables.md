@@ -29,6 +29,7 @@ title: Algorand parameter tables
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
 |-|-|-|-|-|
 |Max number transactions in a group / atomic transfer|16|[reference](./atomic_transfers.md)|MaxTxGroupSize||
+|Max number of inner transactions|256|[reference](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#inner-transactions)|MaxInnerTransactions|Whilst the actual value is 16, inner transaction pooling multiplies this value by MaxTxGroupSize.|
 |Maximum size of a block|1000000 bytes|-|MaxTxnBytesPerBlock||
 |Maximum size of note|1024 bytes|-|MaxTxnNoteBytes||
 |Maximum transaction life|1000 rounds|[reference](./transactions/index.md#setting-first-and-last-valid)|MaxTxnLife||
