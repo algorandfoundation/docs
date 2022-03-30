@@ -132,7 +132,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     Account acct = getAccount();
 
     // Create signer object
-	BasicAccountTransactionSigner signer = new BasicAccountTransactionSigner(acct);
+	TxnSigner signer = acct.getTransactionSigner();
 
     // Get suggested params from client
     Response<TransactionParametersResponse> rsp = client.TransactionParams().execute();
@@ -284,7 +284,77 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	atc.AddMethodCall(combine(mcp, getMethod(contract, "txntest"), []interface{}{10000, stxn, 1000}))
 
     ```
+    
+=== "Java"
+    ```java
+    	// Read in contract json file
+    	List<String> lines = Files.readAllLines(Paths.get("path/to/contract.json"), Charset.defaultCharset());
+    	String jsonContract = StringUtils.join(lines, "");
 
+    	// convert Json to contract
+    	Contract contract = new Gson().fromJson(jsonContract, Contract.class);
+	
+	// get method name from Contract object
+        Method addmethod = getMethodByName("add", contract);
+	
+	/**
+	// Utility function to return an ABIMethod by its name
+    	public static Method getMethodByName(String name, Contract contract) throws Exception {
+		Optional<Method> m = contract.methods.stream().filter(mt -> mt.name.equals(name)).findFirst();
+		return m.orElseThrow(() -> new Exception("Method undefined: " + name));
+    	} 
+	*/
+
+	// get transaction params
+        TransactionParams sp = getTransactionParams(client);
+
+        // create methodCallParams by builder (or create by constructor) for add method
+        MethodCallParams.Builder methodCallParamsBuilderAddMethod = new MethodCallParams.Builder();
+
+        // methodCallParams add: commons params
+        methodCallParamsBuilderAddMethod.setAppID(getAppId());
+        methodCallParamsBuilderAddMethod.setSender(acct.getAddress().toString());
+        methodCallParamsBuilderAddMethod.setSigner(signer);
+        methodCallParamsBuilderAddMethod.setSuggestedParams(sp);
+
+        // methodCallParams add: add method params
+        methodCallParamsBuilderAddMethod.setMethod(addmethod);
+        methodCallParamsBuilderAddMethod.methodArgs.add(1);
+        methodCallParamsBuilderAddMethod.methodArgs.add(1);
+
+        // Simple call to the `add` method, method_args can be any type but _must_
+        // match those in the method signature of the contract
+        atc.addMethodCall(methodCallParamsBuilderAddMethod.build());
+
+        // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
+        // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
+        Transaction ptxn = PaymentTransactionBuilder
+                .Builder()
+                .amount(10000)
+                .suggestedParams(sp)
+                .sender(acct.getAddress())
+                .receiver(acct.getAddress())
+                .build();
+
+        // create methodCallParams by builder (or create by constructor) for txntest method
+        MethodCallParams.Builder methodCallParamsBuilderTxnTest = new MethodCallParams.Builder();
+
+        // methodCallParams txtest: commons params
+        methodCallParamsBuilderTxnTest.setAppID(getAppId());
+        methodCallParamsBuilderTxnTest.setSender(acct.getAddress().toString());
+        methodCallParamsBuilderTxnTest.setSigner(signer);
+        methodCallParamsBuilderTxnTest.setSuggestedParams(sp);
+
+        // methodCallParams txntest: add method params
+        methodCallParamsBuilderTxnTest.setMethod(addmethod);
+        methodCallParamsBuilderTxnTest.methodArgs.add(10000);
+        methodCallParamsBuilderTxnTest.methodArgs.add(ptxn);
+        methodCallParamsBuilderTxnTest.methodArgs.add(1000);
+
+        atc.addMethodCall(methodCallParamsBuilderTxnTest.build());
+
+    ```
+    
 ## Execution 
 
 Once all the transactions are added to the atomic group the Atomic Transaction Composer allows several ways to perform the transactions. 
@@ -332,3 +402,15 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 		log.Printf("%s returned %+v", r.TxID, r.ReturnValue)
 	}
     ```
+
+=== "Java"
+    ```java
+	
+	AtomicTransactionComposer.ExecuteResult resultExecute = atc.execute(client, 5);
+        resultExecute.methodResults.forEach(methodResult -> {
+            System.out.println(methodResult);
+        });
+	
+    ```
+
+	
