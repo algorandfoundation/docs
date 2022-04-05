@@ -9,6 +9,17 @@ This guide explains how to install the Algorand Node software on Linux distribut
 !!! Info
     Windows users may choose to use [Rand Labs](https://github.com/randlabs/algorand-windows-node/) installation binaries.
 
+### Hardware requirements
+
+Due to the higher TPS on MainNet, to successfully run an Algorand MainNet node, the following hardware is necessary:
+
+* at least 4GB of RAM (8GB strongly recommended)
+* a not-too-slow SSD: HDD and SD cards are too slow for a MainNet node and will most likely prevent the node to sync
+* at least 100Mbps connection (1Gbps recommended)
+
+Participation nodes (especially those with high stake) and relays have higher requirements to ensure the performance of the overall blockchain.
+
+Private networks may be run on much lower-spec machines, including Raspberry Pi 4 (assuming they are used at lower TPS).
 
 ### Package manager installation overview
 
@@ -418,6 +429,7 @@ Next consensus protocol supported: true
 Genesis ID: testnet-v1.0
 Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ```
+
 # Sync Node Network using Fast Catchup
 
 Fast Catchup is a new feature and will rapidly update a node using catchpoint  snapshots. A new command on goal node is now available for catchup. The entire process should sync a node in minutes rather than hours or days. As an example, the results for a BetaNet fast catchup, at the time of writing this, was a couple minutes to get to the sync point and a few more minutes to sync the remaining blocks since the snapshot. The total blocks synced was around 4.2 million blocks and it finished syncing in under 6 minutes. Actual sync times may vary depending on the number of accounts, number of blocks and the network.  Here are the links to get the most recent catchup point snapshot per network. The results  include a round to catchup to and the provided catchpoint. Paste into the `goal node catchup` command.
@@ -433,6 +445,9 @@ https://algorand-catchpoints.s3.us-east-2.amazonaws.com/channel/mainnet/latest.c
 
 The results will look similar to this:
 `4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
+
+!!! warning
+    Do **NOT** use fast catchup on an *archival* or relay node.
 
 Steps:
 
@@ -495,6 +510,15 @@ Genesis ID: betanet-v1.0
 Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
 
+## Troubleshooting for fast catchup
+
+If fast catchup fails, check the following:
+
+* the node is *not* archival (and is not a relay).
+* the software is up-to-date: `goal version -v` should report the latest `Algorand` version in https://github.com/algorand/go-algorand/releases, ignoring the `Algorand BetaNet` releases.
+* the catch point matches the network used by the node and reported as `Genesis ID` by `goal node status`.
+* the hardware requirements above are satisfied, in particular a not-too-slow SSD is used.
+* the computer does not run out of memory.
 
 # Updating Node
 The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. Note that the `-d` argument has to be specified when updating. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
