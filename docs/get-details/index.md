@@ -66,3 +66,8 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 # Algorand consensus
 [Overview](algorand_consensus.md) - A high-level guide on the Algorand consensus protocol.
+
+# Useful Resources
+[Smart Contract Examples](useful_resources/#smart-contract-examples) - Helpful for new and experienced developers.
+
+[Algorand Request for Comments](useful_resources/#smart-contract-examples) - The place to go to read and discuss present and future standards.
