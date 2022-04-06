@@ -1221,7 +1221,7 @@ Calculation for increase in min-balance during creation or opt-in is as follows:
 
     - 100,000 microAlgo base fee for each page requested. 
     - 25,000 + 3,500 = 28,500 for each Uint in the *Global State* schema
-    - 25,000 + 25,000 = 50,000 for each byte-slice in *Global State* the schema
+    - 25,000 + 25,000 = 50,000 for each byte-slice in the *Global State* schema
 
 === "Application Opt-In"
 
