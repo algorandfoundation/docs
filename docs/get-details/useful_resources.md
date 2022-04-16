@@ -16,3 +16,8 @@ When it comes to standardising practises this is the place the be. Whether it's 
 
 [GitHub Discussions](https://github.com/algorandfoundation/ARCs/issues)
 
+# PyTeal Course
+
+New to Algorand Smart Contracts? Checkout this great series that guides you from setting up your environment for the first time to writing and debugging smart contracts on Algorand.
+
+[YouTube Playlist](https://www.youtube.com/watch?v=V3d3VTlgMo8&list=PLpAdAjL5F75CNnmGbz9Dm_k-z5I6Sv9_x)
