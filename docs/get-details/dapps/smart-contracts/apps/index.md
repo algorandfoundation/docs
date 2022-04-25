@@ -86,7 +86,7 @@ To fund this account, any other account in the Algorand network can send algos t
         TxnField.amount: Int(5000),
         TxnField.receiver: Txn.Sender()
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     #...
 
     # The `Sender` for the above is implied to be Global.current_application_address(). 
@@ -130,7 +130,7 @@ If a smart contract wishes to transfer an asset it holds or needs to opt into an
         TxnField.asset_amount: Int(1000),
         TxnField.xfer_asset: Txn.assets[0], # Must be in the assets array sent as part of the application call
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     #...
     ```
 
@@ -165,7 +165,7 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
         TxnField.freeze_asset_account: Txn.accounts[1],
         TxnField.freeze_asset_frozen: Int(1)
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     #...
     ```
 
@@ -201,7 +201,7 @@ A smart contract can revoke or clawback any asset where the smart contract addre
         TxnField.asset_sender: Txn.accounts[1],         
         TxnField.asset_amount: Int(1000)
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     #...
     ```
 
@@ -242,7 +242,7 @@ Assets can also be created by a smart contract. To create an asset with an inner
         TxnField.config_asset_freeze: Global.current_application_address(),
         TxnField.config_asset_clawback: Global.current_application_address()
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     # InnerTxn.created_asset_id() would represent the asset id that was just created
     #...
     ```
@@ -289,7 +289,7 @@ As with all assets, the mutable addresses can be changed. For example to change 
         TxnField.config_asset_freeze: Txn.sender(),
         TxnField.config_asset_clawback: Txn.sender()
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     #...
     ```
 
@@ -325,7 +325,7 @@ Assets managed by the contract can also be deleted. This can be done with the fo
         TxnField.type_enum: TxnType.AssetConfig,
         TxnField.config_asset: Txn.assets[0]
     }),
-    InnerTxn.Submit(),
+    InnerTxnBuilder.Submit(),
     #...
     ```
 
@@ -422,7 +422,7 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
         TxnField.application_id: Int(1234),
         TxnField.on_complete: OnComplete.NoOp,
     })
-    InnerTxn.Submit()
+    InnerTxnBuilder.Submit()
     #...
     ```
 
@@ -1221,7 +1221,7 @@ Calculation for increase in min-balance during creation or opt-in is as follows:
 
     - 100,000 microAlgo base fee for each page requested. 
     - 25,000 + 3,500 = 28,500 for each Uint in the *Global State* schema
-    - 25,000 + 25,000 = 50,000 for each byte-slice in *Global State* the schema
+    - 25,000 + 25,000 = 50,000 for each byte-slice in the *Global State* schema
 
 === "Application Opt-In"
 

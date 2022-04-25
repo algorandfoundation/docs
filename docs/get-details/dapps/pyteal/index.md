@@ -107,7 +107,7 @@ def approval_program():
 
 The `program` variable is set to a [PyTeal `Cond` Expression](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=Cond#chaining-tests-cond) which is an example of a Control Flow statement. Other Control flow statements are documented in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#).
 
-A `Cond` expression allows several conditions to be evaluated in order, taking a number of arguments as [`Condition Expression`, `Body Expression`].  The `Condition Expression` must evaluate to True or False. For a given invocation, the fist Condition that evaluates True will pass flow of the program to its corresponding `Body Expression`.  If none of the conditions are true the smart contract will return an `err` and fail.  The body for each condition here should reference some other variable or method defined in your PyTeal contract.
+A `Cond` expression allows several conditions to be evaluated in order, taking a number of arguments as [`Condition Expression`, `Body Expression`].  The `Condition Expression` must evaluate to True or False. For a given invocation, the first Condition that evaluates True will pass flow of the program to its corresponding `Body Expression`.  If none of the conditions are true the smart contract will return an `err` and fail.  The body for each condition here should reference some other variable or method defined in your PyTeal contract.
 
 !!! note
     For control flow statements like `Cond`, the Body Expression of each condition _MUST_ evaluate to the same type. The current types that are allowed are `none`, `any`, `uint64` or `bytes`

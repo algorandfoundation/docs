@@ -1,6 +1,13 @@
 const algosdk = require('algosdk');
 
+// mnemonics use for recover account 
+// never use mnemonics in code, for demo purposes only
+const MNEMONICS_ACCOUNT_A = "Your 25-word mnemonic goes here";
+const MNEMONICS_ACCOUNT_B = "Your 25-word mnemonic goes here";
+
 let  client = null;
+
+// setup algorand client
 async function setupClient() {
     if (client == null) {
         const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -13,17 +20,10 @@ async function setupClient() {
     }
     return client;
 }
-// recover first account
-// never use mnemonics in code, for demo purposes only
-function recoverAccount1() {
-    const passphrase = "Your 25-word mnemonic goes here";
-    let myAccount = algosdk.mnemonicToSecretKey(passphrase);
-    return myAccount;
-}
-// recover second account
-function recoverAccount2() {
-    const passphrase = "Your 25-word mnemonic goes here";
-    let myAccount = algosdk.mnemonicToSecretKey(passphrase);
+
+// recover account from mnemonics
+function recoverAccount(mnemonics) {
+    let myAccount = algosdk.mnemonicToSecretKey(mnemonics);
     return myAccount;
 }
 
@@ -39,13 +39,14 @@ async function submitAtomicTransfer() {
 
         // recover account
         // Account A
-        let myAccountA = await recoverAccount1();
+        let myAccountA = recoverAccount(MNEMONICS_ACCOUNT_A);
         console.log("My account A address: %s", myAccountA.addr)
 
         // recover an additional account
         // Account B
-        let myAccountB = await recoverAccount2();
+        let myAccountB = recoverAccount(MNEMONICS_ACCOUNT_B);
         console.log("My account B address: %s", myAccountB.addr)
+
         //Check your balances
         let accountInfo = await algodClient.accountInformation(myAccountA.addr).do();
         console.log("Account A balance: %d microAlgos", accountInfo.amount);
@@ -95,4 +96,5 @@ async function submitAtomicTransfer() {
         console.log("err", err);
     }
 }
+
 submitAtomicTransfer();

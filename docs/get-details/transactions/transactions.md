@@ -97,7 +97,7 @@ This is a special form of an Asset Transfer Transaction.
 |Field|Required|Type|codec| Description|
 |---|---|---|---|---|
 |<a name="xferasset">XferAsset</a>| _required_ |uint64|`"xaid"`|The unique ID of the asset to opt-in to.|
-|<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The account which is allocating the asset to their account's Asset map.|
+|<a name="sender">Sender</a>|_required_|Address|`"snd"`| The account which is allocating the asset to their account's Asset map.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The account which is allocating the asset to their account's Asset map.|
 
 # Asset Clawback Transaction 
@@ -114,7 +114,6 @@ This is a special form of an Asset Transfer Transaction.
 |<a name="assetamount">AssetAmount</a>|_required_|uint64|`"aamt"`| The amount of the asset to be transferred.|
 |<a name="assetsender">AssetSender</a>|_required_|Address|`"asnd"`| The address from which the funds will be withdrawn.|
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
-|<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the entire asset holding balance from the AssetSender account. It will not remove the asset holding.|
 
 # Asset Freeze Transaction
 Transaction Object Type: `AssetFreezeTx`

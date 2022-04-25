@@ -54,10 +54,12 @@ these integers.  AVM 0.9 is v4. AVM 1.0 is v5. AVM 1.1 is v6.
 ## Execution Modes
 
 Starting from v2, the AVM can run programs in two modes:
+
 1. LogicSig or _stateless_ mode, used to execute Smart Signatures
 2. Application or _stateful_ mode, used to execute Smart Contracts
 
 Differences between modes include:
+
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
 3. Opcode availability. Refer to [opcodes document](../opcodes) for details.
