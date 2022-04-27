@@ -37,7 +37,7 @@ The scheme component ("algorand:") is case-insensitive, and implementations must
 
 - label: Label for that address (e.g. name of receiver)
 
-- address: Algorand address
+- address: Algorand address (if missing, sender address will be used as receiver.)
 
 - xnote: A URL-encoded notes field value that must not be modifiable by the user when displayed to users.
 
@@ -86,4 +86,11 @@ Request 150 units of Asset ID 45 from an address
 
 ```
 algorand://TMTAD6N22HCS2LKH7677L2KFLT3PAQWY6M4JFQFXQS32ECBFC23F57RYX4?amount=150&asset=45
+```
+
+
+Opt-in request for Asset ID 37
+
+```
+algorand://?amount=0&asset=37
 ```
