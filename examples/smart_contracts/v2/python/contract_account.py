@@ -63,14 +63,14 @@ def contract_account_example():
     # string parameter
     # arg_str = "<my string>"
     # arg1 = arg_str.encode()
-    # lsig = transaction.LogicSig(program, args=[arg1])
+    # lsig = transaction.LogicSigAccount(program, args=[arg1])
 
     # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
 
     # Create arg to pass if TEAL program requires an arg
     # if not, omit args param
     arg1 = (123).to_bytes(8, 'big')
-    lsig = LogicSig(program, args=[arg1])
+    lsig = LogicSigAccount(program, args=[arg1])
     sender = lsig.address()
 
     # Get suggested parameters
@@ -87,7 +87,7 @@ def contract_account_example():
     txn = PaymentTxn(
         sender, params, receiver, amount, closeremainderto)
 
-    # Create the LogicSigTransaction with contract account LogicSig
+    # Create the LogicSigTransaction with contract account LogicSigAccount
     lstx = transaction.LogicSigTransaction(txn, lsig)
     # transaction.write_to_file([lstx], "simple.stxn")
 

@@ -209,7 +209,7 @@ int 0
     // Result = ASABACI=
     ```
 
-Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSig method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format. 
+Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
 
 The binary bytes are used in the SDKs as shown below. If using the `goal` command-line tool to compile the TEAL code, these same bytes can be retrieved using the following commands. 
 
@@ -236,12 +236,12 @@ The response result from the TEAL `compile` command above is used to create the 
 === "Python"
 	```python
         import base64
-        from algosdk.future.transaction import LogicSig
+        from algosdk.future.transaction import LogicSigAccount
 
         programstr = response['result']
         t = programstr.encode()
         program = base64.decodebytes(t)
-        lsig = LogicSig(program)
+        lsig = LogicSigAccount(program)
     ```
 
 === "Java"
@@ -284,15 +284,15 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 === "Python"
 	```python
-        from algosdk.future.transaction import LogicSig
+        from algosdk.future.transaction import LogicSigAccount
 
         # string parameter
         arg_str = "my string"
         arg1 = arg_str.encode()
-        lsig = LogicSig(program, args=[arg1])
+        lsig = LogicSigAccount(program, args=[arg1])
         # integer parameter
         arg1 = (123).to_bytes(8, 'big')
-        lsig = LogicSig(program, args=[arg1])
+        lsig = LogicSigAccount(program, args=[arg1])
     ```
 
 === "Java"
@@ -428,7 +428,7 @@ int 123
         let closeToRemaninder = undefined;
         let note = undefined;
         let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
-        // Create the LogicSigTransaction with contract account LogicSig 
+        // Create the LogicSigTransaction with contract account LogicSigAccount
         let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
         // send raw LogicSigTransaction to network
         // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
@@ -508,12 +508,12 @@ int 123
             # string parameter
             # arg_str = "<my string>"
             # arg1 = arg_str.encode()
-            # lsig = transaction.LogicSig(program, args=[arg1])
+            # lsig = transaction.LogicSigAccount(program, args=[arg1])
             # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
             # Create arg to pass if TEAL program requires an arg
             # if not, omit args param
             arg1 = (123).to_bytes(8, 'big')
-            lsig = LogicSig(program, args=[arg1])
+            lsig = LogicSigAccount(program, args=[arg1])
             sender = lsig.address()
             # Get suggested parameters
             params = algod_client.suggested_params()
@@ -526,7 +526,7 @@ int 123
             # Create a transaction
             txn = PaymentTxn(
                 sender, params, receiver, amount, closeremainderto)
-            # Create the LogicSigTransaction with contract account LogicSig
+            # Create the LogicSigTransaction with contract account LogicSigAccount
             lstx = transaction.LogicSigTransaction(txn, lsig)
             # transaction.write_to_file([lstx], "simple.stxn")
             # Send raw LogicSigTransaction to network
@@ -638,7 +638,7 @@ int 123
                     .suggestedParams(params)
                     .build();   
             try {
-                // create the LogicSigTransaction with contract account LogicSig
+                // create the LogicSigTransaction with contract account LogicSigAccount
                 SignedTransaction stx = Account.signLogicsigTransaction(lsig, txn);
                 // send raw LogicSigTransaction to network
                 byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
@@ -883,7 +883,7 @@ The following example illustrates signing a transaction with a created logic sig
         let note = undefined;
         let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, 
             receiver, amount, closeToRemaninder, note, params)
-        // Create the LogicSigTransaction with contract account LogicSig
+        // Create the LogicSigTransaction with contract account LogicSigAccount
         let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
         // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
         // send raw LogicSigTransaction to network    
@@ -965,15 +965,15 @@ The following example illustrates signing a transaction with a created logic sig
         # string parameter
         # arg_str = "<my string>"
         # arg1 = arg_str.encode()
-        # lsig = transaction.LogicSig(program, args=[arg1])
+        # lsig = transaction.LogicSigAccount(program, args=[arg1])
         # integer parameter
         # arg1 = (123).to_bytes(8, 'big')
-        # lsig = transaction.LogicSig(program, args=[arg1])
+        # lsig = transaction.LogicSigAccount(program, args=[arg1])
         # if TEAL program requires an arg,
-        # if not, omit args param on LogicSig
-        # lsig = LogicSig(program)
+        # if not, omit args param on LogicSigAccount
+        # lsig = LogicSigAccount(program)
         arg1 = (123).to_bytes(8, 'big')
-        lsig = LogicSig(program, args=[arg1])
+        lsig = LogicSigAccount(program, args=[arg1])
         # Recover the account that is wanting to delegate signature
         # never use mnemonics in code, for demo purposes    
         passphrase = "<25-word-mnemonic>"
@@ -994,7 +994,7 @@ The following example illustrates signing a transaction with a created logic sig
         # Create a transaction
         txn = PaymentTxn(
             addr, params, receiver, amount, closeremainderto)
-        # Create the LogicSigTransaction with contract account LogicSig
+        # Create the LogicSigTransaction with contract account LogicSigAccount
         lstx = transaction.LogicSigTransaction(txn, lsig)
         txns = [lstx]
         transaction.write_to_file(txns, "simple.stxn")
@@ -1110,7 +1110,7 @@ The following example illustrates signing a transaction with a created logic sig
                     .build();   
 
             try {
-                // create the LogicSigTransaction with contract account LogicSig
+                // create the LogicSigTransaction with contract account LogicSigAccount
                 SignedTransaction stx = Account.signLogicsigTransaction(lsig, txn);
 
                 // send raw LogicSigTransaction to network
