@@ -78,7 +78,7 @@ dup
 int 10
 <=
 bnz loop
-pop
+// once the loop exits, the last counter value will be left on stack
 ```
 
 Subroutines can be implemented using labels and the `callsub` and `retsub` opcodes. The sample below illustrates a sample subroutine call.
