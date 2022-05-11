@@ -77,18 +77,18 @@ try:
     # string parameter
     # arg_str = "<my string>"
     # arg1 = arg_str.encode()
-    # lsig = transaction.LogicSig(program, args=[arg1])
+    # lsig = transaction.LogicSigAccount(program, args=[arg1])
 
     # integer parameter
     # arg1 = (123).to_bytes(8, 'big')
-    # lsig = transaction.LogicSig(program, args=[arg1])
+    # lsig = transaction.LogicSigAccount(program, args=[arg1])
     # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
 
     # if TEAL program requires an arg,
-    # if not, omit args param on LogicSig
-    # lsig = LogicSig(program)
+    # if not, omit args param on LogicSigAccount
+    # lsig = LogicSigAccount(program)
     arg1 = (123).to_bytes(8, 'big')
-    lsig = LogicSig(program, args=[arg1])
+    lsig = LogicSigAccount(program, args=[arg1])
 
     # Recover the account that is wanting to delegate signature
     # never use mnemonics in production code, for demo purposes only
@@ -113,7 +113,7 @@ try:
     # Create a transaction
     txn = PaymentTxn(
         addr, params, receiver, amount, closeremainderto)
-    # Create the LogicSigTransaction with contract account LogicSig
+    # Create the LogicSigTransaction with contract account LogicSigAccount
     lstx = transaction.LogicSigTransaction(txn, lsig)
     # transaction.write_to_file([lstx], "./simple.stxn")
 

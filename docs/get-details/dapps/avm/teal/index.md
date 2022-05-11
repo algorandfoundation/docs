@@ -71,12 +71,14 @@ int 0
 loop:
 int 1
 +
+dup
 // implement loop code
 // ...
 // check upper bound
 int 10
 <=
 bnz loop
+// once the loop exits, the last counter value will be left on stack
 ```
 
 Subroutines can be implemented using labels and the `callsub` and `retsub` opcodes. The sample below illustrates a sample subroutine call.

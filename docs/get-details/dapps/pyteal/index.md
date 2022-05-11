@@ -1008,7 +1008,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     unsigned_txn = transaction.PaymentTxn(escrow_address, params, rcv, amt)
     encodedProg = escrowProg.encode()
     program = base64.decodebytes(encodedProg)
-    lsig = transaction.LogicSig(program)
+    lsig = transaction.LogicSigAccount(program)
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
     # wait for confirmation
@@ -1023,7 +1023,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     return pmtx
 ```
 
-The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSig` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smartsigs/index.md).
+The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSigAccount` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smartsigs/index.md).
 
 The solution can be completed by adding a main function to put the utility functions to use.
 
@@ -1108,7 +1108,7 @@ def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
     unsigned_txn = transaction.PaymentTxn(escrow_address, params, rcv, amt)
     encodedProg = escrowProg.encode()
     program = base64.decodebytes(encodedProg)
-    lsig = transaction.LogicSig(program)
+    lsig = transaction.LogicSigAccount(program)
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
     pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)

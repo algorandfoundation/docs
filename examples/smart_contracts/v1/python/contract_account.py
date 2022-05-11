@@ -14,7 +14,7 @@ try:
     # b"\x01\x20\x01\x00\x22 is `int 0`
     # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
     program = b"\x01\x20\x01\x00\x22"
-    lsig = transaction.LogicSig(program)
+    lsig = transaction.LogicSigAccount(program)
     sender = lsig.address()
     acl = algod.AlgodClient(algod_token, algod_address)
     # get suggested parameters
@@ -29,7 +29,7 @@ try:
     # create a transaction
     txn = transaction.PaymentTxn(
         sender, fee, last_round, last_round+100, gh, receiver, amount, closeremainderto)
-    # Create the LogicSigTransaction with contract account LogicSig
+    # Create the LogicSigTransaction with contract account LogicSigAccount
     lstx = transaction.LogicSigTransaction(txn, lsig)
     print("This transaction is expected to fail as it is int 0 , always false")
     # send raw LogicSigTransaction to network

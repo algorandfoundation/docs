@@ -4,7 +4,7 @@ This guide explains how to install the Algorand Node software on Linux distribut
 
 [The package manager method](#installation-with-a-package-manager) uses fixed directories and automatically updates. It has been validated on Debian, Ubuntu, Fedora, and CentOS.
 
-[The updater script method](#installation-with-the-updater-script) allows manually setting data directories and requires manual updates. It has been tested on the same Linux distributions from above, as well as on Raspbian (Raspberry Pi 3), openSUSE Leap, Manjaro, Mageia, Alpine, and Solus.
+[The updater script method](#installation-with-the-updater-script) allows manually setting data directories and requires manual updates. It has been tested on the same Linux distributions from above, as well as on openSUSE Leap, Manjaro, Mageia, Alpine, and Solus.
 
 !!! Info
     Windows users may choose to use [Rand Labs](https://github.com/randlabs/algorand-windows-node/) installation binaries.
@@ -18,8 +18,6 @@ Due to the higher TPS on MainNet, to successfully run an Algorand MainNet node, 
 * at least 100Mbps connection (1Gbps recommended)
 
 Participation nodes (especially those with high stake) and relays have higher requirements to ensure the performance of the overall blockchain.
-
-Private networks may be run on much lower-spec machines, including Raspberry Pi 4 (assuming they are used at lower TPS).
 
 ### Package manager installation overview
 
@@ -51,7 +49,7 @@ export PATH="$HOME/node:$PATH"
 
 Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
 
-Use this option when installing in the following operating systems: macOS, Raspbian, openSUSE Leap, Manjaro, Mageia, Alpine, Solus, etc. Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process.
+Use this option when installing in the following operating systems: macOS, openSUSE Leap, Manjaro, Mageia, Alpine, Solus, etc. Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process.
 
 
 # Installation with a package manager
@@ -218,7 +216,7 @@ When the installer runs, it will pull down the latest update package from S3 and
 
 
 ## Installing on Linux
-Nodes have been verified on Ubuntu, CentOS, Fedora, Raspbian (Raspberry Pi 1-4), openSUSE Leap, Manjaro, Mageia, Alpine, and Solus. Other modern distros should work as well.
+Nodes have been verified on Ubuntu, CentOS, Fedora, openSUSE Leap, Manjaro, Mageia, Alpine, and Solus. Other modern distros should work as well.
 
 + Create a temporary folder to hold the install package and files.
 
