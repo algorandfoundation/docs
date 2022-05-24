@@ -71,7 +71,7 @@ To start the Indexer so it populates the PostgreSQL database, supply the Algoran
 $ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod=~/node/data
 
 # start with networked Algorand node
-$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" ---algod-token="[your-api-token]
+$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" --algod-token="[your-api-token]"
 
 ```
 
