@@ -311,16 +311,16 @@ Once the Contract object is constructed, it can be used to look up and pass meth
         method_args.add(1);
 
         // create methodCallParams by builder (or create by constructor) for add method
-        MethodCallTransactionBuilder mtcb = MethodCallTransactionBuilder.Builder();
-        mtcb.applicationId(getAppId());
-        mtcb.sender(acct.getAddress().toString());
-        mtcb.signer(acct.getTransactionSigner());
-        mtcb.suggestedParams(tsp);
-        mtcb.method(getMethodByName("add", contract));
-        mtcb.methodArguments(method_args);
+        MethodCallTransactionBuilder mctb = MethodCallTransactionBuilder.Builder();
+        mctb.applicationId(getAppId());
+        mctb.sender(acct.getAddress().toString());
+        mctb.signer(acct.getTransactionSigner());
+        mctb.suggestedParams(tsp);
+        mctb.method(getMethodByName("add", contract));
+        mctb.methodArguments(method_args);
 
         AtomicTransactionComposer atc = new AtomicTransactionComposer();
-        atc.addMethodCall(mtcb.build());
+        atc.addMethodCall(mctb.build());
 
         ExecuteResult res = atc.execute(client, 2);
 
