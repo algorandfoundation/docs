@@ -67,7 +67,9 @@ After generating a private key and corresponding address, sending Algos to the a
 
 ### Attributes
 #### Minimum Balance
-Every account on Algorand must have a minimum balance of 100,000 microAlgos. If ever a transaction is sent that would result in a balance lower than the minimum, the transaction will fail. The minimum balance increases with each asset holding the account has. Read more about assets and changes to the minimum balance requirement in the [Algorand Standard Assets](../asa) section.
+Every account on Algorand must have a minimum balance of 100,000 microAlgos. If ever a transaction is sent that would result in a balance lower than the minimum, the transaction will fail. The minimum balance increases with each asset holding the account has (whether the asset was created or owned by the account) and with each application the account created or opted in. Destroying a created asset, opting out/closing out an owned asset, destroying a created app, or opting out an opted in app decreases accordingly the minimum balance.
+
+Read more about assets, applications, and changes to the minimum balance requirement in the [Algorand Standard Assets](../asa) and [Smart contracts details](../dapps/smart-contracts/apps) sections.
 
 #### Online/Offline
 By default, Algorand accounts are set to **offline**. An **online** account is one that participates in Algorand consensus. For an account to go online, it must generate a participation key and send a special key registration transaction. Read more about how to register an account online in the [Network Participation](../../run-a-node/participate/index.md) section.
