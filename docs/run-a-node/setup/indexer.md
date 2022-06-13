@@ -1,6 +1,6 @@
 title: Install the indexer
 
-The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgeSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../../rest-apis/indexer) for searching the database and another Indexer to be responsible for loading the ledger data.
+The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgreSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../../rest-apis/indexer) for searching the database and another Indexer to be responsible for loading the ledger data.
 
 
 The V2 Indexer is network agnostic, meaning it can point at BetaNet, TestNet, or MainNet. 
@@ -71,7 +71,7 @@ To start the Indexer so it populates the PostgreSQL database, supply the Algoran
 $ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod=~/node/data
 
 # start with networked Algorand node
-$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" ---algod-token="[your-api-token]
+$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" --algod-token="[your-api-token]"
 
 ```
 

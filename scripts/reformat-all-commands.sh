@@ -17,6 +17,9 @@ CLI_TOOLS="~/go/bin/" # path to goal, algokey, etc.
 # CLI DIAGCFG
 ./reformat.py -doc-dir ../docs/clis/diagcfg/ -cmd $CLI_TOOLS/diagcfg
 
+# CLI TEALDBG
+./reformat.py -doc-dir ../docs/clis/tealdbg/ -cmd $CLI_TOOLS/tealdbg
+
 # CLI INDEXER
 ./reformat.py -doc-dir ../docs/clis/indexer/ -cmd $CLI_TOOLS/algorand-indexer
 
