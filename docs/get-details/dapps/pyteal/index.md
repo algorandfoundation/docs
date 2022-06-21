@@ -119,264 +119,226 @@ In the above example, most of the conditions check the transaction type using th
 
 The only condition above that does _not_ check the `on_completion` field is the first one, which only checks the `application_id` field. An `application_id` of `0` on the `Txn` tells us that this is meant to Create the Application. If the program succeeds, it will be assigned an application ID and further invocations will use that ID to call it. In this example the `handle_creation` Expression should handle any initialization necessary for this contract.
 
-### First handler
+### First Router 
+
+While the above method of constructing distinct Expression trees for both the approval and clear state programs works, it is often preferable to use the [Router](TODO) class provided in `PyTeal`. The `Router` class abstracts much of the handling for method routing when constructing ABI compliant applications. This is especially useful for encoding and decoding ABI types and returning ABI types.
 
 ```python
-def approval_program():
-    handle_creation = Seq(
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
-    )
+from pyteal import *
 
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-    return compileTeal(program, Mode.Application, version=5)
+# Create an expression to store 0 in the `Count` global variable and return 1
+handle_creation = Seq(
+    App.globalPut(Bytes("Count"), Int(0)),
+    Int(1)
+)
+
+# Main router class
+router = Router(
+    # Name of the contract
+    "my-first-router",
+    # What to do for each on-complete type when no arguments are passed (bare call)
+    BareCallActions(
+        # On create only, just approve
+        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        # Always let creator update/delete but only by the creator of this contract
+        update_application=OnCompleteAction.always(Reject()),
+        delete_application=OnCompleteAction.always(Reject()),
+        # No local state, don't bother handling it. 
+        close_out=OnCompleteAction.never(),
+        opt_in=OnCompleteAction.never(),
+        clear_state=OnCompleteAction.never(),
+    ),
+)
+
 ```
 
 Here we defined the `handle_creation` variable to be a Sequence of Expressions using [`Seq`](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
 
 The first expression stores a global variable named Count, and its value is set to 0. More information about storing state variables is available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
 
-This second expression is the familiar `Return` expression which exits the program with the return value. In this case, it returns a value of 1, indicating success. 
+This second expression is just `Int(1)` that gets passed back to the caller. 
 
-When this specific smart contract is first deployed it will store a global variable named Count with a value of 0 and immediately return success. 
+The Router class is initialized with a string name (will be important below in [abi.json](TODO)) and a set of BareCallACtions. A Bare Call is an application call transaction with 0 application arguments.
 
-### Handle other OnComplete values
+Each OnComplete type may have an associated OnCompleteAction, the options are:
 
-Because our program requires no Local State, opting-in to this contract is not required so we can reject any opt-ins. Similarly, since there is no need to opt-in, there is no reason to allow a close-out, so those can be rejected as well.  Finally, the contract can deny application transactions that attempt to delete or update the contract.
+    - `create_only`: Only triggered on the initial creation of the application (Txn.application_id() == Int(0))
+    - `call_only`: Triggered for any application calls that are not the initial creation (Txn.application_id() != Int(0))
+    - `always`: Triggered any time this on complete is used Or(Txn.application_id() == Int(0), Txn.application_id() != Int(0))
+    - `never`: Never triggered, application should reject the transaction if this OnComplete is specified in the transaction. 
 
-```python
+The OnCompleteAction is passed an Expression to evaluate when it is triggered and it should `Return` something. 
 
-def approval_program():
-    handle_creation = Seq([
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1)) # Could also be Approve()
-    ])
+In the first case we `Return` the result of the `handle_creation` expression. For update and delete we `Reject`, this is an alias for `Return(Int(0))`
 
-    handle_optin = Return(Int(0)) # Could also be Reject()
+To summarize, when this specific smart contract is first deployed it will store a global variable named Count with a value of 0 and return success. 
 
-    handle_closeout = Return(Int(0))
-
-    handle_updateapp = Return(Int(0))
-
-    handle_deleteapp = Return(Int(0))
-
-
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-    return compileTeal(program, Mode.Application, version=5)
-
-```
-
-All four of these transaction types simply return a 0, which will cause the transactions to fail. This contract now handles all application transactions but the standard NoOp type. 
-
-### Handle NoOp 
+### Handle Method Calls 
 
 Typically the OnCompletion value is set to `NoOp` to make calls to any application. Different logic handling is often achieved by inspecting other transaction fields, especially `application_args`.
 
-Our example requires an add and a deduct function, to increment and decrement the counter respectively, to be handled for NoOp application transactions. 
+Since our example will be an ARC4 contract, the application_args first argument will be the method selector but the router handles that for us.
 
-Which of these two methods is executed will depend on the first element in the `application_args` passed.  For more information on passing parameters to smart contracts, see the [smart contract documentation](../smart-contracts/apps/index.md).
+Our example requires an increment function and a decrement function to be handle incrementing and decrementing the counter. 
 
 ```python
 from pyteal import *
 
-"""Basic Counter Application"""
 
-def approval_program():
-    handle_creation = Seq([
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
-    ])
+count_key = Bytes("Count")
 
-    handle_optin = Return(Int(0))
+# Create an expression to store 0 in the `Count` global variable and return 1
+handle_creation = Seq(
+    App.globalPut(count_key, Int(0)),
+    Int(1)
+)
 
-    handle_closeout = Return(Int(0))
+# Main router class
+router = Router(
+    # Name of the contract
+    "my-first-router",
+    # What to do for each on-complete type when no arguments are passed (bare call)
+    BareCallActions(
+        # On create only, just approve
+        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        # Always let creator update/delete but only by the creator of this contract
+        update_application=OnCompleteAction.always(Reject()),
+        delete_application=OnCompleteAction.always(Reject()),
+        # No local state, don't bother handling it. 
+        close_out=OnCompleteAction.never(),
+        opt_in=OnCompleteAction.never(),
+        clear_state=OnCompleteAction.never(),
+    ),
+)
 
-    handle_updateapp = Return(Int(0))
-
-    handle_deleteapp = Return(Int(0))
-
-    handle_noop = Seq(
-        # First, lets fail immediately if this transaction is grouped with any others
-        Assert(Global.group_size() == Int(1)), 
-        Cond(
-            [Txn.application_args[0] == Bytes("Add"), add], 
-            [Txn.application_args[0] == Bytes("Deduct"), deduct]
-        )
-    )
-
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-    return compileTeal(program, Mode.Application, version=5)
-
-```
-
-In the example, we've implemented the `handle_noop` body as a Seq containing 2 Expressions.
-
-The first is an `Assert` that will immediately Reject the Transaction if, in this case, the number of transactions in the group is not exactly 1. The `Global.group_size()` illustrates the use of a PyTeal global variables. See the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#global-parameters) for other global variables available.
-
-The second Expression in the Sequence is another `Cond` expression is used to route to the correct Expression based on the first argument passed with the application transaction. If neither of these conditions evaluate to True, the transaction is rejected.
-
-
-### Implement functionality
-
-The final step for the approval program is to implement the add and deduct functions for the smart contract.
-
-```python
-def approval_program():
-    handle_creation = Seq([
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
-    ])
-
-    handle_optin = Return(Int(0))
-
-    handle_closeout = Return(Int(0))
-
-    handle_updateapp = Return(Int(0))
-
-    handle_deleteapp = Return(Int(0))
-
+@router.method
+def increment():
     # Declare the ScratchVar as a Python variable _outside_ the expression tree
     scratchCount = ScratchVar(TealType.uint64)
-
-    add = Seq(
+    return Seq(
+        Assert(Global.group_size() == Int(1)),
         # The initial `store` for the scratch var sets the value to 
         # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(Bytes("Count"))), 
+        scratchCount.store(App.globalGet(count_key)), 
         # Increment the value stored in the scratch var 
         # and update the global state variable 
-        App.globalPut(Bytes("Count"), scratchCount.load() + Int(1)),
-        Return(Int(1))
+        App.globalPut(count_key, scratchCount.load() + Int(1)),
     )
 
-     deduct = Seq(
+@router.method
+def decrement():
+    # Declare the ScratchVar as a Python variable _outside_ the expression tree
+    scratchCount = ScratchVar(TealType.uint64)
+    return Seq(
+        Assert(Global.group_size() == Int(1)),
         # The initial `store` for the scratch var sets the value to 
         # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(Bytes("Count"))),
+        scratchCount.store(App.globalGet(count_key)),
         # Check if the value would be negative by decrementing 
         If(scratchCount.load() > Int(0),
             # If the value is > 0, decrement the value stored 
             # in the scratch var and update the global state variable
-            App.globalPut(Bytes("Count"), scratchCount.load() - Int(1)),
+            App.globalPut(count_key, scratchCount.load() - Int(1)),
         ),
-        Return(Int(1))
     )
-
-    handle_noop = Seq(
-        Assert(Global.group_size() == Int(1)), 
-        Cond(
-            [Txn.application_args[0] == Bytes("Add"), add], 
-            [Txn.application_args[0] == Bytes("Deduct"), deduct]
-        )
-    )
-
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-    return compileTeal(program, Mode.Application, version=5)
 
 ```
 
-The contract is modified to create a temporary variable in scratch space. Critically, the declaration of this `ScratchVar` happens _outside_ the Expression tree since the statement `scratchCount = ScratchVar()` is _not_ a valid PyTeal Expression. Smart contracts can hold up to 256 temporary variables in scratch space.  The scratch variable in this example happens to be an integer, byte arrays can also be stored. 
+In the example, we've implemented the `increment` and `decrement` methods as python methods that return a PyTeal `Expression`. They are attached to the router using the `@router.method` decorator which handles determining the method selector that should be used for routing when an application call is made.
 
-First, the current value of the global variable Count is read for the contract and placed in scratch space. 
+The first line of both handlers creates a ScratchVar to be used later. Critically, the declaration of this `ScratchVar` happens _outside_ the Expression tree since the statement `scratchCount = ScratchVar()` is _not_ a valid PyTeal Expression. Smart contracts can hold up to 256 temporary variables in scratch space.  The scratch variable in this example happens to be an integer, byte arrays can also be stored. 
+
+!!! note
+    The `walrus operator` is very handy for these types of things. The above could have been `Seq( (sv := ScratchVar()).store(Int(0)), ...)` but would have complicated the example.
+
+The first expression in the Sequence for both handlers is an `Assert` that will immediately Reject the Transaction if, in this case, the number of transactions in the group is not exactly 1. The `Global.group_size()` illustrates the use of a PyTeal global variables. See the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#global-parameters) for other global variables available.
+
+
+Next, the current value of the global variable Count is read for the contract and placed in scratch space. 
+
 Then, the contract either increments this number or decrements and then stores the result into the contract’s global variable. 
 
-On the deduct, an additional `If` expression is used to verify the current global variable is above 0. 
+In the `decrement` method, an additional `If` expression is used to verify the current global variable is above 0. 
 
-Finally, both methods exit the smart contract call, returning a 1, indicating approval.
-
+Finally, both methods exit the smart contract call. Assuming no errors were thrown, the `Router` will return 1, indicating success.
 
 ### Final product
 
 Because no opt-in is allowed, a clear program need not do anything so we simply return 1, indicating success. The full example is presented below. 
 
 ```python
-#samplecontract.py
 from pyteal import *
 
-"""Basic Counter Application"""
+count_key = Bytes("Count")
 
-def approval_program():
-    handle_creation = Seq([
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
-    ])
+# Create an expression to store 0 in the `Count` global variable and return 1
+handle_creation = Seq(
+    App.globalPut(count_key, Int(0)),
+    Int(1)
+)
 
-    handle_optin = Return(Int(0))
-    handle_closeout = Return(Int(0))
-    handle_updateapp = Return(Int(0))
-    handle_deleteapp = Return(Int(0))
+# Main router class
+router = Router(
+    # Name of the contract
+    "my-first-router",
+    # What to do for each on-complete type when no arguments are passed (bare call)
+    BareCallActions(
+        # On create only, just approve
+        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        # Always let creator update/delete but only by the creator of this contract
+        update_application=OnCompleteAction.always(Reject()),
+        delete_application=OnCompleteAction.always(Reject()),
+        # No local state, don't bother handling it. 
+        close_out=OnCompleteAction.never(),
+        opt_in=OnCompleteAction.never(),
+        clear_state=OnCompleteAction.never(),
+    ),
+)
+
+@router.method
+def increment():
+    # Declare the ScratchVar as a Python variable _outside_ the expression tree
     scratchCount = ScratchVar(TealType.uint64)
+    return Seq(
+        Assert(Global.group_size() == Int(1)),
+        # The initial `store` for the scratch var sets the value to 
+        # whatever is in the `Count` global state variable
+        scratchCount.store(App.globalGet(count_key)), 
+        # Increment the value stored in the scratch var 
+        # and update the global state variable 
+        App.globalPut(count_key, scratchCount.load() + Int(1)),
+    )
 
-    add = Seq([
-        scratchCount.store(App.globalGet(Bytes("Count"))),
-        App.globalPut(Bytes("Count"), scratchCount.load() + Int(1)),
-        Return(Int(1))
-    ])
-
-    deduct = Seq([
-        scratchCount.store(App.globalGet(Bytes("Count"))),
-         If(scratchCount.load() > Int(0),
-             App.globalPut(Bytes("Count"), scratchCount.load() - Int(1)),
-         ),
-         Return(Int(1))
-    ])
-
-    handle_noop = Seq(
-        Assert(Global.group_size() == Int(1)), 
-        Cond(
-            [Txn.application_args[0] == Bytes("Add"), add], 
-            [Txn.application_args[0] == Bytes("Deduct"), deduct]
-        )
+@router.method
+def decrement():
+    # Declare the ScratchVar as a Python variable _outside_ the expression tree
+    scratchCount = ScratchVar(TealType.uint64)
+    return Seq(
+        Assert(Global.group_size() == Int(1)),
+        # The initial `store` for the scratch var sets the value to 
+        # whatever is in the `Count` global state variable
+        scratchCount.store(App.globalGet(count_key)),
+        # Check if the value would be negative by decrementing 
+        If(scratchCount.load() > Int(0),
+            # If the value is > 0, decrement the value stored 
+            # in the scratch var and update the global state variable
+            App.globalPut(count_key, scratchCount.load() - Int(1)),
+        ),
     )
 
 
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-
-    return compileTeal(program, Mode.Application, version=5)
-
-
-def clear_state_program():
-    program = Return(Int(1))
-    return compileTeal(program, Mode.Application, version=5)
+# Compile the program
+approval_program, clear_program, contract = router.compile_program(version=6)
 
 # print out the results
-print(approval_program())
-print(clear_state_program())
+print(approval_program)
+print(clear_state_program)
+
+import json
+print(json.dumps(contract.dictify()))
 ```
+
+The last bit to add is the `router.compile_program` which compiles the PyTeal into TEAL and returns the `approval` program, the `clear` program, and even the Python SDK `contract` object that can be used to make method calls or written to a file and shared.
 
 This program can be executed to illustrate compiling the PyTeal and printing out the resultant TEAL code.
 
@@ -575,45 +537,46 @@ Now that the contract is deployed, the Add or Deduct functions can be called usi
 To begin with, a function can be added to support calling the smart contract.
 
 ```python
+
+from algosdk.atomic_transaction_composer import *
+
 # call application
-def call_app(client, private_key, index, app_args) :
-    # declare sender
+def call_app(client, private_key, index, contract) :
+    # get sender address
     sender = account.address_from_private_key(private_key)
+    # create a Signer object 
+    signer = AccountTransactionSigner(private_key)
 
     # get node suggested parameters
     params = client.suggested_params()
 
-    # create unsigned transaction
-    txn = transaction.ApplicationNoOpTxn(sender, params, index, app_args)
-
-    # sign transaction
-    signed_txn = txn.sign(private_key)
-    tx_id = signed_txn.transaction.get_txid()
+    # Create an instance of AtomicTransactionComposer
+    atc = AtomicTransactionComposer()
+    atc.add_method_call(
+        app_id=index,
+        method=contract.get_method_by_name("increment"),
+        sender=sender,
+        sp=sp,
+        signer=signer,
+        method_args=[], # No method args needed here
+    )
 
     # send transaction
-    client.send_transactions([signed_txn])
+    results = atc.execute(client, 2)
 
     # wait for confirmation
-    try:
-        transaction_response = transaction.wait_for_confirmation(client, tx_id, 5)
-        print("TXID: ", tx_id)
-        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
-       
-    except Exception as err:
-        print(err)
-        return
-    print("Application called")
+    print("TXID: ", results.tx_ids[0])
+    print("Result confirmed in round: {}".format(results.confirmed_round))
 ```
 
-This function operates similarly to the `create_app` function we defined earlier. In this case, we use the Python SDK’s `ApplicationNoOpTxn` function to create a standard NoOp application transaction. The address of the account sending the call is specified, followed by the network suggested parameters, the application id of the smart contract, and any arguments to the call. The arguments will be used to specify either the Add or Deduct methods.
+This function constructs an AtomicTransactionComposer to handle adding the appropriate arguments. The only argument we need to pass in this case is the method selector for the method we wish to call (`increment`) but it is added automatically to the application args of the created transaction. Any arguments that the method specifies in the contract would be passed to the `method_args` array.
 
 The `main` function can then be modified to call the smart contract after deploying by adding the following to the bottom of the `main` function.
 
 ```python
     print("--------------------------------------------")
     print("Calling Counter application......")
-    app_args = ["Add"]
-    call_app(algod_client, creator_private_key, app_id, app_args)
+    call_app(algod_client, creator_private_key, app_id, contract)
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, app_id))
@@ -674,65 +637,65 @@ def read_global_state(client, app_id):
     return format_state(global_state)
 
 
-"""Basic Counter Application in PyTeal"""
 
-def approval_program():
-    on_creation = Seq([
-        App.globalPut(Bytes("Count"), Int(0)),
-        Return(Int(1))
-    ])
+from pyteal import *
 
-    handle_optin = Return(Int(0))
+count_key = Bytes("Count")
 
-    handle_closeout = Return(Int(0))
+# Create an expression to store 0 in the `Count` global variable and return 1
+handle_creation = Seq(
+    App.globalPut(count_key, Int(0)),
+    Int(1)
+)
 
-    handle_updateapp = Return(Int(0))
+# Main router class
+router = Router(
+    # Name of the contract
+    "my-first-router",
+    # What to do for each on-complete type when no arguments are passed (bare call)
+    BareCallActions(
+        # On create only, just approve
+        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        # Always let creator update/delete but only by the creator of this contract
+        update_application=OnCompleteAction.always(Reject()),
+        delete_application=OnCompleteAction.always(Reject()),
+        # No local state, don't bother handling it. 
+        close_out=OnCompleteAction.never(),
+        opt_in=OnCompleteAction.never(),
+        clear_state=OnCompleteAction.never(),
+    ),
+)
 
-    handle_deleteapp = Return(Int(0))
-
+@router.method
+def increment():
+    # Declare the ScratchVar as a Python variable _outside_ the expression tree
     scratchCount = ScratchVar(TealType.uint64)
+    return Seq(
+        Assert(Global.group_size() == Int(1)),
+        # The initial `store` for the scratch var sets the value to 
+        # whatever is in the `Count` global state variable
+        scratchCount.store(App.globalGet(count_key)), 
+        # Increment the value stored in the scratch var 
+        # and update the global state variable 
+        App.globalPut(count_key, scratchCount.load() + Int(1)),
+    )
 
-    add = Seq([
-        scratchCount.store(App.globalGet(Bytes("Count"))),
-        App.globalPut(Bytes("Count"), scratchCount.load() + Int(1)),
-        Return(Int(1))
-    ])
-
-    deduct = Seq([
-       scratchCount.store(App.globalGet(Bytes("Count"))),
+@router.method
+def decrement():
+    # Declare the ScratchVar as a Python variable _outside_ the expression tree
+    scratchCount = ScratchVar(TealType.uint64)
+    return Seq(
+        Assert(Global.group_size() == Int(1)),
+        # The initial `store` for the scratch var sets the value to 
+        # whatever is in the `Count` global state variable
+        scratchCount.store(App.globalGet(count_key)),
+        # Check if the value would be negative by decrementing 
         If(scratchCount.load() > Int(0),
-            App.globalPut(Bytes("Count"), scratchCount.load() - Int(1)),
+            # If the value is > 0, decrement the value stored 
+            # in the scratch var and update the global state variable
+            App.globalPut(count_key, scratchCount.load() - Int(1)),
         ),
-        Return(Int(1))
-   ])
-
-    handle_noop = Cond(
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Add")
-        ), add],
-        [And(
-            Global.group_size() == Int(1),
-            Txn.application_args[0] == Bytes("Deduct")
-        ), deduct],
     )
-
-    program = Cond(
-        [Txn.application_id() == Int(0), on_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
-    # Mode.Application specifies that this is a smart contract
-    return compileTeal(program, Mode.Application, version=5)
-
-def clear_state_program():
-    program = Return(Int(1))
-    # Mode.Application specifies that this is a smart contract
-    return compileTeal(program, Mode.Application, version=5)
-
 
 # create new application
 def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema):
@@ -820,22 +783,24 @@ def main() :
     global_schema = transaction.StateSchema(global_ints, global_bytes)
     local_schema = transaction.StateSchema(local_ints, local_bytes)
 
-    # compile program to TEAL assembly
+    # Compile the program
+    approval_program, clear_program, contract = router.compile_program(version=6)
+
     with open("./approval.teal", "w") as f:
-        approval_program_teal = approval_program()
-        f.write(approval_program_teal)
+        f.write(approval_program)
 
-
-    # compile program to TEAL assembly
     with open("./clear.teal", "w") as f:
-        clear_state_program_teal = clear_state_program()
-        f.write(clear_state_program_teal)
+        f.write(clear_program)
+
+    with open("./contract.json", "w") as f:
+        import json
+        f.write(json.dumps(contract.dictify()))
 
     # compile program to binary
-    approval_program_compiled = compile_program(algod_client, approval_program_teal)
+    approval_program_compiled = compile_program(algod_client, approval_program)
 
     # compile program to binary
-    clear_state_program_compiled = compile_program(algod_client, clear_state_program_teal)
+    clear_state_program_compiled = compile_program(algod_client, clear_state_program)
 
     print("--------------------------------------------")
     print("Deploying Counter application......")
@@ -849,12 +814,13 @@ def main() :
     print("--------------------------------------------")
     print("Calling Counter application......")
     app_args = ["Add"]
-    call_app(algod_client, creator_private_key, app_id, app_args)
+    call_app(algod_client, creator_private_key, app_id, contract)
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, app_id))
 
-main()
+if __name__ == "__main__":
+    main()
 
 ```
 
