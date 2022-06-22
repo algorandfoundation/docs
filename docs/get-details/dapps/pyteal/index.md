@@ -144,9 +144,9 @@ router = Router(
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
         # No local state, don't bother handling it. 
-        close_out=OnCompleteAction.never(),
-        opt_in=OnCompleteAction.never(),
-        clear_state=OnCompleteAction.never(),
+        close_out=OnCompleteAction.never(),   # Equivalent to omitting completely
+        opt_in=OnCompleteAction.never(),      # Equivalent to omitting completely
+        clear_state=OnCompleteAction.never(), # Equivalent to omitting completely
     ),
 )
 
@@ -339,6 +339,21 @@ print(json.dumps(contract.dictify()))
 ```
 
 The last bit to add is the `router.compile_program` which compiles the PyTeal into TEAL and returns the `approval` program, the `clear` program, and even the Python SDK `contract` object that can be used to make method calls or written to a file and shared.
+
+The contract as json can be be shared with callers and loaded into the SDKs. 
+
+It will look line this:
+```json
+{
+  "name": "my-first-router",
+  "methods": [
+    { "name": "increment", "args": [], "returns": { "type": "void" } },
+    { "name": "decrement", "args": [], "returns": { "type": "void" } }
+  ],
+  "desc": null,
+  "networks": {}
+}
+```
 
 This program can be executed to illustrate compiling the PyTeal and printing out the resultant TEAL code.
 
@@ -548,7 +563,7 @@ def call_app(client, private_key, index, contract) :
     signer = AccountTransactionSigner(private_key)
 
     # get node suggested parameters
-    params = client.suggested_params()
+    sp = client.suggested_params()
 
     # Create an instance of AtomicTransactionComposer
     atc = AtomicTransactionComposer()
@@ -590,63 +605,22 @@ The complete example is shown below.
 import base64
 
 from algosdk.future import transaction
-from algosdk import account, mnemonic, logic
+from algosdk import account, mnemonic
+from algosdk.atomic_transaction_composer import *
 from algosdk.v2client import algod
 from pyteal import *
 
 # user declared account mnemonics
-creator_mnemonic = "finger rigid hat room course salmon say detect avocado assault awake sea public curious exit valve donkey tired escape dash drink diagram section absent cruise"
+creator_mnemonic = "TODO: Add your mnemonic"
 # user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-# helper function to compile program source
-def compile_program(client, source_code):
-    compile_response = client.compile(source_code)
-    return base64.b64decode(compile_response['result'])
-
-# helper function that converts a mnemonic passphrase into a private signing key
-def get_private_key_from_mnemonic(mn) :
-    private_key = mnemonic.to_private_key(mn)
-    return private_key
-
-
-# helper function that formats global state for printing
-def format_state(state):
-    formatted = {}
-    for item in state:
-        key = item['key']
-        value = item['value']
-        formatted_key = base64.b64decode(key).decode('utf-8')
-        if value['type'] == 1:
-            # byte string
-            if formatted_key == 'voted':
-                formatted_value = base64.b64decode(value['bytes']).decode('utf-8')
-            else:
-                formatted_value = value['bytes']
-            formatted[formatted_key] = formatted_value
-        else:
-            # integer
-            formatted[formatted_key] = value['uint']
-    return formatted
-
-# helper function to read app global state
-def read_global_state(client, app_id):
-    app = client.application_info(app_id)
-    global_state = app['params']['global-state'] if "global-state" in app['params'] else []
-    return format_state(global_state)
-
-
-
-from pyteal import *
-
+## Contract logic
 count_key = Bytes("Count")
 
 # Create an expression to store 0 in the `Count` global variable and return 1
-handle_creation = Seq(
-    App.globalPut(count_key, Int(0)),
-    Int(1)
-)
+handle_creation = Seq(App.globalPut(count_key, Int(0)), Int(1))
 
 # Main router class
 router = Router(
@@ -659,12 +633,13 @@ router = Router(
         # Always let creator update/delete but only by the creator of this contract
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
-        # No local state, don't bother handling it. 
+        # No local state, don't bother handling it.
         close_out=OnCompleteAction.never(),
         opt_in=OnCompleteAction.never(),
         clear_state=OnCompleteAction.never(),
     ),
 )
+
 
 @router.method
 def increment():
@@ -672,13 +647,14 @@ def increment():
     scratchCount = ScratchVar(TealType.uint64)
     return Seq(
         Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to 
+        # The initial `store` for the scratch var sets the value to
         # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(count_key)), 
-        # Increment the value stored in the scratch var 
-        # and update the global state variable 
+        scratchCount.store(App.globalGet(count_key)),
+        # Increment the value stored in the scratch var
+        # and update the global state variable
         App.globalPut(count_key, scratchCount.load() + Int(1)),
     )
+
 
 @router.method
 def decrement():
@@ -686,19 +662,62 @@ def decrement():
     scratchCount = ScratchVar(TealType.uint64)
     return Seq(
         Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to 
+        # The initial `store` for the scratch var sets the value to
         # whatever is in the `Count` global state variable
         scratchCount.store(App.globalGet(count_key)),
-        # Check if the value would be negative by decrementing 
-        If(scratchCount.load() > Int(0),
-            # If the value is > 0, decrement the value stored 
+        # Check if the value would be negative by decrementing
+        If(
+            scratchCount.load() > Int(0),
+            # If the value is > 0, decrement the value stored
             # in the scratch var and update the global state variable
             App.globalPut(count_key, scratchCount.load() - Int(1)),
         ),
     )
 
+# helper function to compile program source
+def compile_program(client, source_code):
+    compile_response = client.compile(source_code)
+    return base64.b64decode(compile_response["result"])
+
+
+# helper function that converts a mnemonic passphrase into a private signing key
+def get_private_key_from_mnemonic(mn):
+    private_key = mnemonic.to_private_key(mn)
+    return private_key
+
+
+# helper function that formats global state for printing
+def format_state(state):
+    formatted = {}
+    for item in state:
+        key = item["key"]
+        value = item["value"]
+        formatted_key = base64.b64decode(key).decode("utf-8")
+        if value["type"] == 1:
+            # byte string
+            if formatted_key == "voted":
+                formatted_value = base64.b64decode(value["bytes"]).decode("utf-8")
+            else:
+                formatted_value = value["bytes"]
+            formatted[formatted_key] = formatted_value
+        else:
+            # integer
+            formatted[formatted_key] = value["uint"]
+    return formatted
+
+
+# helper function to read app global state
+def read_global_state(client, app_id):
+    app = client.application_info(app_id)
+    global_state = (
+        app["params"]["global-state"] if "global-state" in app["params"] else []
+    )
+    return format_state(global_state)
+
 # create new application
-def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema):
+def create_app(
+    client, private_key, approval_program, clear_program, global_schema, local_schema
+):
     # define sender as creator
     sender = account.address_from_private_key(private_key)
 
@@ -709,9 +728,15 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     params = client.suggested_params()
 
     # create unsigned transaction
-    txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
-                                            approval_program, clear_program, \
-                                            global_schema, local_schema)
+    txn = transaction.ApplicationCreateTxn(
+        sender,
+        params,
+        on_complete,
+        approval_program,
+        clear_program,
+        global_schema,
+        local_schema,
+    )
 
     # sign transaction
     signed_txn = txn.sign(private_key)
@@ -724,51 +749,54 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     try:
         transaction_response = transaction.wait_for_confirmation(client, tx_id, 5)
         print("TXID: ", tx_id)
-        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
-       
+        print(
+            "Result confirmed in round: {}".format(
+                transaction_response["confirmed-round"]
+            )
+        )
+
     except Exception as err:
         print(err)
         return
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
-    app_id = transaction_response['application-index']
+    app_id = transaction_response["application-index"]
     print("Created new app-id:", app_id)
 
     return app_id
 
 
 # call application
-def call_app(client, private_key, index, app_args) :
-    # declare sender
+def call_app(client, private_key, index, contract):
+    # get sender address
     sender = account.address_from_private_key(private_key)
+    # create a Signer object
+    signer = AccountTransactionSigner(private_key)
 
     # get node suggested parameters
-    params = client.suggested_params()
+    sp = client.suggested_params()
 
-    # create unsigned transaction
-    txn = transaction.ApplicationNoOpTxn(sender, params, index, app_args)
-
-    # sign transaction
-    signed_txn = txn.sign(private_key)
-    tx_id = signed_txn.transaction.get_txid()
+    # Create an instance of AtomicTransactionComposer
+    atc = AtomicTransactionComposer()
+    atc.add_method_call(
+        app_id=index,
+        method=contract.get_method_by_name("increment"),
+        sender=sender,
+        sp=sp,
+        signer=signer,
+        method_args=[],  # No method args needed here
+    )
 
     # send transaction
-    client.send_transactions([signed_txn])
-
+    results = atc.execute(client, 2)
 
     # wait for confirmation
-    try:
-        transaction_response = transaction.wait_for_confirmation(client, tx_id, 4)
-        print("TXID: ", tx_id)
-        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
-       
-    except Exception as err:
-        print(err)
-        return
-    print("Application called")
+    print("TXID: ", results.tx_ids[0])
+    print("Result confirmed in round: {}".format(results.confirmed_round))
 
-def main() :
+
+def main():
     # initialize an algodClient
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
@@ -794,30 +822,38 @@ def main() :
 
     with open("./contract.json", "w") as f:
         import json
+
         f.write(json.dumps(contract.dictify()))
 
     # compile program to binary
     approval_program_compiled = compile_program(algod_client, approval_program)
 
     # compile program to binary
-    clear_state_program_compiled = compile_program(algod_client, clear_state_program)
+    clear_state_program_compiled = compile_program(algod_client, clear_program)
 
     print("--------------------------------------------")
     print("Deploying Counter application......")
 
     # create new application
-    app_id = create_app(algod_client, creator_private_key, approval_program_compiled, clear_state_program_compiled, global_schema, local_schema)
+    app_id = create_app(
+        algod_client,
+        creator_private_key,
+        approval_program_compiled,
+        clear_state_program_compiled,
+        global_schema,
+        local_schema,
+    )
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, app_id))
 
     print("--------------------------------------------")
     print("Calling Counter application......")
-    app_args = ["Add"]
     call_app(algod_client, creator_private_key, app_id, contract)
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, app_id))
+
 
 if __name__ == "__main__":
     main()
