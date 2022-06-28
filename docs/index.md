@@ -1,3 +1,5 @@
+{% load badge_tags %}
+
 title: Algorand Developer Docs
 
 {% endverbatim %}
