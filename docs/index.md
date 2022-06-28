@@ -1,5 +1,9 @@
 title: Algorand Developer Docs
 
+{% endverbatim %}
+{% generate_challenge_thumbnail challenge_slug="1" %}
+{% verbatim %}
+
 # Top-level sections
 <ul class="docs-homepage__card-list">
     <li class="docs-homepage__card-list-item">
