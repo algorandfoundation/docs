@@ -441,7 +441,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 13 | VoteLast | uint64 |      | The last round that the participation key is valid. |
 | 14 | VoteKeyDilution | uint64 |      | Dilution for the 2-level participation key |
 | 15 | Type | []byte |      | Transaction type as bytes |
-| 16 | TypeEnum | uint64 |      | See table below |
+| 16 | TypeEnum | uint64 |      | Transaction type as enum |
 | 17 | XferAsset | uint64 |      | Asset ID |
 | 18 | AssetAmount | uint64 |      | value in Asset's units |
 | 19 | AssetSender | []byte |      | 32 byte address. Moves asset from AssetSender if Sender is the Clawback address of the asset. |
@@ -489,6 +489,10 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 61 | CreatedApplicationID | uint64 | v5  | ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only |
 | 62 | LastLog | []byte | v6  | The last message emitted. Empty bytes if none were emitted. Application mode only |
 | 63 | StateProofPK | []byte | v6  | 64 byte state proof public key commitment |
+| 64 | ApprovalProgramPages | []byte | v7  | Approval Program as an array of pages |
+| 65 | NumApprovalProgramPages | uint64 | v7  | Number of Approval Program pages |
+| 66 | ClearStateProgramPages | []byte | v7  | ClearState Program as an array of pages |
+| 67 | NumClearStateProgramPages | uint64 | v7  | Number of ClearState Program pages |
 
 
 Additional details in the [opcodes document](../opcodes#txn) on the `txn` op.
