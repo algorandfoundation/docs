@@ -427,6 +427,19 @@ The notation J,K indicates that two uint64 values J and K are interpreted as a u
 | 63 | StateProofPK | []byte | v6  | 64 byte state proof public key commitment |
 
 
+TypeEnum mapping:
+
+| Index | "Type" string | Description |
+| --- | --- | --- |
+| 0 | unknown | Unknown type. Invalid transaction |
+| 1 | pay | Payment |
+| 2 | keyreg | KeyRegistration |
+| 3 | acfg | AssetConfig |
+| 4 | axfer | AssetTransfer |
+| 5 | afrz | AssetFreeze |
+| 6 | appl | ApplicationCall |
+
+
 FirstValidTime causes the program to fail. The field is reserved for future use.
 
 ## global f
