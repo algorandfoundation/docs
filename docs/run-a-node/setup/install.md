@@ -184,7 +184,7 @@ cd ~/node
 Download the updater script.
 
 ```
-curl https://raw.githubusercontent.com/algorand/go-algorand/master/cmd/updater/update.sh -O
+curl https://raw.githubusercontent.com/algorand/go-algorand/rel/stable/cmd/updater/update.sh -O
 ```
 
 + Ensure that your system knows it's an executable file.
@@ -228,7 +228,7 @@ cd ~/node
 Download the updater script.
 
 ```
-wget https://raw.githubusercontent.com/algorand/go-algorand/master/cmd/updater/update.sh
+wget https://raw.githubusercontent.com/algorand/go-algorand/rel/stable/cmd/updater/update.sh
 ```
 
 + Ensure that your system knows it's an executable file.
