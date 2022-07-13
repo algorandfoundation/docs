@@ -4,7 +4,7 @@ title: goal account addpartkey
 
 
 
-Generate a participation key for the specified account
+Generate and install participation key for the specified account
 
 
 
@@ -12,7 +12,7 @@ Generate a participation key for the specified account
 
 
 
-Generate a participation key for the specified account. This participation key can then be used for going online and participating in consensus.
+Generate and install participation key for the specified account. This participation key can then be used for going online and participating in consensus.
 
 
 
@@ -34,7 +34,7 @@ goal account addpartkey [flags]
 
   -h, --help                   help for addpartkey
 
-      --keyDilution uint       Key dilution for two-level participation keys
+      --keyDilution uint       Key dilution for two-level participation keys (defaults to sqrt of validity window)
 
   -o, --outdir string          Save participation key file to specified output directory to (for offline creation)
 

@@ -8,14 +8,6 @@ Block generator testing tools.
 
 
 
-### Synopsis
-
-
-
-Block generator testing tools.
-
-
-
 ### Options
 
 
