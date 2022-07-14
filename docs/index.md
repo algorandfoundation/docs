@@ -1,5 +1,3 @@
-{% load badge_tags %}
-
 title: Algorand Developer Docs
 
 <div class="docs-homepage__challenge-box">
