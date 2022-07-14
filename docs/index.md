@@ -2,9 +2,21 @@
 
 title: Algorand Developer Docs
 
-{% endverbatim %}
-{% generate_challenge_thumbnail challenge_slug="1" %}
-{% verbatim %}
+<div class="docs-homepage__challenge-box">
+    <div class="challenge-overview-icon"></div>
+
+    <div>
+      <p class="button--large docs-homepage__challenge-box__title">Complete Challenges and Earn Badges</p>
+
+      <p>Become a master Algorand Developer by completing coding challenges and getting rewarded with on-chain Badges along the way!</p>
+    </div>
+
+    <a href="{% url 'challenges-list' %}" class="button--small button--primary docs-homepage__challenge-box__link">
+      View Challenges
+
+      {% include "button-right-arrow.svg" %}
+    </a>
+</div>
 
 # Top-level sections
 <ul class="docs-homepage__card-list">
@@ -95,3 +107,7 @@ title: Algorand Developer Docs
         </a>
     </li>
 </ul>
+
+{% endverbatim %}
+{% generate_challenge_thumbnail challenge_slug="1" %}
+{% verbatim %}
