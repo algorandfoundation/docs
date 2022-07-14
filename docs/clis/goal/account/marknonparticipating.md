@@ -42,6 +42,8 @@ goal account marknonparticipating [flags]
 
   -N, --no-wait            Don't wait for transaction to commit
 
+  -S, --signer string      Address of key to sign with, if different from address due to rekeying
+
   -t, --txfile string      Write status change transaction to this file, rather than posting to network
 
   -v, --validrounds uint   The validity period for the status change transaction

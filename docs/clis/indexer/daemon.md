@@ -38,9 +38,13 @@ indexer daemon [flags]
 
       --allow-migration                        allow migrations to happen even when no algod connected
 
+      --api-config-file string                 supply an API config file to enable/disable parameters
+
   -c, --configfile string                      file path to configuration file (indexer.yml)
 
       --cpuprofile string                      file to record cpu profile to
+
+  -i, --data-dir string                        path to indexer data dir, or $INDEXER_DATA
 
       --default-accounts-limit uint32          set the default Limit parameter for querying accounts, if none is provided (default 100)
 
@@ -55,6 +59,8 @@ indexer daemon [flags]
       --dev-mode                               allow performance intensive operations like searching for accounts at a particular round
 
   -n, --dummydb                                use dummy indexer db
+
+      --enable-all-parameters                  override default configuration and enable all parameters. Can't be used with --api-config-file
 
   -g, --genesis string                         path to genesis.json (defaults to genesis.json in algod data dir if that was set)
 

@@ -30,11 +30,13 @@ goal app interact execute [flags]
 
 ```
 
-      --app-id uint   Application ID (if omitted, zero, which creates an application)
+      --app-id uint     Application ID (if omitted, zero, which creates an application)
 
-  -f, --from string   Account to execute interaction from
+  -f, --from string     Account to execute interaction from
 
-  -h, --help          help for execute
+  -h, --help            help for execute
+
+  -S, --signer string   Address of key to sign with, if different from "from" address due to rekeying
 
 ```
 

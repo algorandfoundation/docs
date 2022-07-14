@@ -36,6 +36,8 @@ goal clerk compile [input file 1] [input file 2]... [flags]
 
   -h, --help             help for compile
 
+  -m, --map              write out source map
+
   -n, --no-out           don't write contract program binary
 
   -o, --outfile string   Filename to write program bytes or signed LogicSig to
