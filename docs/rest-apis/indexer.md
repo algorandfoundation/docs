@@ -484,7 +484,7 @@ Lookup an account's created asset parameters, optionally for a specific ID.
 ### GET /v2/accounts/{account-id}/transactions
 
 **Description**
-Lookup account transactions.
+Lookup account transactions. Transactions are returned newest to oldest.
 
 
 **Parameters**
@@ -944,7 +944,7 @@ Lookup the list of accounts who hold this asset
 ### GET /v2/assets/{asset-id}/transactions
 
 **Description**
-Lookup transactions for an asset.
+Lookup transactions for an asset. Transactions are returned oldest to newest.
 
 
 **Parameters**
@@ -1078,7 +1078,7 @@ Lookup block.
 ### GET /v2/transactions
 
 **Description**
-Search for transactions.
+Search for transactions. Transactions are returned oldest to newest unless the address parameter is used, in which case results are returned newest to oldest.
 
 
 **Parameters**
@@ -1507,6 +1507,15 @@ Key-value pairs for StateDelta.
 |---|---|
 |**key**  <br>*required*|string|
 |**value**  <br>*required*|[EvalDelta](#evaldelta)|
+
+
+<a name="hashtype"></a>
+### Hashtype
+The type of hash function used to create the proof, must be one of: 
+* sha512_256 
+* sha256
+
+*Type* : enum (sha512_256, sha256)
 
 
 <a name="healthcheck"></a>

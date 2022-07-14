@@ -59,7 +59,7 @@ goal account [flags]
 
 
 * [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
-* [goal account addpartkey](../addpartkey/)	 - Generate a participation key for the specified account
+* [goal account addpartkey](../addpartkey/)	 - Generate and install participation key for the specified account
 * [goal account balance](../balance/)	 - Retrieve the balances for the specified account
 * [goal account changeonlinestatus](../changeonlinestatus/)	 - Change online status for the specified account
 * [goal account delete](../delete/)	 - Delete an account

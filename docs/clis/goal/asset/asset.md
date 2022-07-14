@@ -62,6 +62,7 @@ goal asset [flags]
 * [goal asset destroy](../destroy/)	 - Destroy an asset
 * [goal asset freeze](../freeze/)	 - Freeze assets
 * [goal asset info](../info/)	 - Look up current parameters for an asset
+* [goal asset optin](../optin/)	 - Optin to assets
 * [goal asset send](../send/)	 - Transfer assets
 
 

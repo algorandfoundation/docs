@@ -30,7 +30,7 @@ algokey part generate [flags]
 
 ```
 
-      --dilution uint    Key dilution (default to sqrt of validity window)
+      --dilution uint    Key dilution for two-level participation keys (defaults to sqrt of validity window)
 
       --first uint       First round for participation key
 

@@ -8,14 +8,6 @@ Start the generator daemon in standalone mode.
 
 
 
-### Synopsis
-
-
-
-Start the generator daemon in standalone mode.
-
-
-
 ```
 
 indexer util block-generator daemon [flags]

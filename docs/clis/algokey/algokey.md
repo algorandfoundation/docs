@@ -30,7 +30,9 @@ algokey [flags]
 
 ```
 
-  -h, --help   help for algokey
+  -h, --help      help for algokey
+
+  -v, --version   Display and write current build version and exit
 
 ```
 
