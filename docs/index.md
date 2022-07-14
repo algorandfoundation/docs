@@ -18,6 +18,13 @@ title: Algorand Developer Docs
     </a>
 </div>
 
+<hr>
+
+{% endverbatim %}
+{% generate_challenge_thumbnail challenge_slug="1" %}
+{% verbatim %}
+
+
 # Top-level sections
 <ul class="docs-homepage__card-list">
     <li class="docs-homepage__card-list-item">
@@ -107,7 +114,3 @@ title: Algorand Developer Docs
         </a>
     </li>
 </ul>
-
-{% endverbatim %}
-{% generate_challenge_thumbnail challenge_slug="1" %}
-{% verbatim %}
