@@ -2,18 +2,11 @@ title: Algorand Developer Docs
 
 <div class="docs-homepage__challenge-box">
     <div class="challenge-overview-icon"></div>
-
     <div>
-      <p class="button--large docs-homepage__challenge-box__title">Complete Challenges and Earn Badges</p>
-
-      <p>Become a master Algorand Developer by completing coding challenges and getting rewarded with on-chain Badges along the way!</p>
+        <p class="button--large docs-homepage__challenge-box__title">Complete Challenges and Earn Badges</p>
+        <p class="typography--regular-body docs-homepage__challenge-box__description">Become a master Algorand Developer by completing coding challenges and getting rewarded with on-chain Badges along the way!</p>
     </div>
-
-    <a href="{% url 'challenges-list' %}" class="button--small button--primary docs-homepage__challenge-box__link">
-      View Challenges
-
-      {% include "button-right-arrow.svg" %}
-    </a>
+    <a href="/challenges/" class="button--small button--primary docs-homepage__challenge-box__link">View Challenges</a>
 </div>
 
 # Top-level sections
