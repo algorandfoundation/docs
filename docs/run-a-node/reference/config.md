@@ -65,7 +65,7 @@ The `algod` process configuration parameters are shown in the table below.
 | PeerConnectionsUpdateInterval	| PeerConnectionsUpdateInterval defines the interval at which the peer connections information is being sent to the telemetry ( when enabled ). Defined in seconds.| 	3600 | 
 | PeerPingPeriodSeconds	| Peer Ping Period Seconds. 0 == disable	| 0 | 
 | PriorityPeers	| PriorityPeers specifies peer IP addresses that should always get outgoing broadcast messages from this node. |  | 	
-| PublicAddress	| Public Address to connect to.	| | 
+| PublicAddress	| The public address to connect to that is advertised to other nodes. For MainNet relays, make sure this entry includes the full SRV host name plus the publicly-accessible port number. A valid entry will avoid "self-gossip" errors in the log.	| | 
 | ReconnectTime	| Interval between RPC calls to a random peer to sync from their transactions. Specified in seconds.	| 60 | 
 | ReservedFDs	| To make sure the `algod` process does not run out of FDs, `algod` ensures that RLIMIT_NOFILE exceeds the max number of incoming connections (i.e., IncomingConnectionsLimit) by at least ReservedFDs.  ReservedFDs are meant to leave room for short-lived FDs like DNS queries, SQLite files, etc.	| 256 | 
 | RestReadTimeoutSeconds	| Read timeouts passed to the rest http.Server implementation.	| 15 | 
