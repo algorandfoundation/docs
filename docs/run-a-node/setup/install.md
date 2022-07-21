@@ -172,7 +172,7 @@ goal node status -d /var/lib/algorand
 # Installation with the updater script
 
 ## Installing on a Mac
-Verified on OSX v10.13.4 (High Sierra) and 10.15.7 (Catalina).
+Verified on OSX v12.3.1 (Monterey) and OSX v13.4.1 (Ventura).
 
 + Create a folder to hold the install package and files.
 
