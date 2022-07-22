@@ -121,7 +121,7 @@ The only condition above that does _not_ check the `on_completion` field is the 
 
 ### First Router 
 
-While the above method of constructing distinct Expression trees for both the approval and clear state programs works, it is often preferable to use the [Router](TODO) class provided in `PyTeal`. The `Router` class abstracts much of the handling for method routing when constructing ABI compliant applications. This is especially useful for encoding and decoding ABI types and returning ABI types.
+While the above method of constructing distinct Expression trees for both the approval and clear state programs works, it is often preferable to use the [Router](TODO: link to user-guide) class provided in `PyTeal`. The `Router` class abstracts much of the handling for method routing when constructing ABI compliant applications. This is especially useful for encoding and decoding ABI types and returning ABI types.
 
 ```python
 from pyteal import *
@@ -403,8 +403,6 @@ def compile_program(client, source_code):
 def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
-
-
 ```
 
 The `compile_program` function is a utility function that allows passing the generated TEAL code to a node that will compile and return the byte code. This returned byte code will be used with the application creation transaction (deploying the contract) later.
@@ -440,7 +438,6 @@ def read_global_state(client, app_id):
     app = client.application_info(app_id)
     global_state = app['params']['global-state'] if "global-state" in app['params'] else []
     return format_state(global_state)
-
 ```
 
 Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the application data including the global state. In this example, the function `read_global_state` uses the Python SDK function `application_info` to connect to the Algorand node and retrieve the application information. The function then extracts the global state values if they exist, otherwise returns an empty array. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
@@ -517,19 +514,17 @@ def main() :
 
     # compile program to TEAL assembly
     with open("./approval.teal", "w") as f:
-        approval_program_teal = approval_program()
-        f.write(approval_program_teal)
+        f.write(approval_program)
 
     # compile program to TEAL assembly
     with open("./clear.teal", "w") as f:
-        clear_state_program_teal = clear_state_program()
-        f.write(clear_state_program_teal)
+        f.write(clear_state_program)
 
     # compile program to binary
-    approval_program_compiled = compile_program(algod_client, approval_program_teal)
+    approval_program_compiled = compile_program(algod_client, approval_program)
 
     # compile program to binary
-    clear_state_program_compiled = compile_program(algod_client, clear_state_program_teal)
+    clear_state_program_compiled = compile_program(algod_client, clear_state_program)
 
     print("--------------------------------------------")
     print("Deploying Counter application......")
