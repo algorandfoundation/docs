@@ -30,27 +30,29 @@ indexer util validator [flags]
 
 ```
 
-      --addr string            If provided validate a single address instead of reading Stdin.
+      --addr string             If provided validate a single address instead of reading Stdin.
 
-      --algod-token string     Algod token.
+      --algod-token string      Algod token.
 
-      --algod-url string       Algod url.
+      --algod-url string        Algod url.
 
-  -h, --help                   help for validator
+  -e, --error-log-file string   When specified, error messages are written to this file instead of to stderr.
 
-      --indexer-token string   Indexer token.
+  -h, --help                    help for validator
 
-      --indexer-url string     Indexer url.
+      --indexer-token string    Indexer token.
 
-      --print-commands         Print curl commands, including tokens, to query algod and indexer.
+      --indexer-url string      Indexer url.
 
-      --processor int          Choose compare algorithm [0 = Struct, 1 = Reflection]
+      --print-commands          Print curl commands, including tokens, to query algod and indexer.
 
-      --retries int            Number of retry attempts when a difference is detected. (default 5)
+      --processor int           Choose compare algorithm [0 = Struct, 1 = Reflection]
 
-      --retry-delay int        Time in milliseconds to sleep between retries. (default 1000)
+      --retries int             Number of retry attempts when a difference is detected. (default 5)
 
-      --threads int            Number of worker threads to initialize. (default 4)
+      --retry-delay int         Time in milliseconds to sleep between retries. (default 1000)
+
+      --threads int             Number of worker threads to initialize. (default 4)
 
 ```
 

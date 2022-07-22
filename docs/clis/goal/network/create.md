@@ -30,6 +30,8 @@ goal network create [flags]
 
 ```
 
+      --devMode           Forces the configuration to enable DevMode, returns an error if the template is not compatible with DevMode.
+
   -h, --help              help for create
 
   -n, --network string    Specify the name to use for the private network

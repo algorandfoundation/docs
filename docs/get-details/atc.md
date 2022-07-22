@@ -150,7 +150,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 
     ```
 
-The call to add a transaction may may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
+The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
 
 
 ## Calling ABI Methods

@@ -1,10 +1,10 @@
-title: goal asset send
+title: goal asset optin
 ---
-## goal asset send
+## goal asset optin
 
 
 
-Transfer assets
+Optin to assets
 
 
 
@@ -12,13 +12,13 @@ Transfer assets
 
 
 
-Transfer asset holdings. An account can begin accepting an asset by issuing a zero-amount asset transfer to itself.
+Opt in to receive a new asset. An account will begin accepting an asset by issuing a zero-amount asset transfer to itself.
 
 
 
 ```
 
-goal asset send [flags]
+goal asset optin [flags]
 
 ```
 
@@ -30,15 +30,11 @@ goal asset send [flags]
 
 ```
 
-  -a, --amount uint                 The amount to be transferred (required), in base units of the asset.
+  -a, --account string              Account address to opt in to using the asset (if not specified, uses default account)
 
-      --asset string                Unit name of the asset being transferred
+      --asset string                Unit name of the asset being accepted
 
-      --assetid uint                ID of the asset being transferred
-
-      --clawback string             Address to issue a clawback transaction from (defaults to no clawback)
-
-  -c, --close-to string             Close asset account and send remainder to this address
+      --assetid uint                ID of the asset being accepted
 
       --creator string              Account address for asset creator
 
@@ -52,9 +48,7 @@ goal asset send [flags]
 
       --firstvalid uint             The first round where the transaction may be committed to the ledger
 
-  -f, --from string                 Account address to send the money from (if not specified, uses default account)
-
-  -h, --help                        help for send
+  -h, --help                        help for optin
 
       --lastvalid uint              The last round where the transaction may be committed to the ledger
 
@@ -71,8 +65,6 @@ goal asset send [flags]
   -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
 
   -S, --signer string               Address of key to sign with, if different from transaction "from" address due to rekeying
-
-  -t, --to string                   Address to send to money to (required)
 
       --validrounds uint            The number of rounds for which the transaction will be valid
 

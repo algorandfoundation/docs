@@ -30,7 +30,9 @@ indexer [flags]
 
 ```
 
-  -h, --help   help for indexer
+  -h, --help      help for indexer
+
+  -v, --version   print version and exit
 
 ```
 
@@ -40,6 +42,7 @@ indexer [flags]
 
 
 
+* [indexer api-config](../api-config/)	 - api configuration
 * [indexer daemon](../daemon/)	 - run indexer daemon
 * [indexer util](../util/util/)	 - Utilities for testing Indexer operation and correctness.
 
