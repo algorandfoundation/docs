@@ -158,7 +158,7 @@ The first expression stores a global variable named Count, and its value is set 
 
 This second expression is just `Int(1)` that gets passed back to the caller. 
 
-The Router class is initialized with a string name (will be important below in [abi.json](TODO)) and a set of BareCallACtions. A Bare Call is an application call transaction with 0 application arguments.
+The Router class is initialized with a string name (will be important below in [abi.json](TODO)) and a set of BareCallActions. A Bare Call is an application call transaction with 0 application arguments.
 
 Each OnComplete type may have an associated OnCompleteAction, the options are:
 
