@@ -129,7 +129,7 @@ from pyteal import *
 # Create an expression to store 0 in the `Count` global variable and return 1
 handle_creation = Seq(
     App.globalPut(Bytes("Count"), Int(0)),
-    Int(1)
+    Approve()
 )
 
 # Main router class
@@ -139,7 +139,7 @@ router = Router(
     # What to do for each on-complete type when no arguments are passed (bare call)
     BareCallActions(
         # On create only, just approve
-        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        no_op=OnCompleteAction.create_only(handle_creation),
         # Always let creator update/delete but only by the creator of this contract
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
@@ -156,7 +156,7 @@ Here we defined the `handle_creation` variable to be a Sequence of Expressions u
 
 The first expression stores a global variable named Count, and its value is set to 0. More information about storing state variables is available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
 
-This second expression is just `Int(1)` that gets passed back to the caller. 
+This second expression is just `Approve()` which is an alias for `Return(Int(1))` that gets passed back to the caller. 
 
 The Router class is initialized with a string name (will be important below in [abi.json](TODO)) and a set of BareCallActions. A Bare Call is an application call transaction with 0 application arguments.
 
@@ -190,7 +190,7 @@ count_key = Bytes("Count")
 # Create an expression to store 0 in the `Count` global variable and return 1
 handle_creation = Seq(
     App.globalPut(count_key, Int(0)),
-    Int(1)
+    Approve()
 )
 
 # Main router class
@@ -200,7 +200,7 @@ router = Router(
     # What to do for each on-complete type when no arguments are passed (bare call)
     BareCallActions(
         # On create only, just approve
-        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        no_op=OnCompleteAction.create_only(handle_creation),
         # Always let creator update/delete but only by the creator of this contract
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
@@ -274,7 +274,7 @@ count_key = Bytes("Count")
 # Create an expression to store 0 in the `Count` global variable and return 1
 handle_creation = Seq(
     App.globalPut(count_key, Int(0)),
-    Int(1)
+    Approve()
 )
 
 # Main router class
@@ -284,7 +284,7 @@ router = Router(
     # What to do for each on-complete type when no arguments are passed (bare call)
     BareCallActions(
         # On create only, just approve
-        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        no_op=OnCompleteAction.create_only(handle_creation),
         # Always let creator update/delete but only by the creator of this contract
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
@@ -615,7 +615,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 count_key = Bytes("Count")
 
 # Create an expression to store 0 in the `Count` global variable and return 1
-handle_creation = Seq(App.globalPut(count_key, Int(0)), Int(1))
+handle_creation = Seq(App.globalPut(count_key, Int(0)), Approve())
 
 # Main router class
 router = Router(
@@ -624,7 +624,7 @@ router = Router(
     # What to do for each on-complete type when no arguments are passed (bare call)
     BareCallActions(
         # On create only, just approve
-        no_op=OnCompleteAction.create_only(Return(handle_creation)),
+        no_op=OnCompleteAction.create_only(handle_creation),
         # Always let creator update/delete but only by the creator of this contract
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
