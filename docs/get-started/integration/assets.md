@@ -22,7 +22,7 @@ To get you started quickly, we recommend checking out the SDK getting started pa
     [Your first Algo payment transaction](../../../sdks/go){: target="_blank"}
  
 
-And for ASAs, the following code will show you how opt-in, transfer, and close out ASA balances.
+And for ASAs, the following code will show you how to opt-in, transfer, and close out ASA balances.
 
 === "Python"
     [Run code](https://replit.com/@Algorand/ASAIntegrationPython#main.py){: target="_blank"}
