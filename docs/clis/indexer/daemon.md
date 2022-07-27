@@ -40,6 +40,8 @@ indexer daemon [flags]
 
       --api-config-file string                 supply an API config file to enable/disable parameters
 
+      --catchpoint string                      initialize local ledger using fast catchup
+
   -c, --configfile string                      file path to configuration file (indexer.yml)
 
       --cpuprofile string                      file to record cpu profile to
@@ -65,6 +67,8 @@ indexer daemon [flags]
   -g, --genesis string                         path to genesis.json (defaults to genesis.json in algod data dir if that was set)
 
   -h, --help                                   help for daemon
+
+      --init-ledger                            initialize local ledger using sequential mode (default true)
 
   -f, --logfile string                         file to write logs to, if unset logs are written to standard out
 
