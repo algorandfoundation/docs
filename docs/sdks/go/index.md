@@ -288,7 +288,5 @@ If you have any trouble compiling or running your program, please check the comp
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
 
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-go/)
-* [Algorand VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
-* [Algo Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/)
 * [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
 * [Algo Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
