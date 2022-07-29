@@ -238,7 +238,7 @@ txn Sender
 ==
 return
 `;
- 
+
 // declare clear state program source
 clearProgramSource = `#pragma version 5
 int 1
@@ -263,16 +263,16 @@ async function createApp(client, creatorAccount, approvalProgram, clearProgram, 
     // declare onComplete as NoOp
     onComplete = algosdk.OnApplicationComplete.NoOpOC;
 
-	// get node suggested parameters
+    // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     // params.fee = 1000;
     // params.flatFee = true;
 
     // create unsigned transaction
-    let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete, 
-                                            approvalProgram, clearProgram, 
-                                            localInts, localBytes, globalInts, globalBytes,);
+    let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete,
+        approvalProgram, clearProgram,
+        localInts, localBytes, globalInts, globalBytes);
     let txId = txn.txID().toString();
 
     // Sign the transaction
@@ -292,23 +292,23 @@ async function createApp(client, creatorAccount, approvalProgram, clearProgram, 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
     let appId = transactionResponse['application-index'];
-    console.log("Created new app-id: ",appId);
+    console.log("Created new app-id: ", appId);
     return appId;
 }
 
 // optIn
-async function optInApp(client, account, index) {
+async function optInApp(client, account, app_id) {
     // define sender
     sender = account.addr;
 
-	// get node suggested parameters
+    // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     // params.fee = 1000;
     // params.flatFee = true;
 
     // create unsigned transaction
-    let txn = algosdk.makeApplicationOptInTxn(sender, params, index);
+    let txn = algosdk.makeApplicationOptInTxn(sender, params, app_id);
     let txId = txn.txID().toString();
 
     // Sign the transaction
@@ -326,7 +326,7 @@ async function optInApp(client, account, index) {
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid'])
+    console.log("Opted-in to app-id:", transactionResponse['txn']['txn']['apid'])
 }
 
 // call application 
@@ -359,19 +359,19 @@ async function callApp(client, account, index, appArgs) {
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Called app-id:",transactionResponse['txn']['txn']['apid'])
-    if (transactionResponse['global-state-delta'] !== undefined ) {
-        console.log("Global State updated:",transactionResponse['global-state-delta']);
+    console.log("Called app-id:", transactionResponse['txn']['txn']['apid'])
+    if (transactionResponse['global-state-delta'] !== undefined) {
+        console.log("Global State updated:", transactionResponse['global-state-delta']);
     }
-    if (transactionResponse['local-state-delta'] !== undefined ) {
-        console.log("Local State updated:",transactionResponse['local-state-delta']);
+    if (transactionResponse['local-state-delta'] !== undefined) {
+        console.log("Local State updated:", transactionResponse['local-state-delta']);
     }
 }
 
 // read local state of application from user account
-async function readLocalState(client, account, index){
+async function readLocalState(client, account, index) {
     let accountInfoResponse = await client.accountInformation(account.addr).do();
-    for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
+    for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) {
         if (accountInfoResponse['apps-local-state'][i].id == index) {
             console.log("User's local state:");
             for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].length; n++) {
@@ -382,9 +382,9 @@ async function readLocalState(client, account, index){
 }
 
 // read global state of application
-async function readGlobalState(client, account, index){
+async function readGlobalState(client, account, index) {
     let accountInfoResponse = await client.accountInformation(account.addr).do();
-    for (let i = 0; i < accountInfoResponse['created-apps'].length; i++) { 
+    for (let i = 0; i < accountInfoResponse['created-apps'].length; i++) {
         if (accountInfoResponse['created-apps'][i].id == index) {
             console.log("Application's global state:");
             for (let n = 0; n < accountInfoResponse['created-apps'][i]['params']['global-state'].length; n++) {
@@ -398,7 +398,7 @@ async function updateApp(client, creatorAccount, index, approvalProgram, clearPr
     // define sender as creator
     sender = creatorAccount.addr;
 
-	// get node suggested parameters
+    // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     // params.fee = 1000;
@@ -424,7 +424,7 @@ async function updateApp(client, creatorAccount, index, approvalProgram, clearPr
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
     let appId = transactionResponse['txn']['txn'].apid;
-    console.log("Updated app-id: ",appId);
+    console.log("Updated app-id: ", appId);
     return appId;
 }
 
@@ -458,14 +458,14 @@ async function closeOutApp(client, account, index) {
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Closed out from app-id:",transactionResponse['txn']['txn']['apid'])
+    console.log("Closed out from app-id:", transactionResponse['txn']['txn']['apid'])
 }
 
 async function deleteApp(client, creatorAccount, index) {
     // define sender as creator
     sender = creatorAccount.addr;
 
-	// get node suggested parameters
+    // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     // params.fee = 1000;
@@ -491,7 +491,7 @@ async function deleteApp(client, creatorAccount, index) {
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
     let appId = transactionResponse['txn']['txn'].apid;
-    console.log("Deleted app-id: ",appId);
+    console.log("Deleted app-id: ", appId);
     return appId;
 }
 
@@ -499,7 +499,7 @@ async function clearApp(client, account, index) {
     // define sender as creator
     sender = account.addr;
 
-	// get node suggested parameters
+    // get node suggested parameters
     let params = await client.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     // params.fee = 1000;
@@ -525,73 +525,73 @@ async function clearApp(client, account, index) {
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
     let appId = transactionResponse['txn']['txn'].apid;
-    console.log("Cleared local state for app-id: ",appId);
+    console.log("Cleared local state for app-id: ", appId);
     return appId;
 }
 
 async function main() {
     try {
-    // initialize an algodClient
-    let algodClient = new algosdk.Algodv2(algodToken, algodAddress, port);
+        // initialize an algodClient
+        let algodClient = new algosdk.Algodv2(algodToken, algodAddress, port);
 
-    // get accounts from mnemonic
-    let creatorAccount = algosdk.mnemonicToSecretKey(creatorMnemonic);
-    let userAccount = algosdk.mnemonicToSecretKey(userMnemonic);
-   
-    // compile programs 
-    let approvalProgram = await compileProgram(algodClient, approvalProgramSourceInitial);
-    let clearProgram = await compileProgram(algodClient, clearProgramSource);
+        // get accounts from mnemonic
+        let creatorAccount = algosdk.mnemonicToSecretKey(creatorMnemonic);
+        let userAccount = algosdk.mnemonicToSecretKey(userMnemonic);
 
-    // create new application
-    let appId = await createApp(algodClient, creatorAccount, approvalProgram, clearProgram, localInts, localBytes, globalInts, globalBytes);
+        // compile programs 
+        let approvalProgram = await compileProgram(algodClient, approvalProgramSourceInitial);
+        let clearProgram = await compileProgram(algodClient, clearProgramSource);
 
-    // opt-in to application
-    await optInApp(algodClient, userAccount, appId);
+        // create new application
+        let appId = await createApp(algodClient, creatorAccount, approvalProgram, clearProgram, localInts, localBytes, globalInts, globalBytes);
 
-    // call application without arguments
-    await callApp(algodClient, userAccount, appId, undefined);
+        // opt-in to application
+        await optInApp(algodClient, userAccount, appId);
 
-    // read local state of application from user account
-    await readLocalState(algodClient, userAccount, appId);
+        // call application without arguments
+        await callApp(algodClient, userAccount, appId, undefined);
 
-    // read global state of application
-    await readGlobalState(algodClient, creatorAccount, appId);
+        // read local state of application from user account
+        await readLocalState(algodClient, userAccount, appId);
 
-    // update application
-    approvalProgram = await compileProgram(algodClient, approvalProgramSourceRefactored);
-    await updateApp(algodClient, creatorAccount, appId, approvalProgram, clearProgram);
+        // read global state of application
+        await readGlobalState(algodClient, creatorAccount, appId);
 
-    // call application with arguments
-    let timestamp = new Date().toUTCString();
-    console.log(new Date(timestamp));
-    let appArgs = [];
-    appArgs.push(new Uint8Array(Buffer.from(timestamp)));
-    await callApp(algodClient, userAccount, appId, appArgs);
+        // update application
+        approvalProgram = await compileProgram(algodClient, approvalProgramSourceRefactored);
+        await updateApp(algodClient, creatorAccount, appId, approvalProgram, clearProgram);
 
-    // read local state of application from user account
-    await readLocalState(algodClient, userAccount, appId);
+        // call application with arguments
+        let timestamp = new Date().toUTCString();
+        console.log(new Date(timestamp));
+        let appArgs = [];
+        appArgs.push(new Uint8Array(Buffer.from(timestamp)));
+        await callApp(algodClient, userAccount, appId, appArgs);
 
-    // close-out from application
-    await closeOutApp(algodClient, userAccount, appId)
+        // read local state of application from user account
+        await readLocalState(algodClient, userAccount, appId);
 
-    // opt-in again to application
-    await optInApp(algodClient, userAccount, appId)
+        // close-out from application
+        await closeOutApp(algodClient, userAccount, appId)
 
-    // call application with arguments
-    await callApp(algodClient, userAccount, appId, appArgs)
+        // opt-in again to application
+        await optInApp(algodClient, userAccount, appId)
 
-    // read local state of application from user account
-    await readLocalState(algodClient, userAccount, appId);
+        // call application with arguments
+        await callApp(algodClient, userAccount, appId, appArgs)
 
-    // delete application
-    await deleteApp(algodClient, creatorAccount, appId)
+        // read local state of application from user account
+        await readLocalState(algodClient, userAccount, appId);
 
-    // clear application from user account
-    await clearApp(algodClient, userAccount, appId)
+        // delete application
+        await deleteApp(algodClient, creatorAccount, appId)
+
+        // clear application from user account
+        await clearApp(algodClient, userAccount, appId)
 
     }
-    catch (err){
-        console.log("err", err);  
+    catch (err) {
+        console.log("err", err);
     }
 }
 
