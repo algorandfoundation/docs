@@ -1,20 +1,15 @@
 const algosdk = require('algosdk');
 
-// const token = "<algod-token>";
-// const server = "<algod-address>";
-// const port = <algod-port>;
 // sandbox
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
-// const token = "6b3a2ae3896f23be0a1f0cdd083b6d6d046fbeb594a3ce31f2963b717f74ad43"
-// const server = "http://127.0.0.1"
-// const port = 54746;
+
 // Import the filesystem module 
 const fs = require('fs');
-// import your private key mnemonic
-// let PASSPHRASE = "<25-word-mnemonic>";
-let PASSPHRASE = "awake used crawl list cruel harvest useful flag essay speed glad salmon camp sudden ride symptom test kind version together project inquiry diet abandon budget";
+
+// import YOUR private key mnemonic to run dryrun on your local machine
+let PASSPHRASE = "<25-word-mnemonic>";
 
 let myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
 console.log("My Address: " + myAccount.addr);
