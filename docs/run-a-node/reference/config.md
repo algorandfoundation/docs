@@ -91,7 +91,7 @@ The `algod` process configuration parameters are shown in the table below.
 | PriorityPeers	| PriorityPeers specifies peer IP addresses that should always get outgoing broadcast messages from this node. |  | 	
 | ProposalAssemblyTime | The max amount of time to spend on generating a proposal block. | 250000000 |
 | PublicAddress	| The public address to connect to that is advertised to other nodes. For MainNet relays, make sure this entry includes the full SRV host name plus the publicly-accessible port number. A valid entry will avoid "self-gossip" errors in the log.	| | 
-| ReconnectTime	| Interval between RPC calls to a random peer to sync from their transactions. Specified in seconds.	| 60 | 
+| ReconnectTime	| Interval between RPC calls to a random peer to sync from their transactions. Specified in nanoseconds.	| 60000000000 | 
 | ReservedFDs	| To make sure the `algod` process does not run out of FDs, `algod` ensures that RLIMIT_NOFILE exceeds the max number of incoming connections (i.e., IncomingConnectionsLimit) by at least ReservedFDs.  ReservedFDs are meant to leave room for short-lived FDs like DNS queries, SQLite files, etc.	| 256 | 
 | RestConnectionsHardLimit | The http server does not accept new connections as long we have this many (hard limit) connections already. | 2048 |
 | RestConnectionsSoftLimit | When the number of http connections to the REST layer exceeds the soft limit, we start returning http code 429 Too Many Requests. | 1024 |
