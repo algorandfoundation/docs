@@ -489,6 +489,10 @@ Catchpoint downloaded blocks: 81
 Genesis ID: betanet-v1.0
 Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
+
+!!! Note
+    Only the first 3 status (`Catchpoint`, `total accounts`, `accounts processed`) will show right after catchup begins. Status on `total blocks` and `downloaded blocks` will only show after catchup processes the total number of accounts, which takes several minutes.
+
 4) A new option can facilitate a status watch, -w which takes a parameter of time, in milliseconds, between two successive status updates. This will eliminate the need to repeatedly issue a status manually. Press ^c to exit the watch.
 
 `goal node status -w 1000`
