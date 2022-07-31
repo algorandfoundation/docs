@@ -263,7 +263,5 @@ To view the transaction, open [AlgoExplorer](https://testnet.algoexplorer.io/){t
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.  
 
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/){target=_blank}  
-* [Algorand Studio](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/){target=_blank}  
-* [Algorand Studio VSCode Extension](https://developer.algorand.org/articles/intro-algorand-studio-algorand-vs-code-extension/){target=_blank}  
 * [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/){target=_blank}  
 * [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/){target=_blank}  
