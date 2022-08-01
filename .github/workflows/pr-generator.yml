@@ -37,16 +37,15 @@ jobs:
           ref: master
       - name: Download binaries
         run: |
-          pwd
-          ls -la
-          cd ..
-          ls -la
+          cd ../../
           # TODO: use passed version or latest
           wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_3.8.1.tar.gz
           wget https://algorand-releases.s3.amazonaws.com/indexer/2.13.0/algorand-indexer_linux_amd64_2.13.0.tar.bz2
+          ls -la
       - name: Install binaries
         run: |
           # TODO: use passed version or latest
+          cd ../../
           mkdir -p ~/go/bin
           mkdir -p node_stable_linux-amd64_3.8.1
           tar xzf node_stable_linux-amd64_3.8.1.tar.gz -C node_stable_linux-amd64_3.8.1/
@@ -54,10 +53,12 @@ jobs:
           mkdir -p algorand-indexer_linux_amd64_2.13.0
           tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2 -C algorand-indexer_linux_amd64_2.13.0/
           cp algorand-indexer_linux_amd64_2.13.0/algorand-indexer ~/go/bin/
+          ls -la
+          ls -la ~/go/bin
       - name: Run doc generator
         run: |
-          cd docs/scripts/
-          ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
+          cd scripts/
+          ./reformat-all-commands.sh ../../../go-algorand/ ../../../indexer/
           git diff
       - name: Create PR
         run: echo "Time to create a PR!"
