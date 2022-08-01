@@ -13,8 +13,8 @@ let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_p
 
 (async () => {
     const enc = new TextEncoder();
-    let note = enc.encode("Hello");
-    let s = Buffer.from(note).toString("base64");
+    const note = enc.encode("Hello");
+    const s = Buffer.from(note).toString("base64");
     let transactionInfo = await indexerClient.searchForTransactions()
         .notePrefix(s)
         .minRound(14838981).do();

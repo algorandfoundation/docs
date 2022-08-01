@@ -1,20 +1,17 @@
 const algosdk = require('algosdk');
 
-// const token = "<algod-token>";
-// const server = "<algod-address>";
-// const port = <algod-port>;
 // sandbox
 const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const server = "http://localhost";
 const port = 4001;
 
 // Import the filesystem module 
-const fs = require('fs'); 
-// import your private key mnemonic
-// mnemonics should not be used in prodcution code, for demo purposes only
+const fs = require('fs');
+
+// import YOUR private key mnemonic to run dryrun on your local machine
 let PASSPHRASE = "<25-word-mnemonic>";
 
-let  myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
+let myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
 console.log("My Address: " + myAccount.addr);
 // create an algod v2 client
 let algodclient = new algosdk.Algodv2(token, server, port);
@@ -35,7 +32,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // btoi
     // int 12345
     // ==
-    let  fs = require('fs'),
+    let fs = require('fs'),
         path = require('path'),
         filePath = path.join(__dirname, 'samplearg.teal');
     // filePath = path.join(__dirname, <'fileName'>);
@@ -59,7 +56,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
     // sign the logic signature with an account sk
     lsig.sign(myAccount.sk);
-    
+
     // Setup a transaction
     let sender = myAccount.addr;
     let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
@@ -75,31 +72,31 @@ let algodclient = new algosdk.Algodv2(token, server, port);
 
     //compile debugging
     const dryrunResponse = await algosdk.createDryrun({
-        client: algodclient, 
+        client: algodclient,
         txns: [
             algosdk.decodeSignedTransaction(rawSignedTxn['blob'])
         ]
     })
-    let  textedJson = JSON.stringify(dryrunResponse, undefined, 4);
-    console.log("compile Response ");  
+    let textedJson = JSON.stringify(dryrunResponse, undefined, 4);
+    console.log("compile Response ");
     console.log(textedJson);
 
     //source debugging
     const dryrunResponseSource = await algosdk.createDryrun({
-        client: algodclient, 
+        client: algodclient,
         txns: [
             algosdk.decodeSignedTransaction(rawSignedTxn['blob'])
         ],
         sources: data
-        
+
     })
     textedJson = JSON.stringify(dryrunResponseSource, undefined, 4);
-    console.log("source Response ");  
+    console.log("source Response ");
     console.log(textedJson);
-    
+
     // send raw LogicSigTransaction to network 
     let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
-    console.log("Transaction : " + tx.txId);    
+    console.log("Transaction : " + tx.txId);
     const confirmedTxn = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
     //Get the completed Transaction
     console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
@@ -109,16 +106,14 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     console.log(e);
 });
 async function dryrunDebugging(lsig, txn, data) {
-    if (data == null)
-    {
+    if (data == null) {
         //compile
         txns = [{
             lsig: lsig,
             txn: txn,
-        }];        
+        }];
     }
-    else
-    {
+    else {
         // source
         txns = [{
             txn: txn,
@@ -159,7 +154,7 @@ function getUint8Int(number) {
     const buffer = Buffer.alloc(8);
     const bigIntValue = BigInt(number);
     buffer.writeBigUInt64BE(bigIntValue);
-    return  [Uint8Array.from(buffer)];
+    return [Uint8Array.from(buffer)];
 }
 // output should look like this
 // compile Response 
