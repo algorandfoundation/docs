@@ -21,7 +21,7 @@ jobs:
         run: |
           wget --version
           java --version
-          bzip --version
+          bzip2 --version
           git --version
           aws --version
       - name: Clone docs repo
