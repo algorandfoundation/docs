@@ -50,10 +50,10 @@ jobs:
             cd go-algorand
             # echo "GO_ALGORAND_VERSION=$(git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
             echo "GO_ALGORAND_VERSION=$(echo '3.8.1')" >> $GITHUB_ENV
-            echo "GO_ALGORAND_VERSION set to ${{ env.GO_ALGORAND_VERSION }}"
+            echo "GO_ALGORAND_VERSION set to latest: ${{ env.GO_ALGORAND_VERSION }}"
           else
             echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
-            echo "GO_ALGORAND_VERSION set to ${{ inputs.go_algorand_version }}"
+            echo "GO_ALGORAND_VERSION set to passed value: ${{ inputs.go_algorand_version }}"
           fi
       - name: Clone Indexer repo
         uses: actions/checkout@v3
