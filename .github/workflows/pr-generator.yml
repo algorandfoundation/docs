@@ -23,7 +23,6 @@ jobs:
           java --version
           bzip2 --version
           git --version
-          aws --version
       - name: Clone docs repo
         uses: actions/checkout@v3
       - name: Clone go-algorand repo
@@ -39,9 +38,12 @@ jobs:
       - name: Download binaries
         run: |
           pwd
+          ls -la
+          cd ..
+          ls -la
           # TODO: use passed version or latest
-          aws s3 cp s3://algorand-releases/channel/stable/node_stable_linux-amd64_3.8.1.tar.gz .
-          aws s3 cp s3://algorand-releases/indexer/2.13.0/algorand-indexer_linux_amd64_2.13.0.tar.bz2 .
+          wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_3.8.1.tar.gz
+          wget https://algorand-releases.s3.amazonaws.com/indexer/2.13.0/algorand-indexer_linux_amd64_2.13.0.tar.bz2
       - name: Install binaries
         run: |
           # TODO: use passed version or latest
@@ -56,5 +58,6 @@ jobs:
         run: |
           cd docs/scripts/
           ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
+          git diff
       - name: Create PR
         run: echo "Time to create a PR!"
