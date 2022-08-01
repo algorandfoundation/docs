@@ -12,6 +12,7 @@ on:
         type: string
         required: false
         default: 'latest' # TODO
+  push: # Temporary for testing
 jobs:
   pr-generator:
     runs-on: ubuntu-20.04
