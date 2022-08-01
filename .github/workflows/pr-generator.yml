@@ -6,12 +6,12 @@ on:
         description: "Go-Algorand Version"
         type: string
         required: false
-        default: 'latest'
+        default: 'latest' # TODO
       indexer-version:
         description: "Indexer Version"
         type: string
         required: false
-        default: 'latest'
+        default: 'latest' # TODO
 jobs:
   pr-generator:
     runs-on: ubuntu-20.04
@@ -22,9 +22,38 @@ jobs:
           java --version
           bzip --version
           git --version
-      - name: Clone go-algorand
-      - name: Clone Indexer
+          aws --version
+      - name: Clone docs repo
+        uses: actions/checkout@v3
+      - name: Clone go-algorand repo
+        uses: actions/checkout@v3
+        with:
+          repository: algorand/go-algorand
+          ref: rel/stable
+      - name: Clone Indexer repo
+        uses: actions/checkout@v3
+        with:
+          repository: algorand/indexer
+          ref: master
       - name: Download binaries
+        run: |
+          pwd
+          # TODO: use passed version or latest
+          aws s3 cp s3://algorand-releases/channel/stable/node_stable_linux-amd64_3.8.1.tar.gz .
+          aws s3 cp s3://algorand-releases/indexer/2.13.0/algorand-indexer_linux_amd64_2.13.0.tar.bz2 .
       - name: Install binaries
+        run: |
+          # TODO: use passed version or latest
+          mkdir -p ~/go/bin
+          mkdir -p node_stable_linux-amd64_3.8.1
+          tar xzf node_stable_linux-amd64_3.8.1.tar.gz -C node_stable_linux-amd64_3.8.1/
+          cp node_stable_linux-amd64_3.8.1/* ~/go/bin/
+          mkdir -p algorand-indexer_linux_amd64_2.13.0
+          tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2 -C algorand-indexer_linux_amd64_2.13.0/
+          cp algorand-indexer_linux_amd64_2.13.0/algorand-indexer ~/go/bin/
       - name: Run doc generator
+        run: |
+          cd docs/scripts/
+          ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
       - name: Create PR
+        run: echo "Time to create a PR!"
