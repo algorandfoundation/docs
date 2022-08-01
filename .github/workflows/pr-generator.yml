@@ -48,7 +48,8 @@ jobs:
         run: |
           if ${{ inputs.go_algorand_version == 'latest' }}; then
             cd go-algorand
-            echo "GO_ALGORAND_VERSION=$(git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
+            # echo "GO_ALGORAND_VERSION=$(git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
+            echo "GO_ALGORAND_VERSION=$(echo '3.8.1')" >> $GITHUB_ENV
             echo "GO_ALGORAND_VERSION set to ${{ env.GO_ALGORAND_VERSION }}"
           else
             echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
