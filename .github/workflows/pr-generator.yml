@@ -52,9 +52,8 @@ jobs:
           cd node_stable_linux-amd64_3.8.1/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
           cd ../../
-          mkdir -p algorand-indexer_linux_amd64_2.13.0
-          tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2 -C algorand-indexer_linux_amd64_2.13.0/
-          cp algorand-indexer_linux_amd64_2.13.0/bin/algorand-indexer ~/go/bin/
+          tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2
+          cp algorand-indexer_linux_amd64_2.13.0/algorand-indexer ~/go/bin/
           ls -la
           ls -la ~/go/bin
       - name: Run doc generator
