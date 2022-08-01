@@ -58,7 +58,9 @@ jobs:
           ls -la ~/go/bin
       - name: Run doc generator
         run: |
+          pwd
           cd scripts/
+          ls -la
           ./reformat-all-commands.sh ../../../go-algorand/ ../../../indexer/
           git diff
       - name: Create PR
