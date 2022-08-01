@@ -504,13 +504,13 @@ Construct the transaction with defined values:
 
 === "Python"
 	```python
-    txn = transaction.ApplicationOptInTxn(sender, params, index)
+    txn = transaction.ApplicationOptInTxn(sender, params, app_id)
     ```
 
 === "JavaScript"
 	```javascript
     // create unsigned transaction
-    let txn = algosdk.makeApplicationOptInTxn(sender, params, index);
+    let txn = algosdk.makeApplicationOptInTxn(sender, params, app_id);
     ```
 
 === "Java"
