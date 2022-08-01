@@ -12,7 +12,7 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let currencyGreater = 10;
+    const currencyGreater = 10;
     let transactionInfo = await indexerClient.searchForTransactions()
         .currencyGreaterThan(currencyGreater).do();
     console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));

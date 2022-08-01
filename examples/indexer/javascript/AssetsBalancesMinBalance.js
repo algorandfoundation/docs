@@ -12,8 +12,8 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let assetIndex = 2044572;
-    let currencyGreater = 200;
+    const assetIndex = 2044572;
+    const currencyGreater = 200;
     let assetInfo = await indexerClient.lookupAssetBalances(assetIndex)
         .currencyGreaterThan(currencyGreater).do();
     console.log("Information for Asset: " + JSON.stringify(assetInfo, undefined, 2));

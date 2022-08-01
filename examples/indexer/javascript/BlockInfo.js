@@ -12,7 +12,7 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let block = 50;
+    const block = 50;
     let blockInfo = await indexerClient.lookupBlock(block).do();
     console.log("Information for Block: " + JSON.stringify(blockInfo, undefined, 2));
 })().catch(e => {

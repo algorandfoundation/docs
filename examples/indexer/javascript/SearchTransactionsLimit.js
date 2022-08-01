@@ -12,8 +12,8 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let currencyGreater = 10;
-    let limit = 5;
+    const currencyGreater = 10;
+    const limit = 5;
     let transactionInfo = await indexerClient.searchForTransactions()
         .currencyGreaterThan(currencyGreater)
         .limit(limit).do();
