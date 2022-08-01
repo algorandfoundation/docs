@@ -26,17 +26,19 @@ jobs:
       - name: Clone docs repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          path: docs
       - name: Clone go-algorand repo
         uses: actions/checkout@v3
         with:
           repository: algorand/go-algorand
           ref: rel/stable
+          path: go-algorand
       - name: Clone Indexer repo
         uses: actions/checkout@v3
         with:
           repository: algorand/indexer
           ref: master
+          path: indexer
       - name: Download binaries
         run: |
           cd ../../
