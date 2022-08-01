@@ -13,17 +13,6 @@ on:
         required: false
         default: 'latest' # TODO
   push: # Temporary for testing
-    inputs:
-      go_algorand_version:
-        description: "Go-Algorand Version"
-        type: string
-        required: false
-        default: 'latest' # TODO
-      indexer_version:
-        description: "Indexer Version"
-        type: string
-        required: false
-        default: 'latest' # TODO
 jobs:
   pr-generator:
     runs-on: ubuntu-20.04
@@ -48,7 +37,11 @@ jobs:
         run: |
           if ${{ (inputs.go_algorand_version == 'latest') || (inputs.go_algorand_version == '') }}; then
             cd go-algorand
+            git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable'
+            git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1
+            git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//'
             echo "GO_ALGORAND_VERSION=$(git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
+            echo $GITHUB_ENV
             echo "GO_ALGORAND_VERSION set to latest"
           else
             echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
