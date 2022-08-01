@@ -49,12 +49,12 @@ jobs:
           mkdir -p ~/go/bin
           mkdir -p node_stable_linux-amd64_3.8.1
           tar xzf node_stable_linux-amd64_3.8.1.tar.gz -C node_stable_linux-amd64_3.8.1/
-          cd node_stable_linux-amd64_3.8.1
+          cd node_stable_linux-amd64_3.8.1/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
-          cd ..
+          cd ../../
           mkdir -p algorand-indexer_linux_amd64_2.13.0
           tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2 -C algorand-indexer_linux_amd64_2.13.0/
-          cp algorand-indexer_linux_amd64_2.13.0/algorand-indexer ~/go/bin/
+          cp algorand-indexer_linux_amd64_2.13.0/bin/algorand-indexer ~/go/bin/
           ls -la
           ls -la ~/go/bin
       - name: Run doc generator
