@@ -48,9 +48,8 @@ jobs:
         run: |
           if ${{ inputs.go_algorand_version == 'latest' }}; then
             cd go-algorand
-            GO_ALGORAND_VERSION=`git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//'`
-            echo "GO_ALGORAND_VERSION=${GO_ALGORAND_VERSION}" >> $GITHUB_ENV
-            echo "GO_ALGORAND_VERSION set to ${GO_ALGORAND_VERSION}"
+            echo "GO_ALGORAND_VERSION=$(git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
+            echo "GO_ALGORAND_VERSION set to ${{ env.GO_ALGORAND_VERSION }}"
           else
             echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
             echo "GO_ALGORAND_VERSION set to ${{ inputs.go_algorand_version }}"
@@ -64,16 +63,16 @@ jobs:
       - name: Download binaries
         run: |
           # TODO: use passed version or latest
-          wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${GO_ALGORAND_VERSION}.tar.gz
+          wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
           wget https://algorand-releases.s3.amazonaws.com/indexer/2.13.0/algorand-indexer_linux_amd64_2.13.0.tar.bz2
           ls -la
       - name: Install binaries
         run: |
           # TODO: use passed version or latest
           mkdir -p ~/go/bin
-          mkdir -p node_stable_linux-amd64_${GO_ALGORAND_VERSION}
-          tar xzf node_stable_linux-amd64_${GO_ALGORAND_VERSION}.tar.gz -C node_stable_linux-amd64_${GO_ALGORAND_VERSION}/
-          cd node_stable_linux-amd64_${GO_ALGORAND_VERSION}/bin/
+          mkdir -p node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}
+          tar xzf node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz -C node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/
+          cd node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
           cd ../../
           tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2
