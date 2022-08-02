@@ -17,22 +17,26 @@ jobs:
   pr-generator:
     runs-on: ubuntu-20.04
     steps:
+
       - name: Install dependencies
         run: |
           wget --version
           java --version
           bzip2 --version
           git --version
+
       - name: Clone docs repo
         uses: actions/checkout@v3
         with:
           path: docs
+
       - name: Clone go-algorand repo
         uses: actions/checkout@v3
         with:
           repository: algorand/go-algorand
           ref: rel/stable
           path: go-algorand
+
       - name: Get latest go-algorand version
         run: |
           if ${{ (inputs.go_algorand_version == 'latest') || (inputs.go_algorand_version == '') }}; then
@@ -45,12 +49,14 @@ jobs:
             echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
             echo "GO_ALGORAND_VERSION set to passed value: ${{ inputs.go_algorand_version }}"
           fi
+
       - name: Clone Indexer repo
         uses: actions/checkout@v3
         with:
           repository: algorand/indexer
           ref: master
           path: indexer
+
       - name: Get latest indexer version
         run: |
           if ${{ (inputs.indexer_version == 'latest') || (inputs.indexer_version == '') }}; then
@@ -63,11 +69,13 @@ jobs:
             echo "INDEXER_VERSION=${{ inputs.indexer_version }}" >> $GITHUB_ENV
             echo "INDEXER_VERSION set to passed value: ${{ inputs.indexer_version }}"
           fi
+
       - name: Download binaries
         run: |
           wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
           wget https://algorand-releases.s3.amazonaws.com/indexer/${{ env.INDEXER_VERSION }}/algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}.tar.bz2
           ls -la
+
       - name: Install binaries
         run: |
           mkdir -p ~/go/bin
@@ -80,11 +88,13 @@ jobs:
           cp algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}/algorand-indexer ~/go/bin/
           ls -la
           ls -la ~/go/bin
+
       - name: Run doc generator
         run: |
           cd docs/scripts/
           ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
           git diff
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
