@@ -66,7 +66,7 @@ jobs:
       - name: Download binaries
         run: |
           wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
-          wget https://algorand-releases.s3.amazonaws.com/indexer/${{ INDEXER_VERSION }}/algorand-indexer_linux_amd64_${{ INDEXER_VERSION }}.tar.bz2
+          wget https://algorand-releases.s3.amazonaws.com/indexer/${{ env.INDEXER_VERSION }}/algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}.tar.bz2
           ls -la
       - name: Install binaries
         run: |
@@ -76,8 +76,8 @@ jobs:
           cd node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
           cd ../../
-          tar xjf algorand-indexer_linux_amd64_${{ INDEXER_VERSION }}.tar.bz2
-          cp algorand-indexer_linux_amd64_${{ INDEXER_VERSION }}/algorand-indexer ~/go/bin/
+          tar xjf algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}.tar.bz2
+          cp algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}/algorand-indexer ~/go/bin/
           ls -la
           ls -la ~/go/bin
       - name: Run doc generator
@@ -89,8 +89,8 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           path: docs
-          branch: "automatic-pr-go-algorand-${{ env.GO_ALGORAND_VERSION }}-indexer-${{ INDEXER_VERSION }}"
-          title: "Automatic PR for go-algorand: ${{ env.GO_ALGORAND_VERSION }} and indexer: ${{ INDEXER_VERSION }}"
+          branch: "automatic-pr-go-algorand-${{ env.GO_ALGORAND_VERSION }}-indexer-${{ env.INDEXER_VERSION }}"
+          title: "Automatic PR for go-algorand: ${{ env.GO_ALGORAND_VERSION }} and indexer: ${{ env.INDEXER_VERSION }}"
           body: "Automated changes by GitHub action"
           reviewers: "algojack"
           delete-branch: true
