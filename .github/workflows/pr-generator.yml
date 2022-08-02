@@ -2,7 +2,7 @@ name: "PR Generator"
 on:
   workflow_dispatch:
     inputs:
-      go-algorand-version:
+      go_algorand_version:
         description: "Go-Algorand Version"
         type: string
         required: false
