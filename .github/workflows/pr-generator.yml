@@ -12,7 +12,7 @@ on:
         type: string
         required: false
         default: 'latest'
-  push: # Testing one more time
+
 jobs:
   pr-generator:
     runs-on: ubuntu-20.04
