@@ -6,12 +6,12 @@ on:
         description: "Go-Algorand Version"
         type: string
         required: false
-        default: 'latest' # TODO
+        default: 'latest'
       indexer_version:
         description: "Indexer Version"
         type: string
         required: false
-        default: 'latest' # TODO
+        default: 'latest'
   push: # Temporary for testing
 jobs:
   pr-generator:
@@ -65,21 +65,19 @@ jobs:
           fi
       - name: Download binaries
         run: |
-          # TODO: use passed version or latest
           wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
-          wget https://algorand-releases.s3.amazonaws.com/indexer/2.13.0/algorand-indexer_linux_amd64_2.13.0.tar.bz2
+          wget https://algorand-releases.s3.amazonaws.com/indexer/${{ INDEXER_VERSION }}/algorand-indexer_linux_amd64_${{ INDEXER_VERSION }}.tar.bz2
           ls -la
       - name: Install binaries
         run: |
-          # TODO: use passed version or latest
           mkdir -p ~/go/bin
           mkdir -p node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}
           tar xzf node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz -C node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/
           cd node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
           cd ../../
-          tar xjf algorand-indexer_linux_amd64_2.13.0.tar.bz2
-          cp algorand-indexer_linux_amd64_2.13.0/algorand-indexer ~/go/bin/
+          tar xjf algorand-indexer_linux_amd64_${{ INDEXER_VERSION }}.tar.bz2
+          cp algorand-indexer_linux_amd64_${{ INDEXER_VERSION }}/algorand-indexer ~/go/bin/
           ls -la
           ls -la ~/go/bin
       - name: Run doc generator
@@ -87,5 +85,12 @@ jobs:
           cd docs/scripts/
           ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
           git diff
-      - name: Create PR
-        run: echo "Time to create a PR!"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: docs
+          branch: "automatic-pr-go-algorand-${{ env.GO_ALGORAND_VERSION }}-indexer-${{ INDEXER_VERSION }}"
+          title: "Automatic PR for go-algorand: ${{ env.GO_ALGORAND_VERSION }} and indexer: ${{ INDEXER_VERSION }}"
+          body: "Automated changes by GitHub action"
+          reviewers: "algojack"
+          delete-branch: true
