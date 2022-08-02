@@ -7,7 +7,7 @@ on:
         type: string
         required: false
         default: 'latest' # TODO
-      indexer-version:
+      indexer_version:
         description: "Indexer Version"
         type: string
         required: false
@@ -37,14 +37,10 @@ jobs:
         run: |
           if ${{ (inputs.go_algorand_version == 'latest') || (inputs.go_algorand_version == '') }}; then
             cd go-algorand
-            git status
             git fetch --tags
-            git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable'
-            git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1
-            git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//'
-            echo "GO_ALGORAND_VERSION=$(git tag --sort=committerdate --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
-            echo $GITHUB_ENV
-            echo "GO_ALGORAND_VERSION set to latest"
+            echo "Setting GO_ALGORAND_VERSION to latest:"
+            git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1 | sed 's/v//' | sed 's/-stable//'
+            echo "GO_ALGORAND_VERSION=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
           else
             echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
             echo "GO_ALGORAND_VERSION set to passed value: ${{ inputs.go_algorand_version }}"
@@ -55,6 +51,18 @@ jobs:
           repository: algorand/indexer
           ref: master
           path: indexer
+      - name: Get latest indexer version
+        run: |
+          if ${{ (inputs.indexer_version == 'latest') || (inputs.indexer_version == '') }}; then
+            cd indexer
+            git fetch --tags
+            echo "Setting INDEXER_VERSION to latest:"
+            git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v "-" | sort -V | tail -1
+            echo "INDEXER_VERSION=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v "-" | sort -V | tail -1)" >> $GITHUB_ENV
+          else
+            echo "INDEXER_VERSION=${{ inputs.indexer_version }}" >> $GITHUB_ENV
+            echo "INDEXER_VERSION set to passed value: ${{ inputs.indexer_version }}"
+          fi
       - name: Download binaries
         run: |
           # TODO: use passed version or latest
