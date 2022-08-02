@@ -38,8 +38,6 @@ indexer util block-generator runner [flags]
 
   -p, --indexer-port uint                   Port to start the server at. This is useful if you have a prometheus server for collecting additional data. (default 4010)
 
-  -k, --keep-data-dir                       If set the validator will not delete the data directory after tests complete.
-
   -l, --log-level string                    LogLevel to use when starting Indexer. [error, warn, info, debug, trace] (default "error")
 
   -c, --postgres-connection-string string   Postgres connection string.
