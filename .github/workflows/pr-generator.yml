@@ -12,7 +12,6 @@ on:
         type: string
         required: false
         default: 'latest'
-  push: # Temporary for testing
 jobs:
   pr-generator:
     runs-on: ubuntu-20.04
