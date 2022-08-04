@@ -10,7 +10,7 @@ See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand 
     Where possible, TEAL code snippets are accompanied by their counterparts in PyTeal. Here are a few things to be aware of when comparing across these two languages:
      
     - Each PyTeal code snippet ends with the action to compile the program and write it to a file so the user can view the underlying TEAL code.
-    - Sometimes the compiled version of a PyTeal code snippet will differ slightly from the TEAL version. However, the resulting function should be equivalent for the particular area of focus in the documentation. In larger more complex programs, this may not always be the case.
+    - Sometimes the compiled version of a PyTeal code snippet will differ slightly from the program version. However, the resulting function should be equivalent for the particular area of focus in the documentation. In larger more complex programs, this may not always be the case.
     - When a TEAL code snippet includes comments as placeholders for code, the PyTeal example will often use a placeholder of `Seq([Return(Int(1))])` with a comment describing this as a placeholder. This allows the user to compile the program for learning purposes. However, returning 1 is a very permissive action and should be carefully updated when used in a production application.
 
 # The lifecycle of a smart contract
