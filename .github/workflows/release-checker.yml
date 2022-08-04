@@ -33,9 +33,9 @@ jobs:
       - name: Get current documentation versions
         run: |
           cd docs
-          echo "CURRENT_STABLE_GO_ALGORAND_VERSION=$(cat .go-algorand-stable.version) >> $GITHUB_ENV
-          echo "CURRENT_BETA_GO_ALGORAND_VERSION=$(cat .go-algorand-beta.version) >> $GITHUB_ENV
-          echo "CURRENT_INDEXER_VERSION=$(cat .indexer.version) >> $GITHUB_ENV
+          echo "CURRENT_STABLE_GO_ALGORAND_VERSION=$(cat .go-algorand-stable.version)" >> $GITHUB_ENV
+          echo "CURRENT_BETA_GO_ALGORAND_VERSION=$(cat .go-algorand-beta.version)" >> $GITHUB_ENV
+          echo "CURRENT_INDEXER_VERSION=$(cat .indexer.version)" >> $GITHUB_ENV
 
       - name: Get latest stable and beta go-algorand releases
         run: |
@@ -48,7 +48,7 @@ jobs:
         run: |
           cd indexer
           git fetch --tags
-          echo "LATEST_INDEXER_RELEASE=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v "-" | sort -V | tail -1)" >> $GITHUB_ENV
+          echo "LATEST_INDEXER_RELEASE=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1)" >> $GITHUB_ENV
 
       - name: Trigger docs and version updates if STABLE versions don't match
         if: |
