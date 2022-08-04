@@ -15,7 +15,6 @@ jobs:
           path: docs
 
       - name: Clone go-algorand repo
-        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         uses: actions/checkout@v3
         with:
           repository: algorand/go-algorand
@@ -23,7 +22,6 @@ jobs:
           path: go-algorand
 
       - name: Clone Indexer repo
-        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         uses: actions/checkout@v3
         with:
           repository: algorand/indexer
