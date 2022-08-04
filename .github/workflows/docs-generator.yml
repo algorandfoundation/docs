@@ -89,6 +89,7 @@ jobs:
           cd docs/get-details/algorand-networks
           sed -i.bak 's/v.*-beta/${{ inputs.go_algorand_version }}/' betanet.md
           rm betanet.md.bak
+          echo "${{ inputs.go_algorand_version }} > .go-algorand-beta.version"
 
       - name: Change go-algorand version for Stable release
         if: contains(inputs.go_algorand_version, '-stable')
@@ -97,7 +98,7 @@ jobs:
           sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' testnet.md
           sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' mainnet.md
           rm testnet.md.bak mainnet.md.bak
-          echo "${{ inputs.go_algorand_version }} > .go-algorand.version"
+          echo "${{ inputs.go_algorand_version }} > .go-algorand-stable.version"
 
       - name: Change Indexer version
         if: inputs.indexer_version != '' && !contains(inputs.indexer_version, '-')
