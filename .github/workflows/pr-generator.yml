@@ -86,7 +86,7 @@ jobs:
       - name: Change version for Beta release
         if: contains(inputs.go_algorand_version, '-beta')
         run: |
-          cd docs/get-details/algorand-networks
+          cd docs/docs/get-details/algorand-networks
           sed -i.bak 's/v.*-beta/${{ inputs.go_algorand_version }}/' betanet.md
           rm betanet.md.bak
           echo "${{ inputs.go_algorand_version }} > .go-algorand-beta.version"
@@ -94,7 +94,7 @@ jobs:
       - name: Change go-algorand version for Stable release
         if: contains(inputs.go_algorand_version, '-stable')
         run: |
-          cd docs/get-details/algorand-networks
+          cd docs/docs/get-details/algorand-networks
           sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' testnet.md
           sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' mainnet.md
           rm testnet.md.bak mainnet.md.bak
