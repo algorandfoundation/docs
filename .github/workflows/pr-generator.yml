@@ -1,4 +1,4 @@
-name: "Docs Generator"
+name: "PR Generator"
 on:
   workflow_dispatch:
     inputs:
@@ -23,7 +23,7 @@ on:
   push: # for testing only
 
 jobs:
-  docs-generator:
+  pr-generator:
     runs-on: ubuntu-latest
     steps:
       - name: Clone docs repo

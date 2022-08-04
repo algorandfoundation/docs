@@ -54,7 +54,7 @@ jobs:
         if: |
           env.CURRENT_GO_ALGORAND_VERSION != env.LATEST_STABLE_GO_ALGORAND_RELEASE ||
           env.CURRENT_INDEXER_VERSION != env.LATEST_INDEXER_RELEASE
-        uses: docs/.github/workflows/docs-generator.yml
+        uses: docs/.github/workflows/pr-generator.yml
         with:
           go_algorand_version: ${{ env.LATEST_STABLE_GO_ALGORAND_RELEASE }}
           indexer_version: ${{ env.LATEST_INDEXER_RELEASE }}
@@ -62,7 +62,7 @@ jobs:
       - name: Trigger docs and version updates if BETA versions don't match
         if: |
           env.CURRENT_GO_ALGORAND_VERSION != env.LATEST_BETA_GO_ALGORAND_RELEASE
-        uses: docs/.github/workflows/docs-generator.yml
+        uses: docs/.github/workflows/pr-generator.yml
         with:
           go_algorand_version: ${{ env.LATEST_BETA_GO_ALGORAND_RELEASE }}
           indexer_version: ${{ env.LATEST_INDEXER_RELEASE }}
