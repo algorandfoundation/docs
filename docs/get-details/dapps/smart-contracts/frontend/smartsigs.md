@@ -89,20 +89,19 @@ int 0
     from algosdk.v2client import algod
 
     try:
-        # create an algod client
-        algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        # Create an algod client, using default sandbox parameters here
+        algod_token = "a" * 64
         algod_address = "http://localhost:4001"
         algod_client = algod.AlgodClient(algod_token, algod_address)
 
-        # int 0 - sample.teal
+        # Load in our program
         myprogram = "sample.teal"
-        # read teal program
-        data = open(myprogram, 'r').read()
-        # compile teal program
+        data = load_resource(myprogram)
+
+        # Compile the program against the algod
         response = algod_client.compile(data)
-        # print(response)
-        print("Response Result = ",response['result'])
-        print("Response Hash = ",response['hash'])
+        print(f"Response Result (base64 encoded): {response['result']}")
+        print(f"Response Hash: {response['hash']}")
     except Exception as e:
         print(e)
 
@@ -238,9 +237,8 @@ The response result from the TEAL `compile` command above is used to create the 
         import base64
         from algosdk.future.transaction import LogicSigAccount
 
-        programstr = response['result']
-        t = programstr.encode()
-        program = base64.decodebytes(t)
+        # Decode the program to bytes
+        program = base64.b64decode(response["result"])
         lsig = LogicSigAccount(program)
     ```
 
@@ -290,6 +288,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         arg_str = "my string"
         arg1 = arg_str.encode()
         lsig = LogicSigAccount(program, args=[arg1])
+
         # integer parameter
         arg1 = (123).to_bytes(8, 'big')
         lsig = LogicSigAccount(program, args=[arg1])
@@ -453,96 +452,89 @@ int 123
 
 === "Python"
 	```python
-        from algosdk import transaction, account, mnemonic
-        from algosdk.v2client import algod
-        from algosdk.future.transaction import *
-        import os
-        import base64
-        import json
-        # Read a file
-        def load_resource(res):
-            dir_path = os.path.dirname(os.path.realpath(__file__))
-            path = os.path.join(dir_path, res)
-            with open(path, "rb") as fin:
-                data = fin.read()
-            return data
-        def contract_account_example():
-            # Create an algod client
-            algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
-            algod_address = "http://localhost:4001" 
-            # algod_token = "<algod-token>" 
-            # algod_address = "<algod-address>" 
-            # receiver = "<receiver-address>" 
-            receiver = "NQMDAY2QKOZ4ZKJLE6HEO6LTGRJHP3WQVZ5C2M4HKQQLFHV5BU5AW4NVRY"
-            algod_client = algod.AlgodClient(algod_token, algod_address)        
-            myprogram = "samplearg.teal"
-            # myprogram = "<filename>"
-            # Read TEAL program
-            data = load_resource(myprogram)
-            source = data.decode('utf-8')
-            # Compile TEAL program
-            # // This code is meant for learning purposes only
-            # // It should not be used in production
-            # // sample.teal
-            # arg_0
-            # btoi
-            # int 123
-            # ==
-            # // bto1
-            # // Opcode: 0x17
-            # // Pops: ... stack, []byte
-            # // Pushes: uint64
-            # // converts bytes X as big endian to uint64
-            # // btoi panics if the input is longer than 8 bytes
-            response = algod_client.compile(source)
-            # Print(response)
-            print("Response Result = ", response['result'])
-            print("Response Hash = ", response['hash'])
-            # Create logic sig
-            programstr = response['result']
-            t = programstr.encode("ascii")
-            # program = b"hex-encoded-program"
-            program = base64.decodebytes(t)
-            print(program)
-            print(len(program) * 8)
-            # string parameter
-            # arg_str = "<my string>"
-            # arg1 = arg_str.encode()
-            # lsig = transaction.LogicSigAccount(program, args=[arg1])
-            # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-            # Create arg to pass if TEAL program requires an arg
-            # if not, omit args param
-            arg1 = (123).to_bytes(8, 'big')
-            lsig = LogicSigAccount(program, args=[arg1])
-            sender = lsig.address()
-            # Get suggested parameters
-            params = algod_client.suggested_params()
-            # Comment out the next two (2) lines to use suggested fees
-            # params.flat_fee = True
-            # params.fee = 1000           
-            # Build transaction  
-            amount = 10000 
-            closeremainderto = None
-            # Create a transaction
-            txn = PaymentTxn(
-                sender, params, receiver, amount, closeremainderto)
-            # Create the LogicSigTransaction with contract account LogicSigAccount
-            lstx = transaction.LogicSigTransaction(txn, lsig)
-            # transaction.write_to_file([lstx], "simple.stxn")
-            # Send raw LogicSigTransaction to network
-            txid = algod_client.send_transaction(lstx)
-            print("Transaction ID: " + txid) 
-            # wait for confirmation	
-            try:
-                confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
-                print("TXID: ", txid)
-                print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-            except Exception as err:
-                print(err)
-            print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        
-        contract_account_example()
+    import os
+    import base64
+    import json
+
+    from algosdk.v2client import algod
+    from algosdk.future.transaction import *
+    from algosdk import transaction, account, mnemonic
+    from algosdk.atomic_transaction_composer import *
+
+    # Read a file
+    def load_resource(res):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(dir_path, res)
+        with open(path, "r") as f:
+            data = f.read()
+        return data
+
+
+    def contract_account_example():
+        # Create an algod client, using default sandbox parameters here
+        algod_token = "a" * 64
+        algod_address = "http://localhost:4001"
+        algod_client = algod.AlgodClient(algod_token, algod_address)
+
+        # Get account info
+        addr1_mnemonic = "<Your 25-word-mnemonic>"
+        private_key = mnemonic.to_private_key(addr1_mnemonic)
+        addr1 = account.address_from_private_key(private_key)
+
+        # Load in our program
+        myprogram = "sample.teal"
+        data = load_resource(myprogram)
+
+        # Compile the program against the algod
+        response = algod_client.compile(data)
+        print(f"Response Result (base64 encoded): {response['result']}")
+        print(f"Response Hash: {response['hash']}")
+
+        # Decode the program to bytes and encode the argument as bytes
+        program = base64.b64decode(response["result"])
+        arg1 = (123).to_bytes(8, "big")
+
+        # Create the lsig account, passing arg
+        lsig = LogicSigAccount(program, args=[arg1])
+        sender = lsig.address()
+        print(f"Address of lsig: {sender}")
+
+        # Get suggested parameters
+        params = algod_client.suggested_params()
+
+        # replace with any other address or amount
+        receiver = addr1
+        amount = 10000
+
+        # fund the contract account to test payment from the contract
+        atc = AtomicTransactionComposer()
+        signer = AccountTransactionSigner(private_key)
+        ptxn = TransactionWithSigner(
+            PaymentTxn(addr1, params, lsig.address(), 1000000), signer
+        )
+        atc.add_transaction(ptxn)
+        result = atc.execute(algod_client, 2)
+        for res in result.abi_results:
+            print(res.return_value)
+
+        # Create a transaction
+        txn = PaymentTxn(sender, params, receiver, amount)
+
+        # Create the LogicSigTransaction with contract account LogicSigAccount
+        lstx = transaction.LogicSigTransaction(txn, lsig.lsig)
+
+        # Send raw LogicSigTransaction to network
+        txid = algod_client.send_transaction(lstx)
+        print("Transaction ID: " + txid)
+
+        # wait for confirmation
+        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
+        print(f"Result confirmed in round: {confirmed_txn['confirmed-round']}")
+        print(f"Transaction information: {json.dumps(confirmed_txn, indent=4)}")
+
+
+    contract_account_example()
+
     ```
 
 === "Java"
@@ -907,11 +899,18 @@ The following example illustrates signing a transaction with a created logic sig
 
 === "Python"
 	```python
-    from algosdk import algod, transaction, account, mnemonic
-    from algosdk.v2client import algod
     import os
     import base64
+    import json
+
+    from algosdk.v2client import algod
     from algosdk.future.transaction import *
+    from algosdk import transaction, account, mnemonic
+    from algosdk.atomic_transaction_composer import *
+
+    # // This code is meant for learning purposes only
+    # // It should not be used in production
+
     # Read a file
     def load_resource(res):
         dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -919,93 +918,81 @@ The following example illustrates signing a transaction with a created logic sig
         with open(path, "rb") as fin:
             data = fin.read()
         return data
+
+
     try:
-        # Create an algod client
-        algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        # Create an algod client, using default sandbox parameters here
+        algod_token = "a" * 64
         algod_address = "http://localhost:4001"
-        # algod_token = "<algod-token>"
-        # algod_address = "<algod-address:port>"
-        # receiver = "<receiver-address>"
-        receiver = "NQMDAY2QKOZ4ZKJLE6HEO6LTGRJHP3WQVZ5C2M4HKQQLFHV5BU5AW4NVRY"
         algod_client = algod.AlgodClient(algod_token, algod_address)
-        myprogram = "samplearg.teal"
-        # myprogram = "<filename>"
-        # Read TEAL program
+
+        # Get account info
+        addr1_mnemonic = "<Your 25-word-mnemonic>"
+        private_key = mnemonic.to_private_key(addr1_mnemonic)
+        addr1 = account.address_from_private_key(private_key)
+
+        # Load in our program
+        myprogram = "sample.teal"
         data = load_resource(myprogram)
-        source = data.decode('utf-8')
-        # Compile TEAL program
-        # // This code is meant for learning purposes only
-        # // It should not be used in production
-        # // sample.teal
+        source = data.decode("utf-8")
 
-        # arg_0
-        # btoi
-        # int 123
-        # ==
-
-        # // bto1
-        # // Opcode: 0x17
-        # // Pops: ... stack, []byte
-        # // Pushes: uint64
-        # // converts bytes X as big endian to uint64
-        # // btoi panics if the input is longer than 8 bytes
+        # Compile the program against the algod
         response = algod_client.compile(source)
-        # Print(response)
-        print("Response Result = ", response['result'])
-        print("Response Hash = ", response['hash'])
+        print(f"Response Result (base64 encoded): {response['result']}")
+        print(f"Response Hash: {response['hash']}")
 
-        # Create logic sig
-        programstr = response['result']
-        t = programstr.encode("ascii")
-        # program = b"hex-encoded-program"
-        program = base64.decodebytes(t)
-        print(program)
-        print(len(program) * 8)
-        # Create arg to pass
-        # string parameter
-        # arg_str = "<my string>"
-        # arg1 = arg_str.encode()
-        # lsig = transaction.LogicSigAccount(program, args=[arg1])
-        # integer parameter
-        # arg1 = (123).to_bytes(8, 'big')
-        # lsig = transaction.LogicSigAccount(program, args=[arg1])
-        # if TEAL program requires an arg,
-        # if not, omit args param on LogicSigAccount
-        # lsig = LogicSigAccount(program)
-        arg1 = (123).to_bytes(8, 'big')
+        # Decode the program to bytes and encode the argument as bytes
+        program = base64.b64decode(response["result"])
+        arg1 = (123).to_bytes(8, "big")
+
+        # Create the lsig account, passing arg
         lsig = LogicSigAccount(program, args=[arg1])
+
         # Recover the account that is wanting to delegate signature
-        # never use mnemonics in code, for demo purposes    
-        passphrase = "<25-word-mnemonic>"
+        # never use mnemonics in code, for demo purposes
+        passphrase = "<Your 25-word-mnemonic>"
         sk = mnemonic.to_private_key(passphrase)
         addr = account.address_from_private_key(sk)
         print("Address of Sender/Delegator: " + addr)
+
         # Sign the logic signature with an account sk
         lsig.sign(sk)
 
         # Get suggested parameters
         params = algod_client.suggested_params()
-        # Comment out the next two (2) lines to use suggested fees
-        # params.flat_fee = True
-        # params.fee = 1000
-        # Build transaction
+
+        # replace with any other address or amount
+        receiver = addr1
         amount = 10000
-        closeremainderto = None
+
+        # fund the contract account to test payment from the contract
+        atc = AtomicTransactionComposer()
+        signer = AccountTransactionSigner(private_key)
+        ptxn = TransactionWithSigner(
+            PaymentTxn(addr1, params, lsig.address(), 1000000), signer
+        )
+        atc.add_transaction(ptxn)
+        result = atc.execute(algod_client, 2)
+        for res in result.abi_results:
+            print(res.return_value)
+
         # Create a transaction
-        txn = PaymentTxn(
-            addr, params, receiver, amount, closeremainderto)
+        txn = PaymentTxn(addr, params, receiver, amount)
+
         # Create the LogicSigTransaction with contract account LogicSigAccount
-        lstx = transaction.LogicSigTransaction(txn, lsig)
-        txns = [lstx]
-        transaction.write_to_file(txns, "simple.stxn")
+        lstx = transaction.LogicSigTransaction(txn, lsig.lsig)
+
         # Send raw LogicSigTransaction to network
         txid = algod_client.send_transaction(lstx)
         print("Transaction ID: " + txid)
+
+        # Wait for confirmation
         confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))    
+        print(f"Result confirmed in round: {confirmed_txn['confirmed-round']}")
+        print(f"Transaction information: {json.dumps(confirmed_txn, indent=4)}")
     except Exception as e:
         print(e)
+
     ```
 
 === "Java"
