@@ -34,8 +34,11 @@ jobs:
         run: |
           cd docs
           echo "::set-output name=stable::$(cat .go-algorand-stable.version)"
+          cat .go-algorand-stable.version
           echo "::set-output name=beta::$(cat .go-algorand-beta.version)"
+          cat .go-algorand-beta.version
           echo "::set-output name=indexer::$(cat .indexer.version)"
+          cat .indexer.version
 
       - name: Get latest stable and beta go-algorand releases
         id: latest_go_algorand
@@ -43,7 +46,9 @@ jobs:
           cd go-algorand
           git fetch --tags
           echo "::set-output name=stable::$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1)"
+          git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1
           echo "::set-output name=beta::$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*-beta' | sort -V | tail -1)"
+          git tag --list 'v[0-9]*.[0-9]*.[0-9]*-beta' | sort -V | tail -1
 
       - name: Get latest indexer release without dashes
         id: latest_indexer
@@ -51,6 +56,7 @@ jobs:
           cd indexer
           git fetch --tags
           echo "::set-output name=indexer::$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1)"
+          git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1
 
     outputs: # Translate step outputs into job outputs
       current_stable: ${{ steps.current_versions.outputs.stable }}
