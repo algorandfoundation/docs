@@ -88,6 +88,7 @@ jobs:
           cd docs/docs/get-details/algorand-networks
           sed -i.bak 's/v.*-beta/${{ inputs.go_algorand_version }}/' betanet.md
           rm betanet.md.bak
+          cd ../../../
           echo "${{ inputs.go_algorand_version }} > .go-algorand-beta.version"
 
       - name: Change go-algorand version for Stable release
@@ -97,12 +98,13 @@ jobs:
           sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' testnet.md
           sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' mainnet.md
           rm testnet.md.bak mainnet.md.bak
+          cd ../../../
           echo "${{ inputs.go_algorand_version }} > .go-algorand-stable.version"
 
       - name: Change Indexer version
         if: inputs.indexer_version != '' && !contains(inputs.indexer_version, '-')
         run: |
-          echo "${{ inputs.indexer_version }} > .indexer.version"
+          echo "${{ inputs.indexer_version }} > docs/.indexer.version"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
