@@ -1,9 +1,7 @@
 name: "Check for releases"
 on:
-  # schedule:
-  #   - cron: '*/30 * * * *'
-  push: # For testing only
-  workflow_dispatch: # For testing only
+  schedule:
+    - cron: '*/30 * * * *'
 
 jobs:
   release-checker:
@@ -13,7 +11,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: docs
-          ref: automatic-pr-generator #for testing only
 
       - name: Clone go-algorand repo
         uses: actions/checkout@v3
@@ -61,6 +58,15 @@ jobs:
           echo "::set-output name=indexer::$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1)"
           git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1
 
+      - name: Check versions # Just for easier troubleshooting
+        run: |
+          echo "Checking if current stable: ${{ steps.current_versions.outputs.stable }} equals latest stable: ${{ steps.latest_go_algorand.outputs.stable }}"
+          [[ "${{ steps.current_versions.outputs.stable }}" == "${{ steps.latest_go_algorand.outputs.stable }}" ]] && echo "Matches" || echo "NO MATCH!!"
+          echo "Checking if current beta: ${{ steps.current_versions.outputs.beta }} equals latest beta: ${{ steps.latest_go_algorand.outputs.beta }}"
+          [[ "${{ steps.current_versions.outputs.beta }}" == "${{ steps.latest_go_algorand.outputs.beta }}" ]] && echo "Matches" || echo "NO MATCH!!"
+          echo "Checking if current indexer: ${{ steps.current_versions.outputs.indexer }} equals latest indexer: ${{ steps.latest_indexer.outputs.indexer }}"
+          [[ "${{ steps.current_versions.outputs.indexer }}" == "${{ steps.latest_indexer.outputs.indexer }}" ]] && echo "Matches" || echo "NO MATCH!!"
+
     outputs: # Translate step outputs into job outputs
       current_stable: ${{ steps.current_versions.outputs.stable }}
       current_beta: ${{ steps.current_versions.outputs.beta }}
@@ -68,21 +74,6 @@ jobs:
       latest_stable: ${{ steps.latest_go_algorand.outputs.stable }}
       latest_beta: ${{ steps.latest_go_algorand.outputs.beta }}
       latest_indexer: ${{ steps.latest_indexer.outputs.indexer }}
-
-  version-test:
-    name: Testing versions match
-    needs: release-checker
-    runs-on: ubuntu-latest
-    steps:
-      - name: check versions
-        run: |
-          echo "Checking if current stable: ${{ needs.release-checker.outputs.current_stable }} equals latest stable: ${{ needs.release-checker.outputs.latest_stable }}"
-          [[ "${{ needs.release-checker.outputs.current_stable }}" == "${{ needs.release-checker.outputs.latest_stable }}" ]] && echo "Matches" || echo "NO MATCH!!"
-          echo "Checking if current beta: ${{ needs.release-checker.outputs.current_beta }} equals latest beta: ${{ needs.release-checker.outputs.latest_beta }}"
-          [[ "${{ needs.release-checker.outputs.current_beta }}" == "${{ needs.release-checker.outputs.latest_beta }}" ]] && echo "Matches" || echo "NO MATCH!!"
-          echo "Checking if current indexer: ${{ needs.release-checker.outputs.current_indexer }} equals latest indexer: ${{ needs.release-checker.outputs.latest_indexer }}"
-          [[ "${{ needs.release-checker.outputs.current_indexer }}" == "${{ needs.release-checker.outputs.latest_indexer }}" ]] && echo "Matches" || echo "NO MATCH!!"
-
 
   trigger-pr-generator-stable:
     name: Trigger docs and version updates if STABLE versions don't match

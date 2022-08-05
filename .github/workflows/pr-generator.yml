@@ -20,7 +20,6 @@ on:
         description: "Indexer Version (Example: X.X.X)"
         type: string
         required: true
-  push: # for testing only
 
 jobs:
   pr-generator:
@@ -105,19 +104,13 @@ jobs:
         run: |
           echo "${{ inputs.indexer_version }} > .indexer.version"
 
-      - name: TESTING ONLY # For testing only
-        run: |
-          cd docs
-          git status
-          git diff
-
-      # - name: Create Pull Request
-      #   uses: peter-evans/create-pull-request@v4
-      #   with:
-      #     path: docs
-      #     branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
-      #     title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
-      #     body: "Changes generated automatically by github action docs-generator."
-      #     reviewers: "nullun,barnjamin,ryanrfox"
-      #     delete-branch: true
-      #     base: staging
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: docs
+          branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
+          title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
+          body: "Changes generated automatically by github action docs-generator."
+          reviewers: "nullun,barnjamin,ryanrfox"
+          delete-branch: true
+          base: staging
