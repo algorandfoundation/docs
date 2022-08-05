@@ -33,19 +33,15 @@ jobs:
         id: current_versions
         run: |
           cd docs
-          echo "NNNNEWLINEHEREEEE"
           echo "::set-output name=stable::$(cat .go-algorand-stable.version)"
-          echo "NNNNEWLINEHEREEEE"
+          echo "Stable version: "
           cat .go-algorand-stable.version
-          echo "NNNNEWLINEHEREEEE"
           echo "::set-output name=beta::$(cat .go-algorand-beta.version)"
-          echo "NNNNEWLINEHEREEEE"
+          echo "Beta version: "
           cat .go-algorand-beta.version
-          echo "NNNNEWLINEHEREEEE"
           echo "::set-output name=indexer::$(cat .indexer.version)"
-          echo "NNNNEWLINEHEREEEE"
+          echo "Indexer version: "
           cat .indexer.version
-          echo "NNNNEWLINEHEREEEE"
 
       - name: Get latest stable and beta go-algorand releases
         id: latest_go_algorand
@@ -69,8 +65,8 @@ jobs:
       current_stable: ${{ steps.current_versions.outputs.stable }}
       current_beta: ${{ steps.current_versions.outputs.beta }}
       current_indexer: ${{ steps.current_versions.outputs.indexer }}
-      latest_stable: ${{ steps.latest_go_algorand.outputs.indexer }}
-      latest_beta: ${{ steps.latest_go_algorand.outputs.indexer }}
+      latest_stable: ${{ steps.latest_go_algorand.outputs.stable }}
+      latest_beta: ${{ steps.latest_go_algorand.outputs.beta }}
       latest_indexer: ${{ steps.latest_indexer.outputs.indexer }}
 
   version-test:
