@@ -12,7 +12,7 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let name = "DevDocsCoin";
+    const name = "DevDocsCoin";
     let assetInfo = await indexerClient.searchForAssets()
         .name(name).do();
     console.log("Information for Asset Name: " + JSON.stringify(assetInfo, undefined, 2));

@@ -12,7 +12,7 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let assetIndex = 312769;
+    const assetIndex = 312769;
     let accountInfo = await indexerClient.searchAccounts()
         .assetID(assetIndex).do();
     console.log("Information for account info for Asset: " + JSON.stringify(accountInfo, undefined, 2));

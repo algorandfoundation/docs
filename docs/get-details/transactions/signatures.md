@@ -250,7 +250,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     # create a multisig account
     version = 1  # multisig version
     threshold = 2  # how many signatures are necessary
-    msig = Multisig(version, threshold, [account_1, account_2])
+    msig = Multisig(version, threshold, [account_1, account_2, account_3])
 
     print("Multisig Address: ", msig.address())
     print('Go to the below link to fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account={}'.format(msig.address())) 

@@ -12,9 +12,9 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let asset_id = 2044572;
-    let address_role = "receiver";
-    let address = "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI";
+    const asset_id = 2044572;
+    const address_role = "receiver";
+    const address = "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI";
     let tracsactionInfo = await indexerClient.lookupAssetTransactions(asset_id)
         .addressRole(address_role)
         .address(address).do();

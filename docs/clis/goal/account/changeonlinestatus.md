@@ -30,7 +30,7 @@ goal account changeonlinestatus [flags]
 
 ```
 
-  -a, --address string       Account address to change (required if no --partkeyfile)
+  -a, --address string       Account address to change (required if no -partkeyfile)
 
   -f, --fee uint             The Fee to set on the status change transaction (defaults to suggested fee)
 
@@ -46,9 +46,7 @@ goal account changeonlinestatus [flags]
 
   -o, --online               Set this account to online or offline (default true)
 
-      --partkeyfile string   Participation key file (required if no --address)
-
-  -S, --signer string        Address of key to sign with, if different due to rekeying
+      --partkeyfile string   Participation key file (required if no -account)
 
   -t, --txfile string        Write status change transaction to this file
 

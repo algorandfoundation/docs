@@ -85,22 +85,24 @@ python3 example.py
 ```
 
 ```text
-#output 
-Alice is generating temporary accounts...
+#output
+Generating temporary accounts...
 Alice is generating an example NFT...
-The NFT ID is: 17
-Alice is creating auction smart contract that lasts 30 seconds to auction off NFT...
+The NFT ID is 17
+Alice's balances: {0: 99999000, 17: 1}
+Bob is creating an auction that lasts 30 seconds to auction off the NFT...
+Done. The auction app ID is 18 and the escrow account is...
 Alice is setting up and funding NFT auction...
-Alice's algo balance:  99998100  algos
-The smart contract now holds the following: {0: 202000, 17: 1}
-Carla wants to bid on NFT, her algo balance:  100000100  algos
-Carla is placing bid for:  1000000  algos
-Carla is opting into NFT with id: 17
-Alice is closing out the auction....
-The smart contract now holds the following: {0: 0}
-Carla's NFT balance: 1  for NFT ID:  17
+Alice's balances: {0: 99998000, 17: 0}
+Auction escrow balances: {0: 202000, 17: 1}
+Carla wants to bid on NFT, her balances: {0: 100000000}
+Carla is placing bid for 1000000 microAlgos
+Carla is opting into NFT with ID 17
+Waiting 16 seconds for the auction to finish
+Alice is closing out the auction
+The auction escrow now holds the following: {0: 0}
 Alice's balances after auction:  {0: 101197100, 17: 0}  Algos
-Carla's balances after auction:  {0: 98997100, 17: 1}  Algos
+Carla's balances after auction:  {0: 98997098, 17: 1}  Algos
 ```
 
 Optionally Run tests.

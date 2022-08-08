@@ -11,7 +11,7 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
+    const acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
     let accountInfo = await indexerClient.lookupAccountByID(acct).do();
     console.log("Information for Account: " + JSON.stringify(accountInfo, undefined, 2));
 })().catch(e => {
