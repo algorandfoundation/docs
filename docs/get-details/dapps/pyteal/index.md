@@ -121,7 +121,7 @@ The only condition above that does _not_ check the `on_completion` field is the 
 
 ### First Router 
 
-While the above method of constructing distinct Expression trees for both the approval and clear state programs works, it is often preferable to use the [Router](TODO: link to user-guide) class provided in `PyTeal`. The `Router` class abstracts much of the handling for method routing when constructing ABI compliant applications. This is especially useful for encoding and decoding ABI types and returning ABI types.
+While the above method of constructing distinct Expression trees for both the approval and clear state programs works, it is often preferable to use the [Router](https://pyteal.readthedocs.io/en/stable/abi.html#registering-methods) class provided in `PyTeal`. The `Router` class abstracts much of the handling for method routing when constructing ABI compliant applications. This is especially useful for encoding and decoding ABI types and returning ABI types.
 
 ```python
 from pyteal import *
@@ -158,7 +158,7 @@ The first expression stores a global variable named Count, and its value is set 
 
 This second expression is just `Approve()` which is an alias for `Return(Int(1))` that gets passed back to the caller. 
 
-The Router class is initialized with a string name (will be important below in [abi.json](TODO)) and a set of BareCallActions. A Bare Call is an application call transaction with 0 application arguments.
+The Router class is initialized with a string name (will be important below in [abi.json](#abi-specification)) and a set of BareCallActions. A Bare Call is an application call transaction with 0 application arguments.
 
 Each OnComplete type may have an associated OnCompleteAction, the options are:
 
@@ -340,7 +340,9 @@ print(json.dumps(contract.dictify()))
 
 The last bit to add is the `router.compile_program` which compiles the PyTeal into TEAL and returns the `approval` program, the `clear` program, and even the Python SDK `contract` object that can be used to make method calls or written to a file and shared.
 
-The contract as json can be be shared with callers and loaded into the SDKs. 
+### ABI specification
+
+The contract as json can be be shared with callers and loaded into the SDKs, see the [abi](../smart-contracts/ABI/index.md) page for more. 
 
 It will look line this:
 ```json
