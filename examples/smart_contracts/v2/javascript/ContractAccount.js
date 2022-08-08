@@ -1,6 +1,7 @@
 const { Transaction, algosToMicroalgos } = require('algosdk');
 const algosdk = require('algosdk');
 const { getAccounts } = require('./sandbox.js');
+const fs = require('fs');
 
 // Create an algod client, using default sandbox parameters here
 const token = "a".repeat(64);
@@ -19,8 +20,8 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     console.log(params);
 
     // Read TEAL file. See more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-    let fs = require('fs'),
-        path = require('path'),
+
+    let path = require('path'),
         filePath = path.join(__dirname, 'samplearg.teal');
     let data = fs.readFileSync(filePath);
 

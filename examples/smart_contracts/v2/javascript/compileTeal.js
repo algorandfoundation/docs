@@ -6,6 +6,7 @@ const port = 4001;
 
 // Import the filesystem module 
 const fs = require('fs');
+
 let algodclient = new algosdk.Algodv2(token, server, port);
 
 (async () => {

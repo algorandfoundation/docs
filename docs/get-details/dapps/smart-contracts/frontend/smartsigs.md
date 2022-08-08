@@ -395,6 +395,7 @@ int 123
     const { Transaction, algosToMicroalgos } = require('algosdk');
     const algosdk = require('algosdk');
     const { getAccounts } = require('./sandbox.js');
+    const fs = require('fs');
 
     // Create an algod client, using default sandbox parameters here
     const token = "a".repeat(64);
@@ -413,8 +414,8 @@ int 123
         console.log(params);
 
         // Read TEAL file. See more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-        let fs = require('fs'),
-            path = require('path'),
+
+        let path = require('path'),
             filePath = path.join(__dirname, 'samplearg.teal');
         let data = fs.readFileSync(filePath);
 
@@ -861,7 +862,7 @@ The following example illustrates signing a transaction with a created logic sig
     const algosdk = require('algosdk');
     const fs = require('fs');
     const { getAccounts } = require('./sandbox.js');
-
+    const fs = require('fs');
 
     // Create an algod client, using default sandbox parameters here
     const token = "a".repeat(64);
@@ -885,8 +886,7 @@ The following example illustrates signing a transaction with a created logic sig
         console.log(params);
 
         // Read TEAL file. See more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-        let fs = require('fs'),
-            path = require('path'),
+        let path = require('path'),
             filePath = path.join(__dirname, 'samplearg.teal');
         let data = fs.readFileSync(filePath);
 
