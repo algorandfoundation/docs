@@ -16,8 +16,8 @@ let numtx = 1;
 // loop until there are no more transactions in the response
 // for the limit(max limit is 1000  per request)    
 (async () => {
-    let min_amount = 100000000000000;
-    let limit = 2;
+    const min_amount = 100000000000000;
+    const limit = 2;
     while (numtx > 0) {
         // execute code as long as condition is true
         let next_page = nexttoken;
@@ -27,10 +27,9 @@ let numtx = 1;
             .nextToken(next_page).do();
         let transactions = response['transactions'];
         numtx = transactions.length;
-        if (numtx > 0)
-        {
-            nexttoken = response['next-token']; 
-            console.log("Transaction Information: " + JSON.stringify(response, undefined, 2));           
+        if (numtx > 0) {
+            nexttoken = response['next-token'];
+            console.log("Transaction Information: " + JSON.stringify(response, undefined, 2));
         }
     }
 })().catch(e => {

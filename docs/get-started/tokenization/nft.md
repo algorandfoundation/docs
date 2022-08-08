@@ -115,7 +115,7 @@ The relevant code snippet in each of the SDKs is as follows. Note that this is n
     ```
 
 
-Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) NFT standard. Choose your favorite SDK to run the full code example for creating an NFT on TestNet and watch the step-by-step video guide.
+Now let's go ahead and create Alice’s NFT. We will use the Algorand Foundation’s proposed [ARC-0003](https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0003.md) NFT standard. Choose your favorite SDK to run the full code example for creating an NFT on TestNet.
 
 === "Python"
     [Run Python code](https://replit.com/@Algorand/CreateNFT#main.py){: target="_blank"}

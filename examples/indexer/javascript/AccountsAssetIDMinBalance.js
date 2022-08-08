@@ -11,8 +11,8 @@ const indexer_port = 8980;
 let indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
 
 (async () => {
-    let assetIndex = 312769;
-    let currencyGreater = 100;
+    const assetIndex = 312769;
+    const currencyGreater = 100;
     let accountInfo = await indexerClient.searchAccounts()
         .assetID(assetIndex)
         .currencyGreaterThan(currencyGreater).do();

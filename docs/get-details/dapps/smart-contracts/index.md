@@ -11,7 +11,7 @@ Algorand Smart Contracts (ASC1) are small programs that serve various functions 
 Smart contracts are contracts that, once deployed, are remotely callable from any node in the Algorand blockchain. Once deployed, the on-chain instantiation of the contract is referred to as an Application and assigned an Application Id. These applications are triggered by a specific type of transaction called an Application Call transaction.  These on-chain applications handle the primary decentralized logic of a dApp. 
 
 - Applications can [modify state](./apps/#modifying-state-in-smart-contract) associated with the application (global state) or a per application+account (local state) basis. 
-- Applications can [access](./apps/#using-assets-in-smart-contracts) on-chain values, such as account balances, asset configuration parameters, or the latest block time. Calls to the smart con 
+- Applications can [access](./apps/#using-assets-in-smart-contracts) on-chain values, such as account balances, asset configuration parameters, or the latest block time.
 - Applications can [execute transactions](./apps/#inner-transactions) as part of the execution of the logic. One type of transaction they can perform, as of AVM 1.1, is an Application Call transaction which allows one application to call another.  This ability to call other applications enables composability between applications. 
 - Applications have an associated [Application Account](./apps/#using-a-smart-contract-as-an-escrow) that can hold Algos or ASAs balances and can be used as on-chain escrow accounts. 
 
