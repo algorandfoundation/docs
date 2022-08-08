@@ -8,7 +8,7 @@ This guide covers using smart signatures with the Algorand SDKs. Smart signature
 
 
 # Compiling TEAL program from SDKs
-Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section read a file called `sample.teal` which contains one line of TEAL code, `int 0` . This will always return `false`. So, any transactions that use this TEAL file will fail. 
+Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section read a file called `sample.teal` which contains one line of TEAL code, `int 1` .
 
 
 To use the SDK compile command, the [config settings](../../../../run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](../../../../run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
@@ -40,7 +40,8 @@ The following TEAL code is used in the examples below.
 ```
 // This code is meant for learning purposes only
 // It should not be used in production
-int 0
+#pragma version 6
+int 1
 ```
 
 !!! info
@@ -48,66 +49,78 @@ int 0
 
 === "JavaScript"
 	```javascript
-    const fs = require('fs');
-    const path = require('path');
     const algosdk = require('algosdk');
-    // We assume that testing is done off of sandbox, hence the settings below
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    const token = "a".repeat(64);
     const server = "http://localhost";
     const port = 4001;
 
-    // create v2 client
-    const algodClient = new algosdk.Algodv2(token, server, port);
+    // Import the filesystem module 
+    const fs = require('fs');
+    let algodclient = new algosdk.Algodv2(token, server, port);
 
-    const main = async () => {
+    (async () => {
         // Read file for Teal code - int 0
-        const filePath = path.join(__dirname, 'sample.teal');
-        const data = fs.readFileSync(filePath);
-
-        // Compile teal
-        const results = await algodClient.compile(data).do();
-        return results;
-    };
-
-    main().then((results) => {
-        // Print results
+        var fs = require('fs'),
+            path = require('path'),
+            filePath = path.join(__dirname, 'sample.teal');
+        let data = fs.readFileSync(filePath);
+        let results = await algodclient.compile(data).do();
         console.log("Hash = " + results.hash);
         console.log("Result = " + results.result);
-    }).catch(e => {
-        const error = e.body && e.body.message ? e.body.message : e;
-        console.log(error);
+
+    })().catch(e => {
+        console.log(e.body.message);
+        console.log(e);
     });
 
-    // output would be similar to this... 
-    // Hash : KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-    // Result : ASABACI=
+    // output would be similar to this...
+    // Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+    // Result = ASABACI=
     ```
 
 === "Python"
 	```python
-    # compile teal code
+    # compile TEAL code
     from algosdk.v2client import algod
+    import os
+
+    # read file
+    def load_resource(res):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(dir_path, res)
+        with open(path, "rb") as fin:
+            data = fin.read()
+        return data
+
 
     try:
-        # Create an algod client, using default sandbox parameters here
-        algod_token = "a" * 64
+        # create an algod client
+        algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         algod_address = "http://localhost:4001"
         algod_client = algod.AlgodClient(algod_token, algod_address)
 
-        # Load in our program
+        # int 1 - sample.teal
+        # This code is meant for learning purposes only
+        # It should not be used in production
         myprogram = "sample.teal"
-        data = load_resource(myprogram)
 
-        # Compile the program against the algod
-        response = algod_client.compile(data)
-        print(f"Response Result (base64 encoded): {response['result']}")
-        print(f"Response Hash: {response['hash']}")
+        # read TEAL program
+        data = load_resource(myprogram)
+        source = data.decode("utf-8")
+
+        # Compile TEAL program
+        response = algod_client.compile(source)
+
+        print("Response Result = ", response["result"])
+        print("Response Hash = ", response["hash"])
     except Exception as e:
         print(e)
 
     # results should look similar to this:
-    # Response Result = ASABACI=
+    # Response Result = ASABACI =
     # Response Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+
     ```
 
 === "Java"
@@ -139,7 +152,7 @@ int 0
         if (client == null)
             this.client = connectToNetwork();
 
-        // read file - int 0
+        // read file - int 1
         byte[] data = Files.readAllBytes(Paths.get("./sample.teal"));
         // compile
         CompileResponse response = client.TealCompile().source(data).execute().body();
@@ -187,7 +200,7 @@ int 0
             fmt.Printf("failed to make algod client: %s\n", err)
             return
         }
-        // int 0 in sample.teal
+        // int 1 in sample.teal
         file, err := os.Open("./sample.teal")
         if err != nil {
             log.Fatal(err)
@@ -214,7 +227,7 @@ The binary bytes are used in the SDKs as shown below. If using the `goal` comman
 
 
 ``` bash
-//simple.teal contains int 0
+//simple.teal contains int 1
 //hexdump 
 $ hexdump -C simple.teal.tok
 00000000  01 20 01 00 22                                    |. .."|
@@ -228,99 +241,106 @@ The response result from the TEAL `compile` command above is used to create the 
 
 === "JavaScript"
 	```javascript
-        const program = new Uint8Array(Buffer.from(results.result , "base64"));
-        const lsig = algosdk.makeLogicSig(program);   
+    let program = new Uint8Array(Buffer.from(results.result, "base64"));
+
+    // Create the lsig account, passing arg
+    let args = getUint8Int(123);
+    let lsig = new algosdk.LogicSigAccount(program, args);  
     ```
 
 === "Python"
 	```python
-        import base64
-        from algosdk.future.transaction import LogicSigAccount
+    # Decode the program to bytes and encode the argument as bytes
+    program = base64.b64decode(response["result"])
+    arg1 = (123).to_bytes(8, "big")
 
-        # Decode the program to bytes
-        program = base64.b64decode(response["result"])
-        lsig = LogicSigAccount(program)
+    # Create the lsig account, passing arg
+    lsig = LogicSigAccount(program, args=[arg1])
     ```
 
 === "Java"
 	```java
-        // byte[] program = {
-        //     0x01, 0x20, 0x01, 0x00, 0x22  // int 0
-        // };
-        byte[] program = Base64.getDecoder().decode(response.result.toString());
-        LogicsigSignature lsig = new LogicsigSignature(program, null);
+    // byte[] program = {
+    //     0x01, 0x20, 0x01, 0x00, 0x22  // int 1
+    // };
+    byte[] program = Base64.getDecoder().decode(response.result.toString());
+    LogicsigSignature lsig = new LogicsigSignature(program, null);
     ```
 
 === "Go"
 	```go
-        // program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
-        program, err :=  base64.StdEncoding.DecodeString(response.Result)	
-        var sk ed25519.PrivateKey
-        var ma crypto.MultisigAccount
-        var args [][]byte
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)  
+    // program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
+    program, err :=  base64.StdEncoding.DecodeString(response.Result)	
+    var sk ed25519.PrivateKey
+    var ma crypto.MultisigAccount
+    var args [][]byte
+    lsig, err := crypto.MakeLogicSig(program, args, sk, ma)  
     ```
 
 # Passing parameters using the SDKs
 The SDKs require that parameters to a smart signature TEAL program be in byte arrays. This byte array is passed to the method that creates the logic signature. Currently, these parameters must be either unsigned integers or binary strings. If comparing a constant string in TEAL, the constant within the TEAL program must be encoded in hex or base64. See the TEAL tab below for a simple example of comparing the string argument used in the other examples. SDK native language functions can be used to encode the parameters to the TEAL program correctly. The example below illustrates both a string parameter and an integer.
+
+
+!!! info
+    For more information on encoding and decoding, check out the [Encoding and Decoding](https://developer.algorand.org/docs/get-details/encoding/) page.
 
 !!! info
     The samples show setting parameters at the creation of the logic signature. These parameters can be changed at the time of submitting the transaction.
 
 === "JavaScript"
 	```javascript
-        // string parameter
-        const args = [];
-        args.push([...Buffer.from("my string")]);
-        const lsig = algosdk.makeLogicSig(program, args);
-        
-        // integer parameter
-        const args = [];
-        args.push(algosdk.encodeUint64(123));
-        const lsig = algosdk.makeLogicSig(program, args);
+    // string parameter
+    const args = [];
+    args.push([...Buffer.from("my string")]);
+    const lsig = new algosdk.LogicSigAccount(program, args);
+    
+    // integer parameter
+    const args = [];
+    args.push(algosdk.encodeUint64(123));
+    const lsig = new algosdk.LogicSigAccount(program, args);
     ```
 
 === "Python"
 	```python
-        from algosdk.future.transaction import LogicSigAccount
+    from algosdk.future.transaction import LogicSigAccount
 
-        # string parameter
-        arg_str = "my string"
-        arg1 = arg_str.encode()
-        lsig = LogicSigAccount(program, args=[arg1])
+    # string parameter
+    arg_str = "my string"
+    arg1 = arg_str.encode()
+    lsig = LogicSigAccount(program, args=[arg1])
 
-        # integer parameter
-        arg1 = (123).to_bytes(8, 'big')
-        lsig = LogicSigAccount(program, args=[arg1])
+    # integer parameter
+    arg1 = (123).to_bytes(8, 'big')
+    lsig = LogicSigAccount(program, args=[arg1])
     ```
 
 === "Java"
 	```java
-        // string parameter
-        ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-        String orig = "my string";
-        teal_args.add(orig.getBytes());
-        LogicsigSignature lsig = new LogicsigSignature(program, teal_args);    
+    // string parameter
+    ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+    String orig = "my string";
+    teal_args.add(orig.getBytes());
+    LogicsigSignature lsig = new LogicsigSignature(program, teal_args);    
 
-        // integer parameter
-        ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-        byte[] arg1 = {123};
-        teal_args.add(arg1);
-        LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
+    // integer parameter
+    ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
+    byte[] arg1 = {123};
+    teal_args.add(arg1);
+    LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
     ```
 
 === "Go"
 	```go
-        // string parameter
-        args := make([][]byte, 1)
-        args[0] = []byte("my string")
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
-        
-        // integer parameter
-        args := make([][]byte, 1)
-        var buf [8]byte
-        binary.BigEndian.PutUint64(buf[:], 123)
-        args[0] = buf[:]
+    // string parameter
+    args := make([][]byte, 1)
+    args[0] = []byte("my string")
+    lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+    
+    // integer parameter
+    args := make([][]byte, 1)
+    var buf [8]byte
+    binary.BigEndian.PutUint64(buf[:], 123)
+    args[0] = buf[:]
     ```
 
 === "TEAL"
@@ -372,70 +392,83 @@ int 123
 
 === "JavaScript"
 	```javascript
+    const { Transaction, algosToMicroalgos } = require('algosdk');
     const algosdk = require('algosdk');
-    // const token = "<algod-token>";
-    // const server = "<algod-address>";
-    // const port = <algod-port>;
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    const { getAccounts } = require('./sandbox.js');
+
+    // Create an algod client, using default sandbox parameters here
+    const token = "a".repeat(64);
     const server = "http://localhost";
     const port = 4001;
-    // Import the filesystem module 
-    const fs = require('fs'); 
-    // create an algod v2 client
     let algodclient = new algosdk.Algodv2(token, server, port);
+
     (async () => {
+        // Get receiver account info from sandbox
+        const accounts = await getAccounts();
+        const receiverAccount = accounts[0];
+        console.log("Receiver Address: " + receiverAccount.addr);
+
         // get suggested parameters
         let params = await algodclient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee
-        // params.fee = 1000;
-        // params.flatFee = true;
         console.log(params);
-        // create logic sig
-        // samplearg.teal
-        // This code is meant for learning purposes only
-        // It should not be used in production
-        // arg_0
-        // btoi
-        // int 12345
-        // ==
-        // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-        let  fs = require('fs'),
+
+        // Read TEAL file. See more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
+        let fs = require('fs'),
             path = require('path'),
             filePath = path.join(__dirname, 'samplearg.teal');
-            // filePath = path.join(__dirname, '<filename>');
         let data = fs.readFileSync(filePath);
+
+        //Compile the program against the algod
         let results = await algodclient.compile(data).do();
         console.log("Hash = " + results.hash);
         console.log("Result = " + results.result);
-        // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
         let program = new Uint8Array(Buffer.from(results.result, "base64"));
-        //let program = new Uint8Array(Buffer.from("AiABuWAtFyIS", "base64"));
-        // Use this if no args
-        // let lsig = algosdk.makeLogicSig(program);
-        // String parameter
-        // let args = ["<my string>"];
-        // let lsig = algosdk.makeLogicSig(program, args);
-        // Integer parameter
-        let args = getUint8Int(12345);
+
+        // Create the lsig account, passing arg
+        let args = getUint8Int(123);
         let lsig = new algosdk.LogicSigAccount(program, args);
-        console.log("lsig : " + lsig.address());   
-        // create a transaction
+        console.log("lsig : " + lsig.address());
+
+        // fund the contract account to test payment from the contract
+        const atc = new algosdk.AtomicTransactionComposer();
+        const signer = algosdk.makeBasicAccountTransactionSigner(receiverAccount)
+        const ptxn = new Transaction({
+            from: receiverAccount.addr,
+            to: lsig.address(),
+            amount: (algosToMicroalgos(0.1) + algosdk.ALGORAND_MIN_TX_FEE + 10000),
+            ...params
+        })
+        const tws = { txn: ptxn, signer: signer }
+        atc.addTransaction(tws)
+        const atcResults = await atc.execute(algodclient, 2);
+        for (const result of atcResults.methodResults) {
+            console.log(`${result.method.name} => ${result.returnValue}`);
+        }
+        let lsigAccountInfo = await algodclient.accountInformation(lsig.address()).do();
+        console.log("lsig balance: ", lsigAccountInfo.amount);
+
+
+        // Setup a transaction
         let sender = lsig.address();
-        // let receiver = "<receiver-address>";
-        let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
+        let receiver = receiverAccount.addr
         let amount = 10000;
         let closeToRemaninder = undefined;
         let note = undefined;
         let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
-        // Create the LogicSigTransaction with contract account LogicSigAccount
-        let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
+
+        // Create the LogicSigTransaction with contract account LogicSig 
+        let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig.lsig);
+
         // send raw LogicSigTransaction to network
-        // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
         let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
-        console.log("Transaction : " + tx.txId);   
+        console.log("Transaction : " + tx.txId);
+
+        //Wait for confirmation
         const confirmedTxn = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
+
         //Get the completed Transaction
         console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+
     })().catch(e => {
         console.log(e.message);
         console.log(e);
@@ -445,9 +478,8 @@ int 123
         const buffer = Buffer.alloc(8);
         const bigIntValue = BigInt(number);
         buffer.writeBigUInt64BE(bigIntValue);
-        return  [Uint8Array.from(buffer)];
+        return [Uint8Array.from(buffer)];
     }
-
     ```
 
 === "Python"
@@ -460,6 +492,11 @@ int 123
     from algosdk.future.transaction import *
     from algosdk import transaction, account, mnemonic
     from algosdk.atomic_transaction_composer import *
+    from algosdk.constants import *
+    from algosdk.util import *
+
+    # Note this method is defined in sandbox.py
+    from sandbox import get_accounts
 
     # Read a file
     def load_resource(res):
@@ -476,13 +513,11 @@ int 123
         algod_address = "http://localhost:4001"
         algod_client = algod.AlgodClient(algod_token, algod_address)
 
-        # Get account info
-        addr1_mnemonic = "<Your 25-word-mnemonic>"
-        private_key = mnemonic.to_private_key(addr1_mnemonic)
-        addr1 = account.address_from_private_key(private_key)
+        # Get receiver account info (address and private key)
+        receiver_addr, receiver_sk = get_accounts()[0]
 
         # Load in our program
-        myprogram = "sample.teal"
+        myprogram = "samplearg.teal"
         data = load_resource(myprogram)
 
         # Compile the program against the algod
@@ -503,14 +538,22 @@ int 123
         params = algod_client.suggested_params()
 
         # replace with any other address or amount
-        receiver = addr1
+        receiver = receiver_addr
         amount = 10000
 
         # fund the contract account to test payment from the contract
         atc = AtomicTransactionComposer()
-        signer = AccountTransactionSigner(private_key)
+        signer = AccountTransactionSigner(receiver_sk)
         ptxn = TransactionWithSigner(
-            PaymentTxn(addr1, params, lsig.address(), 1000000), signer
+            PaymentTxn(
+                receiver_addr,
+                params,
+                lsig.address(),
+                algos_to_microalgos(0.1)
+                + MIN_TXN_FEE
+                + amount,  # Amount = min balance + min txn fees + payment amount
+            ),
+            signer,
         )
         atc.add_transaction(ptxn)
         result = atc.execute(algod_client, 2)
@@ -534,7 +577,6 @@ int 123
 
 
     contract_account_example()
-
     ```
 
 === "Java"
@@ -791,6 +833,9 @@ int 123
     }
     ```
 
+!!! Note
+    The sample.teal file will compile to the address PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A. The address must be funded with at least 101000 microAlgos (account minimum balance + minimum transaction fee) else will result in an overspend response from the network node. Note that the sample code funds the contract address using [Atomic Transaction Composer](https://developer.algorand.org/docs/get-details/atc/?from_query=atomictr#create-publication-overlay).
+
 # Account delegation SDK usage
 Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. 
 
@@ -814,87 +859,86 @@ The following example illustrates signing a transaction with a created logic sig
 === "JavaScript"
 	```javascript
     const algosdk = require('algosdk');
-    // const token = "<algod-token>";
-    // const server = "<algod-address>";
-    // const port = <algod-port>;
-    // sandbox
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    const fs = require('fs');
+    const { getAccounts } = require('./sandbox.js');
+
+
+    // Create an algod client, using default sandbox parameters here
+    const token = "a".repeat(64);
     const server = "http://localhost";
     const port = 4001;
-    // Import the filesystem module 
-    const fs = require('fs'); 
-    // import your private key mnemonic
-    // mnemonics should not be used in production code, for demo purposes only
-    let PASSPHRASE = "<25-word-mnemonic>";
-    let  myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
-    console.log("My Address: " + myAccount.addr);
-    // create an algod v2 client
     let algodclient = new algosdk.Algodv2(token, server, port);
+
     (async () => {
-        // get suggested parameter
+        // Get receiver account info from sandbox
+        const accounts = await getAccounts();
+        const receiverAccount = accounts[0];
+        console.log("Receiver Address: " + receiverAccount.addr);
+
+
+        // Get sender account info from sandbox
+        const senderAccount = accounts[0];
+        console.log("Sender Address: " + senderAccount.addr);
+
+        // Get suggested parameters
         let params = await algodclient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee 
-        // params.fee = 1000;
-        // params.flatFee = true;
         console.log(params);
-        // create logic sig
-        // samplearg.teal
-        // This code is meant for learning purposes only
-        // It should not be used in production
-        // arg_0
-        // btoi
-        // int 12345
-        // ==
-        // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-        let  fs = require('fs'),
+
+        // Read TEAL file. See more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
+        let fs = require('fs'),
             path = require('path'),
             filePath = path.join(__dirname, 'samplearg.teal');
-        // filePath = path.join(__dirname, <'fileName'>);
         let data = fs.readFileSync(filePath);
+
+        //Compile the program against the algod
         let results = await algodclient.compile(data).do();
         console.log("Hash = " + results.hash);
         console.log("Result = " + results.result);
-        // let program = new Uint8Array(Buffer.from(<"base64-encoded-program">, "base64"));
         let program = new Uint8Array(Buffer.from(results.result, "base64"));
-        // Use this if no args
-        // let lsig = algosdk.makeLogicSig(program);
-        // String parameter
-        // let args = ["<my string>"];
-        // let lsig = algosdk.makeLogicSig(program, args);
-        // Integer parameter
-        let args = getUint8Int(12345);
+
+        // Create the lsig account, passing arg
+        let args = getUint8Int(123);
         let lsig = new algosdk.LogicSigAccount(program, args);
+        console.log("lsig : " + lsig.address());
+
         // sign the logic signature with an account sk
-        lsig.sign(myAccount.sk);        
+        lsig.sign(senderAccount.sk);
+
         // Setup a transaction
-        let sender = myAccount.addr;
-        let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
-        // let receiver = "<receiver-address>"";
+        let sender = senderAccount.addr;
+        let receiver = receiverAccount.addr;
         let amount = 10000;
         let closeToRemaninder = undefined;
         let note = undefined;
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, 
+        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender,
             receiver, amount, closeToRemaninder, note, params)
-        // Create the LogicSigTransaction with contract account LogicSigAccount
-        let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
-        // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
+
+        // Create the LogicSigTransaction with contract account LogicSig
+        let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig.lsig);
+        console.log("signedTxn: ", rawSignedTxn)
+
         // send raw LogicSigTransaction to network    
         let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
-        console.log("Transaction : " + tx.txId);    
+        console.log("Transaction : " + tx.txId);
+
+        //Wait for confirmation
         const confirmedTxn = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
+
         //Get the completed Transaction
         console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+
+
     })().catch(e => {
         console.log(e.message);
         console.log(e);
     });
+
     function getUint8Int(number) {
         const buffer = Buffer.alloc(8);
         const bigIntValue = BigInt(number);
         buffer.writeBigUInt64BE(bigIntValue);
-        return  [Uint8Array.from(buffer)];
+        return [Uint8Array.from(buffer)];
     }
-
     ```
 
 === "Python"
@@ -905,18 +949,23 @@ The following example illustrates signing a transaction with a created logic sig
 
     from algosdk.v2client import algod
     from algosdk.future.transaction import *
-    from algosdk import transaction, account, mnemonic
+    from algosdk import transaction
     from algosdk.atomic_transaction_composer import *
+    from algosdk.constants import *
+    from algosdk.util import *
 
-    # // This code is meant for learning purposes only
-    # // It should not be used in production
+    # Note this method is defined in sandbox.py
+    from sandbox import get_accounts
+
+    # This code is meant for learning purposes only
+    # It should not be used in production
 
     # Read a file
     def load_resource(res):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         path = os.path.join(dir_path, res)
-        with open(path, "rb") as fin:
-            data = fin.read()
+        with open(path, "r") as f:
+            data = f.read()
         return data
 
 
@@ -926,18 +975,15 @@ The following example illustrates signing a transaction with a created logic sig
         algod_address = "http://localhost:4001"
         algod_client = algod.AlgodClient(algod_token, algod_address)
 
-        # Get account info
-        addr1_mnemonic = "<Your 25-word-mnemonic>"
-        private_key = mnemonic.to_private_key(addr1_mnemonic)
-        addr1 = account.address_from_private_key(private_key)
+        # Get receiver account info (address and private key)
+        receiver_addr, receiver_sk = get_accounts()[0]
 
         # Load in our program
-        myprogram = "sample.teal"
+        myprogram = "samplearg.teal"
         data = load_resource(myprogram)
-        source = data.decode("utf-8")
 
         # Compile the program against the algod
-        response = algod_client.compile(source)
+        response = algod_client.compile(data)
         print(f"Response Result (base64 encoded): {response['result']}")
         print(f"Response Hash: {response['hash']}")
 
@@ -950,34 +996,21 @@ The following example illustrates signing a transaction with a created logic sig
 
         # Recover the account that is wanting to delegate signature
         # never use mnemonics in code, for demo purposes
-        passphrase = "<Your 25-word-mnemonic>"
-        sk = mnemonic.to_private_key(passphrase)
-        addr = account.address_from_private_key(sk)
-        print("Address of Sender/Delegator: " + addr)
+        delegator_addr, delegator_sk = get_accounts()[1]
+        print("Address of Sender/Delegator: " + delegator_addr)
 
         # Sign the logic signature with an account sk
-        lsig.sign(sk)
+        lsig.sign(delegator_sk)
 
         # Get suggested parameters
         params = algod_client.suggested_params()
 
         # replace with any other address or amount
-        receiver = addr1
+        receiver = receiver_addr
         amount = 10000
 
-        # fund the contract account to test payment from the contract
-        atc = AtomicTransactionComposer()
-        signer = AccountTransactionSigner(private_key)
-        ptxn = TransactionWithSigner(
-            PaymentTxn(addr1, params, lsig.address(), 1000000), signer
-        )
-        atc.add_transaction(ptxn)
-        result = atc.execute(algod_client, 2)
-        for res in result.abi_results:
-            print(res.return_value)
-
         # Create a transaction
-        txn = PaymentTxn(addr, params, receiver, amount)
+        txn = PaymentTxn(delegator_addr, params, receiver, amount)
 
         # Create the LogicSigTransaction with contract account LogicSigAccount
         lstx = transaction.LogicSigTransaction(txn, lsig.lsig)
@@ -992,7 +1025,6 @@ The following example illustrates signing a transaction with a created logic sig
         print(f"Transaction information: {json.dumps(confirmed_txn, indent=4)}")
     except Exception as e:
         print(e)
-
     ```
 
 === "Java"
@@ -1265,8 +1297,7 @@ The following example illustrates signing a transaction with a created logic sig
         }
     ```
 
-!!! Note
-    The samplearg.teal file will compile to the address UVBYHRZIHUNUELDO6HWUAHOZF6G66W6T3JOXIIUSV3LDSBWVCFZ6LM6NCA, please fund this address with at least 11000 microALGO else executing the sample code as written will result in an overspend response from the network node.
+
 
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).

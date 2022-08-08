@@ -11,30 +11,27 @@ def load_resource(res):
         data = fin.read()
     return data
 
+
 try:
-
     # create an algod client
-    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
+    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     algod_address = "http://localhost:4001"
-
-    # algod_token = "<algod-token>"
-    # algod_address = "<algod-address>"
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
-    # int 0 - sample.teal
+    # int 1 - sample.teal
     # This code is meant for learning purposes only
     # It should not be used in production
     myprogram = "sample.teal"
-    # myprogram = "<filename>"
 
     # read TEAL program
     data = load_resource(myprogram)
-    source = data.decode('utf-8')
+    source = data.decode("utf-8")
+
     # Compile TEAL program
     response = algod_client.compile(source)
-    # Print(response)
-    print ("Response Result = ",response['result'])
-    print("Response Hash = ",response['hash'])
+
+    print("Response Result = ", response["result"])
+    print("Response Hash = ", response["hash"])
 except Exception as e:
     print(e)
 

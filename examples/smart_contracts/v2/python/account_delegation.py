@@ -4,18 +4,23 @@ import json
 
 from algosdk.v2client import algod
 from algosdk.future.transaction import *
-from algosdk import transaction, account, mnemonic
+from algosdk import transaction
 from algosdk.atomic_transaction_composer import *
+from algosdk.constants import *
+from algosdk.util import *
 
-# // This code is meant for learning purposes only
-# // It should not be used in production
+# Note this method is defined in sandbox.py
+from sandbox import get_accounts
+
+# This code is meant for learning purposes only
+# It should not be used in production
 
 # Read a file
 def load_resource(res):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     path = os.path.join(dir_path, res)
-    with open(path, "rb") as fin:
-        data = fin.read()
+    with open(path, "r") as f:
+        data = f.read()
     return data
 
 
@@ -25,18 +30,15 @@ try:
     algod_address = "http://localhost:4001"
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
-    # Get account info
-    addr1_mnemonic = "<Your 25-word-mnemonic>"
-    private_key = mnemonic.to_private_key(addr1_mnemonic)
-    addr1 = account.address_from_private_key(private_key)
+    # Get receiver account info (address and private key)
+    receiver_addr, receiver_sk = get_accounts()[0]
 
     # Load in our program
-    myprogram = "sample.teal"
+    myprogram = "samplearg.teal"
     data = load_resource(myprogram)
-    source = data.decode("utf-8")
 
     # Compile the program against the algod
-    response = algod_client.compile(source)
+    response = algod_client.compile(data)
     print(f"Response Result (base64 encoded): {response['result']}")
     print(f"Response Hash: {response['hash']}")
 
@@ -49,34 +51,21 @@ try:
 
     # Recover the account that is wanting to delegate signature
     # never use mnemonics in code, for demo purposes
-    passphrase = "<Your 25-word-mnemonic>"
-    sk = mnemonic.to_private_key(passphrase)
-    addr = account.address_from_private_key(sk)
-    print("Address of Sender/Delegator: " + addr)
+    delegator_addr, delegator_sk = get_accounts()[1]
+    print("Address of Sender/Delegator: " + delegator_addr)
 
     # Sign the logic signature with an account sk
-    lsig.sign(sk)
+    lsig.sign(delegator_sk)
 
     # Get suggested parameters
     params = algod_client.suggested_params()
 
     # replace with any other address or amount
-    receiver = addr1
+    receiver = receiver_addr
     amount = 10000
 
-    # fund the contract account to test payment from the contract
-    atc = AtomicTransactionComposer()
-    signer = AccountTransactionSigner(private_key)
-    ptxn = TransactionWithSigner(
-        PaymentTxn(addr1, params, lsig.address(), 1000000), signer
-    )
-    atc.add_transaction(ptxn)
-    result = atc.execute(algod_client, 2)
-    for res in result.abi_results:
-        print(res.return_value)
-
     # Create a transaction
-    txn = PaymentTxn(addr, params, receiver, amount)
+    txn = PaymentTxn(delegator_addr, params, receiver, amount)
 
     # Create the LogicSigTransaction with contract account LogicSigAccount
     lstx = transaction.LogicSigTransaction(txn, lsig.lsig)

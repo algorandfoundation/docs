@@ -6,6 +6,11 @@ from algosdk.v2client import algod
 from algosdk.future.transaction import *
 from algosdk import transaction, account, mnemonic
 from algosdk.atomic_transaction_composer import *
+from algosdk.constants import *
+from algosdk.util import *
+
+# Note this method is defined in sandbox.py
+from sandbox import get_accounts
 
 # Read a file
 def load_resource(res):
@@ -22,13 +27,11 @@ def contract_account_example():
     algod_address = "http://localhost:4001"
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
-    # Get account info
-    addr1_mnemonic = "<Your 25-word-mnemonic>"
-    private_key = mnemonic.to_private_key(addr1_mnemonic)
-    addr1 = account.address_from_private_key(private_key)
+    # Get receiver account info (address and private key)
+    receiver_addr, receiver_sk = get_accounts()[0]
 
     # Load in our program
-    myprogram = "sample.teal"
+    myprogram = "samplearg.teal"
     data = load_resource(myprogram)
 
     # Compile the program against the algod
@@ -49,14 +52,22 @@ def contract_account_example():
     params = algod_client.suggested_params()
 
     # replace with any other address or amount
-    receiver = addr1
+    receiver = receiver_addr
     amount = 10000
 
     # fund the contract account to test payment from the contract
     atc = AtomicTransactionComposer()
-    signer = AccountTransactionSigner(private_key)
+    signer = AccountTransactionSigner(receiver_sk)
     ptxn = TransactionWithSigner(
-        PaymentTxn(addr1, params, lsig.address(), 1000000), signer
+        PaymentTxn(
+            receiver_addr,
+            params,
+            lsig.address(),
+            algos_to_microalgos(0.1)
+            + MIN_TXN_FEE
+            + amount,  # Amount = min balance + min txn fees + payment amount
+        ),
+        signer,
     )
     atc.add_transaction(ptxn)
     result = atc.execute(algod_client, 2)
