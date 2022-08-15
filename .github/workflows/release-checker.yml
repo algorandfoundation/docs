@@ -1,0 +1,96 @@
+name: "Check for releases"
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  release-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout docs repo
+        uses: actions/checkout@v3
+        with:
+          path: docs
+
+      - name: Clone go-algorand repo
+        uses: actions/checkout@v3
+        with:
+          repository: algorand/go-algorand
+          ref: rel/stable
+          path: go-algorand
+
+      - name: Clone Indexer repo
+        uses: actions/checkout@v3
+        with:
+          repository: algorand/indexer
+          ref: master
+          path: indexer
+
+      - name: Get current documentation versions
+        id: current_versions
+        run: |
+          cd docs
+          TEMP_STABLE=$(cat .go-algorand-stable.version)
+          echo "Stable version: $TEMP_STABLE"
+          echo "::set-output name=stable::$TEMP_STABLE"
+          TEMP_BETA=$(cat .go-algorand-beta.version)
+          echo "Beta version: $TEMP_BETA"
+          echo "::set-output name=beta::$TEMP_BETA"
+          TEMP_INDEXER=$(cat .indexer.version)
+          echo "Indexer version: $TEMP_INDEXER"
+          echo "::set-output name=indexer::$TEMP_INDEXER"
+
+      - name: Get latest stable and beta go-algorand releases
+        id: latest_go_algorand
+        run: |
+          cd go-algorand
+          git fetch --tags
+          echo "::set-output name=stable::$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1)"
+          git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1
+          echo "::set-output name=beta::$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*-beta' | sort -V | tail -1)"
+          git tag --list 'v[0-9]*.[0-9]*.[0-9]*-beta' | sort -V | tail -1
+
+      - name: Get latest indexer release without dashes
+        id: latest_indexer
+        run: |
+          cd indexer
+          git fetch --tags
+          echo "::set-output name=indexer::$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1)"
+          git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1
+
+      - name: Check versions # Just for easier troubleshooting
+        run: |
+          echo "Checking if current stable: ${{ steps.current_versions.outputs.stable }} equals latest stable: ${{ steps.latest_go_algorand.outputs.stable }}"
+          [[ "${{ steps.current_versions.outputs.stable }}" == "${{ steps.latest_go_algorand.outputs.stable }}" ]] && echo "Matches" || echo "NO MATCH!!"
+          echo "Checking if current beta: ${{ steps.current_versions.outputs.beta }} equals latest beta: ${{ steps.latest_go_algorand.outputs.beta }}"
+          [[ "${{ steps.current_versions.outputs.beta }}" == "${{ steps.latest_go_algorand.outputs.beta }}" ]] && echo "Matches" || echo "NO MATCH!!"
+          echo "Checking if current indexer: ${{ steps.current_versions.outputs.indexer }} equals latest indexer: ${{ steps.latest_indexer.outputs.indexer }}"
+          [[ "${{ steps.current_versions.outputs.indexer }}" == "${{ steps.latest_indexer.outputs.indexer }}" ]] && echo "Matches" || echo "NO MATCH!!"
+
+    outputs: # Translate step outputs into job outputs
+      current_stable: ${{ steps.current_versions.outputs.stable }}
+      current_beta: ${{ steps.current_versions.outputs.beta }}
+      current_indexer: ${{ steps.current_versions.outputs.indexer }}
+      latest_stable: ${{ steps.latest_go_algorand.outputs.stable }}
+      latest_beta: ${{ steps.latest_go_algorand.outputs.beta }}
+      latest_indexer: ${{ steps.latest_indexer.outputs.indexer }}
+
+  trigger-pr-generator-stable:
+    name: Trigger docs and version updates if STABLE versions don't match
+    needs: release-checker
+    if: |
+      needs.release-checker.outputs.current_stable != needs.release-checker.outputs.latest_stable ||
+      needs.release-checker.outputs.current_indexer != needs.release-checker.outputs.latest_indexer
+    uses: algorand/docs/.github/workflows/pr-generator.yml@automatic-pr-generator
+    with:
+      go_algorand_version: ${{ needs.release-checker.outputs.latest_stable }}
+      indexer_version: ${{ needs.release-checker.outputs.latest_indexer }}
+
+  trigger-pr-generator-beta:
+    name: Trigger docs and version updates if BETA versions don't match
+    needs: release-checker
+    if: needs.release-checker.outputs.current_beta != needs.release-checker.outputs.latest_beta
+    uses: algorand/docs/.github/workflows/pr-generator.yml@automatic-pr-generator
+    with:
+      go_algorand_version: ${{ needs.release-checker.outputs.latest_beta }}
+      indexer_version: ${{ needs.release-checker.outputs.latest_indexer }}
