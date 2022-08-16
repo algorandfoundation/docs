@@ -81,7 +81,7 @@ jobs:
     if: |
       needs.release-checker.outputs.current_stable != needs.release-checker.outputs.latest_stable ||
       needs.release-checker.outputs.current_indexer != needs.release-checker.outputs.latest_indexer
-    uses: algorand/docs/.github/workflows/pr-generator.yml@automatic-pr-generator
+    uses: ./.github/workflows/pr-generator.yml
     with:
       go_algorand_version: ${{ needs.release-checker.outputs.latest_stable }}
       indexer_version: ${{ needs.release-checker.outputs.latest_indexer }}
@@ -90,7 +90,7 @@ jobs:
     name: Trigger docs and version updates if BETA versions don't match
     needs: release-checker
     if: needs.release-checker.outputs.current_beta != needs.release-checker.outputs.latest_beta
-    uses: algorand/docs/.github/workflows/pr-generator.yml@automatic-pr-generator
+    uses: ./.github/workflows/pr-generator.yml
     with:
       go_algorand_version: ${{ needs.release-checker.outputs.latest_beta }}
       indexer_version: ${{ needs.release-checker.outputs.latest_indexer }}
