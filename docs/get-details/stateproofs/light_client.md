@@ -41,7 +41,7 @@ The Light Client should have 2 interfaces: one to advance Algorand state by veri
 ![Light Client](../../imgs/light_client_arch.png)
 </center>
 
-Algorand provides a proof of concept version of a light client which is located on GitHub. Please note that this PoC code is purely informational and does not reflect the ideal way to implement a Light Client. Each section of the Light Client proof of concept will be explained below.
+Algorand provides a proof of concept version of a light client which is located on [GitHub](https://github.com/algorand/light-client-poc). Please note that this PoC code is purely informational and does not reflect the ideal way to implement a Light Client. Each section of the Light Client proof of concept will be explained below.
 
 ## Oracle
 
