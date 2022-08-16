@@ -61,6 +61,11 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 # WalletConnect
 [Overview](walletconnect/index.md) - Guide on using the wallet connect API.
 
+# Algorand State Proofs
+[Algorand State Proofs Overview](stateproofs/index.md) - An overview of how state proofs are generated on Algorand.
+
+[How To Build An Algorand Light Client - With State Proofs](stateproofs/light_client.md.md)- A guide on building a light client for Algorand State Proofs.
+
 # Algorand networks
 [Overview](algorand-networks/index.md) - List of all Algorand networks.
 
