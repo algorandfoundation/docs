@@ -374,8 +374,8 @@ Contract Accounts are created by compiling the TEAL logic within the smart signa
 * Sign the Transaction with the Logic Signature.
 * Send the Transaction to the network.
 
-<center>![Transaction From Contract Account](../../../../imgs/asc1_sdk_usage-1.png)</center>
-<center>*Transaction From Contract Account*</center>
+<center>![Contract Account](../../../../imgs/modes-1.png)</center>
+<center>*TEAL Contract Account*</center>
 
 The following example illustrates compiling a TEAL program with one argument and signing a transaction with a created logic signature. The example TEAL program `samplearg.teal` takes one argument. 
 
@@ -836,7 +836,7 @@ int 123
     ```
 
 !!! Note
-    The samplearg.teal file will compile to the address PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A. The address must be funded with at least 101000 microAlgos (account minimum balance + minimum transaction fee) else will result in an overspend response from the network node. Note that the sample code funds the contract address using [Atomic Transaction Composer](https://developer.algorand.org/docs/get-details/atc/?from_query=atomictr#create-publication-overlay).
+    The samplearg.teal file will compile to the address PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A. The address must be funded with at least 101000 microAlgos (account minimum balance + minimum transaction fee) else will result in an overspend response from the network node. Note that the sample code funds the contract address using [Atomic Transaction Composer](../../../atc.md).
 
 # Account delegation SDK usage
 Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [Smart Signature Usage Modes](../smartsigs/modes.md) documentation explains smart signature modes in more detail. 
@@ -853,8 +853,8 @@ Delegated Logic Signatures require that the logic signature be signed from a spe
 * Sign the Transaction with the Logic Signature.
 * Send the Transaction to the network.
 
-<center>![Delegated Signature Transaction](../../../../imgs/asc1_sdk_usage-2.png)</center>
-<center>*Delegated Signature Transaction*</center>
+<center>![Delegated Signature](../../../../imgs/modes-2.png)</center>
+<center>*TEAL Delegated Signature*</center>
 
 The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.
 
