@@ -3,80 +3,66 @@ on:
   workflow_dispatch:
     inputs:
       go_algorand_version:
-        description: "Go-Algorand Version"
+        description: "Go-Algorand Full Version (Example: v1.2.3-stable)"
         type: string
-        required: false
-        default: 'latest'
+        required: true
       indexer_version:
-        description: "Indexer Version"
+        description: "Indexer Version (Example: X.X.X)"
         type: string
-        required: false
-        default: 'latest'
+        required: true
+  workflow_call:
+    inputs:
+      go_algorand_version:
+        description: "Go-Algorand Full Version (Example: v1.2.3-stable)"
+        type: string
+        required: true
+      indexer_version:
+        description: "Indexer Version (Example: X.X.X)"
+        type: string
+        required: true
 
 jobs:
   pr-generator:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-
-      - name: Install dependencies
-        run: |
-          wget --version
-          java --version
-          bzip2 --version
-          git --version
-
       - name: Clone docs repo
         uses: actions/checkout@v3
         with:
           path: docs
 
       - name: Clone go-algorand repo
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         uses: actions/checkout@v3
         with:
           repository: algorand/go-algorand
-          ref: rel/stable
+          ref: ${{ inputs.go_algorand_version }}
           path: go-algorand
 
-      - name: Get latest go-algorand version
+      - name: Get short/clean go-algorand version
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         run: |
-          if ${{ (inputs.go_algorand_version == 'latest') || (inputs.go_algorand_version == '') }}; then
-            cd go-algorand
-            git fetch --tags
-            echo "Setting GO_ALGORAND_VERSION to latest:"
-            git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1 | sed 's/v//' | sed 's/-stable//'
-            echo "GO_ALGORAND_VERSION=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*-stable' | sort -V | tail -1 | sed 's/v//' | sed 's/-stable//')" >> $GITHUB_ENV
-          else
-            echo "GO_ALGORAND_VERSION=${{ inputs.go_algorand_version }}" >> $GITHUB_ENV
-            echo "GO_ALGORAND_VERSION set to passed value: ${{ inputs.go_algorand_version }}"
-          fi
+          TEMP_VERSION=${{ inputs.go_algorand_version }}
+          TEMP_VERSION=$(echo $TEMP_VERSION | sed 's/v//' | sed 's/-stable//')
+          echo "GO_ALGORAND_VERSION set to $TEMP_VERSION"
+          echo "GO_ALGORAND_VERSION=$TEMP_VERSION" >> $GITHUB_ENV
 
       - name: Clone Indexer repo
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         uses: actions/checkout@v3
         with:
           repository: algorand/indexer
-          ref: master
+          ref: ${{ inputs.indexer_version }}
           path: indexer
 
-      - name: Get latest indexer version
-        run: |
-          if ${{ (inputs.indexer_version == 'latest') || (inputs.indexer_version == '') }}; then
-            cd indexer
-            git fetch --tags
-            echo "Setting INDEXER_VERSION to latest:"
-            git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v "-" | sort -V | tail -1
-            echo "INDEXER_VERSION=$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v "-" | sort -V | tail -1)" >> $GITHUB_ENV
-          else
-            echo "INDEXER_VERSION=${{ inputs.indexer_version }}" >> $GITHUB_ENV
-            echo "INDEXER_VERSION set to passed value: ${{ inputs.indexer_version }}"
-          fi
-
       - name: Download binaries
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         run: |
           wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
-          wget https://algorand-releases.s3.amazonaws.com/indexer/${{ env.INDEXER_VERSION }}/algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}.tar.bz2
+          wget https://algorand-releases.s3.amazonaws.com/indexer/${{ inputs.indexer_version }}/algorand-indexer_linux_amd64_${{ inputs.indexer_version }}.tar.bz2
           ls -la
 
       - name: Install binaries
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         run: |
           mkdir -p ~/go/bin
           mkdir -p node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}
@@ -84,24 +70,49 @@ jobs:
           cd node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
           cd ../../
-          tar xjf algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}.tar.bz2
-          cp algorand-indexer_linux_amd64_${{ env.INDEXER_VERSION }}/algorand-indexer ~/go/bin/
+          tar xjf algorand-indexer_linux_amd64_${{ inputs.indexer_version }}.tar.bz2
+          cp algorand-indexer_linux_amd64_${{ inputs.indexer_version }}/algorand-indexer ~/go/bin/
           ls -la
           ls -la ~/go/bin
 
       - name: Run doc generator
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         run: |
           cd docs/scripts/
           ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
           git diff
 
+      - name: Change version for Beta release
+        if: contains(inputs.go_algorand_version, '-beta')
+        run: |
+          cd docs/docs/get-details/algorand-networks
+          sed -i.bak 's/v.*-beta/${{ inputs.go_algorand_version }}/' betanet.md
+          rm betanet.md.bak
+          cd ../../../
+          echo "${{ inputs.go_algorand_version }}" > .go-algorand-beta.version
+
+      - name: Change go-algorand version for Stable release
+        if: contains(inputs.go_algorand_version, '-stable')
+        run: |
+          cd docs/docs/get-details/algorand-networks
+          sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' testnet.md
+          sed -i.bak 's/v.*-stable/${{ inputs.go_algorand_version }}/' mainnet.md
+          rm testnet.md.bak mainnet.md.bak
+          cd ../../../
+          echo "${{ inputs.go_algorand_version }}" > .go-algorand-stable.version
+
+      - name: Change Indexer version
+        if: inputs.indexer_version != '' && !contains(inputs.indexer_version, '-')
+        run: |
+          echo "${{ inputs.indexer_version }}" > docs/.indexer.version
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
           path: docs
-          branch: "automatic-pr-go-algorand-${{ env.GO_ALGORAND_VERSION }}-indexer-${{ env.INDEXER_VERSION }}"
-          title: "Automatic PR for go-algorand: ${{ env.GO_ALGORAND_VERSION }} and indexer: ${{ env.INDEXER_VERSION }}"
-          body: "Changes generated by reformat-all-commands.sh script automatically."
+          branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
+          title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
+          body: "Changes generated automatically by github action docs-generator."
           reviewers: "nullun,barnjamin,ryanrfox"
           delete-branch: true
           base: staging

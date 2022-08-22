@@ -407,7 +407,7 @@ With the release of TEAL 6 (AVM 1.1), Smart Contracts may issue inner transactio
     - An application may not call itself, even indirectly. This is referred to as `re-entrancy` and is explicitly forbidden. 
     - An application may only call into other applications up to a stack depth of 8. In other words if app calls (`->`) look like 1->2->3->4->5->6->7->8, App 8 may _not_ call another application. This would violate the stack depth limit.
     - An application may issue up to 256 inner transactions to increase its budget (max budget of 179.2k!), but the max call budget is shared for all applications in the group. Meaning you cant have two apps calls in the same group that _both_ try to issue 256 inner app calls.
-    - An application may _not_ call contracts with an older TEAL version. This limitation prevents an older application from unexpected behavior introduced in newer versions of TEAL 
+    - An application may _not_ call contracts with an older program version. This limitation prevents an older application from unexpected behavior introduced in newer program versions 
 
 
 ## Application call
