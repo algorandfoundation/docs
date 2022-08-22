@@ -21,7 +21,7 @@ try:
     # int 1 - sample.teal
     # This code is meant for learning purposes only
     # It should not be used in production
-    myprogram = "sample.teal"
+    myprogram = "samplearg.teal"
 
     # read TEAL program
     data = load_resource(myprogram)
@@ -35,6 +35,6 @@ try:
 except Exception as e:
     print(e)
 
-# results should look similar to this:
-# Response Result = ASABACI =
-# Response Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+# results should be the following:
+# Response Result =  Bi0XgXsS
+# Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A

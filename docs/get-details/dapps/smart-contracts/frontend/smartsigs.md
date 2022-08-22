@@ -6,46 +6,35 @@ This guide covers using smart signatures with the Algorand SDKs. Smart signature
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
 
+# Setting up Sandbox
+
+To use the SDKs, dev mode needs to be launched with Sandbox. 
+
+```
+# run the sandbox executable to start in dev mode
+./sandbox up dev
+```
+
+Dev mode supplies three pre-loaded accounts that will be used in the below sample code. To check the available accounts:
+
+```
+# Available accounts
+./sandbox goal account list
+```
 
 # Compiling TEAL program from SDKs
-Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section read a file called `sample.teal` which contains one line of TEAL code, `int 1` .
+Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section read a file called `samplearg.teal` which contains the following TEAL code.
 
-
-To use the SDK compile command, the [config settings](../../../../run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](../../../../run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
-
+`samplearg.teal`
 ```
-$ goal node stop -d data
-$ cd data
-$ cp config.json.example config.json
-```
-
-Then edit the config.json file and replace `false` on the line
-
-`"EnableDeveloperAPI": false,`
-
-with `true`
-
-`"EnableDeveloperAPI": true,`
-
-Restart the node.
-
-```
-$ goal node start -d data
-$ goal node status -d data
-```
-
-The following TEAL code is used in the examples below.
-
-`sample.teal`
-```
-// This code is meant for learning purposes only
-// It should not be used in production
 #pragma version 6
-int 1
+arg_0
+btoi
+int 123
+==
 ```
 
-!!! info
-    The samples on this page use a docker sandbox install.
+The following code compiles the `samplearg.teal` TEAL program.
 
 === "JavaScript"
 	```javascript
@@ -57,13 +46,14 @@ int 1
 
     // Import the filesystem module 
     const fs = require('fs');
+
     let algodclient = new algosdk.Algodv2(token, server, port);
 
     (async () => {
-        // Read file for Teal code - int 0
+        // Read file for Teal code - int 1
         var fs = require('fs'),
             path = require('path'),
-            filePath = path.join(__dirname, 'sample.teal');
+            filePath = path.join(__dirname, 'samplearg.teal');
         let data = fs.readFileSync(filePath);
         let results = await algodclient.compile(data).do();
         console.log("Hash = " + results.hash);
@@ -74,14 +64,15 @@ int 1
         console.log(e);
     });
 
-    // output would be similar to this...
-    // Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-    // Result = ASABACI=
+    // results should be the following:
+    // Response Result =  Bi0XgXsS
+    // Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A    
     ```
 
 === "Python"
 	```python
     # compile TEAL code
+
     from algosdk.v2client import algod
     import os
 
@@ -103,7 +94,7 @@ int 1
         # int 1 - sample.teal
         # This code is meant for learning purposes only
         # It should not be used in production
-        myprogram = "sample.teal"
+        myprogram = "samplearg.teal"
 
         # read TEAL program
         data = load_resource(myprogram)
@@ -117,9 +108,9 @@ int 1
     except Exception as e:
         print(e)
 
-    # results should look similar to this:
-    # Response Result = ASABACI =
-    # Response Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
+    # results should be the following:
+    # Response Result =  Bi0XgXsS
+    # Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A
 
     ```
 
@@ -133,46 +124,53 @@ int 1
     import com.algorand.algosdk.v2.client.model.CompileResponse;
 
     public class CompileTeal {
-    // Utility function to update changing block parameters
-    public AlgodClient client = null;
+        // Utility function to update changing block parameters
+        public AlgodClient client = null;
 
-    // utility function to connect to a node
-    private AlgodClient connectToNetwork() {
+        // utility function to connect to a node
+        private AlgodClient connectToNetwork() {
 
-        // Initialize an algod client
-        final Integer ALGOD_PORT = 4001;
-        final String ALGOD_API_ADDR = "localhost";
-        final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-        return client;
+            // Initialize an algod client
+            // final Integer ALGOD_PORT = <algod-port>;
+            // final String ALGOD_API_ADDR = "<algod-address>";
+            // final String ALGOD_API_TOKEN = "<algod-token>";
+            final Integer ALGOD_PORT = 4001;
+            final String ALGOD_API_ADDR = "localhost";
+            final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+            AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
+            return client;
+        }
+
+        public void compileTealSource() throws Exception {
+            // Initialize an algod client
+            if (client == null)
+                this.client = connectToNetwork();
+    
+            // read file - int 0
+            byte[] data = Files.readAllBytes(Paths.get("./samplearg.teal"));
+            // byte[] data = Files.readAllBytes(Paths.get("<./filename>"));
+    
+            // compile
+            CompileResponse response = client.TealCompile().source(data).execute().body();
+            // print results
+            System.out.println("response: " + response);
+            System.out.println("Hash: " + response.hash); 
+            System.out.println("Result: " + response.result); 
+        }
+
+        public static void main(final String args[]) throws Exception {
+            CompileTeal t = new CompileTeal();
+            t.compileTealSource();
+        }
+
     }
+    // results should be the following:
+    // Response Result =  Bi0XgXsS
+    // Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A
 
-    public void compileTealSource() throws Exception {
-        // Initialize an algod client
-        if (client == null)
-            this.client = connectToNetwork();
-
-        // read file - int 1
-        byte[] data = Files.readAllBytes(Paths.get("./sample.teal"));
-        // compile
-        CompileResponse response = client.TealCompile().source(data).execute().body();
-        // print results
-        System.out.println("response: " + response);
-        System.out.println("Hash: " + response.hash); 
-        System.out.println("Result: " + response.result); 
-    }
-
-    public static void main(final String args[]) throws Exception {
-        CompileTeal t = new CompileTeal();
-        t.compileTealSource();
-    }
-
-    }
-    // Output should look similar to this... 
-    // response:
-    // {"hash":"KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE","result":"ASABACI="}
-    // Hash: KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE 
-    // Result: ASABACI=
+    // resource
+    // https://developer.algorand.org/docs/features/asc1/sdks/#account-delegation-sdk-usage
     ```
 
 === "Go"
@@ -180,64 +178,67 @@ int 1
     package main
 
     import (
-
+        //	"bytes"
         "context"
         "io/ioutil"
         "log"
+
+        //	"crypto/ed25519"
+        //	"encoding/base64"
+        //  "encoding/gob"
+        //	"encoding/json"
+
+        // "encoding/binary"
         "fmt"
         "os"
+
         "github.com/algorand/go-algorand-sdk/client/v2/algod"
+        //	"github.com/algorand/go-algorand-sdk/crypto"
+        //	"github.com/algorand/go-algorand-sdk/transaction"
     )
 
     func main() {
 
-        const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        // const algodToken = "<algod-token>"
+        // const algodAddress = "<algod-address>"
+
+        // sandbox
         const algodAddress = "http://localhost:4001"
+        const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
         // Create an algod client
         algodClient, err := algod.MakeClient(algodAddress, algodToken)
         if err != nil {
-            fmt.Printf("failed to make algod client: %s\n", err)
+            fmt.Printf("failed to make client: %s\n", err)
             return
         }
-        // int 1 in sample.teal
-        file, err := os.Open("./sample.teal")
+        // int 0 in sample.teal
+        // file, err := os.Open("<filename>")	
+        file, err := os.Open("./samplearg.teal")
         if err != nil {
             log.Fatal(err)
-        }    
+        }
+
         defer file.Close()
         tealFile, err := ioutil.ReadAll(file)
         if err != nil {
-            fmt.Printf("failed to teal file: %s\n", err)
+            fmt.Printf("failed to read file: %s\n", err)
             return}
-        // compile teal program
+
+
         response, err := algodClient.TealCompile(tealFile).Do(context.Background())
-        // print response	
         fmt.Printf("Hash = %s\n", response.Hash)
         fmt.Printf("Result = %s\n", response.Result)
+
     }
-    // results should look similar to
-    // Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-    // Result = ASABACI=
+    // results should be the following:
+    // Response Result =  Bi0XgXsS
+    // Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A    
     ```
 
 Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
 
-The binary bytes are used in the SDKs as shown below. If using the `goal` command-line tool to compile the TEAL code, these same bytes can be retrieved using the following commands. 
-
-
-``` bash
-//simple.teal contains int 1
-//hexdump 
-$ hexdump -C simple.teal.tok
-00000000  01 20 01 00 22                                    |. .."|
-00000005
-//base64 format
-$ cat simple.teal.tok | base64
-ASABACI=
-```
-
-The response result from the TEAL `compile` command above is used to create the `program` variable. This variable can then be used as an input parameter to the function to make a logic signature.
+The response result from the TEAL `compile` command above is used to create the `program` variable. This variable can then be used as an input parameter to the logic signature creation function.
 
 === "JavaScript"
 	```javascript
@@ -282,7 +283,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 
 !!! info
-    For more information on encoding and decoding, check out the [Encoding and Decoding](https://developer.algorand.org/docs/get-details/encoding/) page.
+    For more information on encoding and decoding, check out the [Encoding and Decoding](../../../encoding.md) page.
 
 !!! info
     The samples show setting parameters at the creation of the logic signature. These parameters can be changed at the time of submitting the transaction.
@@ -359,7 +360,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
     ```
 
 # Contract account SDK usage
-Smart signatures can be used as contract accounts and allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. In most cases, it is preferrable to use [smart contract](../apps/index.md) escrow accounts over smart signatures as smart signatures require the logic to be supplied for every transaction.
+Smart signatures can be used as contract accounts and allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [Smart Signature Usage Modes](../smartsigs/modes.md) documentation explains smart signature modes in more detail. **In most cases, it is preferrable to use [smart contract](../apps/index.md) escrow accounts over smart signature contract accounts** as smart signatures require the logic to be supplied for every transaction.
 
 Smart signature contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand transactions. The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a [logic signature](../smartsigs/modes.md#logic-signatures). 
 
@@ -835,10 +836,10 @@ int 123
     ```
 
 !!! Note
-    The sample.teal file will compile to the address PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A. The address must be funded with at least 101000 microAlgos (account minimum balance + minimum transaction fee) else will result in an overspend response from the network node. Note that the sample code funds the contract address using [Atomic Transaction Composer](https://developer.algorand.org/docs/get-details/atc/?from_query=atomictr#create-publication-overlay).
+    The samplearg.teal file will compile to the address PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A. The address must be funded with at least 101000 microAlgos (account minimum balance + minimum transaction fee) else will result in an overspend response from the network node. Note that the sample code funds the contract address using [Atomic Transaction Composer](https://developer.algorand.org/docs/get-details/atc/?from_query=atomictr#create-publication-overlay).
 
 # Account delegation SDK usage
-Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. 
+Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [Smart Signature Usage Modes](../smartsigs/modes.md) documentation explains smart signature modes in more detail. 
 
 Delegated transactions are special transactions where the `sender` signs the logic and the transaction is then signed with the [logic signature](../smartsigs/modes.md#logic-signature). In all other aspects, the transaction functions as any other transaction. 
 

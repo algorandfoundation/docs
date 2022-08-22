@@ -13,7 +13,7 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // Read file for Teal code - int 1
     var fs = require('fs'),
         path = require('path'),
-        filePath = path.join(__dirname, 'sample.teal');
+        filePath = path.join(__dirname, 'samplearg.teal');
     let data = fs.readFileSync(filePath);
     let results = await algodclient.compile(data).do();
     console.log("Hash = " + results.hash);
@@ -24,6 +24,6 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     console.log(e);
 });
 
-// output would be similar to this...
-// Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-// Result = ASABACI=
+// results should be the following:
+// Response Result =  Bi0XgXsS
+// Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A

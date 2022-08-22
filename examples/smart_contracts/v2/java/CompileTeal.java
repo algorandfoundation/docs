@@ -30,7 +30,7 @@ public class CompileTeal {
             this.client = connectToNetwork();
  
         // read file - int 0
-        byte[] data = Files.readAllBytes(Paths.get("./sample.teal"));
+        byte[] data = Files.readAllBytes(Paths.get("./samplearg.teal"));
         // byte[] data = Files.readAllBytes(Paths.get("<./filename>"));
  
         // compile
@@ -47,11 +47,9 @@ public class CompileTeal {
     }
 
 }
-// Output should look similar to this... 
-// response:
-// {"hash":"KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE","result":"ASABACI="}
-// Hash: KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE 
-// Result: ASABACI=
+// results should be the following:
+// Response Result =  Bi0XgXsS
+// Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A
 
 // resource
 // https://developer.algorand.org/docs/features/asc1/sdks/#account-delegation-sdk-usage

@@ -37,7 +37,7 @@ func main() {
 	}
 	// int 0 in sample.teal
 	// file, err := os.Open("<filename>")	
-	file, err := os.Open("./sample.teal")
+	file, err := os.Open("./samplearg.teal")
     if err != nil {
         log.Fatal(err)
     }
@@ -54,6 +54,6 @@ func main() {
 	fmt.Printf("Result = %s\n", response.Result)
 
 }
-// results should look similar to
-// Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-// Result = ASABACI=
+// results should be the following:
+// Response Result =  Bi0XgXsS
+// Response Hash =  PBS3JWRY5HGL46SDYLDVMEJVJXKMSCFOAY7SKIW2RQ7OTJVWNNGW4QXQ5A

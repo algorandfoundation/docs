@@ -39,10 +39,11 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // fund the contract account to test payment from the contract
     const atc = new algosdk.AtomicTransactionComposer();
     const signer = algosdk.makeBasicAccountTransactionSigner(receiverAccount)
+    const txn_amt = 10000 // amount of microAlgos being sent with lsig
     const ptxn = new Transaction({
         from: receiverAccount.addr,
         to: lsig.address(),
-        amount: (algosToMicroalgos(0.1) + algosdk.ALGORAND_MIN_TX_FEE + 10000),
+        amount: (algosToMicroalgos(0.1) + algosdk.ALGORAND_MIN_TX_FEE + txn_amt),
         ...params
     })
     const tws = { txn: ptxn, signer: signer }
