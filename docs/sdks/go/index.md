@@ -79,7 +79,7 @@ func main() {
     } else {
         fmt.Printf("My address: %s\n", myAddress)
         fmt.Printf("My passphrase: %s\n", passphrase)
-        fmt.Println("--> Copy down your address and passpharse for future use.")
+        fmt.Println("--> Copy down your address and passphrase for future use.")
         fmt.Println("--> Once secured, press ENTER key to continue...")
         fmt.Scanln()
     }
