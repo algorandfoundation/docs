@@ -190,7 +190,7 @@ curl https://raw.githubusercontent.com/algorand/go-algorand/rel/stable/cmd/updat
 + Ensure that your system knows it's an executable file.
 
 ```
-chmod 544 update.sh
+chmod 744 update.sh
 ```
 
 + Run the installer from within your node directory.
@@ -234,7 +234,7 @@ wget https://raw.githubusercontent.com/algorand/go-algorand/rel/stable/cmd/updat
 + Ensure that your system knows it's an executable file.
 
 ```
-chmod 544 update.sh
+chmod 744 update.sh
 ```
 
 + Run the installer from within your node directory.

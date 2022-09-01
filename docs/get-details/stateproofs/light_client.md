@@ -51,14 +51,14 @@ Algorand provides a proof of concept version of a light client which is located 
 // It then allows, given a round, to retrieve the vector commitment root attesting to the interval to which the round
 // belongs.
 type Oracle struct {
-  // BlockIntervalCommitmentHistory is a sliding window of verified block interval commitments. Given a round,
-  // it returns the block interval commitment that contains the specified block.
-  BlockIntervalCommitmentHistory *CommitmentHistory
-  // VotersCommitment is the vector commitment root of the top N accounts to sign the next StateProof.
-  VotersCommitment transactionverificationtypes.GenericDigest
-  // LnProvenWeight is an integer value representing the natural log of the proven weight with 16 bits of precision.
-  // This value would be used to verify the next state proof.
-  LnProvenWeight uint64
+   // BlockIntervalCommitmentHistory is a sliding window of verified block interval commitments. Given a round,
+   // it returns the block interval commitment that contains the specified block.
+   BlockIntervalCommitmentHistory *CommitmentHistory
+   // VotersCommitment is the vector commitment root of the top N accounts to sign the next StateProof.
+   VotersCommitment stateproofcrypto.GenericDigest
+   // LnProvenWeight is an integer value representing the natural log of the proven weight with 16 bits of precision.
+   // This value would be used to verify the next state proof.
+   LnProvenWeight uint64
 }
 
 ```
@@ -76,15 +76,15 @@ The Oracle exposes the following functions:
 // genesisVotersCommitment - the initial genesisVotersCommitment commitment. Real values can be found in the Algorand developer portal.
 // genesisLnProvenWeight - the initial LnProvenWeight. Real values can be found in the Algorand developer portal.
 // capacity - the maximum number of commitments to hold before discarding the earliest commitment.
-func InitializeOracle(firstAttestedRound uint64, intervalSize uint64, genesisVotersCommitment transactionverificationtypes.GenericDigest,
-  genesisLnProvenWeight uint64, capacity uint64) *Oracle {
-  return &Oracle{
-     // The BlockIntervalCommitmentHistory is initialized using the first attested round,
-     // the interval size and its capacity.
-     BlockIntervalCommitmentHistory: InitializeCommitmentHistory(firstAttestedRound, intervalSize, capacity),
-     VotersCommitment:               genesisVotersCommitment,
-     LnProvenWeight:                 genesisLnProvenWeight,
-  }
+func InitializeOracle(firstAttestedRound uint64, intervalSize uint64, genesisVotersCommitment stateproofcrypto.GenericDigest,
+   genesisLnProvenWeight uint64, capacity uint64) *Oracle {
+   return &Oracle{
+      // The BlockIntervalCommitmentHistory is initialized using the first attested round,
+      // the interval size and its capacity.
+      BlockIntervalCommitmentHistory: InitializeCommitmentHistory(firstAttestedRound, intervalSize, capacity),
+      VotersCommitment:               genesisVotersCommitment,
+      LnProvenWeight:                 genesisLnProvenWeight,
+   }
 }
 
 ```
@@ -99,32 +99,37 @@ func InitializeOracle(firstAttestedRound uint64, intervalSize uint64, genesisVot
 // and saves the block header commitment to the history.
 // This method should be called by a relay or some external process that is initiated when new Algorand state proofs are available.
 // Parameters:
-// stateProof - a slice containing the msgpacked state proof, as returned from the Algorand node API.
-// message - the decoded state proof message, unpacked using msgpack.
-func (o *Oracle) AdvanceState(stateProof *transactionverificationtypes.EncodedStateProof, message transactionverificationtypes.Message) error {
-  // verifier is Algorand's implementation of the state proof verifier, exposed by the SDK. It uses the
-  // previous proven VotersCommitment and LnProvenWeight.
-  verifier := stateproofverification.InitializeVerifier(o.VotersCommitment, o.LnProvenWeight)
-  // The newly formed verifier verifies the given message using the state proof.
-  err := verifier.VerifyStateProofMessage(stateProof, message)
-  if err != nil {
-     // If the verification failed, for whatever reason, we return the error returned.
-     return err
-  }
+// stateProof - the decoded state proof, retrieved using the Algorand SDK.
+// message - the message to which the state proof attests.
+func (o *Oracle) AdvanceState(stateProof *stateproof.StateProof, message types.Message) error {
+   // verifier is Algorand's implementation of the state proof verifier, exposed by the state proof verification library.
+   // It uses the previous proven VotersCommitment and LnProvenWeight.
+   verifier := stateproof.MkVerifierWithLnProvenWeight(o.VotersCommitment, o.LnProvenWeight)
 
-  // Successful verification of the message means we can trust it, so we save the VotersCommitment
-  // and the LnProvenWeight in the message, for verification of the next message.
-  o.VotersCommitment = message.VotersCommitment
-  o.LnProvenWeight = message.LnProvenWeight
+   // We hash the state proof message using the Algorand SDK. The resulting hash is of the form
+   // sha256("spm" || msgpack(stateProofMessage)).
+   messageHash := stateproofcrypto.MessageHash(crypto.HashStateProofMessage(&message))
 
-  var commitmentDigest types.Digest
-  copy(commitmentDigest[:], message.BlockHeadersCommitment)
-  // We insert the BlockHeadersCommitment found in the message to our commitment history sliding window.
-  // A side effect of this, if this commitment were to push our window over its capacity, would be deletion
-  // of the earliest commitment.
-  o.BlockIntervalCommitmentHistory.InsertCommitment(commitmentDigest)
+   // The newly formed verifier verifies the given message using the state proof.
+   err := verifier.Verify(message.LastAttestedRound, messageHash, stateProof)
+   if err != nil {
+      // If the verification failed, for whatever reason, we return the error returned.
+      return err
+   }
 
-  return nil
+   // Successful verification of the message means we can trust it, so we save the VotersCommitment
+   // and the LnProvenWeight in the message, for verification of the next message.
+   o.VotersCommitment = message.VotersCommitment
+   o.LnProvenWeight = message.LnProvenWeight
+
+   var commitmentDigest types.Digest
+   copy(commitmentDigest[:], message.BlockHeadersCommitment)
+   // We insert the BlockHeadersCommitment found in the message to our commitment history sliding window.
+   // A side effect of this, if this commitment were to push our window over its capacity, would be deletion
+   // of the earliest commitment.
+   o.BlockIntervalCommitmentHistory.InsertCommitment(commitmentDigest)
+
+   return nil
 }
 ```
 
@@ -135,9 +140,9 @@ func (o *Oracle) AdvanceState(stateProof *transactionverificationtypes.EncodedSt
 // Parameters:
 // round - the round to which a commitment will be retrieved.
 func (o *Oracle) GetStateProofCommitment(round types.Round) (types.Digest, error) {
-  // Receiving a commitment that should cover a round requires calculating the round's interval and retrieving the commitment
-  // for that interval. See BlockIntervalCommitmentHistory.GetCommitment for more details.
-  return o.BlockIntervalCommitmentHistory.GetCommitment(round)
+   // Receiving a commitment that should cover a round requires calculating the round's interval and retrieving the commitment
+   // for that interval. See BlockIntervalCommitmentHistory.GetCommitment for more details.
+   return o.BlockIntervalCommitmentHistory.GetCommitment(round)
 }
 ```
 
@@ -160,45 +165,45 @@ The transaction verifier exposes the following interface:
 // genesisHash - the hash of the genesis block.
 // seed - the sortition seed of the block associated with the light block header.
 // blockIntervalCommitment - the commitment to compare to, provided by the Oracle.
-func VerifyTransaction(transactionHash types.Digest, transactionProofResponse models.ProofResponse,
-  lightBlockHeaderProofResponse models.LightBlockHeaderProof, confirmedRound types.Round, genesisHash types.Digest, seed transactionverificationtypes.Seed, blockIntervalCommitment types.Digest) error {
-  // Verifying attested vector commitment roots is currently exclusively supported with sha256 hashing, both for transactions
-  // and light block headers.
-  if transactionProofResponse.Hashtype != "sha256" {
-     return ErrUnsupportedHashFunction
-  }
+func VerifyTransaction(transactionHash types.Digest, transactionProofResponse models.TransactionProofResponse,
+   lightBlockHeaderProofResponse models.LightBlockHeaderProof, confirmedRound types.Round, genesisHash types.Digest, seed types.Seed, blockIntervalCommitment types.Digest) error {
+   // Verifying attested vector commitment roots is currently exclusively supported with sha256 hashing, both for transactions
+   // and light block headers.
+   if transactionProofResponse.Hashtype != "sha256" {
+      return ErrUnsupportedHashFunction
+   }
 
-  var stibHashDigest types.Digest
-  copy(stibHashDigest[:], transactionProofResponse.Stibhash[:])
+   var stibHashDigest types.Digest
+   copy(stibHashDigest[:], transactionProofResponse.Stibhash[:])
 
-  // We first compute the leaf in the vector commitment that attests to the given transaction.
-  transactionLeaf := computeTransactionLeaf(transactionHash, stibHashDigest)
-  // We use the transactionLeaf and the given transactionProofResponse to compute the root of the vector commitment
-  // that attests to the given transaction.
-  transactionProofRoot, err := computeVectorCommitmentRoot(transactionLeaf, transactionProofResponse.Idx,
-     transactionProofResponse.Proof, transactionProofResponse.Treedepth)
+   // We first compute the leaf in the vector commitment that attests to the given transaction.
+   transactionLeaf := computeTransactionLeaf(transactionHash, stibHashDigest)
+   // We use the transactionLeaf and the given transactionProofResponse to compute the root of the vector commitment
+   // that attests to the given transaction.
+   transactionProofRoot, err := computeVectorCommitmentRoot(transactionLeaf, transactionProofResponse.Idx,
+      transactionProofResponse.Proof, transactionProofResponse.Treedepth)
 
-  if err != nil {
-     return err
-  }
+   if err != nil {
+      return err
+   }
 
-  // We use our computed transaction vector commitment root, saved in transactionProofRoot, and the given data
-  // to calculate the leaf in the vector commitment that attests to the light block headers.
-  candidateLightBlockHeaderLeaf := computeLightBlockHeaderLeaf(confirmedRound, transactionProofRoot, genesisHash, seed)
-  // We use the candidateLightBlockHeaderLeaf and the given lightBlockHeaderProofResponse to compute the root of the vector
-  // commitment that attests to the candidateLightBlockHeaderLeaf.
-  lightBlockHeaderProofRoot, err := computeVectorCommitmentRoot(candidateLightBlockHeaderLeaf, lightBlockHeaderProofResponse.Index, lightBlockHeaderProofResponse.Proof,
-     lightBlockHeaderProofResponse.Treedepth)
+   // We use our computed transaction vector commitment root, saved in transactionProofRoot, and the given data
+   // to calculate the leaf in the vector commitment that attests to the light block headers.
+   candidateLightBlockHeaderLeaf := computeLightBlockHeaderLeaf(confirmedRound, transactionProofRoot, genesisHash, seed)
+   // We use the candidateLightBlockHeaderLeaf and the given lightBlockHeaderProofResponse to compute the root of the vector
+   // commitment that attests to the candidateLightBlockHeaderLeaf.
+   lightBlockHeaderProofRoot, err := computeVectorCommitmentRoot(candidateLightBlockHeaderLeaf, lightBlockHeaderProofResponse.Index, lightBlockHeaderProofResponse.Proof,
+      lightBlockHeaderProofResponse.Treedepth)
 
-  if err != nil {
-     return err
-  }
+   if err != nil {
+      return err
+   }
 
-  // We verify that the given commitment, provided by the Oracle, is identical to the computed commitment
-  if bytes.Equal(lightBlockHeaderProofRoot[:], blockIntervalCommitment[:]) != true {
-     return ErrRootMismatch
-  }
-  return nil
+   // We verify that the given commitment, provided by the Oracle, is identical to the computed commitment
+   if bytes.Equal(lightBlockHeaderProofRoot[:], blockIntervalCommitment[:]) != true {
+      return ErrRootMismatch
+   }
+   return nil
 }
 ```
 
@@ -280,33 +285,33 @@ func computeVectorCommitmentRoot(leaf types.Digest, leafIndex uint64, proof []by
 // index - the leaf's index in the vector commitment tree.
 // depth - the length of the path from the leaf to the root.
 func getVectorCommitmentPositions(index uint64, depth uint64) ([]NodePosition, error) {
-  // A depth of 0 is only valid when the proof's length is also 0. Since the calling function checks for the situation
-  // where both values are 0, depth of 0 must be invalid.
-  if depth == 0 {
-     return []NodePosition{}, ErrInvalidTreeDepth
-  }
+   // A depth of 0 is only valid when the proof's length is also 0. Since the calling function checks for the situation
+   // where both values are 0, depth of 0 must be invalid.
+   if depth == 0 {
+      return []NodePosition{}, ErrInvalidTreeDepth
+   }
 
-  // Since each bit of the index is mapped to an element in the resulting positions array,
-  // the index must contain a number of bits amounting to the depth parameter, which means it must be smaller than 2 ^ depth.
-  if index >= 1<<depth {
-     return []NodePosition{}, ErrIndexDepthMismatch
-  }
+   // Since each bit of the index is mapped to an element in the resulting positions array,
+   // the index must contain a number of bits amounting to the depth parameter, which means it must be smaller than 2 ^ depth.
+   if index >= 1<<depth {
+      return []NodePosition{}, ErrIndexDepthMismatch
+   }
 
-  // The resulting array should contain a number of positions equal to the depth of the tree -
-  // the length of the path between the root and the leaves - as that is the amounts of nodes traversed when calculating
-  // the vector commitment root.
-  directions := make([]NodePosition, depth)
+   // The resulting array should contain a number of positions equal to the depth of the tree -
+   // the length of the path between the root and the leaves - as that is the amounts of nodes traversed when calculating
+   // the vector commitment root.
+   directions := make([]NodePosition, depth)
 
-  // We iterate on the resulting array starting from the end, to allow us to extract LSBs, yet have the eventual result
-  // be equivalent to extracting MSBs.
-  for i := len(directions) - 1; i >= 0; i-- {
-     // We take index's current LSB, translate it to a node position and place it in index i.
-     directions[i] = NodePosition(index & 1)
-     // We shift the index to the right, to prepare for the extraction of the next LSB.
-     index >>= 1
-  }
+   // We iterate on the resulting array starting from the end, to allow us to extract LSBs, yet have the eventual result
+   // be equivalent to extracting MSBs.
+   for i := len(directions) - 1; i >= 0; i-- {
+      // We take index's current LSB, translate it to a node position and place it in index i.
+      directions[i] = NodePosition(index & 1)
+      // We shift the index to the right, to prepare for the extracting of the next LSB.
+      index >>= 1
+   }
 
-  return directions, nil
+   return directions, nil
 }
 ```
 
