@@ -55,7 +55,7 @@ The Algo also acts as a utility token. When you’re building an application, yo
 # Fees
 Fees are calculated based on the size of the transaction and a user can choose to augment a fee to help prioritize acceptance into a block when network traffic is high and blocks are consistently full. There is no concept of gas fees on Algorand. 
 
-The minimum fee for a transaction is only 1,000 microAlgos or .001 Algos. 
+The minimum fee for a transaction is only 1,000 microAlgos or 0.001 Algos. 
 
 # Openness
 Earlier, we compared a blockchain ledger that is distributed, to a traditional ledger that is owned by a single entity. Technically, a blockchain ledger could be owned and operated by just a few entities, but this wouldn’t be a very good blockchain since such a centralized set of nodes could easily manipulate the state of the blockchain.
