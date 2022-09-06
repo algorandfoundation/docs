@@ -505,7 +505,7 @@ Lookup account transactions. Transactions are returned newest to oldest.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -967,7 +967,7 @@ Lookup transactions for an asset. Transactions are returned oldest to newest.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -1102,7 +1102,7 @@ Search for transactions. Transactions are returned oldest to newest unless the a
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -1437,9 +1437,11 @@ data/bookkeeping/block.go : Block
 |**rewards**  <br>*optional*||[BlockRewards](#blockrewards)|
 |**round**  <br>*required*|\[rnd\] Current round on which this block was appended to the chain.|integer|
 |**seed**  <br>*required*|\[seed\] Sortition seed.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**state-proof-tracking**  <br>*optional*|Tracks the status of state proofs.|< [StateProofTracking](#stateprooftracking) > array|
 |**timestamp**  <br>*required*|\[ts\] Block creation timestamp in seconds since eposh|integer|
 |**transactions**  <br>*optional*|\[txns\] list of transactions corresponding to a given round.|< [Transaction](#transaction) > array|
 |**transactions-root**  <br>*required*|\[txn\] TransactionsRoot authenticates the set of transactions appearing in the block. More specifically, it's the root of a merkle tree whose leaves are the block's Txids, in lexicographic order. For the empty block, it's 0. Note that the TxnRoot does not authenticate the signatures on the transactions, only the transactions themselves. Two blocks with the same transactions but in a different order and with different signatures will have the same TxnRoot.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**transactions-root-sha256**  <br>*required*|\[txn256\] TransactionsRootSHA256 is an auxiliary TransactionRoot, built using a vector commitment instead of a merkle tree, and SHA256 hash function instead of the default SHA512_256. This commitment can be used on environments where only the SHA256 function exists.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**txn-counter**  <br>*optional*|\[tc\] TxnCounter counts the number of transactions committed in the ledger, from the time at which support for this feature was introduced.<br><br>Specifically, TxnCounter is the number of the next transaction that will be committed after this block.  It is 0 when no transactions have ever been committed (since TxnCounter started being supported).|integer|
 |**upgrade-state**  <br>*optional*||[BlockUpgradeState](#blockupgradestate)|
 |**upgrade-vote**  <br>*optional*||[BlockUpgradeVote](#blockupgradevote)|
@@ -1509,6 +1511,14 @@ Key-value pairs for StateDelta.
 |**value**  <br>*required*|[EvalDelta](#evaldelta)|
 
 
+<a name="hashfactory"></a>
+### HashFactory
+
+|Name|Description|Schema|
+|---|---|---|
+|**hash-type**  <br>*optional*|\[t\]|integer|
+
+
 <a name="hashtype"></a>
 ### Hashtype
 The type of hash function used to create the proof, must be one of: 
@@ -1532,6 +1542,28 @@ A health check response.
 |**message**  <br>*required*||string|
 |**round**  <br>*required*||integer|
 |**version**  <br>*required*|Current version.|string|
+
+
+<a name="indexerstateproofmessage"></a>
+### IndexerStateProofMessage
+
+|Name|Description|Schema|
+|---|---|---|
+|**block-headers-commitment**  <br>*optional*|\[b\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**first-attested-round**  <br>*optional*|\[f\]|integer|
+|**latest-attested-round**  <br>*optional*|\[l\]|integer|
+|**ln-proven-weight**  <br>*optional*|\[P\]|integer|
+|**voters-commitment**  <br>*optional*|\[v\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="merklearrayproof"></a>
+### MerkleArrayProof
+
+|Name|Description|Schema|
+|---|---|---|
+|**hash-factory**  <br>*optional*||[HashFactory](#hashfactory)|
+|**path**  <br>*optional*|\[pth\]|< string (byte) > array|
+|**tree-depth**  <br>*optional*|\[td\]|integer|
 
 
 <a name="miniassetholding"></a>
@@ -1570,6 +1602,84 @@ Valid types:
 Application state delta.
 
 *Type* : < [EvalDeltaKeyValue](#evaldeltakeyvalue) > array
+
+
+<a name="stateprooffields"></a>
+### StateProofFields
+\[sp\] represents a state proof.
+
+Definition:
+crypto/stateproof/structs.go : StateProof
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**part-proofs**  <br>*optional*|\[P\]|[MerkleArrayProof](#merklearrayproof)|
+|**positions-to-reveal**  <br>*optional*|\[pr\] Sequence of reveal positions.|< integer > array|
+|**reveals**  <br>*optional*|\[r\] Note that this is actually stored as a map[uint64] - Reveal in the actual msgp|< [StateProofReveal](#stateproofreveal) > array|
+|**salt-version**  <br>*optional*|\[v\] Salt version of the merkle signature.|integer|
+|**sig-commit**  <br>*optional*|\[c\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**sig-proofs**  <br>*optional*|\[S\]|[MerkleArrayProof](#merklearrayproof)|
+|**signed-weight**  <br>*optional*|\[w\]|integer|
+
+
+<a name="stateproofparticipant"></a>
+### StateProofParticipant
+
+|Name|Description|Schema|
+|---|---|---|
+|**verifier**  <br>*optional*|\[p\]|[StateProofVerifier](#stateproofverifier)|
+|**weight**  <br>*optional*|\[w\]|integer|
+
+
+<a name="stateproofreveal"></a>
+### StateProofReveal
+
+|Name|Description|Schema|
+|---|---|---|
+|**participant**  <br>*optional*|\[p\]|[StateProofParticipant](#stateproofparticipant)|
+|**position**  <br>*optional*|The position in the signature and participants arrays corresponding to this entry.|integer|
+|**sig-slot**  <br>*optional*|\[s\]|[StateProofSigSlot](#stateproofsigslot)|
+
+
+<a name="stateproofsigslot"></a>
+### StateProofSigSlot
+
+|Name|Description|Schema|
+|---|---|---|
+|**lower-sig-weight**  <br>*optional*|\[l\] The total weight of signatures in the lower-numbered slots.|integer|
+|**signature**  <br>*optional*||[StateProofSignature](#stateproofsignature)|
+
+
+<a name="stateproofsignature"></a>
+### StateProofSignature
+
+|Name|Description|Schema|
+|---|---|---|
+|**falcon-signature**  <br>*optional*|**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**merkle-array-index**  <br>*optional*||integer|
+|**proof**  <br>*optional*||[MerkleArrayProof](#merklearrayproof)|
+|**verifying-key**  <br>*optional*|\[vkey\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="stateprooftracking"></a>
+### StateProofTracking
+
+|Name|Description|Schema|
+|---|---|---|
+|**next-round**  <br>*optional*|\[n\] Next round for which we will accept a state proof transaction.|integer|
+|**online-total-weight**  <br>*optional*|\[t\] The total number of microalgos held by the online accounts during the StateProof round.|integer|
+|**type**  <br>*optional*|State Proof Type. Note the raw object uses map with this as key.|integer|
+|**voters-commitment**  <br>*optional*|\[v\] Root of a vector commitment containing online accounts that will help sign the proof.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="stateproofverifier"></a>
+### StateProofVerifier
+
+|Name|Description|Schema|
+|---|---|---|
+|**commitment**  <br>*optional*|\[cmt\] Represents the root of the vector commitment tree.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**key-lifetime**  <br>*optional*|\[lf\] Key lifetime.|integer|
 
 
 <a name="stateschema"></a>
@@ -1656,7 +1766,8 @@ data/transactions/transaction.go : Transaction
 |**sender**  <br>*required*|\[snd\] Sender's address.|string|
 |**sender-rewards**  <br>*optional*|\[rs\] rewards applied to sender account.|integer|
 |**signature**  <br>*optional*||[TransactionSignature](#transactionsignature)|
-|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl)|
+|**state-proof-transaction**  <br>*optional*||[TransactionStateProof](#transactionstateproof)|
+|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction<br>* \[stpf\] state-proof-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
 
 
 <a name="transactionapplication"></a>
@@ -1818,6 +1929,21 @@ crypto/multisig.go : MultisigSig
 |---|---|---|
 |**public-key**  <br>*optional*|\[pk\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**signature**  <br>*optional*|\[s\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="transactionstateproof"></a>
+### TransactionStateProof
+Fields for a state proof transaction. 
+
+Definition:
+data/transactions/stateproof.go : StateProofTxnFields
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**message**  <br>*optional*|\[spmsg\]|[IndexerStateProofMessage](#indexerstateproofmessage)|
+|**state-proof**  <br>*optional*||[StateProofFields](#stateprooffields)|
+|**state-proof-type**  <br>*optional*|\[sptype\] Type of the state proof. Integer representing an entry defined in protocol/stateproof.go|integer|
 
 
 
