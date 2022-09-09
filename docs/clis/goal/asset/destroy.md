@@ -64,6 +64,8 @@ goal asset destroy [flags]
 
   -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
 
+  -S, --signer string               Address of key to sign with, if different from transaction "from" address due to rekeying
+
       --validrounds uint            The number of rounds for which the transaction will be valid
 
 ```

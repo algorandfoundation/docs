@@ -332,7 +332,7 @@ approval_program, clear_program, contract = router.compile_program(version=6)
 
 # print out the results
 print(approval_program)
-print(clear_state_program)
+print(clear_program)
 
 import json
 print(json.dumps(contract.dictify()))

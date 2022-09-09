@@ -84,6 +84,8 @@ goal asset create [flags]
 
   -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
 
+  -S, --signer string               Address of key to sign with, if different from transaction "from" address due to rekeying
+
       --total uint                  Total amount of tokens for created asset
 
       --unitname string             Name for the unit of asset
