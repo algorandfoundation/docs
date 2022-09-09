@@ -22,20 +22,9 @@ The validity ranges of participation keys can overlap. For any account, at any t
 
 # Removing Old Keys
 
-When a participation key is no longer in use, simply delete the participation key file. Participation keys can be identified by their filename, which contains the address of the account and the first and last participation rounds.
+When a participation key is no longer in use, the only way to remove it is by calling the node's participation API endpoint.
 
 ```bash
-$ rm `$ALGORAND_DATA/<network>/<address>.<firstround>.<lastround>.partkey`
+$ curl -X DELETE $URL/v2/participation/$partKeyID -H "X-Algo-API-Token: $token"
 ```
 Make sure to identify the correct key (i.e. make sure it is _not_ the currently registered key) before deleting.
-
-Restart the node to clear the old key from memory:
-
-=== "Debian/RPM"
-    ```bash 
-    $ sudo systemctl restart algorand
-    ```
-=== "Mac/Other Linux Distros"
-    ```bash
-    $ goal node restart
-    ```
