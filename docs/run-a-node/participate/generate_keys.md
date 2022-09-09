@@ -7,7 +7,7 @@ _[Read more about how Participation Keys function in the Algorand Consensus Prot
 !!! info "Important"
 	- The account’s private spending key does not need to be on the node to generate a participation key. Technically, anyone can generate a participation key for a particular account, but only the private spending key of the account can authorize the transaction that would register the account to go online with a particular participation key. This distinction allows you to keep private keys in cold storage.
 	- For security, the individual keys for each round are deleted from the key file as each round is completed. It is critical for the safety of the Algorand blockchain to avoid storing backups of participation key files that have been registered for an account.  
-	- There is no theoretical limit to the range you can specify for a partkey validity period, only disk space constraints. A recommended range is 3,000,000 rounds.
+	- The limit to the range you can specify for a partkey validity period is 2^24 - 1 (16,777,215). For security, it is recommended that the range does not exceed 3,000,000 rounds.
 
 !!! warning
 	All the `goal` commands in this page must be run under the user that owns the `data` directory and runs `algod`. They should never run under the user `root`, as this may compromise permissions in the `data` folder. For example, with a default installation of the Debian package, `goal account ...` should be replaced by `sudo -u algorand -E goal account ...`.

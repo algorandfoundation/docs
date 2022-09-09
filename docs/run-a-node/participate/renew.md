@@ -2,7 +2,7 @@ title: Renew participation keys
 
 The process of renewing a participation key is simply creating a new participation key and registering it online before the previous key expires.
 
-You can renew a participation key anytime before it expires, and we recommend to do it at least two weeks (about 38,400 rounds) in advance so as not to risk [having an account marked as online that is not participating](./index.md#ensure-that-online-accounts-are-participating). 
+You can renew a participation key anytime before it expires, and we recommend to do it at least two weeks (about 268,800 rounds) in advance so as not to risk [having an account marked as online that is not participating](./index.md#ensure-that-online-accounts-are-participating).
 
 The validity ranges of participation keys can overlap. For any account, at any time, at most one participation key is registered, namely the one included in the latest online key registration transaction for this account. 
 
@@ -22,20 +22,9 @@ The validity ranges of participation keys can overlap. For any account, at any t
 
 # Removing Old Keys
 
-When a participation key is no longer in use, simply delete the participation key file. Participation keys can be identified by their filename, which contains the address of the account and the first and last participation rounds.
+When a participation key is no longer in use, the only way to remove it is by calling the node's participation API endpoint.
 
 ```bash
-$ rm `$ALGORAND_DATA/<network>/<address>.<firstround>.<lastround>.partkey`
+$ curl -X DELETE $URL/v2/participation/$partKeyID -H "X-Algo-API-Token: $token"
 ```
 Make sure to identify the correct key (i.e. make sure it is _not_ the currently registered key) before deleting.
-
-Restart the node to clear the old key from memory:
-
-=== "Debian/RPM"
-    ```bash 
-    $ sudo systemctl restart algorand
-    ```
-=== "Mac/Other Linux Distros"
-    ```bash
-    $ goal node restart
-    ```
