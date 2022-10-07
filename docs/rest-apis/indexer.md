@@ -50,7 +50,7 @@ Search for accounts.
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
-|**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations.|integer|
+|**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations. Using application-id or asset-id filters will return both creator and opt-in accounts. Filtering by include-all will return creator and opt-in accounts for deleted assets and accounts. Non-opt-in managers are not included in the results when asset-id is used.|integer|
 
 
 **Responses**
@@ -1032,6 +1032,7 @@ Lookup block.
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**round-number**  <br>*required*|Round number|integer|
+|**Query**|**header-only**  <br>*optional*|Header only flag. When this is set to true, returned block does not contain the transactions|boolean|
 
 
 **Responses**
@@ -1433,6 +1434,7 @@ data/bookkeeping/block.go : Block
 |---|---|---|
 |**genesis-hash**  <br>*required*|\[gh\] hash to which this block belongs.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**genesis-id**  <br>*required*|\[gen\] ID to which this block belongs.|string|
+|**participation-updates**  <br>*optional*||[ParticipationUpdates](#participationupdates)|
 |**previous-block-hash**  <br>*required*|\[prev\] Previous block hash.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**rewards**  <br>*optional*||[BlockRewards](#blockrewards)|
 |**round**  <br>*required*|\[rnd\] Current round on which this block was appended to the chain.|integer|
@@ -1595,6 +1597,16 @@ Valid types:
 * delete
 
 *Type* : enum (noop, optin, closeout, clear, update, delete)
+
+
+<a name="participationupdates"></a>
+### ParticipationUpdates
+Participation account data that needs to be checked/acted on by the network.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**expired-participation-accounts**  <br>*optional*|\[partupdrmv\] a list of online accounts that needs to be converted to offline since their participation key expired.|< string > array|
 
 
 <a name="statedelta"></a>
