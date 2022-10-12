@@ -93,11 +93,11 @@ This file may be msgpack or json and can be created using goal or the SDKs
         ]
     })
 
-    # If you're running the code in nodejs you can save the file to disk.
+    // If you're running the code in nodejs you can save the file to disk.
     const filename = 'dryrun.msgp'
     fs.writeFileSync(filename, algosdk.encodeObj(drr.get_obj_for_encoding(true)))
     
-    # If you're doing this in the browser you'll need to present the file as a download.
+    // If you're doing this in the browser you'll need to present the file as a download.
     const msgp = algosdk.encodeObj(drr.get_obj_for_encoding(true));
 
     const msgp_bin = new Blob(
