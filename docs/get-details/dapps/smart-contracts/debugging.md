@@ -167,7 +167,6 @@ This file may be msgpack or json and can be created using goal or the SDKs
 
     ```
 
-### Creating 
 ## Calling the debugger with context
 
 ```
