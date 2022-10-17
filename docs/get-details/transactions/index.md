@@ -567,6 +567,30 @@ Application NoOp Transactions make up a majority of the Application Call methods
 
 A State Proof Transaction is a transaction that's submitted to the network during the consensus process. These types of transactions are not submitted by individuals, nor can a Smart Contract issue inner state proof transactions.
 
+```
+{
+  "txn": {
+    "txn": {
+      "fv": 24192139,
+      "gh": "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
+      "lv": 24193139,
+      "snd": "XM6FEYVJ2XDU2IBH4OT6VZGW75YM63CM4TC6AV6BD3JZXFJUIICYTVB5EU",
+      "sp": {
+        ...
+      },
+      "spmsg": {
+        "P": 2230170,
+        "b": "8LkpbqSqlWcsfUr9EgpxBmrTDqQBg2tcubN7cpcFRM8=",
+        "f": 24191745,
+        "l": 24192000,
+        "v": "drLLvXcg+sOqAhYIjqatF68QP7TeR0B/NljKtOtDit7Hv5Hk7gB9BgI5Ijz+tkmDkRoblcchwYDJ1RKzbapMAw=="
+      },
+      "type": "stpf"
+    }
+  }
+}
+```
+
 # Sending a Transaction in the Future
 
 Algorand transactions are valid for a specific round range and the range maximum is 1000 rounds. If you plan to submit the transaction right away, specifying this round range is trivial. However, when the transaction requires offline signing or you plan to make frequent transactions from that account, it may be beneficial to specify a future round range or ranges that are more convenient. You can sign these transactions in a single secure session, and then submit them to the network when the valid round range is reached.
