@@ -16,6 +16,7 @@ There are [six transaction types](https://github.com/algorand/go-algorand/blob/m
 - [Asset Freeze](#asset-freeze-transaction)
 - [Asset Transfer](#asset-transfer-transaction)
 - [Application Call](#application-call-transaction)
+- [State Proof](#state-proof-transaction)
 
 
 These six transaction types can be specified in particular ways that result in more granular perceived transaction types. As an example, a transaction to [create an asset](../atomic_transfers#creating-an-asset) and [destroy an asset](../atomic_transfers#destroying-an-asset) use the same underlying `AssetConfigTx` type. Distinguishing these two transactions requires knowing which combination of `AssetConfigTx` fields and values result in one versus the other. This guide will help explain those differences.  Fortunately, the SDKs provide intuitive methods to create these more granular transaction types without having to necessarily worry about the underlying structure. However, if you are signing a pre-made transaction, correctly interpreting the underlying structure is critical. 
@@ -561,6 +562,34 @@ Application NoOp Transactions make up a majority of the Application Call methods
 - The ForeignAssets (`apas`) contains the ASA id 16 
 - The ForeignApps (`apfa`) contains the AppId 10
 - The OnComplete (`apan`) is set to NoOp (0 value so omitted from the output)
+
+# State Proof Transaction
+
+A State Proof Transaction is a transaction that's submitted to the network during the consensus process. These types of transactions are not submitted by individuals, nor can a Smart Contract issue inner state proof transactions.
+
+```
+{
+  "txn": {
+    "txn": {
+      "fv": 24192139,
+      "gh": "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
+      "lv": 24193139,
+      "snd": "XM6FEYVJ2XDU2IBH4OT6VZGW75YM63CM4TC6AV6BD3JZXFJUIICYTVB5EU",
+      "sp": {
+        ...
+      },
+      "spmsg": {
+        "P": 2230170,
+        "b": "8LkpbqSqlWcsfUr9EgpxBmrTDqQBg2tcubN7cpcFRM8=",
+        "f": 24191745,
+        "l": 24192000,
+        "v": "drLLvXcg+sOqAhYIjqatF68QP7TeR0B/NljKtOtDit7Hv5Hk7gB9BgI5Ijz+tkmDkRoblcchwYDJ1RKzbapMAw=="
+      },
+      "type": "stpf"
+    }
+  }
+}
+```
 
 # Sending a Transaction in the Future
 
