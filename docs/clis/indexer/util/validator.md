@@ -46,6 +46,8 @@ indexer util validator [flags]
 
       --print-commands          Print curl commands, including tokens, to query algod and indexer.
 
+      --print-skipped           Include accounts which were skipped in the error log.
+
       --processor int           Choose compare algorithm [0 = Struct, 1 = Reflection]
 
       --retries int             Number of retry attempts when a difference is detected. (default 5)
