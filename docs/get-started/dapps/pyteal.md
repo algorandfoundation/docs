@@ -121,7 +121,9 @@ Whenever you're finished testing, you can use the following command to shutdown 
 ./sandbox down
 ```
 
-Now let’s dig into the code.
+Before we dig into the code, consider checking out [Dappflow](https://dappflow.org/) to take a look at all the transactions that have been created from the above tests. Dappflow is a Block Explorer for use with public and private Algorand networks. You are able to view blocks, transactions, accounts, assets, and applications.
+
+![Dappflow Transaction](/imgs/dappflow_transaction.png "Dappflow Transaction Overview")
 
 # Application overview
 The auction demo application uses a smart contract to auction off a non-fungible token. The smart contract covers four basic methods that are used to achieve this functionality. 

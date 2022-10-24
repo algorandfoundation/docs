@@ -86,12 +86,12 @@ The speed at which blocks are produced, the amount of transactions that can fit 
 ## Throughput
 You want to choose a blockchain that can scale and handle high throughput so that your users don’t experience long wait times when interacting with your application.
 
-On Algorand, blocks are produced every 4.5 seconds and can hold up to 5,000 transactions, which results in a throughput of about 1,000 transactions per second (1000 TPS). 
+On Algorand, blocks are produced every 3.9 seconds and can hold up to 25,000 transactions, which results in a throughput of about 6,000 transactions per second (6000 TPS). 
 
 ## Finality
 In proof-of-work blockchains, since forking is a possibility, transactions can’t be considered final until a certain amount of time passes and the likelihood of the transaction being on an orphaned chain is practically zero. This means that the actual throughput of this type of blockchain is caveated by a delay in finality. Downstream processes in an application must take this into account to avoid compounding issues if a transaction ends up being invalid.
 
-As we mentioned earlier, Algorand does not have forking so transactions are final as soon as they are confirmed in a block. A throughput of 1,000 TPS then actually means 1,000 _finalized_ transactions per second.
+As we mentioned earlier, Algorand does not have forking so transactions are final as soon as they are confirmed in a block. A throughput of 6,000 TPS then actually means 6,000 _finalized_ transactions per second.
 
 # Core features
 Algorand makes it easy to tokenize, transfer, and program conditions on any instrument of value. Create fungible tokens, NFTs, and security tokens with a single transaction (no smart contract code required). Or program sophisticated decentralized applications (dApps) with Algorand smart contracts.
