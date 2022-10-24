@@ -967,6 +967,7 @@ def compile_smart_signature(client, source_code):
 def get_private_key_from_mnemonic(mn) :
     private_key = mnemonic.to_private_key(mn)
     return private_key
+```
 
 
 
