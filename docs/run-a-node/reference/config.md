@@ -1,8 +1,27 @@
 title: Node configuration settings
-Nodes can be configured with different options. These options will determine some of the capabilities of the node and whether it functions as a relay node or a non-relay node. This involves setting parameters in the configuration file for either the `algod` or `kmd` process. The configuration file (`config.json`) for the `algod` process is located in the node's `data` directory (rename `config.json.example`).  The configuration file (`kmd_config.json`) for `kmd` is located in the nodes `data/kmd-version` (rename `kmd_config.json.example') directory. See [Node Types](../../run-a-node/setup/types.md) for more information.
+Nodes can be configured with different options. These options will determine some of the capabilities of the node and whether it functions as a relay node or a non-relay node. This involves setting parameters in the configuration file for either the `algod` or `kmd` process. 
+
+The configuration file (`config.json`) for the `algod` process is located in the node's `data` directory. 
+If it does not exist, it needs to be created.
+A full example is provided as `config.json.example`.
+However, it is strongly recommended to only specify the parameters with non-default values in a custom `config.json` file, otherwise, when the algod software is updated, you may be using older non-recommended values for some of the parameters.
+
+Concretely, the `config.json` for an archival node should usually just be:
+```json
+{
+    "Archival": true
+}
+```
+
+The configuration file (`kmd_config.json`) for `kmd` is located in the nodes `data/kmd-version` (rename `kmd_config.json.example') directory. 
+
+See [Node Types](../../run-a-node/setup/types.md) for more information.
 
 !!! info
     All changes require the node to be restarted to take effect.
+
+!!! warning
+    Changing some parameter values can have drastic negative impact on performance. In particular, never set `IsIndexerActive` to `true`. This activates the very slow deprecated V1 indexer. If indexer is required, use the [V2 indexer](../../../get-details/indexer).
  
 # algod Configuration Settings
 The `algod` process configuration parameters are shown in the table below.

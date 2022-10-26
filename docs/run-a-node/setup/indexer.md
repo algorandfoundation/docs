@@ -1,6 +1,6 @@
 title: Install the indexer
 
-The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgreSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../../rest-apis/indexer) for searching the database and another Indexer to be responsible for loading the ledger data.
+The Algorand Indexer is a feature that enables searching the blockchain for transactions, assets, accounts, and blocks with various criteria. Currently, Algorand has a V1 and V2 Indexer. The V1 Indexer is deprecated and can significantly slow down nodes. Users should now use the V2 Indexer. The V2 Indexer runs as an independent process that must connect to a [PostgreSQL](https://www.postgresql.org/) compatible database that contains the ledger data. The PostgreSQL database is populated by the indexer which connects to an Algorand node and processes all the ledger data and loads the database. The node the Indexer connects to must be an archival node to get all the ledger data. Alternatively, the Indexer can just connect to a PostgresSQL database that is populated by another instance of Indexer. This allows reader instances to be set up that provide the [REST APIs](../../../rest-apis/indexer) for searching the database and another Indexer to be responsible for loading the ledger data.
 
 
 The V2 Indexer is network agnostic, meaning it can point at BetaNet, TestNet, or MainNet. 
@@ -88,7 +88,10 @@ When starting the Indexer, a REST API is exposed. To control access to this API 
 # Indexer V1
 
 !!! info
-     This section explains using V1 of the indexer and should be considered deprecated.
+     This section explains using V1 of the indexer and should be considered deprecated. Indexer V1 enpoints will soon be completely removed.
+
+!!! warning
+    Enabling indexer V1 can significantly slow down the Algorand node.
 
 All transaction searching by default is limited to a 1000 round range. If a node is configured in archival mode, an additional configuration option can be used to turn on a node indexer and remove this restriction. With the indexer turned on, searching for specific transactions will be quicker. Two additional REST calls are also made available for more refined searching. 
 

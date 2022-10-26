@@ -35,9 +35,17 @@ Participation keys are valid for a specific round range. Make sure to renew part
 _Visit the [Renew Participation Keys section](./renew.md) for detailed instructions._
 
 ## Ensure that Participation Nodes are working properly
-Monitor your participation node to ensure high performance and consistent access to your registered participation key. 
 
-Blocks are timestamped using the clock time from the block proposer's node, so keep your node clock accurate and on time.
+Monitor your participation node to ensure high performance and consistent access to your registered participation key. 
+The following should be monitored:
+
+* last committed block (`goal node status` or API) matches a third-party API service
+* CPU / RAM / disk use are within thresholds
+* clock is accurate (blocks are timestamped using the clock time from the block proposer's node, so keep your node clock accurate and on time)
+* the participation node is sending votes and proposing blocks at the expected frequency.
+
+For the last point, you can use the third-party [Metrika dashboard/alerts](https://app.metrika.co) to get alerts if your node is not participating properly and/or when your participation key is expiring.
+If you do not want to use the Metrika dashboard, put in place a similar monitoring system based on the algod logs (this is more complex).
 
 ## Securely Store Participation Keys
 
