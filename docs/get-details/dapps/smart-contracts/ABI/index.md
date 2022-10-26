@@ -62,7 +62,7 @@ Once the method selector is known, it is used in the smart contract logic to rou
 The `method` pseudo-opcode can be used in a contract to do the above work and produce a *method selector* given the *method signature* string.
 
 ```
-method "add(uint64,uint64)uint64"
+method "add(uint64,uint64)uint128"
 ```
 
 ## Implementing a method
