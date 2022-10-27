@@ -26,15 +26,15 @@ The table below is a summary of possible configurations:
 Here are some common use cases:
 
 * I want to participate in consensus and help secure the Algorand network.
-    * ➥ non-relay non-archival participation node
+    * ➥ non-relay non-archival participation node.
     * Note: I need to have some Algos for that purpose and I need to monitor my node 24/7 to ensure it is working properly.
 * I want to send transactions and read current state of smart contracts/applications:
-    * ➥ non-relay non-archival non-participation node
+    * ➥ non-relay non-archival non-participation node.
     * Example: a dApp website that does not use any historical information (past transaction/operation), a website displaying balances of a list of important accounts.
 * I want full access to historical data (blocks, transactions) with advanced querying:
-    * ➥ non-relay archival non-participation node, together with an [**indexer**](../indexer/)
+    * ➥ non-relay archival non-participation node, together with an [**indexer**](../indexer/).
 * I want to get state proofs for any block:
-    * ➥ non-relay archival non-participation node
+    * ➥ non-relay archival non-participation node.
 
 # Participation Node 
 Classifying a node as a participation node is not a configuration parameter but a dynamic operation where the node is hosting participation keys for one or more online accounts. This process is described in [Participate in Consensus](../participate/index.md). Technically both non-relay and relay nodes can participate in consensus, but Algorand recommends *only* non-relay nodes participate in consensus. 

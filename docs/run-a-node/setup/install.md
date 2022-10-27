@@ -57,7 +57,7 @@ export PATH="$HOME/node:$PATH"
 Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
 
 Use this option when installing in the following operating systems: macOS, openSUSE Leap, Manjaro, Mageia, Alpine, Solus, etc. 
-Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process (this is not recommended for most user)
+Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process (this is not recommended for most users).
 
 
 # Installation with a package manager
