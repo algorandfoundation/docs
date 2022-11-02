@@ -26,6 +26,26 @@ Due to the higher TPS on MainNet, to successfully run an Algorand MainNet node, 
 
 Participation nodes (especially those with high stake) and relays have higher requirements to ensure the performance of the overall blockchain.
 
+Recommended system specification for participation nodes is:
+
+* 8 vCPU
+* 16 GB RAM
+* 100 GB NVMe SSD or equivalent
+* 1 Gbps connection with low latency
+
+Recommended system specification for relay nodes is:
+
+* 16 vCPU
+* 32 GB RAM
+* 3 TB NVMe SSD or equivalent
+* 30 TB/month egress
+* 1 Gbps connection with very low latency
+
+The third-party website [Algoscan Analytics](https://developer.algoscan.app/) indicates the current size of the data folder for MainNet/TestNet/BetaNet archival nodes.
+
+!!! info
+    Private networks used for development require must lower specs as they are usually achieving much lower TPS. A Raspberry Pi with 2GB of RAM is sufficient for low-TPS private networks.
+    
 ### Package manager installation overview
 
 See [Node Artifacts](../../reference/artifacts) reference for a detailed list of some of files that are installed by this method. An environment variable can be set that points to the data directory and goal will use that variable if no `-d` flag is specified. The binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is recommended to add to shell config files the following environment variable that points to the data directory:
