@@ -4,11 +4,23 @@ A benefit of Algorand's decentralized network implementation is that a relay is 
 
 It is possible to set up a relay for a personal network that does not require DNS entries. This is done using the following steps.
 
+See the [Algorand Foundation FAQ](https://www.algorand.foundation/general-faq#04-faq) for additional details about MainNet relays.
+
 # Install Node 
 Follow the [install instructions](../../run-a-node/setup/install.md) for the specific operating system that the relay will run on.
 
 # Edit the Configuration File
 Edit the configuration file for the node as described in the [configuration](../config) guide. Set the property `NetAddress` to `":4161"` for TestNet and to `":4160"` for MainNet. Then the file. Make sure the file is named `config.json`.
+
+Concretely, your `config.json` file should look like:
+
+```json
+{
+    "NetAddress": ":4161"
+}
+```
+
+for TestNet.
 
 !!! warning
 	As a precaution, it is not recommended that relay nodes interact with accounts or participate in consensus.

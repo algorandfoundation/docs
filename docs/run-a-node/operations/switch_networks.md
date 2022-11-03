@@ -15,7 +15,7 @@ The network can be switched by either replacing the current genesis file located
 # Using a new Data Directory
 To construct a new data directory follow the steps described below that depend on the type of install that was used with the current node.
 
-# Mac OS or Other Linux Distros
+## Mac OS or Other Linux Distros
 Assume the node binaries are currently installed in `~/node` and the data directory is set to `~/node/data`. Create the new data directory for the network that is being switched to. (eg `~/node/testnetdata`). 
 
 ```
@@ -38,7 +38,7 @@ The node will restart and begin communicating with the TestNet network. It will 
 
 At this point, the original network can be stared as well using the standard data directory.
 
-# Debian or RPM installs
+## Debian or RPM installs
 For *Debian* and *RPM* installs the data directory is set to `/var/lib/algorand`. With these installs, the genesis files are stored in `/var/lib/algorand/genesis/`. Create the new data directory for the network that is being switched to. (eg `/var/lib/algorand_testnet`). 
 
 ```

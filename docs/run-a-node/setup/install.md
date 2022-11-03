@@ -1,13 +1,20 @@
 title: Install a node
 # Overview
+
 This guide explains how to install the Algorand Node software on Linux distributions and Mac OS. When installing on Linux, two installation methods are covered: by package manager and by updater script.
 
 [The package manager method](#installation-with-a-package-manager) uses fixed directories and automatically updates. It has been validated on Debian, Ubuntu, Fedora, and CentOS.
 
 [The updater script method](#installation-with-the-updater-script) allows manually setting data directories and requires manual updates. It has been tested on the same Linux distributions from above, as well as on openSUSE Leap, Manjaro, Mageia, Alpine, and Solus.
 
-!!! Info
+!!! warning
+    Do not mix and match installation methods as this can lead to hard-to-debug issues. If the package manager method is available in your environment, we strongly recommend using only this method.
+
+!!! tip
     Windows users may choose to use [Rand Labs](https://github.com/randlabs/algorand-windows-node/) installation binaries.
+
+!!! tip
+    If you are a developer and want to use a private network, [sandbox](../../../get-started/devenv/sandbox.md) is often simpler than installing a node manually. However, it is still recommended to install the Algorand software without running a node, to get access to the developer tools such as `msgpacktool` and `algokey`.
 
 ### Hardware requirements
 
@@ -19,6 +26,26 @@ Due to the higher TPS on MainNet, to successfully run an Algorand MainNet node, 
 
 Participation nodes (especially those with high stake) and relays have higher requirements to ensure the performance of the overall blockchain.
 
+Recommended system specification for participation nodes is:
+
+* 8 vCPU
+* 16 GB RAM
+* 100 GB NVMe SSD or equivalent
+* 1 Gbps connection with low latency
+
+Recommended system specification for relay nodes is:
+
+* 16 vCPU
+* 32 GB RAM
+* 3 TB NVMe SSD or equivalent
+* 30 TB/month egress
+* 1 Gbps connection with very low latency
+
+The third-party website [Algoscan Analytics](https://developer.algoscan.app/) indicates the current size of the data folder for MainNet/TestNet/BetaNet archival nodes.
+
+!!! info
+    Private networks used for development require much lower specs as they are usually achieving much lower TPS. A Raspberry Pi with 2GB of RAM is sufficient for low-TPS private networks.
+    
 ### Package manager installation overview
 
 See [Node Artifacts](../../reference/artifacts) reference for a detailed list of some of files that are installed by this method. An environment variable can be set that points to the data directory and goal will use that variable if no `-d` flag is specified. The binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is recommended to add to shell config files the following environment variable that points to the data directory:
@@ -49,10 +76,13 @@ export PATH="$HOME/node:$PATH"
 
 Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
 
-Use this option when installing in the following operating systems: macOS, openSUSE Leap, Manjaro, Mageia, Alpine, Solus, etc. Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process.
+Use this option when installing in the following operating systems: macOS, openSUSE Leap, Manjaro, Mageia, Alpine, Solus, etc. 
+Also, use this method for the Linux distributions listed in the previous section if you want full control of the installation process (this is not recommended for most users).
 
 
 # Installation with a package manager
+
+This is the recommended method for most users on a compatible OS.
 
 ## Debian based distributions (Debian, Ubuntu, Linux Mint, ...)
 Nodes have been verified on Ubuntu 18.04 and 20.04, as well as on Debian 11. Other Debian-based distros should work as well (use apt-get install rather than apt install).
@@ -405,7 +435,7 @@ tcp        0      0 xxx.xxx.xxx.xxx:yyyyy        18.214.74.184:9243      ESTABLI
 
 When telemetry is disabled, the above command prints nothing.
 
-
+For additional detail see the [reference page on telemetry](../../reference/telemetry-config).
 
 # Sync Node with Network
 When a node first starts, it will need to sync with the network. This process can take a while as the node is loading up the current ledger and catching up to the rest of the network. See the section below a [Fast Catchup](#sync-node-network-using-fast-catchup) option. The status can be checked by running the following goal command:
@@ -445,7 +475,10 @@ The results will look similar to this:
 `4420000#Q7T2RRTDIRTYESIXKAAFJYFQWG4A3WRA3JIUZVCJ3F4AQ2G2HZRA`
 
 !!! warning
-    Do **NOT** use fast catchup on an *archival* or relay node.
+    Do **NOT** use fast catchup on an *archival* or relay node. If you ever do it, you need to reset your node and start from scratch.
+
+!!! warning
+    Fast catchup requires trust in the entity providing the catchpoint. An attacker controlling enough relays and proposing a malicious catchpoint can in theory allow a node to sync to an incorrect state of the blockchain. For full decentralization and no trust requirement, either use a catchpoint generated by one of your archival node (you can read the catchpoint using `goal node status`) or catch up from scratch without fast catchup.
 
 Steps:
 
@@ -521,6 +554,8 @@ If fast catchup fails, check the following:
 * the catch point matches the network used by the node and reported as `Genesis ID` by `goal node status`.
 * the hardware requirements above are satisfied, in particular a not-too-slow SSD is used.
 * the computer does not run out of memory.
+
+If you used fast catchup on an archival node, you need to stop the node, remove all files in the data folder except the configuration files (`*.json`) and the genesis files (`genesis*`), and restart the node. This operation will also remove all keys stored in the node. Proceed with caution.
 
 # Updating Node
 The *RPM* or *Debian* packages are updated automatically. For other installs, check for and install the latest updates by running `./update.sh -d ~/node/data` at any time from within your node directory. Note that the `-d` argument has to be specified when updating. It will query S3 for available builds and see if there are newer builds than the currently installed version. To force an update, run `./update.sh -i -c stable -d ~/node/data`.
