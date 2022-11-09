@@ -3,3 +3,4 @@ arrange:
   - types.md
   - install.md
   - indexer.md
+  - node-troubleshooting.md
