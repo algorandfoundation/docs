@@ -125,7 +125,7 @@ The `algod` process configuration parameters are shown in the table below.
 | TransactionSyncDataExchangeRate | The auto-calculated data exchange rate between each two peers. The unit of the data exchange rate is in bytes per second. Setting the value to zero implies allowing the transaction sync to dynamically calculate the value. | 0 |
 | TransactionSyncSignificantMessageThreshold | The threshold used for a transaction sync message before it can be used for calculating the data exchange rate. Setting this to zero would use the default values. The threshold is defined in units of bytes. | 0 |
 | TxPoolExponentialIncreaseFactor	| When the transaction pool is full, the priority of a new transaction must be at least TxPoolExponentialIncreaseFactor times greater than the minimum-priority of a transaction already in the pool (otherwise the new transaction is discarded).| 2 | 
-| TxPoolSize	| The maximum number of transactions that a node's pending transaction pool can contain.	| 15000 | 
+| TxPoolSize	| The maximum number of transactions that a node's pending transaction pool can contain.	| 75000 | 
 | TxSyncIntervalSeconds	| Interval between RPC calls to a random peer to sync from their transactions. Specified in seconds.	| 60 | 
 | TxSyncServeResponseSize	| The max size the sync server would return.	| 1000000 | 
 | TxSyncTimeoutSeconds	| Time to wait for a Transaction Sync RPC call to return. Specified in seconds.	| 30 | 
