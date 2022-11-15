@@ -679,6 +679,154 @@ Lookup application.
 * lookup
 
 
+<a name="lookupapplicationboxbyidandname"></a>
+### GET /v2/applications/{application-id}/box
+Get box information for a given application.
+```
+GET /v2/applications/{application-id}/box
+```
+
+
+**Description**
+Given an application ID and box name, returns base64 encoded box name and value. Box names must be in the goal app call arg form 'encoding:value'. For ints, use the form 'int:1234'. For raw bytes, encode base 64 and use 'b64' prefix as in 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**application-id**  <br>*required*||integer|
+|**Query**|**name**  <br>*required*|A box name in goal-arg form 'encoding:value'. For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Box information|[Box](#box)|
+|**400**|Response for errors|[Response 400](#lookupapplicationboxbyidandname-response-400)|
+|**404**|Response for errors|[Response 404](#lookupapplicationboxbyidandname-response-404)|
+|**500**|Response for errors|[Response 500](#lookupapplicationboxbyidandname-response-500)|
+
+<a name="lookupapplicationboxbyidandname-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupapplicationboxbyidandname-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="lookupapplicationboxbyidandname-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* lookup
+
+
+<a name="searchforapplicationboxes"></a>
+### GET /v2/applications/{application-id}/boxes
+Get box names for a given application.
+```
+GET /v2/applications/{application-id}/boxes
+```
+
+
+**Description**
+Given an application ID, returns the box names of that application sorted lexicographically.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**application-id**  <br>*required*||integer|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Box names of an application|[Response 200](#searchforapplicationboxes-response-200)|
+|**400**|Response for errors|[Response 400](#searchforapplicationboxes-response-400)|
+|**404**|Response for errors|[Response 404](#searchforapplicationboxes-response-404)|
+|**500**|Response for errors|[Response 500](#searchforapplicationboxes-response-500)|
+
+<a name="searchforapplicationboxes-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**application-id**  <br>*required*|\[appidx\] application index.|integer|
+|**boxes**  <br>*required*||< [BoxDescriptor](#boxdescriptor) > array|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="searchforapplicationboxes-response-400"></a>
+**Response 400**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="searchforapplicationboxes-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="searchforapplicationboxes-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* search
+
+
 <a name="lookupapplicationlogsbyid"></a>
 ### GET /v2/applications/{application-id}/logs
 
@@ -1264,6 +1412,8 @@ data/basics/userBalance.go : AccountData
 |**status**  <br>*required*|\[onl\] delegation status of the account's MicroAlgos<br>* Offline - indicates that the associated account is delegated.<br>*  Online  - indicates that the associated account used as part of the delegation pool.<br>*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
 |**total-apps-opted-in**  <br>*required*|The count of all applications that have been opted in, equivalent to the count of application local data (AppLocalState objects) stored in this account.|integer|
 |**total-assets-opted-in**  <br>*required*|The count of all assets that have been opted in, equivalent to the count of AssetHolding objects held by this account.|integer|
+|**total-box-bytes**  <br>*required*|For app-accounts only. The total number of bytes allocated for the keys and values of boxes which belong to the associated application.|integer|
+|**total-boxes**  <br>*required*|For app-accounts only. The total number of boxes which belong to the associated application.|integer|
 |**total-created-apps**  <br>*required*|The count of all apps (AppParams objects) created by this account.|integer|
 |**total-created-assets**  <br>*required*|The count of all assets (AssetParams objects) created by this account.|integer|
 
@@ -1488,6 +1638,27 @@ Fields relating to voting for a protocol upgrade.
 |**upgrade-approve**  <br>*optional*|\[upgradeyes\] Indicates a yes vote for the current proposal.|boolean|
 |**upgrade-delay**  <br>*optional*|\[upgradedelay\] Indicates the time between acceptance and execution.|integer|
 |**upgrade-propose**  <br>*optional*|\[upgradeprop\] Indicates a proposed upgrade.|string|
+
+
+<a name="box"></a>
+### Box
+Box name and its content.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**name**  <br>*required*|\[name\] box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**value**  <br>*required*|\[value\] box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="boxdescriptor"></a>
+### BoxDescriptor
+Box descriptor describes an app box without a value.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="evaldelta"></a>
