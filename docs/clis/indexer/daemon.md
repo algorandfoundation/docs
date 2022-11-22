@@ -56,8 +56,6 @@ indexer daemon [flags]
 
       --default-balances-limit uint32          set the default Limit parameter for querying balances, if none is provided (default 1000)
 
-      --default-boxes-limit uint32             set the default allowed Limit parameter for searching an app's boxes (default 1000)
-
       --default-transactions-limit uint32      set the default Limit parameter for querying transactions, if none is provided (default 1000)
 
       --dev-mode                               allow performance intensive operations like searching for accounts at a particular round
@@ -85,8 +83,6 @@ indexer daemon [flags]
       --max-assets-limit uint32                set the maximum allowed Limit parameter for querying assets (default 1000)
 
       --max-balances-limit uint32              set the maximum allowed Limit parameter for querying balances (default 10000)
-
-      --max-boxes-limit uint32                 set the maximum allowed Limit parameter for searching an app's boxes (default 10000)
 
       --max-conn uint32                        set the maximum connections allowed in the connection pool, if the maximum is reached subsequent connections will wait until a connection becomes available, or timeout according to the read-timeout setting
 
