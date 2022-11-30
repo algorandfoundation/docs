@@ -1,10 +1,10 @@
-title: goal app read
+title: goal app box list
 ---
-## goal app read
+## goal app box list
 
 
 
-Read local or global state for an application
+List all application boxes belonging to an application
 
 
 
@@ -12,13 +12,17 @@ Read local or global state for an application
 
 
 
-Read global or local (account-specific) state for an application
+List all application boxes belonging to an application.
+
+For printable strings, the box name is formatted as 'str:hello'
+
+For everything else, the box name is formatted as 'b64:A=='. 
 
 
 
 ```
 
-goal app read [flags]
+goal app box list [flags]
 
 ```
 
@@ -30,17 +34,9 @@ goal app read [flags]
 
 ```
 
-      --app-id uint    Application ID
+  -h, --help       help for list
 
-  -f, --from string    Account to fetch state from
-
-      --global         Fetch global state for this application.
-
-      --guess-format   Format application state using heuristics to guess data encoding.
-
-  -h, --help           help for read
-
-      --local --from   Fetch account-specific state for this application. --from address is required when using this flag
+  -m, --max uint   Maximum number of boxes to list. 0 means no limit.
 
 ```
 
@@ -55,6 +51,8 @@ goal app read [flags]
       --app-account strings        Accounts that may be accessed from application logic
 
       --app-arg stringArray        Args to encode for application transactions (all will be encoded to a byte slice). For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
+
+      --app-id uint                Application ID
 
   -i, --app-input string           JSON file containing encoded arguments and inputs (mutually exclusive with app-arg, app-account, foreign-app, foreign-asset, and box)
 
@@ -86,7 +84,7 @@ goal app read [flags]
 
 
 
-* [goal app](../../app/app/)	 - Manage applications
+* [goal app box](../../box/box/)	 - Read application box data
 
 
 
