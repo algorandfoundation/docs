@@ -1,6 +1,6 @@
 title: Smart contract details
 
-Algorand smart contracts are pieces of logic that reside on the Algorand blockchain and are remotely callable. These contracts are primarily responsible for implementing the logic associated with a distributed application. Smart contracts are referred to as stateful smart contracts or applications in the Algorand documentation. Smart contracts can generate asset and payment transactions allowing them to function as Escrow accounts on the Algorand blockchain. Smart contracts can also store values on the blockchain. This storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Like smart signatures, smart contracts are written in Python using PyTeal or TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. The recommended approach for writing smart contracts is to use the Python SDK with the PyTeal library.  
+Algorand smart contracts are pieces of logic that reside on the Algorand blockchain and are remotely callable. These contracts are primarily responsible for implementing the logic associated with a distributed application. Smart contracts are referred to as stateful smart contracts or applications in the Algorand documentation. Smart contracts can generate asset and payment transactions allowing them to function as Escrow accounts on the Algorand blockchain. Smart contracts can also store values on the blockchain. This storage can be global, local, or box storage. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Box storage is also global and allows contracts to use larger segments of storage. Like smart signatures, smart contracts are written in Python using PyTeal or TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. The recommended approach for writing smart contracts is to use the Python SDK with the PyTeal library.  
 
 See the [*PyTeal Documentation*](../../pyteal/index.md) for information on building smart contracts in Python.
 
@@ -19,7 +19,7 @@ Smart contracts are implemented using two programs:
 * The `ApprovalProgram` is responsible for processing all application calls to the contract, with the exception of the clear call (described in the next bullet). This program is responsible for implementing most of the logic of an application. Like smart signatures, this program will succeed only if one nonzero value is left on the stack upon program completion or the `return` opcode is called with a positive value on the top of the stack.
 * The `ClearStateProgram` is used to handle accounts using the clear call to remove the smart contract from their balance record. This program will pass or fail the same way the `ApprovalProgram` does. 
 
-In either program, if a global or local state variable is modified and the program fails, the state changes will not be applied. 
+In either program, if a global, box, or local state variable is modified and the program fails, the state changes will not be applied. 
 
 Having two programs allows an account to clear the contract from its state, whether the logic passes or not. When the clear call is made to the contract, whether the logic passes or fails, the contract will be removed from the account's balance record. Note the similarity to the CloseOut transaction call which can fail to remove the contract from the account, which is described below.
 
@@ -32,24 +32,25 @@ Calls to smart contracts are implemented using `ApplicationCall` transactions. T
 * CloseOut - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
 * ClearState - Similar to CloseOut, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
 
-The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. The overall architecture of a smart contract is shown below. In the following sections, details on the individual capabilities of a smart contract will be explained.
+The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. In the following sections, details on the individual capabilities of a smart contract will be explained.
 
 <center>![Smart Contract](../../../../imgs/stateful-1.png)</center>
-<center>*Smart Contract*</center>
-
-The `goal` calls shown above in the orange boxes represent all the specific calls that can be made against a smart contract and are described later in this document. These calls are also available in the SDKs. The teal-colored boxes represent the two required TEAL programs, the blue boxes are the state variables (local and global), and the yellow boxes represent the TEAL opcodes used to modify state. Modifying state is detailed in later section.
+<center>*Application Transaction Types*</center>
 
 # Smart contract arrays
-A set of arrays can be passed with any application transaction, which instructs the protocol to load additional data for use in the contract. These arrays are the *arguments* array, the *applications* array, the *assets* array, and the *accounts* array. 
+A set of arrays can be passed with any application transaction, which instructs the protocol to load additional data for use in the contract. These arrays are the *arguments* array, the *applications* array, the *assets* array, the *accounts* array, and the *boxes* array. These arrays are used to restrict how much of the ledger can be accessed in one specific call to the smart contract. This restriction is in place to maintaing blockchain performance. These arrays can be changed per application transaction (even within an atomic group).
 
 The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a 2KB total size limit. See [Passing Arguments To Smart Contracts](#passing-arguments-to-smart-contracts) for more details on arguments.
 
-The other three arrays are used to load data from the blockchain:
+The other arrays are used to load data from the blockchain:
 * The application array is used to pass other smart contract IDs that can be used to read state for those specific contracts. 
 * The assets array is used to pass a list of asset IDs that can be used to retrieve configuration and asset balance information. 
-* The accounts array allows additional accounts to be passed to the contract for balance information and local state. Note that to access an account's asset balance, both the account and the asset ID must be specified in their respective arrays. Similarly, to access an account's local state for a specific application, both the account and the smart contract ID must be specified in their respective arrays. 
+* The accounts array allows additional accounts to be passed to the contract for balance information and local state. Note that to access an account's asset balance, both the account and the asset ID must be specified in their respective arrays. Similarly, to access an account's local state for a specific application, both the account and the smart contract ID must be specified in their respective arrays.
+* The boxes array defines which boxes can be manipulated in a particular call to the smart contract. The box array is an array of pairs: the first element of each pair is an integer specifying the index into the application array, and the second element is the key name of the box to be accessed.   
 
-These other three arrays are limited to eight total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction. Many opcodes that make use of these arrays take an integer parameter as an index into these arrays. The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. Most of the opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
+These three arrays (*applications*, *assets*, and *accounts*) are limited to eight total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction. Many opcodes that make use of these arrays take an integer parameter as an index into these arrays. The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. Most of the opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
+
+Boxes function similar to the other arrays but differ is significant ways which are explained in detail in the [Boxes section of the documentation](#box-details).
 
 <center>![Smart Contract](../../../../imgs/stateful-2.png)</center>
 <center>*Smart Contract Arrays*</center>
@@ -404,7 +405,6 @@ A smart contract can make inner transactions consisting of grouped transactions.
 
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
 
-
 # Contract To Contract Calls
 
 With the release of TEAL 6 (AVM 1.1), Smart Contracts may issue inner transactions that invoke other Smart Contracts. This allows for composability across applications but comes with some limitations.
@@ -452,7 +452,73 @@ Additionally, when validating transactions, using relative position of transacti
 
 Since TEAL 6, all created assets and apps are available to be accessed by application calls in the same group which allows more dynamic behavior. For example an application can be created via Inner Transaction then funded immediately in the same transaction group since we have access to the created application id and address.   
 
-# Modifying state in smart contract
+
+# Smart Contract Storage 
+Smart Contracts have three different types of storage: local storage, global storage, and box storage. 
+
+Global state and boxes are associated with the app itself, whereas local state is associated with each user account that opts into the application. Global and local storage are Key/Value pairs that are limited to 128 bytes per pair. Boxes are keyed storage segments up to 32kb of data per box.
+
+Each storage option’s properties are described below. 
+
+**Global state for app a:**
+
+* Allocation: 
+    * Can include between 0 and 64 key/value pairs and a total of 8K of memory to share among them.
+    * The amount of global storage is allocated in k/v units, and determined at contract creation. This cannot be edited later. 
+    * The contract creator address is responsible for funding the global storage (by an increase to their minimum balance requirement, see below). 
+* Reading: 
+    * Can be read by any app call that has specified app a’s ID in its foreign apps array.
+    * Can be read on-chain using the k/v pairs defined (from off-chain, can be read using goal or APIs + SDKs). 
+* Writing: 
+    * Can only be written by app a. 
+* Deletion: 
+    * Is deleted when app a is deleted. Cannot otherwise be deallocated (though of course the contents can be cleared by app a, but this does not change the minimum balance requirement). 
+
+**Local state for account x for app a:** 
+
+* Allocation: 
+    * Is allocated when account x opts in to app a (submits a transaction to opt-in to app a).
+    * Can include between 0 and 16 key/value pairs and a total of 2KB of memory to share among them. 
+    * The amount of local storage is allocated in k/v units, and determined at contract creation. This cannot be edited later. 
+    * The opted-in user address is responsible for funding the local storage (by an increase to their minimum balance). 
+* Reading: 
+    * Can be read by any app call that has app x in its foreign apps array and account x in its foreign accounts array. 
+    * Can be read on-chain using the k/v pairs defined (from off-chain, can be read using goal and the SDKs). 
+* Writing: 
+    * Is editable only by app a, but is delete-able by app a or the user x (using a ClearState call, see below). 
+* Deletion: 
+    * Deleting an app does not affect its local storage. 
+    * _Clear state_. Every Smart Contract on Algorand has two programs: the _approval_ and the _clear state_ program. An account holder can clear their local state for an app at any time (deleting their data and freeing up their locked minimum balance). The purpose of the clear state program is to allow the app to handle the clearing of that local state gracefully. 
+    * Account x can request to clear its local state using a [close out transaction](https://developer.algorand.org/docs/get-details/transactions/#application-close-out-transaction). 
+    * Account x can clear its local state for app a using a [clear state transaction](https://developer.algorand.org/docs/get-details/transactions/#application-clear-state-transaction), which will always succeed, even after app a is deleted. 
+
+
+**Boxes for app a:** 
+
+* Allocation: 
+    * App a can allocate as many boxes as it needs, when it needs them.
+    * App a allocates a box using the box_create opcode in its TEAL program, specifying the name and the size of the box being allocated. 
+        * Boxes can be any size from 0 to 32K bytes. 
+        * Box names must be at least 1 byte, at most 64 bytes, and must be unique within app a. 
+    * The app account(the smart contract) is responsible for funding the box storage (with an increase to its minimum balance requirement, see below for details). 
+    * A box name must be referenced in the boxes array of the app call to be allocated. 
+* Reading: 
+    * App a is the only app that can read the contents of its boxes on-chain. This on-chain privacy is unique to box storage. Recall that everything can be read by anybody from off-chain using the algod or indexer APIs. 
+    * To read box b from app a, the app call must include b in its boxes array. 
+    * Read budget: Each box reference in the boxes array allows an app call to access 1K bytes of box state - 1K of “box read budget”. To read a box larger than 1K, multiple box references must be put in the boxes arrays. 
+        * The box read budget is shared across the transaction group. 
+        * The total box read budget must be larger than the sum of the sizes of all the individual boxes referenced (it is not possible to use this read budget for a part of a box - the whole box is read in).
+    * Box data is unstructured. This is unique to box storage. 
+    * A box is referenced by including its app ID and box name. 
+* Writing: 
+    * App a is the only app that can write the contents of its boxes.
+    * Exactly analogous to reading, each box ref in the boxes array allows an app call to write 1K bytes of box state - 1K of “box write budget”. 
+* Deletion: 
+    * App a is the only app that can delete its boxes. 
+    * If an app is deleted, its boxes are not deleted. (the correct cleanup design is to look up the boxes from off-chain and call the app to delete all its boxes before deleting the app itself). 
+
+
+# Manipulate global or local state in smart contract
 Smart contracts can create, update, and delete values in global or local state. The number of values that can be written is limited based on how the contract was first created. See [Creating the Smart Contract](#creating-the-smart-contract) for details on configuring the initial global and local storage. State is represented with key-value pairs. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. The TEAL language provides several opcodes for facilitating reading and writing to state.
 
 ## Reading local state from other accounts
@@ -652,7 +718,7 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise, `int 2` would represent the second passed in foreign application. The actual contract IDs can also be specified as long as the contract is in the contracts array. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
 
-## Summary of state operations
+## Summary of global and Local state operations
 
 | Context            | Write            | Read                | Delete           | Check If Exists     |
 | ---                | ---              | ---                 | ---              | ---                 |
@@ -661,7 +727,278 @@ The `int 0` represents the current application and `int 1` would reference the f
 | Other App Global   |                  | `app_global_get_ex` |                  | `app_global_get_ex` |
 | Other App Local    |                  | `app_local_get_ex`  |                  | `app_local_get_ex`  |
 
+# Box Details
+Boxes are useful in many scenarios:
 
+* Applications that need larger or unbound contract storage.
+* Applications that want to store data per user, but do not wish to require users to opt-in to the contract.
+* Applications that have dynamic storage requirements.
+* Applications that require larger storage blocks that can not fit in the existing global state key-value pairs.
+* Applications that require storing arbitrary maps or hash tables. 
+  
+The following sections cover the details of manipulating boxes within a smart contract. 
+
+## Box Array 
+The box array is an array of pairs: the first element of each pair is an integer specifying the index into the foreign application array, and the second element is the key name of the box to be accessed.
+
+Each entry in the box array allows access to only 1kb of data. For example, if a box is sized to 4kb, the transaction must use four entries in this array. To claim an allotted entry a corresponding app Id and box name need to be added to the box ref array. If you need more than the 1kb associated with that specific box name, you can either specify the box ref entry more than once or, preferably, add “empty” box refs `[0,””]` into the array. If you specify 0 as the app Id the box ref is for the application being called. 
+
+For example, suppose the contract needs to read “BoxA” which is 1.5kb, and “Box B” which is 2.5kb, this would require four entries in the box ref array and would look something like:
+
+```py
+boxes=[[0, "BoxA"],[0,"BoxB"], [0,""],[0,""]]
+``` 
+
+The box reference budget is based on the sizes of the boxes accessed, not the amount of data read or written. For example, if a contract accesses “Box A” with a size of 2kb and “Box B” with a size of 10 bytes, this requires both boxes be in the box reference array and one additional reference, which should be an “empty” box reference. 
+
+Access budgets are summed across multiple application calls in the same transaction group. For example in a group of two smart contract calls, there is room for 16 array entries (8 per app call), allowing access to 16kb of data. If an application needs to access a 16kb box named “Box A”, it will need to be grouped with one additional application call and the box reference array for each transaction in the group should look similar to this:
+
+Transaction 0: [0,”Box A”],[0,””],[0,””],[0,””],[0,””],[0,””],[0,””],[0,””]
+Transaction 1: [0,””],[0,””],[0,””],[0,””],[0,””],[0,””],[0,””],[0,””]
+
+Box refs can be added to the boxes array using `goal` or any of the SDKs.
+
+=== "Goal"
+    ```goal
+    goal app method --app-id=53 --method="add_member2()void" --box="53,str:BoxA" --from=CONP4XZSXVZYA7PGYH7426OCAROGQPBTWBUD2334KPEAZIHY7ZRR653AFY
+    ```
+
+=== "Python SDK"
+    ```py
+    # Algorand Python SDK
+    # Using ATC
+    atc = AtomicTransactionComposer()
+    atc.add_method_call(app_id, my_method, addr, sp, signer, method_args=[1,5], boxes=[[app_id, “key”]],
+    )
+    ```
+
+=== "Beaker"
+    ```py
+    #Beaker framework
+    result = app_client.call(
+        Myapp.my_method,
+    boxes=[[app_client.app_id, "key"]],
+    )
+    ```
+## Creating a Box
+The AVM supports two opcodes `box_create` and `box_put` that can be used to create a box. 
+The `box_create` opcode takes two parameters, the name and the size in bytes for the created box. The `box_put` opcode takes two parameters as well. The first parameter is the name and the second is a byte array to write. Because the AVM limits byte arrays to 4,096, `box_put` can only be used for boxes with length <= 4,096.
+
+=== "TEAL"
+    ```teal
+    // 100 byte box created with box_create
+    byte “Mykey”
+    int 100
+    box_create
+    ….
+    // create with a box_put
+    byte "Mykey"
+    byte “My data values”
+    box_put
+    ```
+
+=== "PyTeal"
+    ```py
+    # 100 byte box created with box_create
+    App.box_create(“MyKey”,Int(100))
+    …
+    # box created with box_put
+    App.box_put(“MyKey”, “My data values”)
+    ```
+
+Box names must be unique within an application. If using `box_create`, and an existing box name is passed with a different size, the creation will fail. If an existing box name is used with the existing size, the call will return a 0 without modifying the box contents. When creating a new box the call will return a 1. When using `box_put` with an existing key name, the put will fail if the size of the second argument (data array) is different from the original box size. 
+
+!!!info
+    When creating a box, the key name to be created must be in the box ref array.
+
+## Writing to a Box  
+The AVM provides two opcodes, `box_put` and `box_replace`,  to write data to a box. The `box_put` opcode is described in the previous section. The `box_replace` opcode takes three parameters, the key name, the starting location and replacement bytes.
+
+=== "TEAL"
+    ```teal
+    byte “MyKey” 
+    int 10
+    byte “best”
+    box_replace
+    ```
+=== "PyTeal"
+    ```py
+    #Beaker Framework
+        @external
+        def replace_string(self, ky: abi.String, start: abi.Uint64, replacement: abi.String, *, output: abi.String):
+            return Seq(
+                App.box_replace(ky.get(), start.get(), replacement.get()),
+                boxstr :=  App.box_get(ky.get()),
+                Assert( boxstr.hasValue()),
+                output.set(boxstr.value()),
+            ) 
+
+    ```
+
+When using `box_replace`, the box size can not increase. This means if the replacement bytes, when added to the start byte location, exceed the upper bounds of the box, the call will fail. 
+
+## Reading from a Box
+The AVM provides two opcodes for reading the contents of a box, `box_get` and `box_extract`. The `box_get` opcode takes one parameter which is the key name for the box. It reads the entire contents of a box. The `box_get` opcode returns two values. The top-of-stack is an integer that has the value of 1 or 0. A value of 1 means that the box was found and read. A value of 0 means that the box was not found. The next stack element contains the bytes read if the box exists, else it contains an empty byte array. `box_get` fails if the box length exceeds 4,096.
+
+=== "TEAL"
+    ```teal
+    byte “MyKey”
+    box_get
+    assert //verify that the read occurred and we have a value
+    //box contents at the top of the stack
+    ```
+
+=== "PyTeal"
+    ```py
+            return Seq(
+                App.box_put(Bytes("Cnt"), val.encode()),
+                boxint :=  App.box_get(Bytes("Cnt")),
+                Assert(boxint.hasValue()),
+                output.decode(boxint.value()),
+            )
+    ```
+
+Note that when using either opcode to read the contents of a box, the AVM is limited to reading no more than 4kb at a time. This is because the stack is limited to 4kb entries. For larger boxes, the `box_extract` opcode should be used to perform multiple reads to retrieve the entire contents.
+
+The `box_extract` opcode requires three parameters: the box key name, the starting location, and the length to read. If the box is not found or if the read exceeds the boundaries of the box the opcode will fail. 
+
+
+=== "TEAL"
+    ```teal
+    byte “BoxA”
+    byte “this is a test of a very very very very long string”
+    box_put
+    byte “BoxA”
+    int 5
+    int 9
+    box_extract
+    byte “is a test”
+    ==
+    assert
+    ```
+
+=== "PyTeal"
+    ```py
+            return Seq(
+                App.box_put(Bytes("BoxA"), Bytes("this is a test of a very very very very long string")),
+                output.set(App.box_extract(Bytes("BoxA"), Int(5), Int(9))),
+            ) 
+    ```
+
+## Getting a Box Length
+The AVM offers the `box_len` opcode to retrieve the length of a box. This opcode can also be used to verify the existence of a particular box. The opcode takes the box key name and returns two unsigned integers (uint64). The top-of-stack is either a 0 or 1, where 1 indicates the existence of the box and 0 indicates the box does not exist. The next is the length of the box if it exists, else it is 0.
+
+=== "TEAL"
+    ```teal
+    byte “BoxA”
+    byte “this is a test of a very very very very long string”
+    box_put
+    byte “BoxA”
+    box_len
+    assert
+    int 51
+    ==
+    assert
+    ```
+
+=== "PyTeal"
+    ```py
+            return Seq(
+                App.box_put(Bytes("BoxA"), Bytes("this is a test of a very very very very long string")),
+                bt := App.box_length(Bytes("BoxA")),
+                Assert(bt.hasValue()),
+                output.set(bt.value()),
+            ) 
+
+    ```
+
+## Deleting a Box
+The AVM offers the `box_del` opcode to delete a box. This opcode takes the box key name. The opcode returns one unsigned integer (uint64) with a value of 0 or 1. A value of 1 indicates the box existed and was deleted. A value of 0 indicates the box did not exist.
+
+
+=== "TEAL"
+    ```teal
+    byte ”BoxA"
+    byte “this is a test of a very very very very long string”
+    box_put
+    byte “BoxA”
+    box_del
+    bnz existed
+    ``` 
+
+=== "PyTeal"
+    ```py
+            return Seq(
+                App.box_put(Bytes("BoxA"), Bytes("this is a test of a very very very very long string")),
+                output.set(App.box_delete(Bytes("BoxA"))),
+            ) 
+    ```
+
+!!!warning
+    You must delete all boxes before deleting a contract. If this is not done, the minimum balance for that box is not recoverable.
+
+## Example: Storing Named Tuples in a Box
+If your contract is using the ABI and authored in PyTeaI, you might want to store a named tuple in a Box. It is preferable that the tuple only contain static data types, as that will allow easy indexing into the box. The following example creates a box for every address that calls the contract’s add_member method. This is an effective way of storing data for every user of the contract without having to have the user’s account opt-in to the contract.
+
+=== "PyTeal"
+    ```py
+    # This example uses the Beaker framework
+
+    from algosdk import *
+    from pyteal import *
+    from beaker import *
+
+
+    class NamedTupleBox(Application):
+
+        class MembershipRecord(abi.NamedTuple):
+            role: abi.Field[abi.Uint8]
+            voted: abi.Field[abi.Bool]
+
+        
+        @external
+        def add_member(self, role: abi.Uint8, voted: abi.Bool,*, output: MembershipRecord):
+            return Seq(
+                output.set(role, voted),
+                App.box_put(Txn.sender(), output.encode()),
+            )
+
+        @external
+        def del_member(self,*, output: abi.Uint64):
+            return Seq(
+                output.set(App.box_delete(Txn.sender())),
+            )     
+            
+    if __name__ == "__main__":
+        accts = sandbox.get_accounts()
+        acct = accts.pop()
+
+
+        app_client = client.ApplicationClient(
+            sandbox.get_algod_client(), NamedTupleBox(), signer=acct.signer
+        )
+
+        app_client.create()
+        app_client.fund(100 * consts.algo)
+        print("APP ID")
+        print(app_client.app_id)
+        print(acct.address)
+        ls = acct.address.encode()
+
+        result = app_client.call(
+            NamedTupleBox.add_member,
+            role=2,
+            voted=False,
+            boxes=[[app_client.app_id, encoding.decode_address(acct.address)]],
+        )
+        result = app_client.call(
+            NamedTupleBox.del_member,
+            boxes=[[app_client.app_id, encoding.decode_address(acct.address)]],
+        )    
+
+        print(result.return_value)
+        NamedTupleBox().dump('./artifacts')
+    ```
 # Checking the transaction type in a smart Contract
 The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Contract](#the-lifecycle-of-a-smart-contract) can be checked within the TEAL code by examining the `OnCompletion` transaction property. 
 
@@ -1211,7 +1548,7 @@ As a way of getting started writing smart contracts, the following boilerplate t
     err
     ```
 # Minimum balance requirement for a smart contract
-When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used.
+When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used. This minimum balance requirement is associated with the account that creates or opts into the smart contract.
 
 Calculation for increase in min-balance during creation or opt-in is as follows:
 
@@ -1242,9 +1579,7 @@ Calculation for increase in min-balance during creation or opt-in is as follows:
 
 !!! note 
     Global storage is actually stored in the creator account, so that account is responsible for the global storage minimum balance.  When an account opts-in, it is responsible for the minimum balance of local storage. 
-
 ## Example
-
 Given a smart contract with 1 *global* key-value-pair of type byteslice and 1 *local* storage key-value pair of type integer and no Extra Pages. 
 
 
@@ -1262,3 +1597,15 @@ Given a smart contract with 1 *global* key-value-pair of type byteslice and 1 *l
     ```
     100,000 + 28,500 = 128,500
     ```
+
+# Minimum Balance Requirement For Boxes
+Boxes are created by a smart contract and raise the minimum balance requirement(MBR) that must be in the contract's ledger balance. This means that a contract that intends to use boxes, must be funded beforehand.
+
+When a box with name `n` and size `s` is created, the MBR is raised by `2500 + 400 * (len(n)+s)` microAlgos. When the box is destroyed, the minimum balance requirement is decremented by the same amount.
+
+Notice that the key (name) is included as part of the MBR calculation. 
+
+For example, if a box is created with the name “BoxA” (a 4 byte long key) and with a size of 1024 bytes, the MBR for the app account increases by 413,700 microAlgos:
+
+    (2500 per box) + (400 * (box size + key size))
+    (2500) + (400 * (1024+4)) = 413,700 microAlgos 
