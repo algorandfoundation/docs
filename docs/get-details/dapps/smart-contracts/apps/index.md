@@ -465,7 +465,7 @@ Global state and boxes are associated with the app itself, whereas local state i
 
 Each storage option’s properties are described below. 
 
-**Global state for app a:**
+## Global Storage
 
 * Allocation: 
     * Can include between 0 and 64 key/value pairs and a total of 8K of memory to share among them.
