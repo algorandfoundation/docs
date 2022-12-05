@@ -483,7 +483,7 @@ Each storage option’s properties are described below.
 
 * Allocation: 
     * Is allocated when account x opts in to app a (submits a transaction to opt-in to app a).
-    * Can include between 0 and 16 key/value pairs and a total of 2KB of memory to share among them. 
+    * Can include between 0 and 16 key/value pairs for a total of 2KB of memory to share among them. 
     * The amount of local storage is allocated in k/v units, and determined at contract creation. This cannot be edited later. 
     * The opted-in user address is responsible for funding the local storage (by an increase to their minimum balance). 
 * Reading: 
