@@ -843,7 +843,7 @@ The AVM provides two opcodes, `box_put` and `box_replace`,  to write data to a b
 When using `box_replace`, the box size can not increase. This means if the replacement bytes, when added to the start byte location, exceed the upper bounds of the box, the call will fail. 
 
 ## Reading from a Box
-The AVM provides two opcodes for reading the contents of a box, `box_get` and `box_extract`. The `box_get` opcode takes one parameter which is the key name for the box. It reads the entire contents of a box. The `box_get` opcode returns two values. The top-of-stack is an integer that has the value of 1 or 0. A value of 1 means that the box was found and read. A value of 0 means that the box was not found. The next stack element contains the bytes read if the box exists, else it contains an empty byte array. `box_get` fails if the box length exceeds 4,096.
+The AVM provides two opcodes for reading the contents of a box, `box_get` and `box_extract`. The `box_get` opcode takes one parameter which is the key name for the box. It reads the entire contents of a box. The `box_get` opcode returns two values. The top-of-stack is an integer that has the value of 1 or 0. A value of 1 means that the box was found and read. A value of 0 means that the box was not found. The next stack element contains the bytes read if the box exists, else it contains an empty byte array. `box_get` fails if the box length exceeds 4kb.
 
 === "TEAL"
     ```teal
