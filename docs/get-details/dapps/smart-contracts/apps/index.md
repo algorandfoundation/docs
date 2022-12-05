@@ -492,7 +492,7 @@ Each storage option’s properties are described below.
 * Writing: 
     * Is editable only by app a, but is delete-able by app a or the user x (using a ClearState call, see below). 
 * Deletion: 
-    * Deleting an app does not affect its local storage. 
+    * Deleting an app does not affect its local storage. Accounts must clear out of app to recover minimum balance.
     * _Clear state_. Every Smart Contract on Algorand has two programs: the _approval_ and the _clear state_ program. An account holder can clear their local state for an app at any time (deleting their data and freeing up their locked minimum balance). The purpose of the clear state program is to allow the app to handle the clearing of that local state gracefully. 
     * Account x can request to clear its local state using a [close out transaction](https://developer.algorand.org/docs/get-details/transactions/#application-close-out-transaction). 
     * Account x can clear its local state for app a using a [clear state transaction](https://developer.algorand.org/docs/get-details/transactions/#application-clear-state-transaction), which will always succeed, even after app a is deleted. 
@@ -520,7 +520,7 @@ Each storage option’s properties are described below.
     * As with reading, each box ref in the boxes array allows an app call to write 1kb of box state - 1kb of “box write budget”. 
 * Deletion: 
     * App a is the only app that can delete its boxes. 
-    * If an app is deleted, its boxes are not deleted. (the correct cleanup design is to look up the boxes from off-chain and call the app to delete all its boxes before deleting the app itself). 
+    * If an app is deleted, its boxes are not deleted. The boxes will not be modifiable but still can be queried using the SDKs. The minimum balance will also be locked. (the correct cleanup design is to look up the boxes from off-chain and call the app to delete all its boxes before deleting the app itself). 
 
 
 # Manipulate global or local state in smart contract
