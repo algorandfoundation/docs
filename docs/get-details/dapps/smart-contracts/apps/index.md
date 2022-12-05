@@ -479,7 +479,7 @@ Each storage option’s properties are described below.
 * Deletion: 
     * Is deleted when app a is deleted. Cannot otherwise be deallocated (though of course the contents can be cleared by app a, but this does not change the minimum balance requirement). 
 
-**Local state for account x for app a:** 
+## Local Storage
 
 * Allocation: 
     * Is allocated when account x opts in to app a (submits a transaction to opt-in to app a).
