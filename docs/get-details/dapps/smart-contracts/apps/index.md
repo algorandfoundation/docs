@@ -502,7 +502,7 @@ Each storage option’s properties are described below.
 
 * Allocation: 
     * App a can allocate as many boxes as it needs, when it needs them.
-    * App a allocates a box using the box_create opcode in its TEAL program, specifying the name and the size of the box being allocated. 
+    * App a allocates a box using the `box_create` opcode in its TEAL program, specifying the name and the size of the box being allocated. 
         * Boxes can be any size from 0 to 32K bytes. 
         * Box names must be at least 1 byte, at most 64 bytes, and must be unique within app a. 
     * The app account(the smart contract) is responsible for funding the box storage (with an increase to its minimum balance requirement, see below for details). 
