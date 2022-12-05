@@ -459,7 +459,7 @@ Since TEAL 6, all created assets and apps are available to be accessed by applic
 
 
 # Smart Contract Storage 
-Smart Contracts have three different types of storage: local storage, global storage, and box storage. 
+Smart Contracts have three different types of storage: [local storage](#local-storage), [global storage](#global-storage), and [box storage](#box-storage). 
 
 Global state and boxes are associated with the app itself, whereas local state is associated with each user account that opts into the application. Global and local storage are Key/Value pairs that are limited to 128 bytes per pair. Boxes are keyed storage segments up to 32kb of data per box.
 
