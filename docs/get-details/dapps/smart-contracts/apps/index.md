@@ -754,7 +754,7 @@ For example, suppose the contract needs to read “BoxA” which is 1.5kb, and �
 boxes=[[0, "BoxA"],[0,"BoxB"], [0,""],[0,""]]
 ``` 
 
-The box reference budget is based on the sizes of the boxes accessed, not the amount of data read or written. For example, if a contract accesses “Box A” with a size of 2kb and “Box B” with a size of 10 bytes, this requires both boxes be in the box reference array and one additional reference, which should be an “empty” box reference. 
+The required box I/O budget is based on the sizes of the boxes accessed, not the amount of data read or written. For example, if a contract accesses “Box A” with a size of 2kb and “Box B” with a size of 10 bytes, this requires both boxes be in the box reference array and one additional reference ( ceil((2kb + 10b) / 1kb), which can be an “empty” box reference. 
 
 Access budgets are summed across multiple application calls in the same transaction group. For example in a group of two smart contract calls, there is room for 16 array entries (8 per app call), allowing access to 16kb of data. If an application needs to access a 16kb box named “Box A”, it will need to be grouped with one additional application call and the box reference array for each transaction in the group should look similar to this:
 
