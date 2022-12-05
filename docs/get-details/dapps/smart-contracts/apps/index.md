@@ -736,7 +736,7 @@ The `int 0` represents the current application and `int 1` would reference the f
 Boxes are useful in many scenarios:
 
 * Applications that need larger or unbound contract storage.
-* Applications that want to store data per user, but do not wish to require users to opt-in to the contract.
+* Applications that want to store data per user, but do not wish to require users to opt-in to the contract or need the account data to persist even after the user closes or clears out of the application.
 * Applications that have dynamic storage requirements.
 * Applications that require larger storage blocks that can not fit in the existing global state key-value pairs.
 * Applications that require storing arbitrary maps or hash tables. 
