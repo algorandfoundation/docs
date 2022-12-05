@@ -498,7 +498,7 @@ Each storage option’s properties are described below.
     * Account x can clear its local state for app a using a [clear state transaction](https://developer.algorand.org/docs/get-details/transactions/#application-clear-state-transaction), which will always succeed, even after app a is deleted. 
 
 
-**Boxes for app a:** 
+## Box Storage 
 
 * Allocation: 
     * App a can allocate as many boxes as it needs, when it needs them.
