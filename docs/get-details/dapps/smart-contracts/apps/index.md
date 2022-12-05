@@ -517,7 +517,7 @@ Each storage option’s properties are described below.
     * A box is referenced by including its app ID and box name. 
 * Writing: 
     * App a is the only app that can write the contents of its boxes.
-    * Exactly analogous to reading, each box ref in the boxes array allows an app call to write 1K bytes of box state - 1K of “box write budget”. 
+    * As with reading, each box ref in the boxes array allows an app call to write 1kb of box state - 1kb of “box write budget”. 
 * Deletion: 
     * App a is the only app that can delete its boxes. 
     * If an app is deleted, its boxes are not deleted. (the correct cleanup design is to look up the boxes from off-chain and call the app to delete all its boxes before deleting the app itself). 
