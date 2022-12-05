@@ -787,7 +787,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
     ```
 ## Creating a Box
 The AVM supports two opcodes `box_create` and `box_put` that can be used to create a box. 
-The `box_create` opcode takes two parameters, the name and the size in bytes for the created box. The `box_put` opcode takes two parameters as well. The first parameter is the name and the second is a byte array to write. Because the AVM limits any element on the stack to 4kb (#TODO link to stack parameter), `box_put` can only be used for boxes with length <= 4kb.
+The `box_create` opcode takes two parameters, the name and the size in bytes for the created box. The `box_put` opcode takes two parameters as well. The first parameter is the name and the second is a byte array to write. Because the AVM limits any element on the stack to 4kb, `box_put` can only be used for boxes with length <= 4kb.
 
 === "TEAL"
     ```teal
