@@ -14,9 +14,11 @@ This guide explains how to install the Algorand Node software on Linux distribut
     Windows users may choose to use [Rand Labs](https://github.com/randlabs/algorand-windows-node/) installation binaries.
 
 !!! tip
-    If you are a developer and want to use a private network, [sandbox](../../../get-started/devenv/sandbox.md) is often simpler than installing a node manually. However, it is still recommended to install the Algorand software without running a node, to get access to the developer tools such as `msgpacktool` and `algokey`.
+    If you are a developer and want to use a private network, [sandbox](../../get-started/devenv/sandbox.md) is often simpler than installing a node manually. However, it is still recommended to install the Algorand software without running a node, to get access to the developer tools such as `msgpacktool` and `algokey`.
 
 ### Hardware requirements
+
+(Last update to this section: November 3, 2022.)
 
 Due to the higher TPS on MainNet, to successfully run an Algorand MainNet node, the following hardware is necessary:
 
@@ -40,6 +42,8 @@ Recommended system specification for relay nodes is:
 * 3 TB NVMe SSD or equivalent
 * 30 TB/month egress
 * 1 Gbps connection with very low latency
+
+While directly-attached NVMe SSD are recommended, in October 2022, the use of AWS EBS gp3 was able to provide sufficient performance. Users choosing this option should constantly monitor performance of the node, and may need to upgrade to faster storage solutions in the future (e.g., in case of important increase of TPS support).
 
 The third-party website [Algoscan Analytics](https://developer.algoscan.app/) indicates the current size of the data folder for MainNet/TestNet/BetaNet archival nodes.
 

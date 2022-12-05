@@ -30,9 +30,7 @@ goal account partkeyinfo [flags]
 
 ```
 
-  -c, --compatibility   Print output in compatibility mode. This option will be removed in a future release, please use REST API for tooling.
-
-  -h, --help            help for partkeyinfo
+  -h, --help   help for partkeyinfo
 
 ```
 
