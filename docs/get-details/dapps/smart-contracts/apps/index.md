@@ -1604,7 +1604,7 @@ Given a smart contract with 1 *global* key-value-pair of type byteslice and 1 *l
     ```
 
 # Minimum Balance Requirement For Boxes
-Boxes are created by a smart contract and raise the minimum balance requirement(MBR) that must be in the contract's ledger balance. This means that a contract that intends to use boxes, must be funded beforehand.
+Boxes are created by a smart contract and raise the minimum balance requirement (MBR) that must be in the contract's ledger balance. This means that a contract that intends to use boxes, must be funded beforehand.
 
 When a box with name `n` and size `s` is created, the MBR is raised by `2500 + 400 * (len(n)+s)` microAlgos. When the box is destroyed, the minimum balance requirement is decremented by the same amount.
 
