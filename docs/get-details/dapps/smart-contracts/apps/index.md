@@ -506,7 +506,7 @@ Each storage option’s properties are described below.
         * Boxes can be any size from 0 to 32K bytes. 
         * Box names must be at least 1 byte, at most 64 bytes, and must be unique within app a. 
     * The app account(the smart contract) is responsible for funding the box storage (with an increase to its minimum balance requirement, see below for details). 
-    * A box name must be referenced in the boxes array of the app call to be allocated. 
+    * A box name and app id must be referenced in the boxes array of the app call to be allocated. 
 * Reading: 
     * App a is the only app that can read the contents of its boxes on-chain. This on-chain privacy is unique to box storage. Recall that everything can be read by anybody from off-chain using the algod or indexer APIs. 
     * To read box b from app a, the app call must include b in its boxes array. 
