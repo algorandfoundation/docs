@@ -468,7 +468,7 @@ Each storage option’s properties are described below.
 ## Global Storage
 
 * Allocation: 
-    * Can include between 0 and 64 key/value pairs and a total of 8K of memory to share among them.
+    * Can include between 0 and 64 key/value pairs for a total of 8K of memory to share among them.
     * The amount of global storage is allocated in k/v units, and determined at contract creation. This cannot be edited later. 
     * The contract creator address is responsible for funding the global storage (by an increase to their minimum balance requirement, see below). 
 * Reading: 
