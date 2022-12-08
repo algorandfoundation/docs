@@ -13,7 +13,7 @@ With Algorand Standard Assets you can represent stablecoins, loyalty points, sys
 This section begins with an [overview](#assets-overview) of the asset implementation on Algorand including a review of all [asset parameters](#asset-parameters). This is followed by [how-tos](#asset-functions) in the SDKs and `goal` for all on-chain asset functions.
 
 !!! info
-    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
 
 # Assets overview
 
@@ -1688,4 +1688,4 @@ Retrieve an asset's configuration information from the network using the SDKs or
     ```
 
 !!! info
-    Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+    Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).

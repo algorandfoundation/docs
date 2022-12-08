@@ -26,9 +26,6 @@ CLI_TOOLS="~/go/bin/" # path to goal, algokey, etc.
 # REST KMD
 ./convert_swagger.py -target ../docs/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
 
-# REST ALGOD V1
-#./convert_swagger.py -target ../docs/rest-apis/algod/v1.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/swagger.json -processors algod_specfile_processors
-
 # REST ALGOD V2 (from algod.oas2.json)
 ./convert_swagger.py -target ../docs/rest-apis/algod/v2.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/algod.oas2.json
 

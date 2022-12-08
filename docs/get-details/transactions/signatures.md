@@ -667,4 +667,4 @@ A full explanation of Logic Signatures can be found in the [Algorand Smart Contr
 - [Attach a LogicSig with `goal`](../../dapps/smart-contracts/smartsigs/walkthrough)
 
 !!! info
-    Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
+    Full running code examples for each SDK are available within the GitHub at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
