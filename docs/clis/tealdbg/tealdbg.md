@@ -10,7 +10,8 @@ Algorand TEAL Debugger
 
 ### Synopsis
 
-
+!!! warning
+    As of AVMv8, `dryrun` will no longer work with any contract that uses box storage. A new endpoint that will replace `dryrun` is currently in development.
 
 Debug a local or remote TEAL code in controlled environment
 
