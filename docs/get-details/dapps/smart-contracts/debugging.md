@@ -1,5 +1,8 @@
 title: Debugging smart contracts
 
+!!! warning
+    As of AVMv8, `dryrun` will no longer work with any contract that uses box storage. A new endpoint to replace `dryrun` along with a new tool to replace `tealdbg` is current in development.
+
 Smart contracts can be debugged using two different methods. The first is an interactive debugger that uses the `tealdbg` command-line tool to launch a debug session where the smart contract can be examined as the contract is being evaluated. The second method uses the `goal clerk dryrun-remote` command which outputs a line by line result of the evaluation of the smart contract.  These two methods are described below.
 
 # Using the TEAL debugger

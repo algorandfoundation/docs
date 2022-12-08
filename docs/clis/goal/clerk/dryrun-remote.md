@@ -10,7 +10,8 @@ Test a program with algod's dryrun REST endpoint
 
 ### Synopsis
 
-
+!!! warning
+    As of AVMv8, `dryrun` will no longer work with any contract that uses box storage. A new endpoint that will replace `dryrun` is current in development.
 
 Test a TEAL program with algod's dryrun REST endpoint under various conditions and verbosity.
 
