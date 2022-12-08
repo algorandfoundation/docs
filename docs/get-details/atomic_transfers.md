@@ -43,8 +43,6 @@ This could be done by a service or by each party involved in the transaction. Fo
 The example below illustrates Account A sending a transaction to Account C and Account B sending a transaction to Account A.
 
 !!! info
-    The examples in this section have been updated to the v2 API, which was launched to MainNet on June 16, 2020. Visit the [v2 Migration Guide](../../archive/migration) for information on how to migrate your code from v1. 
-
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
 
 === "JavaScript"

@@ -6,9 +6,7 @@ Follow the guide below to send your first transaction on Algorand and familiariz
 
 Code snippets are abbreviated for conciseness and clarity. See the full code example for each SDK at the bottom of this guide.
 
-!!! info
-    The examples in this section have been updated to the v2 API, which was launched to MainNet on June 16, 2020. Visit the [v2 Migration Guide](../migration) for information on how to migrate your code from v1. 
-
+!!! info 
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/start_building](https://github.com/algorand/docs/tree/master/examples/start_building) and for [download](https://github.com/algorand/docs/blob/master/examples/start_building/start_building.zip?raw=true) (.zip).
 
 # Create an account
@@ -217,7 +215,7 @@ Check your balance to confirm the added funds.
     ```bash 
     curl -i -X GET \
        -H "X-Algo-API-Token:<algod-token>" \
-     'http://<algod-address>:<algod-port>/v1/account/<address>'
+     'http://<algod-address>:<algod-port>/v2/account/<address>'
     ```
 
 === "goal"
@@ -399,7 +397,7 @@ Send the signed transaction to the network with your algod client.
        -H "X-Algo-API-Token:<algod-token>" \
        -H "Content-Type:application/x-binary" \
        -T "hello-world.stxn" \
-     'http://<algod-address>:<algod-port>/v1/transactions'
+     'http://<algod-address>:<algod-port>/2/transactions'
     ```
 === "goal"
     ```bash 
@@ -608,7 +606,7 @@ Successfully submitting your transaction to the network does not necessarily mea
     ```bash 
     curl -i -X GET \
        -H "X-Algo-API-Token:<algod-token>" \
-     'http://<algod-address>:<algod-port>/v1/transactions/pending/<txid>'
+     'http://<algod-address>:<algod-port>/v2/transactions/pending/<txid>'
     ```
 
 === "goal"
@@ -695,7 +693,7 @@ Read your transaction back from the blockchain.
     ```bash 
     curl -i -X GET \
        -H "X-Algo-API-Token:<algod-token>" \
-     'http://<algod-address>:<port>/v1/account/<my-address>/transaction/<txid>'
+     'http://<algod-address>:<port>/2/account/<my-address>/transaction/<txid>'
     ```
 
 Notice above the pattern of constructing a transaction, authorizing it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.

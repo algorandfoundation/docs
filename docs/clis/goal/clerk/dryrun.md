@@ -10,8 +10,6 @@ Test a program offline
 
 ### Synopsis
 
-!!! warning
-    As of AVMv8, `dryrun` will no longer work with any contract that uses box storage. Work is being done on a new endpoint that will replace `dryrun`
 
 
 Test a TEAL program offline under various conditions and verbosity.

@@ -10,8 +10,7 @@ Algorand TEAL Debugger
 
 ### Synopsis
 
-!!! warning
-    As of AVMv8, `tealdbg` will no longer work with any contract that uses box storage. A new debugging tool that will replace `tealdbg` is currently in development.
+
 
 Debug a local or remote TEAL code in controlled environment
 
