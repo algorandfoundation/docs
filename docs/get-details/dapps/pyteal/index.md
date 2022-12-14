@@ -601,7 +601,7 @@ The complete example is shown below.
 ```python
 import base64
 
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import account, mnemonic
 from algosdk.atomic_transaction_composer import *
 from algosdk.v2client import algod
@@ -945,7 +945,7 @@ A few global variables are created and some utility functions are added to the p
 ```python
 import base64
 
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import mnemonic
 from algosdk.v2client import algod
 from pyteal import *
@@ -1067,7 +1067,7 @@ A simple payment transaction is then created to fund the escrow with a little ov
 ```python
 import base64
 
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import mnemonic
 from algosdk.v2client import algod
 from pyteal import *

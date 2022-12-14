@@ -2,8 +2,8 @@ import json
 import base64
 from algosdk.v2client import algod
 from algosdk import account, mnemonic
-from algosdk.future.transaction import AssetConfigTxn, AssetTransferTxn, AssetFreezeTxn
-from algosdk.future.transaction import *
+from algosdk.transaction import AssetConfigTxn, AssetTransferTxn, AssetFreezeTxn
+from algosdk.transaction import *
 
 
 # Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.

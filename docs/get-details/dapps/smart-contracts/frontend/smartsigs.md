@@ -236,7 +236,7 @@ The response result from the TEAL `compile` command above is used to create the 
 === "Python"
 	```python
         import base64
-        from algosdk.future.transaction import LogicSigAccount
+        from algosdk.transaction import LogicSigAccount
 
         programstr = response['result']
         t = programstr.encode()
@@ -284,7 +284,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 === "Python"
 	```python
-        from algosdk.future.transaction import LogicSigAccount
+        from algosdk.transaction import LogicSigAccount
 
         # string parameter
         arg_str = "my string"
@@ -455,7 +455,7 @@ int 123
 	```python
         from algosdk import transaction, account, mnemonic
         from algosdk.v2client import algod
-        from algosdk.future.transaction import *
+        from algosdk.transaction import *
         import os
         import base64
         import json
@@ -911,7 +911,7 @@ The following example illustrates signing a transaction with a created logic sig
     from algosdk.v2client import algod
     import os
     import base64
-    from algosdk.future.transaction import *
+    from algosdk.transaction import *
     # Read a file
     def load_resource(res):
         dir_path = os.path.dirname(os.path.realpath(__file__))

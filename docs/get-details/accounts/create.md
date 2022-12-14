@@ -1023,7 +1023,7 @@ The following code shows how to generate a multisignature account composed of th
 === "Python"
 	```python
 	from algosdk import mnemonic
-	from algosdk.future.transaction import Multisig
+	from algosdk.transaction import Multisig
 	# Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 	# Change these values to use the accounts created previously.
 	# Change these values with mnemonics

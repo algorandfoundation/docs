@@ -247,7 +247,7 @@ fields.
 === "Python"
 
     ```python 
-    from algosdk.future.transaction import PaymentTxn
+    from algosdk.transaction import PaymentTxn
 
     params = algod_client.suggested_params()
     # comment out the next two (2) lines to use suggested fees

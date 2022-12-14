@@ -3,7 +3,7 @@ from algosdk.v2client import algod
 
 import os
 import base64
-from algosdk.future.transaction import *
+from algosdk.transaction import *
 
 # Read a file
 def load_resource(res):
