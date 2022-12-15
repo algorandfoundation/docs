@@ -159,7 +159,7 @@ func main() {
         sender, receiver, fee, amount, firstValidRound, lastValidRound,
         note, "", genID, genHash )
 
-    txID, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+    txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
     if err != nil {
         fmt.Printf("Signing failed with %v", err)
         return
