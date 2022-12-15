@@ -206,7 +206,7 @@ Unsigned transactions require the transaction object to be created before writin
         fmt.Printf("Submitted transaction %s\n", sendResponse)
 
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,txID,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txID,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
             return
@@ -401,7 +401,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
         fmt.Printf("Submitted transaction %s\n", sendResponse)
 
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,sendResponse,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,sendResponse,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
             return

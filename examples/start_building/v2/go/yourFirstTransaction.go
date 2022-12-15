@@ -97,7 +97,7 @@ func main() {
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(algodClient, txID, 4)
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txID, 4)
 	if err != nil {
 		fmt.Printf("Error wating for confirmation on txID: %s\n", txID)
 		return

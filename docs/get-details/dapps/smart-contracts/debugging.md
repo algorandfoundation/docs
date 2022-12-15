@@ -121,7 +121,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 === "Go"
     ```go
 
-	app_txn, err := future.MakeApplicationNoOpTx(app_id, nil, []string{other_addr}, nil, []uint64{asset_id}, sp, addr, nil, types.Digest{}, [32]byte{}, types.Address{})
+	app_txn, err := transaction.MakeApplicationNoOpTx(app_id, nil, []string{other_addr}, nil, []uint64{asset_id}, sp, addr, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		log.Fatalf("Failed to create app call txn: %+v", err)
 	}
@@ -133,7 +133,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	s_app_txn := types.SignedTxn{}
 	msgpack.Decode(s_app_bytes, &s_app)
 
-    drr, err := future.CreateDryrun(client, []types.SignedTxn{s_app_txn}, nil, context.Background())
+    drr, err := transaction.CreateDryrun(client, []types.SignedTxn{s_app_txn}, nil, context.Background())
 	if err != nil {
 		log.Fatalf("Failed to create dryrun: %+v", err)
 	}
@@ -271,7 +271,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
     ```go
     // ... 
     // Create the dryrun request object
-    dryrunRequest, _ := future.CreateDryrun(client, txns, nil, context.Background())
+    dryrunRequest, _ := transaction.CreateDryrun(client, txns, nil, context.Background())
 
     // Pass dryrun request to algod server
     dryrunResponse, _ := client.TealDryrun(dryrunRequest).Do(context.Background())
