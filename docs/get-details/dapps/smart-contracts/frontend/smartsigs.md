@@ -260,7 +260,7 @@ The response result from the TEAL `compile` command above is used to create the 
         var sk ed25519.PrivateKey
         var ma crypto.MultisigAccount
         var args [][]byte
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)  
+        lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)  
     ```
 
 # Passing parameters using the SDKs
@@ -315,7 +315,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         // string parameter
         args := make([][]byte, 1)
         args[0] = []byte("my string")
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)
         
         // integer parameter
         args := make([][]byte, 1)
@@ -728,17 +728,17 @@ int 123
         program, err :=  base64.StdEncoding.DecodeString(response.Result)	
         // if no args use these two lines
         // var args [][]byte
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        // lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)
         // string parameter
         // args := make([][]byte, 1)
         // args[0] = []byte("<my string>")
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        // lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)
         // integer args parameter
         args := make([][]byte, 1)
         var buf [8]byte
         binary.BigEndian.PutUint64(buf[:], 123)
         args[0] = buf[:]
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)
         addr := crypto.LogicSigAddress(lsig).String()
 
         // Get suggested params for the transaction
@@ -1210,17 +1210,17 @@ The following example illustrates signing a transaction with a created logic sig
         program, err :=  base64.StdEncoding.DecodeString(response.Result)	
         // if no args use these two lines
         // var args [][]byte
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, m a)
+        // lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, m a)
         // string parameter
         // args := make([][]byte, 1)
         // args[0] = []byte("<my string>")
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)       
+        // lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)       
         // integer args parameter
         args := make([][]byte, 1)
         var buf [8]byte
         binary.BigEndian.PutUint64(buf[:], 123)
         args[0] = buf[:]
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)       
+        lsig, err := crypto.MakeLogicSigAccountEscrow(program, args, sk, ma)       
         // Construct the transaction
         txParams, err := algodClient.SuggestedParams().Do(context.Background())
         if err != nil {
