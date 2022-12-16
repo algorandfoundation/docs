@@ -201,7 +201,7 @@ func main() {
 	}
     fmt.Printf("Submitted transaction %s\n", pendingTxID)
 
-    confirmedTxn, err := future.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
+    confirmedTxn, err := transaction.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
     if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", pendingTxID)
         return

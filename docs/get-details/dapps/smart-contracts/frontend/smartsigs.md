@@ -789,7 +789,7 @@ int 123
             fmt.Printf("Sending failed with %v\n", err)
         }
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
             return
@@ -1268,7 +1268,7 @@ The following example illustrates signing a transaction with a created logic sig
             fmt.Printf("Sending failed with %v\n", err)
         }
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
             return
