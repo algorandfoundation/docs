@@ -461,7 +461,6 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         "crypto/ed25519"
         "fmt"
         json "encoding/json"
-        "github.com/algorand/go-algorand-sdk/future"
         "github.com/algorand/go-algorand-sdk/client/v2/algod"	
         "github.com/algorand/go-algorand-sdk/crypto"
         "github.com/algorand/go-algorand-sdk/mnemonic"

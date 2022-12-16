@@ -29,9 +29,9 @@ To use the Atomic Transaction Composer, first initialize the composer:
 
 === "Go"
     ```go
-	    import "github.com/algorand/go-algorand-sdk/future"
+	    import "github.com/algorand/go-algorand-sdk/transaction"
         //...
-    	var atc = future.AtomicTransactionComposer{}
+    	var atc = transaction.AtomicTransactionComposer{}
     ```
 
 === "Java"
@@ -258,7 +258,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
         return abi.Method{}, fmt.Errorf("No method named: %s", name)
     }
 
-    func combine(mcp future.AddMethodCallParams, m abi.Method, a []interface{}) future.AddMethodCallParams {
+    func combine(mcp transaction.AddMethodCallParams, m abi.Method, a []interface{}) transaction.AddMethodCallParams {
         mcp.Method = m
         mcp.MethodArgs = a
         return mcp

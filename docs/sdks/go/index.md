@@ -59,7 +59,6 @@ import (
     "context"
     json "encoding/json"
     "fmt"
-	"github.com/algorand/go-algorand-sdk/future"
     "github.com/algorand/go-algorand-sdk/client/v2/algod"
     "github.com/algorand/go-algorand-sdk/crypto"
     "github.com/algorand/go-algorand-sdk/mnemonic"
