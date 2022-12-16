@@ -230,7 +230,7 @@ The response result from the TEAL `compile` command above is used to create the 
 === "JavaScript"
 	```javascript
         const program = new Uint8Array(Buffer.from(results.result , "base64"));
-        const lsig = algosdk.makeLogicSig(program);   
+        const lsig = new algosdk.LogicSig(program);   
     ```
 
 === "Python"
@@ -274,12 +274,12 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         // string parameter
         const args = [];
         args.push([...Buffer.from("my string")]);
-        const lsig = algosdk.makeLogicSig(program, args);
+        const lsig = new algosdk.LogicSig(program, args);
         
         // integer parameter
         const args = [];
         args.push(algosdk.encodeUint64(123));
-        const lsig = algosdk.makeLogicSig(program, args);
+        const lsig = new algosdk.LogicSig(program, args);
     ```
 
 === "Python"
@@ -412,10 +412,10 @@ int 123
         let program = new Uint8Array(Buffer.from(results.result, "base64"));
         //let program = new Uint8Array(Buffer.from("AiABuWAtFyIS", "base64"));
         // Use this if no args
-        // let lsig = algosdk.makeLogicSig(program);
+        // let lsig = new algosdk.LogicSig(program);
         // String parameter
         // let args = ["<my string>"];
-        // let lsig = algosdk.makeLogicSig(program, args);
+        // let lsig = new algosdk.LogicSig(program, args);
         // Integer parameter
         let args = getUint8Int(12345);
         let lsig = new algosdk.LogicSigAccount(program, args);
@@ -864,10 +864,10 @@ The following example illustrates signing a transaction with a created logic sig
         // let program = new Uint8Array(Buffer.from(<"base64-encoded-program">, "base64"));
         let program = new Uint8Array(Buffer.from(results.result, "base64"));
         // Use this if no args
-        // let lsig = algosdk.makeLogicSig(program);
+        // let lsig = new algosdk.LogicSig(program);
         // String parameter
         // let args = ["<my string>"];
-        // let lsig = algosdk.makeLogicSig(program, args);
+        // let lsig = new algosdk.LogicSig(program, args);
         // Integer parameter
         let args = getUint8Int(12345);
         let lsig = new algosdk.LogicSigAccount(program, args);
