@@ -318,7 +318,7 @@ In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2,
 === "Python"
   ```python
     import json
-    from algosdk import mnemonic
+    from algosdk import account, mnemonic
     from algosdk.v2client import algod
     from algosdk.transaction import *
 
@@ -339,10 +339,14 @@ In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2,
         account1_passphrase = "PASTE your phrase for account 1"
         account2_passphrase = "PASTE your phrase for account 2"
         account3_passphrase = "PASTE your phrase for account 3"
+
+        private_key1 = mnemonic.to_private_key(account1_passphrase)
+        private_key2 = mnemonic.to_private_key(account2_passphrase)
+        private_key3 = mnemonic.to_private_key(account3_passphrase)
         
-        account1 = mnemonic.to_public_key(account1_passphrase)
-        account2 = mnemonic.to_public_key(account2_passphrase)    
-        account3 = mnemonic.to_public_key(account3_passphrase)
+        account1 = account.address_from_private_key(private_key1)
+        account2 = account.address_from_private_key(private_key2)    
+        account3 = account.address_from_private_key(private_key3)
 
         print("Account 1 : {}".format(account1))
         print("Account 2 : {}".format(account2))
@@ -394,10 +398,14 @@ In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2,
         #  to acct 2 and signed by account 1
 
 
-        account1 = mnemonic.to_public_key(account1_passphrase)
         private_key_account1 = mnemonic.to_private_key(account1_passphrase)  
-        account2 = mnemonic.to_public_key(account2_passphrase)
-        account3 = mnemonic.to_public_key(account3_passphrase)
+        account1 = account.address_from_private_key(private_key_account1)
+
+        private_key_account2 = mnemonic.to_private_key(account2_passphrase)  
+        account2 = account.address_from_private_key(private_key_account2)
+
+        private_key_account3 = mnemonic.to_private_key(account3_passphrase)  
+        account3 = account.address_from_private_key(private_key_account3)
 
         amount = int(1000000)
         receiver = account2

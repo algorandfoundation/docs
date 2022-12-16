@@ -237,13 +237,13 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     # an accounts dict.
 
     private_key_1 = mnemonic.to_private_key(mnemonic1)
-    account_1 = mnemonic.to_public_key(mnemonic1)
+    account_1 = account.address_from_private_key(private_key_1)
 
     private_key_2 = mnemonic.to_private_key(mnemonic2)
-    account_2 = mnemonic.to_public_key(mnemonic2)
+    account_2 = account.address_from_private_key(private_key_2)
 
     private_key_3 = mnemonic.to_private_key(mnemonic3)
-    account_3 = mnemonic.to_public_key(mnemonic3)
+    account_3 = address.address_from_private_key(private_key_3)
 
 
 
