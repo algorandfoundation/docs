@@ -240,7 +240,7 @@ The `tealdbg` utility has many more options for setting specific context items. 
 
 Using the [Dryrun](../../../../rest-apis/algod/v2/#post-v2tealdryrun) REST endpoint to debug programs can be very helpful for debugging or even running unit tests.
 
-The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has the same contents as the dryrun dump file. After Sending the Dryrun Request object to the server the response will contain evaluation results for all the transactions that invoked smart contracts including a Stack Trace, cost, logs (if successful) and errors encountered.
+The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has the same contents as the dryrun dump file. After Sending the Dryrun Request object to the server the response will contain evaluation results for all the transactions that invoked smart contracts including a Stack Trace, cost (as budget-*), logs (if successful) and errors encountered.
 
 
 === "Python"
@@ -311,7 +311,8 @@ Example of DryrunResponse payload:
                 },
                 // ...
             ],
-            "cost": 1337,
+            "budget-consumed":1337,
+            "budget-added":1400,
 
             // Disassembled program line by line.
             "disassembly":["disassembled", "program", "broken", "out", "by", "line"],

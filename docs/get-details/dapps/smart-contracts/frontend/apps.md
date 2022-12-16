@@ -57,7 +57,7 @@ An `algod` client connection is also required. The following connects using Sand
     // user declared algod connection parameters
     algodAddress = "http://localhost:4001";
     algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+    let algodClient = new algosdk.Algodv2(algodToken, algodServer);
     ```
 
 === "Java"
