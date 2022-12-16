@@ -37,27 +37,6 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
     ...
     ```
 
-=== "Java"
-	```java
-
-    ...
-            final String SRC_ADDR = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
-
-            try {
-                // Get suggested parameters from the node
-                TransactionParams params = algodApiInstance.transactionParams();
-
-                // create transaction
-                String genId = params.getGenesisID();
-                Digest genesisHash = new Digest(params.getGenesishashb64());
-                BigInteger firstRound = BigInteger.valueOf(7000000);
-                BigInteger lastRound = BigInteger.valueOf(7001000);
-                BigInteger fee = BigInteger.valueOf(1000);
-                Transaction tx = new Transaction(new Address(SRC_ADDR), fee, firstRound, lastRound,
-                        null, genId, genesisHash, null, null,  null, null, null);
-    ...
-    ```
-
 === "goal"
     ```zsh
     $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=1000 --firstvalid=7000000 --lastvalid=7001000 --online=false --txfile=offline.txn
