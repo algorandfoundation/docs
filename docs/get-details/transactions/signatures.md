@@ -223,9 +223,9 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     import json
     from algosdk.v2client import algod
     from algosdk import account, encoding, mnemonic
-    from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
+    from algosdk.transaction import Multisig, PaymentTxn, MultisigTransaction
     import base64
-    from algosdk.future.transaction import *
+    from algosdk.transaction import *
 
     # Change these values with mnemonics
     mnemonic1 = "PASTE phrase for account 1"

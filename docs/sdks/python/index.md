@@ -110,7 +110,7 @@ Transactions are used to interact with the Algorand network. To create a payment
 ​
 ```python
 # build transaction
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import constants
 
 
@@ -183,7 +183,7 @@ import json
 import base64
 from algosdk import account, mnemonic, constants
 from algosdk.v2client import algod
-from algosdk.future import transaction
+from algosdk import transaction
 
 
 def generate_algorand_keypair():
