@@ -767,7 +767,7 @@ int 123
         lastValidRound := uint64(txParams.LastRoundValid)
         tx, err := transaction.MakePaymentTxnWithFlatFee(
             addr, receiver, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        txID, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+        txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
         if err != nil {
             fmt.Printf("Signing failed with %v", err)
             return
@@ -1247,7 +1247,7 @@ The following example illustrates signing a transaction with a created logic sig
         tx, err := transaction.MakePaymentTxnWithFlatFee(
             sender, receiver, fee, amount, firstValidRound, lastValidRound,
             note, "", genID, genHash )
-        txID, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+        txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
         if err != nil {
             fmt.Printf("Signing failed with %v", err)
             return
