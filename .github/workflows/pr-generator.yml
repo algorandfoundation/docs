@@ -53,6 +53,23 @@ jobs:
           repository: algorand/indexer
           ref: ${{ inputs.indexer_version }}
           path: indexer
+          submodules: true
+
+      - name: Install golang
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.17.9
+
+      - name: Generate conduit docs
+        if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
+        run: |
+          sudo apt update
+          sudo apt -y install python3 python3-pip python3-setuptools python3-wheel libboost-math-dev libffi-dev
+          cd ./indexer
+          make
+          rm -r ../get-details/conduit/* && cp ./conduit-docs/* ../get-details/conduit/
+          cd ../
 
       - name: Download binaries
         if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
@@ -105,14 +122,3 @@ jobs:
         if: inputs.indexer_version != '' && !contains(inputs.indexer_version, '-')
         run: |
           echo "${{ inputs.indexer_version }}" > docs/.indexer.version
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          path: docs
-          branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
-          title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
-          body: "Changes generated automatically by github action docs-generator."
-          reviewers: "nullun,barnjamin,ryanrfox"
-          delete-branch: true
-          base: staging
