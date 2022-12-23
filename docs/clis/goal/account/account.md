@@ -63,6 +63,7 @@ goal account [flags]
 * [goal account balance](../balance/)	 - Retrieve the balances for the specified account
 * [goal account changeonlinestatus](../changeonlinestatus/)	 - Change online status for the specified account
 * [goal account delete](../delete/)	 - Delete an account
+* [goal account deletepartkey](../deletepartkey/)	 - Delete a participation key
 * [goal account dump](../dump/)	 - Dump the balance record for the specified account
 * [goal account export](../export/)	 - Export an account key for use with account import
 * [goal account import](../import/)	 - Import an account key from mnemonic
