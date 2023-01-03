@@ -327,7 +327,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -512,7 +512,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 		return
 	}
 
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -707,7 +707,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 		fmt.Printf("failed to send transaction: %s\n", err)
 		return
 	}
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -893,7 +893,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1077,7 +1077,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1271,7 +1271,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1473,7 +1473,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return

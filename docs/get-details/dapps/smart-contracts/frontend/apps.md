@@ -57,7 +57,7 @@ An `algod` client connection is also required. The following connects using Sand
     // user declared algod connection parameters
     algodAddress = "http://localhost:4001";
     algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+    let algodClient = new algosdk.Algodv2(algodToken, algodServer);
     ```
 
 === "Java"
@@ -364,7 +364,7 @@ Construct the transaction with defined values:
 === "Go"
 	```go
     // create unsigned transaction
-    txn, _ := future.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
+    txn, _ := transaction.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
                         nil, nil, nil, nil, params, creatorAccount.Address, nil, 
                         types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
     ```
@@ -445,7 +445,7 @@ Sign, send, await confirmation and display the results:
     fmt.Printf("Submitted transaction %s\n", sendResponse)
 
     // Wait for confirmation
-    confirmedTxn, err := future.WaitForConfirmation(client, txID, 4, context.Background())
+    confirmedTxn, err := transaction.WaitForConfirmation(client, txID, 4, context.Background())
     if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
         return
@@ -526,7 +526,7 @@ Construct the transaction with defined values:
 === "Go"
 	```go
     // create unsigned transaction
-    txn, _ := future.MakeApplicationOptInTx(index, nil, nil, nil, nil, params,
+    txn, _ := transaction.MakeApplicationOptInTx(index, nil, nil, nil, nil, params,
                             sender, nil, types.Digest{}, [32]byte{}, types.Address{})
     ```
 
@@ -636,7 +636,7 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
 === "Go"
 	```go
     // create unsigned transaction
-    txn, _:= future.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
+    txn, _:= transaction.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
                             nil, types.Digest{}, [32]byte{}, types.Address{})
 
     // sign, send, await 
@@ -802,7 +802,7 @@ Construct the update transaction and await the response:
 === "Go"
 	```go
         // create unsigned transaction
-        txn, _ := future.MakeApplicationUpdateTx(index, nil, nil, nil, nil, 
+        txn, _ := transaction.MakeApplicationUpdateTx(index, nil, nil, nil, nil, 
                             approvalProgram, clearProgram, params, creatorAccount.Address, 
                             nil, types.Digest{}, [32]byte{}, types.Address{})
 
@@ -902,7 +902,7 @@ The refactored application expects a timestamp be supplied with the application 
     appArgs[0] = []byte(now)
 
     // create unsigned transaction
-    txn, _ := future.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
+    txn, _ := transaction.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
                                 nil, types.Digest{}, [32]byte{}, types.Address{})
 
     // sign, send, await
@@ -963,7 +963,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 === "Go"
 	```go
     // create unsigned transaction
-    txn, _ := future.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+    txn, _ := transaction.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 
     // sign, send, await
 
@@ -1020,7 +1020,7 @@ The approval program defines the creator as the only account able to [delete the
 === "Go"
 	```go
     // create unsigned transaction
-    txn, _ := future.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, sender, 
+    txn, _ := transaction.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, sender, 
                             nil, types.Digest{}, [32]byte{}, types.Address{})
 
     // sign, send, await
@@ -1079,7 +1079,7 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 === "Go"
 	```go
     // create unsigned transaction
-    txn, _ := future.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, sender, 
+    txn, _ := transaction.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, sender, 
                             nil, types.Digest{}, [32]byte{}, types.Address{})
 
     // sign, send, await

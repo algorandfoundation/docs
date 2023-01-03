@@ -1,6 +1,6 @@
 from algosdk import transaction, account, mnemonic
 from algosdk.v2client import algod
-from algosdk.future.transaction import *
+from algosdk.transaction import *
 import os
 import base64
 import json

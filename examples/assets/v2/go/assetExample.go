@@ -5,14 +5,13 @@ import (
 	"crypto/ed25519"
 	json "encoding/json"
 	"fmt"
-	"github.com/algorand/go-algorand-sdk/future"
+
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/crypto"
 	"github.com/algorand/go-algorand-sdk/mnemonic"
+	"github.com/algorand/go-algorand-sdk/transaction"
 	"github.com/algorand/go-algorand-sdk/types"
 )
-import transaction "github.com/algorand/go-algorand-sdk/future"
-
 
 // UPDATE THESE VALUES
 // const algodAddress = "Your ADDRESS"
@@ -57,8 +56,6 @@ func loadAccounts() (map[int][]byte, map[int]string) {
 	}
 	return sks, pks
 }
-
-
 
 // prettyPrint prints Go structs
 func prettyPrint(data interface{}) {
@@ -158,11 +155,10 @@ func main() {
 	// 	"3": "3ZQ3SHCYIKSGK7MTZ7PE7S6EDOFWLKDQ6RYYVMT7OHNQ4UJ774LE52AQCU"
 	// }
 
-
 	// CREATE ASSET
 
 	// Construct the transaction
-	// Set parameters for asset creation 
+	// Set parameters for asset creation
 	creator := pks[1]
 	assetName := "latinum"
 	unitName := "latinum"
@@ -202,23 +198,21 @@ func main() {
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
 	assetID := confirmedTxn.AssetIndex
-
-
 
 	// print created asset and asset holding info for this asset
 	fmt.Printf("Asset ID: %d\n", assetID)
 	printCreatedAsset(assetID, pks[1], algodClient)
 	printAssetHolding(assetID, pks[1], algodClient)
 	// Your output should look similar to this...
-	
+
 	// Asset created AssetName: latinum
 	// Transaction ID: BEBUEATOOWSYDKN7W56Y2DHRED2Q45Z3M6ENGU4OWWMETC6CFW7Q
 	// Submitted transaction BEBUEATOOWSYDKN7W56Y2DHRED2Q45Z3M6ENGU4OWWMETC6CFW7Q
@@ -240,14 +234,14 @@ func main() {
 	// 		"unit-name": "latinum",
 	// 		"url": "https://path/to/my/asset/details"
 	// 	}
-	// } 
+	// }
 	// {
 	// 	"amount": 1000,
 	// 	"asset-id": 2654040,
 	// 	"creator": "THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM"
-	// } 
+	// }
 
-    // CHANGE MANAGER
+	// CHANGE MANAGER
 	// Change Asset Manager from Account 2 to Account 1
 	// assetID := uint64(332920)
 	// Get network-related transaction parameters and assign
@@ -282,17 +276,16 @@ func main() {
 		return
 	}
 
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
 	// print created assetinfo for this asset
 	fmt.Printf("Asset ID: %d\n", assetID)
 	printCreatedAsset(assetID, pks[1], algodClient)
-
 
 	// Your terminal output should appear similar to this...
 
@@ -316,7 +309,7 @@ func main() {
 	// 		"unit-name": "latinum",
 	// 		"url": "https://path/to/my/asset/details"
 	// 	}
-	// } 
+	// }
 
 	// OPT-IN
 
@@ -344,7 +337,6 @@ func main() {
 		return
 	}
 
-
 	// Broadcast the transaction to the network
 	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
@@ -352,13 +344,12 @@ func main() {
 		return
 	}
 
-
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
 	// print created assetholding for this asset and Account 3, showing 0 balance
 	fmt.Printf("Asset ID: %d\n", assetID)
@@ -377,10 +368,10 @@ func main() {
 	// 	"amount": 0,
 	// 	"asset-id": 2654040,
 	// 	"creator": "THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM"
-	// } 
+	// }
 
 	// TRANSFER ASSET
-	
+
 	// Send  10 latinum from Account 1 to Account 3
 	// assetID := uint64(332920)
 	// Get network-related transaction parameters and assign
@@ -397,7 +388,7 @@ func main() {
 	recipient := pks[3]
 	amount := uint64(10)
 	closeRemainderTo := ""
-	txn, err = transaction.MakeAssetTransferTxn(sender, recipient, amount, note, txParams, closeRemainderTo, 
+	txn, err = transaction.MakeAssetTransferTxn(sender, recipient, amount, note, txParams, closeRemainderTo,
 		assetID)
 	if err != nil {
 		fmt.Printf("Failed to send transaction MakeAssetTransfer Txn: %s\n", err)
@@ -416,15 +407,14 @@ func main() {
 		return
 	}
 
-
 	// Wait for transaction to be confirmed
 
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
 	// print created assetholding for this asset and Account 3 and Account 1
 	// You should see amount of 10 in Account 3, and 990 in Account 1
@@ -444,13 +434,13 @@ func main() {
 	// 	"amount": 10,
 	// 	"asset-id": 2654040,
 	// 	"creator": "THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM"
-	// } 
+	// }
 	// Account 1: THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM
 	// {
 	// 	"amount": 990,
 	// 	"asset-id": 2654040,
 	// 	"creator": "THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM"
-	// } 
+	// }
 
 	// FREEZE ASSET
 	// The freeze address (Account 2) Freeze's asset for Account 3.
@@ -484,19 +474,17 @@ func main() {
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
-    // You should now see is-frozen value of true
+	// You should now see is-frozen value of true
 	fmt.Printf("Asset ID: %d\n", assetID)
 	fmt.Printf("Account 3: %s\n", pks[3])
 	printAssetHolding(assetID, pks[3], algodClient)
-
-	
 
 	// Your terminal output should look similar to this:
 
@@ -512,7 +500,7 @@ func main() {
 	// 	"creator": "THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM",
 	// 	"is-frozen": true
 	// }
-	
+
 	// REVOKE ASSET
 	// Revoke an Asset
 	// The clawback address (Account 2) revokes 10 latinum from Account 3 (target)
@@ -549,12 +537,12 @@ func main() {
 
 	// Wait for transaction to be confirmed
 
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
 	// print created assetholding for this asset and Account 3 and Account 1
 	// You should see amount of 0 in Account 3, and 1000 in Account 1
@@ -576,7 +564,7 @@ func main() {
 	// 	"asset-id": 2654040,
 	// 	"creator": "THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM",
 	// 	"is-frozen": true
-	// } 
+	// }
 	// targetAccount 1: THQHGD4HEESOPSJJYYF34MWKOI57HXBX4XR63EPBKCWPOJG5KUPDJ7QJCM
 	// {
 	// 	"amount": 1000,
@@ -620,18 +608,17 @@ func main() {
 
 	// Wait for transaction to be confirmed
 
-
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 
-	fmt.Printf("Asset ID: %d\n", assetID)	
-	fmt.Printf("Account 3 must do a transaction for an amount of 0, \n" )
-    fmt.Printf("with a closeRemainderTo to the creator account, to clear it from its accountholdings. \n")
-    fmt.Printf("For Account 1, nothing should print after this as the asset is destroyed on the creator account \n")
+	fmt.Printf("Asset ID: %d\n", assetID)
+	fmt.Printf("Account 3 must do a transaction for an amount of 0, \n")
+	fmt.Printf("with a closeRemainderTo to the creator account, to clear it from its accountholdings. \n")
+	fmt.Printf("For Account 1, nothing should print after this as the asset is destroyed on the creator account \n")
 
 	// print created asset and asset holding info for this asset (should not print anything)
 
@@ -642,7 +629,7 @@ func main() {
 
 	// Transaction PI4U7DJZYDKEZS2PKTNGB6DFNVCCEYN5FNLZBBWNONTWMA7RH6AA confirmed in round 4086093
 	// Asset ID: 2654040
-	// Account 3 must do a transaction for an amount of 0, 
+	// Account 3 must do a transaction for an amount of 0,
 	// with a closeRemainderTo to the creator account, to clear it from its accountholdings.
 	// For Account 1, nothing should print after this as the asset is destroyed on the creator account
 }

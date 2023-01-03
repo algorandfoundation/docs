@@ -4,7 +4,7 @@ import base64
 from algosdk import account
 
 from algosdk.v2client import algod
-from algosdk.future import transaction
+from algosdk import transaction
 
 
 def getting_started_example():

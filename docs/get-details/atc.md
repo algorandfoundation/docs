@@ -29,9 +29,9 @@ To use the Atomic Transaction Composer, first initialize the composer:
 
 === "Go"
     ```go
-	    import "github.com/algorand/go-algorand-sdk/future"
+	    import "github.com/algorand/go-algorand-sdk/transaction"
         //...
-    	var atc = future.AtomicTransactionComposer{}
+    	var atc = transaction.AtomicTransactionComposer{}
     ```
 
 === "Java"
@@ -106,16 +106,16 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     acct, _ := GetAccount()
 
     // Create signer object
-	signer := future.BasicAccountTransactionSigner{Account: acct}
+	signer := transaction.BasicAccountTransactionSigner{Account: acct}
 
     // Get suggested params from client
 	sp, _ := client.SuggestedParams().Do(context.Background())
 
     // Create a transaction
-	ptxn, _ := future.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
+	ptxn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
 
     // Construct TransactionWithSigner
-	tws := future.TransactionWithSigner{Txn: txn, Signer: signer}
+	tws := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
 
     // Pass TransactionWithSigner to atc
 
@@ -258,13 +258,13 @@ Once the Contract object is constructed, it can be used to look up and pass meth
         return abi.Method{}, fmt.Errorf("No method named: %s", name)
     }
 
-    func combine(mcp future.AddMethodCallParams, m abi.Method, a []interface{}) future.AddMethodCallParams {
+    func combine(mcp transaction.AddMethodCallParams, m abi.Method, a []interface{}) transaction.AddMethodCallParams {
         mcp.Method = m
         mcp.MethodArgs = a
         return mcp
     }
 
-	mcp := future.AddMethodCallParams{
+	mcp := transaction.AddMethodCallParams{
 		AppID:           contract.Networks[genesis_hash].AppID,
 		Sender:          acct.Address,
 		SuggestedParams: sp,
@@ -279,8 +279,8 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
     // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-	txn, _ := future.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
-	stxn := future.TransactionWithSigner{Txn: txn, Signer: signer}
+	txn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
+	stxn := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
 	atc.AddMethodCall(combine(mcp, getMethod(contract, "txntest"), []interface{}{10000, stxn, 1000}))
 
     ```

@@ -267,7 +267,7 @@ func createApp(client *algod.Client, creatorAccount crypto.Account, approvalProg
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, nil,
+	txn, err := transaction.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, nil,
 		nil, nil, nil, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
@@ -292,7 +292,7 @@ func createApp(client *algod.Client, creatorAccount crypto.Account, approvalProg
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
@@ -319,7 +319,7 @@ func optInApp(client *algod.Client, account crypto.Account, index uint64) {
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationOptInTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+	txn, err := transaction.MakeApplicationOptInTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -343,7 +343,7 @@ func optInApp(client *algod.Client, account crypto.Account, index uint64) {
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
@@ -367,7 +367,7 @@ func callApp(client *algod.Client, account crypto.Account, index uint64, appArgs
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+	txn, err := transaction.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -391,7 +391,7 @@ func callApp(client *algod.Client, account crypto.Account, index uint64, appArgs
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
@@ -443,7 +443,7 @@ func updateApp(client *algod.Client, creatorAccount crypto.Account, index uint64
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationUpdateTx(index, nil, nil, nil, nil, approvalProgram, clearProgram, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+	txn, err := transaction.MakeApplicationUpdateTx(index, nil, nil, nil, nil, approvalProgram, clearProgram, params, creatorAccount.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -467,7 +467,7 @@ func updateApp(client *algod.Client, creatorAccount crypto.Account, index uint64
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
@@ -490,7 +490,7 @@ func closeOutApp(client *algod.Client, account crypto.Account, index uint64) {
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+	txn, err := transaction.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -514,7 +514,7 @@ func closeOutApp(client *algod.Client, account crypto.Account, index uint64) {
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
@@ -538,7 +538,7 @@ func deleteApp(client *algod.Client, account crypto.Account, index uint64) {
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+	txn, err := transaction.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -562,7 +562,7 @@ func deleteApp(client *algod.Client, account crypto.Account, index uint64) {
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return
@@ -585,7 +585,7 @@ func clearApp(client *algod.Client, account crypto.Account, index uint64) {
 	// params.Fee = 1000
 
 	// create unsigned transaction
-	txn, err := future.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+	txn, err := transaction.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		fmt.Printf("Error creating transaction: %s\n", err)
 		return
@@ -609,7 +609,7 @@ func clearApp(client *algod.Client, account crypto.Account, index uint64) {
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(client, txID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(client, txID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
 		return

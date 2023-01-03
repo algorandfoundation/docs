@@ -2,7 +2,7 @@ import json
 from algosdk.v2client import algod
 from algosdk import mnemonic
 from algosdk import account
-from algosdk.future.transaction import *
+from algosdk.transaction import *
 
 # This atomic transfer example code requires three (3) acounts:
 #  - account_1 requires a user-defined mnemonic and be funded with 1001000 microAlgos

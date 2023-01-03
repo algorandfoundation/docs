@@ -230,13 +230,13 @@ The response result from the TEAL `compile` command above is used to create the 
 === "JavaScript"
 	```javascript
         const program = new Uint8Array(Buffer.from(results.result , "base64"));
-        const lsig = algosdk.makeLogicSig(program);   
+        const lsig = new algosdk.LogicSig(program);   
     ```
 
 === "Python"
 	```python
         import base64
-        from algosdk.future.transaction import LogicSigAccount
+        from algosdk.transaction import LogicSigAccount
 
         programstr = response['result']
         t = programstr.encode()
@@ -260,7 +260,7 @@ The response result from the TEAL `compile` command above is used to create the 
         var sk ed25519.PrivateKey
         var ma crypto.MultisigAccount
         var args [][]byte
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)  
+        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)  
     ```
 
 # Passing parameters using the SDKs
@@ -274,17 +274,17 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         // string parameter
         const args = [];
         args.push([...Buffer.from("my string")]);
-        const lsig = algosdk.makeLogicSig(program, args);
+        const lsig = new algosdk.LogicSig(program, args);
         
         // integer parameter
         const args = [];
         args.push(algosdk.encodeUint64(123));
-        const lsig = algosdk.makeLogicSig(program, args);
+        const lsig = new algosdk.LogicSig(program, args);
     ```
 
 === "Python"
 	```python
-        from algosdk.future.transaction import LogicSigAccount
+        from algosdk.transaction import LogicSigAccount
 
         # string parameter
         arg_str = "my string"
@@ -315,7 +315,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         // string parameter
         args := make([][]byte, 1)
         args[0] = []byte("my string")
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
         
         // integer parameter
         args := make([][]byte, 1)
@@ -412,10 +412,10 @@ int 123
         let program = new Uint8Array(Buffer.from(results.result, "base64"));
         //let program = new Uint8Array(Buffer.from("AiABuWAtFyIS", "base64"));
         // Use this if no args
-        // let lsig = algosdk.makeLogicSig(program);
+        // let lsig = new algosdk.LogicSig(program);
         // String parameter
         // let args = ["<my string>"];
-        // let lsig = algosdk.makeLogicSig(program, args);
+        // let lsig = new algosdk.LogicSig(program, args);
         // Integer parameter
         let args = getUint8Int(12345);
         let lsig = new algosdk.LogicSigAccount(program, args);
@@ -455,7 +455,7 @@ int 123
 	```python
         from algosdk import transaction, account, mnemonic
         from algosdk.v2client import algod
-        from algosdk.future.transaction import *
+        from algosdk.transaction import *
         import os
         import base64
         import json
@@ -685,7 +685,6 @@ int 123
         "log"
         "os"
         "fmt"
-        "github.com/algorand/go-algorand-sdk/future"
         "github.com/algorand/go-algorand-sdk/client/v2/algod"
         "github.com/algorand/go-algorand-sdk/crypto"
         "github.com/algorand/go-algorand-sdk/transaction"
@@ -729,17 +728,17 @@ int 123
         program, err :=  base64.StdEncoding.DecodeString(response.Result)	
         // if no args use these two lines
         // var args [][]byte
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
         // string parameter
         // args := make([][]byte, 1)
         // args[0] = []byte("<my string>")
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
         // integer args parameter
         args := make([][]byte, 1)
         var buf [8]byte
         binary.BigEndian.PutUint64(buf[:], 123)
         args[0] = buf[:]
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)
+        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
         addr := crypto.LogicSigAddress(lsig).String()
 
         // Get suggested params for the transaction
@@ -767,7 +766,7 @@ int 123
         lastValidRound := uint64(txParams.LastRoundValid)
         tx, err := transaction.MakePaymentTxnWithFlatFee(
             addr, receiver, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        txID, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+        txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
         if err != nil {
             fmt.Printf("Signing failed with %v", err)
             return
@@ -789,7 +788,7 @@ int 123
             fmt.Printf("Sending failed with %v\n", err)
         }
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
             return
@@ -865,10 +864,10 @@ The following example illustrates signing a transaction with a created logic sig
         // let program = new Uint8Array(Buffer.from(<"base64-encoded-program">, "base64"));
         let program = new Uint8Array(Buffer.from(results.result, "base64"));
         // Use this if no args
-        // let lsig = algosdk.makeLogicSig(program);
+        // let lsig = new algosdk.LogicSig(program);
         // String parameter
         // let args = ["<my string>"];
-        // let lsig = algosdk.makeLogicSig(program, args);
+        // let lsig = new algosdk.LogicSig(program, args);
         // Integer parameter
         let args = getUint8Int(12345);
         let lsig = new algosdk.LogicSigAccount(program, args);
@@ -911,7 +910,7 @@ The following example illustrates signing a transaction with a created logic sig
     from algosdk.v2client import algod
     import os
     import base64
-    from algosdk.future.transaction import *
+    from algosdk.transaction import *
     # Read a file
     def load_resource(res):
         dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -1157,7 +1156,6 @@ The following example illustrates signing a transaction with a created logic sig
         "log"
         "os"
         "fmt"
-        "github.com/algorand/go-algorand-sdk/future"
         "github.com/algorand/go-algorand-sdk/client/v2/algod"
         "github.com/algorand/go-algorand-sdk/crypto"
         "github.com/algorand/go-algorand-sdk/mnemonic"
@@ -1212,17 +1210,17 @@ The following example illustrates signing a transaction with a created logic sig
         program, err :=  base64.StdEncoding.DecodeString(response.Result)	
         // if no args use these two lines
         // var args [][]byte
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, m a)
+        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, m a)
         // string parameter
         // args := make([][]byte, 1)
         // args[0] = []byte("<my string>")
-        // lsig, err := crypto.MakeLogicSig(program, args, sk, ma)       
+        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)       
         // integer args parameter
         args := make([][]byte, 1)
         var buf [8]byte
         binary.BigEndian.PutUint64(buf[:], 123)
         args[0] = buf[:]
-        lsig, err := crypto.MakeLogicSig(program, args, sk, ma)       
+        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)       
         // Construct the transaction
         txParams, err := algodClient.SuggestedParams().Do(context.Background())
         if err != nil {
@@ -1247,7 +1245,7 @@ The following example illustrates signing a transaction with a created logic sig
         tx, err := transaction.MakePaymentTxnWithFlatFee(
             sender, receiver, fee, amount, firstValidRound, lastValidRound,
             note, "", genID, genHash )
-        txID, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+        txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
         if err != nil {
             fmt.Printf("Signing failed with %v", err)
             return
@@ -1268,7 +1266,7 @@ The following example illustrates signing a transaction with a created logic sig
             fmt.Printf("Sending failed with %v\n", err)
         }
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
             return
