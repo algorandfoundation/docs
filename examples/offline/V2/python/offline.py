@@ -4,8 +4,8 @@ import base64
 import os
 from algosdk import mnemonic
 from algosdk.v2client import algod
-from algosdk.future.transaction import PaymentTxn
-from algosdk.future.transaction import *
+from algosdk.transaction import PaymentTxn
+from algosdk.transaction import *
 
 
 def connect_to_network():

@@ -96,8 +96,7 @@ Nodes have been verified on Ubuntu 18.04 and 20.04, as well as on Debian 11. Oth
 ```
 sudo apt-get update
 sudo apt-get install -y gnupg2 curl software-properties-common
-curl -O https://releases.algorand.com/key.pub
-sudo apt-key add key.pub
+curl -o - https://releases.algorand.com/key.pub | sudo tee /etc/apt/trusted.gpg.d/algorand.asc
 sudo add-apt-repository "deb [arch=amd64] https://releases.algorand.com/deb/ stable main"
 sudo apt-get update
 

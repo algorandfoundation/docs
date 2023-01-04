@@ -1022,8 +1022,8 @@ The following code shows how to generate a multisignature account composed of th
 
 === "Python"
 	```python
-	from algosdk import mnemonic
-	from algosdk.future.transaction import Multisig
+	from algosdk import mnemonic, account
+	from algosdk.transaction import Multisig
 	# Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
 	# Change these values to use the accounts created previously.
 	# Change these values with mnemonics
@@ -1032,13 +1032,13 @@ The following code shows how to generate a multisignature account composed of th
 	mnemonic3 = "PASTE phrase for account 3"
 
 	private_key_1 = mnemonic.to_private_key(mnemonic1)
-	account_1 = mnemonic.to_public_key(mnemonic1)
+	account_1 = account.address_from_private_key(private_key_1)
 
 	private_key_2 = mnemonic.to_private_key(mnemonic2)
-	account_2 = mnemonic.to_public_key(mnemonic2)
+	account_2 = account.address_from_private_key(private_key_2)
 
 	private_key_3 = mnemonic.to_private_key(mnemonic3)
-	account_3 = mnemonic.to_public_key(mnemonic3)
+	account_3 = account.address_from_private_key(private_key_3)
 
 	# create a multisig account
 	version = 1  # multisig version

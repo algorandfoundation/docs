@@ -104,7 +104,7 @@ func main() {
 	tx, err := transaction.MakePaymentTxnWithFlatFee(
 		addr, receiver, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
 
-	txID, stx, err := crypto.SignLogicsigTransaction(lsig, tx)
+	txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
 	if err != nil {
 		fmt.Printf("Signing failed with %v", err)
 		return
@@ -130,7 +130,7 @@ func main() {
 
 
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
 		return

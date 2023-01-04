@@ -49,12 +49,13 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 
 === "Java"
     ```java
-    ...
-    import java.util.Base64;
-    ...
-    import com.algorand.algosdk.crypto.ParticipationPublicKey;
-    import com.algorand.algosdk.crypto.VRFPublicKey;
-    ...
+        // ...
+        import java.util.Base64;
+        // ...
+        import com.algorand.algosdk.crypto.ParticipationPublicKey;
+        import com.algorand.algosdk.crypto.VRFPublicKey;
+        // ...
+
         public void writeUnsignedTransaction(){
 
             // connect to node
@@ -68,7 +69,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 
             try {
                 // Get suggested parameters from the node
-                TransactionParams params = algodApiInstance.transactionParams();
+                Response<TransactionParametersResponse> params = algodApiInstance.TransactionParams().execute();
 
                 // create transaction
                 String genId = params.getGenesisID();
@@ -81,8 +82,18 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
                 BigInteger lastRound = BigInteger.valueOf(6003000);
                 BigInteger fee = BigInteger.valueOf(2000);
                 BigInteger voteKd = BigInteger.valueOf(1730);
-                Transaction tx = new Transaction(new Address(SRC_ADDR), fee, firstRound, lastRound,
-                        null, genId, genesisHash, voteKey, selKey,  voteFst, voteLst, voteKd);
+
+                // Get suggested parameters from the node
+                // Prepare the transaction 
+                KeyRegistrationTransaction ktxn = Transaction.KeyRegistrationTransactionBuilder()
+                    .participationPublicKey(voteKey)
+                    .selectionPublicKey(selKey)
+                    .suggestedParams(params.body())
+                    .voteFirst(voteFst)
+                    .voteLast(voteLst)
+                    .voteKeyDilution(voteKd)
+                // ...
+
     ```
 
 === "Go"

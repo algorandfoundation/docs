@@ -1,10 +1,10 @@
 import json
 from algosdk.v2client import algod
 from algosdk import account, encoding, mnemonic
-from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
+from algosdk.transaction import Multisig, PaymentTxn, MultisigTransaction
 import base64
 import os
-from algosdk.future.transaction import *
+from algosdk.transaction import *
 
 def connect_to_network():
     # Specify your node address and token. This must be updated.

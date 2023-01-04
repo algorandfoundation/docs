@@ -1,5 +1,9 @@
 title: Debugging smart contracts
 
+
+!!! warning
+    As of AVMv8, `dryrun` will no longer work with any contract that uses box storage. A new endpoint to replace `dryrun` along with a new tool to replace `tealdbg` is currently in development.
+
 Smart contracts can be debugged using two different methods. The first is an interactive debugger that uses the `tealdbg` command-line tool to launch a debug session where the smart contract can be examined as the contract is being evaluated. The second method uses the `goal clerk dryrun-remote` command which outputs a line by line result of the evaluation of the smart contract.  These two methods are described below.
 
 # Using the TEAL debugger
@@ -117,7 +121,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 === "Go"
     ```go
 
-	app_txn, err := future.MakeApplicationNoOpTx(app_id, nil, []string{other_addr}, nil, []uint64{asset_id}, sp, addr, nil, types.Digest{}, [32]byte{}, types.Address{})
+	app_txn, err := transaction.MakeApplicationNoOpTx(app_id, nil, []string{other_addr}, nil, []uint64{asset_id}, sp, addr, nil, types.Digest{}, [32]byte{}, types.Address{})
 	if err != nil {
 		log.Fatalf("Failed to create app call txn: %+v", err)
 	}
@@ -129,7 +133,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	s_app_txn := types.SignedTxn{}
 	msgpack.Decode(s_app_bytes, &s_app)
 
-    drr, err := future.CreateDryrun(client, []types.SignedTxn{s_app_txn}, nil, context.Background())
+    drr, err := transaction.CreateDryrun(client, []types.SignedTxn{s_app_txn}, nil, context.Background())
 	if err != nil {
 		log.Fatalf("Failed to create dryrun: %+v", err)
 	}
@@ -236,7 +240,7 @@ The `tealdbg` utility has many more options for setting specific context items. 
 
 Using the [Dryrun](../../../../rest-apis/algod/v2/#post-v2tealdryrun) REST endpoint to debug programs can be very helpful for debugging or even running unit tests.
 
-The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has the same contents as the dryrun dump file. After Sending the Dryrun Request object to the server the response will contain evaluation results for all the transactions that invoked smart contracts including a Stack Trace, cost, logs (if successful) and errors encountered.
+The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has the same contents as the dryrun dump file. After Sending the Dryrun Request object to the server the response will contain evaluation results for all the transactions that invoked smart contracts including a Stack Trace, cost (as budget-*), logs (if successful) and errors encountered.
 
 
 === "Python"
@@ -267,7 +271,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
     ```go
     // ... 
     // Create the dryrun request object
-    dryrunRequest, _ := future.CreateDryrun(client, txns, nil, context.Background())
+    dryrunRequest, _ := transaction.CreateDryrun(client, txns, nil, context.Background())
 
     // Pass dryrun request to algod server
     dryrunResponse, _ := client.TealDryrun(dryrunRequest).Do(context.Background())
@@ -307,7 +311,8 @@ Example of DryrunResponse payload:
                 },
                 // ...
             ],
-            "cost": 1337,
+            "budget-consumed":1337,
+            "budget-added":1400,
 
             // Disassembled program line by line.
             "disassembly":["disassembled", "program", "broken", "out", "by", "line"],

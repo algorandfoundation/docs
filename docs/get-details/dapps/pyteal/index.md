@@ -601,7 +601,7 @@ The complete example is shown below.
 ```python
 import base64
 
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import account, mnemonic
 from algosdk.atomic_transaction_composer import *
 from algosdk.v2client import algod
@@ -945,7 +945,7 @@ A few global variables are created and some utility functions are added to the p
 ```python
 import base64
 
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import mnemonic
 from algosdk.v2client import algod
 from pyteal import *
@@ -978,8 +978,8 @@ A utility function is then added to create and submit a simple payment transacti
 ```python
 def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
     params = algod_client.suggested_params()
-    add = mnemonic.to_public_key(creator_mnemonic)
     key = mnemonic.to_private_key(creator_mnemonic)
+    add = account.address_from_private_key(key)
     unsigned_txn = transaction.PaymentTxn(add, params, rcv, amt)
     signed = unsigned_txn.sign(key)
     txid = algod_client.send_transaction(signed)
@@ -1033,7 +1033,8 @@ def main() :
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
     # define private keys
-    receiver_public_key = mnemonic.to_public_key(benefactor_mnemonic)
+    private_key = mnemonic.to_private_key(benefactor_mnemonic)
+    receiver_public_key = account.address_from_private_key(private_key)
 
     print("--------------------------------------------")
     print("Compiling Donation Smart Signature......")
@@ -1067,7 +1068,7 @@ A simple payment transaction is then created to fund the escrow with a little ov
 ```python
 import base64
 
-from algosdk.future import transaction
+from algosdk import transaction
 from algosdk import mnemonic
 from algosdk.v2client import algod
 from pyteal import *
@@ -1095,8 +1096,8 @@ def get_private_key_from_mnemonic(mn) :
 
 def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
     params = algod_client.suggested_params()
-    add = mnemonic.to_public_key(creator_mnemonic)
     key = mnemonic.to_private_key(creator_mnemonic)
+    add = account.address_from_private_key(key)
     unsigned_txn = transaction.PaymentTxn(add, params, rcv, amt)
     signed = unsigned_txn.sign(key)
     txid = algod_client.send_transaction(signed)
@@ -1136,7 +1137,8 @@ def main() :
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
     # define private keys
-    receiver_public_key = mnemonic.to_public_key(benefactor_mnemonic)
+    private_key = mnemonic.to_private_key(benefactor)
+    receiver_public_key = account.address_from_private_key(private_key)
 
     print("--------------------------------------------")
     print("Compiling Donation Smart Signature......")

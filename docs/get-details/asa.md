@@ -13,7 +13,7 @@ With Algorand Standard Assets you can represent stablecoins, loyalty points, sys
 This section begins with an [overview](#assets-overview) of the asset implementation on Algorand including a review of all [asset parameters](#asset-parameters). This is followed by [how-tos](#asset-functions) in the SDKs and `goal` for all on-chain asset functions.
 
 !!! info
-    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
 
 # Assets overview
 
@@ -327,7 +327,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	}
 	fmt.Printf("Submitted transaction %s\n", sendResponse)
 	// Wait for confirmation
-	confirmedTxn, err := future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -512,7 +512,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 		return
 	}
 
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -707,7 +707,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 		fmt.Printf("failed to send transaction: %s\n", err)
 		return
 	}
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -893,7 +893,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1077,7 +1077,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1271,7 +1271,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1473,7 +1473,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 		return
 	}
 	// Wait for transaction to be confirmed
-	confirmedTxn, err = future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
 	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
 		return
@@ -1688,4 +1688,4 @@ Retrieve an asset's configuration information from the network using the SDKs or
     ```
 
 !!! info
-    Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+    Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).

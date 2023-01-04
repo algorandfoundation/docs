@@ -223,9 +223,9 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     import json
     from algosdk.v2client import algod
     from algosdk import account, encoding, mnemonic
-    from algosdk.future.transaction import Multisig, PaymentTxn, MultisigTransaction
+    from algosdk.transaction import Multisig, PaymentTxn, MultisigTransaction
     import base64
-    from algosdk.future.transaction import *
+    from algosdk.transaction import *
 
     # Change these values with mnemonics
     mnemonic1 = "PASTE phrase for account 1"
@@ -237,13 +237,13 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     # an accounts dict.
 
     private_key_1 = mnemonic.to_private_key(mnemonic1)
-    account_1 = mnemonic.to_public_key(mnemonic1)
+    account_1 = account.address_from_private_key(private_key_1)
 
     private_key_2 = mnemonic.to_private_key(mnemonic2)
-    account_2 = mnemonic.to_public_key(mnemonic2)
+    account_2 = account.address_from_private_key(private_key_2)
 
     private_key_3 = mnemonic.to_private_key(mnemonic3)
-    account_3 = mnemonic.to_public_key(mnemonic3)
+    account_3 = address.address_from_private_key(private_key_3)
 
 
 
@@ -461,7 +461,6 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
         "crypto/ed25519"
         "fmt"
         json "encoding/json"
-        "github.com/algorand/go-algorand-sdk/future"
         "github.com/algorand/go-algorand-sdk/client/v2/algod"	
         "github.com/algorand/go-algorand-sdk/crypto"
         "github.com/algorand/go-algorand-sdk/mnemonic"
@@ -613,7 +612,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 
         // Wait for confirmation
-        confirmedTxn, err := future.WaitForConfirmation(algodClient,txid,  4, context.Background())
+        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
         if err != nil {
             fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
             return
@@ -667,4 +666,4 @@ A full explanation of Logic Signatures can be found in the [Algorand Smart Contr
 - [Attach a LogicSig with `goal`](../../dapps/smart-contracts/smartsigs/walkthrough)
 
 !!! info
-    Full running code examples for each SDK are available within the GitHub repo for V1 and V2 at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).
+    Full running code examples for each SDK are available within the GitHub at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).

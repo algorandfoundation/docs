@@ -241,12 +241,12 @@ Create a payment transaction from one account to another using suggested paramet
 
 
     with open("pay.txn", "r") as f:
-        recovered_txn = encoding.future_msgpack_decode(f.read())
+        recovered_txn = encoding.msgpack_decode(f.read())
 
     print(recovered_txn)
 
     with open("signed_pay.txn", "r") as f:
-        recovered_signed_txn = encoding.future_msgpack_decode(f.read())
+        recovered_signed_txn = encoding.msgpack_decode(f.read())
 
     print(recovered_signed_txn)
 
@@ -258,7 +258,7 @@ Create a payment transaction from one account to another using suggested paramet
 	// Error handling omitted for brevity
 	sp, _ := client.SuggestedParams().Do(context.Background())
 
-	pay_txn, _ := future.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 10000, nil, "", sp)
+	pay_txn, _ := transaction.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 10000, nil, "", sp)
 
 	var pay_txn_bytes = make([]byte, 1e3)
 	base64.StdEncoding.Encode(pay_txn_bytes, msgpack.Encode(pay_txn))

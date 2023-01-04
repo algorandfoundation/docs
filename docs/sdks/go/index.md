@@ -59,7 +59,6 @@ import (
     "context"
     json "encoding/json"
     "fmt"
-	"github.com/algorand/go-algorand-sdk/future"
     "github.com/algorand/go-algorand-sdk/client/v2/algod"
     "github.com/algorand/go-algorand-sdk/crypto"
     "github.com/algorand/go-algorand-sdk/mnemonic"
@@ -225,7 +224,7 @@ if err != nil {
 fmt.Printf("Submitted transaction %s\n", sendResponse)
 
 // Wait for confirmation
-confirmedTxn, err := future.WaitForConfirmation(algodClient, txID, 4, context.Background())
+confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txID, 4, context.Background())
 if err != nil {
     fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
     return

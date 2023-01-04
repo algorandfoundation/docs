@@ -46,11 +46,11 @@ let algodclient = new algosdk.Algodv2(token, server, port);
     // let program = new Uint8Array(Buffer.from(<"base64-encoded-program">, "base64"));
     let program = new Uint8Array(Buffer.from(results.result, "base64"));
     // Use this if no args
-    // let lsig = algosdk.makeLogicSig(program);
+    // let lsig = new algosdk.LogicSig(program);
 
     // String parameter
     // let args = ["<my string>"];
-    // let lsig = algosdk.makeLogicSig(program, args);
+    // let lsig = new algosdk.LogicSig(program, args);
     // Integer parameter
 
     let args = getUint8Int(12345);
