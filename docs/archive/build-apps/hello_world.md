@@ -397,7 +397,7 @@ Send the signed transaction to the network with your algod client.
        -H "X-Algo-API-Token:<algod-token>" \
        -H "Content-Type:application/x-binary" \
        -T "hello-world.stxn" \
-     'http://<algod-address>:<algod-port>/2/transactions'
+     'http://<algod-address>:<algod-port>/v2/transactions'
     ```
 === "goal"
     ```bash 
@@ -693,7 +693,7 @@ Read your transaction back from the blockchain.
     ```bash 
     curl -i -X GET \
        -H "X-Algo-API-Token:<algod-token>" \
-     'http://<algod-address>:<port>/2/account/<my-address>/transaction/<txid>'
+     'http://<algod-address>:<port>/v2/account/<my-address>/transaction/<txid>'
     ```
 
 Notice above the pattern of constructing a transaction, authorizing it, submitting it to the network, and confirming its inclusion in a block. This is a framework to familiarize yourself with as it appears often in blockchain-related development.
