@@ -3,7 +3,7 @@
 # SETUP
 GO_ALGORAND_SRC=$1
 INDEXER_SRC=$2
-CLI_TOOLS="~/go/bin/" # path to goal, algokey, etc.
+CLI_TOOLS="~/go/bin/" # path to goal, algorand-indexer, algokey, etc.
 
 # CLI GOAL
 ./reformat.py -doc-dir ../docs/clis/goal/ -cmd $CLI_TOOLS/goal
@@ -24,7 +24,7 @@ CLI_TOOLS="~/go/bin/" # path to goal, algokey, etc.
 ./reformat.py -doc-dir ../docs/clis/indexer/ -cmd $CLI_TOOLS/algorand-indexer
 
 # CLI CONDUIT
-./reformat.py -doc-dir ../docs/clis/conduit/ -cmd $CLI_TOOLS/conduit
+#./reformat.py -doc-dir ../docs/clis/conduit/ -cmd $CLI_TOOLS/conduit
 
 # REST KMD
 ./convert_swagger.py -target ../docs/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
