@@ -38,7 +38,7 @@ To start the Indexer as a reader (ie not connecting to an Algorand node), supply
 $ ./algorand-indexer daemon --data-dir /tmp -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable"  --no-algod
 ```
 
-To start the Indexer so it populates the PostgreSQL database, supply the Algorand Archival node connection details. This can be done by either specifying the data directory (`--algod`), if the node is on the same machine as the Indexer, or by supplying the algod network host and port string (`--algod-net`) and the proper API token (`--algod-token`). The database needs to be created and running prior to starting the Indexer.
+To start the Indexer so it populates the PostgreSQL database, supply the Algorand Archival node connection details. This can be done by either specifying the Algorand Node data directory (`--algod`), if the node is on the same machine as the Indexer, or by supplying the algod network host and port string (`--algod-net`) and the proper API token (`--algod-token`). The database needs to be created and running prior to starting the Indexer.
 
 ```bash
 # start with local data directory
