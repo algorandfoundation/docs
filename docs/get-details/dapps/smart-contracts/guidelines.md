@@ -4,16 +4,16 @@ title: Modern guidelines for smart contracts and smart signatures on Algorand
 
 The content provided here is not an exhaustive list of security considerations. Before deploying any application in production, it is strongly advised to get the contract audited by one more third-party security companies.
 
-## DO NOT use smart signatures (except for niche use cases)
+## Use smart signatures very SPARINGLY
 
 Algorand supports two types of programs on the blockchain: **smart signatures** and **smart contracts**. Smart signatures themselves can be used both as **delegated (logic) signatures** or **contract account**.
 
-Nowadays, 99% of the dApps should **only** use **smart contracts** and should **not** use any **smart signatures**. 
+Most dApps should **only** use **smart contracts** and should **not** use any **smart signatures**. 
 
 See the [section "More about smart signatures vs smart contracts"](#more-about-smart-signatures-vs-smart-contracts) for additional details.
 
 !!! info
-    As in the section below, smart signatures were necessary in the past. If you see an example on the Internet using smart signatures, please take some time to see if it can be migrated following the instructions below.
+    As in the section below, smart signatures were necessary in the past. If you see an example (on the [developer portal](https://developer.algorand.org) or anywhere else online) that uses smart signatures, please take some time to see if it can be migrated following the instructions below.
 
 
 ## DO proper fee management
@@ -192,7 +192,7 @@ However, as for the keys to update smart contract, it is strongly recommended to
 * Ensure that the smart contract cannot be deleted or made unusable while the application account still has funds.
 
 
-### Local state / clear state
+### Local state, boxes, clear state
 
 * Do **NOT** use local state for data that cannot be lost:
     * Local state can always be cleared by the user. There is no trustless way to recover data.
@@ -203,6 +203,9 @@ However, as for the keys to update smart contract, it is strongly recommended to
     * Do not use boxes or any foreign account/asset/application when clearing, as the user may not provide them in the transaction.
     * Remember that the state will be cleared even if the TEAL code fails.
     * A usual example is when the user sends some funds to the application account and the amount is recorded in local storage (e.g., for retrieval). In this case, a solution can keep in global storage a counter of the "lost funds" by users that cleared they state.
+* Delete all boxes before deleting a smart contract:
+    * Each box increases the minimum balance requirement of the application account. If the smart contract is deleted, the minimum balance is forever lost.
+    * The above is true even if the application account is rekeyed to another account. Rekeying the application account to another account will allow to transfer all the funds out of the application account even if the smart contract is deleted, **except** for the minimum balance due to boxes.
 
 ### Oracle, interactions, and randomness
 
@@ -212,7 +215,7 @@ However, as for the keys to update smart contract, it is strongly recommended to
 * Remember that smart contracts and smart signatures **CANNOT KEEP SECRETS** and **MUST NOT USE PASSWORDS**:
     * Everything that a smart contract operates on is made public to everyone on the blockchain. In particular, any input and output of the smart contract is public. (This is the case for all major blockchains.)
     * Oracles might be used but like for randomness beacons above, the exact trust model need to be studied in a lot of details. For example, Intel SGX may or may not be appropriate in certain cases, due to its known vulnerabilities.
-    * Direct or indirect uses of passwords by smart contracts or smart signatures are 99.9% of the time insecure. If your dApp uses password, we strongly recommend that a cryptography expert fully review the design. Most of the documentation and examples of the Internet are wrong or misleading. (As an example amongst many others, looking for PBKDF2 will give examples with number of iterations is only 1,024 which is completely inadequate.)
+    * Direct or indirect uses of passwords by smart contracts or smart signatures are 99.9% of the time insecure. If your dApp uses password, we strongly recommend that a cryptography expert fully review the design. Most of the documentation and examples on the Internet are wrong or misleading. (As an example amongst many others, looking for PBKDF2 will give examples with number of iterations is only 1,024 which is completely inadequate.)
 * Remember that smart contract and smart signatures **CANNOT** interact by themselves with the outside world:
     * Smart contracts and smart signatures can only read on-chain data.
     * Oracles may provide a way for them to interact with the outside world. But as for the randomness beacon above, it is necessary to study the trust model. 
@@ -240,7 +243,7 @@ However, as for the keys to update smart contract, it is strongly recommended to
 
 Blockchains do not automatically make something secure.
 Traditional security guidelines still need to be strictly followed.
-Actually, due to the nature of blockchains, those guidelines are even more important: in a web3 project, a bug can easily cost million of dollars without possibility to recover the money through the justice system.
+Actually, due to the nature of blockchains, those guidelines are even more important: in a web3 project, a bug can easily cost millions of dollars without possibility to recover the money through the justice system.
 
 Here we highlight some of them (the list is non-exhaustive):
 
@@ -261,7 +264,7 @@ Here we highlight some of them (the list is non-exhaustive):
 ### Issues with smart signatures
 
 * Smart signatures are much harder to audit than smart contracts in most settings.
-* Smart signatures cannot be used in inner transactions from smart contracts, which strongly limit composability of smart contracts.
+* Smart signatures cannot be used in inner transactions from smart contracts, which strongly limits composability of smart contracts (at least for TEAL v8 and before).
 * Smart signatures are much less flexible than smart contracts. While some simple dApps could be based on smart signatures and using smart signatures could slightly reduce fees, adding any feature would become problematic and any upgrade would most likely be impossible.
 * Contrary to smart contract, smart signatures do not have a standardized ABI (Application Binary Interface). Smart contracts have [ARC-4](https://arc.algorand.foundation/ARCs/arc-0004).
 * (For delegated logic signatures only) Most wallets do not support signing delegated logic signatures, as this is a potentially dangerous operation: a malicious delegated logic signature can remain dormant for years and can allow to siphon out funds of an account much later. There is no way to check whether an account signed a malicious delegated logic signature until the actual fund siphoning occurs.
@@ -306,15 +309,17 @@ where:
 
 ### (Niche) use cases for smart signatures
 
-There are two main (niche) use cases for smart signatures:
+There are three main (niche) use cases for smart signatures:
 
-* As contract account, smart signatures can be used when very costly operations need to be performed, such as `ed25519verify` or `vrf_verify`. A smart contract needing to perform such operations would require to be called (in a group of transactions) just after a transaction from the contract account. Importantly, this mechanism can only be used for smart contract methods that are not meant to be called from another smart contract, as smart contracts currently cannot issue inner transaction signed by a logic signature.
-* As contract account, smart signatures can be used to allow any user (even without a blockchain account) to send certain transactions for free:
+* As a contract account, smart signatures can be used when very costly operations need to be performed, such as `ed25519verify` or `vrf_verify`. A smart contract needing to perform such operations would require to be called (in a group of transactions) just after a transaction from the contract account. 
+    * Importantly, this mechanism can only be used for smart contract methods that are not meant to be called from another smart contract, as smart contracts currently cannot issue inner transaction signed by a logic signature.
+    * An alternative solution is to [increase the opcode budget](../../../dapps/avm/teal/#dynamic-operational-cost-of-teal-opcodes) of the smart contract using group transactions and inner transactions. PyTeal actually includes a [budget increase utility](https://pyteal.readthedocs.io/en/stable/opup.html). This method however is more expensive in terms of transaction fees, compared to using a smart signature contract account. ON the other hand, it has the advantages of being easier to code and of not breaking composability.
+* As a contract account, smart signatures can be used to allow any user (even without a blockchain account) to send certain transactions for free:
     * This is only meaningful if there are only a limited number of transactions that can be executed in a given amount of time. 
     * A concrete example would be a smart signature allowing to call a smart contract acting as a third-party blockchain light client. Only when the third-party blockchain has new valid blocks can the smart contract be called succesfully.
-* As delegated logic signature, smart signatures can be used in complex systems to delegate certain operations on an account to another signature key or another smart contract. Here are a few examples:
-  * Delegation of the issuance of "change offline" transactions to a lower-security key to give the ability to very quickly send "change offline" transactions in case of a participation node issue.
-  * Delegation of ASA transfers to a "hot key." This allows to use the Algorand blockchain to record token ownership in a custodial system (e.g., for a loyalty reward program). The actual keys of the custodial accounts can be kept in cold storage, while the system uses hot keys whose only ability is to transfer tokens between custodial accounts. This way, the system is no less secure than a centralized system with a centralized DB: in case of leak of keys, the only thing the attacker can do is to transfer the tokens incorrectly, but the attacker is not able to rekey accounts or steal Algos (if Algos are used for any other purpose).
+* As a delegated logic signature, smart signatures can be used in complex systems to delegate certain operations on an account to another signature key or another smart contract. Here are a few examples:
+    * Delegation of the issuance of "change offline" transactions to a lower-security key to give the ability to very quickly send "change offline" transactions in case of a participation node issue.
+    * Delegation of ASA transfers to a "hot key." This allows using the Algorand blockchain to record token ownership in a custodial system (e.g., for a loyalty reward program). The actual keys of the custodial accounts can be kept in cold storage, while the system uses hot keys whose only ability is to transfer tokens between custodial accounts. This way, the system is no less secure than a centralized system with a centralized DB: in case of leak of keys, the only thing the attacker can do is to transfer the tokens incorrectly, but the attacker is not able to rekey accounts or steal Algos (if Algos are used for any other purpose).
 
 Note that the second use case can often be done using a smart contract and inner transactions. However, a delegated logic signature is often easier to write and use for that purpose.
 
@@ -323,6 +328,7 @@ Note that the second use case can often be done using a smart contract and inner
 In the past, smart signatures were used as companions of smart contracts in the following scenarios:
 
 * **Escrow accounts** for smart contracts before inner transactions (AVM 1.0 / TEAL v5). Now inner transactions should be used. Notes:
+    * Since AVM 1.0 / TEAL v5, escrow accounts can be either a smart signature contract account or an application account (associated to a smart contract). Application accounts use inner transactions and are preferred.
     * There are a few rare corner cases where inner transactions cannot be used. For example TEAL v8 does not allow making an inner transaction from a (smart signature) contract account nor allow making an application call inner transaction for a TEAL v2/v3/v4 smart contract. In those cases, it may be needed to use a contract account as escrow account. However, it is strongly recommended to restrict the use of such an escrow account to the rare method calls that need it. Indeed, such method calls would themselves not be callable from inner transactions perpetuating the above issue.
     * In case multiple escrow accounts are needed (instead of a globa escrow account), the simplest solution is to rekey accounts to the application account.
     * Before AVM 1.1 / TEAL v6, only a small subsets of inner transactions were supported, making use of contract accounts for escrow accounts sometimes necessary. This is no more an issue.
