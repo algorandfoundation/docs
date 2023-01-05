@@ -8,7 +8,7 @@ At the end of this section are several useful transaction-related how-tos.
 	When you are given a transaction to sign, understanding its underlying representation will help you verify that the details of the transaction are correct.
 
 # Transaction Types
-There are [six transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 
+There are [seven transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 
 
 - [Payment](#payment-transaction)
 - [Key Registration](#key-registration-transaction)
