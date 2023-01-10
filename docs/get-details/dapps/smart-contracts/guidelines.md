@@ -168,7 +168,6 @@ However, as for the keys to update smart contract, it is strongly recommended to
 ### General
 
 * Use [Beaker](https://github.com/algorand-devrel/beaker) instead of plain PyTeal or TEAL, unless you need to go in production very quickly. Note however that Beaker may introduce breaking changes.
-    * An alternative option is to use [Reach](https://www.reach.sh/).
 * If using plain TEAL or plain PyTEAL (without Beaker):
     * Explicitly handling all `OnComplete` actions, including delete/update.
 * Follow ARCs:
