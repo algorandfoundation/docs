@@ -102,8 +102,17 @@ return
 ```
 
 # Dynamic operational cost of TEAL opcodes
-Smart signature are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. For optimal performance, smart contracts and smart signatures are also limited in opcode cost. This cost is evaluated when a smart contract runs and is representative of it’s computational expense. Every opcode executed by the AVM has a numeric value that represents its computational cost. Most opcodes have a computational cost of 1. Some, such as `SHA256` (cost 35) or `ed25519verify` (cost 1900) have substantially larger computational costs. 
-Smart signatures are limited to 20,000 for total computational cost. Smart contracts invoked by a single application transaction are limited to 700 for either of the programs associated with the contract. However, if the smart contract is invoked via a group of application transactions, the computational budget is considered pooled. The total opcode budget will be 700 multiplied by the number of application transactions within the group. So if the maximum transaction group size is used and all are application transactions, the computational budget would be 700x16=11200.. The [TEAL Opcodes](opcodes) reference lists the opcode cost for every opcode.
+Smart signature are limited to 1000 bytes in size. Size encompasses the compiled program plus arguments. Smart contracts are limited to 2KB total for the compiled approval and clear programs. This size can be increased in 2KB increments, up to an 8KB limit for both programs. 
+
+For optimal performance, smart contracts and smart signatures are also limited in opcode cost. This cost is evaluated when a smart contract runs and is representative of it’s computational expense. Every opcode executed by the AVM has a numeric value that represents its computational cost. Most opcodes have a computational cost of 1. Some, such as `SHA256` (cost 35) or `ed25519verify` (cost 1900) have substantially larger computational costs. The [TEAL Opcodes](opcodes) reference lists the opcode cost for every opcode.
+
+Smart signatures are limited to 20,000 for total computational cost. 
+
+Smart contracts invoked by a single application transaction are limited to 700 for either of the programs associated with the contract. However, if the smart contract is invoked via a group of application transactions, the computational budget for approval programs is considered pooled. The total opcode budget will be 700 multiplied by the number of application transactions within the group (including inner transactions). So if the maximum transaction group size is used (i.e., 16 transactions) and the maximum number of inner transactions is used (i.e., 256 inner transactions) and all are application transactions, the computational budget would be 700x(16+256)=190,400. 
+
+!!! info
+    Executions of clear state programs are more stringent than approval programs, in order to ensure that applications may be closed out, but that applications also are assured a chance to clean up their internal state. At the beginning of the execution of a clear state program, the pooled budget available must be 700 or higher. If it is not, the containing transaction group fails without clearing the app's state. During the execution of the clear state program, no more than 700 cost may be drawn. If further execution is attempted, the clear state program fails, and the app's state is cleared.
+
 
 # Example walkthrough of a TEAL program
 The example covered in this tutorial is for a smart signature contract account TEAL program. The account is set up where all tokens are removed from the account with one successful transaction and delivered to one of two accounts. Unsuccessful transactions leave the funds in the contract account.
