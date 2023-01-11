@@ -122,3 +122,14 @@ jobs:
         if: inputs.indexer_version != '' && !contains(inputs.indexer_version, '-')
         run: |
           echo "${{ inputs.indexer_version }}" > docs/.indexer.version
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: docs
+          branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
+          title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
+          body: "Changes generated automatically by github action docs-generator."
+          reviewers: "nullun,barnjamin,ryanrfox"
+          delete-branch: true
+          base: staging

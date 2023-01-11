@@ -30,48 +30,25 @@ $ cd ~/indexer/<tarfile-name>
 ## Run the Indexer
 The Indexer primarily provides two services, loading a PostgreSQL database with ledger data and supplying a REST API to search this ledger data. You can set the Indexer to point at a database that was loaded by another instance of the Indexer. The database does not have to be on the current node. In fact, you can have one Indexer that loads the database and many Indexers that share this data through their REST APIs. How the Indexer operates is determined with parameters that are passed to the Indexer as it is started.
 
-The Indexer has many options which can be seen using the -h option when running the Indexer binary.
-
-```bash
-$ ./algorand-indexer daemon -h
-run indexer daemon. Serve api on HTTP.
-
-Usage:
-  indexer daemon [flags]
-
-Flags:
-  -d, --algod string         path to algod data dir, or $ALGORAND_DATA
-      --algod-net string     host:port of algod
-      --algod-token string   api access token for algod
-  -c, --config string        path to 'key: value' config file, keys are same as command line options
-      --dev-mode             allow performance intensive operations like searching for accounts at a particular round
-  -g, --genesis string       path to genesis.json (defaults to genesis.json in algod data dir if that was set)
-  -h, --help                 help for daemon
-      --no-algod             disable connecting to algod for block following
-  -S, --server string        host:port to serve API on (default :8980) (default ":8980")
-  -t, --token string         an optional auth token, when set REST calls must use this token in a bearer format, or in a 'X-Indexer-API-Token' header
-
-Global Flags:
-      --cpuprofile string   file to record cpu profile to
-  -n, --dummydb             use dummy indexer db
-      --pidfile string      file to write daemon's process id to
-  -P, --postgres string     connection string for postgres database
-```
+The Indexer has many options which can be seen using the -h option when running the [Indexer binary](../../clis/indexer/indexer.md).
 
 To start the Indexer as a reader (ie not connecting to an Algorand node), supply the `--postgres` or `-P` option when running the indexer. The value should be a valid connection string for a postgres database.
 
 ```bash
-$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable"  --no-algod
+$ ./algorand-indexer daemon --data-dir /tmp -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable"  --no-algod
 ```
 
-To start the Indexer so it populates the PostgreSQL database, supply the Algorand Archival node connection details. This can be done by either specifying the data directory (`--algod`), if the node is on the same machine as the Indexer, or by supplying the algod network host and port string (`--algod-net`) and the proper API token (`--algod-token`). The database needs to be created and running prior to starting the Indexer.
+To start the Indexer so it populates the PostgreSQL database, supply the Algorand Archival node connection details. This can be done by either specifying the Algorand Node data directory (with `--algod`), if the node is on the same machine as the Indexer, or by supplying the algod network host and port string (`--algod-net`) and the proper API token (`--algod-token`). The database needs to be created and running prior to starting the Indexer.
+
+!!! note
+    The indexer has a flag `--data-dir` for where to write it's data, which is distinct from the algod data directory in the above paragraph.
 
 ```bash
 # start with local data directory
-$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod=~/node/data
+$ ./algorand-indexer daemon --data-dir /tmp -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod=~/node/data
 
 # start with networked Algorand node
-$ ./algorand-indexer daemon -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" --algod-token="[your-api-token]"
+$ ./algorand-indexer daemon --data-dir /tmp -P "host=[your-host] port=[your-port] user=[uname] password=[password] dbname=[ledgerdb] sslmode=disable" --algod-net="http://[your-host]:[your-port]" --algod-token="[your-api-token]"
 
 ```
 

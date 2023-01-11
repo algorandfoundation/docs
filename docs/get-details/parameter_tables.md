@@ -18,6 +18,8 @@ title: Algorand parameter tables
 |Per state entry|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaMinBalancePerEntry||
 |Addition per integer entry|0.0035 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaUintMinBalance||
 |Addition per byte slice entry|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaBytesMinBalance||
+|Per Box created|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxFlatMinBalance||
+|Per byte in box created|0.004 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxByteMinBalance|Includes the length of the key|
 
 ## Transaction fee
 |Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
@@ -73,3 +75,10 @@ title: Algorand parameter tables
 |Max number of foreign accounts + ASAs + applications|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|zMaxAppTotalTxnReferences||
 |Max number of created applications|Unlimited|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsCreated||
 |Max number of opt-in applications|Unlimited|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsOptedIn||
+
+## Box Constraints
+|Name|Current value|Developer doc|Consensus parameter name in (.go)|Note|
+|-|-|-|-|-|
+|Max size of box | 32768 |[reference](./dapps/smart-contracts/apps/index.md#box-storage)|MaxBoxSize|Does not include name/key length. That is capped by MaxAppKeyLen|
+|Max box references | 8 |[reference](./dapps/smart-contracts/apps/index.md#smart-contract-arrays)|MaxAppBoxReferences||
+|Bytes per Box reference | 1024 |[reference](./dapps/smart-contracts/apps/index.md#smart-contract-arrays)|BytesPerBoxReference||
