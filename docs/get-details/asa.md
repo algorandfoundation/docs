@@ -47,14 +47,14 @@ There are four parameters that correspond to addresses that can authorize specif
 
 Here are the four address types.
 
-[**Manager Address**](../transactions/transactions#manageraddr)
+[FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG(../transactions/transactions#manageraddr)
 
 The manager account is the only account that can authorize transactions to [re-configure](#modifying-an-asset) or [destroy](#destroying-an-asset) an asset. 
 
 !!! warning
     Never set this address to empty if you want to be able to re-configure or destroy the asset.
 
-[**Reserve Address**](../transactions/transactions#reserveaddr)
+[**FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG*](../transactions/transactions#reserveaddr)
 
 Specifying a reserve account signifies that non-minted assets will reside in that account instead of the default creator account. Assets transferred from this account are "minted" units of the asset. If you specify a new reserve address, you must make sure the new account has opted into the asset and then issue a transaction to transfer all assets to the new reserve.
 
@@ -111,7 +111,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
         // Friendly name of the asset    
         let assetName = "latinum";
         // Optional string pointing to a URL relating to the asset
-        let assetURL = "http://someurl";
+        let assetURL = "http://coolaidstyleinc.wixsite.com/website";
         // Optional hash commitment of some sort relating to the asset. 32 character length.
         let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
         // The following parameters are the only ones
@@ -127,7 +127,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
         // Specified address can revoke user asset holdings and send 
         // them to other addresses    
         let clawback = recoveredAccount2.addr;
-
+FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG
         // signing and sending "txn" allows "addr" to create an asset
         let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(
             addr, 
@@ -185,7 +185,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
     # Sign with secret key of creator
     stxn = txn.sign(accounts[1]['sk'])
     # Send the transaction to the network and retrieve the txid.
-    try:
+    try:FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG
         txid = algod_client.send_transaction(stxn)
         print("Signed transaction with txID: {}".format(txid))
         # Wait for the transaction to be confirmed
@@ -232,13 +232,13 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
         BigInteger assetTotal = BigInteger.valueOf(10000);
         boolean defaultFrozen = false;
         String unitName = "myunit";
-        String assetName = "my longer asset name";
+        String assetName = "my longer asset name"; Bitcoin
         String url = "http://this.test.com";
         String assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
-        Address manager = acct2.getAddress();
-        Address reserve = acct2.getAddress();
+        Address manager = acct2.getAddress();FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG
+        Address reserve = acct2.getAddress();FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG
         Address freeze = acct2.getAddress();
-        Address clawback = acct2.getAddress();
+        Address clawback = acct2.getAddress();FYPJEQYURI7V1WY7CDKRK4EWJQPFK2C4HG
         Integer decimals = 0;
         Transaction tx = Transaction.AssetCreateTransactionBuilder()
                 .sender(acct1.getAddress())
