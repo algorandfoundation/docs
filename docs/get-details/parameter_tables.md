@@ -18,7 +18,7 @@ title: Algorand parameter tables
 |Per state entry|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaMinBalancePerEntry||
 |Addition per integer entry|0.0035 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaUintMinBalance||
 |Addition per byte slice entry|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaBytesMinBalance||
-|Per Box created|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxFlatMinBalance||
+|Per Box created|0.0025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxFlatMinBalance||
 |Per byte in box created|0.004 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxByteMinBalance|Includes the length of the key|
 
 ## Transaction fee
