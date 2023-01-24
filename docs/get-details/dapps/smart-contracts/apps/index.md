@@ -768,14 +768,44 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
     goal app method --app-id=53 --method="add_member2()void" --box="53,str:BoxA" --from=CONP4XZSXVZYA7PGYH7426OCAROGQPBTWBUD2334KPEAZIHY7ZRR653AFY
     ```
 
-=== "Python SDK"
+=== "Python"
     ```py
-    # Algorand Python SDK
-    # Using ATC
     atc = AtomicTransactionComposer()
-    atc.add_method_call(app_id, my_method, addr, sp, signer, method_args=[1,5], boxes=[[app_id, “key”]],
-    )
+    atc.add_method_call(app_id, my_method, addr, sp, signer, method_args=[1,5], boxes=[[app_id, “key”]])
     ```
+
+=== "JavaScript"
+    ```js
+    const atc = new AtomicTransactionComposer();
+    atc.addMethodCall({
+        appID: appId,
+        method: myMethod,
+        methodArgs: [1,5],
+        boxes: [{ appIndex: appId, name: new Uint8Array(Buffer.from("key")) }],
+        sender: acct.addr,
+        suggestedParams: sp,
+        signer: algosdk.makeBasicAccountTransactionSigner(acct),
+    });
+    ```
+
+=== "Go"
+    ```go
+    mcp := transaction.AddMethodCallParams{
+		AppID:           app_id,
+		Sender:          acct.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+        Method: method,
+        BoxReferences: types.AppBoxReference{AppID: 0, Name: []byte("key")},
+		MethodArgs: []interface{}{[]byte(boxName), []interface{}{123, 456}},
+	}
+
+	var boxAtc = transaction.AtomicTransactionComposer{}
+	err := boxAtc.AddMethodCall(mcp)
+    // ...
+    ```
+
 
 === "Beaker"
     ```py
