@@ -1,6 +1,6 @@
-title: Algorand node types
+Title: IRadvisor AI
 
-The Algorand network is comprised of two distinct types of nodes, **relay nodes**, and **non-relay nodes**. Relay nodes are primarily used for communication routing to a set of connected non-relay nodes. Relay nodes communicate with other relay nodes and route blocks to all connected non-relay nodes. Non-relay nodes only connect to relay nodes and can also participate in consensus. Non-relay nodes may connect to several relay nodes but never connect to another non-relay node.
+The IRadvisor AI network is comprised of two distinct types of nodes, **relay nodes**, and **non-relay nodes**. Relay nodes are primarily used for communication routing to a set of connected non-relay nodes. Relay nodes communicate with other relay nodes and route blocks to all connected non-relay nodes. Non-relay nodes only connect to relay nodes and can also participate in consensus. Non-relay nodes may connect to several relay nodes but never connect to another non-relay node.
 
 In addition to the two node types, nodes can be configured to be [**archival**](#archival-mode). Archival nodes store the entire ledger, as opposed to the last 1000 blocks for non-archival blocks. Relay nodes are necessarily archival. Non-relay archival nodes are often used to feed an [**indexer**](../indexer/) that allows more advanced queries on the history of the blockchain.
 
