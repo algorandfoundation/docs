@@ -790,17 +790,17 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 
 === "Go"
     ```go
-	var boxAtc = transaction.AtomicTransactionComposer{}
-	err := boxAtc.AddMethodCall(transaction.AddMethodCallParams{
-		AppID:           appId,
-		Sender:          acct.Address,
-		SuggestedParams: sp,
-		OnComplete:      types.NoOpOC,
-		Signer:          signer,
+    var boxAtc = transaction.AtomicTransactionComposer{}
+    err := boxAtc.AddMethodCall(transaction.AddMethodCallParams{
+        AppID:           appId,
+        Sender:          acct.Address,
+        SuggestedParams: sp,
+        OnComplete:      types.NoOpOC,
+        Signer:          signer,
         Method:          method,
         BoxReferences:   types.AppBoxReference{AppID: appId, Name: []byte("key")},
-		MethodArgs:      []interface{}{1,5},
-	})
+        MethodArgs:      []interface{}{1,5},
+    })
     // ...
     ```
 
