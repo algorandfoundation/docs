@@ -546,6 +546,9 @@ Application NoOp Transactions make up a majority of the Application Call methods
     "apfa": [
       10
     ],
+    "apbx":[
+      {"i":51, "n": "Y29vbF9ib3g="}
+    ],
     "apid": 51,
     "fee": 1000,
     "fv": 13376,
@@ -563,6 +566,7 @@ Application NoOp Transactions make up a majority of the Application Call methods
 - The Accounts (`apat`) contains the address "4RLXQGPZVVRSXQF4VKZ74I6BCUD7TUVROOUBCVRKY37LQSHXORZV4KCAP4"
 - The ForeignAssets (`apas`) contains the ASA id 16 
 - The ForeignApps (`apfa`) contains the AppId 10
+- The Boxes (`apbx`) contains a reference to the box named "cool_box", owned by app id 51
 - The OnComplete (`apan`) is set to NoOp (0 value so omitted from the output)
 
 # State Proof Transaction
