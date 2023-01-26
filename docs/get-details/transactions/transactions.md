@@ -144,7 +144,8 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 | <a name="">Foreign Assets</a>| _optional_| []uint64 | `"apas"`| Lists the assets whose AssetParams may be accessed by this application's approval-program and clear-state-program. The access is read-only.|
 | <a name="">GlobalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apgs"`| Holds the maximum number of global state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
 | <a name="">LocalStateSchema</a>| _optional_| <a href=#storage-state-schema>StateSchema</a>| `"apls"`| Holds the maximum number of local state values defined within a <a href=#storage-state-schema>StateSchema</a> object.|
-| <a name="">ExtraProgramPages</a>| _optional_| ExtraProgramPages | `"apep"`| Number of additional pages allocated to the application's approval and clear state programs. Each `ExtraProgramPages` is 2048 bytes. The sum of `ApprovalProgram` and `ClearStateProgram` may not exceed 2048*(1+`ExtraProgramPages`) bytes. |
+| <a name="">ExtraProgramPages</a>| _optional_| uint64 | `"apep"`| Number of additional pages allocated to the application's approval and clear state programs. Each `ExtraProgramPages` is 2048 bytes. The sum of `ApprovalProgram` and `ClearStateProgram` may not exceed 2048*(1+`ExtraProgramPages`) bytes. |
+| <a name="">Boxes</a>| _optional_| []BoxRef | `"apbx"`| The boxes that should be made available for the runtime of the program. |
 
 ## Storage State Schema
 Object Name: `StateSchema`

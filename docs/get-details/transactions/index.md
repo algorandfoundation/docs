@@ -369,6 +369,8 @@ Application Call transactions may include other fields needed by the logic such 
 
 *ForeignAssets* - To pass ASAs for parameter checking
 
+*Boxes* - To pass references to Application Boxes so the AVM can access the contents
+
 Details for smart contract authoring can be found on the [Smart Contract Details](../dapps/smart-contracts/apps) page.
 
 
@@ -596,7 +598,7 @@ A State Proof Transaction is a transaction that's submitted to the network durin
 Algorand transactions are valid for a specific round range and the range maximum is 1000 rounds. If you plan to submit the transaction right away, specifying this round range is trivial. However, when the transaction requires offline signing or you plan to make frequent transactions from that account, it may be beneficial to specify a future round range or ranges that are more convenient. You can sign these transactions in a single secure session, and then submit them to the network when the valid round range is reached.
 
 !!! tip
-	For recurring transactions, Algorand Smart Contracts can be a more secure option. Read the corresponding [guide](../dapps/pyteal/smart-contracts) to learn more.
+	For recurring transactions, Algorand Smart Contracts can be a more secure option. Read the corresponding [guide](../dapps/smart-contracts/guidelines/) to learn more.
 
 Calculating the round range requires you to know the **current round**, the **average block time**, and the **target submission time**. 
 
