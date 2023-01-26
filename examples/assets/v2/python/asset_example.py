@@ -2,7 +2,6 @@ import json
 import base64
 from algosdk.v2client import algod
 from algosdk import account, mnemonic
-from algosdk.transaction import AssetConfigTxn, AssetTransferTxn, AssetFreezeTxn
 from algosdk.transaction import *
 
 
@@ -19,7 +18,7 @@ accounts = {}
 counter = 1
 for m in [mnemonic1, mnemonic2, mnemonic3]:
     accounts[counter] = {}
-    accounts[counter]['pk'] = mnemonic.to_public_key(m)
+    accounts[counter]['pk'] = account.address_from_private_key(m)
     accounts[counter]['sk'] = mnemonic.to_private_key(m)
     counter += 1
 
@@ -40,7 +39,7 @@ def print_created_asset(algodclient, account, assetid):
     # response = myindexer.accounts(asset_id = assetid)
     # then use 'account_info['created-assets'][0] to get info on the created asset
     account_info = algodclient.account_info(account)
-    idx = 0;
+    idx = 0
     for my_account_info in account_info['created-assets']:
         scrutinized_asset = account_info['created-assets'][idx]
         idx = idx + 1       
