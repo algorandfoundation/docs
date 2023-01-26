@@ -5,41 +5,41 @@ Algod is instrumented to provide telemetry which is used for insight into the so
 
 Telemetry can be enabled by following the command below *as the user running `algod`* (replacing `<name>` with your desired hostname, e.g. 'SarahsLaptop'):
 
-<pre>
+
 ``` 
 bash
 diagcfg telemetry name -n <name>
 ``` 
-</pre>
+
 
 If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
 
-<pre>
+
 ``` 
 bash
 sudo -u algorand -H -E diagcfg telemetry name -n <name>
 ``` 
-</pre>
+
 
 (The option `-H` is necessary to ensure `$HOME` is set to the home directory of the `algorand` user.)
 
 Telemetry can also be provided without providing a hostname:
 
-<pre>
+
 ``` 
 bash
 diagcfg telemetry enable
 ``` 
-</pre>
+
 
 If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
 
-<pre>
+
 ``` 
 bash
 sudo -u algorand -H -E diagcfg telemetry enable
 ``` 
-</pre>
+
 
 !!! Note
     After enabling (or disabling) telemetry, the node needs to be restarted.
@@ -53,21 +53,21 @@ In particular, do *not* run `sudo diagcfg ...`.
 
 Telemetry can be disabled at any time by using (*as the user running `algod`*):
 
-<pre>
+
 ``` 
 bash
 diagcfg telemetry disable
 ``` 
-</pre>
+
 
 If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
 
-<pre>
+
 ``` 
 bash
 sudo -u algorand -H -E diagcfg telemetry
 ``` 
-</pre>
+
 
 ### Technical Details and Checking Telemetry is Enabled
 
@@ -75,39 +75,39 @@ Running the `diagcfg` commands will create and update the logging configuration 
 
 To check if telemetry is enabled, run (*as the user running `algod`*):
 
-<pre>
+
 ``` 
 bash
 diagcfg telemetry
 ``` 
-</pre>
+
 
 If the Debian package is used, the above command needs to be run as the `algorand` user, i.e.:
 
-<pre>
+
 ``` 
 bash
 sudo -u algorand -H -E diagcfg telemetry
 ``` 
-</pre>
+
 
 It is also possible to check whether `algod` is connected to the telemetry server by running:
 
-<pre>
+
 ``` 
 bash
 sudo netstat -an | grep :9243
 ``` 
-</pre>
+
 
 If a single node/`algod` is running and telemetry is enabled, the output should look like:
 
-<pre>
+
 ``` 
 plain
 tcp        0      0 xxx.xxx.xxx.xxx:yyyyy        18.214.74.184:9243      ESTABLISHED
 ``` 
-</pre>
+
 
 When telemetry is disabled, the above command prints nothing.
 

@@ -23,7 +23,7 @@ The recommended method for most users on a compatible OS is to do the installati
 
 ---++ To install to CentOS 7, open a terminal and run the following commands.
 
-<pre>
+
 ``` 
 curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
 sudo rpmkeys --import rpm_algorand.pub
@@ -36,11 +36,11 @@ sudo yum install algorand-devtools
 # Or, to only install algorand:
 sudo yum install algorand
 ``` 
-</pre>
+
 
 ---++ To install to Fedora or CentOS 8 Stream, open a terminal and run the following commands.
 
-<pre>
+
 ``` 
 curl -O https://releases.algorand.com/rpm/rpm_algorand.pub
 sudo rpmkeys --import rpm_algorand.pub
@@ -48,7 +48,7 @@ dnf install -y 'dnf-command(config-manager)'
 dnf config-manager --add-repo=https://releases.algorand.com/rpm/stable/algorand.repo
 dnf install algorand
 ``` 
-</pre>
+
 
 ---+++ info
 `kmd` related files such as the kmd token file will be written to the `${HOME}/.algorand/kmd-version` directory. These files are primarily used with the SDKs and REST endpoints. [Read more about kmd](../../clis/kmd).

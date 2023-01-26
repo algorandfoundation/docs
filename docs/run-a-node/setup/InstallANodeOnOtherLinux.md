@@ -52,12 +52,12 @@ When installing for the first time a `data` directory will need to be specified.
 
 Additionally, it is convenient to add `~/node` to `PATH` so `goal` becomes directly executable, instead of having to constantly reference it as `./goal` in the `node` directory.
 
-<pre>
+
 ``` 
 export ALGORAND_DATA="$HOME/node/data"
 export PATH="$HOME/node:$PATH"
 ``` 
-</pre>
+
 
 Note that the environment variables set by these commands are not permanent, so it is advisable to add the exports to shell config files (e.g., `~/.bashrc` or `~/.zshrc`).
 

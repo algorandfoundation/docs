@@ -28,7 +28,7 @@ The location of the binaries is needed by the template to tell `systemd` where t
 
 Here is a snippet of the template:
 
-<pre>
+
 ``` 
 [Service]
 ExecStart=@@BINDIR@@/algod -d %I
@@ -36,7 +36,7 @@ User=@@USER@@
 Group=@@GROUP@@
 ...
 ``` 
-</pre>
+
 
 !!! Note
 If `bindir` is not provided, the script will assume the current working directory.

@@ -7,7 +7,7 @@ goal node status
 
 The goal node status command will return information about the node and what block number it is currently processing. When the node is caught up with the rest of the network, the "Sync Time" will be 0.0 as in the example response below (if on MainNet, some details will be different).
 
-<pre>
+
 ``` 
 Last committed block: 125064
 Time since last block: 3.1s
@@ -19,7 +19,7 @@ Next consensus protocol supported: true
 Genesis ID: testnet-v1.0
 Genesis hash: SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=
 ``` 
-</pre>
+
 
 ### Sync Node Network using Fast Catchup
 
@@ -75,7 +75,7 @@ Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 
 Results should show 5 Catchpoint status lines for Catchpoint, total accounts, accounts processed, total blocks , downloaded blocks.
 
-<pre>
+
 ``` 
 Last committed block: 4453
 Sync Time: 15.8s
@@ -87,7 +87,7 @@ Catchpoint downloaded blocks: 81
 Genesis ID: betanet-v1.0
 Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ``` 
-</pre>
+
 
 !!! Note
 Only the first 3 status (`Catchpoint`, `total accounts`, `accounts processed`) will show right after catchup begins. Status on `total blocks` and `downloaded blocks` will only show after catchup processes the total number of accounts, which takes several minutes.
@@ -100,7 +100,7 @@ Only the first 3 status (`Catchpoint`, `total accounts`, `accounts processed`) w
 
 Once there is a Sync Time of 0, the node is synced and if fully usable.
 
-<pre>
+
 ``` 
 Last committed block: 4431453
 Time since last block: 3.9s
@@ -113,7 +113,7 @@ Last Catchpoint: 4430000#UAQPNY32LP3K5ARGFUQEFTBGELI5ZAQOMBGE7YL5ZFXL2MXWTO2A
 Genesis ID: betanet-v1.0
 Genesis hash: mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ``` 
-</pre>
+
 
 ### Troubleshooting for fast catchup
 
