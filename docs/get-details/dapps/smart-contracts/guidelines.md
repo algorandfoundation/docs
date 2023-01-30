@@ -120,11 +120,17 @@ In this case, the transaction fee needs to be reasonably bounded depending on th
 
 The simplest solution for inner transaction fee is to set them to 0 and rely on [fee pooling](../../../transactions/#pooled-transaction-fees): the other transactions (that are not signed by a smart signature) should provide enough fees to cover all transactions.
 
+!!! tip
+    Setting the inner transaction fee to 0 is different from not setting it. When it is not set, the inner transaction fee is set to the minimum allowable, taking into account the minimum transaction fee and credit from overpaying in earlier transactions. It is recommended to always set the transaction fee.
+
 ### DO handle congestion smoothly and securely
 
 In case of congestion, the blockchain may require higher fees.
 
 This is a complex subject with [a discussion in progress on the forum](https://forum.algorand.org/t/brainstorm-on-default-valid-window-length-and-lease/8208).
+
+!!! tip
+    Inner transaction fees are not subject to congestion fees. Inner transaction fees can always be set to the minimum fee (see guideline above how to access it) or to 0 (the recommended solution). When set to 0, the inner transaction will take the minimum fee from [fee pooling](../../../transactions/#pooled-transaction-fees).
 
 ## DO validate carefully incoming transactions
 
