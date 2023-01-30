@@ -146,7 +146,6 @@ router = Router(
         # No local state, don't bother handling it. 
         close_out=OnCompleteAction.never(),   # Equivalent to omitting completely
         opt_in=OnCompleteAction.never(),      # Equivalent to omitting completely
-        clear_state=OnCompleteAction.never(), # Equivalent to omitting completely
     ),
 )
 
@@ -207,7 +206,6 @@ router = Router(
         # No local state, don't bother handling it. 
         close_out=OnCompleteAction.never(),
         opt_in=OnCompleteAction.never(),
-        clear_state=OnCompleteAction.never(),
     ),
 )
 
@@ -291,7 +289,6 @@ router = Router(
         # No local state, don't bother handling it. 
         close_out=OnCompleteAction.never(),
         opt_in=OnCompleteAction.never(),
-        clear_state=OnCompleteAction.never(),
     ),
 )
 
@@ -633,7 +630,6 @@ router = Router(
         # No local state, don't bother handling it.
         close_out=OnCompleteAction.never(),
         opt_in=OnCompleteAction.never(),
-        clear_state=OnCompleteAction.never(),
     ),
 )
 

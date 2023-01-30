@@ -18,7 +18,7 @@ title: Algorand parameter tables
 |Per state entry|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaMinBalancePerEntry||
 |Addition per integer entry|0.0035 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaUintMinBalance||
 |Addition per byte slice entry|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|SchemaBytesMinBalance||
-|Per Box created|0.025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxFlatMinBalance||
+|Per Box created|0.0025 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxFlatMinBalance||
 |Per byte in box created|0.004 Algos|[reference](./dapps/smart-contracts/apps/index.md#minimum-balance-requirement-for-a-smart-contract)|BoxByteMinBalance|Includes the length of the key|
 
 ## Transaction fee
@@ -32,7 +32,7 @@ title: Algorand parameter tables
 |-|-|-|-|-|
 |Max number transactions in a group / atomic transfer|16|[reference](./atomic_transfers.md)|MaxTxGroupSize||
 |Max number of inner transactions|256|[reference](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#inner-transactions)|MaxInnerTransactions|Whilst the actual value is 16, inner transaction pooling multiplies this value by MaxTxGroupSize.|
-|Maximum size of a block|1000000 bytes|-|MaxTxnBytesPerBlock||
+|Maximum size of a block|5000000 bytes|-|MaxTxnBytesPerBlock||
 |Maximum size of note|1024 bytes|-|MaxTxnNoteBytes||
 |Maximum transaction life|1000 rounds|[reference](./transactions/index.md#setting-first-and-last-valid)|MaxTxnLife||
 
