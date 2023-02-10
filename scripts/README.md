@@ -27,3 +27,17 @@ the markdown more pleasant with our mkdocs theme.
 ./convert_swagger.py -specfile ~/go/src/github.com/algorand/go-algorand/daemon/kmd/api/swagger.json  -target ../docs/reference/rest-apis/kmd.md
 ./convert_swagger.py -specfile ~/go/src/github.com/algorand/go-algorand/daemon/algod/api/algod.oas2.json  -target ../docs/reference/rest-apis/algod.md
 ```
+
+# config_json_gen
+
+Used to extract node config options from the go-algorand source. Markdown is written to stdout, warnings are written to stderr. To update the template, edit template.tmpl and rebuild the tool.
+
+Build tool:
+```
+go build .
+```
+
+Run:
+```
+./config_json_gen -path ~/algorand/go-algorand/ > config.md
+```
