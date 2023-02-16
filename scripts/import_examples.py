@@ -1,4 +1,54 @@
 import os
+from dataclasses import dataclass
+
+@dataclass
+class ExampleSource:
+    example_dir: str
+    language_name: str 
+    src_comment_flag: str
+    doc_comment_flag: str
+
+
+sources: list[ExampleSource] = [
+    ExampleSource(
+        example_dir="../../py-algorand-sdk/_examples", 
+        language_name='python',
+        src_comment_flag="# example: ",
+        doc_comment_flag="<!-- ===PYSDK_"
+    ),
+    #ExampleSource(
+    #    example_dir="../../js-algorand-sdk/examples", 
+    #    language_name='javascript',
+    #    src_comment_flag="// example: ",
+    #    doc_comment_flag="<!-- ===JSSDK_"
+    #),
+    #ExampleSource(
+    #    example_dir="../../go/src/github.com/algorand/go-algorand-sdk/examples", 
+    #    language_name='go',
+    #    src_comment_flag="// example: ",
+    #    doc_comment_flag="<!-- ===GOSDK_"
+    #),
+    #ExampleSource(
+    #    example_dir="../../java-algorand-sdk/examples", 
+    #    language_name='java',
+    #    src_comment_flag="// example: ",
+    #    doc_comment_flag="<!-- ===JAVASDK_"
+    #),
+    #ExampleSource(
+    #    example_dir="../../pyteal/examples", 
+    #    language_name='python',
+    #    src_comment_flag="# example: ",
+    #    doc_comment_flag="<!-- ===PYTEAL_"
+    #),
+    #ExampleSource(
+    #    example_dir="../../beaker/examples", 
+    #    language_name='python',
+    #    src_comment_flag="# example: ",
+    #    doc_comment_flag="<!-- ===BEAKER_"
+    #)
+]
+
+
 
 # Example Name => source string
 SDKExamples = dict[str, list[str]]
@@ -63,9 +113,7 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
 
 
 
-def import_pysdk_examples():
-    sdk_examples = find_examples_in_sdk("/home/ben/py-algorand-sdk/_examples", "# example: ", 'python')
-    replace_matches_in_docs("../docs", "<!-- ===PYSDK_", sdk_examples)
-
 if __name__ == "__main__":
-    import_pysdk_examples()
+    for src in sources: 
+        sdk_examples = find_examples_in_sdk(src.example_dir, src.src_comment_flag, src.language_name)
+        replace_matches_in_docs("../docs", src.doc_comment_flag, sdk_examples)
