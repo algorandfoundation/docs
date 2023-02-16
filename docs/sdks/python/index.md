@@ -51,6 +51,25 @@ The SDK is installed and can now interact with the Sandbox created earlier.​
 
 # Create an Account on Algorand
 In order to interact with the Algorand blockchain, you must have a funded account. To quickly create a test account use the following code.
+
+
+<!-- ===PYSDK_CREATE_ALGOD_CLIENT=== -->
+```python
+
+# Create a new algod client, configured to connect to our local sandbox
+algod_address = "http://localhost:4001"
+algod_token = "a" * 64
+algod_client = algod.AlgodClient(algod_token, algod_address)
+
+# Or, if necessary, pass alternate headers
+
+# Create a new client with an alternate api key header
+special_algod_client = algod.AlgodClient(
+    "", algod_address, headers={"X-API-Key": algod_token}
+)
+
+```
+<!-- ===PYSDK_CREATE_ALGOD_CLIENT=== -->
 ​
 ```python
 from algosdk import account, mnemonic
