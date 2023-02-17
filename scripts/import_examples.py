@@ -181,8 +181,5 @@ if __name__ == "__main__":
             "../docs", src.doc_comment_flag, sdk_examples
         )
 
-        if len(unmatched_examples) > 0:
-            print(
-                f"Unmatched examples in {src.language_name}: "
-                f"{list(unmatched_examples.keys())}"
-            )
+        for name, unmatched in unmatched_examples.items():
+            print(f"Missing {name} for {src.language_name} in docs")
