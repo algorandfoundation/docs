@@ -89,6 +89,8 @@ If any of these four addresses is set to `""` that address will be cleared and c
 Create assets using either the SDKs or `goal`. When using the SDKs supply all creation parameters. With `goal`, managing the various addresses associated with the asset must be done after executing an asset creation. See Modifying an Asset in the next section for more details on changing addresses for the asset.
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_CREATE=== -->
+
     ``` javascript
         let params = await algodclient.getTransactionParams().do();
         // comment out the next two lines to use suggested fee
@@ -157,8 +159,11 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
         console.log("Transaction " + tx.txId + " confirmed in round " + ptx["confirmed-round"]);
         
     ```
+    <!-- ===JSSDK_ASSET_CREATE=== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_CREATE=== -->
+
     ``` python 
     # CREATE ASSET
     # Get network params for transactions before every transaction.
@@ -215,7 +220,11 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 
     ```
 
+    <!-- ===PYSDK_ASSET_CREATE=== -->
+
 === "Java"
+    <!-- ===JAVASDK_ASSET_CREATE=== -->
+
     ``` java 
         // CREATE ASSET
         // get changing network parameters for each transaction
@@ -274,8 +283,10 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
         }
 
     ```
+    <!-- ===JAVASDK_ASSET_CREATE=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_CREATE=== -->
     ``` go
 	// Get network-related transaction parameters and assign
 	txParams, err := algodClient.SuggestedParams().Do(context.Background())
@@ -339,6 +350,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	printCreatedAsset(assetID, pks[1], algodClient)
 	printAssetHolding(assetID, pks[1], algodClient)
     ```
+    <!-- ===GOSDK_ASSET_CREATE=== -->
 
 === "goal"
     ``` goal
