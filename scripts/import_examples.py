@@ -146,8 +146,16 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
         if len(matches) == 0:
             continue
 
+        # Need to track the offset here so we dont write to the
+        # wrong spot in the doc file if the example is longer or shorter
+        # than the current set of lines in the docs
         offset = 0
         for match in matches:
+
+            if match.name not in examples:
+                print(f"Missing {prefix.strip('<!- =')}{match.name} in src examples")
+                continue
+
             page_lines[match.line_start + offset : match.line_stop + offset] = examples[
                 match.name
             ].lines
@@ -156,8 +164,12 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
                 match.line_stop - match.line_start
             )
 
+            del examples[match.name]
+
         with open(path, "w") as f:
             f.write("\n".join(page_lines))
+
+    return examples
 
 
 if __name__ == "__main__":
@@ -165,4 +177,12 @@ if __name__ == "__main__":
         sdk_examples = find_examples_in_sdk(
             src.example_dir, src.src_comment_flag, src.language_name
         )
-        replace_matches_in_docs("../docs", src.doc_comment_flag, sdk_examples)
+        unmatched_examples = replace_matches_in_docs(
+            "../docs", src.doc_comment_flag, sdk_examples
+        )
+
+        if len(unmatched_examples) > 0:
+            print(
+                f"Unmatched examples in {src.language_name}: "
+                f"{list(unmatched_examples.keys())}"
+            )
