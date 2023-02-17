@@ -10,9 +10,13 @@ We should show how to initialize a new client, set key header and do some very
 simple calls against them. Refer to SDK docs or REST API docs for full functionality 
 
 ### Algod Client:
+
+[Reference Page for Python](./docs/sdks/python/index.md) 
+[Reference Page for JS](./docs/sdks/javascript/index.md) 
+[Reference Page for Go](./docs/sdks/go/index.md) 
+[Reference Page for Java](./docs/sdks/java/index.md) 
     
     CREATE_CLIENT - show how to init client and connect to algod and pass api keys in header
-
     USE_CLIENT - show how to get status/suggested params
 
 ### Indexer Client:
@@ -31,7 +35,7 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 ## Accounts
 
-We should show how to create, save, restore accounts on [this page](./docs/get-details/accounts/create.md)
+[Reference Page](./docs/get-details/accounts/create.md)
 
     GENERATE_ACCOUNT - generate a new account with the SDK
     RECOVER_ACCOUNT_MNEMONIC - Create an account from a known mnemonic and print pubkey/privatekey
@@ -39,7 +43,7 @@ We should show how to create, save, restore accounts on [this page](./docs/get-d
 
 ## ASAs
 
-We should show how to do all the things with ASAs on [this page](./docs/get-details/asa.md)
+[Reference Page](./docs/get-details/asa.md)
 
 ### All the things
 
@@ -56,22 +60,23 @@ We should show how to do all the things with ASAs on [this page](./docs/get-deta
 
 ### No ATC
 
-We should show how to group transactions on [this page](./docs/get-details/atomic-transfers.md) without using the ATC
+[Reference Page](./docs/get-details/atomic-transfers.md)
 
-    MANUAL_ATOMIC_GROUP - Create a couple Payment transactions, Group them,
-    print the group ids and txids, sign them, send them
-    Show how to get _all_ the results back (not just the first txid)
+    MANUAL_ATOMIC_GROUP - 
+        Create a couple Payment transactions, Group them,
+        print the group ids and txids, sign them, send them
+    MANUAL_GROUP_TXIDS - 
+        Show how to get _all_ the results back (not just the first txid)
 
 
 ### With ATC
 
-We should show how to group transactions on [this page](./docs/get-details/atc.md) using the ATC 
+[Reference Page](./docs/get-details/atc.md)
 
-    Create a contract object
-    Create a couple TransactionWithSigners (1 payment, 1 method call using the contract object)
-    Show how you can get the transaction group and print the group ids and txids
-    Execute the group 
-    Show how to get the results (esp for non method calls)
+    ATC_CONTRACT_INIT - Create a contract object
+    ATC_GROUP_TRANSACTION - Create a couple TransactionWithSigners (1 payment, 1 method call using the contract object)
+    ATC_GROUP_TXIDS - Show how you can get the transaction group and print the group ids and txids
+    ATC_RESULTS - Execute the group, Show how to get the results (esp for non method calls)
 
 ## Encoding/Decoding
 

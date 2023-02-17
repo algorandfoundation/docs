@@ -50,8 +50,15 @@ sources: list[ExampleSource] = [
 ]
 
 
-# Example Name => source string
-SDKExamples = dict[str, list[str]]
+@dataclass
+class Example:
+    path: str
+    line_start: int
+    lines: list[str]
+
+
+# Example Name => source lines
+SDKExamples = dict[str, Example]
 
 
 def find_examples_in_sdk(dir: str, prefix: str, lang: str) -> SDKExamples:
@@ -70,18 +77,34 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str) -> SDKExamples:
                     continue
 
                 lines = content.splitlines()
-                for line in lines:
+                for lno, line in enumerate(lines):
                     if prefix in line:
-                        name_to_src[line.strip(prefix)] = [
-                            "```" + lang,
-                            *local_example,
-                            "```",
-                        ]
+                        name = line.strip(prefix)
+                        name_to_src[name] = Example(
+                            path=path,
+                            line_start=lno - len(local_example),
+                            lines=[
+                                "```" + lang,
+                                *local_example,
+                                "```",
+                            ],
+                        )
                         local_example = []
                     else:
                         local_example.append(line)
 
     return name_to_src
+
+
+@dataclass
+class DocExampleMatch:
+    name: str
+    line_start: int
+    line_stop: int
+
+    @staticmethod
+    def empty() -> "DocExampleMatch":
+        return DocExampleMatch("", 0, 0)
 
 
 def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
@@ -92,28 +115,49 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
         if not os.path.isfile(path):
             # recurse through directories
             replace_matches_in_docs(path, prefix, examples)
-        elif path[-2:] == "md":
-            start, stop = 0, 0
-            example_name = ""
-            page_lines = []
-            with open(path, "r") as f:
-                content = f.read()
-                if prefix not in content:
+            continue
+        elif path[-2:] != "md":
+            continue
+
+        page_lines: list[str] = []
+        matches: list[DocExampleMatch] = []
+        current_match = DocExampleMatch.empty()
+
+        with open(path, "r") as f:
+            content = f.read()
+            if prefix not in content:
+                continue
+
+            page_lines = content.splitlines()
+            for lno, line in enumerate(page_lines):
+                if prefix not in line:
                     continue
 
-                page_lines = content.splitlines()
-                for lno, line in enumerate(page_lines):
-                    if prefix in line:
-                        if example_name == "":
-                            example_name = line.strip(prefix + "->")
-                            start = lno + 1
-                        else:
-                            stop = lno
+                # First time finding seeing this one
+                if current_match.name == "":
+                    current_match.name = line[len(prefix) :].strip("= ->")
+                    current_match.line_start = lno + 1
+                # Second time finding it, add it to matches and wipe current
+                else:
+                    current_match.line_stop = lno
+                    matches.append(current_match)
+                    current_match = DocExampleMatch.empty()
 
-            if start != 0 and stop != 0:
-                page_lines[start:stop] = examples[example_name]
-                with open(path, "w") as f:
-                    f.write("\n".join(page_lines))
+        if len(matches) == 0:
+            continue
+
+        offset = 0
+        for match in matches:
+            page_lines[match.line_start + offset : match.line_stop + offset] = examples[
+                match.name
+            ].lines
+
+            offset += len(examples[match.name].lines) - (
+                match.line_stop - match.line_start
+            )
+
+        with open(path, "w") as f:
+            f.write("\n".join(page_lines))
 
 
 if __name__ == "__main__":
