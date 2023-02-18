@@ -487,7 +487,7 @@ Each storage option’s properties are described below.
     * The amount of local storage is allocated in k/v units, and determined at contract creation. This cannot be edited later. 
     * The opted-in user address is responsible for funding the local storage (by an increase to their minimum balance). 
 * Reading: 
-    * Can be read by any app call that has app x in its foreign apps array and account x in its foreign accounts array. 
+    * Can be read by any app call that has app a in its foreign apps array and account x in its foreign accounts array. 
     * Can be read on-chain using the k/v pairs defined (from off-chain, can be read using goal and the SDKs). 
 * Writing: 
     * Is editable only by app a, but is delete-able by app a or the user x (using a ClearState call, see below). 
