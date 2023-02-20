@@ -353,11 +353,12 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
     <!-- ===GOSDK_ASSET_CREATE=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_CREATE=== -->
     ``` goal
         goal asset create --creator <address> --total 1000 --unitname <unit-name> --asseturl "https://path/to/my/asset/details" --decimals 0   -d data
     ```
+    <!-- ===GOAL_ASSET_CREATE=== -->
 
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
 **See also**
 
@@ -371,6 +372,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 After an asset has been created only the manager, reserve, freeze and clawback accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_CONFIG=== -->
 	``` javascript
     params = await algodclient.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
@@ -407,8 +409,10 @@ After an asset has been created only the manager, reserve, freeze and clawback a
     await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
  
     ```
+    <!-- ===JSSDK_ASSET_CONFIG=== -->
 
 === "Python"
+    <!-- ===PYDK_ASSET_CONFIG=== -->
 	``` python  
     # CHANGE MANAGER
     # The current manager(Account 2) issues an asset configuration transaction that assigns Account 1 as the new manager.
@@ -443,8 +447,10 @@ After an asset has been created only the manager, reserve, freeze and clawback a
     # Check asset info to view change in management. manager should now be account 1
     print_created_asset(algod_client, accounts[1]['pk'], asset_id)
     ```
+    <!-- ===PYDK_ASSET_CONFIG=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_CONFIG=== -->
     ``` java  
         // CHANGE MANAGER
         // Change Asset Configuration:
@@ -487,8 +493,11 @@ After an asset has been created only the manager, reserve, freeze and clawback a
             return;
         }
     ```
+    <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
+
+    <!-- ===GOSDK_ASSET_CONFIG=== -->
 	``` go  
     // CHANGE MANAGER
 	// Change Asset Manager from Account 2 to Account 1
@@ -536,13 +545,15 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	printCreatedAsset(assetID, pks[1], algodClient)
 
     ```
+    <!-- ===GOSDK_ASSET_CONFIG=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_CONFIG=== -->
 	``` goal  
     goal asset config  --manager <address> --new-reserve <address> --assetid <asset-id> -d data 
     ```
+    <!-- ===GOAL_ASSET_CONFIG=== -->
 
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
 **See also**
 
@@ -556,6 +567,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 Before an account can receive a specific asset it must opt-in to receive it. An opt-in transaction places an asset holding of 0 into the account and increases its minimum balance by 100,000 microAlgos. An opt-in transaction is simply an asset transfer with an amount of 0, both to and from the account opting in. The following code illustrates this transaction.
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_OPTIN=== -->
 	``` javascript  
     // Opting in to transact with the new asset
     // Allow accounts that want recieve the new asset
@@ -606,8 +618,10 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
     await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
     ```
+    <!-- ===JSSDK_ASSET_OPTIN=== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_OPTIN=== -->
 	``` python  
     # OPT-IN
     # Check if asset_id is in account 3's asset holdings prior
@@ -648,8 +662,10 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
         # This should now show a holding with a balance of 0.
         print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
     ```
+    <!-- ===PYSDK_ASSET_OPTIN=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_OPTIN=== -->
 	``` java  
         // OPT-IN
         // Opt in to Receiving the Asset
@@ -688,8 +704,10 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
             return;
         }
     ```
+    <!-- ===JAVASDK_ASSET_OPTIN=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_OPTIN=== -->
 	``` go  
 	// OPT-IN
 	// Account 3 opts in to receive latinum
@@ -730,13 +748,14 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	fmt.Printf("Account 3: %s\n", pks[3])
 	printAssetHolding(assetID, pks[3], algodClient)
     ```
+    <!-- ===GOSDK_ASSET_OPTIN=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_OPTIN=== -->
 	``` goal  
     goal asset send -a 0 --asset <asset-name>  -f <opt-in-account> -t <opt-in-account> --creator <asset-creator>  -d data
     ```
-
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
+    <!-- ===GOAL_ASSET_OPTIN=== -->
 
 **See also**
 
@@ -749,6 +768,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 Assets can be transferred between accounts that have opted-in to receiving the asset. These are analogous to standard payment transactions but for Algorand Standard Assets. 
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_XFER=== -->
 	``` javascript  
     // Transfer New Asset:
     // Now that account3 can recieve the new tokens 
@@ -794,8 +814,10 @@ Assets can be transferred between accounts that have opted-in to receiving the a
     await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
     ```
+    <!-- ===JSSDK_ASSET_XFER=== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_XFER=== -->
 	``` python  
     # TRANSFER ASSET
     # transfer asset of 10 from account 1 to account 3
@@ -823,8 +845,10 @@ Assets can be transferred between accounts that have opted-in to receiving the a
     # The balance should now be 10.
     print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
     ```
+    <!-- ===PYSDK_ASSET_XFER=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_XFER=== -->
 	``` java  
         // TRANSFER ASSET
         // Transfer the Asset:
@@ -868,8 +892,10 @@ Assets can be transferred between accounts that have opted-in to receiving the a
             return;
         }
     ```
+    <!-- ===JAVASDK_ASSET_XFER=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_XFER=== -->
 	``` go  
 	// TRANSFER ASSET
 	
@@ -919,11 +945,14 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	fmt.Printf("Account 1: %s\n", pks[1])
 	printAssetHolding(assetID, pks[1], algodClient)
     ```
+    <!-- ===GOSDK_ASSET_XFER=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_XFER=== -->
 	``` goal  
     goal asset send -a <asset-amount> --asset <asset-name> -f <asset-sender> -t <asset-receiver> --creator <asset-creator> -d data
     ```
+    <!-- ===GOAL_ASSET_XFER=== -->
 
 [See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
@@ -938,6 +967,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 Freezing or unfreezing an asset for an account requires a transaction that is signed by the freeze account. The code below illustrates the freeze transaction.
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_FREEZE=== -->
 	``` javascript  
     // freeze asset
     // The asset was created and configured to allow freezing an account
@@ -984,8 +1014,10 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 
 
     ```
+    <!-- ===JSSDK_ASSET_FREEZE=== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_FREEZE=== -->
 	``` python  
     # FREEZE ASSET
     params = algod_client.suggested_params()
@@ -1014,8 +1046,10 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
     # The balance should now be 10 with frozen set to true.
     print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
     ```
+    <!-- ===PYSDK_ASSET_FREEZE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_FREEZE=== -->
 	``` java  
         // FREEZE
         // Freeze the Asset:
@@ -1056,8 +1090,10 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
             return;
         }
     ```
+    <!-- ===JAVASDK_ASSET_FREEZE=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_FREEZE=== -->
 	``` go  
 	// FREEZE ASSET
 	// The freeze address (Account 2) Freeze's asset for Account 3.
@@ -1101,13 +1137,14 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	fmt.Printf("Account 3: %s\n", pks[3])
 	printAssetHolding(assetID, pks[3], algodClient)
     ```
+    <!-- ===GOSDK_ASSET_FREEZE=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_FREEZE=== -->
 	``` goal  
     goal asset freeze --freezer <asset-freeze-account> --freeze=true --account <account-to-freeze> --creator <asset-creator> --asset <asset-name> -d data
     ```
-
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
+    <!-- ===GOAL_ASSET_FREEZE=== -->
 
 **See also**
 
@@ -1120,6 +1157,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires specifying an asset sender (the revoke target account) and an asset receiver (the account to transfer the funds back to). The code below illustrates the clawback transaction.
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_CLAWBACK== -->
 	``` javascript  
     // Revoke an Asset:
     // The asset was also created with the ability for it to be revoked by 
@@ -1163,8 +1201,10 @@ Revoking an asset for an account removes a specific number of the asset from the
     await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
     ```
+    <!-- ===JSSDK_ASSET_CLAWBACK== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_CLAWBACK== -->
 	``` python
 
     # REVOKE ASSET
@@ -1201,8 +1241,10 @@ Revoking an asset for an account removes a specific number of the asset from the
     print("Account 1")
     print_asset_holding(algod_client, accounts[1]['pk'], asset_id)
     ```
+    <!-- ===PYSDK_ASSET_CLAWBACK== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_CLAWBACK== -->
 	``` java  
         // REVOKE (or clawback)
         // Revoke the asset:
@@ -1248,8 +1290,10 @@ Revoking an asset for an account removes a specific number of the asset from the
             return;
         }
     ```
+    <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 	``` go  
 	// REVOKE ASSET
 	// Revoke an Asset
@@ -1299,13 +1343,14 @@ Revoking an asset for an account removes a specific number of the asset from the
 	fmt.Printf("Account 1: %s\n", pks[1])
 	printAssetHolding(assetID, pks[1], algodClient)
     ```
+    <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_CLAWBACK=== -->
 	``` goal  
     goal asset send -a <amount-to-revoke> --asset <asset-name> -f <address-of-revoke-target> -t <address-to-send-assets-to> --clawback <clawback-address> --creator <creator-address> -d data
     ```
-
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
+    <!-- ===GOAL_ASSET_CLAWBACK=== -->
 
 **See also**
 
@@ -1318,6 +1363,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 Created assets can be destroyed only by the asset manager account. All of the assets must be owned by the creator of the asset before the asset can be deleted. 
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_DELETE=== -->
 	``` javascript  
     // Destroy an Asset:
     // All of the created assets should now be back in the creators
@@ -1363,8 +1409,10 @@ Created assets can be destroyed only by the asset manager account. All of the as
     await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);  
 
     ```
+    <!-- ===JSSDK_ASSET_DELETE=== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_DELETE=== -->
 	``` python
 
         # DESTROY ASSET
@@ -1406,8 +1454,10 @@ Created assets can be destroyed only by the asset manager account. All of the as
             print(e)    
 
     ```
+    <!-- ===PYSDK_ASSET_DELETE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_DELETE=== -->
 	``` java  
         // DESTROY
         // Destroy the Asset:
@@ -1452,8 +1502,10 @@ Created assets can be destroyed only by the asset manager account. All of the as
             return;
         }
     ```
+    <!-- ===JAVASDK_ASSET_DELETE=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_DELETE=== -->
 	``` go  
 	// DESTROY ASSET
 	// Destroy the asset
@@ -1499,13 +1551,15 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	printCreatedAsset(assetID, pks[1], algodClient)
 	printAssetHolding(assetID, pks[1], algodClient)
     ```
+    <!-- ===GOSDK_ASSET_DELETE=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_DELETE=== -->
 	``` goal  
     goal asset destroy --creator <creator-address> --manager <asset-manager-address> --asset <asset-name> -d data 
     ```
+    <!-- ===GOAL_ASSET_DELETE=== -->
 
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
 **See also**
 
@@ -1518,6 +1572,7 @@ Retrieve an asset's configuration information from the network using the SDKs or
     The code below illustrates getting asset information without the Indexer. If you have the Indexer installed use the Indexer API to [search for asset](../../rest-apis/indexer/#search-assets) information.
 
 === "JavaScript"
+    <!-- ===JSSDK_ASSET_INFO=== -->
 	``` javascript
     // Function used to print created asset for account and assetid
     const printCreatedAsset = async function (algodclient, account, assetid) {
@@ -1551,8 +1606,10 @@ Retrieve an asset's configuration information from the network using the SDKs or
         await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
 
     ```
+    <!-- ===JSSDK_ASSET_INFO=== -->
 
 === "Python"
+    <!-- ===PYSDK_ASSET_INFO=== -->
 	```python
     #   note: if you have an indexer instance available it may be easier to just search accounts for an asset
     #   Utility function used to print created asset for account and assetid
@@ -1588,8 +1645,10 @@ Retrieve an asset's configuration information from the network using the SDKs or
         print_created_asset(algod_client, accounts[1]['pk'], asset_id)
         print_asset_holding(algod_client, accounts[1]['pk'], asset_id)
     ```
+    <!-- ===PYSDK_ASSET_INFO=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ASSET_INFO=== -->
 	```java
         //note: if you have an indexer instance available it may be easier to just search accounts for an asset
         // utility function to print created asset
@@ -1641,8 +1700,10 @@ Retrieve an asset's configuration information from the network using the SDKs or
         printCreatedAsset(acct1, assetID);
         printAssetHolding(acct1, assetID);
     ```
+    <!-- ===JAVASDK_ASSET_INFO=== -->
 
 === "Go"
+    <!-- ===GOSDK_ASSET_INFO=== -->
 	```go
         // note: if you have an indexer instance available it is easier to just search accounts for an asset
         // printAssetHolding utility to print asset holding for account
@@ -1680,8 +1741,10 @@ Retrieve an asset's configuration information from the network using the SDKs or
         printCreatedAsset(assetID, pks[1], algodClient)
         printAssetHolding(assetID, pks[1], algodClient)    
     ```
+    <!-- ===GOSDK_ASSET_INFO=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_INFO=== -->
 	``` goal  
     goal asset info --creator <creator-address> --asset unitname  -d ~/node/data -w testwall
     Asset ID:         <created-asset-id>
@@ -1698,6 +1761,4 @@ Retrieve an asset's configuration information from the network using the SDKs or
     Freeze address:   <freeze-address>
     Clawback address: <clawback-address>
     ```
-
-!!! info
-    Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+    <!-- ===GOAL_ASSET_INFO=== -->

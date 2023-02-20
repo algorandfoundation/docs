@@ -13,8 +13,8 @@ Show simple examples of how to use the SDK
 [Reference Page for Java](./docs/sdks/java/index.md) 
 
 
-* GENERATE_ACCOUNT - Generate a new account
-* CREATE_ALGOD_CLIENT - Create Algod client
+* ACCOUNT_GENERATE - Generate a new account
+* ALGOD_CREATE_CLIENT - Create Algod client
 * FETCH_ACCOUNT_INFO - Grab account information
 * SIMPLE_PAYMENT_TRANSACTION_CREATE - Create single Payment transaction
 * SIMPLE_PAYMENT_TRANSACTION_SIGN - Sign single Payment transaction
@@ -30,45 +30,45 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
     
 [Reference page](./docs/get-details/algod.md) (new page)
 
-* CREATE_ALGOD_CLIENT - show how to init client and connect to algod and pass api keys in header
-* USE_ALGOD_CLIENT - fetch some data like suggested params
+* ALGOD_CREATE_CLIENT - show how to init client and connect to algod and pass api keys in header
+* ALGOD_USE_CLIENT - fetch some data like suggested params
 
 ### Indexer Client:
 
 [Reference page](./docs/get-details/indexer.md)
 
-* CREATE_INDEXER_CLIENT - show how to init client and connect to indexer and pass api keys in header
-* USE_INDEXER_CLIENT - show how to get status/transactions 
-* INDEXER_CLIENT_PAGINAGE - show how to paginate through results
+* INDEXER_CREATE_CLIENT - show how to init client and connect to indexer and pass api keys in header
+* INDEXER_USE_CLIENT - show how to get status/transactions 
+* INDEXER_CLIENT_PAGINATE - show how to paginate through results
 
 ### KMD:
 
 [Reference page](./docs/get-details/kmd.md) (new page)
 
-* CREATE_KMD_CLIENT - Show how to init client and connect to kmd
-* USE_KMD_CLIENT - Show how to get a wallet handle and grab accounts using the handle
+* KMD_CREATE_CLIENT - Show how to init client and connect to kmd
+* KMD_USE_CLIENT - Show how to get a wallet handle and grab accounts using the handle
 
 
 ## Accounts
 
 [Reference Page](./docs/get-details/accounts/create.md)
 
-* GENERATE_ACCOUNT - generate a new account with the SDK (mirrors SDK reference page)
-* RECOVER_ACCOUNT_MNEMONIC - Create an account from a known mnemonic and print pubkey/privatekey
-* RECOVER_ACCOUNT_PRIVATE_KEY - Create an account from a known private key and print pubkey/mnemonic
+* ACCOUNT_GENERATE - generate a new account with the SDK (mirrors SDK reference page)
+* ACCOUNT_RECOVER_MNEMONIC - Create an account from a known mnemonic and print pubkey/privatekey
+* ACCOUNT_RECOVER_PRIVATE_KEY - Create an account from a known private key and print pubkey/mnemonic
 
 ## ASAs
 
 [Reference Page](./docs/get-details/asa.md)
 
-* CREATE_ASSET - Create an Asset from acct1 
-* OPTIN_ASSET - Opt acct2 in to the newly created asset
-* XFER_ASSET - Send asset from acct1 to acct2 
-* FREEZE_ASSET - Freeze the asset in acct2 and then unfreeze the asset in acct2 
-* CONFIGURE_ASSET - Reconfigure Asset to remove the freeze address 
-* CLAWBACK_ASSET - Clawback Asset from acct2
-* DELETE_ASSET - Delete the asset
-
+* ASSET_CREATE - Create an Asset from acct1 
+* ASSET_OPTIN - Opt acct2 in to the newly created asset
+* ASSET_XFER - Send asset from acct1 to acct2 
+* ASSET_FREEZE - Freeze the asset in acct2 and then unfreeze the asset in acct2 
+* ASSET_CONFIG - Reconfigure Asset to remove the freeze address 
+* ASSET_CLAWBACK - Clawback Asset from acct2
+* ASSET_DELETE - Delete the asset
+* ASSET_INFO - Show how to query the asset info from algod
 
 ## Atomic Transactions
 
