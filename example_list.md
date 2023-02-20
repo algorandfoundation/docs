@@ -28,7 +28,7 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 ### Algod Client:
     
-[Reference page](./docs/get-details/algod/v2.md)
+[Reference page](./docs/get-details/algod.md) (new page)
 
 * CREATE_ALGOD_CLIENT - show how to init client and connect to algod and pass api keys in header
 * USE_ALGOD_CLIENT - fetch some data like suggested params
@@ -43,10 +43,10 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 ### KMD:
 
-[Reference page](./docs/get-details/kmd.md)
+[Reference page](./docs/get-details/kmd.md) (new page)
 
-    CREATE_KMD_CLIENT - Show how to init client and connect to kmd
-    USE_KMD_CLIENT - Show how to get a wallet handle and grab accounts using the handle
+* CREATE_KMD_CLIENT - Show how to init client and connect to kmd
+* USE_KMD_CLIENT - Show how to get a wallet handle and grab accounts using the handle
 
 
 ## Accounts

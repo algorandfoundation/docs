@@ -8,7 +8,9 @@ arrange:
     - atomic_transfers.md
     - atc.md
     - dapps
+    - algod.md
     - indexer.md
+    - kmd.md
     - walletconnect
     - stateproofs
     - encoding.md

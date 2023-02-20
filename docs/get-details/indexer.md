@@ -1,6 +1,6 @@
 title: Indexer
 
-This guide explains how to search the Algorand Blockchain using the V2 Indexer. This Indexer is no longer part of the Algorand node and requires a separate binary download. See the [Indexer Install Guide](../run-a-node/setup/indexer.md) for instructions on installing and configuring the new Indexer.
+This guide explains how to search the Algorand Blockchain using the Indexer. This Indexer not part of the Algorand node and requires a separate binary download. See the [Indexer Install Guide](../run-a-node/setup/indexer.md) for instructions on installing and configuring the new Indexer.
 
 ![Block Proposal](../imgs/indexerv2.png)
 <center>*Algorand V2 Indexer*</center>
@@ -9,12 +9,12 @@ The primary purpose of this Indexer is to provide a REST API interface of API ca
 
 The Indexer provides a set of REST API calls for searching blockchain Transactions, Accounts, Assets and Blocks. Each of these calls also provides several filter parameters to support refining searches. The latest Algorand native SDKs (Python, JavaScript, Go, and Java) provide similar functionality. These REST calls are based on the Open API specification and are described in the REST SDK reference documentation. 
 
-!!! info
-    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/indexer](https://github.com/algorand/docs/tree/master/examples/indexer) and for [download](https://github.com/algorand/docs/blob/master/examples/indexer/indexer.zip?raw=true) (.zip).
+See the full description of endpoints available in the [indexer docs](../rest-apis/indexer.md).
 
 # SDK client instantiations
 
 === "JavaScript"
+    <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 	```javascript
     const algosdk = require('algosdk');
 
@@ -24,8 +24,10 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 
     const indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
     ```
+    <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Python"
+    <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
     ```python
     import json
     from algosdk.v2client import indexer
@@ -33,8 +35,10 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
     # instantiate indexer client
     myindexer = indexer.IndexerClient(indexer_token="", indexer_address="http://localhost:8980")
     ```
+    <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Java"
+    <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 	```java
     package com.algorand.javatest.indexer;
 
@@ -57,8 +61,10 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
         }
     }
     ```
+    <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
+    <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 	```go
     package main
 
@@ -79,6 +85,7 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
     indexerClient, err := indexer.MakeClient(indexerAddress, indexerToken)
     }
     ```
+    <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
@@ -161,7 +168,6 @@ For example, adding a limit parameter of 5 to the previous call
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTransactionsLimit.js
     (async () => {
         let currencyGreater = 10;
         let limit = 5;
@@ -236,7 +242,6 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTransactionsPaging.js
     let nexttoken = "";
     let numtx = 1;
     // loop until there are no more transactions in the response
@@ -275,7 +280,6 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
     # for the limit (max is 1000  per request)
 
     while (numtx > 0):
-
         response = myindexer.search_transactions(
             min_amount=100000000000000, limit=2, next_page=nexttoken) 
         transactions = response['transactions']
@@ -288,7 +292,6 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
 
 === "Java"
 	```java
-    // /indexer/java/SearchTransactionsPaging.java
     public static void main(String args[]) throws Exception {
         SearchTransactionsPaging ex = new SearchTransactionsPaging();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -392,7 +395,6 @@ Many of the REST calls support getting values at specific rounds. This means tha
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/AccountInfo.js
     (async () => {
         let acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
         let accountInfo = await indexerClient.lookupAccountByID(acct).do();
@@ -405,8 +407,6 @@ Many of the REST calls support getting values at specific rounds. This means tha
 
 === "Python"
 	```python
-    # /indexer/python/account_info.py
-
     response = myindexer.account_info(
         address="7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI")
     print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
@@ -414,7 +414,6 @@ Many of the REST calls support getting values at specific rounds. This means tha
 
 === "Java"
 	```java
-    // /indexer/java/AccountInfo.java
     public static void main(String args[]) throws Exception {
         AccountInfo ex = new AccountInfo();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -441,7 +440,6 @@ If the round parameter is used and set to 50 a balance of 200 would be returned.
 
 === "JavaScript"
 	```javascript
-    // indexer/javascript/AccountInfoBlock.js
     (async () => {
         let acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
         let round = 50;
@@ -456,8 +454,6 @@ If the round parameter is used and set to 50 a balance of 200 would be returned.
 
 === "Python"
 	```python
-    # /indexer/python/account_info_block.py
-
     response = myindexer.account_info(
         address="7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI", block=50)
     print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
@@ -465,7 +461,6 @@ If the round parameter is used and set to 50 a balance of 200 would be returned.
 
 === "Java"
 	```java
-    // /indexer/java/AccountInfoBlock.java
     public static void main(String args[]) throws Exception {
         AccountInfoBlock ex = new AccountInfoBlock();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -522,7 +517,6 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "JavaScript"
 	```javascript
-    // /indexer/python/SearchTransactionsNote.js
     (async () => {
         const enc = new TextEncoder();
         let note = enc.encode("Hello");  
@@ -538,8 +532,6 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "Python"
 	```python
-    # /indexer/python/search_transactions_note.py
-
     import base64
     note_prefix = 'showing prefix'.encode()
 
@@ -552,7 +544,6 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "Java"
 	```java
-    // /indexer/java/SearchTransactionsNote.java
     public static void main(String args[]) throws Exception {
         IndexerClient indexerClientInstance = connectToNetwork();
         Response<TransactionsResponse> resp = indexerClientInstance.searchForTransactions()
@@ -596,46 +587,11 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
     $ curl "localhost:8980/v2/transactions?note-prefix=c2hvd2luZyBwcmVmaXg=" | json_pp
     ```
 
-Results
-``` bash
-{
-   "current-round" : 7087347,
-   "next-token" : "qCFsAAAAAAAAAAAA",
-   "transactions" : [
-      {
-         "note" : "c2hvd2luZyBwcmVmaXggc2VhcmNoZXM=",
-         "round-time" : 1591374973,
-         "intra-round-offset" : 0,
-         "close-rewards" : 0,
-         "id" : "KWLZ4USIJC7P2WFWFA7SKGUDPBF5FOYS7OZ3I6T5ZBBJATRMNWLQ",
-         "tx-type" : "pay",
-         "payment-transaction" : {
-            "receiver" : "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI",
-            "close-amount" : 0,
-            "amount" : 1000000
-         },
-         "confirmed-round" : 7086504,
-         "last-valid" : 7087499,
-         "sender-rewards" : 14650,
-         "fee" : 1000,
-         "closing-amount" : 0,
-         "sender" : "IAMIRIFW3ERXIMR5LWNYHNK7KRTESUGS4QHOPKF2GL3CLHWWGW32XWB7OI",
-         "receiver-rewards" : 0,
-         "first-valid" : 7086499,
-         "signature" : {
-            "sig" : "H8I6wnDdTO+q8N8t0H35GfphOkbaHoJ90gzz8YYX8SV1pUXXXbx0hvU0AT+r8MaJB09FafhQQfkl2HfoII0EBw=="
-         }
-      }
-   ]
-}
-```
-
 # Searching accounts
 The ‘/accounts’ call can be used to search for accounts on the Algorand blockchain. This query provides two main parameters for returning accounts with specific balances. These two calls are `currency-greater-than` and `currency-less-than` which returns all accounts with balances that match the criteria. By default, the currency these parameters look for is the Algo and the values are specified in microAlgos. This behavior can be changed by supplying the `asset-id` parameter which specifies the asset to search accounts for in the ledger. For example to search accounts that have the Tether UDSt token the following command would be used.
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/AccountsAssetID.js
     (async () => {
         let assetIndex = 312769;
         let accountInfo = await indexerClient.searchAccounts()
@@ -649,8 +605,6 @@ The ‘/accounts’ call can be used to search for accounts on the Algorand bloc
 
 === "Python"
 	```python
-    # /indexer/python/accounts_assetid.py
-
     response = myindexer.accounts(
         asset_id=312769)
     print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
@@ -658,7 +612,6 @@ The ‘/accounts’ call can be used to search for accounts on the Algorand bloc
 
 === "Java"
 	```java
-    // /indexer/java/AccountsAssetID.java
     public static void main(String args[]) throws Exception {
         AccountsAssetID ex = new AccountsAssetID();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -699,7 +652,6 @@ This search can be further refined to search for accounts that have a balance gr
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/AccountsAssetIDMinBalance.js
     (async () => {
         let assetIndex = 312769;
         let currencyGreater = 100;
@@ -715,8 +667,6 @@ This search can be further refined to search for accounts that have a balance gr
 
 === "Python"
 	```python
-    # /indexer/python/accounts_assets_min_balance.py
-
     # gets accounts with a min balance of 100 that have a particular AssetID
     response = myindexer.accounts(
         asset_id=312769, min_balance=100)
@@ -763,27 +713,6 @@ This search can be further refined to search for accounts that have a balance gr
 	```bash
     $ curl localhost:8980/v2/accounts?asset-id=312769\&currency-greater-than=100
     ```
-
-Results
-``` bash
-{
-   "accounts" : [
-      {
-         "rewards" : 0,
-         "reward-base" : 101609,
-         "amount" : 3578058672,
-         "status" : "Offline",
-         "amount-without-pending-rewards" : 3496490000,
-         "pending-rewards" : 81568672,
-         "address" : "AAABLBTPDNMMT7VXHGTYLWY6WA5CXG7SSWSF5KXN6P7SRPJESNL6BTB5MY",
-         "round" : 7069819
-      },
-.
-.
-   ],
-   "current-round" : 7069819
-}
-```
 
 This call also supports the pagination mechanism described in [Paginated Results](/#paginated-results) using the `next` and `limit` query parameters. This call also supports [Historical Data Searches](#historical-data-searches) if the Indexer is configured for the `/accounts` call.
 
@@ -854,32 +783,6 @@ The `/accounts/{account-id}` can be used to look up ledger data for a specific a
 	``` bash
     $ curl localhost:8980/v2/accounts/TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA | json_pp
     ```
-
-Results
-``` bash
-{
-   "account" : {
-      "round" : 7069909,
-      "amount-without-pending-rewards" : 999000,
-      "address" : "TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA",
-      "pending-rewards" : 0,
-      "rewards" : 0,
-      "reward-base" : 123047,
-      "amount" : 999000,
-      "assets" : [
-         {
-            "creator" : "",
-            "asset-id" : 163650,
-            "is-frozen" : false,
-            "amount" : 1000000
-         }
-      ],
-      "sig-type" : "sig",
-      "status" : "Offline"
-   },
-   "current-round" : 7069909
-}
-```
 
 The ledger data will include the Algo balance and any extra account information such as `created-apps`, `created-assets`, `apps-local-state`, and `assets` by default. This can be excluded using the `exclude` parameter. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
 
@@ -1095,7 +998,6 @@ The range of transactions to be searched can be restricted based on the time by 
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddressTime.js
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let start_time = "2020-06-03T10:00:00-05:00"; 
@@ -1112,8 +1014,6 @@ The range of transactions to be searched can be restricted based on the time by 
 
 === "Python"
 	```python
-    # /indexer/python/search_tx_address_time.py
-
     # get transaction at specific time
     response = myindexer.search_transactions_by_address(
         address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", start_time="2020-06-03T10:00:00-05:00")
@@ -1125,7 +1025,6 @@ The range of transactions to be searched can be restricted based on the time by 
 
 === "Java"
 	```java
-    // /indexer/java/SearchTxAddressTime.java
     public static void main(String args[]) throws Exception {
         SearchTxAddressTime ex = new SearchTxAddressTime();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -1165,46 +1064,11 @@ The range of transactions to be searched can be restricted based on the time by 
     $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?after-time=2020-06-03T10:00:00-05:00|json_pp
     ```
 
-Results
-``` bash
-{
-   "transactions" : [
-      {
-         "closing-amount" : 0,
-         "intra-round-offset" : 0,
-         "round-time" : 1591209213,
-         "id" : "QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA",
-         "sender-rewards" : 0,
-         "close-rewards" : 0,
-         "signature" : {
-            "sig" : "CUogpD2S7LErOsD8BLRMEUMzKsbrSohkCJYv/7+IeqQfo6T+oClTn0zU4hc8AKSlzm7k9d6qsPP2t53i55NfAw=="
-         },
-         "first-valid" : 7048875,
-         "sender" : "RL6VDLXCN5G7N2GRTS7YLVDSFT4PVBBUOVTVS7T26OQ5MLXYQKRMI5ADXY",
-         "fee" : 1000,
-         "last-valid" : 7049875,
-         "tx-type" : "axfer",
-         "confirmed-round" : 7048877,
-         "receiver-rewards" : 0,
-         "asset-transfer-transaction" : {
-            "amount" : 0,
-            "receiver" : "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4",
-            "close-to" : "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4",
-            "close-amount" : 0,
-            "asset-id" : 312769
-         }
-      }
-   ],
-   "current-round" : 7085397
-} 
-```
-
 ## Round range
 Transaction searches can also be restricted to round ranges using the `min-round` and `max-round` parameters. 
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddressBlockRange.js
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let min_round = 7048876;
@@ -1222,8 +1086,6 @@ Transaction searches can also be restricted to round ranges using the `min-round
 
 === "Python"
 	```python
-    # /indexer/python/search_tx_address_block_range.py
-
     response = myindexer.search_transactions_by_address(
         address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", min_round=7048876, max_round=7048878)
 
@@ -1233,7 +1095,6 @@ Transaction searches can also be restricted to round ranges using the `min-round
 
 === "Java"
 	```java
-    // /indexer/java/SearchTxAddressBlockRange.java
     public static void main(String args[]) throws Exception {
         SearchTxAddressBlockRange ex = new SearchTxAddressBlockRange();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -1279,7 +1140,6 @@ In addition, you can specify a specific round by using the round parameter.
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddressBlock.js
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let round = 7048877;
@@ -1296,8 +1156,6 @@ In addition, you can specify a specific round by using the round parameter.
 
 === "Python"
 	```python
-    # /indexer/python/search_tx_address_block.py
-
     response = myindexer.search_transactions_by_address(
         address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", block=7048877)
 
@@ -1352,7 +1210,6 @@ Searching for a specific transaction can be achieved by supplying the transactio
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddressTxId.js
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let txid = "QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA"; 
@@ -1369,8 +1226,6 @@ Searching for a specific transaction can be achieved by supplying the transactio
 
 === "Python"
 	```python
-    # /indexer/python/search_tx_address_txId.py
-
     response = myindexer.search_transactions_by_address(
         address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4",
         txid="QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA")
@@ -1381,7 +1236,6 @@ Searching for a specific transaction can be achieved by supplying the transactio
 
 === "Java"
 	```java
-    // /indexer/java/SearchTxAddressTxId.java
     public static void main(String args[]) throws Exception {
         SearchTxAddressTxId ex = new SearchTxAddressTxId();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -1425,7 +1279,6 @@ You can also search for specific transaction types that are described in the [tr
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddresstxntype.js
     (async () => {
         let address = "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU";
         let txn_type = "acfg"; 
@@ -1442,8 +1295,6 @@ You can also search for specific transaction types that are described in the [tr
 
 === "Python"
 	```python
-    # /indexer/python/search_tx_address_txntype.py
-
     response = myindexer.search_transactions_by_address(
         address="SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
         txn_type="acfg")
@@ -1454,7 +1305,6 @@ You can also search for specific transaction types that are described in the [tr
 
 === "Java"
 	```java
-    // /indexer/java/SearchTxAddresstxntype.java
     public static void main(String args[]) throws Exception {
         SearchTxAddresstxntype ex = new SearchTxAddresstxntype();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -1493,57 +1343,12 @@ You can also search for specific transaction types that are described in the [tr
     $ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?tx-type=acfg" | json_pp
     ```
 
-Results
-``` bash
-{
-   "current-round" : 7086205,
-   "transactions" : [
-      {
-         "last-valid" : 7087123,
-         "close-rewards" : 0,
-         "asset-config-transaction" : {
-            "params" : {
-               "unit-name" : "HiWorld",
-               "reserve" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-               "manager" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-               "total" : 1000000,
-               "url" : "https://bit.ly/374zKN2",
-               "creator" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-               "clawback" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-               "default-frozen" : false,
-               "name" : "DevDocsCoin",
-               "decimals" : 0,
-               "freeze" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU"
-            },
-            "asset-id" : 0
-         },
-         "signature" : {
-            "sig" : "uH2LhX3v5OFD+KQ61GZS2COlAgM55o2IKpfFox0ZEC079CyT3dxKfYEAhD2yTQsRV2bn83Ou7tNfFQDjWE+CAQ=="
-         },
-         "confirmed-round" : 7086124,
-         "closing-amount" : 0,
-         "id" : "L3W6Y6VUNEENZWUD4BSBFFWVQS6OEXMKKVJYE2MG7G27V647VILA",
-         "note" : "lhEy6PuICYg=",
-         "intra-round-offset" : 1,
-         "sender-rewards" : 0,
-         "tx-type" : "acfg",
-         "created-asset-index" : 2044572,
-         "first-valid" : 7086123,
-         "receiver-rewards" : 0,
-         "fee" : 1000,
-         "round-time" : 1591373291,
-         "sender" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU"
-      }
-   ]
-}
-```
 
 ## Currency
 Searching Transactions that are of certain values can be created by using the `currency-greater-than` and `currency-less-than` parameters. By default, these values are in microAlgos, but if this is used in conjunction with the `asset-id` parameter the currencies will refer to the specific asset. Searching for transactions greater than 50 DevDocsCoin (asset id=2044572) can be done with the following:
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddressAsset.js
     (async () => {
         let address = "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU";
         let asset_id = 2044572;
@@ -1563,8 +1368,6 @@ Searching Transactions that are of certain values can be created by using the `c
 
 === "Python"
 	```python
-    # /indexer/python/accounts_assets_min_balance.py
-
     # gets assets with a min balance of 50 for AssetID
     response = myindexer.asset_balances(
             address="SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",asset_id=2044572, min_balance=50)
@@ -1574,7 +1377,6 @@ Searching Transactions that are of certain values can be created by using the `c
 
 === "Java"
 	```java
-    // /indexer/java/SearchTxAddressAsset.java
     public static void main(String args[]) throws Exception {
         SearchTxAddressAsset ex = new SearchTxAddressAsset();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -1616,46 +1418,11 @@ Searching Transactions that are of certain values can be created by using the `c
     $ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?asset-id=2044572&currency-greater-than=50" | json_pp
     ```
 
-Results
-``` bash
-{
-   "transactions" : [
-      {
-         "sender" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-         "asset-transfer-transaction" : {
-            "amount" : 100,
-            "asset-id" : 2044572,
-            "close-amount" : 0,
-            "receiver" : "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI"
-         },
-         "tx-type" : "axfer",
-         "confirmed-round" : 7086187,
-         "signature" : {
-            "sig" : "ZTr7MGBt/TIgXBDMFylqwmrzsxTKGhcs/JOpbIdsmuMAVXZy9IDTiQR1pkA6jvqTWdt2kFbJJ+beJoFUyeM5CQ=="
-         },
-         "fee" : 1000,
-         "last-valid" : 7087184,
-         "round-time" : 1591373570,
-         "close-rewards" : 0,
-         "first-valid" : 7086184,
-         "intra-round-offset" : 0,
-         "receiver-rewards" : 0,
-         "closing-amount" : 0,
-         "sender-rewards" : 0,
-         "id" : "GVM44H3RWUE557GT4GEEGNLPL5RQZ62F5FK3N5YDKCOTR26XV64A"
-      }
-   ],
-   "current-round" : 7087524,
-   "next-token" : "ayBsAAAAAAAAAAAA"
-}
-```
-
 ## Signature type
 Transaction searches can also look for specific [signature types](https://developer.algorand.org/docs/reference/transactions/#signed-transaction), which can be standard signatures, multi-signatures, or logic signatures. To search for transactions with a specific signature type use the `sig-type` parameter and specify either `sig`, `msig`, or `lsig` and the parameter values. These are signatures that specifically sign Algorand transactions. The following query will return all transactions that signed with a multi-signature for the specific account.
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTxAddresssigtype.js
     (async () => {
         let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
         let sig_type = "msig"; 
@@ -1673,8 +1440,6 @@ Transaction searches can also look for specific [signature types](https://develo
 
 === "Python"
 	```python
-    # /indexer/python/search_tx_address_sigtype.py
-
     response = myindexer.search_transactions_by_address(
         address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", sig_type="msig")
 
@@ -1684,7 +1449,6 @@ Transaction searches can also look for specific [signature types](https://develo
 
 === "Java"
 	```java
-    // /indexer/java/SearchTxAddresssigtype.java
     public static void main(String args[]) throws Exception {
         SearchTxAddresssigtype ex = new SearchTxAddresssigtype();
         IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
@@ -1732,7 +1496,6 @@ The Indexer provides the `/assets` REST call to search the blockchain for specif
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchAssetName.js
     (async () => {
         let name = "DevDocsCoin";
         let assetInfo = await indexerClient.searchForAssets()
@@ -1746,8 +1509,6 @@ The Indexer provides the `/assets` REST call to search the blockchain for specif
 
 === "Python"
 	```python
-    # /indexer/python/search_assets_name.py
-
     response = myindexer.search_assets(
         name="DevDocsCoin")
     print("Asset Name Info: " + json.dumps(response, indent=2, sort_keys=True))
@@ -1755,7 +1516,6 @@ The Indexer provides the `/assets` REST call to search the blockchain for specif
 
 === "Java"
 	```java
-    // /indexer/java/SearchAssetsName.java
     public static void main(String args[]) throws Exception {
         SearchAssetsName ex = new SearchAssetsName();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -1791,31 +1551,6 @@ The Indexer provides the `/assets` REST call to search the blockchain for specif
     $ curl "localhost:8980/v2/assets?name=DevDocsCoin" | json_pp
     ```
 
-Results
-```bash 
-{
-   "current-round" : 7087643,
-   "assets" : [
-      {
-         "params" : {
-            "name" : "DevDocsCoin",
-            "freeze" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-            "decimals" : 0,
-            "total" : 1000000,
-            "default-frozen" : false,
-            "creator" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-            "manager" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-            "unit-name" : "HiWorld",
-            "reserve" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-            "clawback" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-            "url" : "https://bit.ly/374zKN2"
-         },
-         "index" : 2044572
-      }
-   ]
-}
-```
-
 This call returns a list of assets and the round the results were calculated in. Additionally, the next token is also returned if using [Paginated Results](#paginated-results).
 
 # Getting an asset 
@@ -1823,7 +1558,6 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchAssets.js
     (async () => {
         let assetIndex = 2044572;
         let assetInfo = await indexerClient.searchForAssets()
@@ -1837,8 +1571,6 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "Python"
 	```python
-    # /indexer/python/search_assets.py
-
     response = myindexer.search_assets(
         asset_id=2044572)
 
@@ -1847,7 +1579,6 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "Java"
 	```java
-    // /indexer/java/SearchAssets.java
     public static void main(String args[]) throws Exception {
         SearchAssets ex = new SearchAssets();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -1883,35 +1614,11 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
     $ curl "localhost:8980/v2/assets/2044572" | json_pp
     ```
 
-Results
-``` bash
-{
-   "asset" : {
-      "index" : 2044572,
-      "params" : {
-         "manager" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-         "url" : "https://bit.ly/374zKN2",
-         "reserve" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-         "default-frozen" : false,
-         "freeze" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-         "total" : 1000000,
-         "name" : "DevDocsCoin",
-         "decimals" : 0,
-         "clawback" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-         "creator" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-         "unit-name" : "HiWorld"
-      }
-   },
-   "current-round" : 7088298
-}
-```
-
 # Searching for accounts based on asset 
 The Indexer provides the `/assets/{asset-id}/balances` REST API call to search for accounts that transact in a specific Asset. The call returns a list of balances, with their specific amount, the address holding the asset, and whether the account is frozen. Additionally, the round the results were calculated is returned.
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/AssetsBalances.js
     (async () => {
         let assetIndex = 2044572;
         let assetInfo = await indexerClient.lookupAssetBalances(assetIndex).do();
@@ -1924,8 +1631,6 @@ The Indexer provides the `/assets/{asset-id}/balances` REST API call to search f
 
 === "Python"
 	```python
-    # /indexer/python/assets_balances.py
-
     response = myindexer.asset_balances(
         asset_id=2044572)
     print("Asset Balance: " + json.dumps(response, indent=2, sort_keys=True))
@@ -1933,7 +1638,6 @@ The Indexer provides the `/assets/{asset-id}/balances` REST API call to search f
 
 === "Java"
 	```java
-    // /indexer/java/AssetsBalances.java
     public static void main(String args[]) throws Exception {
         AssetsBalances ex = new AssetsBalances();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -2167,7 +1871,6 @@ The Indexer provides the `/blocks/{round-number}` API call to retrieve specific 
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/BlockInfo.js
     (async () => {
         let block = 50;
         let blockInfo = await indexerClient.lookupBlock(block).do();
@@ -2180,8 +1883,6 @@ The Indexer provides the `/blocks/{round-number}` API call to retrieve specific 
 
 === "Python"
 	```python
-    # /indexer/python/block_info.py
-
     response = myindexer.block_info(
         block=555)
     print("Block Info: " + json.dumps(response, indent=2, sort_keys=True))
@@ -2189,7 +1890,6 @@ The Indexer provides the `/blocks/{round-number}` API call to retrieve specific 
 
 === "Java"
 	```java
-    // /indexer/java/BlockInfo.java
     public static void main(String args[]) throws Exception {
         BlockInfo ex = new BlockInfo();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -2224,38 +1924,6 @@ The Indexer provides the `/blocks/{round-number}` API call to retrieve specific 
     $ curl "localhost:8980/v2/blocks/555" | json_pp
     ```
 
-Results
-``` bash
-{
-   "transactions" : [],
-   "genesis-hash" : "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
-   "genesis-id" : "mainnet-v1.0",
-   "upgrade-state" : {
-      "next-protocol-approvals" : 0,
-      "next-protocol-vote-before" : 0,
-      "current-protocol" : "https://github.com/algorandfoundation/specs/tree/5615adc36bad610c7f165fa2967f4ecfa75125f0",
-      "next-protocol-switch-on" : 0
-   },
-   "timestamp" : 1560225075,
-   "seed" : "TikvdKIdKqotCFyHsVUqA8vY0obbwRdhgv1US1ZJs7Y=",
-   "previous-block-hash" : "Fe6FewPRhbQo4xsFEU/QqBjxnoN00DjYovoXa76Q9Ss=",
-   "rewards" : {
-      "rewards-residue" : 320011132,
-      "rewards-level" : 11,
-      "fee-sink" : "",
-      "rewards-rate" : 20000000,
-      "rewards-pool" : "737777777777777777777777777777777777777777777777777UFEJ2CI",
-      "rewards-calculation-round" : 500000
-   },
-   "transactions-root" : "tGWqr06HVvsHC2hFmu2EhwYBSiMkvIoo5nWxAkUxsLo=",
-   "txn-counter" : 0,
-   "round" : 555,
-   "upgrade-vote" : {
-      "upgrade-approve" : false,
-      "upgrade-delay" : 0
-   }
-}
-```
 
 # Search applications 
 The `/applications` REST method is provided to allow searching all applications on the blockchain.
@@ -2280,43 +1948,6 @@ Parameters described below:
         console.log(e.message);
         console.trace();
     });
-    // Response should look similar to this...
-    //
-    // Response: {
-    //     "applications": [
-    //         {
-    //             "id": 20,
-    //             "params": {
-    //                 "approval-program": "ASABASI=",
-    //                 "clear-state-program": "ASABASI=",
-    //                 "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-    //                 "global-state-schema": {
-    //                     "num-byte-slice": 0,
-    //                     "num-uint": 0
-    //                 },
-    //                 "local-state-schema": {
-    //                     "num-byte-slice": 0,
-    //                     "num-uint": 0
-    //                 }
-    //             }
-    //         },
-    //         {
-    //             "id": 22,
-    //             "params": {
-    //                 "approval-program": null,
-    //                 "clear-state-program": null,
-    //                 "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-    //                 "global-state-schema": {
-    //                     "num-byte-slice": 0,
-    //                     "num-uint": 0
-    //                 },
-    //                 "local-state-schema": {
-    //                     "num-byte-slice": 0,
-    //                     "num-uint": 0
-    //                 }
-    //             }
-    //         },
-    //         ...
     ```
 
 === "Python"
@@ -2324,43 +1955,6 @@ Parameters described below:
     response = myindexer.search_applications()
 
     print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
-
-    # response should look similar to this...
-    # Response Info: {
-    # "applications": [
-    #     {
-    #         "id": 20,
-    #         "params": {
-    #             "approval-program": "ASABASI=",
-    #             "clear-state-program": "ASABASI=",
-    #             "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-    #             "global-state-schema": {
-    #                 "num-byte-slice": 0,
-    #                 "num-uint": 0
-    #             },
-    #             "local-state-schema": {
-    #                 "num-byte-slice": 0,
-    #                 "num-uint": 0
-    #             }
-    #         }
-    #     },
-    #     {
-    #         "id": 22,
-    #         "params": {
-    #             "approval-program": null,
-    #             "clear-state-program": null,
-    #             "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-    #             "global-state-schema": {
-    #                 "num-byte-slice": 0,
-    #                 "num-uint": 0
-    #             },
-    #             "local-state-schema": {
-    #                 "num-byte-slice": 0,
-    #                 "num-uint": 0
-    #             }
-    #         }
-    #     },
-    #     ...
     ```
 
 === "Java"
@@ -2380,121 +1974,17 @@ Parameters described below:
         JSONObject jsonObj = new JSONObject(response.body().toString());
         System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
     }
-    // response should look similar to this...
-    //  Response Info:
-    //  {
-    //   "next-token": "142",
-    //   "current-round": 377,
-    //   "applications": [
-    //     {
-    //       "id": 20,
-    //       "params": {
-    //         "clear-state-program": "ASABASI=",
-    //         "global-state": [],
-    //         "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-    //         "local-state-schema": {
-    //           "num-uint": 0,
-    //           "num-byte-slice": 0
-    //         },
-    //         "approval-program": "ASABASI=",
-    //         "global-state-schema": {
-    //           "num-uint": 0,
-    //           "num-byte-slice": 0
-    //         }
-    //       }
-    //     },
-    //     {
-    //       "id": 22,
-    //       "params": {
-    //         "global-state": [],
-    //         "creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-    //         "local-state-schema": {
-    //           "num-uint": 0,
-    //           "num-byte-slice": 0
-    //         },
-    //         "global-state-schema": {
-    //           "num-uint": 0,
-    //           "num-byte-slice": 0
-    //         }
-    //       }
-    //     },
-    //     ...
     ```
 
 === "Go"
 	```go
         // Search applications
         result, err := indexerClient.SearchForApplications().Do(context.Background())
-
-        // Print the results
-        JSON, err := json.MarshalIndent(result, "", "\t")
-        fmt.Printf(string(JSON) + "\n")
-    // results should look similar to this...
-    // {
-    // 	"applications": [
-    // 		{
-    // 			"id": 20,
-    // 			"params": {
-    // 				"approval-program": "ASABASI=",
-    // 				"clear-state-program": "ASABASI=",
-    // 				"creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-    // 				"global-state-schema": {},
-    // 				"local-state-schema": {}
-    // 			}
-    // 		},
-    // 		{
-    // 			"id": 22,
-    // 			"params": {
-    // 				"creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-    // 				"global-state-schema": {},
-    // 				"local-state-schema": {}
-    // 			}
-    // 		},    
     ```
 
 === "cURL"
 	```bash
     $ curl "localhost:8980/v2/applications" | json_pp
-    // Results
-    "applications" : [
-        {
-            "id" : 20,
-            "params" : {
-                "clear-state-program" : "ASABASI=",
-                "approval-program" : "ASABASI=",
-                "creator" : "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-                "local-state-schema" : {
-                "num-uint" : 0,
-                "num-byte-slice" : 0
-                },
-                "global-state-schema" : {
-                "num-uint" : 0,
-                "num-byte-slice" : 0
-                }
-            }
-        },
-        {
-            "id" : 22,
-            "params" : {
-                "creator" : "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-                "global-state-schema" : {
-                "num-byte-slice" : 0,
-                "num-uint" : 0
-                },
-                "local-state-schema" : {
-                "num-byte-slice" : 0,
-                "num-uint" : 0
-                },
-                "clear-state-program" : null,
-                "approval-program" : null
-            }
-        },
-    ...
-        }
-    ],
-    "current-round" : 377,
-    "next-token" : "142"
-    }
     ```
 
 # Lookup application
@@ -2509,26 +1999,6 @@ The `/applications/{application-id}` REST method is provided to allow searching 
         console.log(e.message);
         console.trace();
     });
-    // Repsonse should look similar to this...
-    // Response: {
-    // "application": {
-    //     "id": 59,
-    //         "params": {
-    //         "approval-program": "AiACAQAmAgNmb28DYmFyIihlQQAIKRJBAANCAAIjQyJD",
-    //             "clear-state-program": "ASABASI=",
-    //                 "creator": "7IROB3J2FTR7LYQA3QOUYSTKCQTSVJK4FTTC77KWSE5NMRATEZXP6TARPA",
-    //                     "global-state-schema": {
-    //             "num-byte-slice": 0,
-    //                 "num-uint": 0
-    //         },
-    //         "local-state-schema": {
-    //             "num-byte-slice": 0,
-    //                 "num-uint": 0
-    //         }
-    //     }
-    // },
-    // "current-round": 377
-    // }
     ```
 
 === "Python"
@@ -2536,27 +2006,6 @@ The `/applications/{application-id}` REST method is provided to allow searching 
     response = myindexer.applications(20)
 
     print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
-
-    # response should look similar to this...
-    # Response Info: {
-    #     "application": {
-    #         "id": 20,
-    #         "params": {
-    #             "approval-program": "ASABASI=",
-    #             "clear-state-program": "ASABASI=",
-    #             "creator": "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-    #             "global-state-schema": {
-    #                 "num-byte-slice": 0,
-    #                 "num-uint": 0
-    #             },
-    #             "local-state-schema": {
-    #                 "num-byte-slice": 0,
-    #                 "num-uint": 0
-    #             }
-    #         }
-    #     },
-    #     "current-round": 377
-    # }
     ```
 
 === "Java"
@@ -2575,47 +2024,6 @@ The `/applications/{application-id}` REST method is provided to allow searching 
         JSONObject jsonObj = new JSONObject(response.body().toString());
         System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json          
     }
-    // response should look like this
-    //  Response Info: {
-    //     "application": {
-    //       "deleted": false,
-    //       "created-at-round": 14412247,
-    //       "id": 15974179,
-    //       "params": {
-    //         "clear-state-program": "AiABASJD",
-    //         "global-state": [
-    //           {
-    //             "value": {
-    //               "bytes": "",
-    //               "type": 2,
-    //               "uint": 200
-    //             },
-    //             "key": "YXNzZXRfY29lZmZpY2llbnQ="
-    //           },
-    //           {
-    //             "value": {
-    //               "bytes": "",
-    //               "type": 2,
-    //               "uint": 13164495
-    //             },
-    //             "key": "YXNzZXRfaWQ="
-    //           },
-    //           ...
-    //         ],
-    //         "creator": "X6K3ER2V3IO2G3XXWSTYFOT6NXFGRXAS3AMZGXAWAFKFC4VZ6S4K4JLOFY",
-    //         "local-state-schema": {
-    //           "num-uint": 1,
-    //           "num-byte-slice": 1
-    //         },
-    //         "approval-program": "AiAFAAUEAYCAgIAQJgwEdm90ZQthZGRfb3B0aW9ucwdDcmVhdG9yBE5hbWUIYXNzZXRfaWQRYXN...",
-    //         "global-state-schema": {
-    //           "num-uint": 10,
-    //           "num-byte-slice": 3
-    //         }
-    //       }
-    //     },
-    //     "current-round": 14694513
-    //   }
     ```
 
 === "Go"
@@ -2627,43 +2035,11 @@ The `/applications/{application-id}` REST method is provided to allow searching 
         // Print the results
         JSON, err := json.MarshalIndent(result, "", "\t")
         fmt.Printf(string(JSON) + "\n")
-    // results should look similar to this...
-    // {
-    // 	"application": {
-    // 		"id": 22,
-    // 		"params": {
-    // 			"creator": "GHFRLVOMKJNTJ4HY3P74ZR4CNE2PB7CYAUAJ6HVAVVDX7ZKEMLJX6AAF4M",
-    // 			"global-state-schema": {},
-    // 			"local-state-schema": {}
-    // 		}
-    // 	},
-    // 	"current-round": 377
-    // }   
     ```
 
 === "cURL"
 	```bash
     $ curl "localhost:8980/v2/applications/20" | json_pp
-    // Results
-    {
-    "application" : {
-        "id" : 20,
-        "params" : {
-            "local-state-schema" : {
-                "num-byte-slice" : 0,
-                "num-uint" : 0
-            },
-            "global-state-schema" : {
-                "num-uint" : 0,
-                "num-byte-slice" : 0
-            },
-            "clear-state-program" : "ASABASI=",
-            "creator" : "DQ5PMCTEBZLM4UJEDSGZLKAV6ZGXRK2C5WYAFC63RSHI54ASQSJHDMMTUM",
-            "approval-program" : "ASABASI="
-        }
-    },
-    "current-round" : 377
-    }
     ```
 
 
