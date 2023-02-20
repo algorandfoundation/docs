@@ -64,7 +64,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
-    <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 	```go
     package main
 
@@ -80,33 +80,102 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
     const indexerToken = ""
 
     func main() {
-
         // instantiate indexer client
-    indexerClient, err := indexer.MakeClient(indexerAddress, indexerToken)
+        indexerClient, err := indexer.MakeClient(indexerAddress, indexerToken)
     }
     ```
-    <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
 
-Before describing each of the available REST APIs, a few specific functions are described that are supported across many of the calls. This includes [Paginated Results](#paginated-results), [Historical Data searches](#historical-data-searches), and [Note Field Searching](#note-field-searching).
+The indexer provides two primary ways to access information:
 
-# Paginated results
-When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below.
+1) [Lookup](#lookup) a single item (a single account, a single transaction, a single block)
+2) Search for items that match a query (transactions for > 100A and between round N and M)
 
-| Search Type  | Maximum number of results per search  |
-| ------------- | ------------- |
-| API Resources Per Account | 1,000 |
-| Transactions Search | 1,000 |
-| Accounts Search | 100 |
-| Assets Search | 100 |
-| Balances Search | 1,000 |
-| Applications Search | 100 |
+# Lookup
 
-These values represent the maximum number of results that will be returned when searching for specific results. For example, the following will return the last 1000 transactions that exceeded 10 microAlgos. 
+When performing a lookup of a single item ...
+
+To get the details of a specific asset the indexer provides the `/assets/{asset-id}` REST call.  This call takes no parameters as the asset id is passed in the URL. This call returns the details of the asset and the round the results were calculated in. 
 
 === "JavaScript"
+    <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
+	```javascript
+    (async () => {
+        let assetIndex = 2044572;
+        let assetInfo = await indexerClient.searchForAssets()
+            .index(assetIndex).do();
+        console.log("Information for Asset: " + JSON.stringify(assetInfo, undefined, 2));
+    })().catch(e => {
+        console.log(e);
+        console.trace();
+    });
+    ```
+    <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
+
+=== "Python"
+    <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
+	```python
+    response = myindexer.search_assets(
+        asset_id=2044572)
+
+    print("Asset Info: " + json.dumps(response, indent=2, sort_keys=True))
+    ```
+    <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
+
+=== "Java"
+    <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
+	```java
+    public static void main(String args[]) throws Exception {
+        SearchAssets ex = new SearchAssets();
+        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
+        Long asset_id = Long.valueOf(12215366);        
+        Response<AssetsResponse> response = indexerClientInstance
+            .searchForAssets()
+            .assetId(asset_id)
+            .execute();
+        if (!response.isSuccessful()) {
+            throw new Exception(response.message());
+        } 
+
+        JSONObject jsonObj = new JSONObject(response.body().toString());
+        System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json            
+    }
+    ```
+    <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
+
+=== "Go"
+    <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
+	```go
+    // query parameters
+    var assetID uint64 = 2044572
+
+    // Query
+    _, result, err := indexerClient.LookupAssetByID(assetID).Do(context.Background())
+
+    // Print the results
+    JSON, err := json.MarshalIndent(result, "", "\t")
+    fmt.Printf(string(JSON) + "\n")
+    ```
+    <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
+
+=== "cURL"
+    <!-- ===CURL_INDEXER_LOOKUP_ASSET=== -->
+	``` bash
+    $ curl "localhost:8980/v2/assets/2044572" 
+    ```
+    <!-- ===CURL_INDEXER_LOOKUP_ASSET=== -->
+
+
+
+# Search
+
+... show search with chained filters
+
+=== "JavaScript"
+    <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```javascript
     (async () => {
         let currencyGreater = 10;
@@ -118,14 +187,18 @@ These values represent the maximum number of results that will be returned when 
         console.trace();
     });
     ```
+    <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Python"
+    <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```python
     response = myindexer.search_transactions(min_amount=10) 
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
+    <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Java"
+    <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```java
     public static void main(String args[]) throws Exception {
         SearchTransactionsMinAmount ex = new SearchTransactionsMinAmount();
@@ -143,8 +216,10 @@ These values represent the maximum number of results that will be returned when 
         System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json        
     }
     ```
+    <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Go"
+    <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```go
     // query parameters
     var minAmount uint64 = 10
@@ -156,91 +231,34 @@ These values represent the maximum number of results that will be returned when 
     result, err := json.MarshalIndent(transactions, "", "\t")
     fmt.Printf(string(JSON) + "\n")
     ```
+    <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "cURL"
+    <!-- ===CURL_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```bash
     $ curl "localhost:8980/v2/transactions?currency-greater-than=10"
     ```
+    <!-- ===CURL_INDEXER_SEARCH_MIN_AMOUNT=== -->
+
+# Pagination
+
+When searching large amounts of blockchain data often the results may be too large to process in one given operation. In fact, the indexer imposes hard limits on the number of results returned for specific searches.  The default limits for these searches are summarized in the table below.
+
+| Search Type  | Maximum number of results per search  |
+| ------------- | ------------- |
+| API Resources Per Account | 1,000 |
+| Transactions Search | 1,000 |
+| Accounts Search | 100 |
+| Assets Search | 100 |
+| Balances Search | 1,000 |
+| Applications Search | 100 |
 
 When trying to find specific transactions, the Indexer supplies a pagination method that allows separating the results into several REST calls to return larger result sets. When used with the limit parameter the results for large data sets can be returned in expected result counts.
 
-For example, adding a limit parameter of 5 to the previous call
+For example, adding a limit parameter of 5 to the previous call will cause only 5 results to be returned in each page. To get the next 5 transactions simply add the next-token as a parameter to the next REST call. The parameter is named `next` and this token is only good for the next 5 results.
 
 === "JavaScript"
-	```javascript
-    (async () => {
-        let currencyGreater = 10;
-        let limit = 5;
-        let transactionInfo = await indexerClient.searchForTransactions()
-            .currencyGreaterThan(currencyGreater)
-            .limit(limit).do();
-        console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_transactions(min_amount=10, limit=5) 
-    print(json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsLimit ex = new SearchTransactionsLimit();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long min_amount = Long.valueOf(10);
-        Long limit = Long.valueOf(2);       
-        Response<TransactionsResponse> response = indexerClientInstance
-                .searchForTransactions()
-                .currencyGreaterThan(min_amount)
-                .limit(limit)
-                .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }   
-        
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json             
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var minAmount uint64 = 10
-    var limit uint64 = 5
-    // Query
-    result, err := indexerClient.SearchForTransactions().CurrencyGreaterThan(minAmount).Limit(limit).Do
-
-    // Print results
-    result, err := json.MarshalIndent(transactions, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	```bash
-    $ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5"
-    ```
-
-Will return the last 5 transactions over 10 microAlgos. In addition, a token will be added to the result list that allows querying the next 5 transactions over 5 microAlgos.
-
-Results showing "next-token"
-```bash
-{
-   "next-token" : "cAoBAAAAAAAAAAAA",
-   "current-round" : 7050272,
-   "transactions" : [
-	.
-	.
-```
-
-To get the next 5 transactions simply add the next-token as a parameter to the next REST call. The parameter is named `next` and this token is only good for the next 5 results.
-
-=== "JavaScript"
+    <!-- ===JSSDK_PAGINAGE_RESULTS=== -->
 	```javascript
     let nexttoken = "";
     let numtx = 1;
@@ -248,7 +266,7 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
     // for the limit(max limit is 1000  per request)    
     (async () => {
         let min_amount = 100000000000000;
-        let limit = 2;
+        let limit = 5;
         while (numtx > 0) {
             // execute code as long as condition is true
             let next_page = nexttoken;
@@ -269,19 +287,19 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
         console.trace();
     });
     ```
+    <!-- ===JSSDK_PAGINAGE_RESULTS=== -->
 
 === "Python"
+    <!-- ===PYSDK_PAGINAGE_RESULTS=== -->
 	```python
-
     nexttoken = ""
     numtx = 1
 
     # loop using next_page to paginate until there are no more transactions in the response
     # for the limit (max is 1000  per request)
-
     while (numtx > 0):
         response = myindexer.search_transactions(
-            min_amount=100000000000000, limit=2, next_page=nexttoken) 
+            min_amount=100000000000000, limit=5, next_page=nexttoken) 
         transactions = response['transactions']
         numtx = len(transactions)
         if (numtx > 0):
@@ -289,8 +307,10 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
             # Pretty Printing JSON string 
             print("Tranastion Info: " + json.dumps(response, indent=2, sort_keys=True))
     ```
+    <!-- ===PYSDK_PAGINAGE_RESULTS=== -->
 
 === "Java"
+    <!-- ===JAVASDK_PAGINAGE_RESULTS=== -->
 	```java
     public static void main(String args[]) throws Exception {
         SearchTransactionsPaging ex = new SearchTransactionsPaging();
@@ -326,10 +346,11 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
         }
     }
     ```
+    <!-- ===JAVASDK_PAGINAGE_RESULTS=== -->
 
 === "Go"
+    <!-- ===GOSDK_PAGINAGE_RESULTS=== -->
 	```go
-    // query parameters
     var nextToken = ""
     var numTx = 1
     var numPages = 1
@@ -359,14 +380,26 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
         numPages++
     }
     }
-
     ```
+    <!-- ===GOSDK_PAGINAGE_RESULTS=== -->
 
 === "cURL"
+    <!-- ===CURL_PAGINAGE_RESULTS=== -->
 	```bash
+    $ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5"
     # note the "next-token" field in the most resent results and supply the value to the "next" parameter
-    $ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5&next=cAoBAAAAAAAAAAAA"
+    $ curl "localhost:8979/v2/transactions?currency-greater-than=10&limit=5&next=cAoBAAAAAAAAAAAA"
     ```
+    <!-- ===CURL_PAGINAGE_RESULTS=== -->
+
+Results showing "next-token"
+```json
+{
+   "next-token" : "cAoBAAAAAAAAAAAA",
+   "current-round" : 7050272,
+   "transactions" : []
+}
+```
 
 A new next token will be returned to get the next five. This token acts as a marker in the current result set and allows the next call to pick up where the last search ended. We note that the 'limit' parameter can also be used to specify a larger (rather than smaller) results set than the defaults above. These limits are shown in the following table and are per call, not the total result set.
 
@@ -390,116 +423,6 @@ The following REST calls support paginated results.
 * `/assets/{asset-id}/transactions` - Search for Transactions with a specific Asset.
 * `/transactions` - Search all transactions
 
-# Historical data searches 
-Many of the REST calls support getting values at specific rounds. This means that the Indexer will do calculations that determine what specific values were at a specific round. For example, if account A starts at round 50 with 200 ARCC tokens and spends 50 of those tokens in round 75, the following command would return a balance of 150
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
-        let accountInfo = await indexerClient.lookupAccountByID(acct).do();
-        console.log("Information for Account: " + JSON.stringify(accountInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.account_info(
-        address="7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI")
-    print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        AccountInfo ex = new AccountInfo();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
-        Response<AccountResponse> response = indexerClientInstance
-            .lookupAccountByID(account)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Account Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-
-=== "cURL"
-	```bash
-    $ curl localhost:8980/v2/accounts/7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI
-    ```
-
-If the round parameter is used and set to 50 a balance of 200 would be returned.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
-        let round = 50;
-        let accountInfo = await indexerClient.lookupAccountByID(acct)
-            .round(round).do();
-        console.log("Information for Account at block: " + JSON.stringify(accountInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.account_info(
-        address="7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI", block=50)
-    print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        AccountInfoBlock ex = new AccountInfoBlock();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Address account = new Address("ZYATCNPXNCPI4RE7VPKH7OBLFDFWJGNWY2RPE35DH5IPZFHWBWRL7TS3LU");
-        Long round = Long.valueOf(14653225);
-        Response<AccountResponse>  response = indexerClientInstance
-            .lookupAccountByID(account)
-            .round(round)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Account Info for block: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // Parameters 
-    var round uint64 = 50
-    var account = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI"
-
-    // Lookup block
-    _, result, err := indexerClient.LookupAccountByID(account).Round(round).Do(context.Background())
-
-    // Print results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	```bash
-    $ curl localhost:8980/v2/accounts/7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI?round=50
-    ```
-
-The round parameter results are inclusive of all transactions within the given round. This parameter is only available on the accounts REST calls. This can be very computationally expensive so for performance reasons, it is by default disabled on the `/accounts` REST call but can be enabled by using the `--dev-mode` flag when starting the Indexer.
-
 # Note field searching
 Every transaction has the ability to add up to a 1kb note in the note field. Several of the REST APIs provide the ability to search for a prefix that is present in the note field, meaning that the note starts with a specific string. This can be a very powerful way to quickly locate transactions that are specific to an application. The REST calls that support prefix searching are the following.
 
@@ -516,6 +439,7 @@ $ python3 -c "import base64;print(base64.b64encode('showing prefix'.encode()))"
 This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can then be passed to the search. To search all transactions use the following command.
 
 === "JavaScript"
+    <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 	```javascript
     (async () => {
         const enc = new TextEncoder();
@@ -529,8 +453,10 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
         console.trace();
     });
     ```
+    <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Python"
+    <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 	```python
     import base64
     note_prefix = 'showing prefix'.encode()
@@ -541,8 +467,10 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
     print("note_prefix = " +
         json.dumps(response, indent=2, sort_keys=True))
     ```
+    <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Java"
+    <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 	```java
     public static void main(String args[]) throws Exception {
         IndexerClient indexerClientInstance = connectToNetwork();
@@ -566,8 +494,10 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
         }
     }
     ```
+    <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Go"
+    <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 	```go
     // Parameters
     var notePrefix = "showing prefix"
@@ -580,1493 +510,12 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
     fmt.Printf(string(JSON) + "\n")
 
     ```
+    <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "cURL"
+    <!-- ===CURL_INDEXER_PREFIX_SEARCH=== -->
 	```bash
     python3 -c "import base64;print(base64.b64encode('showing prefix'.encode()))"
     $ curl "localhost:8980/v2/transactions?note-prefix=c2hvd2luZyBwcmVmaXg=" | json_pp
     ```
-
-# Searching accounts
-The ‘/accounts’ call can be used to search for accounts on the Algorand blockchain. This query provides two main parameters for returning accounts with specific balances. These two calls are `currency-greater-than` and `currency-less-than` which returns all accounts with balances that match the criteria. By default, the currency these parameters look for is the Algo and the values are specified in microAlgos. This behavior can be changed by supplying the `asset-id` parameter which specifies the asset to search accounts for in the ledger. For example to search accounts that have the Tether UDSt token the following command would be used.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let assetIndex = 312769;
-        let accountInfo = await indexerClient.searchAccounts()
-            .assetID(assetIndex).do();
-        console.log("Information for account info for Asset: " + JSON.stringify(accountInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.accounts(
-        asset_id=312769)
-    print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        AccountsAssetID ex = new AccountsAssetID();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(408947);
-        Response<AccountsResponse> response = indexerClientInstance
-            .searchForAccounts()
-            .assetId(asset_id)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Pretty Print of Account for Asset: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetId uint64 = 312769
-    var minBalance uint64 = 100
-
-    // Lookup accounts with minimum balance of asset
-    result, err := indexerClient.LookupAssetBalances(assetId).CurrencyGreaterThan(minBalance).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	```bash
-    $ curl localhost:8980/v2/accounts?asset-id=312769
-    ```
-
-This search can be further refined to search for accounts that have a balance greater than 100 USDt by using the following query.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let assetIndex = 312769;
-        let currencyGreater = 100;
-        let accountInfo = await indexerClient.searchAccounts()
-            .assetID(assetIndex)
-            .currencyGreaterThan(currencyGreater).do();
-        console.log("Information for Account Info for Asset: " + JSON.stringify(accountInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    # gets accounts with a min balance of 100 that have a particular AssetID
-    response = myindexer.accounts(
-        asset_id=312769, min_balance=100)
-    print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    // /indexer/java/AccountsAssetIDMinBalance.java
-    public static void main(String args[]) throws Exception {
-        AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(408947);
-        Long currencyGreaterThan = Long.valueOf(3007326000L);
-        // searches for asset greater than currencyGreaterThan
-        Response<AccountsResponse> response = indexerClientInstance.searchForAccounts()
-                .assetId(asset_id)
-                .currencyGreaterThan(currencyGreaterThan)
-                .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Account Info for Asset Min Balance: " + jsonObj.toString(2)); // pretty print json  
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetId uint64 = 312769
-    var minBalance uint64 = 100
-
-    // Lookup accounts with minimum balance of asset
-    result, err := indexerClient.LookupAssetBalances(assetId).CurrencyGreaterThan(minBalance).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	```bash
-    $ curl localhost:8980/v2/accounts?asset-id=312769\&currency-greater-than=100
-    ```
-
-This call also supports the pagination mechanism described in [Paginated Results](/#paginated-results) using the `next` and `limit` query parameters. This call also supports [Historical Data Searches](#historical-data-searches) if the Indexer is configured for the `/accounts` call.
-
-This call returns a list of accounts with associated data, the round number the results were calculated for and optionally the `next-token` value if you are using pagination.
-
-# Getting an account
-The `/accounts/{account-id}` can be used to look up ledger data for a specific account.
-
-!!! note
-    You may receive a 400 error if the account being requested has more than the indexer's `MaxAPIResourcesPerAccount` value. This is set at 1,000 by default, meaning if the account has opted in to 800 assets and **over** 200 applications, it may return a 400 error. You can use the `exclude` parameter with the following values to reduce the number of resources being returned (`all`, `assets`, `created-assets`, `apps-local-state`, `created-apps`). Alternatively you can use the dedicated endpoints to retrieve all account [assets](#lookup-assets-for-a-specific-account)/[applications](#lookup-applications-local-state-for-a-specific-account) and paginate the results.
-
-=== "JavaScript"
-	```javascript
-    // /indexer/javascript/AccountInfo.js
-    (async () => {
-        let acct = "7WENHRCKEAZHD37QMB5T7I2KWU7IZGMCC3EVAO7TQADV7V5APXOKUBILCI";
-        let accountInfo = await indexerClient.lookupAccountByID(acct).do();
-        console.log("Information for Account: " + JSON.stringify(accountInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    # /indexer/python/account_info.py
-
-    # gets account
-    response = myindexer.account_info(
-        address="TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA")
-    print("Account Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    // /indexer/java/AccountInfo.java
-    public static void main(String args[]) throws Exception {
-        AccountInfo ex = new AccountInfo();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
-        Response<AccountResponse> response = indexerClientInstance
-            .lookupAccountByID(account)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Account Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var accountID = "TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA"
-
-    // Lookup account
-    _, result, err := indexerClient.LookupAccountByID(accountID).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl localhost:8980/v2/accounts/TDO7JWA77FH3T2HP5ZOZWFKUQDQEAPD25HDKDVEAAWQKBWTMNMYRXOOYGA | json_pp
-    ```
-
-The ledger data will include the Algo balance and any extra account information such as `created-apps`, `created-assets`, `apps-local-state`, and `assets` by default. This can be excluded using the `exclude` parameter. This call supports [Historical Data Searches](#historical-data-searches) with the `round` parameter which will return ledger data for the account at a specific round.
-
-# Lookup applications created by a specific account
-The `/accounts/{account-id}/created-apps` REST call allows for searching an account for all the applications it has created.
-
-=== "JavaScript"
-    ```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let response = await indexerClient.lookupAccountCreatedApplications(address).do();
-        console.log(JSON.stringify(response, undefined, 2));
-    })().catch(e => {
-        console.error(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
-
-    response = myindexer.lookup_account_application_by_creator(address)
-
-    print(json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-    ```java
-    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-    Response<TransactionResponse> response = indexerClientInstance
-        .lookupAccountCreatedApplications(account)
-        .execute();
-    if (!resonse.isSuccessful()) {
-        throw new Exception(response.message());
-    }
-    System.out.println(response.body().toString());
-    ```
-
-=== "Go"
-    ```go
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    result, err := indexerClient.LookupAccountCreatedApplications(address).Do(context.Background())
-
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-apps
-    ```
-
-# Lookup assets created by a specific account
-The `/accounts/{account-id}/created-assets` REST call allows for searching an account for all the assets it has created.
-
-=== "JavaScript"
-    ```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let response = await indexerClient.lookupAccountCreatedAssets(address).do();
-        console.log(JSON.stringify(response, undefined, 2));
-    })().catch(e => {
-        console.error(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
-
-    response = myindexer.lookup_account_asset_by_creator(address)
-
-    print(json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-    ```java
-    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-    Response<TransactionResponse> response = indexerClientInstance
-        .lookupAccountCreatedAssets(account)
-        .execute();
-    if (!resonse.isSuccessful()) {
-        throw new Exception(response.message());
-    }
-    System.out.println(response.body().toString());
-    ```
-
-=== "Go"
-    ```go
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    result, err := indexerClient.LookupAccountCreatedAssets(address).Do(context.Background())
-
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/created-assets
-    ```
-
-# Lookup assets for a specific account
-The `/accounts/{account-id}/assets` REST call allows for searching an account for all the assets it has opted into.
-
-=== "JavaScript"
-    ```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let response = await indexerClient.lookupAccountAssets(address).do();
-        console.log(JSON.stringify(response, undefined, 2));
-    })().catch(e => {
-        console.error(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
-
-    response = myindexer.lookup_account_assets(address)
-
-    print(json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-    ```java
-    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-    Response<TransactionResponse> response = indexerClientInstance
-        .lookupAccountAssets(account)
-        .execute();
-    if (!resonse.isSuccessful()) {
-        throw new Exception(response.message());
-    }
-    System.out.println(response.body().toString());
-    ```
-
-=== "Go"
-    ```go
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    result, err := indexerClient.LookupAccountAssets(address).Do(context.Background())
-
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/assets
-    ```
-
-# Lookup applications local state for a specific account
-The `/accounts/{account-id}/apps-local-state` REST call allows for searching an account for all the applications local state it has.
-
-=== "JavaScript"
-    ```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let response = await indexerClient.lookupAccountAppLocalStates(address).do();
-        console.log(JSON.stringify(response, undefined, 2));
-    })().catch(e => {
-        console.error(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
-
-    response = myindexer.lookup_account_app_local_states(address)
-
-    print(json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-    ```java
-    Address account = new Address("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4");
-    Response<TransactionResponse> response = indexerClientInstance
-        .lookupAccountAppLocalStates(account)
-        .execute();
-    if (!resonse.isSuccessful()) {
-        throw new Exception(response.message());
-    }
-    System.out.println(response.body().toString());
-    ```
-
-=== "Go"
-    ```go
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    result, err := indexerClient.LookupAccountAppLocalStates(address).Do(context.Background())
-
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/apps-local-state
-    ```
-
-# Search transactions for a specific account
-The `/accounts/{account-id}/transactions` REST call provides a powerful mechanism for searching for specific transactions for a given account. 
-
-## Date-Time
-The range of transactions to be searched can be restricted based on the time by using the `before-time` and `after-time` parameters. These parameters must be [rfc3339](http://www.faqs.org/rfcs/rfc3339.html) formatted date-time strings. For example, the following query searches for all transactions that occurred after 10 am (Zulu/UTC) minus 5 hours (EST).
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let start_time = "2020-06-03T10:00:00-05:00"; 
-        let response = await indexerClient.searchForTransactions()
-            .address(address)
-            .afterTime(start_time).do();
-        console.log("start_time: 06/03/2020 11:00:00 = " + JSON.stringify(response, undefined, 2));
-        }   
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    # get transaction at specific time
-    response = myindexer.search_transactions_by_address(
-        address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", start_time="2020-06-03T10:00:00-05:00")
-
-    print("Transaction Start Time 2020-06-03T10:00:00-05:00 = " +
-        json.dumps(response, indent=2, sort_keys=True))
-
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressTime ex = new SearchTxAddressTime();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-        Date start_time = sdf.parse("2020-08-31T02:35:47-05:00");
-        Response<TransactionsResponse> response = indexerClientInstance
-                .searchForTransactions()
-                .address(account)
-                .afterTime(start_time)
-                .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("start_time: 08/31/2020 02:35:47 = " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var startTime = "2020-06-03T10:00:00-05:00"
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    // Query
-    result, err := indexerClient.SearchForTransactions().Address(address).AfterTimeString(startTime).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?after-time=2020-06-03T10:00:00-05:00|json_pp
-    ```
-
-## Round range
-Transaction searches can also be restricted to round ranges using the `min-round` and `max-round` parameters. 
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let min_round = 7048876;
-        let max_round = 7048878;    
-        let response = await indexerClient.searchForTransactions()
-            .address(address).maxRound(max_round)
-            .minRound(min_round).do();
-        console.log("Information for Transaction search: " + JSON.stringify(response, undefined, 2));
-        }  
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_transactions_by_address(
-        address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", min_round=7048876, max_round=7048878)
-
-    print("min-max rounds: 7048876-7048878 = " +
-        json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressBlockRange ex = new SearchTxAddressBlockRange();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4");
-        Long min_round = Long.valueOf(8965632);
-        Long max_round = Long.valueOf(8965651);       
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .minRound(min_round)
-            .maxRound(max_round)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }               
-        
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var minRound uint64 = 7048876
-    var maxRound uint64 = 7048878
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    // query
-    result, err := indexerClient.SearchForTransactions().Address(address).MinRound(minRound).MaxRound(maxRound).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?min-round=7048876&max-round=7048878" | json_pp
-    ```
-
-In addition, you can specify a specific round by using the round parameter.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let round = 7048877;
-        let response = await indexerClient.searchForTransactions()
-            .address(address)
-            .round(round).do();
-        console.log("Information for Transaction search: " + JSON.stringify(response, undefined, 2));
-        }   
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_transactions_by_address(
-        address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", block=7048877)
-
-    print("block: 7048877 = " +
-        json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    // /indexer/java/SearchTxAddressBlock.java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressBlock ex = new SearchTxAddressBlock();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
-        Long block = Long.valueOf(8965633);             
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .round(block)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }              
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var round uint64 = 7048877
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    // query
-    result, err := indexerClient.SearchForTransactions().Address(address).Round(Round).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?round=7048877"
-    ```
-
-## Transaction ID
-Searching for a specific transaction can be achieved by supplying the transaction id using the `txid` parameter.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let txid = "QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA"; 
-        let response = await indexerClient.searchForTransactions()
-            .address(address)
-            .txid(txid).do();
-        console.log("txid: QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA = " + JSON.stringify(response, undefined, 2));
-        }  
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_transactions_by_address(
-        address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4",
-        txid="QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA")
-
-    print("txid: QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA = " +
-        json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressTxId ex = new SearchTxAddressTxId();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
-        String txid = "GZKSVXCVQASQ2KLI7JUWZ2LP54WAKPVA3TC2ZGQVAHKIWEMMFNEQ";
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .txid(txid)
-            .execute();        
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }  
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("txid: GZKSVXCVQASQ2KLI7JUWZ2LP54WAKPVA3TC2ZGQVAHKIWEMMFNEQ = " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var txID = "QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA"
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    // Query
-    result, err := indexerClient.SearchForTransactions().Address(address).TXID(txID).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?txid=QZS3B2XBBS47S6X5CZGKKC2FC7HRP5VJ4UNS7LPGHP24DUECHAAA" | json_pp
-    ```
-
-## Transaction type
-You can also search for specific transaction types that are described in the [transaction structure](https://developer.algorand.org/docs/features/transactions/#transaction-types) documentation. The Indexer supports looking for `pay`, `keyreg`, `appl`, `acfg`, `axfer` and `afrz` transaction types. To search for a specific type of transaction use the `tx-type` parameter. The following example searches for the asset creation transaction for the DevDocsCoin.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU";
-        let txn_type = "acfg"; 
-        let response = await indexerClient.searchForTransactions()
-            .address(address)
-            .txType(txn_type).do();
-        console.log("txn_type: acfg = " + JSON.stringify(response, undefined, 2));
-        }  
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_transactions_by_address(
-        address="SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",
-        txn_type="acfg")
-
-    print("txn_type: acfg = " +
-        json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddresstxntype ex = new SearchTxAddresstxntype();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("NI2EDLP2KZYH6XYLCEZSI5SSO2TFBYY3ZQ5YQENYAGJFGXN4AFHPTR3LXU");
-        TxType txType = TxType.ACFG;
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .txType(txType)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }          
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("txn_type: acfg = " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var txType = "acfg"
-    address, _ := types.DecodeAddress("SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU")
-
-    // Query
-    result, err := indexerClient.SearchForTransactions().Address(address).TxType(txType).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?tx-type=acfg" | json_pp
-    ```
-
-
-## Currency
-Searching Transactions that are of certain values can be created by using the `currency-greater-than` and `currency-less-than` parameters. By default, these values are in microAlgos, but if this is used in conjunction with the `asset-id` parameter the currencies will refer to the specific asset. Searching for transactions greater than 50 DevDocsCoin (asset id=2044572) can be done with the following:
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU";
-        let asset_id = 2044572;
-        let min_amount = 50;
-
-        let response = await indexerClient.searchForTransactions()
-                .address(address)
-                .currencyGreaterThan(min_amount)
-                .assetID(asset_id).do();
-        console.log("Information for Transaction search: " + JSON.stringify(response, undefined, 2));
-        }   
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    # gets assets with a min balance of 50 for AssetID
-    response = myindexer.asset_balances(
-            address="SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU",asset_id=2044572, min_balance=50)
-
-    print("Asset Balances :" + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddressAsset ex = new SearchTxAddressAsset();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("AMF3CVE4MFZM24CCFEWRCOCWW7TEDJQS3O26OUBRHZ3KWKUBE5ZJRNZ3OY");
-        Long asset_id = Long.valueOf(12215366);   
-        Long min_amount = Long.valueOf(5);              
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .currencyGreaterThan(min_amount)
-            .assetId(asset_id)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }  
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetId uint64 = 2044572
-    var minBalance uint64 = 50
-    address, _ := types.DecodeAddress("SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU")
-
-    // Lookup accounts with minimum balance of asset
-    result, err := indexerClient.LookupAssetBalances(assetId).CurrencyGreaterThan(minBalance).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/accounts/SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU/transactions?asset-id=2044572&currency-greater-than=50" | json_pp
-    ```
-
-## Signature type
-Transaction searches can also look for specific [signature types](https://developer.algorand.org/docs/reference/transactions/#signed-transaction), which can be standard signatures, multi-signatures, or logic signatures. To search for transactions with a specific signature type use the `sig-type` parameter and specify either `sig`, `msig`, or `lsig` and the parameter values. These are signatures that specifically sign Algorand transactions. The following query will return all transactions that signed with a multi-signature for the specific account.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4";
-        let sig_type = "msig"; 
-        let response = await indexerClient.searchForTransactions()
-            .address(address)
-            .sigType(sig_type).do();
-        console.log("Information for Transaction search: " + JSON.stringify(response, undefined, 2));
-        }
-    
-    )().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_transactions_by_address(
-        address="XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4", sig_type="msig")
-
-    print("sig_type: msig = " +
-        json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTxAddresssigtype ex = new SearchTxAddresssigtype();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        Address account = new Address("RBSTLLHK2NJDL3ZH66MKSEX3BE2OWQ43EUM7S7YRVBJ2PRDRCKBSDD3YD4");
-        SigType sig_type = SigType.MSIG;    
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .sigType(sig_type)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }      
-
-        JSONObject jsonObj = new JSONObject(response.toString());
-        System.out.println("Transaction Info SigType msig: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var sigType = "msig"
-    address, _ := types.DecodeAddress("XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4")
-
-    // Query
-    result, err := indexerClient.SearchForTransactions().Address(address).SigType(sigType).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/accounts/XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4/transactions?sig-type=msig" | json_pp
-    ```
-
-The call also supports [Paginated Results](#paginated-results) and [Note Field Searching](#note-field-searching).
-
-This call returns a list of transactions, the round the results were calculated in and if using pagination the next token to retrieve more results.
-
-# Search assets 
-The Indexer provides the `/assets` REST call to search the blockchain for specific assets. The call supports searching based on the asset id, the name of the asset, the unit name of the asset, and by the creator of the asset. For example, to search for DevDocsCoin the `name` parameter should be used. Note that this is a non-case sensitive search.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let name = "DevDocsCoin";
-        let assetInfo = await indexerClient.searchForAssets()
-            .name(name).do();
-        console.log("Information for Asset Name: " + JSON.stringify(assetInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_assets(
-        name="DevDocsCoin")
-    print("Asset Name Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchAssetsName ex = new SearchAssetsName();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        String name = "Planet";        
-        Response<AssetsResponse> response = indexerClientInstance
-            .searchForAssets()
-            .name(name)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Asset Info for Name: " + jsonObj.toString(2)); // pretty print json           
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetName = "DevDocsCoin"
-
-    // Lookup asset
-    _, result, err := indexerClient.SearchForAssets().Name(assetName).Do(context.Background())
-
-    // Search asset by name
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/assets?name=DevDocsCoin" | json_pp
-    ```
-
-This call returns a list of assets and the round the results were calculated in. Additionally, the next token is also returned if using [Paginated Results](#paginated-results).
-
-# Getting an asset 
-To get the details of a specific asset the indexer provides the `/assets/{asset-id}` REST call.  This call takes no parameters as the asset id is passed in the URL. This call returns the details of the asset and the round the results were calculated in. 
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let assetIndex = 2044572;
-        let assetInfo = await indexerClient.searchForAssets()
-            .index(assetIndex).do();
-        console.log("Information for Asset: " + JSON.stringify(assetInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_assets(
-        asset_id=2044572)
-
-    print("Asset Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchAssets ex = new SearchAssets();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(12215366);        
-        Response<AssetsResponse> response = indexerClientInstance
-            .searchForAssets()
-            .assetId(asset_id)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json            
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetID uint64 = 2044572
-
-    // Query
-    _, result, err := indexerClient.LookupAssetByID(assetID).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/assets/2044572" | json_pp
-    ```
-
-# Searching for accounts based on asset 
-The Indexer provides the `/assets/{asset-id}/balances` REST API call to search for accounts that transact in a specific Asset. The call returns a list of balances, with their specific amount, the address holding the asset, and whether the account is frozen. Additionally, the round the results were calculated is returned.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let assetIndex = 2044572;
-        let assetInfo = await indexerClient.lookupAssetBalances(assetIndex).do();
-        console.log("Information for Asset: " + JSON.stringify(assetInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.asset_balances(
-        asset_id=2044572)
-    print("Asset Balance: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        AssetsBalances ex = new AssetsBalances();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(440307);
-        // searhes for asset greater than currencyGreaterThan
-        Response<AssetBalancesResponse> response = indexerClientInstance
-            .lookupAssetBalances(asset_id)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    const assetId = 2044572
-
-    // Lookup balance of asset
-    result, err := indexerClient.LookupAssetBalances(assetId).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	```bash
-    $ curl "localhost:8980/v2/assets/2044572/balances" | json_pp
-    ```
-
-Results
-``` bash
-{
-   "balances" : [
-      {
-         "is-frozen" : false,
-         "amount" : 999900,
-         "address" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU"
-      },
-      {
-         "is-frozen" : false,
-         "amount" : 100,
-         "address" : "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI"
-      }
-   ],
-   "current-round" : 7088478
-}
-```
-
-This call can be refined by looking for addresses based on the current amount using the `currency-greater-than` and `currency-less-than` parameters.
-
-=== "JavaScript"
-	```javascript
-    // /indexer/javascript/AssetsBalancesMinBalance.js
-    (async () => {
-        let assetIndex = 2044572;
-        let currencyGreater = 200;
-        let assetInfo = await indexerClient.lookupAssetBalances(assetIndex)
-            .currencyGreaterThan(currencyGreater).do();
-        console.log("Information for Asset: " + JSON.stringify(assetInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.asset_balances( asset_id=2044572, min_balance=200)
-
-    print("Asset Balances :" + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(408947);
-        Long currencyGreaterThan = Long.valueOf(3007326000L);
-        // searches for asset greater than currencyGreaterThan
-        Response<AccountsResponse> response = indexerClientInstance.searchForAccounts()
-                .assetId(asset_id)
-                .currencyGreaterThan(currencyGreaterThan)
-                .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Account Info for Asset Min Balance: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetId uint64 = 2044572
-    var minBalance uint64 = 200
-
-    // Query
-    result, err := indexerClient.LookupAssetBalances(assetId).CurrencyGreaterThan(minBalance).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/assets/2044572/balances?currency-greater-than=200" | json_pp
-    ```
-
-Results
-``` bash
-{
-   "balances" : [
-      {
-         "is-frozen" : false,
-         "amount" : 999900,
-         "address" : "SWOUICD7Y5PQBWWEYC4XZAQZI7FJRZLD5O3CP4GU2Y7FP3QFKA7RHN2WJU"
-      }
-   ],
-   "current-round" : 7088514
-}
-```
-
-This call also supports [Paginated Results](#paginated-results) and [Historical Data Searches](#historical-data-searches).
-
-# Searching for transactions based on asset 
-The `/assets/{asset-id}/transactions` call is provided by the Indexer to search for transactions involving a specific Asset. This call contains many parameters to refine the search for specific values. These parameters function very similarly to the parameters described in Search Transactions for a Specific Account. The following table list the common search parameters between this call and the `/accounts/{account-id}/transactions` call with a link to the description of this parameter.
-
-| Parameter  | Description Link  |
-| ------------- | ------------- |
-| after-time | [Search Transactions for a Specific Account - Date-Time](#date-time) |
-| before-time | [Search Transactions for a Specific Account - Date-Time](#date-time) |
-| max-round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| min-round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| currency-greater-than | [Search Transactions for a Specific Account - Currency](/#currency) |
-| currency-less-than | [Search Transactions for a Specific Account - Currency](/#currency) |
-| tx-type | [Search Transactions for a Specific Account - Transaction Type](#transaction-type) |
-| sig- type | [Search Transactions for a Specific Account - Signature Type](#signature-type) |
-| tx-id | [Search Transactions for a Specific Account - Transaction ID](#signature-type) |
-
-
-This call also supports [Paginated Results](#paginated-results) and [Note Field Searching](#note-field-searching).
-
-# Address and role
-When searching for transactions that involve a specific Asset you can search for specific accounts as well as the address role. The roles that can be searched for are `sender`, `receiver`, and `freeze-target`. For example, a specific receiver with a given address for an Asset can be searched using the following:
-
-=== "JavaScript"
-	```javascript
-    // /indexer/javascript/SearchAssetTransactionsRole.js
-    (async () => {
-        let asset_id = 2044572;
-        let address_role = "receiver";
-        let address = "UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI";
-        let tracsactionInfo = await indexerClient.lookupAssetTransactions(asset_id)
-            .addressRole(address_role)
-            .address(address).do();
-        console.log("Information for Transaction for Asset: " + JSON.stringify(tracsactionInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    })
-    ```
-
-=== "Python"
-	```python
-    # /indexer/python/search_asset_transactions_role.py
-
-    response = myindexer.search_asset_transactions(
-        asset_id=2044572, address_role="receiver", address="UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI")
-
-    print("Asset Transaction Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    // /indexer/java/SearchAssetsTransactionsRole.java
-    public static void main(String args[]) throws Exception {
-        SearchAssetsTransactionsRole ex = new SearchAssetsTransactionsRole();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(408947);
-        AddressRole addressRole = AddressRole.RECEIVER;
-        Address account = new Address("G26NNWKJUPSTGVLLDHCUQ7LFJHMZP2UUAQG2HURLI6LOEI235YCQUNPQEI");           
-        Response<TransactionsResponse> response = indexerClientInstance
-            .searchForTransactions()
-            .address(account)
-            .assetId(asset_id)
-            .addressRole(addressRole)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Asset Info for Name: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var assetID uint64 = 2044572
-    address, _ := types.DecodeAddress("UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI")
-
-    // Lookup asset
-    result, err := indexerClient.SearchForTransactions().AssetID(assetID).AddressRole(role).Address(address).Do(context.Background())
-
-    // Search asset trnsaction by role
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/assets/2044572/transactions?address-role=receiver&address=UF7ATOM6PBLWMQMPUQ5QLA5DZ5E35PXQ2IENWGZQLEJJAAPAPGEGC3ZYNI" | json_pp
-    ```
-
-When searching for the receiver like in the above example, a `closeto` transaction property is also returned. You can remove this by supplying the `exclude-close-to` parameter and setting its value to true.
-
-# Retrieving blocks 
-The Indexer provides the `/blocks/{round-number}` API call to retrieve specific blocks from the blockchain. This call does not take any parameters and returns data associated with the block.
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let block = 50;
-        let blockInfo = await indexerClient.lookupBlock(block).do();
-        console.log("Information for Block: " + JSON.stringify(blockInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.block_info(
-        block=555)
-    print("Block Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        BlockInfo ex = new BlockInfo();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long block = Long.valueOf(50);
-        Response<Block> response = indexerClientInstance
-            .lookupBlock(block)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Block Info: " + jsonObj.toString(2)); // pretty print json            
-    }
-    ```
-
-=== "Go"
-	```go
-    // query parameters
-    var round uint64 = 555
-
-    // Lookup block
-    result, err := indexerClient.LookupBlock(round).Do(context.Background())
-
-    // Print the results
-    JSON, err := json.MarshalIndent(result, "", "\t")
-    fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	``` bash
-    $ curl "localhost:8980/v2/blocks/555" | json_pp
-    ```
-
-
-# Search applications 
-The `/applications` REST method is provided to allow searching all applications on the blockchain.
-
-This API call contains parameters to refine the search for specific values. It can retrieve specific applications or all applications from the blockchain and returns data associated with smart contract applications. The call supports searching based on a specific application id and provides limit and next parameters. 
-
-Parameters described below:
-
-| Parameter  | Description Link  |
-| ------------- | ------------- |
-| application-id | Search Applications for a Specific Application ID |
-| limit | Search Applications for a Maximum number of results to return. |
-| next | Search Applications for the next page of results. Use the next token provided by the previous results. |
-
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let response = await indexerClient.searchForApplications().do();
-        console.log("Response: " + JSON.stringify(response, undefined, 2));
-    })().catch(e => {
-        console.log(e.message);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.search_applications()
-
-    print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchApplication ex = new SearchApplication();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long limit = 4L;
-        Response<ApplicationsResponse> response = indexerClientInstance
-            .searchForApplications()
-            .limit(limit)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json
-    }
-    ```
-
-=== "Go"
-	```go
-        // Search applications
-        result, err := indexerClient.SearchForApplications().Do(context.Background())
-    ```
-
-=== "cURL"
-	```bash
-    $ curl "localhost:8980/v2/applications" | json_pp
-    ```
-
-# Lookup application
-The `/applications/{application-id}` REST method is provided to allow searching for a specific application on the blockchain. It returns data associated with the smart contract application. 
-
-=== "JavaScript"
-	```javascript
-    (async () => {
-        let response = await indexerClient.lookupApplications(59).do();
-        console.log("Response: " + JSON.stringify(response, undefined, 2));
-    })().catch(e => {
-        console.log(e.message);
-        console.trace();
-    });
-    ```
-
-=== "Python"
-	```python
-    response = myindexer.applications(20)
-
-    print("Response Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-
-=== "Java"
-	```java
-    public static void main(String args[]) throws Exception {
-        LookupApplication ex = new LookupApplication();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long application_id = Long.valueOf(15974179);   
-        Response<ApplicationResponse> response = indexerClientInstance
-            .lookupApplicationByID(application_id)
-            .execute(); 
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Response Info: " + jsonObj.toString(2)); // pretty print json          
-    }
-    ```
-
-=== "Go"
-	```go
-        var applicationID uint64  = 22
-        // Lookup application
-        result, err := indexerClient.LookupApplicationByID(applicationID).Do(context.Background())
-
-        // Print the results
-        JSON, err := json.MarshalIndent(result, "", "\t")
-        fmt.Printf(string(JSON) + "\n")
-    ```
-
-=== "cURL"
-	```bash
-    $ curl "localhost:8980/v2/applications/20" | json_pp
-    ```
-
-
-# Search transactions
-The `/transactions` REST method is provided to allow searching all transactions that have occurred on the blockchain.
-
-This call contains many parameters to refine the search for specific values. These parameters function very similarly to the parameters described in Search Transactions for a Specific Account. The following table list the common search parameters between this call and the `/accounts/{account-id}/transactions` call with a link to the description of this parameter.
-
-
-| Parameter  | Description Link  |
-| ------------- | ------------- |
-| after-time | [Search Transactions for a Specific Account - Date-Time](#date-time) |
-| before-time | [Search Transactions for a Specific Account - Date-Time](#date-time) |
-| max-round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| min-round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| round | [Search Transactions for a Specific Account - Round Range](#round-range) |
-| currency-greater-than | [Search Transactions for a Specific Account - Currency](#currency) |
-| currency-less-than | [Search Transactions for a Specific Account - Currency](#currency) |
-| tx-type | [Search Transactions for a Specific Account - Transaction Type](#transaction-type) |
-| sig- type | [Search Transactions for a Specific Account - Signature Type](#signature-type) |
-| tx-id | [Search Transactions for a Specific Account - Transaction ID](#signature-type) |
-
-Similar to asset searches this method supports searching based on address and role as well.
-
-This call also supports [Paginated Results](#paginated-results) and [Note Field Searching](#note-field-searching).
-
-# Complete code examples
-
-!!! info
-    Full running code examples for each SDK are available within the GitHub repo at [/examples/indexer](https://github.com/algorand/docs/tree/master/examples/indexer) and for [download](https://github.com/algorand/docs/blob/master/examples/indexer/indexer.zip?raw=true) (.zip).
+    <!-- ===CURL_INDEXER_PREFIX_SEARCH=== -->
