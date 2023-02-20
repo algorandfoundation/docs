@@ -13,31 +13,39 @@ The Atomic Transaction Composer is a convenient way to build out an atomic group
 
 To use the Atomic Transaction Composer, first initialize the composer: 
 
-=== "Python"
-    ```py
-    from algosdk.atomic_transaction_composer import AtomicTransactionComposer
-
-    atc = AtomicTransactionComposer()
-    ```
-
 === "JavaScript"
+    <!-- ===JSSDK_ATC_CREATE=== -->
     ```js
     import algosdk from 'algosdk'
 
     const atc = new algosdk.AtomicTransactionComposer()
     ```
+    <!-- ===JSSDK_ATC_CREATE=== -->
+
+=== "Python"
+    <!-- ===PYSDK_ATC_CREATE=== -->
+    ```py
+    from algosdk.atomic_transaction_composer import AtomicTransactionComposer
+
+    atc = AtomicTransactionComposer()
+    ```
+    <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATC_CREATE=== -->
     ```go
 	    import "github.com/algorand/go-algorand-sdk/transaction"
         //...
     	var atc = transaction.AtomicTransactionComposer{}
     ```
+    <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATC_CREATE=== -->
     ```java
         AtomicTransactionComposer atc = new AtomicTransactionComposer();
     ```
+    <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
 
@@ -46,6 +54,7 @@ Individual transactions being passed to the composer must be wrapped in a `Trans
 Constructing a Transaction with Signer and adding it to the transaction composer can be done as follows:
 
 === "Python"
+    <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
     ```py
 
     #...
@@ -67,8 +76,10 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     # Pass TransactionWithSigner to ATC
     atc.add_transaction(tws)
     ```
+    <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
     ```js
     // ...
 
@@ -96,8 +107,10 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     atc.addTransaction(tws)
 
     ```
+    <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
     ```go
 
     // ...
@@ -122,8 +135,10 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     atc.AddTransaction(tws)
 
     ```
+    <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
     ```java
 
     // ...
@@ -149,6 +164,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
     atc.addTransaction(tws);
 
     ```
+    <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
 
@@ -162,13 +178,18 @@ In order to call the methods, a Contract or Interface is constructed. Typically 
 Once the Contract object is constructed, it can be used to look up and pass method objects into the Atomic Transaction Composers `add_method_call`
 
 === "Python"
+    <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
     ```py
     from algosdk.abi import Contract
 
     with open("path/to/contract.json") as f:
         js = f.read()
     c = Contract.from_json(js)
+    ```
+    <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
 
+    <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
+    ```py
     # Using the app id from the "sandnet" network, which is hardcoded in the json file
     app_id = c.networks[genesis_hash].app_id
 
@@ -192,6 +213,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     atc.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
 
     ```
+    <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 
 === "JavaScript"
     ```js
@@ -201,15 +223,10 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     // Parse the json file into an object, pass it to create an ABIContract object
     const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
+    ```
 
-    // Utility function to return an ABIMethod by its name
-    function getMethodByName(name: string): algosdk.ABIMethod  {
-        const m = contract.methods.find((mt: algosdk.ABIMethod)=>{ return mt.name==name })
-        if(m === undefined)
-            throw Error("Method undefined: "+name)
-        return m
-    }
-
+    <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
+    ```js
     const commonParams = {
         appID:contract.networks[genesis_hash].appID,
         sender:acct.addr,
@@ -221,7 +238,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     // Simple call to the `add` method, method_args can be any type but _must_ 
     // match those in the method signature of the contract
     atc.addMethodCall({
-        method: getMethodByName("add"), methodArgs: [1,1], ...commonParams
+        method: contract.getMethodByName("add"), methodArgs: [1,1], ...commonParams
     })
 
     // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
@@ -239,24 +256,19 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     ```
 
 === "Go"
+    <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
     ```go
-
     // Read in contract json file and marshal into Contract
 	f, _ := os.Open("path/to/contract.json")
 	b, _ := ioutil.ReadAll(f)
 	contract := &abi.Contract{}
 	_ = json.Unmarshal(b, contract)
+    ```
+    <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
+    
+    <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
+    ```go
 
-
-    // Utility function to get a Method given the name 
-    func getMethod(c *abi.Contract, name string) (abi.Method, error) {
-        for _, m = range c.Methods {
-            if m.Name == name {
-                return m, nil
-            }
-        }
-        return abi.Method{}, fmt.Errorf("No method named: %s", name)
-    }
 
     func combine(mcp transaction.AddMethodCallParams, m abi.Method, a []interface{}) transaction.AddMethodCallParams {
         mcp.Method = m
@@ -274,18 +286,20 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     // Simple call to the `add` method, method_args can be any type but _must_ 
     // match those in the method signature of the contract
-	atc.AddMethodCall(combine(mcp, getMethod(contract, "add"), []interface{}{1, 1}))
+	atc.AddMethodCall(combine(mcp, contract.GetMethodByName(contract, "add"), []interface{}{1, 1}))
 
 
     // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
     // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
 	txn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
 	stxn := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
-	atc.AddMethodCall(combine(mcp, getMethod(contract, "txntest"), []interface{}{10000, stxn, 1000}))
+	atc.AddMethodCall(combine(mcp, contract.GetMethodByName(contract, "txntest"), []interface{}{10000, stxn, 1000}))
 
     ```
+    <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
     
 === "Java"
+    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
     ```java
 	    // Utility function to return an ABIMethod by its name
         public static Method getMethodByName(String name, Contract contract) throws Exception {
@@ -300,8 +314,11 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
     	// convert Json to contract
     	Contract contract = new Gson().fromJson(jsonContract, Contract.class);
+    ```
+    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
 
-
+    <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
+    ```java
 	    // get transaction params
         Response<TransactionParametersResponse> sp = client.TransactionParams().execute();
         TransactionParametersResponse tsp = sp.body();
@@ -325,6 +342,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
         ExecuteResult res = atc.execute(client, 2);
 
     ```
+    <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
     
 ## Execution 
 
@@ -336,6 +354,7 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 
 
 === "Python"
+    <!-- ===PYSDK_ATC_RESULTS=== -->
     ```py
     # Other options:
     # txngroup = atc.build_group()
@@ -345,8 +364,10 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
     for res in result.abi_results:
         print(res.return_value)
     ```
+    <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
+    <!-- ===JSDK_ATC_RESULTS=== -->
     ```js
     // Other options:
     // const txgroup = atc.buildGroup()
@@ -357,8 +378,10 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
         console.log(result.methodResults[idx])
     }
     ```
+    <!-- ===JSDK_ATC_RESULTS=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATC_RESULTS=== -->
     ```go
     // Other options:
     // txgroup := atc.BuildGroup()
@@ -373,8 +396,10 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 		log.Printf("%s returned %+v", r.TxID, r.ReturnValue)
 	}
     ```
+    <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATC_RESULTS=== -->
     ```java
 	
 	AtomicTransactionComposer.ExecuteResult resultExecute = atc.execute(client, 5);
@@ -383,5 +408,4 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
         });
 	
     ```
-
-	
+    <!-- ===JAVASDK_ATC_RESULTS=== -->

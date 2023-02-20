@@ -89,8 +89,11 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 [Reference Page](./docs/get-details/atc.md)
 
-* ATC_CONTRACT_INIT - Create a contract object
-* ATC_GROUP_TRANSACTION - Create a couple TransactionWithSigners (1 payment, 1 method call using the contract object)
+* ATC_CREATE - Create a new instance of the ATC
+* ATC_CREATE_SIGNER - Show how to create a TransactionSigner
+* ATC_ADD_TRANSACTION - Add a simple transaction to the ATC
+* ATC_CONTRACT_INIT - Create a Contract object
+* ATC_ADD_METHOD_CALL - Call a method using the Contract object 
 * ATC_GROUP_TXIDS - Show how you can get the transaction group and print the group ids and txids
 * ATC_RESULTS - Execute the group, Show how to get the results (esp for non method calls)
 
