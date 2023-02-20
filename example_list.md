@@ -62,12 +62,13 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 [Reference Page](./docs/get-details/atomic-transfers.md)
 
-    MANUAL_ATOMIC_GROUP - 
-        Create a couple Payment transactions, Group them,
-        print the group ids and txids, sign them, send them
-    MANUAL_GROUP_TXIDS - 
-        Show how to get _all_ the results back (not just the first txid)
-
+    ATOMIC_CREATE_TXNS - Create a couple Payment transactions
+    ATOMIC_GROUP_TXNS - Group them
+    ATOMIC_GROUP_DEBUG - print the group ids and txids #TODO
+    ATOMIC_GROUP_SIGN - sign them
+    ATOMIC_GROUP_ASSEMBLE - re-assemble signed transaction (??) 
+    ATOMIC_GROUP_SEND - send them
+    ATOMIC_GROUP_RESULTS - Show how to get _all_ the results back (not just the first txid) # TODO
 
 ### With ATC
 

@@ -46,14 +46,17 @@ The example below illustrates Account A sending a transaction to Account C and A
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
 
 === "JavaScript"
+    <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->
 	``` javascript
     // Transaction A to C 
     let transaction1 = algosdk.makePaymentTxnWithSuggestedParams(myAccountA.addr, myAccountC.addr, 100000, undefined, undefined, params);  
     // Create transaction B to A
     let transaction2 = algosdk.makePaymentTxnWithSuggestedParams(myAccountB.addr, myAccountA.addr, 200000, undefined, undefined, params);  
     ```
+    <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Python"
+    <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 	``` python  
     # from account 1 to account 3
     txn_1 = transaction.PaymentTxn(account_1, params, account_3, 100000)
@@ -61,8 +64,10 @@ The example below illustrates Account A sending a transaction to Account C and A
     # from account 2 to account 1
     txn_2 = transaction.PaymentTxn(account_2, params, account_1, 200000)
     ```
+    <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
 	``` java
     // Create the first transaction
     Transaction tx1 = Transaction.PaymentTransactionBuilder()
@@ -80,8 +85,10 @@ The example below illustrates Account A sending a transaction to Account C and A
     .suggestedParams(params)
     .build();
     ```
+    <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 	``` go
     // from account 1 to account 3
     tx1, err := transaction.MakePaymentTxnWithFlatFee(account1, account3, minFee, 100000, firstValidRound, lastValidRound, nil, "", genID, genHash)
@@ -97,113 +104,78 @@ The example below illustrates Account A sending a transaction to Account C and A
         return
     }
     ```
+    <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "goal"
+    <!-- ===GOAL_ATOMIC_CREATE_TXNS=== -->
 	``` goal
     $ goal clerk send --from=my-account-a<PLACEHOLDER> --to=my-account-c<PLACEHOLDER> --fee=1000 --amount=100000 --out=unsginedtransaction1.txn"
 
     $ goal clerk send --from=my-account-b<PLACEHOLDER> --to=my-account-a<PLACEHOLDER> --fee=1000 --amount=200000 --out=unsginedtransaction2.txn"
     ```
+    <!-- ===GOAL_ATOMIC_CREATE_TXNS=== -->
 
 At this point, these are just individual transactions. The next critical step is to combine them and then calculate the group ID.
 
 See [Authorizing Transactions Offline](../transactions/offline_transactions#saving-unsigned-transactions-to-file) to learn how to create and save individual **unsigned** transactions to a file. This method can be used to distribute group transactions for signing.
-
-## Combine transactions 
-Combining transactions just means concatenating them into a single file or ordering them in an array so that a group ID can then be assigned. 
-
-If using `goal`, the transaction files can be combined using an OS-level command such as `cat`. If using one of the SDKs, the application may store all the transactions individually or in an array. From the SDK it is also possible to read a transaction from a file created at an earlier time, which is described in the [Offline Transactions](../transactions/offline_transactions) documentation. See the complete example at the bottom of this page that details how transactions are combined in the SDKs. To combine transactions in `goal` use a similar method to the one below.
-
-=== "JavaScript"
-	``` javascript
-    // Combine transactions
-    let txns = [transaction1, transaction2]
-    ```
-
-=== "Python"
-	``` python
-    # the Python SDK performs combining implicitly within grouping below
-    ```
-
-=== "Java"
-	``` java
-    // the Java SDK performs combining implicitly within grouping below
-    ```
-
-=== "Go"
-	``` go
-    // the Go SDK performs combining implicitly within grouping below
-    ```
-
-=== "goal"
-	``` goal
-    $ cat unsignedtransaction1.tx unsignedtransaction2.tx > combinedtransactions.tx
-    ```
 
 ## Group transactions
 
 The result of this step is what ultimately guarantees that a particular transaction belongs to a group and is not valid if sent alone (even if properly signed). A group-id is calculated by hashing the concatenation of a set of related transactions. The resulting hash is assigned to the [Group](../transactions/transactions#group) field within each transaction. This mechanism allows anyone to recreate all transactions and recalculate the group ID to verify that the contents are as agreed upon by all parties. Ordering of the transaction set must be maintained.
 
 === "JavaScript"
+<!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
 	``` javascript
     // Group both transactions
+    let txns = [transaction1, transaction2]
     let txgroup = algosdk.assignGroupID(txns);
     ```
+<!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Python"
+<!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 	``` python
     # get group id and assign it to transactions
     gid = transaction.calculate_group_id([txn_1, txn_2])
     txn_1.group = gid
     txn_2.group = gid
     ```
+<!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
+<!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
 	``` java
     // group transactions an assign ids
     Digest gid = TxGroup.computeGroupID(new Transaction[]{tx1, tx2});
     tx1.assignGroupID(gid);
     tx2.assignGroupID(gid);
     ```
+<!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Go"
+<!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 	``` go
     // compute group id and put it into each transaction
     gid, err := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
     tx1.Group = gid
     tx2.Group = gid
     ```
+<!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
+<!-- ===GOAL_ATOMIC_GROUP_TXNS=== --->
 	``` goal
+    $ cat unsignedtransaction1.tx unsignedtransaction2.tx > combinedtransactions.tx
     $ goal clerk group -i combinedtransactions.tx -o groupedtransactions.tx -d data -w yourwallet 
     ```
+<!-- ===GOAL_ATOMIC_GROUP_TXNS=== --->
 
-## Split transactions
+## Split transactions (Goal only)
 
 At this point the transaction set must be split to allow distributing each component transaction to the appropriate wallet for authorization. 
 
-=== "JavaScript"
-	``` javascript
-    // this example does not use files on disk, so splitting is implicit above
-    ```
-
-=== "Python"
-	``` python
-    # this example does not use files on disk, so splitting is implicit above
-    ```
-
-=== "Java"
-	``` java
-    // this example does not use files on disk, so splitting is implicit above
-    ```
-
-=== "Go"
-	``` go
-    // this example does not use files on disk, so splitting is implicit above
-    ```
-
 === "goal"
+    <!-- ===GOAL_ATOMIC_GROUP_SPLIT=== -->
 	``` goal
     # keys in distinct wallets
     $ goal clerk split -i groupedtransactions.tx -o splitfiles -d data -w yourwallet 
@@ -213,32 +185,40 @@ At this point the transaction set must be split to allow distributing each compo
 
     # distribute files for authorization
     ```
+    <!-- ===GOAL_ATOMIC_GROUP_SPLIT=== -->
 
 ## Sign transactions
 With a group ID assigned, each transaction sender must authorize their respective transaction. 
 
 === "JavaScript"
+    <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
 	``` javascript
     // Sign each transaction in the group 
     signedTx1 = transaction1.signTxn( myAccountA.sk )
     signedTx2 = transaction2.signTxn( myAccountB.sk )
     ```
+    <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Python"
+    <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 	``` python
     # sign transactions
     stxn_1 = txn_1.sign(sk_1)    
     stxn_2 = txn_2.sign(sk_2)
     ```
+    <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 	``` java
     // sign individual transactions
-    SignedTransaction signedTx1 = acctA.signTransaction(tx1);;
-    SignedTransaction signedTx2 = acctB.signTransaction(tx2);;
+    SignedTransaction signedTx1 = acctA.signTransaction(tx1);
+    SignedTransaction signedTx2 = acctB.signTransaction(tx2);
     ```        
+    <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 	``` go
     sTxID1, stx1, err := crypto.SignTransaction(sk1, tx1)
     if err != nil {
@@ -251,8 +231,10 @@ With a group ID assigned, each transaction sender must authorize their respectiv
         return
     }
     ```
+    <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "goal"
+    <!-- ===GOAL_ATOMIC_GROUP_SIGN=== -->
 	``` goal
     # sign from single wallet containing all keys
     $ goal clerk sign -i groupedtransactions.tx -o signout.tx -d data -w yourwallet
@@ -263,25 +245,31 @@ With a group ID assigned, each transaction sender must authorize their respectiv
     $ goal clerk sign -i splitfiles-0 -o splitfiles-0.sig -d data -w my_wallet_1
     $ goal clerk sign -i splitfiles-1 -o splitfiles-1.sig -d data -w my_wallet_2
     ```
+    <!-- ===GOAL_ATOMIC_GROUP_SIGN=== -->
 
 ## Assemble transaction group
 
 All authorized transactions are now assembled into an array, maintaining the original transaction ordering, which represents the transaction group.
 
 === "JavaScript"
+    <!-- ===JSSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 	``` javascript
     let signed = []
     signed.push( signedTx1 )
     signed.push( signedTx2 )
     ```
+    <!-- ===JSSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Python"
+    <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 	``` python
     # assemble transaction group
     signed_group =  [stxn_1, stxn_2]
     ```
+    <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
 	``` java
     // put both transaction in a byte array 
     ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream( );
@@ -291,25 +279,31 @@ All authorized transactions are now assembled into an array, maintaining the ori
     byteOutputStream.write(encodedTxBytes2);
     byte groupTransactionBytes[] = byteOutputStream.toByteArray();
     ```
+    <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 	``` go
     var signedGroup []byte
     signedGroup = append(signedGroup, stx1...)
     signedGroup = append(signedGroup, stx2...)
     ```
+    <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "goal"
+    <!-- ===GOAL_ATOMIC_GROUP_ASSEMBLE=== -->
 	``` goal
     # combine signed transactions files
     cat splitfiles-0.sig splitfiles-1.sig > signout.tx
     ```
+    <!-- ===GOAL_ATOMIC_GROUP_ASSEMBLE=== -->
 
 ## Send transaction group
 The transaction group is now broadcast to the network. 
 
 === "JavaScript"
-	``` javascript
+    <!-- ===JSSDK_ATOMIC_GROUP_SEND=== -->
+	```javascript
     let tx = (await algodClient.sendRawTransaction(signed).do());
     console.log("Transaction : " + tx.txId);
 
@@ -317,11 +311,12 @@ The transaction group is now broadcast to the network.
     confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
     //Get the completed Transaction
     console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
     ```
+    <!-- ===JSSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Python"
-	``` python
+    <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
+	```python
     tx_id = algod_client.send_transactions(signed_group)
 
     # wait for confirmation
@@ -330,19 +325,22 @@ The transaction group is now broadcast to the network.
     print("txID: {}".format(tx_id), " confirmed in round: {}".format(
     confirmed_txn.get("confirmed-round", 0)))   
     ```
+    <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"
-	``` java
+    <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
+	```java
     String id = client.RawTransaction().rawtxn(groupTransactionBytes).execute().body().txId;
     System.out.println("Successfully sent tx with ID: " + id);
     // Wait for transaction confirmation
     PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
     System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-
     ```
+    <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
 
 === "Go"
-	``` go
+    <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
+	```go
     pendingTxID, err := algodClient.SendRawTransaction(signedGroup).Do(context.Background())
     if err != nil {
         fmt.Printf("failed to send transaction: %s\n", err)
@@ -356,8 +354,11 @@ The transaction group is now broadcast to the network.
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID ,confirmedTxn.ConfirmedRound)
 
     ```
+    <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
 
 === "goal"
-	``` goal
+    <!-- ===GOAL_ATOMIC_GROUP_SEND=== -->
+	```goal
     goal clerk rawsend -f signout.tx -d data -w yourwallet
     ```
+    <!-- ===GOAL_ATOMIC_GROUP_SEND=== -->
