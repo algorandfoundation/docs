@@ -1,6 +1,6 @@
 title: REST APIs
 arrange:
-  - algod
-  - kmd.md
+  - algod.md
   - indexer.md
+  - kmd.md
   - restendpoints.md

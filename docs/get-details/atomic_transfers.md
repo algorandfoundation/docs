@@ -135,19 +135,19 @@ The result of this step is what ultimately guarantees that a particular transact
 
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
-    ```python
+```python
 
-    # Assign group id to the transactions (order matters!)
-    txn_1, txn_2 = transaction.assign_group_id([txn_1, txn_2])
+# Assign group id to the transactions (order matters!)
+txn_1, txn_2 = transaction.assign_group_id([txn_1, txn_2])
 
-    # Or, equivalently
+# Or, equivalently
 
-    # get group id and assign it to transactions
-    gid = transaction.calculate_group_id([txn_1, txn_2])
-    txn_1.group = gid
-    txn_2.group = gid
+# get group id and assign it to transactions
+gid = transaction.calculate_group_id([txn_1, txn_2])
+txn_1.group = gid
+txn_2.group = gid
 
-    ```
+```
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
@@ -272,12 +272,12 @@ All authorized transactions are now assembled into an array, maintaining the ori
 
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
-    ```python
+```python
 
-    # combine the signed transactions into a single list
-    signed_group = [stxn_1, stxn_2]
+# combine the signed transactions into a single list
+signed_group = [stxn_1, stxn_2]
 
-    ```
+```
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
