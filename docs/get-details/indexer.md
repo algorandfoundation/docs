@@ -301,17 +301,17 @@ nexttoken = ""
 has_results = True
 page = 0
 
-# loop using next_page to paginate until there are 
+# loop using next_page to paginate until there are
 # no more transactions in the response
 while has_results:
     response = myindexer.search_transactions(
         min_amount=10, min_round=1000, max_round=1500
     )
 
-    has_results = len(response['transactions'])>0
+    has_results = len(response["transactions"]) > 0
 
     if has_results:
-        nexttoken = response['next-token']
+        nexttoken = response["next-token"]
         print(f"Tranastion on page {page}: " + json.dumps(response, indent=2))
 
     page += 1

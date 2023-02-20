@@ -24,11 +24,15 @@ To use the Atomic Transaction Composer, first initialize the composer:
 
 === "Python"
     <!-- ===PYSDK_ATC_CREATE=== -->
-    ```py
-    from algosdk.atomic_transaction_composer import AtomicTransactionComposer
+```python
+from algosdk.atomic_transaction_composer import (
+    AtomicTransactionComposer,
+    AccountTransactionSigner,
+    TransactionWithSigner,
+)
 
-    atc = AtomicTransactionComposer()
-    ```
+atc = AtomicTransactionComposer()
+```
     <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
@@ -55,27 +59,24 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 
 === "Python"
     <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
-    ```py
+```python
+addr, sk = acct.address, acct.private_key
 
-    #...
+# Create signer object
+signer = AccountTransactionSigner(sk)
 
-    addr, sk = get_account()
+# Get suggested params from the client
+sp = algod_client.suggested_params()
 
-    # Create signer object
-    signer = AccountTransactionSigner(sk)
+# Create a transaction
+ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
 
-    # Get suggested params from the client
-    sp = client.suggested_params()
+# Construct TransactionWithSigner
+tws = TransactionWithSigner(ptxn, signer)
 
-    # Create a transaction
-    ptxn = PaymentTxn(addr, sp, addr, 10000)
-
-    # Construct TransactionWithSigner
-    tws = TransactionWithSigner(ptxn, signer)
-
-    # Pass TransactionWithSigner to ATC
-    atc.add_transaction(tws)
-    ```
+# Pass TransactionWithSigner to ATC
+atc.add_transaction(tws)
+```
     <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
@@ -179,43 +180,46 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 
 === "Python"
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
-    ```py
-    from algosdk.abi import Contract
-
-    with open("path/to/contract.json") as f:
-        js = f.read()
-    c = Contract.from_json(js)
-    ```
+```python
+with open("path/to/contract.json") as f:
+    js = f.read()
+contract = abi.Contract.from_json(js)
+```
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
 
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
-    ```py
-    # Using the app id from the "sandnet" network, which is hardcoded in the json file
-    app_id = c.networks[genesis_hash].app_id
+```python
 
-    # Utility function to get the Method object for a given method name
-    def get_method(name: str) -> Method:
-        for m in c.methods:
-            if m.name == name:
-                return m
-        raise Exception("No method with the name {}".format(name))
+# Simple call to the `add` method, method_args can be any type but _must_
+# match those in the method signature of the contract
+atc.add_method_call(
+    app_id,
+    contract.get_method_by_name("add"),
+    addr,
+    sp,
+    signer,
+    method_args=[1, 1],
+)
 
-
-
-    # Simple call to the `add` method, method_args can be any type but _must_ 
-    # match those in the method signature of the contract
-    atc.add_method_call(app_id, get_method("add"), addr, sp, signer, method_args=[1,1])
-
-    # This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
-    # The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-    ptxn = PaymentTxn(addr, sp, addr, 10000)
-    txn = TransactionWithSigner(ptxn, signer)
-    atc.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
-
-    ```
+# This method requires a `transaction` as its second argument. 
+# Construct the transaction and pass it in as an argument.
+# The ATC will handle adding it to the group transaction and 
+# setting the reference in the application arguments.
+ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
+txn = TransactionWithSigner(ptxn, signer)
+atc.add_method_call(
+    app_id,
+    contract.get_method_by_name("txntest"),
+    addr,
+    sp,
+    signer,
+    method_args=[10000, txn, 1000],
+)
+```
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
     ```js
 
     // Read in the local contract.json file
@@ -224,8 +228,9 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     // Parse the json file into an object, pass it to create an ABIContract object
     const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
     ```
+    <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
 
-    <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
+    <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
     ```js
     const commonParams = {
         appID:contract.networks[genesis_hash].appID,
@@ -355,15 +360,14 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
 
 === "Python"
     <!-- ===PYSDK_ATC_RESULTS=== -->
-    ```py
-    # Other options:
-    # txngroup = atc.build_group()
-    # txids = atc.submit(client)
-
-    result = atc.execute(client, 2)
-    for res in result.abi_results:
-        print(res.return_value)
-    ```
+```python
+# Other options:
+# txngroup = atc.build_group()
+# txids = atc.submit(client)
+result = atc.execute(algod_client, 4)
+for res in result.abi_results:
+    print(res.return_value)
+```
     <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
