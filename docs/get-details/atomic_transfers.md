@@ -334,7 +334,9 @@ The transaction group is now broadcast to the network.
 tx_id = algod_client.send_transactions(signed_group)
 
 # wait for confirmation
-result: Dict[str, Any] = transaction.wait_for_confirmation(algod_client, tx_id, 4)
+result: Dict[str, Any] = transaction.wait_for_confirmation(
+    algod_client, tx_id, 4
+)
 print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 
 ```

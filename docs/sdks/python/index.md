@@ -56,12 +56,10 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 ​
 <!-- ===PYSDK_GENERATE_ACCOUNT=== -->
 ```python
-
 private_key, address = account.generate_account()
 print(f"address: {address}".format(address))
 print(f"private key: {private_key}")
 print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
-
 ```
 <!-- ===PYSDK_GENERATE_ACCOUNT=== -->
 
@@ -89,7 +87,6 @@ Code beyond this point will be put into the ***first_transaction_example*** func
 
 <!-- ===PYSDK_CREATE_ALGOD_CLIENT=== -->
 ```python
-
 # Create a new algod client, configured to connect to our local sandbox
 algod_address = "http://localhost:4001"
 algod_token = "a" * 64
@@ -101,7 +98,6 @@ algod_client = algod.AlgodClient(algod_token, algod_address)
 special_algod_client = algod.AlgodClient(
     "", algod_address, headers={"X-API-Key": algod_token}
 )
-
 ```
 <!-- ===PYSDK_CREATE_ALGOD_CLIENT=== -->
 
@@ -114,10 +110,8 @@ Before moving on to the next step, make sure your account has been funded by the
 
 <!-- ===PYSDK_FETCH_ACCOUNT_INFO=== -->
 ```python
-
 account_info: Dict[str, Any] = algod_client.account_info(address)
 print(f"Account balance: {account_info.get('amount')} microAlgos")
-
 ```
 <!-- ===PYSDK_FETCH_ACCOUNT_INFO=== -->
 
@@ -126,18 +120,16 @@ Transactions are used to interact with the Algorand network. To create a payment
 ​
 <!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_CREATE=== -->
 ```python
-
 # grab suggested params from algod using client
 # includes things like suggested fee and first/last valid rounds
 params = algod_client.suggested_params()
 unsigned_txn = transaction.PaymentTxn(
-    sender=address, 
-    sp=params, 
-    receiver="HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA", 
-    amt=1000000, 
-    note=b"Hello World"
+    sender=address,
+    sp=params,
+    receiver="HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA",
+    amt=1000000,
+    note=b"Hello World",
 )
-
 ```
 <!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_CREATE=== -->
 ​
@@ -149,10 +141,8 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ​
 <!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SIGN=== -->
 ```python
-
 # sign the transaction
 signed_txn = unsigned_txn.sign(private_key)
-
 ```
 <!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SIGN=== -->
 ​

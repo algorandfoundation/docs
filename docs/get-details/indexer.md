@@ -28,13 +28,14 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 
 === "Python"
     <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
-    ```python
-    import json
-    from algosdk.v2client import indexer
-
-    # instantiate indexer client
-    myindexer = indexer.IndexerClient(indexer_token="", indexer_address="http://localhost:8980")
-    ```
+```python
+# instantiate indexer client
+indexer_host = "http://localhost:8980"
+indexer_token = "a" * 64
+myindexer = indexer.IndexerClient(
+    indexer_token=indexer_token, indexer_address=indexer_host
+)
+```
     <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Java"
@@ -117,12 +118,13 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "Python"
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
-	```python
-    response = myindexer.search_assets(
-        asset_id=2044572)
-
-    print("Asset Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
+```python
+# lookup a single asset
+asset_id = 2044572
+# by passing include_all, we specify that we want to see deleted assets as well
+response = myindexer.asset_info(asset_id, include_all=True)
+print(f"Asset Info: {json.dumps(response, indent=2,)}")
+```
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Java"
@@ -191,10 +193,12 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "Python"
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-	```python
-    response = myindexer.search_transactions(min_amount=10) 
-    print(json.dumps(response, indent=2, sort_keys=True))
-    ```
+```python
+response = myindexer.search_transactions(
+    min_amount=10, min_round=1000, max_round=1500
+)
+print(f"Transaction results: {json.dumps(response, indent=2)}")
+```
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Java"
@@ -258,7 +262,7 @@ When trying to find specific transactions, the Indexer supplies a pagination met
 For example, adding a limit parameter of 5 to the previous call will cause only 5 results to be returned in each page. To get the next 5 transactions simply add the next-token as a parameter to the next REST call. The parameter is named `next` and this token is only good for the next 5 results.
 
 === "JavaScript"
-    <!-- ===JSSDK_PAGINAGE_RESULTS=== -->
+    <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 	```javascript
     let nexttoken = "";
     let numtx = 1;
@@ -287,30 +291,35 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
         console.trace();
     });
     ```
-    <!-- ===JSSDK_PAGINAGE_RESULTS=== -->
+    <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Python"
-    <!-- ===PYSDK_PAGINAGE_RESULTS=== -->
-	```python
-    nexttoken = ""
-    numtx = 1
+    <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
+```python
 
-    # loop using next_page to paginate until there are no more transactions in the response
-    # for the limit (max is 1000  per request)
-    while (numtx > 0):
-        response = myindexer.search_transactions(
-            min_amount=100000000000000, limit=5, next_page=nexttoken) 
-        transactions = response['transactions']
-        numtx = len(transactions)
-        if (numtx > 0):
-            nexttoken = response['next-token']
-            # Pretty Printing JSON string 
-            print("Tranastion Info: " + json.dumps(response, indent=2, sort_keys=True))
-    ```
-    <!-- ===PYSDK_PAGINAGE_RESULTS=== -->
+nexttoken = ""
+has_results = True
+page = 0
+
+# loop using next_page to paginate until there are 
+# no more transactions in the response
+while has_results:
+    response = myindexer.search_transactions(
+        min_amount=10, min_round=1000, max_round=1500
+    )
+
+    has_results = len(response['transactions'])>0
+
+    if has_results:
+        nexttoken = response['next-token']
+        print(f"Tranastion on page {page}: " + json.dumps(response, indent=2))
+
+    page += 1
+```
+    <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Java"
-    <!-- ===JAVASDK_PAGINAGE_RESULTS=== -->
+    <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
 	```java
     public static void main(String args[]) throws Exception {
         SearchTransactionsPaging ex = new SearchTransactionsPaging();
@@ -346,10 +355,10 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
         }
     }
     ```
-    <!-- ===JAVASDK_PAGINAGE_RESULTS=== -->
+    <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Go"
-    <!-- ===GOSDK_PAGINAGE_RESULTS=== -->
+    <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 	```go
     var nextToken = ""
     var numTx = 1
@@ -381,16 +390,16 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
     }
     }
     ```
-    <!-- ===GOSDK_PAGINAGE_RESULTS=== -->
+    <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "cURL"
-    <!-- ===CURL_PAGINAGE_RESULTS=== -->
+    <!-- ===CURL_INDEXER_PAGINATE_RESULTS=== -->
 	```bash
     $ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5"
     # note the "next-token" field in the most resent results and supply the value to the "next" parameter
     $ curl "localhost:8979/v2/transactions?currency-greater-than=10&limit=5&next=cAoBAAAAAAAAAAAA"
     ```
-    <!-- ===CURL_PAGINAGE_RESULTS=== -->
+    <!-- ===CURL_INDEXER_PAGINATE_RESULTS=== -->
 
 Results showing "next-token"
 ```json
@@ -457,16 +466,11 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "Python"
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
-	```python
-    import base64
-    note_prefix = 'showing prefix'.encode()
-
-    response = myindexer.search_transactions(
-        note_prefix=note_prefix)
-
-    print("note_prefix = " +
-        json.dumps(response, indent=2, sort_keys=True))
-    ```
+```python
+note_prefix = "showing prefix".encode()
+response = myindexer.search_transactions(note_prefix=note_prefix)
+print(f"result: {json.dumps(response, indent=2)}")
+```
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Java"
