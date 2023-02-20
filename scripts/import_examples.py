@@ -2,13 +2,35 @@ import os
 from dataclasses import dataclass
 
 
+
 @dataclass
 class ExampleSource:
+    """Represents a source for examples"""
     example_dir: str
     language_name: str
     src_comment_flag: str
     doc_comment_flag: str
 
+@dataclass
+class Example:
+    """Represents a tagged example in source file"""
+    path: str
+    line_start: int
+    lines: list[str]
+
+@dataclass
+class DocExampleMatch:
+    """Represents a match between source and docs"""
+    name: str
+    line_start: int
+    line_stop: int
+
+    @staticmethod
+    def empty() -> "DocExampleMatch":
+        return DocExampleMatch("", 0, 0)
+
+# Example Name => source lines
+SDKExamples = dict[str, Example]
 
 sources: list[ExampleSource] = [
     ExampleSource(
@@ -48,19 +70,6 @@ sources: list[ExampleSource] = [
     #    doc_comment_flag="<!-- ===BEAKER_"
     # )
 ]
-
-
-@dataclass
-class Example:
-    path: str
-    line_start: int
-    lines: list[str]
-
-
-# Example Name => source lines
-SDKExamples = dict[str, Example]
-
-
 def find_examples_in_sdk(dir: str, prefix: str, lang: str) -> SDKExamples:
     directory = os.listdir(dir)
 
@@ -96,17 +105,6 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str) -> SDKExamples:
     return name_to_src
 
 
-@dataclass
-class DocExampleMatch:
-    name: str
-    line_start: int
-    line_stop: int
-
-    @staticmethod
-    def empty() -> "DocExampleMatch":
-        return DocExampleMatch("", 0, 0)
-
-
 def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
     """recursively search in directory for string prefix"""
     directory = os.listdir(dir)
@@ -135,7 +133,7 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
 
                 # First time finding seeing this one
                 if current_match.name == "":
-                    current_match.name = line[len(prefix) :].strip("= ->")
+                    current_match.name = line.strip()[len(prefix) :].strip("= ->_")
                     current_match.line_start = lno + 1
                 # Second time finding it, add it to matches and wipe current
                 else:
@@ -153,7 +151,10 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
         for match in matches:
 
             if match.name not in examples:
-                print(f"Missing {prefix.strip('<!- =')}{match.name} in src examples")
+                print(
+                    f"Missing {match.name} in {prefix.strip(' -<!=_')} "
+                    f"examples (in {path})"
+                )
                 continue
 
             page_lines[match.line_start + offset : match.line_stop + offset] = examples[
@@ -182,4 +183,6 @@ if __name__ == "__main__":
         )
 
         for name, unmatched in unmatched_examples.items():
-            print(f"Missing {name} for {src.language_name} in docs")
+            print(
+                f"Missing {name} for {src.language_name} in docs (in: {unmatched.path})"
+            )

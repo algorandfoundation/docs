@@ -57,13 +57,14 @@ The example below illustrates Account A sending a transaction to Account C and A
 
 === "Python"
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
-	``` python  
-    # from account 1 to account 3
-    txn_1 = transaction.PaymentTxn(account_1, params, account_3, 100000)
+```python
 
-    # from account 2 to account 1
-    txn_2 = transaction.PaymentTxn(account_2, params, account_1, 200000)
-    ```
+# payment from account 1 to account 2
+txn_1 = transaction.PaymentTxn(addr1, suggested_params, addr2, 100000)
+# payment from account 2 to account 1
+txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
+
+```
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Java"
@@ -124,51 +125,58 @@ See [Authorizing Transactions Offline](../transactions/offline_transactions#savi
 The result of this step is what ultimately guarantees that a particular transaction belongs to a group and is not valid if sent alone (even if properly signed). A group-id is calculated by hashing the concatenation of a set of related transactions. The resulting hash is assigned to the [Group](../transactions/transactions#group) field within each transaction. This mechanism allows anyone to recreate all transactions and recalculate the group ID to verify that the contents are as agreed upon by all parties. Ordering of the transaction set must be maintained.
 
 === "JavaScript"
-<!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
-	``` javascript
+    <!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
+	```javascript
     // Group both transactions
     let txns = [transaction1, transaction2]
     let txgroup = algosdk.assignGroupID(txns);
     ```
-<!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
+    <!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Python"
-<!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
-	``` python
+    <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
+    ```python
+
+    # Assign group id to the transactions (order matters!)
+    txn_1, txn_2 = transaction.assign_group_id([txn_1, txn_2])
+
+    # Or, equivalently
+
     # get group id and assign it to transactions
     gid = transaction.calculate_group_id([txn_1, txn_2])
     txn_1.group = gid
     txn_2.group = gid
+
     ```
-<!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
+    <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
-<!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
-	``` java
+    <!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
+	```java
     // group transactions an assign ids
     Digest gid = TxGroup.computeGroupID(new Transaction[]{tx1, tx2});
     tx1.assignGroupID(gid);
     tx2.assignGroupID(gid);
     ```
-<!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
+    <!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Go"
-<!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
-	``` go
+    <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
+	```go
     // compute group id and put it into each transaction
     gid, err := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
     tx1.Group = gid
     tx2.Group = gid
     ```
-<!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
+    <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
-<!-- ===GOAL_ATOMIC_GROUP_TXNS=== --->
-	``` goal
+    <!-- ===GOAL_ATOMIC_GROUP_TXNS=== --->
+	```goal
     $ cat unsignedtransaction1.tx unsignedtransaction2.tx > combinedtransactions.tx
     $ goal clerk group -i combinedtransactions.tx -o groupedtransactions.tx -d data -w yourwallet 
     ```
-<!-- ===GOAL_ATOMIC_GROUP_TXNS=== --->
+    <!-- ===GOAL_ATOMIC_GROUP_TXNS=== --->
 
 ## Split transactions (Goal only)
 
@@ -176,7 +184,7 @@ At this point the transaction set must be split to allow distributing each compo
 
 === "goal"
     <!-- ===GOAL_ATOMIC_GROUP_SPLIT=== -->
-	``` goal
+	```goal
     # keys in distinct wallets
     $ goal clerk split -i groupedtransactions.tx -o splitfiles -d data -w yourwallet 
 
@@ -192,7 +200,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
-	``` javascript
+	```javascript
     // Sign each transaction in the group 
     signedTx1 = transaction1.signTxn( myAccountA.sk )
     signedTx2 = transaction2.signTxn( myAccountB.sk )
@@ -201,16 +209,18 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
-	``` python
-    # sign transactions
-    stxn_1 = txn_1.sign(sk_1)    
-    stxn_2 = txn_2.sign(sk_2)
-    ```
+```python
+
+# sign transactions
+stxn_1 = txn_1.sign(sk1)
+stxn_2 = txn_2.sign(sk2)
+
+```
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
-	``` java
+	```java
     // sign individual transactions
     SignedTransaction signedTx1 = acctA.signTransaction(tx1);
     SignedTransaction signedTx2 = acctB.signTransaction(tx2);
@@ -219,7 +229,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 
 === "Go"
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
-	``` go
+	```go
     sTxID1, stx1, err := crypto.SignTransaction(sk1, tx1)
     if err != nil {
         fmt.Printf("Failed to sign transaction: %s\n", err)
@@ -235,7 +245,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 
 === "goal"
     <!-- ===GOAL_ATOMIC_GROUP_SIGN=== -->
-	``` goal
+	```goal
     # sign from single wallet containing all keys
     $ goal clerk sign -i groupedtransactions.tx -o signout.tx -d data -w yourwallet
 
@@ -262,15 +272,17 @@ All authorized transactions are now assembled into an array, maintaining the ori
 
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
-	``` python
-    # assemble transaction group
-    signed_group =  [stxn_1, stxn_2]
+    ```python
+
+    # combine the signed transactions into a single list
+    signed_group = [stxn_1, stxn_2]
+
     ```
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
-	``` java
+	```java
     // put both transaction in a byte array 
     ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream( );
     byte[] encodedTxBytes1 = Encoder.encodeToMsgPack(signedTx1);
@@ -316,15 +328,16 @@ The transaction group is now broadcast to the network.
 
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
-	```python
-    tx_id = algod_client.send_transactions(signed_group)
+```python
 
-    # wait for confirmation
+# Only the first transaction id is returned
+tx_id = algod_client.send_transactions(signed_group)
 
-    confirmed_txn = wait_for_confirmation(algod_client, tx_id, 4)
-    print("txID: {}".format(tx_id), " confirmed in round: {}".format(
-    confirmed_txn.get("confirmed-round", 0)))   
-    ```
+# wait for confirmation
+result: Dict[str, Any] = transaction.wait_for_confirmation(algod_client, tx_id, 4)
+print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
+
+```
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"
