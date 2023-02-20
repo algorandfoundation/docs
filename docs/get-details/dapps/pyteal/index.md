@@ -59,7 +59,7 @@ int 1
 return
 ```
 
-This output represents the TEAL source for the program. The TEAL source must be compiled to bytecode in order to make use of it on-chain.  This can be done using [goal](../../../clis/goal/clerk/compile.md) or one of the SDKs through the [REST](../../../rest-apis/algod/v2.md#post-v2tealcompile) interface.
+This output represents the TEAL source for the program. The TEAL source must be compiled to bytecode in order to make use of it on-chain.  This can be done using [goal](../../../clis/goal/clerk/compile.md) or one of the SDKs through the [REST](../../../rest-apis/algod.md#post-v2tealcompile) interface.
 
 
 ## A note about PyTeal Expressions

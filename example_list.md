@@ -105,4 +105,4 @@ We should show common encoding/decoding on [this page](./docs/get-details/encodi
 * CODEC_TRANSACTION- Transactions (Signed and unsigned)
 * CODEC_BLOCKS - Blocks
 
-## 
+##  
