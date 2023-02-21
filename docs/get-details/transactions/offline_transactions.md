@@ -42,42 +42,20 @@ Unsigned transactions require the transaction object to be created before writin
 
 === "Python"
 <!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
-    ``` python
-        # build transaction
-        params = algod_client.suggested_params()
-        # comment out the next two (2) lines to use suggested fees
-        params.flat_fee = True
-        params.fee = 1000
-        receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        note = "Hello World".encode()
-        unsigned_txn = PaymentTxn(
-            my_address, params, receiver, 1000000, None, note)
-        # write to file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        transaction.write_to_file([unsigned_txn], dir_path + "/unsigned.txn")
-        
-        # read from file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        txns = transaction.retrieve_from_file(dir_path + "/unsigned.txn")
-        # sign and submit transaction
-        txn = txns[0]
-        signed_txn = txn.sign(mnemonic.to_private_key(passphrase))
-        txid = signed_txn.transaction.get_txid()
-        print("Signed transaction with txID: {}".format(txid))	
-        try:
-            txid = algod_client.send_transaction(signed_txn)
-            # wait for confirmation              
-            confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-            print("TXID: ", txid)
-            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-        except Exception as err:
-            print(err)
-            return
-        print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        print("Decoded note: {}".format(base64.b64decode(
-            confirmed_txn["txn"]["txn"]["note"]).decode()))  
-    ```
+```python
+sp = algod_client.suggested_params()
+pay_txn = transaction.PaymentTxn(acct.address, sp, acct.address, 10000)
+
+# Write message packed transaction to disk
+with open("pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(pay_txn))
+
+# Read message packed transaction and decode it to a Transaction object
+with open("pay.txn", "r") as f:
+    recovered_txn = encoding.msgpack_decode(f.read())
+
+print(recovered_txn.dictify())
+```
 <!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Java"
@@ -271,42 +249,19 @@ Signed Transactions are similar, but require an account to sign the transaction 
 
 === "Python"
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
-    ``` python
-        # build transaction
-        params = algod_client.suggested_params()
-        # comment out the next two (2) lines to use suggested fees
-        params.flat_fee = True
-        params.fee = 1000
-        receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        note = "Hello World".encode()
-        unsigned_txn = PaymentTxn(
-            my_address, params, receiver, 1000000, None, note)
-        # sign transaction
-        signed_txn = unsigned_txn.sign(mnemonic.to_private_key(passphrase))
-        # write to file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        transaction.write_to_file([signed_txn], dir_path + "/signed.txn")
+```python
+# Sign transaction
+spay_txn = pay_txn.sign(acct.private_key)
+# write message packed signed transaction to disk
+with open("signed_pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(spay_txn))
 
-        # read signed transaction from file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        txns = transaction.retrieve_from_file(dir_path + "/signed.txn")
-        signed_txn = txns[0]
-        try:
-            txid = algod_client.send_transaction(signed_txn)
-            print("Signed transaction with txID: {}".format(txid))
-            # wait for confirmation
-            confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-            print("TXID: ", txid)
-            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
+# read message packed signed transaction into a SignedTransaction object
+with open("signed_pay.txn", "r") as f:
+    recovered_signed_txn = encoding.msgpack_decode(f.read())
 
-        except Exception as err:
-            print(err)
-            return
-        print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        print("Decoded note: {}".format(base64.b64decode(
-            confirmed_txn["txn"]["txn"]["note"]).decode())) 
-    ```
+print(recovered_signed_txn.dictify())
+```
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"

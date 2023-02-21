@@ -917,14 +917,12 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 === "Python"
 <!-- ===PYSDK_ACCOUNT_GENERATE=== -->
-	```python
-	from algosdk import account, mnemonic
-
-	def generate_algorand_keypair():
-		private_key, address = account.generate_account()
-		print("My address: {}".format(address))
-		print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
-	```
+```python
+private_key, address = account.generate_account()
+print(f"address: {address}")
+print(f"private key: {private_key}")
+print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
+```
 <!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
 === "Java"
@@ -1050,33 +1048,17 @@ The following code shows how to generate a multisignature account composed of th
 
 === "Python"
 <!-- ===PYSDK_MULTISIG_CREATE=== -->
-	```python
-	from algosdk import mnemonic, account
-	from algosdk.transaction import Multisig
-	# Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
-	# Change these values to use the accounts created previously.
-	# Change these values with mnemonics
-	mnemonic1 = "PASTE phrase for account 1"
-	mnemonic2 = "PASTE phrase for account 2"
-	mnemonic3 = "PASTE phrase for account 3"
-
-	private_key_1 = mnemonic.to_private_key(mnemonic1)
-	account_1 = account.address_from_private_key(private_key_1)
-
-	private_key_2 = mnemonic.to_private_key(mnemonic2)
-	account_2 = account.address_from_private_key(private_key_2)
-
-	private_key_3 = mnemonic.to_private_key(mnemonic3)
-	account_3 = account.address_from_private_key(private_key_3)
-
-	# create a multisig account
-	version = 1  # multisig version
-	threshold = 2  # how many signatures are necessary
-	msig = Multisig(version, threshold, [account_1, account_2, account_3])
-	print("Multisig Address: ", msig.address())
-	print('Go to the below link to fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account={}'.format(msig.address())) 
-
-	```
+```python
+version = 1  # multisig version
+threshold = 2  # how many signatures are necessary
+# create a Multisig given the set of participants and threshold
+msig = transaction.Multisig(
+    version,
+    threshold,
+    [account_1.address, account_2.address, account_3.address],
+)
+print("Multisig Address: ", msig.address())
+```
 <!-- ===PYSDK_MULTISIG_CREATE=== -->
 
 === "Java"

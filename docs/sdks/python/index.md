@@ -54,14 +54,14 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 
 
 ​
-<!-- ===PYSDK_GENERATE_ACCOUNT=== -->
+<!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 ```python
 private_key, address = account.generate_account()
 print(f"address: {address}".format(address))
 print(f"private key: {private_key}")
 print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 ```
-<!-- ===PYSDK_GENERATE_ACCOUNT=== -->
+<!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=161){target=_blank}    
 [`More Information`](../../get-details/accounts/create.md#standalone){target=_blank}  
@@ -126,7 +126,7 @@ params = algod_client.suggested_params()
 unsigned_txn = transaction.PaymentTxn(
     sender=address,
     sp=params,
-    receiver="HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA",
+    receiver=address2,
     amt=1000000,
     note=b"Hello World",
 )
@@ -162,7 +162,6 @@ txn_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 
 print(f"Transaction information: {json.dumps(txn_result, indent=4)}")
 print(f"Decoded note: {b64decode(txn_result['txn']['txn']['note'])}")
-
 ```
 <!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SUBMIT=== -->
 

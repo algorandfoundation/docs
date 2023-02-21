@@ -58,15 +58,13 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 
 === "Python"
 <!-- ===PYSDK_CODEC_ADDRESS=== -->
-    ```python
-    from algosdk.encoding import decode_address, encode_address
+```python
+address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
+pk = encoding.decode_address(address)
+addr = encoding.encode_address(pk)
 
-    address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
-    pk = decode_address(address)
-    addr = encode_address(pk)
-
-    assert addr == address
-    ```
+assert addr == address
+```
 <!-- ===PYSDK_CODEC_ADDRESS=== -->
 
 === "Go"
@@ -108,25 +106,24 @@ When transmitting an array of bytes over the network, byte arrays are base64 enc
 Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may be decoded as follows:
 
 === "JavaScript"
-<!-- ===JSSDK_CODEC_B64=== -->
+<!-- ===JSSDK_CODEC_BASE64=== -->
     ```js
     const encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
     const decoded = Buffer.from(encoded, "base64").toString()
     ```
-<!-- ===JSSDK_CODEC_B64=== -->
+<!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
-<!-- ===PYSDK_CODEC_B64=== -->
-    ```python
-    import base64
-
-    encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-    decoded = base64.b64decode(encoded).encode('ascii')
-    ```
-<!-- ===PYSDK_CODEC_B64=== -->
+<!-- ===PYSDK_CODEC_BASE64=== -->
+```python
+encoded_str = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
+decoded_str = base64.b64decode(encoded_str).decode('utf-8')
+print(decoded_str)
+```
+<!-- ===PYSDK_CODEC_BASE64=== -->
 
 === "Go"
-<!-- ===GOSDK_CODEC_B64=== -->
+<!-- ===GOSDK_CODEC_BASE64=== -->
     ```go
     import "encoding/base64"
 
@@ -135,10 +132,10 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
     encoded := "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
     decoded, _ := base64.StdEncoding.DecodeString(encoded)
     ```
-<!-- ===GOSDK_CODEC_B64=== -->
+<!-- ===GOSDK_CODEC_BASE64=== -->
 
 === "Java"
-<!-- ===JAVASDK_CODEC_B64=== -->
+<!-- ===JAVASDK_CODEC_BASE64=== -->
     ```java
     import java.util.Base64
 
@@ -147,7 +144,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
     String encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0";
     String decoded = new String(Base64.getDecoder().decode(encoded));
     ```
-<!-- ===JAVASDK_CODEC_B64=== -->
+<!-- ===JAVASDK_CODEC_BASE64=== -->
 
 ### Integers
 
@@ -171,14 +168,12 @@ Given an integer `1337`, you may encode it as:
 
 === "Python"
 <!-- ===PYSDK_CODEC_UINT64=== -->
-    ```python
-    val = 1337
-
-    encoded = (val).to_bytes(8,'big')
-    decoded = int.from_bytes(encoded, byteorder='big)
-
-    assert decoded == val
-    ```
+```python
+val = 1337
+encoded_uint = val.to_bytes(8,'big')
+decoded_uint = int.from_bytes(encoded_uint, byteorder='big')
+assert decoded_uint == val
+```
 <!-- ===PYSDK_CODEC_UINT64=== -->
 
 === "Go"
@@ -348,27 +343,8 @@ One type that commonly needs to be decoded are the blocks themselves. Since some
 
 === "Python"
 <!-- ===PYSDK_CODEC_BLOCK=== -->
-    ```py
-
-    from algosdk import encoding
-    from algosdk.v2client.algod import AlgodClient
-    import msgpack
-
-    client = AlgodClient("a"*64, "http://localhost:4001")
-
-    # Get the block in msgpack format
-    block = client.block_info(round_num=1234, response_format='msgpack')
-
-    # Be sure to specify `raw=True` or msgpack will try to decode as utf8
-    res = msgpack.unpackb(block, raw=True)
-
-    # Lets get the 4th transaction
-    txn = res[b'block'][b'txns'][3]
-
-    # Grab the byte value for the key `KEY`
-    address = encoding.encode_address(txn[b'dt'][b'gd'][b'KEY'][b'bs'])
-
-    ```
+```python
+```
 <!-- ===PYSDK_CODEC_BLOCK=== -->
 
 === "JavaScript"

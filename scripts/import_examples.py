@@ -43,13 +43,13 @@ sources: list[ExampleSource] = [
         doc_comment_flag="<!-- ===PYSDK_",
         file_extension=".py",
     ),
-    ExampleSource(
-        example_dir="../../algorand-teal-examples/_examples",
-        language_name="teal",
-        src_comment_flag="// example: ",
-        doc_comment_flag="<!-- ===TEAL_",
-        file_extension=".teal",
-    ),
+    #ExampleSource(
+    #    example_dir="../../algorand-teal-examples/_examples",
+    #    language_name="teal",
+    #    src_comment_flag="// example: ",
+    #    doc_comment_flag="<!-- ===TEAL_",
+    #    file_extension=".teal",
+    #),
     # ExampleSource(
     #    example_dir="../../js-algorand-sdk/examples",
     #    language_name='javascript',
@@ -88,8 +88,8 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
     for fname in directory:
         path = os.path.join(dir, fname)
         if not os.path.isfile(path):
-            name_to_src |= find_examples_in_sdk(path, prefix, lang)
-        elif os.path.splitext(path) == ext:
+            name_to_src |= find_examples_in_sdk(path, prefix, lang, ext)
+        elif os.path.splitext(path)[-1] == ext:
             local_example: list[str] = []
             with open(path, "r") as f:
                 content = f.read()
