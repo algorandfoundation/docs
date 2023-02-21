@@ -84,31 +84,30 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 
 === "Python"
 <!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
-```py
-from algosdk import kmd
-from algosdk.wallet import Wallet
+```python
+kmd_address = "http://localhost:4002"
+kmd_token = "a" * 64
 
-kmd_token = "a"*64 
-kmd_address = <kmd-address>
-# create a kmd client
-kcl = kmd.KMDClient(kmd_token, kmd_address)
+kmd_client = kmd.KMDClient(kmd_token=kmd_token, kmd_address=kmd_address)
 ```
 <!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
 <!-- ===PYSDK_KMD_CREATE_WALLET=== -->
-```py
-	# create a wallet object
-	wallet = Wallet("MyTestWallet1", "testpassword", kcl)
+```python
+# create a wallet object which, if not available yet, also creates the wallet in the KMD
+wlt = wallet.Wallet("MyNewWallet", "supersecretpassword", kmd_client)
+# get wallet information
+info = wlt.info()
+print(f"Wallet name: {info['wallet']['name']}")
 
-	# get wallet information
-	info = wallet.info()
-	print("Wallet name:", info["wallet"]["name"])
+backup = wlt.get_mnemonic()
+print(f"mnemonic for master derivation key: {backup}")
 ```
 <!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 <!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
-```py
-	# create an account
-	address = wallet.generate_key()
-	print("New account:", address)
+```python
+# create an account using the wallet object
+address = wlt.generate_key()
+print(f"New account: {address}")
 ```
 <!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 
@@ -273,31 +272,22 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 
 === "Python"
 <!-- ===PYSDK_KMD_RECOVER_WALLET===-->
-	```python
-	from algosdk import kmd, mnemonic
+```python
+# Create the master derivation key from our backed up mnemonic
+mdk = mnemonic.to_master_derivation_key(backup)
 
-	kmd_token = <kmd-token>
-	kmd_address = <kmd-address>
+# recover the wallet by passing mdk during creation
+new_wallet = wallet.Wallet(
+    "MyNewWalletCopy", "testpassword", kmd_client, mdk=mdk
+)
 
-	# create a kmd client
-	kcl = kmd.KMDClient(kmd_token, kmd_address)
+info = new_wallet.info()
+wallet_id = info["wallet"]["id"]
+print(f"Created Wallet: {wallet_id}")
 
-	# get the master derivation key from the mnemonic
-	backup = <wallet-mnemonic>
-	mdk = mnemonic.to_master_derivation_key(backup)
-
-	# recover the wallet by passing mdk when creating a wallet
-	new_wallet = kcl.create_wallet("MyTestWallet2", "testpassword", master_deriv_key=mdk)
-
-	walletid = new_wallet.get("id")
-	print("Created Wallet: ", walletid)
-
-	wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
-	print("Got wallet handle:", wallethandle)
-
-	rec_addr = kcl.generate_key(wallethandle)
-	print("Recovered account:", rec_addr)
-	```
+rec_addr = wlt.generate_key()
+print("Recovered account:", rec_addr)
+```
 <!-- ===PYSDK_KMD_RECOVER_WALLET===-->
 
 === "Java"
@@ -479,28 +469,19 @@ Use this to retrieve the 25-word mnemonic for the account.
 
 === "Python"
 <!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
-	```python
-	from algosdk import kmd, mnemonic
-	from algosdk.wallet import Wallet
-
-	kmd_token = <kmd-token>
-	kmd_address = <kmd-address>
-
-	# create a kmd client
-	kcl = kmd.KMDClient(kmd_token, kmd_address)
-
-	walletid = None
-	wallets = kcl.list_wallets()
-	for arrayitem in wallets:
-		if arrayitem.get("name") == "MyTestWallet2":
-			walletid = arrayitem.get("id")
-			break
-
-	wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
-	accountkey = kcl.export_key(wallethandle, "testpassword", <account address> )
-	mn = mnemonic.from_private_key(accountkey)
-	print("Account Mnemonic: ", mn)
-	```
+```python
+# Get the id for the wallet we want to export an account from
+wallet_id = get_wallet_id_from_name("MyNewWallet")
+# Get a session handle for the wallet after providing password
+wallethandle = kmd_client.init_wallet_handle(wallet_id, "supersecretpassword")
+# Export the account key for the address passed
+accountkey = kmd_client.export_key(
+    wallethandle, "supersecretpassword", address
+)
+# Print the mnemonic for the accounts private key
+mn = mnemonic.from_private_key(accountkey)
+print(f"Account mnemonic: {mn}")
+```
 <!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Java"
@@ -690,35 +671,19 @@ Use these methods to import a 25-word account-level mnemonic.
 
 === "Python"
 <!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
-	```python
-	from algosdk import kmd, mnemonic
+```python
+wallet_id = get_wallet_id_from_name("MyNewWallet")
 
-	kmd_token = <kmd-token>
-	kmd_address = "http://" + <kmd-address>
+# Generate a new account client side
+new_private_key, new_address = account.generate_account()
+mn = mnemonic.from_private_key(new_private_key)
+print(f"Account: {new_address} Mnemonic: {mn}")
 
-	# create a kmd client
-	kcl = kmd.KMDClient(params.kmd_token, params.kmd_address)
-
-	walletid = None
-	wallets = kcl.list_wallets()
-	for arrayitem in wallets:
-		if arrayitem.get("name") == "MyTestWallet2":
-			walletid = arrayitem.get("id")
-			break
-	print("Got Wallet ID:", walletid)
-
-	wallethandle = kcl.init_wallet_handle(walletid, "testpassword")
-	print("Got Wallet Handle:", wallethandle)
-
-	private_key, address = account.generate_account()
-	print("Account:", address)
-
-	mn = mnemonic.from_private_key(private_key)
-	print("Mnemonic", mn)
-
-	importedaccount = kcl.import_key(wallethandle, private_key)
-	print("Account successfully imported: ", importedaccount)
-	```
+# Import the account to the wallet in KMD
+wallethandle = kmd_client.init_wallet_handle(wallet_id, "supersecretpassword")
+importedaccount = kmd_client.import_key(wallethandle, new_private_key)
+print("Account successfully imported: ", importedaccount)
+```
 <!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Java"
