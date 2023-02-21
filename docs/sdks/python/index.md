@@ -57,7 +57,7 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 <!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 ```python
 private_key, address = account.generate_account()
-print(f"address: {address}".format(address))
+print(f"address: {address}")
 print(f"private key: {private_key}")
 print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 ```

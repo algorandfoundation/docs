@@ -20,6 +20,7 @@ class Example:
     path: str
     line_start: int
     lines: list[str]
+    matches: int
 
 @dataclass
 class DocExampleMatch:
@@ -108,6 +109,7 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
                                 *local_example,
                                 "```",
                             ],
+                            matches=0
                         )
                         local_example = []
                     else:
@@ -176,7 +178,7 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
                 match.line_stop - match.line_start
             )
 
-            del examples[match.name]
+            examples[match.name].matches += 1
 
         with open(path, "w") as f:
             f.write("\n".join(page_lines))
@@ -189,12 +191,13 @@ if __name__ == "__main__":
         sdk_examples = find_examples_in_sdk(
             src.example_dir, src.src_comment_flag, src.language_name, src.file_extension
         )
-        unmatched_examples = replace_matches_in_docs(
+        replace_matches_in_docs(
             "../docs", src.doc_comment_flag, sdk_examples
         )
 
-        for name, unmatched in unmatched_examples.items():
-            print(
-                f"Missing {name} for {src.language_name} in docs "
-                f"(in: {unmatched.path}:{unmatched.line_start})"
-            )
+        for name, example in sdk_examples.items():
+            if example.matches == 0:
+                print(
+                    f"Missing {name} for {src.language_name} in docs "
+                    f"(in: {example.path}:{example.line_start})"
+                )

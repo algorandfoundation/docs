@@ -117,7 +117,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 <!-- ===PYSDK_CODEC_BASE64=== -->
 ```python
 encoded_str = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-decoded_str = base64.b64decode(encoded_str).decode('utf-8')
+decoded_str = base64.b64decode(encoded_str).decode("utf-8")
 print(decoded_str)
 ```
 <!-- ===PYSDK_CODEC_BASE64=== -->
@@ -170,8 +170,8 @@ Given an integer `1337`, you may encode it as:
 <!-- ===PYSDK_CODEC_UINT64=== -->
 ```python
 val = 1337
-encoded_uint = val.to_bytes(8,'big')
-decoded_uint = int.from_bytes(encoded_uint, byteorder='big')
+encoded_uint = val.to_bytes(8, "big")
+decoded_uint = int.from_bytes(encoded_uint, byteorder="big")
 assert decoded_uint == val
 ```
 <!-- ===PYSDK_CODEC_UINT64=== -->
@@ -252,31 +252,35 @@ Create a payment transaction from one account to another using suggested paramet
 
 === "Python"
 <!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
-    ```py
+```python
+sp = algod_client.suggested_params()
+pay_txn = transaction.PaymentTxn(acct.address, sp, acct.address, 10000)
 
-    sp = client.suggested_params()
-    pay_txn = transaction.PaymentTxn(addr1, sp, addr2, 10000)
-    with open("pay.txn", "w") as f:
-        f.write(encoding.msgpack_encode(pay_txn))
+# Write message packed transaction to disk
+with open("pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(pay_txn))
 
-    with open("pay.txn", "r") as f:
-        recovered_txn = encoding.msgpack_decode(f.read())
+# Read message packed transaction and decode it to a Transaction object
+with open("pay.txn", "r") as f:
+    recovered_txn = encoding.msgpack_decode(f.read())
 
-    print(recovered_txn)
-
-    ```
+print(recovered_txn.dictify())
+```
 <!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
-    ```py
-        spay_txn = pay_txn.sign(pk1)
-        with open("signed_pay.txn", "w") as f:
-            f.write(encoding.msgpack_encode(spay_txn))
+```python
+# Sign transaction
+spay_txn = pay_txn.sign(acct.private_key)
+# write message packed signed transaction to disk
+with open("signed_pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(spay_txn))
 
-        with open("signed_pay.txn", "r") as f:
-            recovered_signed_txn = encoding.msgpack_decode(f.read())
+# read message packed signed transaction into a SignedTransaction object
+with open("signed_pay.txn", "r") as f:
+    recovered_signed_txn = encoding.msgpack_decode(f.read())
 
-        print(recovered_signed_txn)
-    ```
+print(recovered_signed_txn.dictify())
+```
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
