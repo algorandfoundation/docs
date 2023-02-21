@@ -105,13 +105,19 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 ## Encoding/Decoding
 
-We should show common encoding/decoding on [this page](./docs/get-details/encoding.md)
+[Reference Page](./docs/get-details/encoding.md)
 
 * CODEC_ADDRESS - Address
+* CODEC_B64 - arbitrary byte slices encoded as b64 
 * CODEC_UINT64 - Uint64
 * CODEC_STATE - Global/local state - how to decode, what the types mean 
 * CODEC_ABI_TYPES - ABI types (using something like ABIType.from("(uint64,address)"))
-* CODEC_TRANSACTION- Transactions (Signed and unsigned)
+* CODEC_TRANSACTION_UNSIGNED - Show how to read/write unsigned transactions
+* CODEC_TRANSACTION_SIGNED- Show how to read/write signed transactions 
 * CODEC_BLOCKS - Blocks
 
-##  
+## Transactions 
+
+[Reference Page](./docs/get-details/transactions/offline_transactions.md)
+
+* TRANSACTION_SIGN_OFFLINE - Show how to create and sign a transaction using cold wallet 

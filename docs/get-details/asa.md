@@ -373,7 +373,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 
 === "JavaScript"
     <!-- ===JSSDK_ASSET_CONFIG=== -->
-	``` javascript
+	```javascript
     params = await algodclient.getTransactionParams().do();
     // comment out the next two lines to use suggested fee
     // params.fee = 1000;

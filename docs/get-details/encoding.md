@@ -45,6 +45,7 @@ The Address developers or users are typically shown is a 58 byte string correspo
 
 Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, encoding to and from the public key format can be done as follows:
 === "JavaScript"
+<!-- ===JSSDK_CODEC_ADDRESS=== -->
     ```js
     import algosdk from 'algosdk'
 
@@ -53,8 +54,10 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
     const addr = algosdk.encodeAddress(pk.publicKey)
     // addr === address
     ```
+<!-- ===JSSDK_CODEC_ADDRESS=== -->
 
 === "Python"
+<!-- ===PYSDK_CODEC_ADDRESS=== -->
     ```python
     from algosdk.encoding import decode_address, encode_address
 
@@ -64,8 +67,10 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 
     assert addr == address
     ```
+<!-- ===PYSDK_CODEC_ADDRESS=== -->
 
 === "Go"
+<!-- ===GOSDK_CODEC_ADDRESS=== -->
     ```go
     import "github.com/algorand/go-algorand-sdk/types"
 
@@ -77,8 +82,10 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
     
     //addr == address
     ```
+<!-- ===GOSDK_CODEC_ADDRESS=== -->
 
 === "Java"
+<!-- ===JAVASDK_CODEC_ADDRESS=== -->
     ```java
     import com.algorand.algosdk.crypto.Address;
 
@@ -90,6 +97,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 
     // addr == address
     ```
+<!-- ===JAVASDK_CODEC_ADDRESS=== -->
 
 ### Byte Arrays
 
@@ -100,20 +108,25 @@ When transmitting an array of bytes over the network, byte arrays are base64 enc
 Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may be decoded as follows:
 
 === "JavaScript"
+<!-- ===JSSDK_CODEC_B64=== -->
     ```js
     const encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
     const decoded = Buffer.from(encoded, "base64").toString()
     ```
+<!-- ===JSSDK_CODEC_B64=== -->
 
 === "Python"
+<!-- ===PYSDK_CODEC_B64=== -->
     ```python
     import base64
 
     encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
     decoded = base64.b64decode(encoded).encode('ascii')
     ```
+<!-- ===PYSDK_CODEC_B64=== -->
 
 === "Go"
+<!-- ===GOSDK_CODEC_B64=== -->
     ```go
     import "encoding/base64"
 
@@ -122,8 +135,10 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
     encoded := "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
     decoded, _ := base64.StdEncoding.DecodeString(encoded)
     ```
+<!-- ===GOSDK_CODEC_B64=== -->
 
 === "Java"
+<!-- ===JAVASDK_CODEC_B64=== -->
     ```java
     import java.util.Base64
 
@@ -132,6 +147,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
     String encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0";
     String decoded = new String(Base64.getDecoder().decode(encoded));
     ```
+<!-- ===JAVASDK_CODEC_B64=== -->
 
 ### Integers
 
@@ -142,6 +158,7 @@ Integers in algorand are almost always uint64, sometimes its required to encode 
 Given an integer `1337`, you may encode it as:
 
 === "JavaScript"
+<!-- ===JSSDK_CODEC_UINT64=== -->
     ```js
     const val = 1337
 
@@ -150,8 +167,10 @@ Given an integer `1337`, you may encode it as:
 
     // val === decoded
     ```
+<!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
+<!-- ===PYSDK_CODEC_UINT64=== -->
     ```python
     val = 1337
 
@@ -160,8 +179,10 @@ Given an integer `1337`, you may encode it as:
 
     assert decoded == val
     ```
+<!-- ===PYSDK_CODEC_UINT64=== -->
 
 === "Go"
+<!-- ===GOSDK_CODEC_UINT64=== -->
     ```go
     import "encoding/binary"
 
@@ -174,8 +195,10 @@ Given an integer `1337`, you may encode it as:
 
     // val == decoded
     ```
+<!-- ===GOSDK_CODEC_UINT64=== -->
 
 === "Java"
+<!-- ===JAVASDK_CODEC_UINT64=== -->
     ```java
     long val = 1337;
 
@@ -185,6 +208,7 @@ Given an integer `1337`, you may encode it as:
 
     //decoded.toLong() == val
     ```
+<!-- ===JAVASDK_CODEC_UINT64=== -->
 
 
 ## Working with encoded structures
@@ -207,6 +231,7 @@ and decoding is:
 Create a payment transaction from one account to another using suggested parameters and amount 10000, we write the msgpack encoded bytes
 
 === "JavaScript"
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
     ```js
 
     const sp = await client.getTransactionParams().do()
@@ -215,19 +240,23 @@ Create a payment transaction from one account to another using suggested paramet
     const pay_txn_bytes = algosdk.encodeObj(pay_txn.get_obj_for_encoding())
     fs.writeFileSync("pay.txn", Buffer.from(pay_txn_bytes).toString("base64"))
 
-    const spay_txn_bytes = pay_txn.signTxn(acct1.sk)
-    fs.writeFileSync("signed_pay.txn", Buffer.from(spay_txn_bytes).toString("base64"))
-
 
     const recovered_pay_txn = algosdk.decodeUnsignedTransaction(Buffer.from(fs.readFileSync("pay.txn").toString(), "base64"))
     console.log(recovered_pay_txn)
 
+    ```
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
+```js
+    const spay_txn_bytes = pay_txn.signTxn(acct1.sk)
+    fs.writeFileSync("signed_pay.txn", Buffer.from(spay_txn_bytes).toString("base64"))
     const recovered_signed_pay_txn = algosdk.decodeSignedTransaction(Buffer.from(fs.readFileSync("signed_pay.txn").toString(), "base64"))
     console.log(recovered_signed_pay_txn)
-
-    ```
+```
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
     ```py
 
     sp = client.suggested_params()
@@ -235,26 +264,29 @@ Create a payment transaction from one account to another using suggested paramet
     with open("pay.txn", "w") as f:
         f.write(encoding.msgpack_encode(pay_txn))
 
-    spay_txn = pay_txn.sign(pk1)
-    with open("signed_pay.txn", "w") as f:
-        f.write(encoding.msgpack_encode(spay_txn))
-
-
     with open("pay.txn", "r") as f:
         recovered_txn = encoding.msgpack_decode(f.read())
 
     print(recovered_txn)
 
-    with open("signed_pay.txn", "r") as f:
-        recovered_signed_txn = encoding.msgpack_decode(f.read())
-
-    print(recovered_signed_txn)
-
     ```
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
+    ```py
+        spay_txn = pay_txn.sign(pk1)
+        with open("signed_pay.txn", "w") as f:
+            f.write(encoding.msgpack_encode(spay_txn))
+
+        with open("signed_pay.txn", "r") as f:
+            recovered_signed_txn = encoding.msgpack_decode(f.read())
+
+        print(recovered_signed_txn)
+    ```
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
-    ```go
-
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```go
 	// Error handling omitted for brevity
 	sp, _ := client.SuggestedParams().Do(context.Background())
 
@@ -265,12 +297,7 @@ Create a payment transaction from one account to another using suggested paramet
 	f, _ := os.Create("pay.txn")
 	f.Write(pay_txn_bytes)
 
-	_, spay_txn, _ := crypto.SignTransaction(acct1.PrivateKey, pay_txn)
-
-	var spay_txn_bytes = make([]byte, 1e3)
-	base64.StdEncoding.Encode(spay_txn_bytes, spay_txn)
-	f2, _ := os.Create("signed_pay.txn")
-	f2.Write(spay_txn_bytes)
+    // ...
 
 	var (
 		recovered_pay_txn   = types.Transaction{}
@@ -281,6 +308,19 @@ Create a payment transaction from one account to another using suggested paramet
 
 	msgpack.Decode(recovered_pay_bytes, &recovered_pay_txn)
 	log.Printf("%+v", recovered_pay_txn)
+```
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+    ```go
+
+	_, spay_txn, _ := crypto.SignTransaction(acct1.PrivateKey, pay_txn)
+
+	var spay_txn_bytes = make([]byte, 1e3)
+	base64.StdEncoding.Encode(spay_txn_bytes, spay_txn)
+	f2, _ := os.Create("signed_pay.txn")
+	f2.Write(spay_txn_bytes)
+
 
 	var (
 		recovered_signed_pay_txn   = types.SignedTxn{}
@@ -292,6 +332,13 @@ Create a payment transaction from one account to another using suggested paramet
 	msgpack.Decode(recovered_signed_pay_bytes, &recovered_signed_pay_txn)
 	log.Printf("%+v", recovered_signed_pay_txn)
     ```
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+
+=== "Java"
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 
 
@@ -300,6 +347,7 @@ Create a payment transaction from one account to another using suggested paramet
 One type that commonly needs to be decoded are the blocks themselves. Since some fields are raw byte arrays (like state deltas) the msgpack format should be used.
 
 === "Python"
+<!-- ===PYSDK_CODEC_BLOCK=== -->
     ```py
 
     from algosdk import encoding
@@ -321,3 +369,16 @@ One type that commonly needs to be decoded are the blocks themselves. Since some
     address = encoding.encode_address(txn[b'dt'][b'gd'][b'KEY'][b'bs'])
 
     ```
+<!-- ===PYSDK_CODEC_BLOCK=== -->
+
+=== "JavaScript"
+<!-- ===JSSDK_CODEC_BLOCK=== -->
+<!-- ===JSSDK_CODEC_BLOCK=== -->
+
+=== "Go"
+<!-- ===GOSDK_CODEC_BLOCK=== -->
+<!-- ===GOSDK_CODEC_BLOCK=== -->
+
+=== "Java"
+<!-- ===JAVASDK_CODEC_BLOCK=== -->
+<!-- ===JAVASDK_CODEC_BLOCK=== -->

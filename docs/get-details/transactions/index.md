@@ -573,7 +573,7 @@ Application NoOp Transactions make up a majority of the Application Call methods
 
 A State Proof Transaction is a transaction that's submitted to the network during the consensus process. These types of transactions are not submitted by individuals, nor can a Smart Contract issue inner state proof transactions.
 
-```
+```js
 {
   "txn": {
     "txn": {
@@ -582,7 +582,7 @@ A State Proof Transaction is a transaction that's submitted to the network durin
       "lv": 24193139,
       "snd": "XM6FEYVJ2XDU2IBH4OT6VZGW75YM63CM4TC6AV6BD3JZXFJUIICYTVB5EU",
       "sp": {
-        ...
+        //...
       },
       "spmsg": {
         "P": 2230170,
@@ -662,17 +662,17 @@ Here are three example scenarios and how the round range may be calculated for e
 
 	Convert 24 hours to seconds (to determine the delta from now to target time):
 
-   	```
+  ```
 	24 hours * 60 minutes/hour * 60 seconds/minute = 86,400 seconds
 	```
 	Calculate the number of blocks produced on average during that time period:
    
-    ```
+  ```
 	86400 seconds/4.5 seconds per block: about 19,200 blocks
 	```
 	Determine first valid round and last valid round for first transaction. Assume current network round is 6,000,000:
 
-    ```
+  ```
 	First Valid Round =  6,000,000 + 19,200 = 6,019,200
 	Last Valid Round = 6,019,200 + 1000 = 6,020,200
 	```
@@ -759,13 +759,34 @@ For atomic transactions, the fees set on all transactions in the group are summe
 !!! info
     Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
 
-An example of setting a pooled fee on a group of two transactions in javascript:
+An example of setting a pooled fee on a group of two transactions:
 
+=== "JavaScript"
+<!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 ```js
 const suggestedParams = await client.getTransactionParams().do()
 suggestedParams.flatFee = true;
 suggestedParams.fee = 2 * algosdk.ALGORAND_MIN_TX_FEE;
 ```
+<!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
+
+=== "Python"
+<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
+```py
+```
+<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
+
+=== "Go"
+<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
+```go
+```
+<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
+
+=== "Java"
+<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
+```java
+```
+<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 
 

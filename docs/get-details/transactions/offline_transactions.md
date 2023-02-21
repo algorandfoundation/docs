@@ -13,6 +13,7 @@ Algorand SDK's and `goal` support writing and reading both signed and unsigned t
 Unsigned transactions require the transaction object to be created before writing to a file.
 
 === "JavaScript"
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
     ``` javascript
         // get network suggested parameters
         let params = await algodClient.getTransactionParams().do();
@@ -37,8 +38,10 @@ Unsigned transactions require the transaction object to be created before writin
         var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
         console.log("Note field: ", string);       
     ```
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
     ``` python
         # build transaction
         params = algod_client.suggested_params()
@@ -75,8 +78,10 @@ Unsigned transactions require the transaction object to be created before writin
         print("Decoded note: {}".format(base64.b64decode(
             confirmed_txn["txn"]["txn"]["note"]).decode()))  
     ```
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Java"
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
     ```java
         // Construct the transaction
         final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
@@ -132,8 +137,10 @@ Unsigned transactions require the transaction object to be created before writin
         System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
         printBalance(myAccount);
     ```
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
     ``` go
         // Construct the transaction
         txParams, err := algodClient.SuggestedParams().Do(context.Background())
@@ -216,8 +223,10 @@ Unsigned transactions require the transaction object to be created before writin
 
         fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
     ```
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
+<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
     ``` goal
     $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
 
@@ -226,10 +235,12 @@ Unsigned transactions require the transaction object to be created before writin
     $ goal clerk rawsend --filename signed.txn
 
     ```
+<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
 # Signed Transaction File Operations 
 Signed Transactions are similar, but require an account to sign the transaction before writing it to a file.
 
 === "JavaScript"
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
     ``` javascript
         // get network suggested parameters
         let params = await algodClient.getTransactionParams().do();
@@ -256,8 +267,10 @@ Signed Transactions are similar, but require an account to sign the transaction 
         var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
         console.log("Note field: ", string);    
     ```
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
     ``` python
         # build transaction
         params = algod_client.suggested_params()
@@ -294,8 +307,10 @@ Signed Transactions are similar, but require an account to sign the transaction 
         print("Decoded note: {}".format(base64.b64decode(
             confirmed_txn["txn"]["txn"]["note"]).decode())) 
     ```
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
     ```java
         // Construct the transaction
         final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
@@ -344,8 +359,10 @@ Signed Transactions are similar, but require an account to sign the transaction 
         System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
         printBalance(myAccount); 
     ```
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
     ``` go
         // Construct the transaction
         txParams, err := algodClient.SuggestedParams().Do(context.Background())
@@ -411,11 +428,15 @@ Signed Transactions are similar, but require an account to sign the transaction 
 
         fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
     ```
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"
+<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
     ``` goal
     $ goal clerk rawsend --filename signed.txn
     ```
+<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
+
 !!! info
     Example transaction code snippets are provided throughout this page. Full running code transaction examples as well as **offline multisig** for each SDK are available within the GitHub repo at [/examples/offline](https://github.com/algorand/docs/tree/master/examples/offline) and for [download](https://github.com/algorand/docs/blob/master/examples/offine/offline.zip?raw=true) (.zip).
     
