@@ -43,10 +43,14 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 ### KMD:
 
-[Reference page](./docs/get-details/kmd.md) (new page)
+[Reference page](./docs/get-details/accounts/create.md)
 
 * KMD_CREATE_CLIENT - Show how to init client and connect to kmd
-* KMD_USE_CLIENT - Show how to get a wallet handle and grab accounts using the handle
+* KMD_CREATE_WALLET - Show how to create a new wallet
+* KMD_RECOVER_WALLET - show how to recover a wallet
+* KMD_CREATE_ACCOUNT - Show how to create a new account
+* KMD_IMPORT_ACCOUNT - Show how to create a new account
+* KMD_EXPORT_ACCOUNT - show how to get the list of accounts in a wallet
 
 
 ## Accounts
@@ -56,6 +60,8 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 * ACCOUNT_GENERATE - generate a new account with the SDK (mirrors SDK reference page)
 * ACCOUNT_RECOVER_MNEMONIC - Create an account from a known mnemonic and print pubkey/privatekey
 * ACCOUNT_RECOVER_PRIVATE_KEY - Create an account from a known private key and print pubkey/mnemonic
+* ACCOUNT_MULTISIG_CREATE - Create a multisig account from a list of accounts
+* ACCOUNT_REKEY - show how to rekey an account
 
 ## ASAs
 

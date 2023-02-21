@@ -54,70 +54,67 @@ kmd token:  [token]
 Create a new wallet and generate an account. In the SDKs, connect to kmd through a kmd client then create a new wallet. With the wallet handle, generate an account. 
 
 === "JavaScript"
-	```javascript
-	const algosdk = require('algosdk');
+<!-- ===JSSDK_KMD_CREATE_CLIENT=== -->
 
-	const kmdtoken = <kmd-token>;
-	const kmdserver = <kmd-address>;
-	const kmdport = <kmd-port>;
+```js
+	const kmdtoken = '';
+	const kmdserver = 'http://localhost';
+	const kmdport = 4002;
 
 	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
+```
+<!-- ===JSSDK_KMD_CREATE_CLIENT=== -->
 
-	let walletid = null;
-	let wallethandle = null;
+<!-- ===JSSDK_KMD_CREATE_WALLET=== -->
+```js
+	let walletid = (await kmdclient.createWallet("MyTestWallet1", "testpassword", "", "sqlite")).wallet.id;
+	console.log("Created wallet:", walletid);
+```
+<!-- ===JSSDK_KMD_CREATE_WALLET=== -->
 
-	(async () => {
-		let walletid = (await kmdclient.createWallet("MyTestWallet1", "testpassword", "", "sqlite")).wallet.id;
-		console.log("Created wallet:", walletid);
+<!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
+```js
+	let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
+	console.log("Got wallet handle:", wallethandle);
 
-		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-		console.log("Got wallet handle:", wallethandle);
-
-		let address1 = (await kmdclient.generateKey(wallethandle)).address;
-		console.log("Created new account:", address1);
-	})().catch(e => {
-		console.log(e);
-	});
-	```
+	let address1 = (await kmdclient.generateKey(wallethandle)).address;
+	console.log("Created new account:", address1);
+```
+<!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Python"
-	```python
-	from algosdk import kmd
-	from algosdk.wallet import Wallet
+<!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
+```py
+from algosdk import kmd
+from algosdk.wallet import Wallet
 
-	kmd_token = <kmd-token>
-	kmd_address = <kmd-address>
-	# create a kmd client
-	kcl = kmd.KMDClient(kmd_token, kmd_address)
-
+kmd_token = "a"*64 
+kmd_address = <kmd-address>
+# create a kmd client
+kcl = kmd.KMDClient(kmd_token, kmd_address)
+```
+<!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
+<!-- ===PYSDK_KMD_CREATE_WALLET=== -->
+```py
 	# create a wallet object
 	wallet = Wallet("MyTestWallet1", "testpassword", kcl)
 
 	# get wallet information
 	info = wallet.info()
 	print("Wallet name:", info["wallet"]["name"])
-
+```
+<!-- ===PYSDK_KMD_CREATE_WALLET=== -->
+<!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
+```py
 	# create an account
 	address = wallet.generate_key()
 	print("New account:", address)
-	```
+```
+<!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Java"
-	```java
-	package com.algorand.algosdk.example;
-
-	import com.algorand.algosdk.kmd.client.ApiException;
-	import com.algorand.algosdk.kmd.client.KmdClient;
-	import com.algorand.algosdk.kmd.client.api.KmdApi;
-	import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
-	import com.algorand.algosdk.kmd.client.model.APIV1POSTWalletResponse;
-	import com.algorand.algosdk.kmd.client.model.CreateWalletRequest;
-	import com.algorand.algosdk.kmd.client.model.GenerateKeyRequest;
-	import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
-
-	public class GenWalletGenAcct 
-	{
-		public static void main(String args[]) throws Exception {
+<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
+```java
 			//Get the values for the following two settings in the
 			//kmd.net and kmd.token files within the data directory 
 			//of your node.        
@@ -131,52 +128,44 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
 			api_key.setApiKey(KMD_API_TOKEN);
 			KmdApi kmdApiInstance = new KmdApi(client);
+```
+<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
+<!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 
-			APIV1POSTWalletResponse wallet;
-			try {
-				//create the REST request
-				CreateWalletRequest req = new CreateWalletRequest()
-						.walletName("MyTestWallet1")
-						.walletPassword("testpassword")
-						.walletDriverName("sqlite");
-				//create the wallet        
-				wallet = kmdApiInstance.createWallet(req);
-				String wallId = wallet.getWallet().getId();
-				//create REST request to get wallet token
-				InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
-				walletHandleRequest.setWalletId(wallId);
-				walletHandleRequest.setWalletPassword("test");
-				//execute request to get the wallet token
-				String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
-				//create REST request to create new key with wallet token
-				GenerateKeyRequest genAcc = new GenerateKeyRequest();
-				genAcc.setWalletHandleToken(token);
-				//execute request to generate new key(account)
-				String newAccount = kmdApiInstance.generateKey(genAcc).getAddress();
-				System.out.println("New Account: " + newAccount);
-
-			} catch (ApiException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	```java
+	APIV1POSTWalletResponse wallet;
+	//create the REST request
+	CreateWalletRequest req = new CreateWalletRequest()
+			.walletName("MyTestWallet1")
+			.walletPassword("testpassword")
+			.walletDriverName("sqlite");
+	//create the wallet        
+	wallet = kmdApiInstance.createWallet(req);
+	String wallId = wallet.getWallet().getId();
+	//create REST request to get wallet token
+	InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
+	walletHandleRequest.setWalletId(wallId);
+	walletHandleRequest.setWalletPassword("test");
 	```
+<!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
+<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
+	```java
+		//execute request to get the wallet token
+		String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
+		//create REST request to create new key with wallet token
+		GenerateKeyRequest genAcc = new GenerateKeyRequest();
+		genAcc.setWalletHandleToken(token);
+		//execute request to generate new key(account)
+		String newAccount = kmdApiInstance.generateKey(genAcc).getAddress();
+		System.out.println("New Account: " + newAccount);
+	```
+<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Go"
-	```go
-	package main
-
-	import (
-		"fmt"
-
-		"github.com/algorand/go-algorand-sdk/client/kmd"
-		"github.com/algorand/go-algorand-sdk/types"
-	)
-
-	const kmdAddress = "<kmd-address>"
-	const kmdToken = "<kmd-token>"
-
-	func main() {
+<!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
+```go
+		var kmdAddress = "<kmd-address>"
+		var kmdToken = "<kmd-token>"
 		// Create a kmd client
 		kmdClient, err := kmd.MakeClient(kmdAddress, kmdToken)
 		if err != nil {
@@ -184,7 +173,10 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 			return
 		}
 		fmt.Println("Made a kmd client")
-
+```
+<!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
+<!-- ===GOSDK_KMD_CREATE_WALLET=== -->
+	```go
 		// Create the example wallet, if it doesn't already exist
 		cwResponse, err := kmdClient.CreateWallet("MyTestWallet1", "testpassword", kmd.DefaultWalletDriver, types.MasterDerivationKey{})
 		if err != nil {
@@ -196,6 +188,11 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 		exampleWalletID := cwResponse.Wallet.ID
 		fmt.Printf("Created wallet '%s' with ID: %s\n", cwResponse.Wallet.Name, exampleWalletID)
 
+	```
+<!-- ===GOSDK_KMD_CREATE_WALLET=== -->
+
+<!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
+	```go
 		// Get a wallet handle. The wallet handle is used for things like signing transactions
 		// and creating accounts. Wallet handles do expire, but they can be renewed
 		initResponse, err := kmdClient.InitWalletHandle(exampleWalletID, "testpassword")
@@ -214,9 +211,8 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 			return
 		}
 		fmt.Printf("New Account: %s\n", genResponse.Address)
-	}
 	```
-
+<!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "goal"
 	```zsh
@@ -244,6 +240,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	An offline wallet may not accurately reflect account balances, but the state for those accounts (e.g. its balance, online status) are safely stored on the blockchain. kmd will repopulate those balances when connected to a node.
 
 === "JavaScript"
+<!-- ===JSSDK_KMD_RECOVER_WALLET===-->
 	```javascript
 	const algosdk = require('algosdk');
 
@@ -272,8 +269,10 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 		console.log(e);
 	});
 	```
+<!-- ===JSSDK_KMD_RECOVER_WALLET===-->
 
 === "Python"
+<!-- ===PYSDK_KMD_RECOVER_WALLET===-->
 	```python
 	from algosdk import kmd, mnemonic
 
@@ -299,8 +298,10 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	rec_addr = kcl.generate_key(wallethandle)
 	print("Recovered account:", rec_addr)
 	```
+<!-- ===PYSDK_KMD_RECOVER_WALLET===-->
 
 === "Java"
+<!-- ===JAVASDK_KMD_RECOVER_WALLET===-->
 	```java
 	package com.algorand.algosdk.example;
 
@@ -363,8 +364,10 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 		}
 	}
 	```
+<!-- ===JAVASDK_KMD_RECOVER_WALLET===-->
 
 === "Go"
+<!-- ===GOSDK_KMD_RECOVER_WALLET===-->
 	```go
 	package main
 
@@ -426,9 +429,10 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 		fmt.Printf("Recovered address %s\n", genResponse.Address)
 	}
 	```
-
+<!-- ===GOSDK_KMD_RECOVER_WALLET===-->
 
 === "goal"
+<!-- ===GOAL_KMD_RECOVER_WALLET===-->
 	```zsh
 	$ goal wallet new -r <recovered-wallet-name>
 	Please type your recovery mnemonic below, and hit return when you are done: 
@@ -441,11 +445,13 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	$ goal account new -w <recovered-wallet-name>
 	Created new account with address [RECOVERED_ADDRESS]
 	```
+<!-- ===GOAL_KMD_RECOVER_WALLET===-->
 
 ### Export an account
 Use this to retrieve the 25-word mnemonic for the account.
 
 === "JavaScript"
+<!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
 	```javascript
 	const algosdk = require('algosdk');
 
@@ -469,8 +475,10 @@ Use this to retrieve the 25-word mnemonic for the account.
 		console.log(e.text);
 	})
 	```
+<!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Python"
+<!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
 	```python
 	from algosdk import kmd, mnemonic
 	from algosdk.wallet import Wallet
@@ -493,8 +501,10 @@ Use this to retrieve the 25-word mnemonic for the account.
 	mn = mnemonic.from_private_key(accountkey)
 	print("Account Mnemonic: ", mn)
 	```
+<!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Java"
+<!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 	```java
 	package com.algorand.algosdk.example;
 
@@ -571,8 +581,10 @@ Use this to retrieve the 25-word mnemonic for the account.
 		}
 	}
 	```
+<!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Go"
+<!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 	```go
 	package main
 
@@ -634,6 +646,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 
 	}
 	```
+<!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 
 ### Import an account
 Use these methods to import a 25-word account-level mnemonic.
@@ -642,6 +655,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	For compatibility with other developer tools, `goal` provides functions to import and export accounts into kmd wallets, however, keep in mind that an imported account can **not** be recovered/derived from the wallet-level mnemonic. You must always keep track of the account-level mnemonics that you import into kmd wallets.
 
 === "JavaScript"
+<!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
 	```javascript
 	const algosdk = require('algosdk');
 
@@ -672,8 +686,10 @@ Use these methods to import a 25-word account-level mnemonic.
 		console.log(e.text);
 	})
 	```
+<!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Python"
+<!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
 	```python
 	from algosdk import kmd, mnemonic
 
@@ -703,8 +719,10 @@ Use these methods to import a 25-word account-level mnemonic.
 	importedaccount = kcl.import_key(wallethandle, private_key)
 	print("Account successfully imported: ", importedaccount)
 	```
+<!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Java"
+<!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 	```java
 	package com.algorand.algosdk.example;
 
@@ -793,8 +811,10 @@ Use these methods to import a 25-word account-level mnemonic.
 		}
 	}
 	```
+<!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Go"
+<!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 	```go
 	package main
 
@@ -855,6 +875,7 @@ Use these methods to import a 25-word account-level mnemonic.
 		fmt.Println("Account Successfully Imported: ", importedAccount)
 	}
 	```
+<!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 
 # Standalone 
 
@@ -881,6 +902,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 
 === "JavaScript"
+<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 	```javascript
 	const algosdk = require('algosdk');
 
@@ -891,8 +913,10 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 		console.log( "My passphrase: " + passphrase );
 	}
 	```
+<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 === "Python"
+<!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 	```python
 	from algosdk import account, mnemonic
 
@@ -901,8 +925,10 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 		print("My address: {}".format(address))
 		print("My passphrase: {}".format(mnemonic.from_private_key(private_key)))
 	```
+<!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
 === "Java"
+<!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 	```java
 	import com.algorand.algosdk.account.Account;    
 
@@ -914,8 +940,10 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 		}
 	}
 	```
+<!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 === "Go"
+<!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 	```go
 	import (
 		"fmt"
@@ -936,11 +964,8 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 		}
 	}
 	```
+<!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
-=== "goal"
-	```text
-    The CLI tool goal may not be used to create a standalone account. It is only used for creating wallet-derived kmd based accounts. 
-	```
 
 === "algokey"
 	```bash
@@ -982,6 +1007,7 @@ The following code shows how to generate a multisignature account composed of th
 	Since multisignature accounts are just logical representations of the data defined above, anyone can "create" the same Algorand address if they know how it is composed. This information is public and included in a signed transaction from a multisignature account. See [how multisignatures look in a signed transaction](../../transactions/signatures#multisignatures).
 
 === "JavaScript"
+<!-- ===JSSDK_MULTISIG_CREATE=== -->
 	```javascript
 	const algosdk = require('algosdk');
 
@@ -1019,8 +1045,11 @@ The following code shows how to generate a multisignature account composed of th
 		console.log("https://dispenser.testnet.aws.algodev.network?account=" + multsigaddr);
 
 	```
+<!-- ===JSSDK_MULTISIG_CREATE=== -->
+
 
 === "Python"
+<!-- ===PYSDK_MULTISIG_CREATE=== -->
 	```python
 	from algosdk import mnemonic, account
 	from algosdk.transaction import Multisig
@@ -1048,8 +1077,10 @@ The following code shows how to generate a multisignature account composed of th
 	print('Go to the below link to fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account={}'.format(msig.address())) 
 
 	```
+<!-- ===PYSDK_MULTISIG_CREATE=== -->
 
 === "Java"
+<!-- ===JAVASDK_MULTISIG_CREATE=== -->
 	```java
 	package com.algorand.javatest.multisig.v2;
 	import java.util.ArrayList;
@@ -1094,8 +1125,10 @@ The following code shows how to generate a multisignature account composed of th
 		}
 	}
 	```
+<!-- ===JAVASDK_MULTISIG_CREATE=== -->
 
 === "Go"
+<!-- ===GOSDK_MULTISIG_CREATE=== -->
 	```go
 	package main
 
@@ -1161,8 +1194,11 @@ The following code shows how to generate a multisignature account composed of th
 		fmt.Printf("sks = "  , sks)
 	}
 	```
+<!-- ===GOSDK_MULTISIG_CREATE=== -->
 
 === "goal"
+
+<!-- ===GOAL_MULTISIG_CREATE=== -->
 	```zsh
 		$ ADDRESS1=$(goal account new | awk '{ print $6 }')
 		$ ADDRESS2=$(goal account new | awk '{ print $6 }')
@@ -1171,6 +1207,7 @@ The following code shows how to generate a multisignature account composed of th
 		$ goal account multisig new $ADDRESS1 $ADDRESS2 $ADDRESS3 -T 2
 		Created new account with address [MULTISIG_ADDRESS]
 	```
+<!-- ===GOAL_MULTISIG_CREATE=== -->
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
 

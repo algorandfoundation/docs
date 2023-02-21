@@ -316,6 +316,7 @@ In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2,
 
 
 === "Python"
+<!-- ===PYSDK_ACCOUNT_REKEY=== -->
   ```python
     import json
     from algosdk import account, mnemonic
@@ -433,4 +434,17 @@ In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2,
     getting_started_example()
 
   ```
+<!-- ===PYSDK_ACCOUNT_REKEY=== -->
 
+=== "JavaScript"
+<!-- ===JSSDK_ACCOUNT_REKEY=== -->
+<!-- ===JSSDK_ACCOUNT_REKEY=== -->
+
+
+=== "Java"
+<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
+<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
+
+=== "Go"
+<!-- ===GOSDK_ACCOUNT_REKEY=== -->
+<!-- ===GOSDK_ACCOUNT_REKEY=== -->
