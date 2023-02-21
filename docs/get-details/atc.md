@@ -201,9 +201,9 @@ atc.add_method_call(
     method_args=[1, 1],
 )
 
-# This method requires a `transaction` as its second argument. 
+# This method requires a `transaction` as its second argument.
 # Construct the transaction and pass it in as an argument.
-# The ATC will handle adding it to the group transaction and 
+# The ATC will handle adding it to the group transaction and
 # setting the reference in the application arguments.
 ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
 txn = TransactionWithSigner(ptxn, signer)

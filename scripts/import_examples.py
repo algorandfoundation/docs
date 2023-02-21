@@ -155,7 +155,7 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
             if match.name not in examples:
                 print(
                     f"Missing {match.name} in {prefix.strip(' -<!=_')} "
-                    f"examples (in {path})"
+                    f"examples (in {path}:{match.line_start})"
                 )
                 continue
 
@@ -186,5 +186,6 @@ if __name__ == "__main__":
 
         for name, unmatched in unmatched_examples.items():
             print(
-                f"Missing {name} for {src.language_name} in docs (in: {unmatched.path})"
+                f"Missing {name} for {src.language_name} in docs "
+                f"(in: {unmatched.path}:{unmatched.line_start})"
             )
