@@ -12,6 +12,7 @@ class ExampleSource:
     language_name: str
     src_comment_flag: str
     doc_comment_flag: str
+    file_extension: str
 
 @dataclass
 class Example:
@@ -40,6 +41,14 @@ sources: list[ExampleSource] = [
         language_name="python",
         src_comment_flag="# example: ",
         doc_comment_flag="<!-- ===PYSDK_",
+        file_extension=".py",
+    ),
+    ExampleSource(
+        example_dir="../../algorand-teal-examples/_examples",
+        language_name="teal",
+        src_comment_flag="// example: ",
+        doc_comment_flag="<!-- ===TEAL_",
+        file_extension=".teal",
     ),
     # ExampleSource(
     #    example_dir="../../js-algorand-sdk/examples",
@@ -72,7 +81,7 @@ sources: list[ExampleSource] = [
     #    doc_comment_flag="<!-- ===BEAKER_"
     # )
 ]
-def find_examples_in_sdk(dir: str, prefix: str, lang: str) -> SDKExamples:
+def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamples:
     directory = os.listdir(dir)
 
     name_to_src: SDKExamples = {}
@@ -80,7 +89,7 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str) -> SDKExamples:
         path = os.path.join(dir, fname)
         if not os.path.isfile(path):
             name_to_src |= find_examples_in_sdk(path, prefix, lang)
-        elif path[-2:] in ["py", "js", "go", "va"]:
+        elif os.path.splitext(path) == ext:
             local_example: list[str] = []
             with open(path, "r") as f:
                 content = f.read()
@@ -178,7 +187,7 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
 if __name__ == "__main__":
     for src in sources:
         sdk_examples = find_examples_in_sdk(
-            src.example_dir, src.src_comment_flag, src.language_name
+            src.example_dir, src.src_comment_flag, src.language_name, src.file_extension
         )
         unmatched_examples = replace_matches_in_docs(
             "../docs", src.doc_comment_flag, sdk_examples
