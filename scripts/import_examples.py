@@ -44,43 +44,48 @@ sources: list[ExampleSource] = [
         doc_comment_flag="<!-- ===PYSDK_",
         file_extension=".py",
     ),
-    #ExampleSource(
-    #    example_dir="../../algorand-teal-examples/_examples",
-    #    language_name="teal",
-    #    src_comment_flag="// example: ",
-    #    doc_comment_flag="<!-- ===TEAL_",
-    #    file_extension=".teal",
-    #),
-    # ExampleSource(
-    #    example_dir="../../js-algorand-sdk/examples",
-    #    language_name='javascript',
-    #    src_comment_flag="// example: ",
-    #    doc_comment_flag="<!-- ===JSSDK_"
-    # ),
-    # ExampleSource(
-    #    example_dir="../../go/src/github.com/algorand/go-algorand-sdk/examples",
-    #    language_name='go',
-    #    src_comment_flag="// example: ",
-    #    doc_comment_flag="<!-- ===GOSDK_"
-    # ),
-    # ExampleSource(
-    #    example_dir="../../java-algorand-sdk/examples",
-    #    language_name='java',
-    #    src_comment_flag="// example: ",
-    #    doc_comment_flag="<!-- ===JAVASDK_"
-    # ),
-    # ExampleSource(
-    #    example_dir="../../pyteal/examples",
-    #    language_name='python',
-    #    src_comment_flag="# example: ",
-    #    doc_comment_flag="<!-- ===PYTEAL_"
-    # ),
-    # ExampleSource(
-    #    example_dir="../../beaker/examples",
-    #    language_name='python',
-    #    src_comment_flag="# example: ",
-    #    doc_comment_flag="<!-- ===BEAKER_"
-    # )
+    ExampleSource(
+       example_dir="../../js-algorand-sdk/examples",
+       language_name='javascript',
+       src_comment_flag="// example: ",
+       doc_comment_flag="<!-- ===JSSDK_",
+       file_extension=".js",
+    ),
+    ExampleSource(
+       example_dir="../../go/src/github.com/algorand/go-algorand-sdk/examples",
+       language_name='go',
+       src_comment_flag="// example: ",
+       doc_comment_flag="<!-- ===GOSDK_",
+       file_extension=".go",
+    ),
+    ExampleSource(
+       example_dir="../../java-algorand-sdk/examples",
+       language_name='java',
+       src_comment_flag="// example: ",
+       doc_comment_flag="<!-- ===JAVASDK_",
+       file_extension=".java",
+    ),
+    ExampleSource(
+        example_dir="../../algorand-teal-examples/_examples",
+        language_name="teal",
+        src_comment_flag="// example: ",
+        doc_comment_flag="<!-- ===TEAL_",
+        file_extension=".teal",
+    ),
+     ExampleSource(
+        example_dir="../../pyteal/examples",
+        language_name='python',
+        src_comment_flag="# example: ",
+        doc_comment_flag="<!-- ===PYTEAL_",
+        file_extension=".py",
+     ),
+    ExampleSource(
+        example_dir="../../beaker/examples",
+        language_name='python',
+        src_comment_flag="# example: ",
+        doc_comment_flag="<!-- ===BEAKER_",
+        file_extension=".py",
+    )
 ]
 def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamples:
     directory = os.listdir(dir)
@@ -188,6 +193,13 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
 
 if __name__ == "__main__":
     for src in sources:
+        if not os.path.isdir(src.example_dir):
+            print(
+                f"Missing {src.doc_comment_flag.strip(' -<!=_')} "
+                f"example directory ({src.example_dir})"
+            )
+            continue
+
         sdk_examples = find_examples_in_sdk(
             src.example_dir, src.src_comment_flag, src.language_name, src.file_extension
         )
