@@ -3,28 +3,34 @@
 import os
 from dataclasses import dataclass
 
-SKIP_DIRS = ['.venv', 'node_modules']
+SKIP_DIRS = [".venv", "node_modules"]
+
 
 @dataclass
 class ExampleSource:
     """Represents a source for examples"""
+
     example_dir: str
     language_name: str
     src_comment_flag: str
     doc_comment_flag: str
     file_extension: str
 
+
 @dataclass
 class Example:
     """Represents a tagged example in source file"""
+
     path: str
     line_start: int
     lines: list[str]
     matches: int
 
+
 @dataclass
 class DocExampleMatch:
     """Represents a match between source and docs"""
+
     name: str
     line_start: int
     line_stop: int
@@ -32,6 +38,7 @@ class DocExampleMatch:
     @staticmethod
     def empty() -> "DocExampleMatch":
         return DocExampleMatch("", 0, 0)
+
 
 # Example Name => source lines
 SDKExamples = dict[str, Example]
@@ -45,25 +52,25 @@ sources: list[ExampleSource] = [
         file_extension=".py",
     ),
     ExampleSource(
-       example_dir="../../js-algorand-sdk/examples",
-       language_name='javascript',
-       src_comment_flag="// example: ",
-       doc_comment_flag="<!-- ===JSSDK_",
-       file_extension=".js",
+        example_dir="../../js-algorand-sdk/examples",
+        language_name="javascript",
+        src_comment_flag="// example: ",
+        doc_comment_flag="<!-- ===JSSDK_",
+        file_extension=".js",
     ),
     ExampleSource(
-       example_dir="../../go/src/github.com/algorand/go-algorand-sdk/examples",
-       language_name='go',
-       src_comment_flag="// example: ",
-       doc_comment_flag="<!-- ===GOSDK_",
-       file_extension=".go",
+        example_dir="../../go/src/github.com/algorand/go-algorand-sdk/examples",
+        language_name="go",
+        src_comment_flag="// example: ",
+        doc_comment_flag="<!-- ===GOSDK_",
+        file_extension=".go",
     ),
     ExampleSource(
-       example_dir="../../java-algorand-sdk/examples",
-       language_name='java',
-       src_comment_flag="// example: ",
-       doc_comment_flag="<!-- ===JAVASDK_",
-       file_extension=".java",
+        example_dir="../../java-algorand-sdk/examples",
+        language_name="java",
+        src_comment_flag="// example: ",
+        doc_comment_flag="<!-- ===JAVASDK_",
+        file_extension=".java",
     ),
     ExampleSource(
         example_dir="../../algorand-teal-examples/_examples",
@@ -72,21 +79,23 @@ sources: list[ExampleSource] = [
         doc_comment_flag="<!-- ===TEAL_",
         file_extension=".teal",
     ),
-     ExampleSource(
+    ExampleSource(
         example_dir="../../pyteal/examples",
-        language_name='python',
+        language_name="python",
         src_comment_flag="# example: ",
         doc_comment_flag="<!-- ===PYTEAL_",
         file_extension=".py",
-     ),
+    ),
     ExampleSource(
         example_dir="../../beaker/examples",
-        language_name='python',
+        language_name="python",
         src_comment_flag="# example: ",
         doc_comment_flag="<!-- ===BEAKER_",
         file_extension=".py",
-    )
+    ),
 ]
+
+
 def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamples:
     directory = os.listdir(dir)
 
@@ -117,7 +126,7 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
                                 *local_example,
                                 "```",
                             ],
-                            matches=0
+                            matches=0,
                         )
                         local_example = []
                     else:
@@ -206,9 +215,7 @@ if __name__ == "__main__":
         sdk_examples = find_examples_in_sdk(
             src.example_dir, src.src_comment_flag, src.language_name, src.file_extension
         )
-        replace_matches_in_docs(
-            "../docs", src.doc_comment_flag, sdk_examples
-        )
+        replace_matches_in_docs("../docs", src.doc_comment_flag, sdk_examples)
 
         for name, example in sdk_examples.items():
             if example.matches == 0:
