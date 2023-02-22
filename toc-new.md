@@ -11,13 +11,15 @@
     ├── kmd.md
     └── tealdbg
 
-# Reference 
+# Details/Reference/? 
     ├── accounts
     │   ├── create.md
     │   ├── index.md
     │   └── rekey.md
     ├── assets.md
-    ├── atomic_transfers_and_atc.md - combine both pages because reasons
+    ├── atomic-transfers
+    │   ├── with_atc.md
+    │   └── wthout_atc.md
     ├── conduit
     │   ├── exporters
     │   │   ├── filewriter.md
@@ -39,8 +41,9 @@
     │   ├── beaker.md   - single page, prefer to link to specific docs/videos/whatever
     │   ├── algokit.md  - single page, prefer to link to specific docs/videos/whatever
     │   ├── abi.md 
-    │   ├── apps
+    │   ├── applications 
     │   │   ├── lifecycle.md - move frontend/apps.md to here
+    │   │   ├── state.md - new page describing the state storage options and limitations
     │   │   └── index.md
     │   ├── debugging.md
     │   ├── guidelines.md 
@@ -57,7 +60,7 @@
     │   └── light_client.md
     ├── transactions
     │   ├── index.md
-    │   ├── offline_transactions.md
+    │   ├── offline_transactions.md  
     │   ├── signatures.md
     │   └── transactions.md
     ├── ARCs - New directory where we can list ARCs and link off to those pages
@@ -85,14 +88,8 @@
     │   ├── devenv.md
     │   ├── pyteal.md
     │   ├── beaker.md
-    ├── integration
-    │   ├── assets.md
-    │   └── searching_data.md
     ├── useful_resources.md - Moved here from Reference
-    └── tokenization
-        ├── ft.md
-        ├── nft.md
-        └── security_token.md
+    └── tokenization.md - collapse ft/nft/security into a single page describing ASAs, move code (if wanted) to Reference
 
 
 # Rest APIs  [UNCHANGED]
