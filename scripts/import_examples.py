@@ -3,7 +3,7 @@
 import os
 from dataclasses import dataclass
 
-
+SKIP_DIRS = ['.venv', 'node_modules']
 
 @dataclass
 class ExampleSource:
@@ -92,6 +92,9 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
 
     name_to_src: SDKExamples = {}
     for fname in directory:
+        if fname in SKIP_DIRS:
+            continue
+
         path = os.path.join(dir, fname)
         if not os.path.isfile(path):
             name_to_src |= find_examples_in_sdk(path, prefix, lang, ext)
