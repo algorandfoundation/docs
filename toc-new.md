@@ -11,25 +11,16 @@
     ├── kmd.md
     └── tealdbg
 
-# Details/Reference/? 
-    ├── accounts
-    │   ├── create.md
-    │   ├── index.md
-    │   └── rekey.md
+# Reference
+    ├── accounts.md - collapse create/index/rekey to single page
     ├── assets.md
     ├── atomic-transfers
     │   ├── with_atc.md
     │   └── wthout_atc.md
     ├── conduit
-    │   ├── exporters
-    │   │   ├── filewriter.md
-    │   │   └── postgresql.md
-    │   ├── importers
-    │   │   ├── algod.md
-    │   │   └── filereader.md
-    │   └── processors
-    │       ├── blockevaluator.md
-    │       └── filter.md
+    │   ├── exporters.md - Collapse to single pages for each
+    │   ├── importers.md
+    │   └── processors.md
     ├── smart-contracts 
     │   ├── avm - moved `teal` up 1 directory, some of these pages could probably be combined
     │   │   ├── index.md
@@ -44,6 +35,7 @@
     │   ├── applications 
     │   │   ├── lifecycle.md - move frontend/apps.md to here
     │   │   ├── state.md - new page describing the state storage options and limitations
+    │   │   ├── inner-txns.md - new page describing the ability to issue inner txns + describe c2c limits 
     │   │   └── index.md
     │   ├── debugging.md
     │   ├── guidelines.md 
