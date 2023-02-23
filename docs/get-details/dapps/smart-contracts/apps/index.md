@@ -852,12 +852,23 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
     ```
 
 === "Python"
-    ```py
-    atc = AtomicTransactionComposer()
-    atc.add_method_call(app_id, my_method, addr, sp, signer, method_args=[1,5], boxes=[[app_id, “key”]])
-    ```
+    <!-- ===PYSDK_ATC_BOX_REF=== -->
+```python
+atc = AtomicTransactionComposer()
+atc.add_method_call(
+    app_id,
+    my_method,
+    addr,
+    sp,
+    signer,
+    method_args=[1, 5],
+    boxes=[[app_id, b"key"]],
+)
+```
+    <!-- ===PYSDK_ATC_BOX_REF=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_ATC_BOX_REF=== -->
     ```js
     const atc = new AtomicTransactionComposer();
     atc.addMethodCall({
@@ -870,8 +881,10 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
         signer: algosdk.makeBasicAccountTransactionSigner(acct),
     });
     ```
+    <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATC_BOX_REF=== -->
     ```go
     var boxAtc = transaction.AtomicTransactionComposer{}
     err := boxAtc.AddMethodCall(transaction.AddMethodCallParams{
@@ -886,6 +899,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
     })
     // ...
     ```
+    <!-- ===GOSDK_ATC_BOX_REF=== -->
 
 
 === "Beaker"
@@ -893,7 +907,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
     #Beaker framework
     result = app_client.call(
         Myapp.my_method,
-    boxes=[[app_client.app_id, "key"]],
+        boxes=[[app_client.app_id, "key"]],
     )
     ```
 ## Creating a Box

@@ -70,21 +70,24 @@ The context can also be read directly from an instance of the Indexer. See the `
 This file may be msgpack or json and can be created using goal or the SDKs
 
 === "Python"
-    ```py
+    <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
+```python
+sp = algod_client.suggested_params()
 
-    app_txn = transaction.ApplicationCallTxn(addr, sp, app_id, transaction.OnComplete.NoOpOC, accounts=[other_addr], foreign_assets=[asset_id])
-    s_app_txn = app_txn.sign(sk)
+atc = atomic_transaction_composer.AtomicTransactionComposer()
+atc.add_method_call(app_id, my_method, acct1.address, sp, acct1.signer)
+txns = atc.gather_signatures()
 
-    drr = transaction.create_dryrun(client, [s_app_txn])
+drr = transaction.create_dryrun(algod_client, txns)
 
-    filename = "dryrun.msgp"
-    with open(filename, "wb") as f:
-        import base64
-        f.write(base64.b64decode(encoding.msgpack_encode(drr)))
-
-    ```
+# Write the file as binary result of msgpack encoding
+with open("dryrun.msgp", "wb") as f:
+    f.write(base64.b64decode(encoding.msgpack_encode(drr)))
+```
+    <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
     ```js
 
     const app_txn = algosdk.makeApplicationNoOpTxn(addr, sp, app_id, undefined, [other_addr], undefined, undefined)
@@ -117,8 +120,10 @@ This file may be msgpack or json and can be created using goal or the SDKs
     link.remove();
 
     ```
+    <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"
+    <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
     ```go
 
 	app_txn, err := transaction.MakeApplicationNoOpTx(app_id, nil, []string{other_addr}, nil, []uint64{asset_id}, sp, addr, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -142,8 +147,10 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	os.WriteFile(filename, msgpack.Encode(drr), 0666)
 
     ```
+    <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Java"
+    <!-- ===JAVADK_DEBUG_DRYRUN_DUMP=== -->
     ```java
 
     Transaction app_txn = ApplicationCallTransactionBuilder.Builder().sender(addr)
@@ -161,8 +168,10 @@ This file may be msgpack or json and can be created using goal or the SDKs
     outfile.close();
 
     ```
+    <!-- ===JAVADK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
+    <!-- ===GOAL_DEBUG_DRYRUN_DUMP=== -->
     ```sh
 
     $ goal app call --app-id {appid} --from {ACCOUNT} --out=dryrun.json --dryrun-dump
@@ -170,6 +179,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
     $ goal clerk dryrun --dryrun-dump -t transaction.txn -o dryrun.json
 
     ```
+    <!-- ===GOAL_DEBUG_DRYRUN_DUMP=== -->
 
 ## Calling the debugger with context
 
@@ -244,18 +254,23 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 
 
 === "Python"
-    ```py
-    # ... 
-    # Create the dryrun request object
-    dryrun_request = create_dryrun(client, txns)
+    <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
+```python
+# Create the dryrun request object
+dryrun_request = transaction.create_dryrun(algod_client, txns)
 
-    # Pass dryrun request to algod server
-    dryrun_response = client.dryrun(dryrun_request)
+# Pass dryrun request to algod server
+dryrun_result = algod_client.dryrun(dryrun_request)
+drr = dryrun_results.DryrunResponse(dryrun_result)
 
-    # Inspect the response to check result 
-    ```
+for txn in drr.txns:
+    if txn.app_call_rejected():
+        print(txn.app_trace())
+```
+    <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
     ```js
     // ... 
     // Create the dryrun request object
@@ -266,8 +281,10 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 
     // Inspect the response to check result 
     ```
+    <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"
+    <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
     ```go
     // ... 
     // Create the dryrun request object
@@ -278,6 +295,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 
     // Inspect the response to check result 
     ```
+    <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 
 === "Shell"

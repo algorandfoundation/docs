@@ -85,7 +85,7 @@ Code beyond this point will be put into the ***first_transaction_example*** func
 
 
 
-<!-- ===PYSDK_CREATE_ALGOD_CLIENT=== -->
+<!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 ```python
 # Create a new algod client, configured to connect to our local sandbox
 algod_address = "http://localhost:4001"
@@ -99,7 +99,7 @@ special_algod_client = algod.AlgodClient(
     "", algod_address, headers={"X-API-Key": algod_token}
 )
 ```
-<!-- ===PYSDK_CREATE_ALGOD_CLIENT=== -->
+<!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 
 !!! Info
@@ -108,17 +108,17 @@ special_algod_client = algod.AlgodClient(
 # Check Your Balance
 Before moving on to the next step, make sure your account has been funded by the faucet.
 
-<!-- ===PYSDK_FETCH_ACCOUNT_INFO=== -->
+<!-- ===PYSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 ```python
 account_info: Dict[str, Any] = algod_client.account_info(address)
 print(f"Account balance: {account_info.get('amount')} microAlgos")
 ```
-<!-- ===PYSDK_FETCH_ACCOUNT_INFO=== -->
+<!-- ===PYSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 # Build First Transaction
 Transactions are used to interact with the Algorand network. To create a payment transaction use the following code.
 ​
-<!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_CREATE=== -->
+<!-- ===PYSDK_TRANSACTION_PAYMENT_CREATE=== -->
 ```python
 # grab suggested params from algod using client
 # includes things like suggested fee and first/last valid rounds
@@ -131,7 +131,7 @@ unsigned_txn = transaction.PaymentTxn(
     note=b"Hello World",
 )
 ```
-<!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_CREATE=== -->
+<!-- ===PYSDK_TRANSACTION_PAYMENT_CREATE=== -->
 ​
 !!! Info
     Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/index.md#transaction-types){target=_blank}. 
@@ -139,19 +139,19 @@ unsigned_txn = transaction.PaymentTxn(
 # Sign First Transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 ​
-<!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SIGN=== -->
+<!-- ===PYSDK_TRANSACTION_PAYMENT_SIGN=== -->
 ```python
 # sign the transaction
 signed_txn = unsigned_txn.sign(private_key)
 ```
-<!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SIGN=== -->
+<!-- ===PYSDK_TRANSACTION_PAYMENT_SIGN=== -->
 ​
 !!! Info
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](../../get-details/transactions/signatures.md#single-signatures){target=_blank}. 
     
 # Submit the Transaction
 The signed transaction can now be submitted to the network. `wait_for_confirmation` SDK Method is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
-<!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SUBMIT=== -->
+<!-- ===PYSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 ```python
 # submit the transaction and get back a transaction id
 txid = algod_client.send_transaction(signed_txn)
@@ -163,7 +163,7 @@ txn_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 print(f"Transaction information: {json.dumps(txn_result, indent=4)}")
 print(f"Decoded note: {b64decode(txn_result['txn']['txn']['note'])}")
 ```
-<!-- ===PYSDK_SIMPLE_PAYMENT_TRANSACTION_SUBMIT=== -->
+<!-- ===PYSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 
 [`Watch Video`](https://youtu.be/ku2hFalMWmA?t=480){target=_blank}  
 

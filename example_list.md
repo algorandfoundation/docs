@@ -15,10 +15,10 @@ Show simple examples of how to use the SDK
 
 * ACCOUNT_GENERATE - Generate a new account
 * ALGOD_CREATE_CLIENT - Create Algod client
-* FETCH_ACCOUNT_INFO - Grab account information
-* SIMPLE_PAYMENT_TRANSACTION_CREATE - Create single Payment transaction
-* SIMPLE_PAYMENT_TRANSACTION_SIGN - Sign single Payment transaction
-* SIMPLE_PAYMENT_TRANSACTION_SUBMIT - Submit transaction and display result
+* ALGOD_FETCH_ACCOUNT_INFO - Grab account information
+* TRANSACTION_PAYMENT_CREATE - Create single Payment transaction
+* TRANSACTION_PAYMENT_SIGN - Sign single Payment transaction
+* TRANSACTION_PAYMENT_SUBMIT - Submit transaction and display result
 
 
 ## REST APIs
@@ -121,3 +121,9 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 [Reference Page](./docs/get-details/transactions/offline_transactions.md)
 
 * TRANSACTION_SIGN_OFFLINE - Show how to create and sign a transaction using cold wallet 
+
+[Reference Page](./docs/docs/run-a-node/participate/offline.md)
+* KEYREG_CREATE_OFFLINE - Create a keyreg txn to take an account offline
+
+[Reference Page](./docs/docs/run-a-node/participate/online.md)
+* KEYREG_CREATE_ONLINE - Create a keyreg txn to take an account online 

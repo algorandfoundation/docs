@@ -13,41 +13,33 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 
 
 === "Python"
-    ```python 
-    from algosdk import encoding
-    ...
-    def write_unsigned():
-        # setup connection
-        algod_client = connect_to_network()
+    <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+```python
+# get suggested parameters
+params = algod_client.suggested_params()
 
-        # get suggested parameters
-        params = algod_client.suggested_params()
+votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw="
+selkey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4="
 
-        b64votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw="
-        votekey_addr = encoding.encode_address(base64.b64decode(b64votekey))
-        b64selkey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4="
-        selkey_addr = encoding.encode_address(base64.b64decode(b64selkey))
+num_rounds = int(1e5)  # sets up keys for 100000 rounds
+key_dilution = int(num_rounds**0.5)  # dilution default is sqrt num rounds
 
-        # create transaction
-        data = {
-            "sender": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
-            "votekey": votekey_addr,
-            "selkey": selkey_addr,
-            "votefst": 6000000,
-            "votelst":9000000,
-            "votekd": 1730,
-            "fee": 2000,
-            "flat_fee": True,
-            "first": 6002000,
-            "last": 6003000,
-            "gen": params.get('genesisID'),
-            "gh": params.get('genesishashb64')
-        }
-        txn = transaction.KeyregTxn(**data)
-    ...
-    ```
+# create transaction
+online_keyreg = transaction.KeyregTxn(
+    sender="EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
+    votekey=votekey,
+    selkey=selkey,
+    votefst=params.first,
+    votelst=params.first + num_rounds,
+    votekd=key_dilution,
+    sp=params,
+)
+print(online_keyreg.dictify())
+```
+    <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
     ```java
         // ...
         import java.util.Base64;
@@ -95,8 +87,10 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
                 // ...
 
     ```
+    <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Go"
+    <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
     ```go 
     func saveUnsignedTransaction() {
 
@@ -130,14 +124,17 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
             Txn: tx,
         }
     ```
+    <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"
+    <!-- ===GOAL_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
     ```zsh 
     # WARNING: This command must be run on the node where the partkey lives and the node
     # must only have a single partkey for the account. Otherwise the command will
     # choose one at random.
     $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=2000 --firstvalid=6002000 --lastvalid=6003000 --online=true --txfile=online.txn
     ```
+    <!-- ===GOAL_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 # Authorize and Send the Transaction
 Use the appropriate [authorization method](../../../get-details/transactions/signatures) to sign the transaction. 

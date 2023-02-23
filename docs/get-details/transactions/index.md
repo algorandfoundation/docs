@@ -773,9 +773,9 @@ suggestedParams.fee = 2 * algosdk.ALGORAND_MIN_TX_FEE;
 === "Python"
 <!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 ```python
-suggested_params =  algod_client.suggested_params()
-suggested_params.fee = 2*suggested_params.min_fee
-# Important to set flat_fee = True here or the fee will be 
+suggested_params = algod_client.suggested_params()
+suggested_params.fee = 2 * suggested_params.min_fee
+# Important to set flat_fee = True here or the fee will be
 # treated as fee-per-byte of the encoded transaction
 suggested_params.flat_fee = True
 ```

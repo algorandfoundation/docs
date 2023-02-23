@@ -43,57 +43,68 @@ There are two options:
 * using SDK constants:
 
 === "Python"
+    <!-- ===PYSDK_CONST_MIN_FEE=== -->
+```python
+from algosdk import constants
 
-    ```py
-    algosdk.constants.MIN_TXN_FEE
-    ```
+print(constants.MIN_TXN_FEE)
+```
+    <!-- ===PYSDK_CONST_MIN_FEE=== -->
 
 === "JavaScript"
-
+    <!-- ===JSSDK_CONST_MIN_FEE=== -->
     ```js
     algosdk.ALGORAND_MIN_TX_FEE
     ```
+    <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"
-
+    <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     ```java
     Account.MIN_TX_FEE_UALGOS
     ```
+    <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
 
+    <!-- ===GOSDK_CONST_MIN_FEE=== -->
     ```go
     transaction.MinTxnFee
     ```
+    <!-- ===GOSDK_CONST_MIN_FEE=== -->
     
 * using an algod API:
 
 === "Python"
-
-    ```py
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-    params = algod_client.suggested_params()
-
-    params.min_fee
-    ```
+    <!-- ===PYSDK_SP_MIN_FEE=== -->
+```python
+suggested_params = algod_client.suggested_params()
+print(suggested_params.min_fee)
+```
+    <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
 
+    <!-- ===JSSDK_SP_MIN_FEE=== -->
     ```js
     // Not supported because getTransactionParams erases the information
     ```
+    <!-- ===JSSDK_SP_MIN_FEE=== -->
 
 === "Java"
 
+    <!-- ===JAVASDK_SP_MIN_FEE=== -->
     ```java
     AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
     TransactionParametersResponse params = client.TransactionParams().execute().body();
     
     params.minFee
     ```
+    <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"
 
+    <!-- ===GOSDK_SP_MIN_FEE=== -->
     ```go
     algodClient, err := algod.MakeClient(algodAddress, algodToken)
 	if err != nil {
@@ -106,6 +117,7 @@ There are two options:
     
 	params.MinFee
     ```
+    <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures
 
@@ -380,6 +392,3 @@ These guidelines are specific to smart signatures. They complement the other gui
 
 * [Trails of Bits guideslines](https://github.com/crytic/building-secure-contracts/tree/master/not-so-smart-contracts/algorand)
 * [ASC Security Guidelines from Joe Polny](https://github.com/joe-p/algo-edu/blob/master/resources/en-US/asc_security.md) on which this document is partially based
-
-
-
