@@ -207,7 +207,7 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
   itxn_field TypeEnum
 
   txn Assets 0
-  itxn_field XferAsset
+  itxn_field FreezeAsset
 
   txn Accounts 1
   itxn_field FreezeAssetAccount
@@ -316,13 +316,15 @@ Assets can also be created by a smart contract. To create an asset with an inner
   int 100
   itxn_field ConfigAssetTotal
 
-  int 0
+  int 2
   itxn_field ConfigAssetDecimals
 
-  txn Sender
-  itxn_field AssetReceiver
-
-  // TODO need to dupn 4 CurrentApplicationAddress into Manager, Reserve, Freeze, Clawback
+  global CurrentApplicationAddress
+  dupn 3
+  itxn_field ConfigAssetManager
+  itxn_field ConfigAssetReserve
+  itxn_field ConfigAssetFreeze
+  itxn_field ConfigAssetClawback
 
   itxn_submit
 ```
@@ -362,7 +364,12 @@ As with all assets, the mutable addresses can be changed. For example to change 
   txn Assets 0
   itxn_field ConfigAsset
 
-  // TODO need to dupn 4 CurrentApplicationAddress into Manager, Reserve, Freeze, Clawback
+  global CurrentApplicationAddress
+  dupn 3
+  itxn_field ConfigAssetManager
+  itxn_field ConfigAssetReserve
+  itxn_field ConfigAssetFreeze
+  itxn_field ConfigAssetClawback
 
   itxn_submit
 ```
@@ -396,7 +403,7 @@ Assets managed by the contract can also be deleted. This can be done with the fo
   itxn_field TypeEnum
 
   txn Assets 0
-  itxn_field XferAsset
+  itxn_field ConfigAsset
 
   itxn_submit
 ```
