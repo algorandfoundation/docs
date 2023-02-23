@@ -440,34 +440,36 @@ A smart contract can make inner transactions consisting of grouped transactions.
 
 === "TEAL"
 <!-- ===TEAL_GROUPED_ITXN=== -->
-    ```teal
-    // This imaginary scenario requires a buyer to pay 1 Algo whilst calling the
-    // smart contract with the argument "buy". The imaginary smart contract could
-    // then send us something in exchange.
-    itxn_begin
+```teal
+itxn_begin
 
-    // Send a 1 Algo payment to the smart contract's address.
-    int pay
-    itxn_field TypeEnum
-    int 1234
-    app_params_get AppAddress
-    itxn_field Receiver
-    int 1000000
-    itxn_field Amount
+int pay
+itxn_field TypeEnum
 
-    // Call the smart contract within the same group with the argument "buy".
-    itxn_next
-    int appl
-    itxn_field TypeEnum
-    int 1234
-    itxn_field ApplicationID
-    int NoOp
-    itxn_field OnCompletion
-    byte "buy"
-    itxn_field ApplicationArgs
+int 1000000
+itxn_field Amount
 
-    itxn_submit
-    ```
+int 123
+app_params_get AppAddress
+assert
+itxn_field Receiver
+
+itxn_next
+
+int appl
+itxn_field TypeEnum
+
+int 123
+itxn_field ApplicationID
+
+int NoOp
+itxn_field OnCompletion
+
+byte "buy"
+itxn_field ApplicationArgs
+
+itxn_submit
+```
 <!-- ===TEAL_GROUPED_ITXN=== -->
 
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
