@@ -127,3 +127,11 @@ simple calls against them. Refer to SDK docs or REST API docs for full functiona
 
 [Reference Page](./docs/docs/run-a-node/participate/online.md)
 * KEYREG_CREATE_ONLINE - Create a keyreg txn to take an account online 
+
+
+# Debugging
+
+[Reference Page](./docs/get-details/dapps/smart-contracts/debugging.md)
+
+* DEBUG_DRYRUN_DUMP - Create a file with a dryrun request object encoded as msgpack
+* DEBUG_DRYRUN_SUBMIT - Create a dryrun request and submit it to the algod
