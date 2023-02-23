@@ -115,7 +115,7 @@ itxn_begin
 int pay
 itxn_field TypeEnum
 
-int 5000
+int 1000000
 itxn_field Amount
 
 txn Sender
@@ -157,20 +157,24 @@ If a smart contract wishes to transfer an asset it holds or needs to opt into an
 
 === "TEAL"
 <!-- ===TEAL_ITXN_ASSET_TRANSFER=== -->
-    ```teal
-    itxn_begin
-    int axfer
-    itxn_field TypeEnum
-    txn Sender
-    itxn_field AssetReceiver
-    //Asset ID must be in the assets array
-    txn Assets 0
-    itxn_field XferAsset
-    // send 10
-    int 1000
-    itxn_field AssetAmount
-    itxn_submit
-    ``` 
+```teal
+  itxn_begin
+
+  int axfer
+  itxn_field TypeEnum
+
+  txn Assets 0
+  itxn_field XferAsset
+
+  txn Accounts 1
+  itxn_field AssetReceiver
+
+  txn ApplicationArgs 3
+  btoi
+  itxn_field AssetAmount
+
+  itxn_submit
+```
 <!-- ===TEAL_ITXN_ASSET_TRANSFER=== -->
 
 In this example, 1000 units of the asset are sent to the account calling the contract. Note that the asset must be in the assets array. If the smart contract is opting into an asset, the contract would send 0 units of the asset to itself. In this case, the receiver could be set to the `global CurrentApplicationAddress`. 
@@ -196,22 +200,28 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
 
 === "TEAL"
 <!-- ===TEAL_ITXN_ASSET_FREEZE=== -->
-    ```teal
-    itxn_begin
-    int afrz
-    itxn_field TypeEnum
-    //asset to be frozen
-    txn Assets 0
-    itxn_field FreezeAsset
-    //account to freeze
-    //first account in accounts array
-    txn Accounts 1
-    itxn_field FreezeAssetAccount
-    //set frozen status to true
-    int 1
-    itxn_field FreezeAssetFrozen
-    itxn_submit
-    ```
+```teal
+  itxn_begin
+
+  int afrz
+  itxn_field TypeEnum
+
+  txn Assets 0
+  itxn_field XferAsset
+
+  txn Accounts 1
+  itxn_field FreezeAssetAccount
+
+  // Flip the current account frozen state
+  txn Accounts 1
+  txn Assets 0
+  asset_holding_get AssetFrozen
+  assert
+  !
+  itxn_field FreezeAssetFrozen
+
+  itxn_submit
+```
 <!-- ===TEAL_ITXN_ASSET_FREEZE=== -->
 
 ## Asset revoke
@@ -236,22 +246,31 @@ A smart contract can revoke or clawback any asset where the smart contract addre
 
 === "TEAL"
 <!-- ===TEAL_ITXN_ASSET_REVOKE=== -->
-    ```teal
-    itxn_begin
-    int axfer
-    itxn_field TypeEnum
-    global CurrentApplicationAddress
-    itxn_field AssetReceiver
-    txn Assets 0
-    itxn_field XferAsset
-    // send 10
-    int 1000
-    itxn_field AssetAmount
-    //first account in the accounts array
-    txn Accounts 1
-    itxn_field AssetSender
-    itxn_submit
-    ```
+```teal
+  itxn_begin
+
+  int axfer
+  itxn_field TypeEnum
+
+  txn Assets 0
+  itxn_field XferAsset
+
+  // Any amount lower or equal to their holding can be revoked
+  // Here we use the accounts entire asset balance
+  txn Accounts 1
+  txn Assets 0
+  asset_holding_get AssetBalance
+  assert
+  itxn_field AssetAmount
+
+  txn Accounts 1
+  itxn_field AssetSender
+
+  global CurrentApplicationAddress
+  itxn_field AssetReceiver
+
+  itxn_submit
+```
 <!-- ===TEAL_ITXN_ASSET_REVOKE=== -->
 
 ## Asset create
@@ -282,30 +301,31 @@ Assets can also be created by a smart contract. To create an asset with an inner
 
 === "TEAL"
 <!-- ===TEAL_ITXN_ASSET_CREATE=== -->
-    ```teal
-    itxn_begin
-    int acfg
-    itxn_field TypeEnum
-    int 1000000
-    itxn_field ConfigAssetTotal
-    int 3
-    itxn_field ConfigAssetDecimals
-    byte "oz"
-    itxn_field ConfigAssetUnitName
-    byte "Gold"
-    itxn_field ConfigAssetName
-    byte "https://gold.rush/"
-    itxn_field ConfigAssetURL
-    global CurrentApplicationAddress
-    dup
-    dup2
-    itxn_field ConfigAssetManager
-    itxn_field ConfigAssetReserve
-    itxn_field ConfigAssetFreeze
-    itxn_field ConfigAssetClawback
-    itxn_submit
-    itxn CreatedAssetID
-    ```
+```teal
+  itxn_begin
+
+  int acfg
+  itxn_field TypeEnum
+
+  byte "Demo Asset"
+  itxn_field ConfigAssetName
+
+  byte "DA"
+  itxn_field ConfigAssetUnitName
+
+  int 100
+  itxn_field ConfigAssetTotal
+
+  int 0
+  itxn_field ConfigAssetDecimals
+
+  txn Sender
+  itxn_field AssetReceiver
+
+  // TODO need to dupn 4 CurrentApplicationAddress into Manager, Reserve, Freeze, Clawback
+
+  itxn_submit
+```
 <!-- ===TEAL_ITXN_ASSET_CREATE=== -->
 
 In this example, a simple asset is created. Using the `itxn CreatedAssetID` opcode after the transaction is submitted allows the contract to get the asset id of the newly created asset.
@@ -333,23 +353,19 @@ As with all assets, the mutable addresses can be changed. For example to change 
 
 === "TEAL"
 <!-- ===TEAL_ITXN_ASSET_CONFIG=== -->
-    ```teal
-    itxn_begin
-    int acfg
-    itxn_field TypeEnum
-    txn Sender
-    itxn_field ConfigAssetFreeze
-    global CurrentApplicationAddress
-    dup
-    dup
-    itxn_field ConfigAssetManager
-    itxn_field ConfigAssetReserve
-    itxn_field ConfigAssetClawback
-    //first asset in the assets array
-    txn Assets 0
-    itxn_field ConfigAsset
-    itxn_submit
-    ```
+```teal
+  itxn_begin
+
+  int acfg
+  itxn_field TypeEnum
+
+  txn Assets 0
+  itxn_field ConfigAsset
+
+  // TODO need to dupn 4 CurrentApplicationAddress into Manager, Reserve, Freeze, Clawback
+
+  itxn_submit
+```
 <!-- ===TEAL_ITXN_ASSET_CONFIG=== -->
 
 This example sets the freeze address to the sender of the application transaction. Note that when changing one address, all others must be reset or they will be cleared. Cleared addresses will be locked forever.
@@ -373,15 +389,17 @@ Assets managed by the contract can also be deleted. This can be done with the fo
 
 === "TEAL"
 <!-- ===TEAL_ITXN_ASSET_DESTROY=== -->
-    ```teal
-    itxn_begin
-    int acfg
-    itxn_field TypeEnum
-    //first asset in the assets array
-    txn Assets 0
-    itxn_field ConfigAsset
-    itxn_submit
-    ```
+```teal
+  itxn_begin
+
+  int acfg
+  itxn_field TypeEnum
+
+  txn Assets 0
+  itxn_field XferAsset
+
+  itxn_submit
+```
 <!-- ===TEAL_ITXN_ASSET_DESTROY=== -->
 
 ## Grouped inner transaction
