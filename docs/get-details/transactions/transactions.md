@@ -88,7 +88,7 @@ Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is 
 |<a name="assetreceiver">AssetReceiver</a>|_required_|Address|`"arcv"`| The recipient of the asset transfer.|
 |<a name="assetcloseto">AssetCloseTo</a>|_optional_|Address|`"aclose"`|Specify this field to remove the asset holding from the [sender](#sender) account and reduce the account's minimum balance (i.e. opt-out of the asset). |
 
-# Asset Accept Transaction 
+# Asset OptIn Transaction 
 Transaction Object Type: `AssetTransferTx`
 
 Includes all fields in [Header](#common-fields-header-and-type) and `"type"` is `"axfer"`.

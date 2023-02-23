@@ -16,9 +16,6 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 
 === "JavaScript"
 	```javascript
-    // requires algosdk@1.6.1 or higher 
-    // verify installed version
-    // npm list algosdk
     const algosdk = require('algosdk');
 
     const indexer_token = "";
@@ -31,7 +28,6 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 === "Python"
     ```python
     import json
-    # requires Python SDK version 1.3 or higher
     from algosdk.v2client import indexer
 
     # instantiate indexer client
@@ -40,8 +36,6 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 
 === "Java"
 	```java
-    // /indexer/java/InstantiateIndexer.java
-    // requires java-algorand-sdk 1.4.1 or higher (see pom.xml)
     package com.algorand.javatest.indexer;
 
     import com.algorand.algosdk.v2.client.common.IndexerClient;
@@ -66,8 +60,6 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
 
 === "Go"
 	```go
-    // requires Go SDK version 1.4 or higher
-
     package main
 
     import (
@@ -75,7 +67,7 @@ The Indexer provides a set of REST API calls for searching blockchain Transactio
         "encoding/json"
         "fmt"
 
-        "github.com/algorand/go-algorand-sdk/client/v2/indexer"
+        "github.com/algorand/go-algorand-sdk/v2/client/v2/indexer"
     )
 
     const indexerAddress = "http://localhost:8980"
@@ -109,7 +101,6 @@ These values represent the maximum number of results that will be returned when 
 
 === "JavaScript"
 	```javascript
-    // /indexer/javascript/SearchTransactionsMinAmount.js
     (async () => {
         let currencyGreater = 10;
         let transactionInfo = await indexerClient.searchForTransactions()
@@ -123,17 +114,12 @@ These values represent the maximum number of results that will be returned when 
 
 === "Python"
 	```python
-    # /indexer/python/search_transactions_min_amount.py
-
     response = myindexer.search_transactions(min_amount=10) 
-
-    # Pretty Printing JSON string
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
 
 === "Java"
 	```java
-    // /indexer/java/SearchTransactionsMinAmount.java
     public static void main(String args[]) throws Exception {
         SearchTransactionsMinAmount ex = new SearchTransactionsMinAmount();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -191,18 +177,12 @@ For example, adding a limit parameter of 5 to the previous call
 
 === "Python"
 	```python
-    # /indexer/python/search_transactions_limit.py
-
-    response = myindexer.search_transactions(
-    min_amount=10, limit=5) 
-
-    # Pretty Printing JSON string
+    response = myindexer.search_transactions(min_amount=10, limit=5) 
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
 
 === "Java"
 	```java
-    // /indexer/java/SearchTransactionsLimit.js
     public static void main(String args[]) throws Exception {
         SearchTransactionsLimit ex = new SearchTransactionsLimit();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -287,7 +267,6 @@ To get the next 5 transactions simply add the next-token as a parameter to the n
 
 === "Python"
 	```python
-    # /indexer/python/search_transactions_paging.py
 
     nexttoken = ""
     numtx = 1
@@ -452,10 +431,6 @@ Many of the REST calls support getting values at specific rounds. This means tha
     }
     ```
 
-=== "Go"
-	```go
-
-    ```
 
 === "cURL"
 	```bash
@@ -612,7 +587,6 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
     // Print results
     JSON, err := json.MarshalIndent(result, "", "\t")
     fmt.Printf(string(JSON) + "\n")
-    }
 
     ```
 
@@ -928,7 +902,7 @@ The `/accounts/{account-id}/created-apps` REST call allows for searching an acco
 	```python
     address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
 
-    response = myindexer.lookupAccountCreatedApplications(address)
+    response = myindexer.lookup_account_application_by_creator(address)
 
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
@@ -979,7 +953,7 @@ The `/accounts/{account-id}/created-assets` REST call allows for searching an ac
 	```python
     address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
 
-    response = myindexer.lookupAccountCreatedAssets(address)
+    response = myindexer.lookup_account_asset_by_creator(address)
 
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
@@ -1030,7 +1004,7 @@ The `/accounts/{account-id}/assets` REST call allows for searching an account fo
 	```python
     address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
 
-    response = myindexer.lookupAccountAssets(address)
+    response = myindexer.lookup_account_assets(address)
 
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
@@ -1081,7 +1055,7 @@ The `/accounts/{account-id}/apps-local-state` REST call allows for searching an 
 	```python
     address = "XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4"
 
-    response = myindexer.lookupAccountAppLocalStates(address)
+    response = myindexer.lookup_account_app_local_states(address)
 
     print(json.dumps(response, indent=2, sort_keys=True))
     ```
@@ -2033,17 +2007,13 @@ This call can be refined by looking for addresses based on the current amount us
 
 === "Python"
 	```python
-    # /indexer/python/assets_balances_min_balance.py
-
-    response = myindexer.asset_balances(
-        asset_id=2044572, min_balance=200)
+    response = myindexer.asset_balances( asset_id=2044572, min_balance=200)
 
     print("Asset Balances :" + json.dumps(response, indent=2, sort_keys=True))
     ```
 
 === "Java"
 	```java
-    // /indexer/java/AccountsAssetIDMinBalance.java
     public static void main(String args[]) throws Exception {
         AccountsAssetIDMinBalance ex = new AccountsAssetIDMinBalance();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -2395,7 +2365,6 @@ Parameters described below:
 
 === "Java"
 	```java
-    // /indexer/java/SearchApplication.java
     public static void main(String args[]) throws Exception {
         SearchApplication ex = new SearchApplication();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
@@ -2592,7 +2561,6 @@ The `/applications/{application-id}` REST method is provided to allow searching 
 
 === "Java"
 	```java
-    // /indexer/java/LookupApplication.java
     public static void main(String args[]) throws Exception {
         LookupApplication ex = new LookupApplication();
         IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
