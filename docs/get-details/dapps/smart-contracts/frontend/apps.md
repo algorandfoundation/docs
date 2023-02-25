@@ -464,7 +464,7 @@ Sign, send, await confirmation and display the results:
 
 ## Opt-in
 
-The user must [opt-in](../apps/#opt-in-to-the-smart-contract) to use the application. This method requires 3 parameters:
+The user must [opt-in](../apps/#opt-in-to-the-smart-contract) to call the application if some local state is used during evaluation of the call. This method requires 3 parameters:
 
 - sender: address, representing the user intending to opt-in to using the app
 - sp: suggested parameters obtained from the network
