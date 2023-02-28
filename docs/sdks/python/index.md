@@ -4,9 +4,7 @@ This section is a quick start guide for interacting with the Algorand network us
 
 # Alternative Guide
 
-If you are a visual learner, try our submitting your first transaction live demo or watch a full video that explains the following steps.  
 [`Try Live Demo`](https://replit.com/@Algorand/gettingStartedPython#main.py){target=_blank}   
-[`Watch Full Video`](https://www.youtube.com/watch?v=ku2hFalMWmA){target=_blank}  
 
 # Install Sandbox
 
@@ -21,7 +19,6 @@ git clone https://github.com/algorand/sandbox.git
 cd sandbox
 ./sandbox up testnet
 ```
-[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=23){target=_blank}    
 [`More Information`](https://developer.algorand.org/articles/introducing-sandbox-20/){target=_blank}    
 
 This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](../../get-details/algorand-networks/index.md){target=_blank}. 
@@ -35,7 +32,6 @@ Algorand provides an SDK for Python which is available as a pip package. To inst
 ``` bash
 pip3 install py-algorand-sdk
 ``` 
-[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=128){target=_blank}   ​
 
 Alternatively, choose and download a [distribution file](https://pypi.org/project/py-algorand-sdk/#files){target=_blank}, and run
 
@@ -63,7 +59,6 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 ```
 <!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
-[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=161){target=_blank}    
 [`More Information`](../../get-details/accounts/create.md#standalone){target=_blank}  
 
 !!! Tip
@@ -80,9 +75,6 @@ Before sending transactions to the Algorand network, the account must be funded 
 
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algod_token` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value and the `algod_address` corresponds to `http://localhost:4001`.
-
-Code beyond this point will be put into the ***first_transaction_example*** function to create a single script.
-
 
 
 <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
@@ -165,7 +157,6 @@ print(f"Decoded note: {b64decode(txn_result['txn']['txn']['note'])}")
 ```
 <!-- ===PYSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 
-[`Watch Video`](https://youtu.be/ku2hFalMWmA?t=480){target=_blank}  
 
 # Complete Example
 The complete example below illustrates how to quickly submit your first transaction.

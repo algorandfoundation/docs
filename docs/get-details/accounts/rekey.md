@@ -362,6 +362,26 @@ print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 
 === "Java"
 <!-- ===JAVASDK_ACCOUNT_REKEY=== -->
+```java
+
+        // Any kind of transaction can contain a rekey, here we use a Payment transaction
+        Transaction rekeyTxn = Transaction.PaymentTransactionBuilder().sender(acct1.getAddress())
+                .receiver(acct1.getAddress()).suggestedParams(sp).rekey(acct2.getAddress()).build();
+        SignedTransaction signedRekeyTxn = acct1.signTransaction(rekeyTxn);
+        Response<PostTransactionsResponse> resp = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedRekeyTxn)).execute();
+        ExampleUtils.printTxnResults(algodClient, resp.body(), "rekey");
+
+        // Create a transaction to rekey it back
+        Transaction rekeyBack = Transaction.PaymentTransactionBuilder().sender(acct1.getAddress())
+                .receiver(acct1.getAddress()).suggestedParams(sp).rekey(acct1.getAddress()).build();
+
+        // note we sign with acct2's key
+        SignedTransaction signedRekeyBack = acct2.signTransaction(rekeyBack);
+        Response<PostTransactionsResponse> rekeyBackResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedRekeyBack)).execute();
+        ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
+```
 <!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
 === "Go"

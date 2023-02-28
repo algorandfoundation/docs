@@ -892,17 +892,11 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 
 === "Java"
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
-	```java
-	import com.algorand.algosdk.account.Account;    
-
-	public class GenerateAlgorandKeyPair {
-		public static void main(String args[]) {
-			Account myAccount = new Account();
-			System.out.println("My Address: " + myAccount.getAddress());
-			System.out.println("My Passphrase: " + myAccount.toMnemonic());
-		}
-	}
-	```
+```java
+        Account acct = new Account();
+        System.out.println("Address: " + acct.getAddress());
+        System.out.println("Passphrase: " + acct.toMnemonic());
+```
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 === "Go"
@@ -1028,50 +1022,19 @@ print("Multisig Address: ", msig.address())
 
 === "Java"
 <!-- ===JAVASDK_MULTISIG_CREATE=== -->
-	```java
-	package com.algorand.javatest.multisig.v2;
-	import java.util.ArrayList;
-	import java.util.List;
-	import com.algorand.algosdk.account.Account;
-	import com.algorand.algosdk.crypto.Ed25519PublicKey;
-	import com.algorand.algosdk.crypto.MultisigAddress;
+```java
+        int version = 1; // no other versions at the time of writing
+        int threshold = 2; // we're making a 2/3 msig
 
-	public class MultisigAccount {
-
-		public void multisigExample() throws Exception {
-			// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
-			// Change these values to use the accounts created previously.
-			final String account1_mnemonic = <var>your-25-word-mnemonic</var>
-			final String account2_mnemonic = <var>your-25-word-mnemonic</var>
-			final String account3_mnemonic = <var>your-25-word-mnemonic</var>
-
-			Account act1 = new Account(account1_mnemonic);
-			Account act2 = new Account(account2_mnemonic);
-			Account act3 = new Account(account3_mnemonic);
-			System.out.println("Account1: " + act1.getAddress());
-			System.out.println("Account2: " + act2.getAddress());
-			System.out.println("Account3: " + act3.getAddress());
-
-			// List for Pks for multisig account
-			List<Ed25519PublicKey> publicKeys = new ArrayList<>();
-			publicKeys.add(act1.getEd25519PublicKey());
-			publicKeys.add(act2.getEd25519PublicKey());
-			publicKeys.add(act3.getEd25519PublicKey());
-
-			// Instantiate the Multisig Account
-			MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
-
-        	System.out.println("Navigate to this link and dispense:  https://dispenser.testnet.aws.algodev.network?account=" + msa.toString());            
-
-			// "Use TestNet Dispenser to add funds to this account");
-		}
-
-		public static void main(String args[]) throws Exception {
-			MultisigAccount t = new MultisigAccount();
-			t.multisigExample();
-		}
-	}
-	```
+        // Populate a list of Ed25519 pubkeys
+        List<Ed25519PublicKey> accts = new ArrayList<>();
+        accts.add(addr1.getEd25519PublicKey());
+        accts.add(addr2.getEd25519PublicKey());
+        accts.add(addr3.getEd25519PublicKey());
+        // create the MultisigAddress object
+        MultisigAddress msig = new MultisigAddress(version, threshold, accts);
+        System.out.printf("msig address: %s\n", msig.toAddress().toString());
+```
 <!-- ===JAVASDK_MULTISIG_CREATE=== -->
 
 === "Go"
