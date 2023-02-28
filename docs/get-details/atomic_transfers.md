@@ -69,23 +69,18 @@ txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
-	``` java
-    // Create the first transaction
-    Transaction tx1 = Transaction.PaymentTransactionBuilder()
-    .sender(acctA.getAddress())
-    .amount(100000)
-    .receiver(acctC.getAddress())
-    .suggestedParams(params)
-    .build();
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
 
-    // Create the second transaction
-    Transaction tx2 = Transaction.PaymentTransactionBuilder()
-    .sender(acctB.getAddress())
-    .amount(200000)
-    .receiver(acctA.getAddress())
-    .suggestedParams(params)
-    .build();
-    ```
+        // payment from account 1 to account 2
+        Transaction ptxn1 = Transaction.PaymentTransactionBuilder().sender(acct1.getAddress())
+                .amount(1000000).receiver(acct2.getAddress()).suggestedParams(rsp.body()).build();
+        // txn_1 = transaction.PaymentTxn(addr1, suggested_params, addr2, 100000)
+
+        // payment from account 2 to account 1
+        Transaction ptxn2 = Transaction.PaymentTransactionBuilder().sender(acct2.getAddress())
+                .amount(2000000).receiver(acct1.getAddress()).suggestedParams(rsp.body()).build();
+```
     <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Go"
@@ -152,12 +147,16 @@ txn_2.group = gid
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
-	```java
-    // group transactions an assign ids
-    Digest gid = TxGroup.computeGroupID(new Transaction[]{tx1, tx2});
-    tx1.assignGroupID(gid);
-    tx2.assignGroupID(gid);
-    ```
+```java
+        // Assign group id to the transactions (order matters!)
+        Transaction[] txs = TxGroup.assignGroupID(ptxn1, ptxn2);
+
+        // Or, equivalently
+        // compute group id and assign it to transactions
+        Digest gid = TxGroup.computeGroupID(txs);
+        ptxn1.group = gid;
+        ptxn2.group = gid;
+```
     <!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Go"
@@ -220,11 +219,9 @@ stxn_2 = txn_2.sign(sk2)
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
-	```java
-    // sign individual transactions
-    SignedTransaction signedTx1 = acctA.signTransaction(tx1);
-    SignedTransaction signedTx2 = acctB.signTransaction(tx2);
-    ```        
+```java
+
+```
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Go"
@@ -282,15 +279,10 @@ signed_group = [stxn_1, stxn_2]
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
-	```java
-    // put both transaction in a byte array 
-    ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream( );
-    byte[] encodedTxBytes1 = Encoder.encodeToMsgPack(signedTx1);
-    byte[] encodedTxBytes2 = Encoder.encodeToMsgPack(signedTx2);
-    byteOutputStream.write(encodedTxBytes1);
-    byteOutputStream.write(encodedTxBytes2);
-    byte groupTransactionBytes[] = byteOutputStream.toByteArray();
-    ```
+```java
+        // combine the signed transactions into a single list
+        SignedTransaction[] stxns = new SignedTransaction[] { signedPtxn1, signedPtxn2 };
+```
     <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Go"
@@ -344,13 +336,15 @@ print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
-	```java
-    String id = client.RawTransaction().rawtxn(groupTransactionBytes).execute().body().txId;
-    System.out.println("Successfully sent tx with ID: " + id);
-    // Wait for transaction confirmation
-    PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-    System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-    ```
+```java
+        // Only the first transaction id is returned
+        Response<PostTransactionsResponse> txResponse = algodClient.RawTransaction().rawtxn(Encoder.encodeToMsgPack(stxns)).execute();
+        String txid = txResponse.body().txId;
+
+        // Wait for it to be confirmed
+        PendingTransactionResponse txResult = Utils.waitForConfirmation(algodClient, txid, 4);
+        System.out.printf("Transaction %s confirmed in round %d\n", txid, txResult.confirmedRound);
+```
     <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
 
 === "Go"
