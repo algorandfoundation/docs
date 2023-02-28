@@ -46,9 +46,9 @@ atc = AtomicTransactionComposer()
 
 === "Java"
     <!-- ===JAVASDK_ATC_CREATE=== -->
-    ```java
+```java
         AtomicTransactionComposer atc = new AtomicTransactionComposer();
-    ```
+```
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
@@ -140,31 +140,18 @@ atc.add_transaction(tws)
 
 === "Java"
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
-    ```java
+```java
+        // Create a transaction
+        Transaction ptxn = PaymentTransactionBuilder.Builder().amount(10000).suggestedParams(sp)
+                .sender(acct.getAddress()).receiver(acct.getAddress()).build();
 
-    // ...
+        // Construct TransactionWithSigner
+        TransactionWithSigner tws = new TransactionWithSigner(ptxn,
+                acct.getTransactionSigner());
 
-    // Returns Account 
-    Account acct = getAccount();
-
-    // Create signer object
-	TxnSigner signer = acct.getTransactionSigner();
-
-    // Get suggested params from client
-    Response<TransactionParametersResponse> rsp = client.TransactionParams().execute();
-    TransactionParametersResponse sp = rsp.body();
-
-    // Create a transaction
-    Transaction ptxn = PaymentTransactionBuilder.Builder().amount(10000).suggestedParams(sp)
-            .sender(acct.getAddress()).receiver(acct.getAddress()).build();
-
-    // Construct TransactionWithSigner
-	TransactionWithSigner tws = new TransactionWithSigner(ptxn, signer);
-
-    // Pass TransactionWithSigner to atc
-    atc.addTransaction(tws);
-
-    ```
+        // Pass TransactionWithSigner to atc
+        atc.addTransaction(tws);
+```
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
@@ -305,48 +292,29 @@ atc.add_method_call(
     
 === "Java"
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
-    ```java
-	    // Utility function to return an ABIMethod by its name
-        public static Method getMethodByName(String name, Contract contract) throws Exception {
-            Optional<Method> m = contract.methods.stream().filter(mt -> mt.name.equals(name)).findFirst();
-            return m.orElseThrow(() -> new Exception("Method undefined: " + name));
-    	} 
-
-        // ...
-
-    	List<String> lines = Files.readAllLines(Paths.get("/path/to/contract.json"), Charset.defaultCharset());
-    	String jsonContract = StringUtils.join(lines, "");
-
-    	// convert Json to contract
-    	Contract contract = new Gson().fromJson(jsonContract, Contract.class);
-    ```
+```java
+        // Read the json from disk
+        String jsonContract = Files.readString(Paths.get("calculator/contract.json"));
+        // Create Contract from Json
+        Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
+```
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
 
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
-    ```java
-	    // get transaction params
-        Response<TransactionParametersResponse> sp = client.TransactionParams().execute();
-        TransactionParametersResponse tsp = sp.body();
-
-        List<Object> method_args = new ArrayList<Object>(); 
-        method_args.add(1);
-        method_args.add(1);
-
+```java
         // create methodCallParams by builder (or create by constructor) for add method
-        MethodCallTransactionBuilder mctb = MethodCallTransactionBuilder.Builder();
-        mctb.applicationId(getAppId());
-        mctb.sender(acct.getAddress().toString());
-        mctb.signer(acct.getTransactionSigner());
-        mctb.suggestedParams(tsp);
-        mctb.method(getMethodByName("add", contract));
-        mctb.methodArguments(method_args);
+        List<Object> method_args = new ArrayList<Object>();
+        method_args.add(1);
+        method_args.add(1);
 
-        AtomicTransactionComposer atc = new AtomicTransactionComposer();
-        atc.addMethodCall(mctb.build());
+        MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
 
-        ExecuteResult res = atc.execute(client, 2);
+        MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner()).sender(acct.getAddress())
+                .method(contract.getMethodByName("add")).methodArguments(method_args)
+                .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
 
-    ```
+        atc.addMethodCall(mcp);
+```
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
     
 ## Execution 
@@ -404,12 +372,10 @@ for res in result.abi_results:
 
 === "Java"
     <!-- ===JAVASDK_ATC_RESULTS=== -->
-    ```java
-	
-	AtomicTransactionComposer.ExecuteResult resultExecute = atc.execute(client, 5);
-        resultExecute.methodResults.forEach(methodResult -> {
-            System.out.println(methodResult);
-        });
-	
-    ```
+```java
+        ExecuteResult res = atc.execute(algodClient, 2);
+        System.out.printf("App call (%s) confirmed in round %d\n", res.txIDs, res.confirmedRound);
+        ReturnValue returnValue = res.methodResults.get(0);
+        System.out.printf("Result from calling '%s' method: %s\n", returnValue.method.name, returnValue.value);
+```
     <!-- ===JAVASDK_ATC_RESULTS=== -->
