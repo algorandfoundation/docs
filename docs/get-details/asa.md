@@ -201,64 +201,38 @@ print(f"Asset ID created: {created_asset}")
 
 === "Java"
     <!-- ===JAVASDK_ASSET_CREATE=== -->
-    ``` java 
-        // CREATE ASSET
-        // get changing network parameters for each transaction
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;        
-        // Create the Asset:
-        BigInteger assetTotal = BigInteger.valueOf(10000);
-        boolean defaultFrozen = false;
-        String unitName = "myunit";
-        String assetName = "my longer asset name";
-        String url = "http://this.test.com";
-        String assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
-        Address manager = acct2.getAddress();
-        Address reserve = acct2.getAddress();
-        Address freeze = acct2.getAddress();
-        Address clawback = acct2.getAddress();
-        Integer decimals = 0;
-        Transaction tx = Transaction.AssetCreateTransactionBuilder()
-                .sender(acct1.getAddress())
-                .assetTotal(assetTotal)
-                .assetDecimals(decimals)
-                .assetUnitName(unitName)
-                .assetName(assetName).url(url)
-                .metadataHashUTF8(assetMetadataHash)
-                .manager(manager)
-                .reserve(reserve)
-                .freeze(freeze)
-                .defaultFrozen(defaultFrozen)
-                .clawback(clawback)
-                .suggestedParams(params).build();
+```java
+        // Account 1 creates an asset called `rug` with a total supply
+        // of 1000 units and sets itself to the freeze/clawback/manager/reserve roles
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
 
-        // Sign the Transaction with creator account
-        SignedTransaction signedTx = acct1.signTransaction(tx);
-        Long assetID = null;
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // Now that the transaction is confirmed we can get the assetID
-            assetID = pTrx.assetIndex;
-            System.out.println("AssetID = " + assetID);
-            printCreatedAsset(acct1, assetID);
-            printAssetHolding(acct1, assetID);
+        // Under the covers, this is an AssetConfig with asset id set to 0
+        Transaction createTxn = Transaction.AssetCreateTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetTotal(1000)
+                .assetDecimals(0)
+                .defaultFrozen(false)
+                .assetUnitName("rug")
+                .assetName("Really Useful Gift")
+                .url("https://path/to/my/asset/details")
+                .manager(acct.getAddress())
+                .reserve(acct.getAddress())
+                .freeze(acct.getAddress())
+                .clawback(acct.getAddress())
+                .build();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
+        SignedTransaction signedCreateTxn = acct.signTransaction(createTxn);
+        Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedCreateTxn)).execute();
+        String txId = submitResult.body().txId;
+        PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, txId, 4);
 
-    ```
+        // Grab the asset id for the asset we just created
+        Long asaId = result.assetIndex;
+        System.out.printf("Created asset with id: %d\n", asaId);
+
+```
     <!-- ===JAVASDK_ASSET_CREATE=== -->
 
 === "Go"
@@ -626,44 +600,17 @@ assert matching_asset["is-frozen"] is False
 
 === "Java"
     <!-- ===JAVASDK_ASSET_OPTIN=== -->
-	``` java  
-        // OPT-IN
-        // Opt in to Receiving the Asset
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // configuration changes must be done by
-        // the manager account - changing manager of the asset
-        tx = Transaction.AssetAcceptTransactionBuilder()
-                .acceptingAccount(acct3.getAddress())
-                .assetIndex(assetID)
-                .suggestedParams(params)
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Under the covers, this is an AssetTransfer from me to me for amount 0
+        // with asset id set to the asset we wish to start accepting
+        Transaction optInTxn = Transaction.AssetAcceptTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetIndex(asaId)
                 .build();
-        // The transaction must be signed by the current manager account
-        signedTx = acct3.signTransaction(tx);
-        // send the transaction to the network and
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // We can now list the account information for acct3
-            // and see that it can accept the new asset
-            System.out.println("Account 3 = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
     <!-- ===JAVASDK_ASSET_OPTIN=== -->
 
 === "Go"
@@ -807,49 +754,19 @@ assert matching_asset["amount"] == 1
 
 === "Java"
     <!-- ===JAVASDK_ASSET_XFER=== -->
-	``` java  
-        // TRANSFER ASSET
-        // Transfer the Asset:
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // set asset xfer specific parameters
-        BigInteger assetAmount = BigInteger.valueOf(10);
-        Address sender = acct1.getAddress();
-        Address receiver = acct3.getAddress();
-        tx = Transaction.AssetTransferTransactionBuilder()
-                .sender(sender)
-                .assetReceiver(receiver)
-                .assetAmount(assetAmount)
-                .assetIndex(assetID)
-                .suggestedParams(params)
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Under the covers, this is an AssetTransfer from me to me for amount 0
+        // with asset id set to the asset we wish to start accepting
+        Transaction xferTxn = Transaction.AssetTransferTransactionBuilder().suggestedParams(sp)
+                .sender(sender.getAddress())
+                .assetReceiver(receiver.getAddress())
+                .assetIndex(asaId)
+                .assetAmount(1)
                 .build();
-        // The transaction must be signed by the sender account
-        signedTx = acct1.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // list the account information for acct1 and acct3
-            System.out.println("Account 3  = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-            System.out.println("Account 1  = " + acct1.getAddress().toString());
-            printAssetHolding(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
     <!-- ===JAVASDK_ASSET_XFER=== -->
 
 === "Go"
@@ -1005,46 +922,20 @@ assert matching_asset["is-frozen"] is True
 
 === "Java"
     <!-- ===JAVASDK_ASSET_FREEZE=== -->
-	``` java  
-        // FREEZE
-        // Freeze the Asset:
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // The asset was created and configured to allow freezing an account
-        // set asset specific parameters
-        boolean freezeState = true;
-        // The sender should be freeze account
-        tx = Transaction.AssetFreezeTransactionBuilder()
-                .sender(acct2.getAddress())
-                .freezeTarget(acct3.getAddress())
-                .freezeState(freezeState)
-                .assetIndex(assetID)
-                .suggestedParams(params)
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Set the freeze state on the account, only the account that is set to the
+        // freeze role
+        // on the asset may issue this transaction
+        Transaction freezeTxn = Transaction.AssetFreezeTransactionBuilder().suggestedParams(sp)
+                .sender(sender.getAddress())
+                .freezeTarget(receiver.getAddress())
+                .freezeState(true)
+                .assetIndex(asaId)
                 .build();
-        // The transaction must be signed by the freeze account
-        signedTx = acct2.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            System.out.println("Account 3 = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
     <!-- ===JAVASDK_ASSET_FREEZE=== -->
 
 === "Go"
@@ -1191,51 +1082,21 @@ assert matching_asset["is-frozen"] is True
 
 === "Java"
     <!-- ===JAVASDK_ASSET_CLAWBACK== -->
-	``` java  
-        // REVOKE (or clawback)
-        // Revoke the asset:
-        // The asset was also created with the ability for it to be revoked by
-        // clawbackaddress.
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // set asset specific parameters
-        assetAmount = BigInteger.valueOf(10);
-        tx = Transaction.AssetClawbackTransactionBuilder()
-                .sender(acct2.getAddress())
-                .assetClawbackFrom(acct3.getAddress())
-                .assetReceiver(acct1.getAddress())
-                .assetAmount(assetAmount)
-                .assetIndex(assetID)
-                .suggestedParams(params)
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // revoke an asset from an account, only the account that is set to the clawback
+        // role
+        // on the asset may issue this transaction
+        Transaction clawbackTxn = Transaction.AssetClawbackTransactionBuilder().suggestedParams(sp)
+                .sender(sender.getAddress())
+                .assetClawbackFrom(receiver.getAddress())
+                .assetReceiver(sender.getAddress())
+                .assetIndex(asaId)
+                .assetAmount(1)
                 .build();
-        // The transaction must be signed by the clawback account
-        signedTx = acct2.signTransaction(tx);
-        // send the transaction to the network and
-        // wait for the transaction to be confirmed
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // list the account information for acct1 and acct3
-            System.out.println("Account 3  = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-            System.out.println("Account 1  = " + acct1.getAddress().toString());
-            printAssetHolding(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
     <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 
 === "Go"
@@ -1384,50 +1245,21 @@ except Exception as e:
 
 === "Java"
     <!-- ===JAVASDK_ASSET_DELETE=== -->
-	``` java  
-        // DESTROY
-        // Destroy the Asset:
-        // All assets should now be back in
-        // creators account
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // set destroy asset specific parameters
-        // The manager must sign and submit the transaction
-        tx = Transaction.AssetDestroyTransactionBuilder()
-                .sender(acct1.getAddress())
-                .assetIndex(assetID)
-                .suggestedParams(params)
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Under the covers, an AssetDestroyTransaction is an AssetConfig with all of
+        // its
+        // configurable fields set to empty
+        // All units of the asset _must_ be owned by the creator account and this
+        // transaction _must_
+        // be issued by the account set to the manager role on the asset
+        Transaction destroyTxn = Transaction.AssetDestroyTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetIndex(asaId)
                 .build();
-        // The transaction must be signed by the manager account
-        signedTx = acct1.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // We list the account information for acct1
-            // and check that the asset is no longer exist
-            System.out.println("Account 3 must do a transaction for an amount of 0, ");
-            System.out.println("with a assetCloseTo to the creator account, to clear it from its accountholdings");
-            System.out.println("Account 1  = " + acct1.getAddress().toString());            
-            System.out.println("Nothing should print after this, Account 1 asset is sucessfully deleted");
-            printAssetHolding(acct1, assetID);
-            printCreatedAsset(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
     <!-- ===JAVASDK_ASSET_DELETE=== -->
 
 === "Go"
@@ -1547,57 +1379,12 @@ print(f"Asset params: {list(asset_params.keys())}")
 
 === "Java"
     <!-- ===JAVASDK_ASSET_INFO=== -->
-	```java
-        //note: if you have an indexer instance available it may be easier to just search accounts for an asset
-        // utility function to print created asset
-        public void printCreatedAsset(Account account, Long assetID) throws Exception {
-            if (client == null)
-                this.client = connectToNetwork();
-            String accountInfo = client.AccountInformation(account.getAddress()).execute().toString();
-            JSONObject jsonObj = new JSONObject(accountInfo.toString());
-            JSONArray jsonArray = (JSONArray) jsonObj.get("created-assets");
-            if (jsonArray.length() > 0) {
-                try {
-                    for (Object o : jsonArray) {
-                        JSONObject ca = (JSONObject) o;
-                        Integer myassetIDInt = (Integer) ca.get("index");
-                        if (assetID.longValue() == myassetIDInt.longValue()) {
-                            System.out.println("Created Asset Info: " + ca.toString(2)); // pretty print
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    throw (e);
-                }
-            }
-        }
-
-        // utility function to print asset holding
-        public void printAssetHolding(Account account, Long assetID) throws Exception {
-            if (client == null)
-                this.client = connectToNetwork();
-            String accountInfo = client.AccountInformation(account.getAddress()).execute().toString();
-            JSONObject jsonObj = new JSONObject(accountInfo.toString());
-            JSONArray jsonArray = (JSONArray) jsonObj.get("assets");
-            if (jsonArray.length() > 0) {
-                try {
-                    for (Object o : jsonArray) {
-                        JSONObject ca = (JSONObject) o;
-                        Integer myassetIDInt = (Integer) ca.get("asset-id");
-                        if (assetID.longValue() == myassetIDInt.longValue()) {
-                            System.out.println("Asset Holding Info: " + ca.toString(2)); // pretty print
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    throw (e);
-                }
-            }
-        }
-        ...
-        printCreatedAsset(acct1, assetID);
-        printAssetHolding(acct1, assetID);
-    ```
+```java
+        // Retrieve the asset info of the newly created asset
+        Response<Asset> assetResp = algodClient.GetAssetByID(asaId).execute();
+        Asset assetInfo = assetResp.body();
+        System.out.printf("Asset Name: %s", assetInfo.params.name);
+```
     <!-- ===JAVASDK_ASSET_INFO=== -->
 
 === "Go"

@@ -303,14 +303,14 @@ atc.add_method_call(
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
 ```java
         // create methodCallParams by builder (or create by constructor) for add method
-        List<Object> method_args = new ArrayList<Object>();
-        method_args.add(1);
-        method_args.add(1);
+        List<Object> methodArgs = new ArrayList<Object>();
+        methodArgs.add(1);
+        methodArgs.add(1);
 
         MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
 
         MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner()).sender(acct.getAddress())
-                .method(contract.getMethodByName("add")).methodArguments(method_args)
+                .method(contract.getMethodByName("add")).methodArguments(methodArgs)
                 .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
 
         atc.addMethodCall(mcp);
