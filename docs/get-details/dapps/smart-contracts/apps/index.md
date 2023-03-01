@@ -925,17 +925,17 @@ The `box_create` opcode takes two parameters, the name and the size in bytes for
 
 === "TEAL"
 <!-- ===TEAL_BOX_CREATE=== -->
-    ```teal
-    // 100 byte box created with box_create
-    byte “Mykey”
-    int 100
-    box_create
-    ….
-    // create with a box_put
-    byte "Mykey"
-    byte “My data values”
-    box_put
-    ```
+```teal
+// 100 byte box created with box_create
+byte "Mykey"
+int 100
+box_create
+// ... OR ...
+// create with a box_put
+byte "Mykey"
+byte "My data values"
+box_put
+```
 <!-- ===TEAL_BOX_CREATE=== -->
 
 === "PyTeal"
@@ -959,12 +959,12 @@ The AVM provides two opcodes, `box_put` and `box_replace`,  to write data to a b
 
 === "TEAL"
 <!-- ===TEAL_BOX_WRITE=== -->
-    ```teal
-    byte “MyKey” 
-    int 10
-    byte “best”
-    box_replace
-    ```
+```teal
+byte "MyKey"
+int 10
+byte "best"
+box_replace
+```
 <!-- ===TEAL_BOX_WRITE=== -->
 
 === "PyTeal"
@@ -990,12 +990,12 @@ The AVM provides two opcodes for reading the contents of a box, `box_get` and `b
 
 === "TEAL"
 <!-- ===TEAL_BOX_GET=== -->
-    ```teal
-    byte “MyKey”
-    box_get
-    assert //verify that the read occurred and we have a value
-    //box contents at the top of the stack
-    ```
+```teal
+byte "MyKey"
+box_get
+assert //verify that the read occurred and we have a value
+//box contents at the top of the stack
+```
 <!-- ===TEAL_BOX_GET=== -->
 
 === "PyTeal"
@@ -1017,18 +1017,20 @@ The `box_extract` opcode requires three parameters: the box key name, the starti
 
 === "TEAL"
 <!-- ===TEAL_BOX_EXTRACT=== -->
-    ```teal
-    byte “BoxA”
-    byte “this is a test of a very very very very long string”
-    box_put
-    byte “BoxA”
-    int 5
-    int 9
-    box_extract
-    byte “is a test”
-    ==
-    assert
-    ```
+```teal
+byte "BoxA"
+byte "this is a test of a very very very very long string"
+box_put
+
+byte "BoxA"
+int 5
+int 9
+box_extract
+
+byte "is a test"
+==
+assert
+```
 <!-- ===TEAL_BOX_EXTRACT=== -->
 
 === "PyTeal"
@@ -1046,17 +1048,19 @@ The AVM offers the `box_len` opcode to retrieve the length of a box. This opcode
 
 === "TEAL"
 <!-- ===TEAL_BOX_LEN=== -->
-    ```teal
-    byte “BoxA”
-    byte “this is a test of a very very very very long string”
-    box_put
-    byte “BoxA”
-    box_len
-    assert
-    int 51
-    ==
-    assert
-    ```
+```teal
+byte "BoxA"
+byte "this is a test of a very very very very long string"
+box_put
+
+byte "BoxA"
+box_len
+assert
+
+int 51
+==
+assert
+```
 <!-- ===TEAL_BOX_LEN=== -->
 
 === "PyTeal"
