@@ -84,17 +84,14 @@ assert addr == address
 
 === "Java"
 <!-- ===JAVASDK_CODEC_ADDRESS=== -->
-    ```java
-    import com.algorand.algosdk.crypto.Address;
-
-    //...
-
-    String address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4";
-    Address pk = new Address(address);
-    String addr = new Address(pk.getBytes());
-
-    // addr == address
-    ```
+```java
+        String addrAsStr = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4";
+        // Instantiate a new Address object with string
+        Address addr = new Address(addrAsStr);
+        // Or with the bytes
+        Address addrAgain = new Address(addr.getBytes());
+        assert addrAgain.equals(addr);
+```
 <!-- ===JAVASDK_CODEC_ADDRESS=== -->
 
 ### Byte Arrays
@@ -136,14 +133,12 @@ print(decoded_str)
 
 === "Java"
 <!-- ===JAVASDK_CODEC_BASE64=== -->
-    ```java
-    import java.util.Base64
-
-    //...
-
-    String encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0";
-    String decoded = new String(Base64.getDecoder().decode(encoded));
-    ```
+```java
+        String encodedStr = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0";
+        byte[] decodedBytes = Encoder.decodeFromBase64(encodedStr);
+        String reEncodedStr = Encoder.encodeToBase64(decodedBytes);
+        assert encodedStr.equals(reEncodedStr);
+```
 <!-- ===JAVASDK_CODEC_BASE64=== -->
 
 ### Integers
@@ -194,15 +189,12 @@ assert decoded_uint == val
 
 === "Java"
 <!-- ===JAVASDK_CODEC_UINT64=== -->
-    ```java
-    long val = 1337;
-
-    byte[] encoded = Encoder.encodeUint64(val);
-
-    BigInteger decoded = Encoder.decodeUint64(encoded);
-
-    //decoded.toLong() == val
-    ```
+```java
+        BigInteger val = BigInteger.valueOf(1337);
+        byte[] encodedVal = Encoder.encodeUint64(val);
+        BigInteger decodedVal = Encoder.decodeUint64(encodedVal);
+        assert val.equals(decodedVal);
+```
 <!-- ===JAVASDK_CODEC_UINT64=== -->
 
 
@@ -335,8 +327,27 @@ print(recovered_signed_txn.dictify())
 
 === "Java"
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Wipe the `reserve` address through an AssetConfigTransaction
+        Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
+
+        byte[] encodedTxn = Encoder.encodeToMsgPack(ptxn);
+
+        Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
+        assert decodedTxn.equals(ptxn);
+```
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
+```java
+        SignedTransaction signedTxn = acct.signTransaction(ptxn);
+        byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
+
+        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(encodedSignedTxn, SignedTransaction.class);
+        assert decodedSignedTransaction.equals(signedTxn);
+```
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 

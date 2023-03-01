@@ -114,50 +114,38 @@ print(f"New account: {address}")
 === "Java"
 <!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 ```java
-			//Get the values for the following two settings in the
-			//kmd.net and kmd.token files within the data directory 
-			//of your node.        
-			final String KMD_API_ADDR = "<kmd-address>";
-			final String KMD_API_TOKEN = "<kmd-token>";
+        String kmdHost = "http://localhost:4002";
+        String kmdToken =  "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-			// Create a wallet with kmd rest api
-			KmdClient client = new KmdClient();
-			client.setBasePath(KMD_API_ADDR);
-			// Configure API key authorization: api_key
-			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-			api_key.setApiKey(KMD_API_TOKEN);
-			KmdApi kmdApiInstance = new KmdApi(client);
+        KmdClient kmdClient = new KmdClient();
+        kmdClient.setBasePath(kmdHost);
+        kmdClient.setApiKey(kmdToken);
+
+        KmdApi kmd = new KmdApi(kmdClient);
 ```
 <!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 <!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
-
-	```java
-	APIV1POSTWalletResponse wallet;
-	//create the REST request
-	CreateWalletRequest req = new CreateWalletRequest()
-			.walletName("MyTestWallet1")
-			.walletPassword("testpassword")
-			.walletDriverName("sqlite");
-	//create the wallet        
-	wallet = kmdApiInstance.createWallet(req);
-	String wallId = wallet.getWallet().getId();
-	//create REST request to get wallet token
-	InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
-	walletHandleRequest.setWalletId(wallId);
-	walletHandleRequest.setWalletPassword("test");
-	```
+```java
+        // create a new CreateWalletRequest and set parameters 
+        CreateWalletRequest cwr = new CreateWalletRequest();
+        cwr.setWalletName(walletName);
+        cwr.setWalletPassword(password);
+        cwr.setWalletDriverName("sqlite"); // other option is `ledger`
+        // using our client, pass the request
+        APIV1POSTWalletResponse result = kmd.createWallet(cwr);
+        APIV1Wallet wallet = result.getWallet();
+        System.out.printf("Wallet name: %s\n", wallet.getName());
+```
 <!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 <!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
-	```java
-		//execute request to get the wallet token
-		String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
-		//create REST request to create new key with wallet token
-		GenerateKeyRequest genAcc = new GenerateKeyRequest();
-		genAcc.setWalletHandleToken(token);
-		//execute request to generate new key(account)
-		String newAccount = kmdApiInstance.generateKey(genAcc).getAddress();
-		System.out.println("New Account: " + newAccount);
-	```
+```java
+        // create a request to generate a new key, using the handle token
+        GenerateKeyRequest gkr = new GenerateKeyRequest();
+        gkr.setWalletHandleToken(handleToken);
+        APIV1POSTKeyResponse generatedKey = kmd.generateKey(gkr);
+        String addr = generatedKey.getAddress();
+        System.out.printf("New account: %s\n", addr);
+```
 <!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Go"
@@ -292,68 +280,19 @@ print("Recovered account:", rec_addr)
 
 === "Java"
 <!-- ===JAVASDK_KMD_RECOVER_WALLET===-->
-	```java
-	package com.algorand.algosdk.example;
-
-	import com.algorand.algosdk.kmd.client.ApiException;
-	import com.algorand.algosdk.kmd.client.KmdClient;
-	import com.algorand.algosdk.kmd.client.api.KmdApi;
-	import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
-	import com.algorand.algosdk.kmd.client.model.APIV1POSTWalletResponse;
-	import com.algorand.algosdk.kmd.client.model.CreateWalletRequest;
-	import com.algorand.algosdk.kmd.client.model.GenerateKeyRequest;
-	import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
-	import com.algorand.algosdk.mnemonic.Mnemonic;
-
-	public class RecoverWalletAcct {
-		public static void main(String args[]) throws Exception {
-			//Get the values for the following two settings in the
-			//kmd.net and kmd.token files within the data directory 
-			//of your node.        
-			final String KMD_API_ADDR = "<kmd-address>";
-			final String KMD_API_TOKEN = "<kmd-token>";
-			final String BACKUP_PHRASE = <wallet-mnemonic>;
-			// Create a wallet with kmd rest api
-			KmdClient client = new KmdClient();
-			client.setBasePath(KMD_API_ADDR);
-			// Configure API key authorization: api_key
-			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-			api_key.setApiKey(KMD_API_TOKEN);
-			KmdApi kmdApiInstance = new KmdApi(client);
-			byte[] mkd = Mnemonic.toKey(BACKUP_PHRASE);
-			APIV1POSTWalletResponse wallet;
-			try {
-				//create the REST request
-				CreateWalletRequest req = new CreateWalletRequest()
-						.walletName("MyTestWallet2")
-						.walletPassword("testpassword")
-						.masterDerivationKey(mkd)
-						.walletDriverName("sqlite");
-				//create the wallet        
-				wallet = kmdApiInstance.createWallet(req);
-				// begin process to generate account
-				String wallId = wallet.getWallet().getId();
-				System.out.println("Created Wallet: " + wallId);
-				//create REST request to get wallet token
-				InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
-				walletHandleRequest.setWalletId(wallId);
-				walletHandleRequest.setWalletPassword("testpassword");
-				//execute request to get the wallet token
-				String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
-				System.out.println("Got wallet handle: " + token);
-				//create REST request to create new key with wallet token
-				GenerateKeyRequest genAcc = new GenerateKeyRequest();
-				genAcc.setWalletHandleToken(token);
-				//execute request to generate new key(account)
-				String recAccount = kmdApiInstance.generateKey(genAcc).getAddress();
-				System.out.println("Recovered Account: " + recAccount);
-
-			} catch (ApiException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	```
+```java
+        // create a new CreateWalletRequest and set parameters 
+        CreateWalletRequest recoverRequest = new CreateWalletRequest();
+        recoverRequest.setWalletName("Recovered:"+walletName);
+        recoverRequest.setWalletPassword(password);
+        recoverRequest.setWalletDriverName("sqlite");
+        // Pass the specific derivation key we want to use
+        // to recover the wallet
+        recoverRequest.setMasterDerivationKey(backupKey);
+        APIV1POSTWalletResponse recoverResponse = kmd.createWallet(recoverRequest);
+        APIV1Wallet recoveredWallet = recoverResponse.getWallet();
+        System.out.printf("Wallet name: %s\n", recoveredWallet.getName());
+```
 <!-- ===JAVASDK_KMD_RECOVER_WALLET===-->
 
 === "Go"
@@ -486,82 +425,16 @@ print(f"Account mnemonic: {mn}")
 
 === "Java"
 <!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
-	```java
-	package com.algorand.algosdk.example;
-
-	import com.algorand.algosdk.kmd.client.ApiException;
-	import com.algorand.algosdk.kmd.client.KmdClient;
-	import com.algorand.algosdk.kmd.client.api.KmdApi;
-	import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
-	import com.algorand.algosdk.kmd.client.model.APIV1POSTKeyExportResponse;
-	import com.algorand.algosdk.kmd.client.model.APIV1GETWalletsResponse;
-	import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
-	import com.algorand.algosdk.kmd.client.model.ExportKeyRequest;
-	import com.algorand.algosdk.mnemonic.Mnemonic;
-
-	import org.bouncycastle.util.Arrays;
-
-	import com.algorand.algosdk.kmd.client.model.APIV1Wallet;
-
-	public class ExportAccount {
-		public static void main(String args[]) throws Exception {
-			//Get the values for the following two settings in the
-			//kmd.net and kmd.token files within the data directory 
-			//of your node.        
-			final String KMD_API_ADDR = "<kmd-address>";
-			final String KMD_API_TOKEN = "<kmd-token>";
-
-			// Create a wallet with kmd rest api
-			KmdClient client = new KmdClient();
-			client.setBasePath(KMD_API_ADDR);
-			// Configure API key authorization: api_key
-			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-			api_key.setApiKey(KMD_API_TOKEN);
-			KmdApi kmdApiInstance = new KmdApi(client);
-
-			APIV1GETWalletsResponse wallets;
-			String walletId = null;
-			try {
-				// Get all wallets from kmd
-				// Loop through them and find the one we
-				// are interested in them
-				wallets = kmdApiInstance.listWallets();
-				for (APIV1Wallet wal : wallets.getWallets()) {
-					System.out.println(wal.getName());
-					if (wal.getName().equals("MyTestWallet2")) {
-						walletId = wal.getId();
-						break;
-					}
-				}
-				if (walletId != null) {
-					// create REST request to get wallet token
-					InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
-					walletHandleRequest.setWalletId(walletId);
-					walletHandleRequest.setWalletPassword("test");
-					// execute request to get the wallet token
-					String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();            
-					ExportKeyRequest expRequest = new ExportKeyRequest();
-					expRequest.setAddress(<account address>);
-					expRequest.setWalletHandleToken(token);
-					expRequest.walletPassword("test");
-
-					APIV1POSTKeyExportResponse expResponse = kmdApiInstance.exportKey(expRequest);
-					byte [] expResponseSlice = Arrays.copyOfRange(expResponse.getPrivateKey(), 0, 32);
-					System.out.println("This is the expResponse: " + expResponse);
-					System.out.println("This is the expResponseSlice: " + expResponseSlice);
-					String mnem = Mnemonic.fromKey(expResponseSlice);
-				
-					System.out.println("Backup Phrase = " + mnem);
-
-				}else{
-					System.out.println("Did not Find Wallet");
-				}
-			} catch (ApiException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	```
+```java
+        ExportKeyRequest ekr = new ExportKeyRequest();
+        ekr.setAddress(addr);
+        ekr.setWalletHandleToken(handleToken);
+        ekr.setWalletPassword(password);
+        APIV1POSTKeyExportResponse exportedKeyResp = kmd.exportKey(ekr);
+        byte[] exportedKey = exportedKeyResp.getPrivateKey();
+        String mn = Mnemonic.fromKey(Arrays.copyOfRange(exportedKey, 0, 32));
+        System.out.printf("Exported mnemonic: %s\n", mn);
+```
 <!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Go"
@@ -688,94 +561,11 @@ print("Account successfully imported: ", importedaccount)
 
 === "Java"
 <!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
-	```java
-	package com.algorand.algosdk.example;
+```java
 
-	import com.algorand.algosdk.account.Account;
-	import com.algorand.algosdk.kmd.client.ApiException;
-	import com.algorand.algosdk.kmd.client.KmdClient;
-	import com.algorand.algosdk.kmd.client.api.KmdApi;
-	import com.algorand.algosdk.kmd.client.auth.ApiKeyAuth;
-	import com.algorand.algosdk.kmd.client.model.APIV1GETWalletsResponse;
-	import com.algorand.algosdk.kmd.client.model.APIV1Wallet;
-	import com.algorand.algosdk.kmd.client.model.APIV1POSTKeyImportResponse;
-	import com.algorand.algosdk.kmd.client.model.ImportKeyRequest;
-	import com.algorand.algosdk.kmd.client.model.InitWalletHandleTokenRequest;
-	import com.algorand.algosdk.mnemonic.Mnemonic;
-	import com.algorand.algosdk.crypto.Address;
+        String recoveredWalletHandleToken = getHandle(kmd, recoveredWallet, password);
 
-
-	public class ImportAcct {
-		public static void main(String args[]) throws Exception {
-			// Get the values for the following two settings in the
-			// kmd.net and kmd.token files within the data directory
-			// of your node.
-			final String KMD_API_ADDR = "<kmd-address>";
-			final String KMD_API_TOKEN = "<kmd-token>";
-
-			// Create a wallet with kmd rest api
-			KmdClient client = new KmdClient();
-			client.setBasePath(KMD_API_ADDR);
-			// Configure API key authorization: api_key
-			ApiKeyAuth api_key = (ApiKeyAuth) client.getAuthentication("api_key");
-			api_key.setApiKey(KMD_API_TOKEN);
-			KmdApi kmdApiInstance = new KmdApi(client);
-
-			APIV1GETWalletsResponse wallets;
-			String walletId = null;
-			try {
-				// Get all wallets from kmd
-				// Loop through them and find the one we
-				// are interested in them
-				wallets = kmdApiInstance.listWallets();
-				for (APIV1Wallet wal : wallets.getWallets()) {
-					System.out.println(wal.getName());
-					if (wal.getName().equals("MyTestWallet2")) {
-						walletId = wal.getId();
-						break;
-					}
-				}
-				if (walletId != null) {
-					System.out.println("Got Wallet Id: " + walletId);
-					// create REST request to get wallet token
-					InitWalletHandleTokenRequest walletHandleRequest = new InitWalletHandleTokenRequest();
-					walletHandleRequest.setWalletId(walletId);
-					walletHandleRequest.setWalletPassword("testpassword");
-					// execute request to get the wallet token
-					String token = kmdApiInstance.initWalletHandleToken(walletHandleRequest).getWalletHandleToken();
-					System.out.println("Got wallet handle: " + token);
-					//create REST request to create new key with wallet token
-					// GenerateKeyRequest genAcc = new GenerateKeyRequest();
-					// genAcc.setWalletHandleToken(token);
-					
-					// generate account using algosdk
-					Account newAccount = new Account();
-					//Get the new account address
-					Address addr = newAccount.getAddress();
-					//Get the backup phrase
-					String backup = newAccount.toMnemonic();
-
-
-					System.out.println("Account Address: " + addr.toString());
-					System.out.println("Account Mnemonic: " + backup);
-
-					byte[] pk = Mnemonic.toKey(backup);
-
-					ImportKeyRequest impResponse = new ImportKeyRequest();
-					impResponse.setPrivateKey(pk);
-					impResponse.setWalletHandleToken(token);
-
-					APIV1POSTKeyImportResponse impRequest = kmdApiInstance.importKey(impResponse);
-					System.out.println("Account Successfully Imported: " + impRequest);    
-				}else{
-					System.out.println("Did not Find Wallet");
-				}
-			} catch (ApiException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	```
+```
 <!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Go"

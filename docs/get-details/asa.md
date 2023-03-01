@@ -401,48 +401,21 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 
 === "Java"
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
-    ``` java  
-        // CHANGE MANAGER
-        // Change Asset Configuration:
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // configuration changes must be done by
-        // the manager account - changing manager of the asset
-        tx = Transaction.AssetConfigureTransactionBuilder()
-                .sender(acct2.getAddress())
-                .assetIndex(assetID)
-                .manager(acct1.getAddress())
-                .reserve(reserve)
-                .freeze(freeze)
-                .clawback(clawback)
-                .suggestedParams(params)
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Wipe the `reserve` address through an AssetConfigTransaction 
+        Transaction reconfigureTxn = Transaction.AssetConfigureTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetIndex(asaId)
+                .manager(acct.getAddress())
+                .freeze(acct.getAddress())
+                .clawback(acct.getAddress())
+                .strictEmptyAddressChecking(false)
+                .reserve(new byte[32])
                 .build();
-        // the transaction must be signed by the current manager account
-        signedTx = acct2.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
 
-            // the manager should now be the same as the creator
-            System.out.println("AssetID = " + assetID);
-            printCreatedAsset(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+```
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
@@ -1383,7 +1356,7 @@ print(f"Asset params: {list(asset_params.keys())}")
         // Retrieve the asset info of the newly created asset
         Response<Asset> assetResp = algodClient.GetAssetByID(asaId).execute();
         Asset assetInfo = assetResp.body();
-        System.out.printf("Asset Name: %s", assetInfo.params.name);
+        System.out.printf("Asset Name: %s\n", assetInfo.params.name);
 ```
     <!-- ===JAVASDK_ASSET_INFO=== -->
 

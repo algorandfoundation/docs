@@ -60,61 +60,18 @@ print(recovered_txn.dictify())
 
 === "Java"
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
-    ```java
-        // Construct the transaction
-        final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
-        String note = "Hello World";
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        System.out.println("Algorand suggested parameters: " + params);
-        Transaction tx = Transaction.PaymentTransactionBuilder()
-            .sender(myAddress)
-            .note(note.getBytes())
-            .amount(100000)
-            .receiver(new Address(RECEIVER))
-            .suggestedParams(params)
-            .build();
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Wipe the `reserve` address through an AssetConfigTransaction
+        Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
 
-        // save as signed even though it has not been
-        SignedTransaction stx = myAccount.signTransaction(tx);
-        System.out.println("Signed transaction with txid: " + stx.transactionID);
-        stx.tx = tx;  
-        // Save transaction to a file 
-        Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(stx));
-        System.out.println("Transaction written to a file");
+        byte[] encodedTxn = Encoder.encodeToMsgPack(ptxn);
 
-        // read transaction from file
-        SignedTransaction decodedTransaction = Encoder.decodeFromMsgPack(
-            Files.readAllBytes(Paths.get("./unsigned.txn")), SignedTransaction.class);            
-        Transaction tx = decodedTransaction.tx;           
-        // Sign the transaction
-        SignedTransaction signedTxn = myAccount.signTransaction(tx);
-        System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
-        // Submit the transaction to the network
-        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-        if (!rawtxresponse.isSuccessful()) {
-            throw new Exception(rawtxresponse.message());
-        }
-        String id = rawtxresponse.body().txId;
-        System.out.println("Successfully sent tx with ID: " + id);
-
-        // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-        System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-
-        // Read the transaction
-        JSONObject jsonObj = new JSONObject(pTrx.toString());
-        System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
-        System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-        printBalance(myAccount);
-    ```
+        Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
+        assert decodedTxn.equals(ptxn);
+```
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
@@ -266,54 +223,13 @@ print(recovered_signed_txn.dictify())
 
 === "Java"
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
-    ```java
-        // Construct the transaction
-        final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
-        String note = "Hello World";
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        System.out.println("Algorand suggested parameters: " + params);
-        Transaction txn = Transaction.PaymentTransactionBuilder()
-            .sender(myAddress)
-            .note(note.getBytes())
-            .amount(100000)
-            .receiver(new Address(RECEIVER))
-            .suggestedParams(params)
-            .build();
+```java
+        SignedTransaction signedTxn = acct.signTransaction(ptxn);
+        byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
 
-        // Sign the transaction
-        SignedTransaction signedTx = myAccount.signTransaction(txn);
-        System.out.println("Signed transaction with txid: " + signedTx.transactionID);
-        // save signed transaction to  a file 
-        Files.write(Paths.get("./signed.txn"), Encoder.encodeToMsgPack(signedTx));
-
-        // read signed transaction
-        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(
-        Files.readAllBytes(Paths.get("./signed.txn")), SignedTransaction.class);     
-        // Msgpack encode the signed transaction
-        byte[] encodedTxBytes = Encoder.encodeToMsgPack(decodedSignedTransaction);
-        // Submit the transaction to the network          
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-        if (!rawtxresponse.isSuccessful()) {
-            throw new Exception(rawtxresponse.message());
-        }
-        String id = rawtxresponse.body().txId;
-        System.out.println("Successfully sent tx with ID: " + id);
-        // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
-        System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-        // Read the transaction
-        JSONObject jsonObj = new JSONObject(pTrx.toString());
-        System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
-        System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-        printBalance(myAccount); 
-    ```
+        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(encodedSignedTxn, SignedTransaction.class);
+        assert decodedSignedTransaction.equals(signedTxn);
+```
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"

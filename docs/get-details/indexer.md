@@ -40,28 +40,12 @@ myindexer = indexer.IndexerClient(
 
 === "Java"
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
-	```java
-    package com.algorand.javatest.indexer;
-
-    import com.algorand.algosdk.v2.client.common.IndexerClient;
-    import com.algorand.algosdk.v2.client.common.Client;
-
-    public class InstantiateIndexer {
-        public Client indexerInstance = null;
-        // utility function to connect to a node
-        private Client connectToNetwork(){
-            final String INDEXER_API_ADDR = "localhost";
-            final int INDEXER_API_PORT = 8980;       
-            IndexerClient indexerClient = new IndexerClient(INDEXER_API_ADDR, INDEXER_API_PORT); 
-            return indexerClient;
-        }
-        public static void main(String args[]) throws Exception {
-            InstantiateIndexer ex = new InstantiateIndexer();
-            IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-            System.out.println("IndexerClient Instantiated : " + indexerClientInstance); // pretty print json
-        }
-    }
-    ```
+```java
+        String indexerHost = "http://localhost";
+        int indexerPort = 8980;
+        String indexerToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
+```
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
@@ -129,23 +113,12 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchAssets ex = new SearchAssets();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long asset_id = Long.valueOf(12215366);        
-        Response<AssetsResponse> response = indexerClientInstance
-            .searchForAssets()
-            .assetId(asset_id)
-            .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        } 
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Asset Info: " + jsonObj.toString(2)); // pretty print json            
-    }
-    ```
+```java
+        Long asaId = 25l;
+        Response<AssetResponse> assetResponse = indexerClient.lookupAssetByID(asaId).execute();
+        Asset assetInfo = assetResponse.body().asset;
+        System.out.printf("Name for %d: %s\n", asaId, assetInfo.params.name);
+```
     <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Go"
@@ -203,23 +176,12 @@ print(f"Transaction results: {json.dumps(response, indent=2)}")
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsMinAmount ex = new SearchTransactionsMinAmount();
-        IndexerClient indexerClientInstance = (IndexerClient)ex.connectToNetwork();
-        Long min_amount = Long.valueOf(10);     
-        Response<TransactionsResponse> response = indexerClientInstance
-                .searchForTransactions()
-                .currencyGreaterThan(min_amount)
-                .execute();
-        if (!response.isSuccessful()) {
-            throw new Exception(response.message());
-        }                
-
-        JSONObject jsonObj = new JSONObject(response.body().toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2)); // pretty print json        
-    }
-    ```
+```java
+        Response<TransactionsResponse> transactionSearchResult = indexerClient.searchForTransactions()
+                .minRound(10l).maxRound(500l).currencyGreaterThan(10l).execute();
+        TransactionsResponse txResp = transactionSearchResult.body();
+        System.out.printf("Found %d transactions that match criteria\n", txResp.transactions.size());
+```
     <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Go"
@@ -320,41 +282,22 @@ while has_results:
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
-	```java
-    public static void main(String args[]) throws Exception {
-        SearchTransactionsPaging ex = new SearchTransactionsPaging();
-        IndexerClient indexerClientInstance = (IndexerClient) ex.connectToNetwork();
-        String nexttoken = "";
-        Integer numtx = 1;  
-        Long maxround=Long.valueOf(30000);           
-        // loop until there are no more transactions in the response
-        // for the limit (max limit is 1000 per request)
-        while (numtx > 0) {
-            Long min_amount = Long.valueOf(500000000000L);
-            Long limit = Long.valueOf(4);
-            String next_page = nexttoken;
-            Response<TransactionsResponse> response = indexerClientInstance
-                .searchForTransactions()
-                .next(next_page)
-                .currencyGreaterThan(min_amount)
-                .maxRound(maxround)
-                .limit(limit)
-                .execute();
-            if (!response.isSuccessful()) {
-                throw new Exception(response.message());
-            }        
-            JSONObject jsonObj = new JSONObject(response.body().toString());
-
-            JSONArray jsonArray = (JSONArray) jsonObj.get("transactions");
-            numtx = jsonArray.length();
-            if (numtx > 0) {
-                nexttoken = jsonObj.get("next-token").toString();
-                JSONObject jsonObjAll = new JSONObject(response.body().toString());
-                System.out.println("Transaction Info: " + jsonObjAll.toString(2)); // pretty print json
-            }
+```java
+        String nextToken = "";
+        boolean hasResults = true;
+        // Start with empty nextToken and while there are
+        // results in the transaction results, query again with the next page 
+        while(hasResults){
+            Response<TransactionsResponse> searchResults = indexerClient.searchForTransactions().minRound(1000l)
+                    .maxRound(1500l).currencyGreaterThan(10l).next(nextToken).execute();
+            TransactionsResponse txnRes = searchResults.body();
+            //
+            // ... do something with transaction results
+            //
+            hasResults = txnRes.transactions.size()>0;
+            nextToken = txnRes.nextToken;
         }
-    }
-    ```
+```
     <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Go"
@@ -475,29 +418,11 @@ print(f"result: {json.dumps(response, indent=2)}")
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
-	```java
-    public static void main(String args[]) throws Exception {
-        IndexerClient indexerClientInstance = connectToNetwork();
-        Response<TransactionsResponse> resp = indexerClientInstance.searchForTransactions()
-                .notePrefix("showing prefix".getBytes())
-                .minRound(10894697L)
-                .maxRound(10994697L).execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-
-        // pretty print json
-        JSONObject jsonObj = new JSONObject(resp.body().toString());
-        System.out.println("Transaction Info: " + jsonObj.toString(2));
-
-        int i = 0;
-        for (Transaction tx : resp.body().transactions) {
-            i++;
-            System.out.println("Transaction " + i);
-            System.out.println("  Note Info: " + new String(tx.note));
-        }
-    }
-    ```
+```java
+        byte[] prefix = new String("showing prefix").getBytes();
+        Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix).execute();
+        // ...
+```
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Go"
