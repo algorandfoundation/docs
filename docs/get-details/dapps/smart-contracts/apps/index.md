@@ -1082,14 +1082,15 @@ The AVM offers the `box_del` opcode to delete a box. This opcode takes the box k
 
 === "TEAL"
 <!-- ===TEAL_BOX_DELETE=== -->
-    ```teal
-    byte ”BoxA"
-    byte “this is a test of a very very very very long string”
-    box_put
-    byte “BoxA”
-    box_del
-    bnz existed
-    ``` 
+```teal
+byte "BoxA"
+byte "this is a test of a very very very very long string"
+box_put
+
+byte "BoxA"
+box_del
+bnz existed
+```
 <!-- ===TEAL_BOX_DELETE=== -->
 
 === "PyTeal"
@@ -1180,12 +1181,11 @@ The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Con
 
 === "TEAL"
 <!-- ===TEAL_TXN_ONCOMPLETE=== -->
-    ```teal
-    int NoOp 
-    //or OptIn, UpdateApplication, DeleteApplication, CloseOut, ClearState 
-    txn OnCompletion
-    ==
-    ```
+```teal
+txn OnCompletion
+int NoOp // OptIn, CloseOut, UpdateApplication, or DeleteApplication
+==
+```
 <!-- ===TEAL_TXN_ONCOMPLETE=== -->
 
 
@@ -1211,11 +1211,11 @@ These parameters are loaded into the arguments array. TEAL opcodes are available
 
 === "TEAL"
 <!-- ===TEAL_TXN_APP_ARGS=== -->
-    ```teal
-    txna ApplicationArgs 1
-    byte "claim" 
-    ==
-    ```
+```teal
+txna ApplicationArgs 1
+byte "claim"
+==
+```
 <!-- ===TEAL_TXN_APP_ARGS=== -->
 
 This call gets the second passed in argument and compares it to the string "claim".
@@ -1233,11 +1233,11 @@ A global variable is also available to check the size of the transaction argumen
 
 === "TEAL"
 <!-- ===TEAL_TXN_NUM_APP_ARGS=== -->
-    ```teal
-    txn NumAppArgs
-    int 4
-    ==
-    ```
+```teal
+txn NumAppArgs
+int 4
+==
+```
 <!-- ===TEAL_TXN_NUM_APP_ARGS=== -->
 
 The above TEAL code will push a 0 on the top of the stack if the number of parameters in this specific transaction is anything other than 4, else it will push a 1 on the top of the stack. Internally all transaction parameters are stored as byte slices (byte-array value). Integers can be converted using the `btoi` opcode.
@@ -1252,10 +1252,10 @@ The above TEAL code will push a 0 on the top of the stack if the number of param
 
 === "TEAL"
 <!-- ===TEAL_TXN_APP_ARG_TO_INT=== -->
-    ```teal
-    txna ApplicationArgs 0
-    btoi
-    ```
+```teal
+txna ApplicationArgs 0
+btoi
+```
 <!-- ===TEAL_TXN_APP_ARG_TO_INT=== -->
 
 
@@ -1304,16 +1304,19 @@ When this transaction is submitted, the `ApprovalProgram` of the smart contract 
 
 === "TEAL"
 <!-- ===TEAL_APPL_OPTIN=== -->
-    ```teal
-    int OptIn
-    txn OnCompletion
-    ==
-    bz notoptingin
-    int 1
-    Return
-    notoptingin:
-    //...
-    ```
+```teal
+txn OnCompletion
+int OptIn
+==
+bz not_optin
+
+// Allow OptIn
+int 1
+return
+
+not_optin:
+// additional checks...
+```
 <!-- ===TEAL_APPL_OPTIN=== -->
 
 Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted into the contract.
@@ -1328,11 +1331,11 @@ Other contracts may have much more complex opt in logic. TEAL also provides an o
 
 === "TEAL"
 <!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
-    ```teal
-    int 0 
-    txn ApplicationID
-    app_opted_in
-    ```
+```teal
+int 0
+txn ApplicationID
+app_opted_in
+```
 <!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array.
@@ -1368,16 +1371,16 @@ The call must specify the intended contract using the `--app-id` option. Additio
 
 === "Teal"
 <!-- ===TEAL_APPL_CALL=== -->
-    ```teal
-    byte "myparm" 
-    txna ApplicationArgs 0
-    ==
-    bz not_my_parm
-    //handle my_parm
-    return
-    not_my_parm:
-    //handle not_my_parm
-    ```
+```teal
+byte "myparam"
+txna ApplicationArgs 0
+==
+bz not_myparam
+// handle my_param
+
+not_myparam:
+// handle not_myparam
+```
 <!-- ===TEAL_APPL_CALL=== -->
 
 # Update smart contract
@@ -1401,12 +1404,20 @@ As stated earlier, anyone can update the program. If this is not desired and you
 
 === "TEAL"
 <!-- ===TEAL_APPL_UPDATE=== -->
-    ```teal
-    global CreatorAddress
-    txn Sender
-    ==
-    assert
-    ```
+```teal
+byte "update"
+txna ApplicationArgs 0
+==
+bz not_update
+
+// Only Creator may update
+global CreatorAddress
+txn Sender
+==
+return
+
+not_update:
+```
 <!-- ===TEAL_APPL_UPDATE=== -->
 
 Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication` application call is made to prevent anyone from ever updating the application code.
@@ -1429,14 +1440,18 @@ Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication
 
 === "TEAL"
 <!-- ===TEAL_APPL_UPDATE_REJECT=== -->
-    ```teal
-    int UpdateApplication
-    txn OnCompletion
-    ==
-    bz not_update
-    int 0
-    return
-    ```
+```teal
+txn OnCompletion
+int UpdateApplication
+==
+bz not_update
+
+// Reject Update
+int 0
+return
+
+not_update:
+```
 <!-- ===TEAL_APPL_UPDATE_REJECT=== -->
 
 # Delete smart contract
@@ -1461,12 +1476,12 @@ Smart contracts have access to many global variables. These variables are set fo
 
 === "TEAL"
 <!-- ===TEAL_GLOBAL_LATEST_TIMESTAMP=== -->
-    ```teal
-    global LatestTimestamp
-    byte "StartDate"
-    app_global_get
-    >=
-    ```
+```teal
+global LatestTimestamp
+byte "StateDate"
+app_global_get
+>=
+```
 <!-- ===TEAL_GLOBAL_LATEST_TIMESTAMP=== -->
 
 # Atomic transfers and transaction properties
@@ -1483,9 +1498,9 @@ The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transa
 
 === "TEAL"
 <!-- ===TEAL_TXN_AMOUNT=== -->
-    ```teal
-    txn Amount
-    ```
+```teal
+txn Amount
+```
 <!-- ===TEAL_TXN_AMOUNT=== -->
 
 In many common patterns, the smart contract will be combined with other Algorand technologies such as assets, atomic transfers, or smart signatures to build a complete application. In the case of atomic transfers, more than one transaction’s properties can be checked within the smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the smart contract is grouped with more than one transaction.
@@ -1500,11 +1515,11 @@ In many common patterns, the smart contract will be combined with other Algorand
 
 === "TEAL"
 <!-- ===TEAL_TXN_GROUP_SIZE=== -->
-    ```teal
-    global GroupSize
-    int 2
-    ==
-    ```
+```teal
+global GroupSize
+int 2
+==
+```
 <!-- ===TEAL_TXN_GROUP_SIZE=== -->
 
 The above TEAL will be true if there are two transactions submitted at once using an atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
@@ -1519,11 +1534,11 @@ The above TEAL will be true if there are two transactions submitted at once usin
 
 === "TEAL"
 <!-- ===TEAL_GTXN_TYPE_ENUM=== -->
-    ```teal
-    gtxn 1 TypeEnum
-    int pay
-    ==
-    ```
+```teal
+gtxn 1 TypeEnum
+int pay
+==
+```
 <!-- ===TEAL_GTXN_TYPE_ENUM=== -->
 
 In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
@@ -1540,14 +1555,12 @@ If any transaction in a group of transactions is a call to a smart contract, the
 
 === "TEAL"
 <!-- ===TEAL_GTXN_APP_ARGS=== -->
-    ```teal
-    // get the first argument of the previous transaction
-    // in a smart contract
-    txn GroupIndex
-    int 1
-    -
-    gtxnsa ApplicationArgs 0
-    ```
+```teal
+txn GroupIndex
+int 1
+-
+gtxnsa ApplicationArgs 0
+```
 <!-- ===TEAL_GTXN_APP_ARGS=== -->
 
 # Using assets in smart contracts
@@ -1572,16 +1585,19 @@ Smart contract applications can work in conjunction with assets. In addition to 
 
 === "TEAL"
 <!-- ===TEAL_APPL_ASSET_BALANCE=== -->
-    ```teal
-    int 0
-    int 2
-    asset_holding_get AssetBalance
-    bnz has_balance
-    int 0 
-    return
-    has_balance:
-    //balance value is now on top of the stack
-    ```
+```teal
+int 0
+int 2
+asset_holding_get AssetBalance
+bnz has_balance
+
+// Reject transaction if no asset balance
+int 0 
+return
+
+has_balance:
+//balance value is now on top of the stack
+```
 <!-- ===TEAL_APPL_ASSET_BALANCE=== -->
 
 This opcode takes two parameters. The first parameter represents an index into the accounts array, where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
@@ -1598,10 +1614,10 @@ It is also possible to get an Asset’s configuration information within a smart
 
 === "TEAL"
 <!-- ===TEAL_APPL_ASSET_PARAM=== -->
-    ```teal
-    int 0
-    asset_params_get AssetTotal
-    ```
+```teal
+int 0
+asset_params_get AssetTotal
+```
 <!-- ===TEAL_APPL_ASSET_PARAM=== -->
 
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
@@ -1732,56 +1748,62 @@ As a way of getting started writing smart contracts, the following boilerplate t
 
 === "TEAL"
 <!-- ===TEAL_BOILERPLATE=== -->
-    ```teal
-    #pragma version 5
+```teal
+#pragma version 8
 
-    // Handle each possible OnCompletion type. We don't have to worry about
-    // handling ClearState, because the ClearStateProgram will execute in that
-    // case, not the ApprovalProgram.
+// Handle each possible OnCompletion type. We don't have to worry about
+// handling ClearState, because the ClearStateProgram will execute in that
+// case, not the ApprovalProgram.
 
-    txn OnCompletion
-    int NoOp
-    ==
-    bnz handle_noop
+txn OnCompletion
+int NoOp
+==
+bnz handle_noop
 
-    txn OnCompletion
-    int OptIn
-    ==
-    bnz handle_optin
+txn OnCompletion
+int OptIn
+==
+bnz handle_optin
 
-    txn OnCompletion
-    int CloseOut
-    ==
-    bnz handle_closeout
+txn OnCompletion
+int CloseOut
+==
+bnz handle_closeout
 
-    txn OnCompletion
-    int UpdateApplication
-    ==
-    bnz handle_updateapp
+txn OnCompletion
+int UpdateApplication
+==
+bnz handle_updateapp
 
-    txn OnCompletion
-    int DeleteApplication
-    ==
-    bnz handle_deleteapp
+txn OnCompletion
+int DeleteApplication
+==
+bnz handle_deleteapp
 
-    // Unexpected OnCompletion value. Should be unreachable.
-    err
+// Unexpected OnCompletion value. Should be unreachable.
+err
 
-    handle_noop:
-    // Handle NoOp
+handle_noop:
+// Handle NoOp
+int 1
+return
 
-    handle_optin:
-    // Handle OptIn
+handle_optin:
+// Handle OptIn
+int 1
+return
 
-    handle_closeout:
-    // Handle CloseOut
+handle_closeout:
+// Handle CloseOut
+int 1
+return
 
-    // By default, disallow updating or deleting the app. Add custom authorization
-    // logic below to allow updating or deletion in certain circumstances.
-    handle_updateapp:
-    handle_deleteapp:
-    err
-    ```
+// By default, disallow updating or deleting the app. Add custom authorization
+// logic below to allow updating or deletion in certain circumstances.
+handle_updateapp:
+handle_deleteapp:
+err
+```
 <!-- ===TEAL_BOILERPLATE=== -->
 
 # Minimum balance requirement for a smart contract
