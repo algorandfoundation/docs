@@ -503,16 +503,20 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
 
 === "TEAL"
 <!-- ===TEAL_ITXN_C2C=== -->
-    ```teal
-    itxn_begin
-    int appl
-    itxn_field TypeEnum
-    int 1234
-    itxn_field ApplicationID
-    int NoOp
-    itxn_field OnCompletion
-    itxn_submit
-    ```
+```teal
+itxn_begin
+
+int appl
+itxn_field TypeEnum
+
+txn Applications 1
+itxn_field ApplicationID
+
+int NoOp
+itxn_field OnCompletion
+
+itxn_submit
+```
 <!-- ===TEAL_ITXN_C2C=== -->
 
 ## Composability
@@ -613,11 +617,11 @@ To write to either local or global state, the opcodes `app_global_put` and `app_
 
 === "TEAL"
 <!-- ===TEAL_WRITE_GLOBAL_STATE=== -->
-    ```teal
-    byte "Mykey"
-    int 50
-    app_global_put
-    ```
+```teal
+byte "GlobalKey"
+int 42
+app_global_put
+```
 <!-- ===TEAL_WRITE_GLOBAL_STATE=== -->
 
 To store a value in local storage, the following TEAL can be used.
@@ -632,12 +636,12 @@ To store a value in local storage, the following TEAL can be used.
 
 === "TEAL"
 <!-- ===TEAL_WRITE_OWN_LOCAL_STATE=== -->
-    ```teal
-    int 0
-    byte "MyLocalKey"
-    int 50
-    app_local_put
-    ```
+```teal
+int 0
+byte "OwnLocalKey"
+int 1337
+app_local_put
+```
 <!-- ===TEAL_WRITE_OWN_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. With `goal` you can pass additional accounts using the `--app-account` option. The address can be also be specified instead of the index. If using an address, it still must exist in the accounts array.
@@ -658,12 +662,12 @@ To store a value into account2, the TEAL would be as follows.
 
 === "TEAL"
 <!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
-    ```teal
-    int 2
-    byte “MyLocalKey”
-    int 50
-    app_local_put
-    ```
+```teal
+txn Accounts 2
+byte "OtherLocalKey"
+int 200
+app_local_put
+```
 <!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
 
 Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call.
@@ -685,10 +689,11 @@ TEAL provides calls to read global and local state values for the current smart 
 
 === "TEAL"
 <!-- ===TEAL_READ_GLOBAL_STATE=== -->
-    ```teal
-    byte "MyGlobalKey"
-    app_global_get
-    ```
+```teal
+
+// READING STATE
+
+```
 <!-- ===TEAL_READ_GLOBAL_STATE=== -->
 
 
@@ -704,11 +709,11 @@ The following TEAL code reads the local state of the sender account for the spec
 
 === "TEAL"
 <!-- ===TEAL_READ_LOCAL_STATE=== -->
-    ```teal
-    int 0
-    byte "MyLocalKey"
-    app_local_get
-    ```
+```teal
+int 0
+byte "OwnLocalState"
+app_local_get
+```
 <!-- ===TEAL_READ_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. The address can be specified instead of the index as long as the account is in the accounts array. With `goal` you can pass additional accounts using the `--app-account` option. 
@@ -718,22 +723,22 @@ In this example, the `int 0` represents the sender of the transaction. This is a
 The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following TEAL should be used.
 
 === "PyTeal"
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
+<!-- ===PYTEAL_READ_OWN_LOCAL_STATE_EX=== -->
     ```py
     program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
     print(compileTeal(program, Mode.Application))
     ```
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
+<!-- ===PYTEAL_READ_OWN_LOCAL_STATE_EX=== -->
 
 === "TEAL"
-<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
-    ```teal
-    int 0 // sender
-    txn ApplicationID // current smart contract
-    byte "MyAmountGiven"
-    app_local_get_ex
-    ```
-<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
+<!-- ===TEAL_READ_OWN_LOCAL_STATE_EX=== -->
+```teal
+int 0
+txn ApplicationID
+byte "OwnLocalState"
+app_local_get_ex
+```
+<!-- ===TEAL_READ_OWN_LOCAL_STATE_EX=== -->
 
 !!! note
     The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
@@ -761,21 +766,17 @@ The `int 0` is the index into the accounts array. The actual address could also 
 
 === "TEAL"
 <!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
-    ```teal
-    int 0 // sender
-    txn ApplicationID
-    byte "MyAmountGiven"
-    app_local_get_ex
-    bz new-giver
+```teal
+int 0
+txn ApplicationID
+byte "deposited"
+app_local_get_ex
+bz new_deposit
+// Account has deposited before
 
-    // logic to deal with an existing giver
-    // stored value is on the top of the stack
-    // return
-
-    new-giver:
-
-    // logic to deal with a new giver
-    ```
+new_deposit:
+// Account is making their first deposit
+```
 <!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
 
 The `app_global_get_ex` is used to read not only the global state of the current contract but any contract that is in the applications array. To access these foreign apps, they must be passed in with the application using the `--foreign-app` option. 
@@ -787,7 +788,7 @@ $ goal app call --foreign-app APP1ID --foreign-app APP2ID
 To read from the global state with the `app_global_get_ex` opcode, use the following TEAL.
 
 === "PyTeal"
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX_2=== -->
+<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
     ```py
     get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
 
@@ -801,17 +802,16 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 
     print(compileTeal(program, Mode.Application))
     ```
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX_2=== -->
+<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
 
 === "TEAL"
-<!-- ===TEAL_READ_GLOBAL_STATE_EX_2=== -->
-    ```teal
-    int 0
-    byte "MyGlobalKey"
-    app_global_get_ex
-    bnz increment_existing //found value
-    ```
-<!-- ===TEAL_READ_GLOBAL_STATE_EX_2=== -->
+<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
+```teal
+int 0
+byte "GlobalKey"
+app_global_get_ex
+```
+<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise, `int 2` would represent the second passed in foreign application. The actual contract IDs can also be specified as long as the contract is in the contracts array. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
 
