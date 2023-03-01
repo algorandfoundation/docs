@@ -45,22 +45,27 @@ This guide requires two accounts:
 An `algod` client connection is also required. The following connects using Sandbox:
 
 === "Python"
+    <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 	```python
     # user declared algod connection parameters
     algod_address = "http://localhost:4001"
     algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     algod_client = algod.AlgodClient(algod_token, algod_address)
     ```
+    <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 	```javascript
     // user declared algod connection parameters
     algodAddress = "http://localhost:4001";
     algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     let algodClient = new algosdk.Algodv2(algodToken, algodServer);
     ```
+    <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 	```Java
     // user declared account mnemonics
     String ALGOD_API_ADDR = "localhost";
@@ -68,14 +73,17 @@ An `algod` client connection is also required. The following connects using Sand
     String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
     ```
+    <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Go"
+    <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 	```go
     // user defined algod client settings
     const algodAddress = "http://localhost:8080"
     const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     algodClient, err := algod.MakeClient(algodAddress, algodToken)
     ```
+    <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
     Ensure the `algod` node has the _"EnableDeveloperAPI"_ parameter set to **true** within the `config.json` file. This is required to enable the SDK access to the _compile_ and _dryrun_ endpoints.
@@ -90,6 +98,7 @@ Begin by defining the application's _global_schema_ and _local_schema_ storage r
 The example application defined below may hold up to one each of `bytes` and `ints` value within the _local storage_ of the user account, as well as a single `ints` value within _global storage_ of the application:
 
 === "Python"
+    <!-- ===PYSDK_APP_SCHEMA=== -->
 	```python
     # declare application state storage (immutable)
     local_ints = 1
@@ -101,8 +110,10 @@ The example application defined below may hold up to one each of `bytes` and `in
     global_schema = transaction.StateSchema(global_ints, global_bytes)
     local_schema = transaction.StateSchema(local_ints, local_bytes)
     ```
+    <!-- ===PYSDK_APP_SCHEMA=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_SCHEMA=== -->
 	```javascript
     // declare application state storage (immutable)
     localInts = 1;
@@ -110,8 +121,10 @@ The example application defined below may hold up to one each of `bytes` and `in
     globalInts = 1;
     globalBytes = 0;
     ```
+    <!-- ===JSSDK_APP_SCHEMA=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_SCHEMA=== -->
 	```Java
     // declare application state storage (immutable)
     int localInts = 1;
@@ -119,8 +132,10 @@ The example application defined below may hold up to one each of `bytes` and `in
     int globalInts = 1;
     int globalBytes = 0;
     ```
+    <!-- ===JAVASDK_APP_SCHEMA=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_SCHEMA=== -->
 	```go
     // declare application state storage (immutable)
     const localInts = 1
@@ -132,6 +147,7 @@ The example application defined below may hold up to one each of `bytes` and `in
     globalSchema := types.StateSchema{NumUint: uint64(globalInts), NumByteSlice: uint64(globalBytes)}
     localSchema := types.StateSchema{NumUint: uint64(localInts), NumByteSlice: uint64(localBytes)}
     ```
+    <!-- ===GOSDK_APP_SCHEMA=== -->
 
 !!! Info
     The example application is not allowed to hold any `bytes` value within global storage.
@@ -139,42 +155,50 @@ The example application defined below may hold up to one each of `bytes` and `in
 
 ## Approval program
 
-The [approval program](../apps/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application. A detailed walkthrough of this code is provided in the [appendix](#appendix) of this guide.
+The [approval program](../apps/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application.
 
 ## Clear program
 
 This is the most basic [clear program](../apps/#the-lifecycle-of-a-stateful-smart-contract) and returns _true_ when an account clears its participation in a smart contract:
 
 === "Python"
+    <!-- ===PYSDK_APP_SOURCE=== -->
 	```python
     # declare clear state program source
     clear_program_source = b"""#pragma version 4
     int 1
     """
     ```
+    <!-- ===PYSDK_APP_SOURCE=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_SOURCE=== -->
 	```javascript
     // declare clear state program source
     clearProgramSource = `#pragma version 4
     int 1
     `;
     ```
+    <!-- ===JSSDK_APP_SOURCE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_SOURCE=== -->
 	```Java
     // declare clear state program source
     String clearProgramSource = "#pragma version 4\n" +
     "int 1\n";
     ```
+    <!-- ===JAVASDK_APP_SOURCE=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_SOURCE=== -->
 	```go
     // declare clear state program source
     const clearProgramSource = `#pragma version 4
     int 1
     `
     ```
+    <!-- ===GOSDK_APP_SOURCE=== -->
 
 # Application methods
 
@@ -193,103 +217,55 @@ The creator will deploy the application using the [create app](../apps#creating-
 Use the creator_mnemonic to define sender:
 
 === "Python"
+    <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```python
     # get account from mnemonic
     private_key = mnemonic.to_private_key(creator_mnemonic)
     sender = account.address_from_private_key(private_key)
     ```
+    <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```javascript
     // get account from mnemonic
     let creatorAccount = algosdk.mnemonicToSecretKey(creatorMnemonic);
     let sender = creatorAccount.addr;
     ```
+    <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```Java
     // get account from mnemonic
     Account creatorAccount = new Account(creatorMnemonic);
     Address sender = creatorAccount.getAddress();
     ```
+    <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
+    <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```go
     // get account from mnemonic
     creatorAccount := recoverAccount(creatorMnemonic)
     sender := creatorAccount.Address
     ```
-
-Use the `suggested_params` endpoint:
-
-=== "Python"
-	```python
-    # get node suggested parameters
-    params = client.suggested_params()
-    # comment out the next two (2) lines to use suggested fees
-    params.flat_fee = True
-    params.fee = 1000
-    ```
-
-=== "JavaScript"
-	```javascript
-    // get node suggested parameters
-    let params = await client.getTransactionParams().do();
-    // comment out the next two lines to use suggested fee
-    params.fee = 1000;
-    params.flatFee = true;
-    ```
-
-=== "Java"
-	```Java
-    // get node suggested parameters
-    TransactionParametersResponse params = client.TransactionParams().execute().body();
-    ```
-
-=== "Go"
-	```go
-    // get transaction suggested parameters
-    params, _ := client.SuggestedParams().Do(context.Background())
-    // comment out the next two (2) lines to use suggested fees
-    params.FlatFee = true
-    params.Fee = 1000
-    ```
-
-Set the [on_complete](../../avm/teal/specification.md#oncomplete) parameter to NoOp: 
-
-=== "Python"
-	```python
-    # declare on_complete as NoOp
-    on_complete = transaction.OnComplete.NoOpOC.real
-    ```
-
-=== "JavaScript"
-	```javascript
-    // declare onComplete as NoOp
-    onComplete = algosdk.OnApplicationComplete.NoOpOC;
-    ```
-
-=== "Java"
-	```Java
-    // not required
-    ```
-
-=== "Go"
-	```go
-    // not required
-    ```
+    <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Compile the programs using the `compile` endpoint:
 
 === "Python"
+    <!-- ===PYSDK_APP_COMPILE=== -->
 	```python
     # helper function to compile program source
     def compile_program(client, source_code) :
         compile_response = client.compile(source_code.decode('utf-8'))
         return base64.b64decode(compile_response['result'])
     ```
+    <!-- ===PYSDK_APP_COMPILE=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_COMPILE=== -->
 	```javascript
     // helper function to compile program source  
     async function compileProgram(client, programSource) {
@@ -300,8 +276,10 @@ Compile the programs using the `compile` endpoint:
         return compiledBytes;
     }
     ```
+    <!-- ===JSSDK_APP_COMPILE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_COMPILE=== -->
 	```Java
     // helper function to compile program source
     public String compileProgram(AlgodClient client, byte[] programSource) {
@@ -315,8 +293,10 @@ Compile the programs using the `compile` endpoint:
         return compileResponse.body().result;
     }
     ```
+    <!-- ===JAVASDK_APP_COMPILE=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_COMPILE=== -->
 	```go
     func compileProgram(client *algod.Client, programSource string) (compiledProgram []byte) {
         compileResponse, err := client.TealCompile([]byte(programSource)).Do(context.Background())
@@ -328,51 +308,18 @@ Compile the programs using the `compile` endpoint:
         return compiledProgram
     }
     ```
+    <!-- ===GOSDK_APP_COMPILE=== -->
 
-Construct the transaction with defined values:
+Construct the transaction with defined values then sign, send, and await confirmation
 
 === "Python"
+    <!-- ===PYSDK_APP_CREATE=== -->
 	```python
     # create unsigned transaction
     txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
                                             approval_program, clear_program, \
                                             global_schema, local_schema)
-    ```
 
-=== "JavaScript"
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete, 
-                                            approvalProgram, clearProgram, 
-                                            localInts, localBytes, globalInts, globalBytes,);
-    let txId = txn.txID().toString();
-    ```
-
-=== "Java"
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
-                        .sender(sender)
-                        .suggestedParams(params)
-                        .approvalProgram(approvalProgramSource)
-                        .clearStateProgram(clearProgramSource)
-                        .globalStateSchema(new StateSchema(globalInts, globalBytes))
-                        .localStateSchema(new StateSchema(localInts, localBytes))
-                        .build();
-    ```
-
-=== "Go"
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
-                        nil, nil, nil, nil, params, creatorAccount.Address, nil, 
-                        types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
-    ```
-
-Sign, send, await confirmation and display the results:
-
-=== "Python"
-	```python
     # sign transaction
     signed_txn = txn.sign(private_key)
     tx_id = signed_txn.transaction.get_txid()
@@ -392,9 +339,17 @@ Sign, send, await confirmation and display the results:
     app_id = transaction_response['application-index']
     print("Created new app-id: ",app_id)
     ```
+    <!-- ===PYSDK_APP_CREATE=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_CREATE=== -->
 	```javascript
+    // create unsigned transaction
+    let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete, 
+                                            approvalProgram, clearProgram, 
+                                            localInts, localBytes, globalInts, globalBytes,);
+    let txId = txn.txID().toString();
+
     // Sign the transaction
     let signedTxn = txn.signTxn(creatorAccount.sk);
     console.log("Signed transaction with txID: %s", txId);
@@ -412,9 +367,21 @@ Sign, send, await confirmation and display the results:
     let appId = transactionResponse['application-index'];
     console.log("Created new app-id: ",appId);
     ```
+    <!-- ===JSSDK_APP_CREATE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_CREATE=== -->
 	```Java
+    // create unsigned transaction
+    Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
+                        .sender(sender)
+                        .suggestedParams(params)
+                        .approvalProgram(approvalProgramSource)
+                        .clearStateProgram(clearProgramSource)
+                        .globalStateSchema(new StateSchema(globalInts, globalBytes))
+                        .localStateSchema(new StateSchema(localInts, localBytes))
+                        .build();
+
     // sign transaction
     SignedTransaction signedTxn = creator.signTransaction(txn);
     System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
@@ -433,9 +400,16 @@ Sign, send, await confirmation and display the results:
     Long appId = pTrx.applicationIndex;
     System.out.println("Created new app-id: " + appId);    
     ```
+    <!-- ===JAVASDK_APP_CREATE=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_CREATE=== -->
 	```go
+    // create unsigned transaction
+    txn, _ := transaction.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
+                        nil, nil, nil, nil, params, creatorAccount.Address, nil, 
+                        types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
+
     // Sign the transaction
     txID, signedTxn, _ := crypto.SignTransaction(creatorAccount.PrivateKey, txn)
     fmt.Printf("Signed txid: %s\n", txID)
@@ -458,6 +432,8 @@ Sign, send, await confirmation and display the results:
     appId = confirmedTxn.ApplicationIndex
     fmt.Printf("Created new app-id: %d\n", appId)
     ```
+    <!-- ===GOSDK_APP_CREATE=== -->
+
 
 !!! Notice
     Note down the app-id from the confirmed transaction response. Place this value into the `index` parameter within all remaining code samples. 
@@ -500,20 +476,36 @@ Use the user_mnemonic to define sender:
     sender := userAccount.Address
     ```
 
-Construct the transaction with defined values:
+Construct the transaction with defined values then sign, send, and await confirmation:
 
 === "Python"
+    <!-- ===PYSDK_APP_OPTIN=== -->
 	```python
     txn = transaction.ApplicationOptInTxn(sender, params, app_id)
+
+    # ... sign send wait
+
+    # display results
+    transaction_response = client.pending_transaction_info(tx_id)
+    print("OptIn to app-id: ",transaction_response['txn']['txn']['apid'])  
     ```
+    <!-- ===PYSDK_APP_OPTIN=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_OPTIN=== -->
 	```javascript
     // create unsigned transaction
     let txn = algosdk.makeApplicationOptInTxn(sender, params, app_id);
+
+    // ... sign send wait
+
+    let transactionResponse = await client.pendingTransactionInformation(txId).do();
+    console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid'])
     ```
+    <!-- ===JSSDK_APP_OPTIN=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_OPTIN=== -->
 	```Java
     // create unsigned transaction
     Transaction txn = Transaction.ApplicationOptInTransactionBuilder()
@@ -521,52 +513,31 @@ Construct the transaction with defined values:
                             .suggestedParams(params)
                             .applicationId(appId)
                             .build();
-    ```
 
-=== "Go"
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationOptInTx(index, nil, nil, nil, nil, params,
-                            sender, nil, types.Digest{}, [32]byte{}, types.Address{})
-    ```
-
-Sign, send, await confirmation and display the results:
-
-=== "Python"
-	```python
-    # sign, send, await
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("OptIn to app-id: ",transaction_response['txn']['txn']['apid'])  
-    ```  
-
-=== "JavaScript"
-	```javascript
-    // sign, send, await
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid'])
-    ```
-
-=== "Java"
-	```Java
-    // sign, send, await
+    //... sign, send, wait
+    
 
     // display results
     PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
     System.out.println("OptIn to app-id: " + pTrx.txn.tx.applicationId);       
     ```
+    <!-- ===JAVASDK_APP_OPTIN=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_OPTIN=== -->
 	```go
-    // sign, send, await
+    // create unsigned transaction
+    txn, _ := transaction.MakeApplicationOptInTx(index, nil, nil, nil, nil, params,
+                            sender, nil, types.Digest{}, [32]byte{}, types.Address{})
+
+    // ... sign, send, await
 
     // display results
     confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
     fmt.Printf("Oped-in to app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     ```
+    <!-- ===GOSDK_APP_OPTIN=== -->
+
 
 ## Call (NoOp)
 
@@ -577,11 +548,12 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
 - index: the app-id as defined by the create method result
 
 === "Python"
+    <!-- ===PYSDK_APP_NOOP=== -->
 	```python
     # create unsigned transaction
     txn = transaction.ApplicationNoOpTxn(sender, params, index)
 
-    # sign, send, await 
+    # ... sign, send, await 
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
@@ -591,13 +563,15 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
     if "local-state-delta" in transaction_response :
         print("Local State updated :\n",transaction_response['local-state-delta'])
     ```
+    <!-- ===PYSDK_APP_NOOP=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_NOOP=== -->
 	```javascript
     // create unsigned transaction
     let txn = algosdk.makeApplicationNoOpTxn(sender, params, index, appArgs)
 
-    // sign, send, await
+    // ... sign, send, wait
 
     // display results
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
@@ -609,8 +583,10 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
         console.log("Local State updated:",transactionResponse['local-state-delta']);
     }
     ```
+    <!-- ===JSSDK_APP_NOOP=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_NOOP=== -->
 	```Java
     // create unsigned transaction
     Transaction txn = Transaction.ApplicationCallTransactionBuilder()
@@ -632,8 +608,10 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
         System.out.println("    Local state: " + pTrx.localStateDelta.toString());
     }
     ```
+    <!-- ===JAVASDK_APP_NOOP=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_NOOP=== -->
 	```go
     // create unsigned transaction
     txn, _:= transaction.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
@@ -645,12 +623,14 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
     confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
     fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     ```
+    <!-- ===GOSDK_APP_NOOP=== -->
 
 ## Read state
 
 Anyone may read the [global state](../apps/#reading-global-state-from-other-smart-contracts) of any application or the [local state](../apps/#reading-local-state-from-other-accounts) of an application within a given user account using the REST API account_info endpoint. 
 
 === "Python"
+    <!-- ===PYSDK_APP_READ_STATE=== -->
 	```python
     # read user local state
     def read_local_state(client, addr, app_id) :   
@@ -666,8 +646,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         global_state = app['params']['global-state'] if "global-state" in app["params"] else []
         print(f"global_state for app_id {app_id}: ", global_state)
     ```
+    <!-- ===PYSDK_APP_READ_STATE=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_READ_STATE=== -->
 	```javascript
     // read local state of application from user account
     async function readLocalState(client, account, index){
@@ -694,8 +676,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
     ```
+    <!-- ===JSSDK_APP_READ_STATE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_READ_STATE=== -->
 	```Java
     public void readLocalState(AlgodClient client, Account account, Long appId) throws Exception {
         Response<com.algorand.algosdk.v2.client.model.Account> acctResponse = client.AccountInformation(account.getAddress()).execute();
@@ -717,8 +701,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
     ```
+    <!-- ===JAVASDK_APP_READ_STATE=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_READ_STATE=== -->
 	```go
     func readLocalState(client *algod.Client, account crypto.Account, index uint64) {
         accountInfo, _ := client.AccountInformation(account.Address.String()).Do(context.Background())
@@ -738,6 +724,7 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
         }
     }
     ```
+    <!-- ===GOSDK_APP_READ_STATE=== -->
 
 ## Update
 
@@ -755,6 +742,7 @@ The update method method requires 6 parameters:
 Construct the update transaction and await the response:
 
 === "Python"
+    <!-- ===PYSDK_APP_UPDATE=== -->
 	```python
     # create unsigned transaction
     txn = transaction.ApplicationUpdateTxn(sender, params, app_id, \
@@ -767,8 +755,10 @@ Construct the update transaction and await the response:
     app_id = transaction_response['txn']['txn']['apid']
     print("Updated existing app-id: ",app_id)
     ```
+    <!-- ===PYSDK_APP_UPDATE=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_UPDATE=== -->
 	```javascript
     // create unsigned transaction
     let txn = algosdk.makeApplicationUpdateTxn(sender, params, index, approvalProgram, clearProgram);
@@ -780,8 +770,10 @@ Construct the update transaction and await the response:
     let appId = transactionResponse['txn']['txn'].apid;
     console.log("Updated app-id: ",appId);
     ```
+    <!-- ===JSSDK_APP_UPDATE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_UPDATE=== -->
 	```Java
     // create unsigned transaction
     Transaction txn = Transaction.ApplicationUpdateTransactionBuilder()
@@ -798,8 +790,10 @@ Construct the update transaction and await the response:
     PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
     System.out.println("Updated new app-id: " + appId);    
     ```
+    <!-- ===JAVASDK_APP_UPDATE=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_UPDATE=== -->
 	```go
         // create unsigned transaction
         txn, _ := transaction.MakeApplicationUpdateTx(index, nil, nil, nil, nil, 
@@ -813,6 +807,7 @@ Construct the update transaction and await the response:
         fmt.Printf("Updated app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     }
     ```
+    <!-- ===GOSDK_APP_UPDATE=== -->
 
 ## Call with arguments
 
@@ -821,6 +816,7 @@ A program may [process arguments passed](../apps/#passing-arguments-to-stateful-
 The refactored application expects a timestamp be supplied with the application call.
 
 === "Python"
+    <!-- ===PYSDK_APP_CALL=== -->
 	```python
     # call application with arguments
     now = datetime.datetime.now().strftime("%H:%M:%S")
@@ -839,8 +835,10 @@ The refactored application expects a timestamp be supplied with the application 
     if "local-state-delta" in transaction_response :
         print("Local State updated :\n",transaction_response['local-state-delta'])
     ```
+    <!-- ===PYSDK_APP_CALL=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_CALL=== -->
 	```javascript
     // call application with arguments
     let ts = new Date(new Date().toUTCString());
@@ -863,8 +861,10 @@ The refactored application expects a timestamp be supplied with the application 
         console.log("Local State updated:",transactionResponse['local-state-delta']);
     }
     ```
+    <!-- ===JSSDK_APP_CALL=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_CALL=== -->
 	```Java
     // call application with arguments
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
@@ -893,8 +893,10 @@ The refactored application expects a timestamp be supplied with the application 
         System.out.println("    Local state: " + pTrx.localStateDelta.toString());
     }
     ```
+    <!-- ===JAVASDK_APP_CALL=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_CALL=== -->
 	```go
     // call application with arguments
     now := time.Now().Format("Mon Jan _2 15:04:05 2006")
@@ -911,6 +913,7 @@ The refactored application expects a timestamp be supplied with the application 
     confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
     fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     ```
+    <!-- ===GOSDK_APP_CALL=== -->
 
 ## Close out
 
@@ -921,6 +924,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 - index: the app-id as defined by the create method result
 
 === "Python"
+    <!-- ===PYSDK_APP_CLOSEOUT=== -->
 	```python
     # create unsigned transaction
     txn = transaction.ApplicationCloseOutTxn(sender, params, index)
@@ -931,8 +935,10 @@ The user may discontinue use of the application by sending a [close out](../apps
     transaction_response = client.pending_transaction_info(tx_id)
     print("Closed out from app-id: ",transaction_response['txn']['txn']['apid'])
     ```
+    <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_CLOSEOUT=== -->
 	```javascript
     // create unsigned transaction
     let txn = algosdk.makeApplicationCloseOutTxn(sender, params, index)
@@ -943,8 +949,10 @@ The user may discontinue use of the application by sending a [close out](../apps
     let transactionResponse = await client.pendingTransactionInformation(txId).do();
     console.log("Closed out from app-id:",transactionResponse['txn']['txn']['apid'])
     ```
+    <!-- ===JSSDK_APP_CLOSEOUT=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 	```Java
     // create unsigned transaction
     Transaction txn = Transaction.ApplicationCloseTransactionBuilder()
@@ -959,8 +967,10 @@ The user may discontinue use of the application by sending a [close out](../apps
     PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
     System.out.println("Closed out from app-id: " + appId);  
     ```
+    <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_CLOSEOUT=== -->
 	```go
     // create unsigned transaction
     txn, _ := transaction.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
@@ -971,12 +981,14 @@ The user may discontinue use of the application by sending a [close out](../apps
     confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
     fmt.Printf("Closed out from app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     ```
+    <!-- ===GOSDK_APP_CLOSEOUT=== -->
 
 ## Delete
 
 The approval program defines the creator as the only account able to [delete the application](../apps/#delete-stateful-smart-contract). This removes the global state, but does not impact any user's local state. This method uses the same 3 parameters.
 
 === "Python"
+    <!-- ===PYSDK_APP_DELETE=== -->
 	```python
     # create unsigned transaction
     txn = transaction.ApplicationDeleteTxn(sender, params, index)
@@ -987,8 +999,10 @@ The approval program defines the creator as the only account able to [delete the
     transaction_response = client.pending_transaction_info(tx_id)
     print("Deleted app-id: ",transaction_response['txn']['txn']['apid'])    
     ```
+    <!-- ===PYSDK_APP_DELETE=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_DELETE=== -->
 	```javascript
     // create unsigned transaction
     let txn = algosdk.makeApplicationDeleteTxn(sender, params, index);
@@ -1000,8 +1014,10 @@ The approval program defines the creator as the only account able to [delete the
     let appId = transactionResponse['txn']['txn'].apid;
     console.log("Deleted app-id: ",appId);
     ```
+    <!-- ===JSSDK_APP_DELETE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_DELETE=== -->
 	```Java
     // create unsigned transaction
     Transaction txn = Transaction.ApplicationDeleteTransactionBuilder()
@@ -1016,8 +1032,10 @@ The approval program defines the creator as the only account able to [delete the
     PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
     System.out.println("Deleted app-id: " + appId);
     ```
+    <!-- ===JAVASDK_APP_DELETE=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_DELETE=== -->
 	```go
     // create unsigned transaction
     txn, _ := transaction.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, sender, 
@@ -1030,12 +1048,14 @@ The approval program defines the creator as the only account able to [delete the
 
     fmt.Printf("Deleted app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     ```
+    <!-- ===GOSDK_APP_DELETE=== -->
 
 ## Clear state
 
 The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-contract) for an application at any time, even if the application was deleted by the creator. This method uses the same 3 parameter.
 
 === "Python"
+    <!-- ===PYSDK_APP_CLEAR=== -->
 	```python
     # create unsigned transaction
     txn = transaction.ApplicationClearStateTxn(sender, params, index)
@@ -1046,8 +1066,10 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
     transaction_response = client.pending_transaction_info(tx_id)
     print("Cleared app-id: ",transaction_response['txn']['txn']['apid']) 
     ```
+    <!-- ===PYSDK_APP_CLEAR=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_APP_CLEAR=== -->
 	```javascript
     // create unsigned transaction
     let txn = algosdk.makeApplicationClearStateTxn(sender, params, index);
@@ -1059,8 +1081,10 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
     let appId = transactionResponse['txn']['txn'].apid;
     console.log("Cleared local state for app-id: ",appId);
     ```
+    <!-- ===JSSDK_APP_CLEAR=== -->
 
 === "Java"
+    <!-- ===JAVASDK_APP_CLEAR=== -->
 	```Java
     // create unsigned transaction
     Transaction txn = Transaction.ApplicationClearTransactionBuilder()
@@ -1075,8 +1099,10 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
     PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
     System.out.println("Cleared local state for app-id: " + appId);   
     ```
+    <!-- ===JAVASDK_APP_CLEAR=== -->
 
 === "Go"
+    <!-- ===GOSDK_APP_CLEAR=== -->
 	```go
     // create unsigned transaction
     txn, _ := transaction.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, sender, 
@@ -1088,6 +1114,7 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
     confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
     fmt.Printf("Cleared local state for app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
     ```
+    <!-- ===GOSDK_APP_CLEAR=== -->
 
 # Appendix
 
