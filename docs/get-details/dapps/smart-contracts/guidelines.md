@@ -60,9 +60,9 @@ print(constants.MIN_TXN_FEE)
 
 === "Java"
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
-    ```java
-    Account.MIN_TX_FEE_UALGOS
-    ```
+```java
+        System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
+```
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
@@ -94,12 +94,11 @@ print(suggested_params.min_fee)
 === "Java"
 
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
-    ```java
-    AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-    TransactionParametersResponse params = client.TransactionParams().execute().body();
-    
-    params.minFee
-    ```
+```java
+        Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = tpr.body();
+        System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
+```
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"

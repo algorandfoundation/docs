@@ -40,53 +40,29 @@ print(online_keyreg.dictify())
 
 === "Java"
     <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
-    ```java
-        // ...
-        import java.util.Base64;
-        // ...
-        import com.algorand.algosdk.crypto.ParticipationPublicKey;
-        import com.algorand.algosdk.crypto.VRFPublicKey;
-        // ...
+```java
+        // get suggested parameters
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
 
-        public void writeUnsignedTransaction(){
+        String address = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
 
-            // connect to node
-            if( algodApiInstance == null ) connectToNetwork();
+        String votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=";
+        String skey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=";
 
-            final String SRC_ADDR = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
-            String selKeyEncoded = new String("X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=");
-            byte[] decodedSelKey = Base64.getDecoder().decode(selKeyEncoded);
-            String voteKeyEncoded = new String("eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=");
-            byte[] decodedVoteKey = Base64.getDecoder().decode(voteKeyEncoded);
+        Long numRounds = 100000l;  // sets up keys for 100000 rounds
+        Long keyDilution = (long) Math.sqrt(numRounds);  // dilution default is sqrt num rounds
 
-            try {
-                // Get suggested parameters from the node
-                Response<TransactionParametersResponse> params = algodApiInstance.TransactionParams().execute();
-
-                // create transaction
-                String genId = params.getGenesisID();
-                Digest genesisHash = new Digest(params.getGenesishashb64());
-                ParticipationPublicKey voteKey = new ParticipationPublicKey(decodedSelKey);
-                VRFPublicKey selKey = new VRFPublicKey(decodedVoteKey);
-                BigInteger voteFst = BigInteger.valueOf(6000000);
-                BigInteger voteLst = BigInteger.valueOf(9000000);
-                BigInteger firstRound = BigInteger.valueOf(6002000);
-                BigInteger lastRound = BigInteger.valueOf(6003000);
-                BigInteger fee = BigInteger.valueOf(2000);
-                BigInteger voteKd = BigInteger.valueOf(1730);
-
-                // Get suggested parameters from the node
-                // Prepare the transaction 
-                KeyRegistrationTransaction ktxn = Transaction.KeyRegistrationTransactionBuilder()
-                    .participationPublicKey(voteKey)
-                    .selectionPublicKey(selKey)
-                    .suggestedParams(params.body())
-                    .voteFirst(voteFst)
-                    .voteLast(voteLst)
-                    .voteKeyDilution(voteKd)
-                // ...
-
-    ```
+        Transaction keyRegTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
+                .sender(address)
+                .selectionPublicKeyBase64(skey)
+                .participationPublicKeyBase64(votekey)
+                .voteFirst(sp.lastRound)
+                .voteLast(sp.lastRound + numRounds)
+                .voteKeyDilution(keyDilution)
+                .build();
+        // ... sign and send to network
+```
     <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Go"

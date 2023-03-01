@@ -107,9 +107,11 @@ Communication with the Algorand network is performed using transactions. To crea
 Before moving on to the next step, make sure your account has been funded by the faucet.
 
 <!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
-```python
-account_info: Dict[str, Any] = algod_client.account_info(address)
-print(f"Account balance: {account_info.get('amount')} microAlgos")
+```java
+        Response<com.algorand.algosdk.v2.client.model.Account> acctInfoResp = algodClient.AccountInformation(acct.getAddress()).execute();
+        com.algorand.algosdk.v2.client.model.Account acctInfo = acctInfoResp.body();
+        // print one of the fields in the account info response
+        System.out.printf("Current balance: %d", acctInfo.amount);
 ```
 <!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 

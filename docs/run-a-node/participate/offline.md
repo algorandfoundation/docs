@@ -39,6 +39,12 @@ print(online_keyreg.dictify())
 
 === "Java"
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+```java
+        // create keyreg transaction to take this account offline
+        Transaction keyRegOfflineTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
+                .sender(address)
+                .build();
+```
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "goal"
