@@ -207,7 +207,7 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
   itxn_field TypeEnum
 
   txn Assets 0
-  itxn_field XferAsset
+  itxn_field FreezeAsset
 
   txn Accounts 1
   itxn_field FreezeAssetAccount
@@ -316,13 +316,15 @@ Assets can also be created by a smart contract. To create an asset with an inner
   int 100
   itxn_field ConfigAssetTotal
 
-  int 0
+  int 2
   itxn_field ConfigAssetDecimals
 
-  txn Sender
-  itxn_field AssetReceiver
-
-  // TODO need to dupn 4 CurrentApplicationAddress into Manager, Reserve, Freeze, Clawback
+  global CurrentApplicationAddress
+  dupn 3
+  itxn_field ConfigAssetManager
+  itxn_field ConfigAssetReserve
+  itxn_field ConfigAssetFreeze
+  itxn_field ConfigAssetClawback
 
   itxn_submit
 ```
@@ -362,7 +364,12 @@ As with all assets, the mutable addresses can be changed. For example to change 
   txn Assets 0
   itxn_field ConfigAsset
 
-  // TODO need to dupn 4 CurrentApplicationAddress into Manager, Reserve, Freeze, Clawback
+  global CurrentApplicationAddress
+  dupn 3
+  itxn_field ConfigAssetManager
+  itxn_field ConfigAssetReserve
+  itxn_field ConfigAssetFreeze
+  itxn_field ConfigAssetClawback
 
   itxn_submit
 ```
@@ -396,7 +403,7 @@ Assets managed by the contract can also be deleted. This can be done with the fo
   itxn_field TypeEnum
 
   txn Assets 0
-  itxn_field XferAsset
+  itxn_field ConfigAsset
 
   itxn_submit
 ```
@@ -433,34 +440,36 @@ A smart contract can make inner transactions consisting of grouped transactions.
 
 === "TEAL"
 <!-- ===TEAL_GROUPED_ITXN=== -->
-    ```teal
-    // This imaginary scenario requires a buyer to pay 1 Algo whilst calling the
-    // smart contract with the argument "buy". The imaginary smart contract could
-    // then send us something in exchange.
-    itxn_begin
+```teal
+itxn_begin
 
-    // Send a 1 Algo payment to the smart contract's address.
-    int pay
-    itxn_field TypeEnum
-    int 1234
-    app_params_get AppAddress
-    itxn_field Receiver
-    int 1000000
-    itxn_field Amount
+int pay
+itxn_field TypeEnum
 
-    // Call the smart contract within the same group with the argument "buy".
-    itxn_next
-    int appl
-    itxn_field TypeEnum
-    int 1234
-    itxn_field ApplicationID
-    int NoOp
-    itxn_field OnCompletion
-    byte "buy"
-    itxn_field ApplicationArgs
+int 1000000
+itxn_field Amount
 
-    itxn_submit
-    ```
+int 123
+app_params_get AppAddress
+assert
+itxn_field Receiver
+
+itxn_next
+
+int appl
+itxn_field TypeEnum
+
+int 123
+itxn_field ApplicationID
+
+int NoOp
+itxn_field OnCompletion
+
+byte "buy"
+itxn_field ApplicationArgs
+
+itxn_submit
+```
 <!-- ===TEAL_GROUPED_ITXN=== -->
 
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the response.
@@ -494,16 +503,20 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
 
 === "TEAL"
 <!-- ===TEAL_ITXN_C2C=== -->
-    ```teal
-    itxn_begin
-    int appl
-    itxn_field TypeEnum
-    int 1234
-    itxn_field ApplicationID
-    int NoOp
-    itxn_field OnCompletion
-    itxn_submit
-    ```
+```teal
+itxn_begin
+
+int appl
+itxn_field TypeEnum
+
+txn Applications 1
+itxn_field ApplicationID
+
+int NoOp
+itxn_field OnCompletion
+
+itxn_submit
+```
 <!-- ===TEAL_ITXN_C2C=== -->
 
 ## Composability
@@ -604,11 +617,11 @@ To write to either local or global state, the opcodes `app_global_put` and `app_
 
 === "TEAL"
 <!-- ===TEAL_WRITE_GLOBAL_STATE=== -->
-    ```teal
-    byte "Mykey"
-    int 50
-    app_global_put
-    ```
+```teal
+byte "GlobalKey"
+int 42
+app_global_put
+```
 <!-- ===TEAL_WRITE_GLOBAL_STATE=== -->
 
 To store a value in local storage, the following TEAL can be used.
@@ -623,12 +636,12 @@ To store a value in local storage, the following TEAL can be used.
 
 === "TEAL"
 <!-- ===TEAL_WRITE_OWN_LOCAL_STATE=== -->
-    ```teal
-    int 0
-    byte "MyLocalKey"
-    int 50
-    app_local_put
-    ```
+```teal
+int 0
+byte "OwnLocalKey"
+int 1337
+app_local_put
+```
 <!-- ===TEAL_WRITE_OWN_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. With `goal` you can pass additional accounts using the `--app-account` option. The address can be also be specified instead of the index. If using an address, it still must exist in the accounts array.
@@ -649,12 +662,12 @@ To store a value into account2, the TEAL would be as follows.
 
 === "TEAL"
 <!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
-    ```teal
-    int 2
-    byte “MyLocalKey”
-    int 50
-    app_local_put
-    ```
+```teal
+txn Accounts 2
+byte "OtherLocalKey"
+int 200
+app_local_put
+```
 <!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
 
 Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call.
@@ -676,10 +689,11 @@ TEAL provides calls to read global and local state values for the current smart 
 
 === "TEAL"
 <!-- ===TEAL_READ_GLOBAL_STATE=== -->
-    ```teal
-    byte "MyGlobalKey"
-    app_global_get
-    ```
+```teal
+
+// READING STATE
+
+```
 <!-- ===TEAL_READ_GLOBAL_STATE=== -->
 
 
@@ -695,11 +709,11 @@ The following TEAL code reads the local state of the sender account for the spec
 
 === "TEAL"
 <!-- ===TEAL_READ_LOCAL_STATE=== -->
-    ```teal
-    int 0
-    byte "MyLocalKey"
-    app_local_get
-    ```
+```teal
+int 0
+byte "OwnLocalState"
+app_local_get
+```
 <!-- ===TEAL_READ_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. The address can be specified instead of the index as long as the account is in the accounts array. With `goal` you can pass additional accounts using the `--app-account` option. 
@@ -709,22 +723,22 @@ In this example, the `int 0` represents the sender of the transaction. This is a
 The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following TEAL should be used.
 
 === "PyTeal"
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
+<!-- ===PYTEAL_READ_OWN_LOCAL_STATE_EX=== -->
     ```py
     program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
     print(compileTeal(program, Mode.Application))
     ```
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
+<!-- ===PYTEAL_READ_OWN_LOCAL_STATE_EX=== -->
 
 === "TEAL"
-<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
-    ```teal
-    int 0 // sender
-    txn ApplicationID // current smart contract
-    byte "MyAmountGiven"
-    app_local_get_ex
-    ```
-<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
+<!-- ===TEAL_READ_OWN_LOCAL_STATE_EX=== -->
+```teal
+int 0
+txn ApplicationID
+byte "OwnLocalState"
+app_local_get_ex
+```
+<!-- ===TEAL_READ_OWN_LOCAL_STATE_EX=== -->
 
 !!! note
     The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
@@ -752,21 +766,17 @@ The `int 0` is the index into the accounts array. The actual address could also 
 
 === "TEAL"
 <!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
-    ```teal
-    int 0 // sender
-    txn ApplicationID
-    byte "MyAmountGiven"
-    app_local_get_ex
-    bz new-giver
+```teal
+int 0
+txn ApplicationID
+byte "deposited"
+app_local_get_ex
+bz new_deposit
+// Account has deposited before
 
-    // logic to deal with an existing giver
-    // stored value is on the top of the stack
-    // return
-
-    new-giver:
-
-    // logic to deal with a new giver
-    ```
+new_deposit:
+// Account is making their first deposit
+```
 <!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
 
 The `app_global_get_ex` is used to read not only the global state of the current contract but any contract that is in the applications array. To access these foreign apps, they must be passed in with the application using the `--foreign-app` option. 
@@ -778,7 +788,7 @@ $ goal app call --foreign-app APP1ID --foreign-app APP2ID
 To read from the global state with the `app_global_get_ex` opcode, use the following TEAL.
 
 === "PyTeal"
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX_2=== -->
+<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
     ```py
     get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
 
@@ -792,17 +802,16 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 
     print(compileTeal(program, Mode.Application))
     ```
-<!-- ===PYTEAL_READ_GLOBAL_STATE_EX_2=== -->
+<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
 
 === "TEAL"
-<!-- ===TEAL_READ_GLOBAL_STATE_EX_2=== -->
-    ```teal
-    int 0
-    byte "MyGlobalKey"
-    app_global_get_ex
-    bnz increment_existing //found value
-    ```
-<!-- ===TEAL_READ_GLOBAL_STATE_EX_2=== -->
+<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
+```teal
+int 0
+byte "GlobalKey"
+app_global_get_ex
+```
+<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise, `int 2` would represent the second passed in foreign application. The actual contract IDs can also be specified as long as the contract is in the contracts array. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
 
@@ -916,17 +925,17 @@ The `box_create` opcode takes two parameters, the name and the size in bytes for
 
 === "TEAL"
 <!-- ===TEAL_BOX_CREATE=== -->
-    ```teal
-    // 100 byte box created with box_create
-    byte “Mykey”
-    int 100
-    box_create
-    ….
-    // create with a box_put
-    byte "Mykey"
-    byte “My data values”
-    box_put
-    ```
+```teal
+// 100 byte box created with box_create
+byte "Mykey"
+int 100
+box_create
+// ... OR ...
+// create with a box_put
+byte "Mykey"
+byte "My data values"
+box_put
+```
 <!-- ===TEAL_BOX_CREATE=== -->
 
 === "PyTeal"
@@ -950,12 +959,12 @@ The AVM provides two opcodes, `box_put` and `box_replace`,  to write data to a b
 
 === "TEAL"
 <!-- ===TEAL_BOX_WRITE=== -->
-    ```teal
-    byte “MyKey” 
-    int 10
-    byte “best”
-    box_replace
-    ```
+```teal
+byte "MyKey"
+int 10
+byte "best"
+box_replace
+```
 <!-- ===TEAL_BOX_WRITE=== -->
 
 === "PyTeal"
@@ -981,12 +990,12 @@ The AVM provides two opcodes for reading the contents of a box, `box_get` and `b
 
 === "TEAL"
 <!-- ===TEAL_BOX_GET=== -->
-    ```teal
-    byte “MyKey”
-    box_get
-    assert //verify that the read occurred and we have a value
-    //box contents at the top of the stack
-    ```
+```teal
+byte "MyKey"
+box_get
+assert //verify that the read occurred and we have a value
+//box contents at the top of the stack
+```
 <!-- ===TEAL_BOX_GET=== -->
 
 === "PyTeal"
@@ -1008,18 +1017,20 @@ The `box_extract` opcode requires three parameters: the box key name, the starti
 
 === "TEAL"
 <!-- ===TEAL_BOX_EXTRACT=== -->
-    ```teal
-    byte “BoxA”
-    byte “this is a test of a very very very very long string”
-    box_put
-    byte “BoxA”
-    int 5
-    int 9
-    box_extract
-    byte “is a test”
-    ==
-    assert
-    ```
+```teal
+byte "BoxA"
+byte "this is a test of a very very very very long string"
+box_put
+
+byte "BoxA"
+int 5
+int 9
+box_extract
+
+byte "is a test"
+==
+assert
+```
 <!-- ===TEAL_BOX_EXTRACT=== -->
 
 === "PyTeal"
@@ -1037,17 +1048,19 @@ The AVM offers the `box_len` opcode to retrieve the length of a box. This opcode
 
 === "TEAL"
 <!-- ===TEAL_BOX_LEN=== -->
-    ```teal
-    byte “BoxA”
-    byte “this is a test of a very very very very long string”
-    box_put
-    byte “BoxA”
-    box_len
-    assert
-    int 51
-    ==
-    assert
-    ```
+```teal
+byte "BoxA"
+byte "this is a test of a very very very very long string"
+box_put
+
+byte "BoxA"
+box_len
+assert
+
+int 51
+==
+assert
+```
 <!-- ===TEAL_BOX_LEN=== -->
 
 === "PyTeal"
@@ -1069,14 +1082,15 @@ The AVM offers the `box_del` opcode to delete a box. This opcode takes the box k
 
 === "TEAL"
 <!-- ===TEAL_BOX_DELETE=== -->
-    ```teal
-    byte ”BoxA"
-    byte “this is a test of a very very very very long string”
-    box_put
-    byte “BoxA”
-    box_del
-    bnz existed
-    ``` 
+```teal
+byte "BoxA"
+byte "this is a test of a very very very very long string"
+box_put
+
+byte "BoxA"
+box_del
+bnz existed
+```
 <!-- ===TEAL_BOX_DELETE=== -->
 
 === "PyTeal"
@@ -1167,12 +1181,11 @@ The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Con
 
 === "TEAL"
 <!-- ===TEAL_TXN_ONCOMPLETE=== -->
-    ```teal
-    int NoOp 
-    //or OptIn, UpdateApplication, DeleteApplication, CloseOut, ClearState 
-    txn OnCompletion
-    ==
-    ```
+```teal
+txn OnCompletion
+int NoOp // OptIn, CloseOut, UpdateApplication, or DeleteApplication
+==
+```
 <!-- ===TEAL_TXN_ONCOMPLETE=== -->
 
 
@@ -1198,11 +1211,11 @@ These parameters are loaded into the arguments array. TEAL opcodes are available
 
 === "TEAL"
 <!-- ===TEAL_TXN_APP_ARGS=== -->
-    ```teal
-    txna ApplicationArgs 1
-    byte "claim" 
-    ==
-    ```
+```teal
+txna ApplicationArgs 1
+byte "claim"
+==
+```
 <!-- ===TEAL_TXN_APP_ARGS=== -->
 
 This call gets the second passed in argument and compares it to the string "claim".
@@ -1220,11 +1233,11 @@ A global variable is also available to check the size of the transaction argumen
 
 === "TEAL"
 <!-- ===TEAL_TXN_NUM_APP_ARGS=== -->
-    ```teal
-    txn NumAppArgs
-    int 4
-    ==
-    ```
+```teal
+txn NumAppArgs
+int 4
+==
+```
 <!-- ===TEAL_TXN_NUM_APP_ARGS=== -->
 
 The above TEAL code will push a 0 on the top of the stack if the number of parameters in this specific transaction is anything other than 4, else it will push a 1 on the top of the stack. Internally all transaction parameters are stored as byte slices (byte-array value). Integers can be converted using the `btoi` opcode.
@@ -1239,10 +1252,10 @@ The above TEAL code will push a 0 on the top of the stack if the number of param
 
 === "TEAL"
 <!-- ===TEAL_TXN_APP_ARG_TO_INT=== -->
-    ```teal
-    txna ApplicationArgs 0
-    btoi
-    ```
+```teal
+txna ApplicationArgs 0
+btoi
+```
 <!-- ===TEAL_TXN_APP_ARG_TO_INT=== -->
 
 
@@ -1291,16 +1304,19 @@ When this transaction is submitted, the `ApprovalProgram` of the smart contract 
 
 === "TEAL"
 <!-- ===TEAL_APPL_OPTIN=== -->
-    ```teal
-    int OptIn
-    txn OnCompletion
-    ==
-    bz notoptingin
-    int 1
-    Return
-    notoptingin:
-    //...
-    ```
+```teal
+txn OnCompletion
+int OptIn
+==
+bz not_optin
+
+// Allow OptIn
+int 1
+return
+
+not_optin:
+// additional checks...
+```
 <!-- ===TEAL_APPL_OPTIN=== -->
 
 Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted into the contract.
@@ -1315,11 +1331,11 @@ Other contracts may have much more complex opt in logic. TEAL also provides an o
 
 === "TEAL"
 <!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
-    ```teal
-    int 0 
-    txn ApplicationID
-    app_opted_in
-    ```
+```teal
+int 0
+txn ApplicationID
+app_opted_in
+```
 <!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array.
@@ -1355,16 +1371,16 @@ The call must specify the intended contract using the `--app-id` option. Additio
 
 === "Teal"
 <!-- ===TEAL_APPL_CALL=== -->
-    ```teal
-    byte "myparm" 
-    txna ApplicationArgs 0
-    ==
-    bz not_my_parm
-    //handle my_parm
-    return
-    not_my_parm:
-    //handle not_my_parm
-    ```
+```teal
+byte "myparam"
+txna ApplicationArgs 0
+==
+bz not_myparam
+// handle my_param
+
+not_myparam:
+// handle not_myparam
+```
 <!-- ===TEAL_APPL_CALL=== -->
 
 # Update smart contract
@@ -1388,12 +1404,20 @@ As stated earlier, anyone can update the program. If this is not desired and you
 
 === "TEAL"
 <!-- ===TEAL_APPL_UPDATE=== -->
-    ```teal
-    global CreatorAddress
-    txn Sender
-    ==
-    assert
-    ```
+```teal
+byte "update"
+txna ApplicationArgs 0
+==
+bz not_update
+
+// Only Creator may update
+global CreatorAddress
+txn Sender
+==
+return
+
+not_update:
+```
 <!-- ===TEAL_APPL_UPDATE=== -->
 
 Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication` application call is made to prevent anyone from ever updating the application code.
@@ -1416,14 +1440,18 @@ Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication
 
 === "TEAL"
 <!-- ===TEAL_APPL_UPDATE_REJECT=== -->
-    ```teal
-    int UpdateApplication
-    txn OnCompletion
-    ==
-    bz not_update
-    int 0
-    return
-    ```
+```teal
+txn OnCompletion
+int UpdateApplication
+==
+bz not_update
+
+// Reject Update
+int 0
+return
+
+not_update:
+```
 <!-- ===TEAL_APPL_UPDATE_REJECT=== -->
 
 # Delete smart contract
@@ -1448,12 +1476,12 @@ Smart contracts have access to many global variables. These variables are set fo
 
 === "TEAL"
 <!-- ===TEAL_GLOBAL_LATEST_TIMESTAMP=== -->
-    ```teal
-    global LatestTimestamp
-    byte "StartDate"
-    app_global_get
-    >=
-    ```
+```teal
+global LatestTimestamp
+byte "StateDate"
+app_global_get
+>=
+```
 <!-- ===TEAL_GLOBAL_LATEST_TIMESTAMP=== -->
 
 # Atomic transfers and transaction properties
@@ -1470,9 +1498,9 @@ The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transa
 
 === "TEAL"
 <!-- ===TEAL_TXN_AMOUNT=== -->
-    ```teal
-    txn Amount
-    ```
+```teal
+txn Amount
+```
 <!-- ===TEAL_TXN_AMOUNT=== -->
 
 In many common patterns, the smart contract will be combined with other Algorand technologies such as assets, atomic transfers, or smart signatures to build a complete application. In the case of atomic transfers, more than one transaction’s properties can be checked within the smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the smart contract is grouped with more than one transaction.
@@ -1487,11 +1515,11 @@ In many common patterns, the smart contract will be combined with other Algorand
 
 === "TEAL"
 <!-- ===TEAL_TXN_GROUP_SIZE=== -->
-    ```teal
-    global GroupSize
-    int 2
-    ==
-    ```
+```teal
+global GroupSize
+int 2
+==
+```
 <!-- ===TEAL_TXN_GROUP_SIZE=== -->
 
 The above TEAL will be true if there are two transactions submitted at once using an atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
@@ -1506,11 +1534,11 @@ The above TEAL will be true if there are two transactions submitted at once usin
 
 === "TEAL"
 <!-- ===TEAL_GTXN_TYPE_ENUM=== -->
-    ```teal
-    gtxn 1 TypeEnum
-    int pay
-    ==
-    ```
+```teal
+gtxn 1 TypeEnum
+int pay
+==
+```
 <!-- ===TEAL_GTXN_TYPE_ENUM=== -->
 
 In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
@@ -1527,14 +1555,12 @@ If any transaction in a group of transactions is a call to a smart contract, the
 
 === "TEAL"
 <!-- ===TEAL_GTXN_APP_ARGS=== -->
-    ```teal
-    // get the first argument of the previous transaction
-    // in a smart contract
-    txn GroupIndex
-    int 1
-    -
-    gtxnsa ApplicationArgs 0
-    ```
+```teal
+txn GroupIndex
+int 1
+-
+gtxnsa ApplicationArgs 0
+```
 <!-- ===TEAL_GTXN_APP_ARGS=== -->
 
 # Using assets in smart contracts
@@ -1559,16 +1585,19 @@ Smart contract applications can work in conjunction with assets. In addition to 
 
 === "TEAL"
 <!-- ===TEAL_APPL_ASSET_BALANCE=== -->
-    ```teal
-    int 0
-    int 2
-    asset_holding_get AssetBalance
-    bnz has_balance
-    int 0 
-    return
-    has_balance:
-    //balance value is now on top of the stack
-    ```
+```teal
+int 0
+int 2
+asset_holding_get AssetBalance
+bnz has_balance
+
+// Reject transaction if no asset balance
+int 0 
+return
+
+has_balance:
+//balance value is now on top of the stack
+```
 <!-- ===TEAL_APPL_ASSET_BALANCE=== -->
 
 This opcode takes two parameters. The first parameter represents an index into the accounts array, where `int 0` is the sender of the transaction’s address. If additional accounts are passed in using the `--app-account` `goal` option then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
@@ -1585,10 +1614,10 @@ It is also possible to get an Asset’s configuration information within a smart
 
 === "TEAL"
 <!-- ===TEAL_APPL_ASSET_PARAM=== -->
-    ```teal
-    int 0
-    asset_params_get AssetTotal
-    ```
+```teal
+int 0
+asset_params_get AssetTotal
+```
 <!-- ===TEAL_APPL_ASSET_PARAM=== -->
 
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
@@ -1719,56 +1748,62 @@ As a way of getting started writing smart contracts, the following boilerplate t
 
 === "TEAL"
 <!-- ===TEAL_BOILERPLATE=== -->
-    ```teal
-    #pragma version 5
+```teal
+#pragma version 8
 
-    // Handle each possible OnCompletion type. We don't have to worry about
-    // handling ClearState, because the ClearStateProgram will execute in that
-    // case, not the ApprovalProgram.
+// Handle each possible OnCompletion type. We don't have to worry about
+// handling ClearState, because the ClearStateProgram will execute in that
+// case, not the ApprovalProgram.
 
-    txn OnCompletion
-    int NoOp
-    ==
-    bnz handle_noop
+txn OnCompletion
+int NoOp
+==
+bnz handle_noop
 
-    txn OnCompletion
-    int OptIn
-    ==
-    bnz handle_optin
+txn OnCompletion
+int OptIn
+==
+bnz handle_optin
 
-    txn OnCompletion
-    int CloseOut
-    ==
-    bnz handle_closeout
+txn OnCompletion
+int CloseOut
+==
+bnz handle_closeout
 
-    txn OnCompletion
-    int UpdateApplication
-    ==
-    bnz handle_updateapp
+txn OnCompletion
+int UpdateApplication
+==
+bnz handle_updateapp
 
-    txn OnCompletion
-    int DeleteApplication
-    ==
-    bnz handle_deleteapp
+txn OnCompletion
+int DeleteApplication
+==
+bnz handle_deleteapp
 
-    // Unexpected OnCompletion value. Should be unreachable.
-    err
+// Unexpected OnCompletion value. Should be unreachable.
+err
 
-    handle_noop:
-    // Handle NoOp
+handle_noop:
+// Handle NoOp
+int 1
+return
 
-    handle_optin:
-    // Handle OptIn
+handle_optin:
+// Handle OptIn
+int 1
+return
 
-    handle_closeout:
-    // Handle CloseOut
+handle_closeout:
+// Handle CloseOut
+int 1
+return
 
-    // By default, disallow updating or deleting the app. Add custom authorization
-    // logic below to allow updating or deletion in certain circumstances.
-    handle_updateapp:
-    handle_deleteapp:
-    err
-    ```
+// By default, disallow updating or deleting the app. Add custom authorization
+// logic below to allow updating or deletion in certain circumstances.
+handle_updateapp:
+handle_deleteapp:
+err
+```
 <!-- ===TEAL_BOILERPLATE=== -->
 
 # Minimum balance requirement for a smart contract
