@@ -87,11 +87,25 @@ special_algod_client = algod.AlgodClient(
 
 === "Go"
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
-	```go
-    // user defined algod client settings
-    const algodAddress = "http://localhost:8080"
-    const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    algodClient, err := algod.MakeClient(algodAddress, algodToken)
+```go
+  // Create a new algod client, configured to connect to out local sandbox
+  var algodAddress = "http://localhost:4001"
+  var algodToken = strings.Repeat("a", 64)
+  algodClient, err := algod.MakeClient(
+    algodAddress,
+    algodToken,
+  )
+
+  // Or, if necessary, pass alternate headers
+
+  var algodHeader common.Header
+  algodHeader.Key = "X-API-Key"
+  algodHeader.Value = algodToken
+  algodClientWithHeaders, err := algod.MakeClientWithHeaders(
+    algodAddress,
+    algodToken,
+    []*common.Header{&algodHeader},
+  )
 ```
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
