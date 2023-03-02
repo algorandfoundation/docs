@@ -110,12 +110,10 @@ The example application defined below may hold up to one each of `bytes` and `in
 === "Python"
     <!-- ===PYSDK_APP_SCHEMA=== -->
 ```python
-local_ints = 1
-local_bytes = 1
-global_ints = 1
-global_bytes = 1
-local_schema = transaction.StateSchema(local_ints, local_bytes)
-global_schema = transaction.StateSchema(global_ints, global_bytes)
+# create schema for both global and local state, specifying
+# how many keys of each type we need to have available
+local_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
+global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 ```
     <!-- ===PYSDK_APP_SCHEMA=== -->
 
@@ -171,10 +169,11 @@ This is the most basic [clear program](../apps/#the-lifecycle-of-a-stateful-smar
 === "Python"
     <!-- ===PYSDK_APP_SOURCE=== -->
 ```python
-with open("calculator/approval.teal", "r") as f:
+# read the `.teal` source files from disk
+with open("application/approval.teal", "r") as f:
     approval_program = f.read()
 
-with open("calculator/clear.teal", "r") as f:
+with open("application/clear.teal", "r") as f:
     clear_program = f.read()
 ```
     <!-- ===PYSDK_APP_SOURCE=== -->
@@ -226,11 +225,13 @@ Use the creator_mnemonic to define sender:
 
 === "Python"
     <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-	```python
-    # get account from mnemonic
-    private_key = mnemonic.to_private_key(creator_mnemonic)
-    sender = account.address_from_private_key(private_key)
-    ```
+```python
+mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
+pk = mnemonic.to_private_key(mn)
+print(f"Base64 encoded private key: {pk}")
+addr = account.address_from_private_key(pk)
+print(f"Address: {addr}")
+```
     <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
@@ -268,6 +269,8 @@ Compile the programs using the `compile` endpoint:
 === "Python"
     <!-- ===PYSDK_APP_COMPILE=== -->
 ```python
+# pass the `.teal` files to the compile endpoint
+# and b64 decode the result to bytes
 approval_result = algod_client.compile(approval_program)
 approval_binary = base64.b64decode(approval_result["result"])
 
@@ -342,7 +345,7 @@ app_create_txn = transaction.ApplicationCreateTxn(
 signed_create_txn = app_create_txn.sign(creator.private_key)
 txid = algod_client.send_transaction(signed_create_txn)
 result = transaction.wait_for_confirmation(algod_client, txid, 4)
-app_id = result['application-index']
+app_id = result["application-index"]
 print(f"Created app with id: {app_id}")
 ```
     <!-- ===PYSDK_APP_CREATE=== -->
@@ -490,7 +493,8 @@ Construct the transaction with defined values then sign, send, and await confirm
 opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
 signed_opt_in = opt_in_txn.sign(user.private_key)
 txid = algod_client.send_transaction(signed_opt_in)
-transaction.wait_for_confirmation(algod_client, txid, 4)
+optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+assert optin_result["confirmed-round"] > 0
 ```
     <!-- ===PYSDK_APP_OPTIN=== -->
 
@@ -553,10 +557,11 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
 === "Python"
     <!-- ===PYSDK_APP_NOOP=== -->
 ```python
-#opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
-#signed_opt_in = opt_in_txn.sign(user.private_key)
-#txid = algod_client.send_transaction(signed_create_txn)
-#transaction.wait_for_confirmation(algod_client, txid, 4)
+noop_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id)
+signed_noop = noop_txn.sign(user.private_key)
+txid = algod_client.send_transaction(signed_noop)
+noop_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+assert noop_result["confirmed-round"] > 0
 ```
     <!-- ===PYSDK_APP_NOOP=== -->
 
@@ -627,8 +632,9 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
 === "Python"
     <!-- ===PYSDK_APP_READ_STATE=== -->
 ```python
-acct_info = algod_client.account_info(user.address)
-print(acct_info)
+acct_info = algod_client.account_application_info(user.address, app_id)
+# base64 encoded keys and values
+print(acct_info["app-local-state"]["key-value"])
 ```
     <!-- ===PYSDK_APP_READ_STATE=== -->
 
@@ -728,6 +734,27 @@ Construct the update transaction and await the response:
 === "Python"
     <!-- ===PYSDK_APP_UPDATE=== -->
 ```python
+with open("application/approval_refactored.teal", "r") as f:
+    approval_program = f.read()
+
+approval_result = algod_client.compile(approval_program)
+approval_binary = base64.b64decode(approval_result["result"])
+
+
+sp = algod_client.suggested_params()
+# create the app update transaction, passing compiled programs and schema
+# note that schema is immutable, we cant change it after create
+app_update_txn = transaction.ApplicationUpdateTxn(
+    creator.address,
+    sp,
+    app_id,
+    approval_program=approval_binary,
+    clear_program=clear_binary,
+)
+signed_update = app_update_txn.sign(creator.private_key)
+txid = algod_client.send_transaction(signed_update)
+update_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+assert update_result["confirmed-round"] > 0
 ```
     <!-- ===PYSDK_APP_UPDATE=== -->
 
@@ -792,6 +819,21 @@ The refactored application expects a timestamp be supplied with the application 
 === "Python"
     <!-- ===PYSDK_APP_CALL=== -->
 ```python
+now = datetime.datetime.now().strftime("%H:%M:%S")
+app_args = [now.encode("utf-8")]
+call_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id, app_args)
+
+signed_call = call_txn.sign(user.private_key)
+txid = algod_client.send_transaction(signed_call)
+call_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+assert call_result["confirmed-round"] > 0
+
+# display results
+print("Called app-id: ", call_result["txn"]["txn"]["apid"])
+if "global-state-delta" in call_result:
+    print("Global State updated :\n", call_result["global-state-delta"])
+if "local-state-delta" in call_result:
+    print("Local State updated :\n", call_result["local-state-delta"])
 ```
     <!-- ===PYSDK_APP_CALL=== -->
 
@@ -884,6 +926,11 @@ The user may discontinue use of the application by sending a [close out](../apps
 === "Python"
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 ```python
+close_txn = transaction.ApplicationCloseOutTxn(user.address, sp, app_id)
+signed_close = close_txn.sign(user.private_key)
+txid = algod_client.send_transaction(signed_close)
+optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+assert optin_result["confirmed-round"] > 0
 ```
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
@@ -940,6 +987,11 @@ The approval program defines the creator as the only account able to [delete the
 === "Python"
     <!-- ===PYSDK_APP_DELETE=== -->
 ```python
+delete_txn = transaction.ApplicationDeleteTxn(creator.address, sp, app_id)
+signed_delete = delete_txn.sign(creator.private_key)
+txid = algod_client.send_transaction(signed_delete)
+optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+assert optin_result["confirmed-round"] > 0
 ```
     <!-- ===PYSDK_APP_DELETE=== -->
 
