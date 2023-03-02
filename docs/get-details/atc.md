@@ -47,7 +47,7 @@ atc = AtomicTransactionComposer()
 === "Java"
     <!-- ===JAVASDK_ATC_CREATE=== -->
 ```java
-        AtomicTransactionComposer atc = new AtomicTransactionComposer();
+                AtomicTransactionComposer atc = new AtomicTransactionComposer();
 ```
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
@@ -141,16 +141,16 @@ atc.add_transaction(tws)
 === "Java"
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 ```java
-        // Create a transaction
-        Transaction ptxn = PaymentTransactionBuilder.Builder().amount(10000).suggestedParams(sp)
-                .sender(acct.getAddress()).receiver(acct.getAddress()).build();
+                // Create a transaction
+                Transaction ptxn = PaymentTransactionBuilder.Builder().amount(10000).suggestedParams(sp)
+                                .sender(acct.getAddress()).receiver(acct.getAddress()).build();
 
-        // Construct TransactionWithSigner
-        TransactionWithSigner tws = new TransactionWithSigner(ptxn,
-                acct.getTransactionSigner());
+                // Construct TransactionWithSigner
+                TransactionWithSigner tws = new TransactionWithSigner(ptxn,
+                                acct.getTransactionSigner());
 
-        // Pass TransactionWithSigner to atc
-        atc.addTransaction(tws);
+                // Pass TransactionWithSigner to atc
+                atc.addTransaction(tws);
 ```
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
@@ -293,27 +293,28 @@ atc.add_method_call(
 === "Java"
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
 ```java
-        // Read the json from disk
-        String jsonContract = Files.readString(Paths.get("calculator/contract.json"));
-        // Create Contract from Json
-        Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
+                // Read the json from disk
+                String jsonContract = Files.readString(Paths.get("calculator/contract.json"));
+                // Create Contract from Json
+                Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
 ```
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
 
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
 ```java
-        // create methodCallParams by builder (or create by constructor) for add method
-        List<Object> methodArgs = new ArrayList<Object>();
-        methodArgs.add(1);
-        methodArgs.add(1);
+                // create methodCallParams by builder (or create by constructor) for add method
+                List<Object> methodArgs = new ArrayList<Object>();
+                methodArgs.add(1);
+                methodArgs.add(1);
 
-        MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
+                MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
 
-        MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner()).sender(acct.getAddress())
-                .method(contract.getMethodByName("add")).methodArguments(methodArgs)
-                .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
+                MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
+                                .sender(acct.getAddress())
+                                .method(contract.getMethodByName("add")).methodArguments(methodArgs)
+                                .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
 
-        atc.addMethodCall(mcp);
+                atc.addMethodCall(mcp);
 ```
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
     
@@ -373,10 +374,11 @@ for res in result.abi_results:
 === "Java"
     <!-- ===JAVASDK_ATC_RESULTS=== -->
 ```java
-        ExecuteResult res = atc.execute(algodClient, 2);
-        System.out.printf("App call (%s) confirmed in round %d\n", res.txIDs, res.confirmedRound);
-        res.methodResults.forEach(methodResult -> {
-            System.out.printf("Result from calling '%s' method: %s\n", methodResult.method.name, methodResult.value);
-        });
+                ExecuteResult res = atc.execute(algodClient, 2);
+                System.out.printf("App call (%s) confirmed in round %d\n", res.txIDs, res.confirmedRound);
+                res.methodResults.forEach(methodResult -> {
+                        System.out.printf("Result from calling '%s' method: %s\n", methodResult.method.name,
+                                        methodResult.value);
+                });
 ```
     <!-- ===JAVASDK_ATC_RESULTS=== -->

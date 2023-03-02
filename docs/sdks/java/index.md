@@ -108,7 +108,8 @@ Before moving on to the next step, make sure your account has been funded by the
 
 <!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 ```java
-        Response<com.algorand.algosdk.v2.client.model.Account> acctInfoResp = algodClient.AccountInformation(acct.getAddress()).execute();
+        Response<com.algorand.algosdk.v2.client.model.Account> acctInfoResp = algodClient
+                .AccountInformation(acct.getAddress()).execute();
         com.algorand.algosdk.v2.client.model.Account acctInfo = acctInfoResp.body();
         // print one of the fields in the account info response
         System.out.printf("Current balance: %d", acctInfo.amount);
@@ -124,10 +125,10 @@ Transactions are used to interact with the Algorand network. To create a payment
         Response<TransactionParametersResponse> suggestedParams = algodClient.TransactionParams().execute();
         Integer amount = 1000000; // 1 Algo
         Transaction ptxn = Transaction.PaymentTransactionBuilder()
-            .sender(acct.getAddress())
-            .amount(amount)
-            .receiver(acct2.getAddress())
-            .suggestedParams(suggestedParams.body()).build();
+                .sender(acct.getAddress())
+                .amount(amount)
+                .receiver(acct2.getAddress())
+                .suggestedParams(suggestedParams.body()).build();
 ```
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_CREATE=== -->
 ​

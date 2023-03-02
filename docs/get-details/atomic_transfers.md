@@ -338,11 +338,13 @@ print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
     <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
 ```java
         // Only the first transaction id is returned
-        Response<PostTransactionsResponse> txResponse = algodClient.RawTransaction().rawtxn(Encoder.encodeToMsgPack(stxns)).execute();
+        Response<PostTransactionsResponse> txResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(stxns)).execute();
         String txid = txResponse.body().txId;
 
         // Wait for the transaction id to be confirmed
-        // If the results from other transactions are needed, grab the txid from those directly and
+        // If the results from other transactions are needed, grab the txid from those
+        // directly and
         // call waitForConfirmation on each
         PendingTransactionResponse txResult = Utils.waitForConfirmation(algodClient, txid, 4);
         System.out.printf("Transaction %s confirmed in round %d\n", txid, txResult.confirmedRound);

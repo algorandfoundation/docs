@@ -404,7 +404,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 ```java
         Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
         TransactionParametersResponse sp = rsp.body();
-        // Wipe the `reserve` address through an AssetConfigTransaction 
+        // Wipe the `reserve` address through an AssetConfigTransaction
         Transaction reconfigureTxn = Transaction.AssetConfigureTransactionBuilder().suggestedParams(sp)
                 .sender(acct.getAddress())
                 .assetIndex(asaId)

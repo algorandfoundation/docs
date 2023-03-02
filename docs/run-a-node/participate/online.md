@@ -50,8 +50,8 @@ print(online_keyreg.dictify())
         String votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=";
         String skey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=";
 
-        Long numRounds = 100000l;  // sets up keys for 100000 rounds
-        Long keyDilution = (long) Math.sqrt(numRounds);  // dilution default is sqrt num rounds
+        Long numRounds = 100000l; // sets up keys for 100000 rounds
+        Long keyDilution = (long) Math.sqrt(numRounds); // dilution default is sqrt num rounds
 
         Transaction keyRegTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
                 .sender(address)

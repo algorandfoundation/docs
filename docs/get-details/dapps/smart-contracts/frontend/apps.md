@@ -46,12 +46,19 @@ An `algod` client connection is also required. The following connects using Sand
 
 === "Python"
     <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
-	```python
-    # user declared algod connection parameters
-    algod_address = "http://localhost:4001"
-    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-    ```
+```python
+# Create a new algod client, configured to connect to our local sandbox
+algod_address = "http://localhost:4001"
+algod_token = "a" * 64
+algod_client = algod.AlgodClient(algod_token, algod_address)
+
+# Or, if necessary, pass alternate headers
+
+# Create a new client with an alternate api key header
+special_algod_client = algod.AlgodClient(
+    "", algod_address, headers={"X-API-Key": algod_token}
+)
+```
     <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "JavaScript"
@@ -66,13 +73,16 @@ An `algod` client connection is also required. The following connects using Sand
 
 === "Java"
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
-	```Java
-    // user declared account mnemonics
-    String ALGOD_API_ADDR = "localhost";
-    Integer ALGOD_PORT = 4001;
-    String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    AlgodClient client = (AlgodClient) new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-    ```
+```java
+        String algodHost = "http://localhost";
+        int algodPort = 4001;
+        String algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
+
+        // OR if the API provider requires a specific header key for the token
+        String tokenHeader = "X-API-Key";
+        AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
+```
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Go"
@@ -82,7 +92,7 @@ An `algod` client connection is also required. The following connects using Sand
     const algodAddress = "http://localhost:8080"
     const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     algodClient, err := algod.MakeClient(algodAddress, algodToken)
-    ```
+```
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -99,17 +109,14 @@ The example application defined below may hold up to one each of `bytes` and `in
 
 === "Python"
     <!-- ===PYSDK_APP_SCHEMA=== -->
-	```python
-    # declare application state storage (immutable)
-    local_ints = 1
-    local_bytes = 1
-    global_ints = 1
-    global_bytes = 0
-
-    # define schema
-    global_schema = transaction.StateSchema(global_ints, global_bytes)
-    local_schema = transaction.StateSchema(local_ints, local_bytes)
-    ```
+```python
+local_ints = 1
+local_bytes = 1
+global_ints = 1
+global_bytes = 1
+local_schema = transaction.StateSchema(local_ints, local_bytes)
+global_schema = transaction.StateSchema(global_ints, global_bytes)
+```
     <!-- ===PYSDK_APP_SCHEMA=== -->
 
 === "JavaScript"
@@ -163,12 +170,13 @@ This is the most basic [clear program](../apps/#the-lifecycle-of-a-stateful-smar
 
 === "Python"
     <!-- ===PYSDK_APP_SOURCE=== -->
-	```python
-    # declare clear state program source
-    clear_program_source = b"""#pragma version 4
-    int 1
-    """
-    ```
+```python
+with open("calculator/approval.teal", "r") as f:
+    approval_program = f.read()
+
+with open("calculator/clear.teal", "r") as f:
+    clear_program = f.read()
+```
     <!-- ===PYSDK_APP_SOURCE=== -->
 
 === "JavaScript"
@@ -236,11 +244,14 @@ Use the creator_mnemonic to define sender:
 
 === "Java"
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-	```Java
-    // get account from mnemonic
-    Account creatorAccount = new Account(creatorMnemonic);
-    Address sender = creatorAccount.getAddress();
-    ```
+```java
+                // Space delimited 25 word mnemonic
+                String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
+                // We can get the private key
+                byte[] key = Mnemonic.toKey(mn);
+                // Or just init the account directly from the mnemonic
+                Account acct = new Account(mn);
+```
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
@@ -256,12 +267,13 @@ Compile the programs using the `compile` endpoint:
 
 === "Python"
     <!-- ===PYSDK_APP_COMPILE=== -->
-	```python
-    # helper function to compile program source
-    def compile_program(client, source_code) :
-        compile_response = client.compile(source_code.decode('utf-8'))
-        return base64.b64decode(compile_response['result'])
-    ```
+```python
+approval_result = algod_client.compile(approval_program)
+approval_binary = base64.b64decode(approval_result["result"])
+
+clear_result = algod_client.compile(clear_program)
+clear_binary = base64.b64decode(clear_result["result"])
+```
     <!-- ===PYSDK_APP_COMPILE=== -->
 
 === "JavaScript"
@@ -314,31 +326,25 @@ Construct the transaction with defined values then sign, send, and await confirm
 
 === "Python"
     <!-- ===PYSDK_APP_CREATE=== -->
-	```python
-    # create unsigned transaction
-    txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
-                                            approval_program, clear_program, \
-                                            global_schema, local_schema)
-
-    # sign transaction
-    signed_txn = txn.sign(private_key)
-    tx_id = signed_txn.transaction.get_txid()
-
-    # send transaction
-    client.send_transactions([signed_txn])
-
-
-    # wait for confirmation
-
-    confirmed_txn = wait_for_confirmation(client, tx_id, 4)
-    print("txID: {}".format(tx_id), " confirmed in round: {}".format(
-    confirmed_txn.get("confirmed-round", 0)))   
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    app_id = transaction_response['application-index']
-    print("Created new app-id: ",app_id)
-    ```
+```python
+sp = algod_client.suggested_params()
+# create the app create transaction, passing compiled programs and schema
+app_create_txn = transaction.ApplicationCreateTxn(
+    creator.address,
+    sp,
+    transaction.OnComplete.NoOpOC,
+    approval_program=approval_binary,
+    clear_program=clear_binary,
+    global_schema=global_schema,
+    local_schema=local_schema,
+)
+# sign transaction
+signed_create_txn = app_create_txn.sign(creator.private_key)
+txid = algod_client.send_transaction(signed_create_txn)
+result = transaction.wait_for_confirmation(algod_client, txid, 4)
+app_id = result['application-index']
+print(f"Created app with id: {app_id}")
+```
     <!-- ===PYSDK_APP_CREATE=== -->
 
 === "JavaScript"
@@ -480,15 +486,12 @@ Construct the transaction with defined values then sign, send, and await confirm
 
 === "Python"
     <!-- ===PYSDK_APP_OPTIN=== -->
-	```python
-    txn = transaction.ApplicationOptInTxn(sender, params, app_id)
-
-    # ... sign send wait
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("OptIn to app-id: ",transaction_response['txn']['txn']['apid'])  
-    ```
+```python
+opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
+signed_opt_in = opt_in_txn.sign(user.private_key)
+txid = algod_client.send_transaction(signed_opt_in)
+transaction.wait_for_confirmation(algod_client, txid, 4)
+```
     <!-- ===PYSDK_APP_OPTIN=== -->
 
 === "JavaScript"
@@ -549,20 +552,12 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
 
 === "Python"
     <!-- ===PYSDK_APP_NOOP=== -->
-	```python
-    # create unsigned transaction
-    txn = transaction.ApplicationNoOpTxn(sender, params, index)
-
-    # ... sign, send, await 
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Called app-id: ",transaction_response['txn']['txn']['apid'])
-    if "global-state-delta" in transaction_response :
-        print("Global State updated :\n",transaction_response['global-state-delta'])
-    if "local-state-delta" in transaction_response :
-        print("Local State updated :\n",transaction_response['local-state-delta'])
-    ```
+```python
+#opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
+#signed_opt_in = opt_in_txn.sign(user.private_key)
+#txid = algod_client.send_transaction(signed_create_txn)
+#transaction.wait_for_confirmation(algod_client, txid, 4)
+```
     <!-- ===PYSDK_APP_NOOP=== -->
 
 === "JavaScript"
@@ -631,21 +626,10 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
 
 === "Python"
     <!-- ===PYSDK_APP_READ_STATE=== -->
-	```python
-    # read user local state
-    def read_local_state(client, addr, app_id) :   
-        results = client.account_info(addr)
-        local_state = results['apps-local-state'][0]
-        for index in local_state :
-            if local_state[index] == app_id :
-                print(f"local_state of account {addr} for app_id {app_id}: ", local_state['key-value'])
-
-    # read app global state
-    def read_global_state(client, app_id):
-        app = client.application_info(app_id)
-        global_state = app['params']['global-state'] if "global-state" in app["params"] else []
-        print(f"global_state for app_id {app_id}: ", global_state)
-    ```
+```python
+acct_info = algod_client.account_info(user.address)
+print(acct_info)
+```
     <!-- ===PYSDK_APP_READ_STATE=== -->
 
 === "JavaScript"
@@ -743,18 +727,8 @@ Construct the update transaction and await the response:
 
 === "Python"
     <!-- ===PYSDK_APP_UPDATE=== -->
-	```python
-    # create unsigned transaction
-    txn = transaction.ApplicationUpdateTxn(sender, params, app_id, \
-                                            approval_program, clear_program, app_args)
-
-    # sign, send, await 
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    app_id = transaction_response['txn']['txn']['apid']
-    print("Updated existing app-id: ",app_id)
-    ```
+```python
+```
     <!-- ===PYSDK_APP_UPDATE=== -->
 
 === "JavaScript"
@@ -817,24 +791,8 @@ The refactored application expects a timestamp be supplied with the application 
 
 === "Python"
     <!-- ===PYSDK_APP_CALL=== -->
-	```python
-    # call application with arguments
-    now = datetime.datetime.now().strftime("%H:%M:%S")
-    app_args = [now.encode("utf-8")]
-
-    # create unsigned transaction
-    txn = transaction.ApplicationNoOpTxn(sender, params, index, app_args)
-
-    # sign, send, await 
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Called app-id: ",transaction_response['txn']['txn']['apid'])
-    if "global-state-delta" in transaction_response :
-        print("Global State updated :\n",transaction_response['global-state-delta'])
-    if "local-state-delta" in transaction_response :
-        print("Local State updated :\n",transaction_response['local-state-delta'])
-    ```
+```python
+```
     <!-- ===PYSDK_APP_CALL=== -->
 
 === "JavaScript"
@@ -925,16 +883,8 @@ The user may discontinue use of the application by sending a [close out](../apps
 
 === "Python"
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
-	```python
-    # create unsigned transaction
-    txn = transaction.ApplicationCloseOutTxn(sender, params, index)
-
-    # sign, send, await 
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Closed out from app-id: ",transaction_response['txn']['txn']['apid'])
-    ```
+```python
+```
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
 === "JavaScript"
@@ -989,16 +939,8 @@ The approval program defines the creator as the only account able to [delete the
 
 === "Python"
     <!-- ===PYSDK_APP_DELETE=== -->
-	```python
-    # create unsigned transaction
-    txn = transaction.ApplicationDeleteTxn(sender, params, index)
-
-    # sign, send, await
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Deleted app-id: ",transaction_response['txn']['txn']['apid'])    
-    ```
+```python
+```
     <!-- ===PYSDK_APP_DELETE=== -->
 
 === "JavaScript"
@@ -1056,16 +998,8 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 
 === "Python"
     <!-- ===PYSDK_APP_CLEAR=== -->
-	```python
-    # create unsigned transaction
-    txn = transaction.ApplicationClearStateTxn(sender, params, index)
-
-    # sign, send, await 
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Cleared app-id: ",transaction_response['txn']['txn']['apid']) 
-    ```
+```python
+```
     <!-- ===PYSDK_APP_CLEAR=== -->
 
 === "JavaScript"

@@ -791,13 +791,13 @@ suggested_params.flat_fee = True
 <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 ```java
         Transaction feeOverrideTxn = Transaction.PaymentTransactionBuilder()
-            .sender(acct.getAddress())
-            .receiver(acct2.getAddress())
-            .suggestedParams(suggestedParams.body())
-            // override the fee given by suggested params
-            // to set a flat fee of 2x minfee to cover another transaction
-            // in the same group
-            .flatFee(2*suggestedParams.body().minFee).build();
+                .sender(acct.getAddress())
+                .receiver(acct2.getAddress())
+                .suggestedParams(suggestedParams.body())
+                // override the fee given by suggested params
+                // to set a flat fee of 2x minfee to cover another transaction
+                // in the same group
+                .flatFee(2 * suggestedParams.body().minFee).build();
 ```
 <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 

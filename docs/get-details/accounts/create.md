@@ -813,17 +813,17 @@ print("Multisig Address: ", msig.address())
 === "Java"
 <!-- ===JAVASDK_MULTISIG_CREATE=== -->
 ```java
-        int version = 1; // no other versions at the time of writing
-        int threshold = 2; // we're making a 2/3 msig
+                int version = 1; // no other versions at the time of writing
+                int threshold = 2; // we're making a 2/3 msig
 
-        // Populate a list of Ed25519 pubkeys
-        List<Ed25519PublicKey> accts = new ArrayList<>();
-        accts.add(addr1.getEd25519PublicKey());
-        accts.add(addr2.getEd25519PublicKey());
-        accts.add(addr3.getEd25519PublicKey());
-        // create the MultisigAddress object
-        MultisigAddress msig = new MultisigAddress(version, threshold, accts);
-        System.out.printf("msig address: %s\n", msig.toAddress().toString());
+                // Populate a list of Ed25519 pubkeys
+                List<Ed25519PublicKey> accts = new ArrayList<>();
+                accts.add(addr1.getEd25519PublicKey());
+                accts.add(addr2.getEd25519PublicKey());
+                accts.add(addr3.getEd25519PublicKey());
+                // create the MultisigAddress object
+                MultisigAddress msig = new MultisigAddress(version, threshold, accts);
+                System.out.printf("msig address: %s\n", msig.toAddress().toString());
 ```
 <!-- ===JAVASDK_MULTISIG_CREATE=== -->
 

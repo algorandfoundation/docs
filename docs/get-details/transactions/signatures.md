@@ -255,34 +255,34 @@ print(
 === "Java"
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
 ```java
-        int version = 1; // no other versions at the time of writing
-        int threshold = 2; // we're making a 2/3 msig
+                int version = 1; // no other versions at the time of writing
+                int threshold = 2; // we're making a 2/3 msig
 
-        // Populate a list of Ed25519 pubkeys
-        List<Ed25519PublicKey> accts = new ArrayList<>();
-        accts.add(addr1.getEd25519PublicKey());
-        accts.add(addr2.getEd25519PublicKey());
-        accts.add(addr3.getEd25519PublicKey());
-        // create the MultisigAddress object
-        MultisigAddress msig = new MultisigAddress(version, threshold, accts);
-        System.out.printf("msig address: %s\n", msig.toAddress().toString());
+                // Populate a list of Ed25519 pubkeys
+                List<Ed25519PublicKey> accts = new ArrayList<>();
+                accts.add(addr1.getEd25519PublicKey());
+                accts.add(addr2.getEd25519PublicKey());
+                accts.add(addr3.getEd25519PublicKey());
+                // create the MultisigAddress object
+                MultisigAddress msig = new MultisigAddress(version, threshold, accts);
+                System.out.printf("msig address: %s\n", msig.toAddress().toString());
 ```
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 ```java
-        // Construct transaction with sender as address of msig
-        Transaction msigPayTxn = Transaction.PaymentTransactionBuilder()
-                .sender(msig.toAddress())
-                .amount(1000)
-                .receiver(acct1.getAddress())
-                .suggestedParams(sp)
-                .build();
+                // Construct transaction with sender as address of msig
+                Transaction msigPayTxn = Transaction.PaymentTransactionBuilder()
+                                .sender(msig.toAddress())
+                                .amount(1000)
+                                .receiver(acct1.getAddress())
+                                .suggestedParams(sp)
+                                .build();
 
-        // For each subsig, sign or append to the existing partially signed transaction
-        SignedTransaction signedMsigPayTxn = acct1.signMultisigTransaction(msig, msigPayTxn);
-        signedMsigPayTxn = acct2.appendMultisigTransaction(msig, signedMsigPayTxn);
-        Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
+                // For each subsig, sign or append to the existing partially signed transaction
+                SignedTransaction signedMsigPayTxn = acct1.signMultisigTransaction(msig, msigPayTxn);
+                signedMsigPayTxn = acct2.appendMultisigTransaction(msig, signedMsigPayTxn);
+                Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
+                                .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
 ```
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 
