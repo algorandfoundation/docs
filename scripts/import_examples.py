@@ -91,9 +91,9 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
        github_url="https://github.com/algorand/go-algorand-sdk",
-       git_branch="master",
-       local_dir="../../go/src/github.com/algorand/go-algorand-sdk",
-       example_dir="examples",
+       git_branch="examples",
+       local_dir="../../go-algorand-sdk",
+       example_dir="_examples",
        language_name="go",
        src_comment_flag="// example: ",
        name="GOSDK",
