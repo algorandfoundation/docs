@@ -874,6 +874,7 @@ atc.add_method_call(
     boxes=[[app_id, b"key"]],
 )
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L92-L102)
     <!-- ===PYSDK_ATC_BOX_REF=== -->
 
 === "JavaScript"

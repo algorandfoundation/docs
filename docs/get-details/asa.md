@@ -197,6 +197,7 @@ print(f"Result confirmed in round: {results['confirmed-round']}")
 created_asset = results["asset-index"]
 print(f"Asset ID created: {created_asset}")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L13-L45)
     <!-- ===PYSDK_ASSET_CREATE=== -->
 
 === "Java"
@@ -233,6 +234,7 @@ print(f"Asset ID created: {created_asset}")
         System.out.printf("Created asset with id: %d\n", asaId);
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L48-L78)
     <!-- ===JAVASDK_ASSET_CREATE=== -->
 
 === "Go"
@@ -416,6 +418,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
                 .build();
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L84-L97)
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
@@ -569,6 +572,7 @@ matching_asset = [
 assert matching_asset["amount"] == 0
 assert matching_asset["is-frozen"] is False
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L57-L79)
     <!-- ===PYSDK_ASSET_OPTIN=== -->
 
 === "Java"
@@ -584,6 +588,7 @@ assert matching_asset["is-frozen"] is False
                 .build();
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L104-L113)
     <!-- ===JAVASDK_ASSET_OPTIN=== -->
 
 === "Go"
@@ -723,6 +728,7 @@ matching_asset = [
 ].pop()
 assert matching_asset["amount"] == 1
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L83-L106)
     <!-- ===PYSDK_ASSET_XFER=== -->
 
 === "Java"
@@ -740,6 +746,7 @@ assert matching_asset["amount"] == 1
                 .build();
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L121-L132)
     <!-- ===JAVASDK_ASSET_XFER=== -->
 
 === "Go"
@@ -891,6 +898,7 @@ matching_asset = [
 ].pop()
 assert matching_asset["is-frozen"] is True
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L109-L132)
     <!-- ===PYSDK_ASSET_FREEZE=== -->
 
 === "Java"
@@ -909,6 +917,7 @@ assert matching_asset["is-frozen"] is True
                 .build();
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L140-L152)
     <!-- ===JAVASDK_ASSET_FREEZE=== -->
 
 === "Go"
@@ -1051,6 +1060,7 @@ matching_asset = [
 assert matching_asset["amount"] == 0
 assert matching_asset["is-frozen"] is True
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L135-L160)
     <!-- ===PYSDK_ASSET_CLAWBACK== -->
 
 === "Java"
@@ -1070,6 +1080,7 @@ assert matching_asset["is-frozen"] is True
                 .build();
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L160-L173)
     <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 
 === "Go"
@@ -1214,6 +1225,7 @@ try:
 except Exception as e:
     print("Expected Error:", e)
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L163-L182)
     <!-- ===PYSDK_ASSET_DELETE=== -->
 
 === "Java"
@@ -1233,6 +1245,7 @@ except Exception as e:
                 .build();
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L180-L193)
     <!-- ===JAVASDK_ASSET_DELETE=== -->
 
 === "Go"
@@ -1348,6 +1361,7 @@ asset_params: Dict[str, Any] = asset_info["params"]
 print(f"Asset Name: {asset_params['name']}")
 print(f"Asset params: {list(asset_params.keys())}")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L48-L53)
     <!-- ===PYSDK_ASSET_INFO=== -->
 
 === "Java"
@@ -1358,6 +1372,7 @@ print(f"Asset params: {list(asset_params.keys())}")
         Asset assetInfo = assetResp.body();
         System.out.printf("Asset Name: %s\n", assetInfo.params.name);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L39-L43)
     <!-- ===JAVASDK_ASSET_INFO=== -->
 
 === "Go"

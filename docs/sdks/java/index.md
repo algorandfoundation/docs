@@ -61,6 +61,7 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
         System.out.println("Address: " + acct.getAddress());
         System.out.println("Passphrase: " + acct.toMnemonic());
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L73-L76)
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 [More Information](../../get-details/accounts/create/#standalone){:target="_blank"}
@@ -97,6 +98,7 @@ Communication with the Algorand network is performed using transactions. To crea
         String tokenHeader = "X-API-Key";
         AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
 <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 
@@ -114,6 +116,7 @@ Before moving on to the next step, make sure your account has been funded by the
         // print one of the fields in the account info response
         System.out.printf("Current balance: %d", acctInfo.amount);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L81-L86)
 <!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 
@@ -130,6 +133,7 @@ Transactions are used to interact with the Algorand network. To create a payment
                 .receiver(acct2.getAddress())
                 .suggestedParams(suggestedParams.body()).build();
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L25-L32)
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_CREATE=== -->
 ​
 !!! Info
@@ -143,6 +147,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ```java
         SignedTransaction sptxn = acct.signTransaction(ptxn);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L35-L36)
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
@@ -163,6 +168,7 @@ The signed transaction can now be submitted to the network. The SDK `waitForConf
         PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, txid, 4);
         System.out.printf("Transaction %s confirmed in round %d\n", txid, result.confirmedRound);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L39-L47)
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 
 [`Run Code`](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="_blank"}

@@ -59,6 +59,7 @@ special_algod_client = algod.AlgodClient(
     "", algod_address, headers={"X-API-Key": algod_token}
 )
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L10-L21)
     <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "JavaScript"
@@ -83,6 +84,7 @@ special_algod_client = algod.AlgodClient(
         String tokenHeader = "X-API-Key";
         AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Go"
@@ -129,6 +131,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 local_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L11-L15)
     <!-- ===PYSDK_APP_SCHEMA=== -->
 
 === "JavaScript"
@@ -152,6 +155,7 @@ global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
         StateSchema localSchema = new StateSchema(localInts, localBytes);
         StateSchema globalSchema = new StateSchema(globalInts, globalBytes);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L40-L46)
     <!-- ===JAVASDK_APP_SCHEMA=== -->
 
 === "Go"
@@ -191,6 +195,7 @@ with open("application/approval.teal", "r") as f:
 with open("application/clear.teal", "r") as f:
     clear_program = f.read()
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L18-L24)
     <!-- ===PYSDK_APP_SOURCE=== -->
 
 === "JavaScript"
@@ -210,6 +215,7 @@ with open("application/clear.teal", "r") as f:
         String approvalSource = Files.readString(Paths.get("application/approval.teal"));
         String clearSource = Files.readString(Paths.get("application/clear.teal"));
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L49-L52)
     <!-- ===JAVASDK_APP_SOURCE=== -->
 
 === "Go"
@@ -247,6 +253,7 @@ print(f"Base64 encoded private key: {pk}")
 addr = account.address_from_private_key(pk)
 print(f"Address: {addr}")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
     <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
@@ -268,6 +275,7 @@ print(f"Address: {addr}")
                 // Or just init the account directly from the mnemonic
                 Account acct = new Account(mn);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
@@ -292,6 +300,7 @@ approval_binary = base64.b64decode(approval_result["result"])
 clear_result = algod_client.compile(clear_program)
 clear_binary = base64.b64decode(clear_result["result"])
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L29-L36)
     <!-- ===PYSDK_APP_COMPILE=== -->
 
 === "JavaScript"
@@ -319,6 +328,7 @@ clear_binary = base64.b64decode(clear_result["result"])
         TEALProgram approvalProg = new TEALProgram(approvalResponse.result);
         TEALProgram clearProg = new TEALProgram(clearResponse.result);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L55-L62)
     <!-- ===JAVASDK_APP_COMPILE=== -->
 
 === "Go"
@@ -359,6 +369,7 @@ result = transaction.wait_for_confirmation(algod_client, txid, 4)
 app_id = result["application-index"]
 print(f"Created app with id: {app_id}")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L39-L56)
     <!-- ===PYSDK_APP_CREATE=== -->
 
 === "JavaScript"
@@ -412,6 +423,7 @@ print(f"Created app with id: {app_id}")
         Long appId = result.applicationIndex;
         System.out.printf("Created application with id: %d\n", appId);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L84)
     <!-- ===JAVASDK_APP_CREATE=== -->
 
 === "Go"
@@ -499,6 +511,7 @@ txid = algod_client.send_transaction(signed_opt_in)
 optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 assert optin_result["confirmed-round"] > 0
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L59-L64)
     <!-- ===PYSDK_APP_OPTIN=== -->
 
 === "JavaScript"
@@ -530,6 +543,7 @@ assert optin_result["confirmed-round"] > 0
         PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient, optInResponse.body().txId, 4);
         assert optInResult.confirmedRound > 0;
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L87-L99)
     <!-- ===JAVASDK_APP_OPTIN=== -->
 
 === "Go"
@@ -565,6 +579,7 @@ txid = algod_client.send_transaction(signed_noop)
 noop_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 assert noop_result["confirmed-round"] > 0
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L67-L72)
     <!-- ===PYSDK_APP_NOOP=== -->
 
 === "JavaScript"
@@ -603,6 +618,7 @@ assert noop_result["confirmed-round"] > 0
         PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId, 4);
         assert noopResult.confirmedRound > 0;
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L102-L114)
     <!-- ===JAVASDK_APP_NOOP=== -->
 
 === "Go"
@@ -631,6 +647,7 @@ acct_info = algod_client.account_application_info(user.address, app_id)
 # base64 encoded keys and values
 print(acct_info["app-local-state"]["key-value"])
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L75-L78)
     <!-- ===PYSDK_APP_READ_STATE=== -->
 
 === "JavaScript"
@@ -667,6 +684,7 @@ print(acct_info["app-local-state"]["key-value"])
     <!-- ===JAVASDK_APP_READ_STATE=== -->
 ```java
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L117-L117)
     <!-- ===JAVASDK_APP_READ_STATE=== -->
 
 === "Go"
@@ -732,6 +750,7 @@ txid = algod_client.send_transaction(signed_update)
 update_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 assert update_result["confirmed-round"] > 0
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L81-L102)
     <!-- ===PYSDK_APP_UPDATE=== -->
 
 === "JavaScript"
@@ -772,6 +791,7 @@ assert update_result["confirmed-round"] > 0
         PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient, updateResponse.body().txId, 4);
         assert updateResult.confirmedRound > 0;
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L139)
     <!-- ===JAVASDK_APP_UPDATE=== -->
 
 === "Go"
@@ -816,6 +836,7 @@ if "global-state-delta" in call_result:
 if "local-state-delta" in call_result:
     print("Local State updated :\n", call_result["local-state-delta"])
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L105-L120)
     <!-- ===PYSDK_APP_CALL=== -->
 
 === "JavaScript"
@@ -876,6 +897,7 @@ if "local-state-delta" in call_result:
             System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
         }
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L142-L170)
     <!-- ===JAVASDK_APP_CALL=== -->
 
 === "Go"
@@ -915,6 +937,7 @@ txid = algod_client.send_transaction(signed_close)
 optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 assert optin_result["confirmed-round"] > 0
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L123-L128)
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
 === "JavaScript"
@@ -948,6 +971,7 @@ assert optin_result["confirmed-round"] > 0
                 4);
         assert closeOutResult.confirmedRound > 0;
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L173-L186)
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 
 === "Go"
@@ -977,6 +1001,7 @@ txid = algod_client.send_transaction(signed_delete)
 optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 assert optin_result["confirmed-round"] > 0
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L131-L136)
     <!-- ===PYSDK_APP_DELETE=== -->
 
 === "JavaScript"
@@ -1009,6 +1034,7 @@ assert optin_result["confirmed-round"] > 0
         PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient, deleteResponse.body().txId, 4);
         assert deleteResult.confirmedRound > 0;
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L189-L200)
     <!-- ===JAVASDK_APP_DELETE=== -->
 
 === "Go"
@@ -1034,7 +1060,10 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 === "Python"
     <!-- ===PYSDK_APP_CLEAR=== -->
 ```python
+clear_txn = transaction.ApplicationClearStateTxn(user.address, sp, app_id)
+# .. sign, send, wait
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L139-L141)
     <!-- ===PYSDK_APP_CLEAR=== -->
 
 === "JavaScript"
@@ -1064,6 +1093,7 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
         SignedTransaction signedClear = user.signTransaction(clearTxn);
         // ... sign, send, wait
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L203-L211)
     <!-- ===JAVASDK_APP_CLEAR=== -->
 
 === "Go"

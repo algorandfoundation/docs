@@ -27,6 +27,7 @@ offline_keyreg = transaction.KeyregTxn(
 )
 print(online_keyreg.dictify())
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L29-L43)
     <!-- ===PYSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "JavaScript"
@@ -45,6 +46,7 @@ print(online_keyreg.dictify())
                 .sender(address)
                 .build();
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "goal"

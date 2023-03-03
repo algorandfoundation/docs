@@ -34,6 +34,9 @@ class ExampleSource:
         return f"{self.github_url}.git"
 
     def file_url(self, file_name: str) -> str:
+        if file_name.startswith(self.example_path()):
+            file_name = file_name[len(self.example_path()) + 1 :]
+
         return (
             f"{self.github_url}/blob/{self.git_branch}/{self.example_dir}/{file_name}"
         )
@@ -72,7 +75,7 @@ sources: list[ExampleSource] = [
     ExampleSource(
         github_url="https://github.com/algorand/py-algorand-sdk",
         git_branch="doc-examples",
-        local_dir="../../py-algorand-sdk/",
+        local_dir="../../py-algorand-sdk",
         example_dir="_examples",
         language_name="python",
         src_comment_flag="# example: ",
@@ -80,64 +83,64 @@ sources: list[ExampleSource] = [
         file_extension=".py",
     ),
     ExampleSource(
-       github_url="https://github.com/algorand/js-algorand-sdk",
-       git_branch="develop",
-       local_dir="../../js-algorand-sdk/",
-       example_dir="examples",
-       language_name="javascript",
-       src_comment_flag="// example: ",
-       name="JSSDK",
-       file_extension=".js",
+        github_url="https://github.com/algorand/js-algorand-sdk",
+        git_branch="develop",
+        local_dir="../../js-algorand-sdk",
+        example_dir="examples",
+        language_name="javascript",
+        src_comment_flag="// example: ",
+        name="JSSDK",
+        file_extension=".js",
     ),
     ExampleSource(
-       github_url="https://github.com/algorand/go-algorand-sdk",
-       git_branch="examples",
-       local_dir="../../go-algorand-sdk",
-       example_dir="_examples",
-       language_name="go",
-       src_comment_flag="// example: ",
-       name="GOSDK",
-       file_extension=".go",
+        github_url="https://github.com/algorand/go-algorand-sdk",
+        git_branch="examples",
+        local_dir="../../go-algorand-sdk",
+        example_dir="_examples",
+        language_name="go",
+        src_comment_flag="// example: ",
+        name="GOSDK",
+        file_extension=".go",
     ),
     ExampleSource(
-       github_url="https://github.com/algorand/java-algorand-sdk",
-       git_branch="examples",
-       local_dir="../../java-algorand-sdk",
-       example_dir="examples",
-       language_name="java",
-       src_comment_flag="// example: ",
-       name="JAVASDK",
-       file_extension=".java",
+        github_url="https://github.com/algorand/java-algorand-sdk",
+        git_branch="examples",
+        local_dir="../../java-algorand-sdk",
+        example_dir="examples",
+        language_name="java",
+        src_comment_flag="// example: ",
+        name="JAVASDK",
+        file_extension=".java",
     ),
     ExampleSource(
-       github_url="https://github.com/algorand-devrel/algorand-teal-examples",
-       git_branch="master",
-       local_dir="../../algorand-teal-examples",
-       example_dir="_examples",
-       language_name="teal",
-       src_comment_flag="// example: ",
-       name="TEAL",
-       file_extension=".teal",
+        github_url="https://github.com/algorand-devrel/algorand-teal-examples",
+        git_branch="master",
+        local_dir="../../algorand-teal-examples",
+        example_dir="_examples",
+        language_name="teal",
+        src_comment_flag="// example: ",
+        name="TEAL",
+        file_extension=".teal",
     ),
     ExampleSource(
-       github_url="https://github.com/algorand/pyteal",
-       git_branch="master",
-       local_dir="../../pyteal",
-       example_dir="examples",
-       language_name="python",
-       src_comment_flag="# example: ",
-       name="PYTEAL",
-       file_extension=".py",
+        github_url="https://github.com/algorand/pyteal",
+        git_branch="master",
+        local_dir="../../pyteal",
+        example_dir="examples",
+        language_name="python",
+        src_comment_flag="# example: ",
+        name="PYTEAL",
+        file_extension=".py",
     ),
     ExampleSource(
-       github_url="https://github.com/algorand-devrel/beaker",
-       git_branch="master",
-       local_dir="../../beaker",
-       example_dir="examples",
-       language_name="python",
-       src_comment_flag="# example: ",
-       name="BEAKER",
-       file_extension=".py",
+        github_url="https://github.com/algorand-devrel/beaker",
+        git_branch="master",
+        local_dir="../../beaker",
+        example_dir="examples",
+        language_name="python",
+        src_comment_flag="# example: ",
+        name="BEAKER",
+        file_extension=".py",
     ),
 ]
 
@@ -167,11 +170,7 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
                         name_to_src[name] = Example(
                             path=path,
                             line_start=lno - len(local_example),
-                            lines=[
-                                "```" + lang,
-                                *local_example,
-                                "```",
-                            ],
+                            lines=local_example,
                             matches=0,
                         )
                         local_example = []
@@ -181,14 +180,16 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
     return name_to_src
 
 
-def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
+def replace_matches_in_docs(
+    dir: str, prefix: str, examples: SDKExamples, src: ExampleSource
+):
     """recursively search in directory for string prefix"""
     directory = os.listdir(dir)
     for fname in directory:
         path = os.path.join(dir, fname)
         if not os.path.isfile(path):
             # recurse through directories
-            replace_matches_in_docs(path, prefix, examples)
+            replace_matches_in_docs(path, prefix, examples, src)
             continue
         elif path[-2:] != "md":
             continue
@@ -233,13 +234,26 @@ def replace_matches_in_docs(dir: str, prefix: str, examples: SDKExamples):
                 )
                 continue
 
-            page_lines[match.line_start + offset : match.line_stop + offset] = examples[
-                match.name
-            ].lines
+            src_example = examples[match.name]
 
-            offset += len(examples[match.name].lines) - (
-                match.line_stop - match.line_start
+            example_link = (
+                src.file_url(src_example.path)
+                + f"#L{src_example.line_start}-"
+                + f"L{src_example.line_start + len(src_example.lines)}"
             )
+
+            example_lines = [
+                "```" + src.language_name,
+                *src_example.lines,
+                "```",
+                f"[Snippet Source]({example_link})"
+            ]
+
+            page_lines[
+                match.line_start + offset : match.line_stop + offset
+            ] = example_lines
+
+            offset += len(example_lines) - (match.line_stop - match.line_start)
 
             examples[match.name].matches += 1
 
@@ -287,17 +301,17 @@ if __name__ == "__main__":
         ensure_source(src)
 
         sdk_examples = find_examples_in_sdk(
-           src.example_path(),
-           src.src_comment_flag,
-           src.language_name,
-           src.file_extension,
+            src.example_path(),
+            src.src_comment_flag,
+            src.language_name,
+            src.file_extension,
         )
 
-        replace_matches_in_docs("../docs", src.doc_comment_flag(), sdk_examples)
+        replace_matches_in_docs("../docs", src.doc_comment_flag(), sdk_examples, src)
 
         for name, example in sdk_examples.items():
-           if example.matches == 0:
-               print(
-                   f"Missing {name} for {src.language_name} in docs "
-                   f"(in: {example.path}:{example.line_start})"
-               )
+            if example.matches == 0:
+                print(
+                    f"Missing {name} for {src.language_name} in docs "
+                    f"(in: {example.path}:{example.line_start})"
+                )

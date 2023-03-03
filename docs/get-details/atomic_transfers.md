@@ -65,6 +65,7 @@ txn_1 = transaction.PaymentTxn(addr1, suggested_params, addr2, 100000)
 txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
 
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L16-L22)
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Java"
@@ -81,6 +82,7 @@ txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
         Transaction ptxn2 = Transaction.PaymentTransactionBuilder().sender(acct2.getAddress())
                 .amount(2000000).receiver(acct1.getAddress()).suggestedParams(rsp.body()).build();
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L26-L36)
     <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Go"
@@ -143,6 +145,7 @@ txn_1.group = gid
 txn_2.group = gid
 
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L25-L36)
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
@@ -157,6 +160,7 @@ txn_2.group = gid
         ptxn1.group = gid;
         ptxn2.group = gid;
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L39-L47)
     <!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Go"
@@ -215,6 +219,7 @@ stxn_1 = txn_1.sign(sk1)
 stxn_2 = txn_2.sign(sk2)
 
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L39-L44)
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
@@ -222,6 +227,7 @@ stxn_2 = txn_2.sign(sk2)
 ```java
 
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L48-L49)
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Go"
@@ -275,6 +281,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 signed_group = [stxn_1, stxn_2]
 
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L47-L51)
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
@@ -283,6 +290,7 @@ signed_group = [stxn_1, stxn_2]
         // combine the signed transactions into a single list
         SignedTransaction[] stxns = new SignedTransaction[] { signedPtxn1, signedPtxn2 };
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L56-L58)
     <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Go"
@@ -332,6 +340,7 @@ result: Dict[str, Any] = transaction.wait_for_confirmation(
 print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L54-L64)
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"
@@ -349,6 +358,7 @@ print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
         PendingTransactionResponse txResult = Utils.waitForConfirmation(algodClient, txid, 4);
         System.out.printf("Transaction %s confirmed in round %d\n", txid, txResult.confirmedRound);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L61-L72)
     <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
 
 === "Go"

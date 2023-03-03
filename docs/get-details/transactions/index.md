@@ -779,6 +779,7 @@ suggested_params.fee = 2 * suggested_params.min_fee
 # treated as fee-per-byte of the encoded transaction
 suggested_params.flat_fee = True
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L68-L73)
 <!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Go"
@@ -799,6 +800,7 @@ suggested_params.flat_fee = True
                 // in the same group
                 .flatFee(2 * suggestedParams.body().minFee).build();
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L64)
 <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 

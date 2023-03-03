@@ -57,6 +57,7 @@ print(f"address: {address}")
 print(f"private key: {private_key}")
 print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L5-L9)
 <!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
 [`More Information`](../../get-details/accounts/create.md#standalone){target=_blank}  
@@ -91,6 +92,7 @@ special_algod_client = algod.AlgodClient(
     "", algod_address, headers={"X-API-Key": algod_token}
 )
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L10-L21)
 <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 
@@ -105,6 +107,7 @@ Before moving on to the next step, make sure your account has been funded by the
 account_info: Dict[str, Any] = algod_client.account_info(address)
 print(f"Account balance: {account_info.get('amount')} microAlgos")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L32-L34)
 <!-- ===PYSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 # Build First Transaction
@@ -123,6 +126,7 @@ unsigned_txn = transaction.PaymentTxn(
     note=b"Hello World",
 )
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L38-L48)
 <!-- ===PYSDK_TRANSACTION_PAYMENT_CREATE=== -->
 ​
 !!! Info
@@ -136,6 +140,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 # sign the transaction
 signed_txn = unsigned_txn.sign(private_key)
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L51-L53)
 <!-- ===PYSDK_TRANSACTION_PAYMENT_SIGN=== -->
 ​
 !!! Info
@@ -155,6 +160,7 @@ txn_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 print(f"Transaction information: {json.dumps(txn_result, indent=4)}")
 print(f"Decoded note: {b64decode(txn_result['txn']['txn']['note'])}")
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L56-L65)
 <!-- ===PYSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 
 

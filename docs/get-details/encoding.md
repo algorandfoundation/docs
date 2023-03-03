@@ -65,6 +65,7 @@ addr = encoding.encode_address(pk)
 
 assert addr == address
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L7-L12)
 <!-- ===PYSDK_CODEC_ADDRESS=== -->
 
 === "Go"
@@ -92,6 +93,7 @@ assert addr == address
         Address addrAgain = new Address(addr.getBytes());
         assert addrAgain.equals(addr);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L25-L31)
 <!-- ===JAVASDK_CODEC_ADDRESS=== -->
 
 ### Byte Arrays
@@ -117,6 +119,7 @@ encoded_str = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
 decoded_str = base64.b64decode(encoded_str).decode("utf-8")
 print(decoded_str)
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L15-L18)
 <!-- ===PYSDK_CODEC_BASE64=== -->
 
 === "Go"
@@ -139,6 +142,7 @@ print(decoded_str)
         String reEncodedStr = Encoder.encodeToBase64(decodedBytes);
         assert encodedStr.equals(reEncodedStr);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L34-L38)
 <!-- ===JAVASDK_CODEC_BASE64=== -->
 
 ### Integers
@@ -169,6 +173,7 @@ encoded_uint = val.to_bytes(8, "big")
 decoded_uint = int.from_bytes(encoded_uint, byteorder="big")
 assert decoded_uint == val
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L21-L25)
 <!-- ===PYSDK_CODEC_UINT64=== -->
 
 === "Go"
@@ -195,6 +200,7 @@ assert decoded_uint == val
         BigInteger decodedVal = Encoder.decodeUint64(encodedVal);
         assert val.equals(decodedVal);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L41-L45)
 <!-- ===JAVASDK_CODEC_UINT64=== -->
 
 
@@ -258,6 +264,7 @@ with open("pay.txn", "r") as f:
 
 print(recovered_txn.dictify())
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L31-L43)
 <!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 ```python
@@ -273,6 +280,7 @@ with open("signed_pay.txn", "r") as f:
 
 print(recovered_signed_txn.dictify())
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L48-L59)
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
@@ -339,6 +347,7 @@ print(recovered_signed_txn.dictify())
         Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
         assert decodedTxn.equals(ptxn);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 ```java
@@ -349,6 +358,7 @@ print(recovered_signed_txn.dictify())
                 SignedTransaction.class);
         assert decodedSignedTransaction.equals(signedTxn);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 
@@ -361,6 +371,7 @@ One type that commonly needs to be decoded are the blocks themselves. Since some
 <!-- ===PYSDK_CODEC_BLOCK=== -->
 ```python
 ```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L65-L65)
 <!-- ===PYSDK_CODEC_BLOCK=== -->
 
 === "JavaScript"
