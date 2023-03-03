@@ -144,13 +144,14 @@ global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 
 === "Java"
     <!-- ===JAVASDK_APP_SCHEMA=== -->
-	```Java
-    // declare application state storage (immutable)
-    int localInts = 1;
-    int localBytes = 1;
-    int globalInts = 1;
-    int globalBytes = 0;
-    ```
+```java
+        int localInts = 1;
+        int localBytes = 1;
+        int globalInts = 1;
+        int globalBytes = 0;
+        StateSchema localSchema = new StateSchema(localInts, localBytes);
+        StateSchema globalSchema = new StateSchema(globalInts, globalBytes);
+```
     <!-- ===JAVASDK_APP_SCHEMA=== -->
 
 === "Go"
@@ -204,11 +205,11 @@ with open("application/clear.teal", "r") as f:
 
 === "Java"
     <!-- ===JAVASDK_APP_SOURCE=== -->
-	```Java
-    // declare clear state program source
-    String clearProgramSource = "#pragma version 4\n" +
-    "int 1\n";
-    ```
+```java
+        // Read in the `teal` source files as a string
+        String approvalSource = Files.readString(Paths.get("application/approval.teal"));
+        String clearSource = Files.readString(Paths.get("application/clear.teal"));
+```
     <!-- ===JAVASDK_APP_SOURCE=== -->
 
 === "Go"
@@ -309,19 +310,15 @@ clear_binary = base64.b64decode(clear_result["result"])
 
 === "Java"
     <!-- ===JAVASDK_APP_COMPILE=== -->
-	```Java
-    // helper function to compile program source
-    public String compileProgram(AlgodClient client, byte[] programSource) {
-        Response<CompileResponse> compileResponse = null;
-        try {
-            compileResponse = client.TealCompile().source(programSource).execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(compileResponse.body().result);
-        return compileResponse.body().result;
-    }
-    ```
+```java
+        CompileResponse approvalResponse = algodClient.TealCompile().source(approvalSource.getBytes()).execute()
+                .body();
+        CompileResponse clearResponse = algodClient.TealCompile().source(clearSource.getBytes()).execute()
+                .body();
+
+        TEALProgram approvalProg = new TEALProgram(approvalResponse.result);
+        TEALProgram clearProg = new TEALProgram(clearResponse.result);
+```
     <!-- ===JAVASDK_APP_COMPILE=== -->
 
 === "Go"
@@ -394,35 +391,27 @@ print(f"Created app with id: {app_id}")
 
 === "Java"
     <!-- ===JAVASDK_APP_CREATE=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationCreateTransactionBuilder()
-                        .sender(sender)
-                        .suggestedParams(params)
-                        .approvalProgram(approvalProgramSource)
-                        .clearStateProgram(clearProgramSource)
-                        .globalStateSchema(new StateSchema(globalInts, globalBytes))
-                        .localStateSchema(new StateSchema(localInts, localBytes))
-                        .build();
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
 
-    // sign transaction
-    SignedTransaction signedTxn = creator.signTransaction(txn);
-    System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
+        Transaction appCreate = ApplicationCreateTransactionBuilder.Builder()
+                .sender(creator.getAddress())
+                .suggestedParams(sp)
+                .approvalProgram(approvalProg)
+                .clearStateProgram(clearProg)
+                .localStateSchema(localSchema)
+                .globalStateSchema(globalSchema)
+                .build();
 
-    // send to network
-    byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-    String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
-    System.out.println("Successfully sent tx with ID: " + id);
+        SignedTransaction signedAppCreate = creator.signTransaction(appCreate);
+        Response<PostTransactionsResponse> createResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedAppCreate)).execute();
 
-    // Wait for transaction confirmation
-    PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-    System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    Long appId = pTrx.applicationIndex;
-    System.out.println("Created new app-id: " + appId);    
-    ```
+        PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, createResponse.body().txId, 4);
+        Long appId = result.applicationIndex;
+        System.out.printf("Created application with id: %d\n", appId);
+```
     <!-- ===JAVASDK_APP_CREATE=== -->
 
 === "Go"
@@ -527,21 +516,20 @@ assert optin_result["confirmed-round"] > 0
 
 === "Java"
     <!-- ===JAVASDK_APP_OPTIN=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationOptInTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .build();
+```java
+        Transaction optInTxn = ApplicationOptInTransactionBuilder.Builder()
+                .sender(user.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .build();
 
-    //... sign, send, wait
-    
+        SignedTransaction signedOptIn = user.signTransaction(optInTxn);
+        Response<PostTransactionsResponse> optInResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedOptIn)).execute();
 
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("OptIn to app-id: " + pTrx.txn.tx.applicationId);       
-    ```
+        PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient, optInResponse.body().txId, 4);
+        assert optInResult.confirmedRound > 0;
+```
     <!-- ===JAVASDK_APP_OPTIN=== -->
 
 === "Go"
@@ -601,27 +589,20 @@ assert noop_result["confirmed-round"] > 0
 
 === "Java"
     <!-- ===JAVASDK_APP_NOOP=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationCallTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .args(appArgs)
-                            .build();
+```java
+        Transaction noopTxn = ApplicationCallTransactionBuilder.Builder()
+                .sender(user.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .build();
 
-    // sign, send, await 
+        SignedTransaction signedNoop = user.signTransaction(noopTxn);
+        Response<PostTransactionsResponse> noopResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedNoop)).execute();
 
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("Called app-id: " + pTrx.txn.tx.applicationId);
-    if (pTrx.globalStateDelta != null) {
-        System.out.println("    Global state: " + pTrx.globalStateDelta.toString());
-    }
-    if (pTrx.localStateDelta != null) {
-        System.out.println("    Local state: " + pTrx.localStateDelta.toString());
-    }
-    ```
+        PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId, 4);
+        assert noopResult.confirmedRound > 0;
+```
     <!-- ===JAVASDK_APP_NOOP=== -->
 
 === "Go"
@@ -684,27 +665,8 @@ print(acct_info["app-local-state"]["key-value"])
 
 === "Java"
     <!-- ===JAVASDK_APP_READ_STATE=== -->
-	```Java
-    public void readLocalState(AlgodClient client, Account account, Long appId) throws Exception {
-        Response<com.algorand.algosdk.v2.client.model.Account> acctResponse = client.AccountInformation(account.getAddress()).execute();
-        List<ApplicationLocalState> applicationLocalState = acctResponse.body().appsLocalState;
-        for (int i = 0; i < applicationLocalState.size(); i++) { 
-            if (applicationLocalState.get(i).id.equals(appId)) {
-                System.out.println("User's application local state: " + applicationLocalState.get(i).keyValue.toString());
-            }
-        }
-    }
-
-    public void readGlobalState(AlgodClient client, Long appId) throws Exception {
-        Response<com.algorand.algosdk.v2.client.model.Application> appResponse = client.GetApplicationByID(appId).execute();
-        List<TealKeyValue> globalState= appResponse.body().params.globalState;
-        if(!globalState.isEmpty()){
-            for (int i = 0; i < globalState.size(); i++) {
-                System.out.println("Application global state: " + globalState.get(i).toString());
-            }
-        }
-    }
-    ```
+```java
+```
     <!-- ===JAVASDK_APP_READ_STATE=== -->
 
 === "Go"
@@ -789,22 +751,27 @@ assert update_result["confirmed-round"] > 0
 
 === "Java"
     <!-- ===JAVASDK_APP_UPDATE=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationUpdateTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .approvalProgram(approvalProgramSource)
-                            .clearStateProgram(clearProgramSource)
-                            .build();
+```java
+        String approvalSourceUpdated = Files.readString(Paths.get("application/approval_refactored.teal"));
+        CompileResponse approvalUpdatedResponse = algodClient.TealCompile().source(approvalSourceUpdated.getBytes())
+                .execute()
+                .body();
+        TEALProgram approvalProgUpdated = new TEALProgram(approvalUpdatedResponse.result);
 
-    // sign, send, await
+        Transaction appUpdate = ApplicationUpdateTransactionBuilder.Builder()
+                .sender(creator.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .approvalProgram(approvalProgUpdated)
+                .clearStateProgram(clearProg)
+                .build();
 
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("Updated new app-id: " + appId);    
-    ```
+        SignedTransaction signedAppUpdate = creator.signTransaction(appUpdate);
+        Response<PostTransactionsResponse> updateResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedAppUpdate)).execute();
+        PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient, updateResponse.body().txId, 4);
+        assert updateResult.confirmedRound > 0;
+```
     <!-- ===JAVASDK_APP_UPDATE=== -->
 
 === "Go"
@@ -879,34 +846,36 @@ if "local-state-delta" in call_result:
 
 === "Java"
     <!-- ===JAVASDK_APP_CALL=== -->
-	```Java
-    // call application with arguments
-    SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
-    Date date = new Date(System.currentTimeMillis());
-    System.out.println(formatter.format(date));
-    List<byte[]> appArgs = new ArrayList<byte[]>();
-    appArgs.add(formatter.format(date).toString().getBytes("UTF8"));  
+```java
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
 
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationCallTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .args(appArgs)
-                            .build();
+        List<byte[]> appArgs = new ArrayList<byte[]>();
+        appArgs.add(formatter.format(date).toString().getBytes());
 
-    // sign, send, await
+        // create unsigned transaction
+        Transaction callTransaction = ApplicationCallTransactionBuilder.Builder()
+                .sender(user.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .args(appArgs)
+                .build();
 
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("Called app-id: " + pTrx.txn.tx.applicationId);
-    if (pTrx.globalStateDelta != null) {
-        System.out.println("    Global state: " + pTrx.globalStateDelta.toString());
-    }
-    if (pTrx.localStateDelta != null) {
-        System.out.println("    Local state: " + pTrx.localStateDelta.toString());
-    }
-    ```
+        SignedTransaction signedCallTransaction = user.signTransaction(callTransaction);
+        Response<PostTransactionsResponse> callResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedCallTransaction)).execute();
+
+        PendingTransactionResponse callResult = Utils.waitForConfirmation(algodClient, callResponse.body().txId, 4);
+        assert callResult.confirmedRound > 0;
+        // display results
+        if (callResult.globalStateDelta != null) {
+            System.out.printf("\tGlobal state: %s\n", callResult.globalStateDelta);
+        }
+
+        if (callResult.localStateDelta != null) {
+            System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
+        }
+```
     <!-- ===JAVASDK_APP_CALL=== -->
 
 === "Go"
@@ -964,20 +933,21 @@ assert optin_result["confirmed-round"] > 0
 
 === "Java"
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationCloseTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .build();
+```java
+        Transaction closeOutTxn = ApplicationCloseTransactionBuilder.Builder()
+                .sender(user.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .build();
 
-    // sign, send, await 
+        SignedTransaction signedCloseOut = user.signTransaction(closeOutTxn);
+        Response<PostTransactionsResponse> closeOutResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedCloseOut)).execute();
 
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("Closed out from app-id: " + appId);  
-    ```
+        PendingTransactionResponse closeOutResult = Utils.waitForConfirmation(algodClient, closeOutResponse.body().txId,
+                4);
+        assert closeOutResult.confirmedRound > 0;
+```
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 
 === "Go"
@@ -1026,20 +996,19 @@ assert optin_result["confirmed-round"] > 0
 
 === "Java"
     <!-- ===JAVASDK_APP_DELETE=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationDeleteTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .build();
+```java
+        Transaction appDelete = ApplicationDeleteTransactionBuilder.Builder()
+                .sender(creator.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .build();
 
-    // sign, send, await
-
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("Deleted app-id: " + appId);
-    ```
+        SignedTransaction signedAppDelete = creator.signTransaction(appDelete);
+        Response<PostTransactionsResponse> deleteResponse = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedAppDelete)).execute();
+        PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient, deleteResponse.body().txId, 4);
+        assert deleteResult.confirmedRound > 0;
+```
     <!-- ===JAVASDK_APP_DELETE=== -->
 
 === "Go"
@@ -1085,20 +1054,16 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 
 === "Java"
     <!-- ===JAVASDK_APP_CLEAR=== -->
-	```Java
-    // create unsigned transaction
-    Transaction txn = Transaction.ApplicationClearTransactionBuilder()
-                            .sender(sender)
-                            .suggestedParams(params)
-                            .applicationId(appId)
-                            .build();
+```java
+        Transaction clearTxn = ApplicationClearTransactionBuilder.Builder()
+                .sender(user.getAddress())
+                .suggestedParams(sp)
+                .applicationId(appId)
+                .build();
 
-    // sign, send, await
-
-    // display results
-    PendingTransactionResponse pTrx = client.PendingTransactionInformation(id).execute().body();
-    System.out.println("Cleared local state for app-id: " + appId);   
-    ```
+        SignedTransaction signedClear = user.signTransaction(clearTxn);
+        // ... sign, send, wait
+```
     <!-- ===JAVASDK_APP_CLEAR=== -->
 
 === "Go"
