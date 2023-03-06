@@ -364,7 +364,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
     <!-- ===JSSDK_ASSET_CONFIG=== -->
 
 === "Python"
-    <!-- ===PYDK_ASSET_CONFIG=== -->
+    <!-- ===PYSDK_ASSET_CONFIG=== -->
 	``` python  
     # CHANGE MANAGER
     # The current manager(Account 2) issues an asset configuration transaction that assigns Account 1 as the new manager.
@@ -399,7 +399,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
     # Check asset info to view change in management. manager should now be account 1
     print_created_asset(algod_client, accounts[1]['pk'], asset_id)
     ```
-    <!-- ===PYDK_ASSET_CONFIG=== -->
+    <!-- ===PYSDK_ASSET_CONFIG=== -->
 
 === "Java"
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
@@ -1061,10 +1061,10 @@ assert matching_asset["amount"] == 0
 assert matching_asset["is-frozen"] is True
 ```
 [Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L135-L160)
-    <!-- ===PYSDK_ASSET_CLAWBACK== -->
+    <!-- ===PYSDK_ASSET_CLAWBACK=== -->
 
 === "Java"
-    <!-- ===JAVASDK_ASSET_CLAWBACK== -->
+    <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 ```java
         Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
         TransactionParametersResponse sp = rsp.body();

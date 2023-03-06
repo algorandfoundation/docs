@@ -951,6 +951,9 @@ atc.add_method_call(
     ```
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 
+=== "Java"
+    <!-- ===JAVASDK_ATC_BOX_REF=== -->
+    <!-- ===JAVASDK_ATC_BOX_REF=== -->
 
 === "Beaker"
     ```py

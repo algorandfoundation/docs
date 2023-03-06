@@ -12,6 +12,10 @@ Registering an account online requires authorizing a [key registration transacti
 Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../get-details/transactions/offline_transactions.md#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register online transaction example](../../get-details/transactions/index.md#register-account-online). 
 
 
+=== "JavaScript"
+    <!-- ===JSSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+    <!-- ===JSSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+
 === "Python"
     <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 ```python

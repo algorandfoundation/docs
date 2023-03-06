@@ -349,7 +349,7 @@ for res in result.abi_results:
     <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
-    <!-- ===JSDK_ATC_RESULTS=== -->
+    <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:
     // const txgroup = atc.buildGroup()
@@ -360,7 +360,7 @@ for res in result.abi_results:
         console.log(result.methodResults[idx])
     }
     ```
-    <!-- ===JSDK_ATC_RESULTS=== -->
+    <!-- ===JSSDK_ATC_RESULTS=== -->
 
 === "Go"
     <!-- ===GOSDK_ATC_RESULTS=== -->

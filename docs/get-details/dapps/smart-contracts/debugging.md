@@ -151,7 +151,7 @@ with open("dryrun.msgp", "wb") as f:
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Java"
-    <!-- ===JAVADK_DEBUG_DRYRUN_DUMP=== -->
+    <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
     ```java
 
     Transaction app_txn = ApplicationCallTransactionBuilder.Builder().sender(addr)
@@ -169,7 +169,7 @@ with open("dryrun.msgp", "wb") as f:
     outfile.close();
 
     ```
-    <!-- ===JAVADK_DEBUG_DRYRUN_DUMP=== -->
+    <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
     <!-- ===GOAL_DEBUG_DRYRUN_DUMP=== -->
@@ -298,6 +298,10 @@ for txn in drr.txns:
     // Inspect the response to check result 
     ```
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
+
+=== "Java"
+    <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
+    <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 
 === "Shell"

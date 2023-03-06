@@ -359,7 +359,7 @@ int 123
 ```
 
 === "JavaScript"
-    <!-- ===JSSDK_LSIG_SIGN=== -->
+    <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
 	```javascript
     const algosdk = require('algosdk');
     // const token = "<algod-token>";
