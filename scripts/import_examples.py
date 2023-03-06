@@ -123,10 +123,10 @@ sources: list[ExampleSource] = [
         file_extension=".teal",
     ),
     ExampleSource(
-        github_url="https://github.com/algorand/pyteal",
-        git_branch="master",
+        github_url="https://github.com/barnjamin/pyteal",
+        git_branch="examples-for-docs",
         local_dir="../../pyteal",
-        example_dir="examples",
+        example_dir="_examples",
         language_name="python",
         src_comment_flag="# example: ",
         name="PYTEAL",

@@ -90,21 +90,23 @@ To fund this account, any other account in the Algorand network can send algos t
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_PAYMENT=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.Payment,
-        TxnField.amount: Int(5000),
-        TxnField.receiver: Txn.sender()
-    }),
-    InnerTxnBuilder.Submit(),
-    #...
-
-    # The `Sender` for the above is implied to be Global.current_application_address(). 
-    # If a different sender is needed, it'd have to be an account that has been rekeyed to 
-    # the application address.
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.Payment,
+                TxnField.amount: Int(5000),
+                TxnField.receiver: Txn.sender(),
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+        # The `Sender` for the above is implied to be Global.current_application_address().
+        # If a different sender is needed, it'd have to be an account that has been rekeyed to
+        # the application address.
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L8-L22)
 <!-- ===PYTEAL_ITXN_PAYMENT=== -->
 
 === "TEAL"
@@ -141,18 +143,21 @@ If a smart contract wishes to transfer an asset it holds or needs to opt into an
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_ASSET_TRANSFER=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.AssetTransfer,
-        TxnField.asset_receiver: Txn.sender(),
-        TxnField.asset_amount: Int(1000),
-        TxnField.xfer_asset: Txn.assets[0], # Must be in the assets array sent as part of the application call
-    }),
-    InnerTxnBuilder.Submit(),
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.AssetTransfer,
+                TxnField.asset_amount: Int(5000),
+                TxnField.asset_receiver: Txn.sender(),
+                TxnField.xfer_asset: Txn.assets[0],
+            }
+        ),
+        # ...
+        InnerTxnBuilder.Submit(),
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L30-L42)
 <!-- ===PYTEAL_ITXN_ASSET_TRANSFER=== -->
 
 === "TEAL"
@@ -184,18 +189,21 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_ASSET_FREEZE=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.AssetFreeze,
-        TxnField.freeze_asset: Txn.assets[0], 
-        TxnField.freeze_asset_account: Txn.accounts[1],
-        TxnField.freeze_asset_frozen: Int(1)
-    }),
-    InnerTxnBuilder.Submit(),
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.AssetFreeze,
+                TxnField.freeze_asset: Txn.assets[0],
+                TxnField.freeze_asset_account: Txn.accounts[1],
+                TxnField.freeze_asset_frozen: Int(1),
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L50-L62)
 <!-- ===PYTEAL_ITXN_ASSET_FREEZE=== -->
 
 === "TEAL"
@@ -229,19 +237,23 @@ A smart contract can revoke or clawback any asset where the smart contract addre
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_ASSET_REVOKE=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.AssetTransfer,
-        TxnField.asset_receiver: Global.current_application_address(),  
-        # AssetSender is _only_ used in the case of clawback, Sender is implied to be current_application_address
-        TxnField.asset_sender: Txn.accounts[1],         
-        TxnField.asset_amount: Int(1000)
-    }),
-    InnerTxnBuilder.Submit(),
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.AssetTransfer,
+                TxnField.asset_receiver: Global.current_application_address(),
+                # AssetSender is _only_ used in the case of clawback
+                # Sender is implied to be current_application_address
+                TxnField.asset_sender: Txn.accounts[1],
+                TxnField.asset_amount: Int(1000),
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L70-L84)
 <!-- ===PYTEAL_ITXN_ASSET_REVOKE=== -->
 
 === "TEAL"
@@ -278,25 +290,27 @@ Assets can also be created by a smart contract. To create an asset with an inner
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_ASSET_CREATE=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.AssetConfig,
-        TxnField.config_asset_total: Int(1000000),
-        TxnField.config_asset_decimals: Int(3),
-        TxnField.config_asset_unit_name: Bytes("oz"),
-        TxnField.config_asset_name: Bytes("Gold"),
-        TxnField.config_asset_url: Bytes("https://gold.rush"),
-        TxnField.config_asset_manager: Global.current_application_address(),
-        TxnField.config_asset_reserve: Global.current_application_address(),
-        TxnField.config_asset_freeze: Global.current_application_address(),
-        TxnField.config_asset_clawback: Global.current_application_address()
-    }),
-    InnerTxnBuilder.Submit(),
-    # InnerTxn.created_asset_id() would represent the asset id that was just created
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.AssetConfig,
+                TxnField.config_asset_total: Int(1000000),
+                TxnField.config_asset_decimals: Int(3),
+                TxnField.config_asset_unit_name: Bytes("oz"),
+                TxnField.config_asset_name: Bytes("Gold"),
+                TxnField.config_asset_url: Bytes("https://gold.rush"),
+                TxnField.config_asset_manager: Global.current_application_address(),
+                TxnField.config_asset_reserve: Global.current_application_address(),
+                TxnField.config_asset_freeze: Global.current_application_address(),
+                TxnField.config_asset_clawback: Global.current_application_address(),
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L92-L110)
 <!-- ===PYTEAL_ITXN_ASSET_CREATE=== -->
 
 === "TEAL"
@@ -337,20 +351,23 @@ As with all assets, the mutable addresses can be changed. For example to change 
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_ASSET_CONFIG=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.AssetConfig,
-        TxnField.config_asset: Txn.assets[0],
-        TxnField.config_asset_manager: Txn.sender(),
-        TxnField.config_asset_reserve: Txn.sender(),
-        TxnField.config_asset_freeze: Txn.sender(),
-        TxnField.config_asset_clawback: Txn.sender()
-    }),
-    InnerTxnBuilder.Submit(),
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.AssetConfig,
+                TxnField.config_asset: Txn.assets[0],
+                TxnField.config_asset_manager: Txn.sender(),
+                TxnField.config_asset_reserve: Txn.sender(),
+                TxnField.config_asset_freeze: Txn.sender(),
+                TxnField.config_asset_clawback: Txn.sender(),
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L118-L132)
 <!-- ===PYTEAL_ITXN_ASSET_CONFIG=== -->
 
 === "TEAL"
@@ -382,16 +399,19 @@ Assets managed by the contract can also be deleted. This can be done with the fo
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_ASSET_DESTROY=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.AssetConfig,
-        TxnField.config_asset: Txn.assets[0]
-    }),
-    InnerTxnBuilder.Submit(),
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.AssetConfig,
+                TxnField.config_asset: Txn.assets[0],
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L140-L150)
 <!-- ===PYTEAL_ITXN_ASSET_DESTROY=== -->
 
 === "TEAL"
@@ -415,27 +435,34 @@ A smart contract can make inner transactions consisting of grouped transactions.
 
 === "PyTeal"
 <!-- ===PYTEAL_GROUPED_ITXN=== -->
-    ```py
-    # This returns a `MaybeValue`, see pyteal docs
-    addr = AppParam.address(Int(1234))
-
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.Payment,
-        TxnField.receiver: addr.value(),
-        TxnField.amount: Int(1000000)
-    })
-    InnerTxnBuilder.Next(), # This indicates we're moving to constructing the next txn in the group
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.ApplicationCall,
-        TxnField.application_id: Int(1234),
-        TxnField.on_completion: OnComplete.NoOp,
-        TxnField.application_args: [Bytes("buy")]
-    })
-    InnerTxnBuilder.Submit()
-    #...
-    ```
+```python
+        # This returns a `MaybeValue`, see pyteal docs
+        addr := AppParam.address(Int(1234)),
+        Assert(addr.hasValue()),
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.Payment,
+                TxnField.receiver: addr.value(),
+                TxnField.amount: Int(1000000),
+            }
+        ),
+        InnerTxnBuilder.Next(),  # This indicates we're moving to constructing the next txn in the group
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.ApplicationCall,
+                TxnField.application_id: Int(1234),
+                TxnField.on_completion: OnComplete.NoOp,
+                # Note this is _not_ using the ABI to call the
+                # method in the other app
+                TxnField.application_args: [Bytes("buy")],
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L158-L183)
 <!-- ===PYTEAL_GROUPED_ITXN=== -->
 
 === "TEAL"
@@ -488,17 +515,20 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
 
 === "PyTeal"
 <!-- ===PYTEAL_ITXN_C2C=== -->
-    ```py
-    #...
-    InnerTxnBuilder.Begin(),
-    InnerTxnBuilder.SetFields({
-        TxnField.type_enum: TxnType.ApplicationCall,
-        TxnField.application_id: Int(1234),
-        TxnField.on_complete: OnComplete.NoOp,
-    })
-    InnerTxnBuilder.Submit()
-    #...
-    ```
+```python
+        # ...
+        InnerTxnBuilder.Begin(),
+        InnerTxnBuilder.SetFields(
+            {
+                TxnField.type_enum: TxnType.ApplicationCall,
+                TxnField.application_id: Int(1234),
+                TxnField.on_completion: OnComplete.NoOp,
+            }
+        ),
+        InnerTxnBuilder.Submit(),
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L191-L202)
 <!-- ===PYTEAL_ITXN_C2C=== -->
 
 === "TEAL"
@@ -609,10 +639,11 @@ To write to either local or global state, the opcodes `app_global_put` and `app_
 
 === "PyTeal"
 <!-- ===PYTEAL_WRITE_GLOBAL_STATE=== -->
-    ```py
+```python
     program = App.globalPut(Bytes("Mykey"), Int(50))
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L5-L7)
 <!-- ===PYTEAL_WRITE_GLOBAL_STATE=== -->
 
 === "TEAL"
@@ -627,22 +658,23 @@ app_global_put
 To store a value in local storage, the following TEAL can be used.
 
 === "PyTeal"
-<!-- ===PYTEAL_WRITE_OWN_LOCAL_STATE=== -->
-    ```py
+<!-- ===PYTEAL_WRITE_SENDER_LOCAL_STATE=== -->
+```python
     program = App.localPut(Int(0), Bytes("MyLocalKey"), Int(50))
     print(compileTeal(program, Mode.Application))
-    ```
-<!-- ===PYTEAL_WRITE_OWN_LOCAL_STATE=== -->
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L12-L14)
+<!-- ===PYTEAL_WRITE_SENDER_LOCAL_STATE=== -->
 
 === "TEAL"
-<!-- ===TEAL_WRITE_OWN_LOCAL_STATE=== -->
+<!-- ===TEAL_WRITE_SENDER_LOCAL_STATE=== -->
 ```teal
 int 0
 byte "OwnLocalKey"
 int 1337
 app_local_put
 ```
-<!-- ===TEAL_WRITE_OWN_LOCAL_STATE=== -->
+<!-- ===TEAL_WRITE_SENDER_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. With `goal` you can pass additional accounts using the `--app-account` option. The address can be also be specified instead of the index. If using an address, it still must exist in the accounts array.
 
@@ -654,10 +686,11 @@ To store a value into account2, the TEAL would be as follows.
 
 === "PyTeal"
 <!-- ===PYTEAL_WRITE_OTHER_LOCAL_STATE=== -->
-    ```python
+```python
     program = App.localPut(Int(2), Bytes("MyLocalKey"), Int(50))
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L19-L21)
 <!-- ===PYTEAL_WRITE_OTHER_LOCAL_STATE=== -->
 
 === "TEAL"
@@ -681,10 +714,11 @@ TEAL provides calls to read global and local state values for the current smart 
 
 === "PyTeal"
 <!-- ===PYTEAL_READ_GLOBAL_STATE=== -->
-    ```py
+```python
     program = App.globalGet(Bytes("MyGlobalKey"))
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L26-L28)
 <!-- ===PYTEAL_READ_GLOBAL_STATE=== -->
 
 === "TEAL"
@@ -701,10 +735,11 @@ The following TEAL code reads the local state of the sender account for the spec
 
 === "PyTeal"
 <!-- ===PYTEAL_READ_LOCAL_STATE=== -->
-    ```py
+```python
     program = App.localGet(Int(0), Bytes("MyLocalKey"))
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L33-L35)
 <!-- ===PYTEAL_READ_LOCAL_STATE=== -->
 
 === "TEAL"
@@ -723,22 +758,23 @@ In this example, the `int 0` represents the sender of the transaction. This is a
 The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following TEAL should be used.
 
 === "PyTeal"
-<!-- ===PYTEAL_READ_OWN_LOCAL_STATE_EX=== -->
-    ```py
+<!-- ===PYTEAL_READ_SENDER_LOCAL_STATE_EX=== -->
+```python
     program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
     print(compileTeal(program, Mode.Application))
-    ```
-<!-- ===PYTEAL_READ_OWN_LOCAL_STATE_EX=== -->
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L40-L42)
+<!-- ===PYTEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 
 === "TEAL"
-<!-- ===TEAL_READ_OWN_LOCAL_STATE_EX=== -->
+<!-- ===TEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 ```teal
 int 0
 txn ApplicationID
 byte "OwnLocalState"
 app_local_get_ex
 ```
-<!-- ===TEAL_READ_OWN_LOCAL_STATE_EX=== -->
+<!-- ===TEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 
 !!! note
     The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
@@ -747,21 +783,24 @@ The `int 0` is the index into the accounts array. The actual address could also 
 
 === "PyTeal"
 <!-- ===PYTEAL_READ_LOCAL_STATE_EX=== -->
-    ```py
-    get_amount_given = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
+```python
+    get_amount_given = App.localGetEx(
+        Int(0), Txn.application_id(), Bytes("MyAmountGiven")
+    )
 
     # Change these to appropriate logic for new and previous givers.
     new_giver_logic = Seq(Return(Int(1)))
 
-    previous_giver_logic = Seq(Return(Int(1))) 
+    previous_giver_logic = Seq(Return(Int(1)))
 
     program = Seq(
-        get_amount_given, 
+        get_amount_given,
         If(get_amount_given.hasValue(), previous_giver_logic, new_giver_logic),
     )
 
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L47-L62)
 <!-- ===PYTEAL_READ_LOCAL_STATE_EX=== -->
 
 === "TEAL"
@@ -789,19 +828,20 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 
 === "PyTeal"
 <!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
-    ```py
+```python
     get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
 
     # Update with appropriate logic for use case
     increment_existing = Seq(Return(Int(1)))
 
-    program = Seq( 
-        get_global_key, 
+    program = Seq(
+        get_global_key,
         If(get_global_key.hasValue(), increment_existing, Return(Int(1))),
     )
 
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L67-L78)
 <!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
 
 === "TEAL"
@@ -941,13 +981,16 @@ box_put
 
 === "PyTeal"
 <!-- ===PYTEAL_BOX_CREATE=== -->
-    ```py
-    # 100 byte box created with box_create
-    App.box_create(“MyKey”,Int(100))
-    …
-    # box created with box_put
-    App.box_put(“MyKey”, “My data values”)
-    ```
+```python
+        # ...
+        # box created with box_create, size 100 bytes
+        App.box_create(Bytes("MyKey"), Int(100)),
+        # OR box created with box_put, size is implicitly the
+        # length of bytes written
+        App.box_put(Bytes("MyKey"), Bytes("My data values"))
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/box.py#L6-L13)
 <!-- ===PYTEAL_BOX_CREATE=== -->
 
 Box names must be unique within an application. If using `box_create`, and an existing box name is passed with a different size, the creation will fail. If an existing box name is used with the existing size, the call will return a 0 without modifying the box contents. When creating a new box the call will return a 1. When using `box_put` with an existing key name, the put will fail if the size of the second argument (data array) is different from the original box size. 
@@ -1001,14 +1044,13 @@ assert //verify that the read occurred and we have a value
 
 === "PyTeal"
 <!-- ===PYTEAL_BOX_GET=== -->
-    ```py
-            return Seq(
-                App.box_put(Bytes("Cnt"), val.encode()),
-                boxint :=  App.box_get(Bytes("Cnt")),
-                Assert(boxint.hasValue()),
-                output.decode(boxint.value()),
-            )
-    ```
+```python
+        boxval := App.box_get(Bytes("MyKey")),
+        Assert(boxval.hasValue()),
+        # do something with boxval.value()
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/box.py#L21-L25)
 <!-- ===PYTEAL_BOX_GET=== -->
 
 Note that when using either opcode to read the contents of a box, the AVM is limited to reading no more than 4kb at a time. This is because the stack is limited to 4kb entries. For larger boxes, the `box_extract` opcode should be used to perform multiple reads to retrieve the entire contents.
@@ -1036,12 +1078,16 @@ assert
 
 === "PyTeal"
 <!-- ===PYTEAL_BOX_EXTRACT=== -->
-    ```py
-            return Seq(
-                App.box_put(Bytes("BoxA"), Bytes("this is a test of a very very very very long string")),
-                output.set(App.box_extract(Bytes("BoxA"), Int(5), Int(9))),
-            ) 
-    ```
+```python
+        # ...
+        App.box_put(
+            Bytes("BoxA"), Bytes("this is a test of a very very very very long string")
+        ),
+        scratchVar.store(App.box_extract(Bytes("BoxA"), Int(5), Int(9))),
+        Assert(scratchVar.load() == Bytes("is a test"))
+        # ...
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/box.py#L33-L40)
 <!-- ===PYTEAL_BOX_EXTRACT=== -->
 
 ## Getting a Box Length
@@ -1066,15 +1112,18 @@ assert
 
 === "PyTeal"
 <!-- ===PYTEAL_BOX_LEN=== -->
-    ```py
-            return Seq(
-                App.box_put(Bytes("BoxA"), Bytes("this is a test of a very very very very long string")),
-                bt := App.box_length(Bytes("BoxA")),
-                Assert(bt.hasValue()),
-                output.set(bt.value()),
-            ) 
-
-    ```
+```python
+        App.box_put(
+            Bytes("BoxA"), Bytes("this is a test of a very very very very long string")
+        ),
+        # box length is equal to the size of the box created
+        # not a measure of how many bytes have been _written_
+        # by the smart contract
+        bt := App.box_length(Bytes("BoxA")),
+        Assert(bt.hasValue()),
+        Assert(bt.value() == 51),
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/box.py#L47-L56)
 <!-- ===PYTEAL_BOX_LEN=== -->
 
 ## Deleting a Box
@@ -1096,12 +1145,15 @@ bnz existed
 
 === "PyTeal"
 <!-- ===PYTEAL_BOX_DELETE=== -->
-    ```py
-            return Seq(
-                App.box_put(Bytes("BoxA"), Bytes("this is a test of a very very very very long string")),
-                output.set(App.box_delete(Bytes("BoxA"))),
-            ) 
-    ```
+```python
+        App.box_put(
+            Bytes("BoxA"), Bytes("this is a test of a very very very very long string")
+        ),
+        # Box delete returns a 1/0 on the stack
+        # depending on if it was successful
+        Assert(App.box_delete(Bytes("BoxA"))),
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/box.py#L63-L69)
 <!-- ===PYTEAL_BOX_DELETE=== -->
 
 !!!warning
@@ -1174,10 +1226,11 @@ The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Con
 
 === "PyTeal"
 <!-- ===PYTEAL_TXN_ONCOMPLETE=== -->
-    ```py
+```python
     program = OnComplete.NoOp == Txn.on_completion()
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L5-L7)
 <!-- ===PYTEAL_TXN_ONCOMPLETE=== -->
 
 === "TEAL"
@@ -1204,10 +1257,11 @@ These parameters are loaded into the arguments array. TEAL opcodes are available
 
 === "PyTeal"
 <!-- ===PYTEAL_TXN_APP_ARGS=== -->
-    ```py
+```python
     program = Txn.application_args[1] == Bytes("claim")
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L12-L14)
 <!-- ===PYTEAL_TXN_APP_ARGS=== -->
 
 === "TEAL"
@@ -1226,10 +1280,11 @@ A global variable is also available to check the size of the transaction argumen
 
 === "PyTeal"
 <!-- ===PYTEAL_TXN_NUM_APP_ARGS=== -->
-    ```py
+```python
     program = Txn.application_args.length() == Int(4)
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L19-L21)
 <!-- ===PYTEAL_TXN_NUM_APP_ARGS=== -->
 
 === "TEAL"
@@ -1245,10 +1300,11 @@ The above TEAL code will push a 0 on the top of the stack if the number of param
 
 === "PyTeal"
 <!-- ===PYTEAL_TXN_APP_ARG_TO_INT=== -->
-    ```py
+```python
     program = Btoi(Txn.application_args[0])
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L26-L28)
 <!-- ===PYTEAL_TXN_APP_ARG_TO_INT=== -->
 
 === "TEAL"
@@ -1289,18 +1345,13 @@ When this transaction is submitted, the `ApprovalProgram` of the smart contract 
 
 === "PyTeal"
 <!-- ===PYTEAL_APPL_OPTIN=== -->
-    ```py
-    # just a placeholder; change this
-    not_opting_in = Seq(Return(Int(0)))
-
-    program = If(
-        OnComplete.OptIn == Txn.on_completion(), 
-        Return(Int(1)), 
-        not_opting_in
-    )
-
+```python
+    # this would reject _ANY_ transaction that isn't an opt-in
+    # and approve _ANY_ transaction that is an opt-in
+    program = If(OnComplete.OptIn == Txn.on_completion(), Approve(), Reject())
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L93-L97)
 <!-- ===PYTEAL_APPL_OPTIN=== -->
 
 === "TEAL"
@@ -1324,10 +1375,11 @@ Other contracts may have much more complex opt in logic. TEAL also provides an o
 
 === "PyTeal"
 <!-- ===PYTEAL_APPL_CHECK_OPTEDIN=== -->
-    ```py
+```python
     program = App.optedIn(Int(0), Txn.application_id())
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L5-L7)
 <!-- ===PYTEAL_APPL_CHECK_OPTEDIN=== -->
 
 === "TEAL"
@@ -1356,18 +1408,14 @@ The call must specify the intended contract using the `--app-id` option. Additio
 
 === "PyTeal"
 <!-- ===PYTEAL_APPL_CALL=== -->
-    ```py
-    # placeholder; change this logic in both cases
-    is_my_parm = Seq(Return(Int(1)))
-    is_not_my_parm = Seq(Return(Int(1)))
-    program = If(
-        Bytes("myparm") == Txn.application_args[0], 
-        is_my_parm, 
-        is_not_my_parm
-    )
-
+```python
+    # this would approve _ANY_ transaction that has its
+    # first app arg set to the byte string "myparam"
+    # and reject all others
+    program = If(Bytes("myparm") == Txn.application_args[0], Approve(), Reject())
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L61-L66)
 <!-- ===PYTEAL_APPL_CALL=== -->
 
 === "Teal"
@@ -1397,10 +1445,14 @@ As stated earlier, anyone can update the program. If this is not desired and you
 
 === "PyTeal"
 <!-- ===PYTEAL_APPL_UPDATE=== -->
-    ```py 
-    program = Assert(Global.creator_address() == Txn.sender())
+```python
+    program = Assert(
+        Txn.on_completion() == OnComplete.UpdateApplication,
+        Global.creator_address() == Txn.sender(),
+    )
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L71-L76)
 <!-- ===PYTEAL_APPL_UPDATE=== -->
 
 === "TEAL"
@@ -1425,18 +1477,16 @@ Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication
 
 === "PyTeal"
 <!-- ===PYTEAL_APPL_UPDATE_REJECT=== -->
-    ```py 
-    # placeholder logic; change this
-    is_not_update = Seq(Return(Int(1)))
-
+```python
     program = If(
-        OnComplete.UpdateApplication == Txn.on_completion(), 
-        Return(Int(0)), 
-        is_not_update
+        OnComplete.UpdateApplication == Txn.on_completion(),
+        Reject(),
+        # placeholder, update with actual logic
+        Approve(),
     )
-
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L81-L88)
 <!-- ===PYTEAL_APPL_UPDATE_REJECT=== -->
 
 === "TEAL"
@@ -1469,10 +1519,11 @@ Smart contracts have access to many global variables. These variables are set fo
 
 === "PyTeal"
 <!-- ===PYTEAL_GLOBAL_LATEST_TIMESTAMP=== -->
-    ```py 
+```python
     program = Global.latest_timestamp() >= App.globalGet(Bytes("StartDate"))
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L12-L14)
 <!-- ===PYTEAL_GLOBAL_LATEST_TIMESTAMP=== -->
 
 === "TEAL"
@@ -1491,10 +1542,11 @@ The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transa
 
 === "PyTeal"
 <!-- ===PYTEAL_TXN_AMOUNT=== -->
-    ```py 
+```python
     program = Txn.amount()
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L33-L35)
 <!-- ===PYTEAL_TXN_AMOUNT=== -->
 
 === "TEAL"
@@ -1508,10 +1560,11 @@ In many common patterns, the smart contract will be combined with other Algorand
 
 === "PyTeal"
 <!-- ===PYTEAL_TXN_GROUP_SIZE=== -->
-    ```py 
+```python
     program = Global.group_size() == Int(2)
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L40-L42)
 <!-- ===PYTEAL_TXN_GROUP_SIZE=== -->
 
 === "TEAL"
@@ -1527,10 +1580,11 @@ The above TEAL will be true if there are two transactions submitted at once usin
 
 === "PyTeal"
 <!-- ===PYTEAL_GTXN_TYPE_ENUM=== -->
-    ```py 
+```python
     program = Gtxn[1].type_enum() == TxnType.Payment
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L47-L49)
 <!-- ===PYTEAL_GTXN_TYPE_ENUM=== -->
 
 === "TEAL"
@@ -1548,10 +1602,11 @@ If any transaction in a group of transactions is a call to a smart contract, the
 
 === "PyTeal"
 <!-- ===PYTEAL_GTXN_APP_ARGS=== -->
-    ```py 
+```python
     program = Gtxn[Txn.group_index() - Int(1)].application_args[0]
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L54-L56)
 <!-- ===PYTEAL_GTXN_APP_ARGS=== -->
 
 === "TEAL"
@@ -1569,19 +1624,14 @@ Smart contract applications can work in conjunction with assets. In addition to 
 
 === "PyTeal"
 <!-- ===PYTEAL_APPL_ASSET_BALANCE=== -->
-    ```py
+```python
     asset_balance = AssetHolding.balance(Int(0), Int(2))
     program = Seq(
-        asset_balance,
-        If(
-            asset_balance.hasValue(), 
-            Return(Int(1)), 
-            Return(Int(0))
-        )
+        asset_balance, If(asset_balance.hasValue(), Return(Int(1)), Return(Int(0)))
     )
-
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/assets.py#L5-L10)
 <!-- ===PYTEAL_APPL_ASSET_BALANCE=== -->
 
 === "TEAL"
@@ -1607,10 +1657,11 @@ It is also possible to get an Asset’s configuration information within a smart
 
 === "PyTEAL"
 <!-- ===PYTEAL_APPL_ASSET_PARAM=== -->
-    ```py
+```python
     program = AssetParam.total(Int(0))
     print(compileTeal(program, Mode.Application))
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/assets.py#L15-L17)
 <!-- ===PYTEAL_APPL_ASSET_PARAM=== -->
 
 === "TEAL"
@@ -1710,23 +1761,16 @@ As a way of getting started writing smart contracts, the following boilerplate t
 
 === "PyTEAL"
 <!-- ===PYTEAL_BOILERPLATE=== -->
-    ```py
-    from pyteal import *
+```python
     # Handle each possible OnCompletion type. We don't have to worry about
     # handling ClearState, because the ClearStateProgram will execute in that
     # case, not the ApprovalProgram.
     def approval_program():
-        handle_noop = Seq([
-            Return(Int(1))
-        ])
+        handle_noop = Seq([Return(Int(1))])
 
-        handle_optin = Seq([
-            Return(Int(1))
-        ])
+        handle_optin = Seq([Return(Int(1))])
 
-        handle_closeout = Seq([
-            Return(Int(1))
-        ])
+        handle_closeout = Seq([Return(Int(1))])
 
         handle_updateapp = Err()
 
@@ -1737,14 +1781,15 @@ As a way of getting started writing smart contracts, the following boilerplate t
             [Txn.on_completion() == OnComplete.OptIn, handle_optin],
             [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
             [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-            [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp]
+            [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
         )
         return program
 
-    with open('boilerplate_approval_pyteal.teal', 'w') as f:
+    with open("boilerplate_approval_pyteal.teal", "w") as f:
         compiled = compileTeal(approval_program(), Mode.Application, version=5)
         f.write(compiled)
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L19-L45)
 <!-- ===PYTEAL_BOILERPLATE=== -->
 
 === "TEAL"
