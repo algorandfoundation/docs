@@ -50,7 +50,7 @@ atc = AtomicTransactionComposer()
 ```java
                 AtomicTransactionComposer atc = new AtomicTransactionComposer();
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L46-L47)
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
@@ -155,7 +155,7 @@ atc.add_transaction(tws)
                 // Pass TransactionWithSigner to atc
                 atc.addTransaction(tws);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L50-L60)
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
@@ -304,7 +304,7 @@ atc.add_method_call(
                 // Create Contract from Json
                 Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L63-L67)
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
 
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
@@ -323,7 +323,7 @@ atc.add_method_call(
 
                 atc.addMethodCall(mcp);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L70-L83)
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
     
 ## Execution 
@@ -390,5 +390,5 @@ for res in result.abi_results:
                                         methodResult.value);
                 });
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L85-L91)
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
     <!-- ===JAVASDK_ATC_RESULTS=== -->

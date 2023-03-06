@@ -152,23 +152,33 @@ with open("dryrun.msgp", "wb") as f:
 
 === "Java"
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
-    ```java
+```java
+        // Set up the transactions we'd like to dryrun
+        AtomicTransactionComposer atc = new AtomicTransactionComposer();
 
-    Transaction app_txn = ApplicationCallTransactionBuilder.Builder().sender(addr)
-        .suggestedParams(sp).applicationId(app_id).foreignAssets(fassets).accounts(addrs).build();
+        List<Object> methodArgs = new ArrayList<Object>();
+        methodArgs.add(1);
+        methodArgs.add(1);
 
+        TransactionParametersResponse sp = algodClient.TransactionParams().execute().body();
 
-    List<SignedTransaction> stxns = new ArrayList<>();
-    stxns.add(acct.signTransaction(app_txn));
+        MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
+        MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
+                        .suggestedParams(sp)
+                        .sender(acct.getAddress())
+                        .method(contract.getMethodByName("add"))
+                        .methodArguments(methodArgs)
+                        .onComplete(Transaction.OnCompletion.NoOpOC)
+                        .build();
+        atc.addMethodCall(mcp);
 
-    DryrunRequest drr = Utils.createDryrun(client, stxns, "", 0L, 0L);
+        DryrunRequest drr = Utils.createDryrun(algodClient, atc.gatherSignatures(), "", 0L, 0L);
 
-    String fname = "dryrun.msgp";
-    FileOutputStream outfile = new FileOutputStream(fname);
-    outfile.write(Encoder.encodeToMsgPack(drr));
-    outfile.close();
-
-    ```
+        FileOutputStream outfile = new FileOutputStream("my-dryrun.msgpack");
+        outfile.write(Encoder.encodeToMsgPack(drr));
+        outfile.close();
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
@@ -301,6 +311,14 @@ for txn in drr.txns:
 
 === "Java"
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
+```java
+        Response<DryrunResponse> resp = algodClient.TealDryrun().request(drr).execute();
+        DryrunResponse drResp = resp.body();
+        DryrunTxnResult dryrunTxnResult = drResp.txns.get(0);
+        System.out.println(dryrunTxnResult.appCallMessages);
+        System.out.println(Utils.appTrace(dryrunTxnResult));
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 

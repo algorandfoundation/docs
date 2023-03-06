@@ -100,56 +100,14 @@ int 1
 
 === "Java"
     <!-- ===JAVASDK_LSIG_COMPILE=== -->
-	```java
-    package com.algorand.javatest.smart_contracts;
-
-    import com.algorand.algosdk.v2.client.common.AlgodClient;
-    import java.nio.file.Files;
-    import java.nio.file.Paths;
-    import com.algorand.algosdk.v2.client.model.CompileResponse;
-
-    public class CompileTeal {
-    // Utility function to update changing block parameters
-    public AlgodClient client = null;
-
-    // utility function to connect to a node
-    private AlgodClient connectToNetwork() {
-
-        // Initialize an algod client
-        final Integer ALGOD_PORT = 4001;
-        final String ALGOD_API_ADDR = "localhost";
-        final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-        return client;
-    }
-
-    public void compileTealSource() throws Exception {
-        // Initialize an algod client
-        if (client == null)
-            this.client = connectToNetwork();
-
-        // read file - int 0
-        byte[] data = Files.readAllBytes(Paths.get("./sample.teal"));
-        // compile
-        CompileResponse response = client.TealCompile().source(data).execute().body();
-        // print results
-        System.out.println("response: " + response);
-        System.out.println("Hash: " + response.hash); 
-        System.out.println("Result: " + response.result); 
-    }
-
-    public static void main(final String args[]) throws Exception {
-        CompileTeal t = new CompileTeal();
-        t.compileTealSource();
-    }
-
-    }
-    // Output should look similar to this... 
-    // response:
-    // {"hash":"KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE","result":"ASABACI="}
-    // Hash: KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE 
-    // Result: ASABACI=
-    ```
+```java
+        String tealsrc = Files.readString(Paths.get("lsig/simple.teal"));
+        Response<CompileResponse> compileResp = algodClient.TealCompile().source(tealsrc.getBytes()).execute();
+        System.out.printf("Program: %s\n", compileResp.body().result);
+        System.out.printf("Address: %s\n", compileResp.body().hash);
+        byte[] tealBinary = Encoder.decodeFromBase64(compileResp.body().result);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
     <!-- ===JAVASDK_LSIG_COMPILE=== -->
 
 === "Go"
@@ -237,13 +195,10 @@ The response result from the TEAL `compile` command above is used to create the 
 
 === "Java"
     <!-- ===JAVASDK_LSIG_INIT=== -->
-	```java
-        // byte[] program = {
-        //     0x01, 0x20, 0x01, 0x00, 0x22  // int 0
-        // };
-        byte[] program = Base64.getDecoder().decode(response.result.toString());
-        LogicsigSignature lsig = new LogicsigSignature(program, null);
-    ```
+```java
+        LogicSigAccount lsig = new LogicSigAccount(tealBinary, null);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
     <!-- ===JAVASDK_LSIG_INIT=== -->
 
 === "Go"
@@ -295,19 +250,14 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 === "Java"
     <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
-	```java
-        // string parameter
-        ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-        String orig = "my string";
-        teal_args.add(orig.getBytes());
-        LogicsigSignature lsig = new LogicsigSignature(program, teal_args);    
-
-        // integer parameter
-        ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-        byte[] arg1 = {123};
-        teal_args.add(arg1);
-        LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
-    ```
+```java
+        List<byte[]> tealArgs = new ArrayList<byte[]>();
+        // The arguments _must_ be byte arrays
+        byte[] arg1 = Encoder.encodeUint64(123l);
+        tealArgs.add(arg1);
+        LogicSigAccount lsigWithArgs = new LogicSigAccount(tealBinaryWithArgs, tealArgs);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
     <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
 
 === "Go"
@@ -475,131 +425,26 @@ int 123
 
 === "Java"
     <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
-	```java
-    package com.algorand.javatest.smart_contracts;
-    import com.algorand.algosdk.account.Account;
-    import com.algorand.algosdk.algod.client.ApiException;
-    import com.algorand.algosdk.crypto.Address;
-    import com.algorand.algosdk.crypto.LogicsigSignature;
-    import com.algorand.algosdk.transaction.SignedTransaction;
-    import com.algorand.algosdk.transaction.Transaction;
-    import com.algorand.algosdk.util.Encoder;
-    import com.algorand.algosdk.v2.client.common.AlgodClient;
-    import com.algorand.algosdk.v2.client.common.Response;
-    import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-    import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
-    import java.nio.file.Files;
-    import java.nio.file.Paths;
-    import org.json.JSONObject;
-    import java.util.ArrayList;
-    import java.util.Base64;
-    import com.algorand.algosdk.v2.client.model.CompileResponse;
-    import com.algorand.algosdk.v2.client.Utils;
-
-    public class ContractAccount {
-        // Utility function to update changing block parameters
-        public AlgodClient client = null;
-        // utility function to connect to a node
-        private AlgodClient connectToNetwork() {
-            // Initialize an algod client
-            final String ALGOD_API_ADDR = "localhost";
-            final Integer ALGOD_PORT = 4001;
-            final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            // final String ALGOD_API_ADDR = "<algod-address>";
-            // final Integer ALGOD_PORT = <algod-port>;
-            // final String ALGOD_API_TOKEN = "<algod-token>";
-
-            AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-            return client;
-        }
-
-        public void contractAccountExample() throws Exception {
-            // Initialize an algod client
-            if (client == null)
-                this.client = connectToNetwork();
-            // Set the receiver
-            // final String RECEIVER = "<receiver-address>";
-            final String RECEIVER = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
-            // Read program from file samplearg.teal
-            // This code is meant for learning purposes only
-            // It should not be used in production
-            // arg_0
-            // btoi
-            // int 123
-            // ==
-            byte[] source = Files.readAllBytes(Paths.get("./samplearg.teal"));   
-            //byte[] source = Files.readAllBytes(Paths.get("./<filename">));
-            // compile
-            Response < CompileResponse > compileresponse = client.TealCompile().source(source).execute();
-            if (!compileresponse.isSuccessful()) {
-                throw new Exception(compileresponse.message());
-            }
-            CompileResponse response = compileresponse.body();
-            // print results
-            System.out.println("response: " + response);
-            System.out.println("Hash: " + response.hash);
-            System.out.println("Result: " + response.result);
-            byte[] program = Base64.getDecoder().decode(response.result.toString());
-
-            // create logic sig
-            // string parameter
-            // ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-            // String orig = "<my string>";
-            // teal_args.add(orig.getBytes());
-            // LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
-
-            // integer parameter
-            ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-            byte[] arg1 = { 123 };
-            teal_args.add(arg1);
-            LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
-            // For no args use null as second param
-            // LogicsigSignature lsig = new LogicsigSignature(program, null);     
-            TransactionParametersResponse params = client.TransactionParams().execute().body();
-            // create a transaction
-            String note = "Hello World";
-            Transaction txn = Transaction.PaymentTransactionBuilder()
-                    .sender(lsig
-                    .toAddress())
-                    .note(note.getBytes())
-                    .amount(100000)
-                    .receiver(new Address(RECEIVER))
-                    .suggestedParams(params)
-                    .build();   
-            try {
-                // create the LogicSigTransaction with contract account LogicSigAccount
-                SignedTransaction stx = Account.signLogicsigTransaction(lsig, txn);
-                // send raw LogicSigTransaction to network
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
-                // logic signature transaction can be written to a file
-                // try {
-                //     String FILEPATH = "./simple.stxn";
-                //     File file = new File(FILEPATH);
-                //     OutputStream os = new FileOutputStream(file);
-                //     os.write(encodedTxBytes);
-                //     os.close();
-                // } catch (Exception e) {
-                //     System.out.println("Exception: " + e);
-                // }
-                String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
-                // Wait for transaction confirmation
-                PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-                System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-                JSONObject jsonObj = new JSONObject(pTrx.toString());
-                System.out.println("Transaction information (with notes): " + jsonObj.toString(2)); // pretty print
-                System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-            }
-        }
-        public static void main(final String args[]) throws Exception {
-            ContractAccount t = new ContractAccount();
-            t.contractAccountExample();
-        }
-    }
-
-
-    ```
+```java
+        TransactionParametersResponse params = algodClient.TransactionParams().execute().body();
+        // create a transaction
+        Transaction txn = Transaction.PaymentTransactionBuilder()
+                .sender(lsig.getAddress())
+                .amount(100000)
+                .receiver(seedAcct.getAddress())
+                .suggestedParams(params)
+                .build();
+        // create the LogicSigTransaction with contract account LogicSigAccount
+        SignedTransaction stx = Account.signLogicsigTransaction(lsig.lsig, txn);
+        // send raw LogicSigTransaction to network
+        Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(stx)).execute();
+        String txid = submitResult.body().txId;
+        // Wait for transaction confirmation
+        PendingTransactionResponse pTrx = Utils.waitForConfirmation(algodClient, txid, 4);
+        System.out.printf("Transaction %s confirmed in round %d\n", txid, pTrx.confirmedRound);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
     <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
 
 === "Go"
@@ -878,140 +723,28 @@ The following example illustrates signing a transaction with a created logic sig
 
 === "Java"
     <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
-	```java
-    package com.algorand.javatest.smart_contracts;
-    import com.algorand.algosdk.account.Account;
-    import com.algorand.algosdk.algod.client.ApiException;
-    import com.algorand.algosdk.crypto.Address;
-    import com.algorand.algosdk.crypto.LogicsigSignature;
-    import com.algorand.algosdk.transaction.SignedTransaction;
-    import com.algorand.algosdk.transaction.Transaction;
-    import com.algorand.algosdk.util.Encoder;
-    import com.algorand.algosdk.v2.client.common.AlgodClient;
-    import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-    import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
-    import java.util.Base64;
-    import org.json.JSONObject;
-    import java.util.ArrayList;
-    import java.nio.file.Files;
-    import java.nio.file.Paths;
-    import com.algorand.algosdk.v2.client.model.CompileResponse;
-    import com.algorand.algosdk.v2.client.Utils;
-    import com.algorand.algosdk.v2.client.common.*;
-
-    public class AccountDelegation {
-        // Utility function to update changing block parameters
-        public AlgodClient client = null;
-        // utility function to connect to a node
-        private AlgodClient connectToNetwork() {
-            // Initialize an algod client
-            // sandbox
-            final String ALGOD_API_ADDR = "localhost";
-            final Integer ALGOD_PORT = 4001;
-            final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-            // final String ALGOD_API_ADDR = "<algod-address>";
-            // final Integer ALGOD_PORT = <algod-port>;
-            // final String ALGOD_API_TOKEN = "<algod-token>";
-
-            AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-            return client;
-        }
-        public void accountDelegationExample() throws Exception {
-            // Initialize an algod client
-            if (client == null)
-                this.client = connectToNetwork();
-            // import your private key mnemonic and address  
-            //  do not use mnemonics in production code, for demo purposes          
-            final String SRC_ACCOUNT = "25-word-mnemonic<PLACEHOLDER>";    
-            Account src = new Account(SRC_ACCOUNT);
-            System.out.println("Sender: " + src.getAddress());   
-            // Set the receiver
-            final String RECEIVER = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ";
-            // final String RECEIVER = "<receiver-address>";
-            // Read program from file samplearg.teal
-            // This code is meant for learning purposes only
-            // It should not be used in production
-            // arg_0
-            // btoi
-            // int 123
-            // ==
-            byte[] source = Files.readAllBytes(Paths.get("./samplearg.teal"));
-            // byte[] source = Files.readAllBytes(Paths.get("<filename>"));
-            // compile
-            CompileResponse response = client.TealCompile().source(source).execute().body();
-            // print results
-            System.out.println("response: " + response);
-            System.out.println("Hash: " + response.hash);
-            System.out.println("Result: " + response.result);
-            byte[] program = Base64.getDecoder().decode(response.result.toString());
-            // create logic sig          
-            // string parameter
-            // ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-            // String orig = "my string";
-            // teal_args.add(orig.getBytes());
-            // LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
-            // integer parameter
-            ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
-            byte[] arg1 = { 123 };
-            teal_args.add(arg1);
-            LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
-            //    For no args, use null as second param
-            //    LogicsigSignature lsig = new LogicsigSignature(program, null);
-            // sign the logic signature with an account sk
-            src.signLogicsig(lsig);
-            Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            TransactionParametersResponse params = resp.body();
-            if (params == null) {
-                throw new Exception("Params retrieval error");
-            }        // create a transaction
-
-            String note = "Hello World";
-            Transaction txn = Transaction.PaymentTransactionBuilder()
-                    .sender(src.getAddress())
-                    .note(note.getBytes())
-                    .amount(100000)
-                    .receiver(new Address(RECEIVER))
-                    .suggestedParams(params)
-                    .build();   
-
-            try {
-                // create the LogicSigTransaction with contract account LogicSigAccount
-                SignedTransaction stx = Account.signLogicsigTransaction(lsig, txn);
-
-                // send raw LogicSigTransaction to network
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(stx);
-                // logic signature transaction can be written to a file
-                // try {
-                //     String FILEPATH = "./simple.stxn";
-                //     File file = new File(FILEPATH);
-                //     OutputStream os = new FileOutputStream(file);
-                //     os.write(encodedTxBytes);
-                //     os.close();
-                // } catch (Exception e) {
-                //     System.out.println("Exception: " + e);
-                // }
-                String id = client.RawTransaction().rawtxn(encodedTxBytes).execute().body().txId;
-                // Wait for transaction confirmation
-                PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-                System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);  
-                JSONObject jsonObj = new JSONObject(pTrx.toString());
-                System.out.println("Transaction information (with notes): " + jsonObj.toString(2)); // pretty print
-                System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-            } catch (ApiException e) {
-                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-            }
-        }
-
-        public static void main(final String args[]) throws Exception {
-            AccountDelegation t = new AccountDelegation();
-            t.accountDelegationExample();
-        }
-    }
-    ```
+```java
+        // account signs the logic, and now the logic may be passed instead
+        // of a signature for a transaction
+        LogicsigSignature delegateLsig = seedAcct.signLogicsig(lsigWithArgs.lsig);
+        params = algodClient.TransactionParams().execute().body();
+        // create a transaction where the sender is the signer of the lsig
+        txn = Transaction.PaymentTransactionBuilder()
+                .sender(seedAcct.getAddress())
+                .amount(100000)
+                .receiver(delegateLsig.toAddress())
+                .suggestedParams(params)
+                .build();
+        // Sign the transaction with the delegate lsig
+        stx = Account.signLogicsigTransaction(delegateLsig, txn);
+        // send raw LogicSigTransaction to network
+        submitResult = algodClient.RawTransaction().rawtxn(Encoder.encodeToMsgPack(stx)).execute();
+        txid = submitResult.body().txId;
+        // Wait for transaction confirmation
+        PendingTransactionResponse delegatResponse = Utils.waitForConfirmation(algodClient, txid, 4);
+        System.out.printf("Transaction %s confirmed in round %d\n", txid, delegatResponse.confirmedRound);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
     <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
 
 === "Go"

@@ -953,6 +953,25 @@ atc.add_method_call(
 
 === "Java"
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
+```java
+                MethodCallTransactionBuilder<?> mct_builder = MethodCallTransactionBuilder.Builder();
+
+                List<AppBoxReference> boxRefs = new ArrayList<>();
+                boxRefs.add(new AppBoxReference(appId.intValue(), "cool-box".getBytes()));
+                MethodCallParams box_ref_mcp = mct_builder
+                                .suggestedParams(sp)
+                                .applicationId(appId)
+                                .sender(acct.getAddress())
+                                .method(contract.getMethodByName("add"))
+                                .methodArguments(methodArgs)
+                                .signer(acct.getTransactionSigner())
+                                .onComplete(Transaction.OnCompletion.NoOpOC)
+                                // Include reference to a box so the app logic may
+                                // use it during evaluation
+                                .boxReferences(boxRefs)
+                                .build();
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 
 === "Beaker"
