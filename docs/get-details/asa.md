@@ -164,8 +164,6 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 === "Python"
     <!-- ===PYSDK_ASSET_CREATE=== -->
 ```python
-
-
 # Account 1 creates an asset called `rug` with a total supply
 # of 1000 units and sets itself to the freeze/clawback/manager/reserve roles
 sp = algod_client.suggested_params()
@@ -197,7 +195,7 @@ print(f"Result confirmed in round: {results['confirmed-round']}")
 created_asset = results["asset-index"]
 print(f"Asset ID created: {created_asset}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L13-L45)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L13-L43)
     <!-- ===PYSDK_ASSET_CREATE=== -->
 
 === "Java"
@@ -365,40 +363,29 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 
 === "Python"
     <!-- ===PYSDK_ASSET_CONFIG=== -->
-	``` python  
-    # CHANGE MANAGER
-    # The current manager(Account 2) issues an asset configuration transaction that assigns Account 1 as the new manager.
-    # Keep reserve, freeze, and clawback address same as before, i.e. account 2
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    txn = AssetConfigTxn(
-        sender=accounts[2]['pk'],
-        sp=params,
-        index=asset_id, 
-        manager=accounts[1]['pk'],
-        reserve=accounts[2]['pk'],
-        freeze=accounts[2]['pk'],
-        clawback=accounts[2]['pk'])
-    # sign by the current manager - Account 2
-    stxn = txn.sign(accounts[2]['sk'])
-    # txid = algod_client.send_transaction(stxn)
-    # print(txid)
-    # Wait for the transaction to be confirmed
-    # Send the transaction to the network and retrieve the txid.
-    try:
-        txid = algod_client.send_transaction(stxn)
-        print("Signed transaction with txID: {}".format(txid))
-        # Wait for the transaction to be confirmed
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4) 
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))   
-    except Exception as err:
-        print(err)
-    # Check asset info to view change in management. manager should now be account 1
-    print_created_asset(algod_client, accounts[1]['pk'], asset_id)
-    ```
+```python
+sp = algod_client.suggested_params()
+# Create a config transaction that wipes the
+# reserve address for the asset
+txn = transaction.AssetConfigTxn(
+    sender=acct1.address,
+    sp=sp,
+    manager=acct1.address,
+    reserve=None,
+    freeze=acct1.address,
+    clawback=acct1.address,
+    strict_empty_address_check=False,
+)
+# Sign with secret key of manager
+stxn = txn.sign(acct1.private_key)
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(f"Sent asset config transaction with txid: {txid}")
+# Wait for the transaction to be confirmed
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L46-L66)
     <!-- ===PYSDK_ASSET_CONFIG=== -->
 
 === "Java"
@@ -572,7 +559,7 @@ matching_asset = [
 assert matching_asset["amount"] == 0
 assert matching_asset["is-frozen"] is False
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L57-L79)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L79-L101)
     <!-- ===PYSDK_ASSET_OPTIN=== -->
 
 === "Java"
@@ -728,7 +715,7 @@ matching_asset = [
 ].pop()
 assert matching_asset["amount"] == 1
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L83-L106)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L105-L128)
     <!-- ===PYSDK_ASSET_XFER=== -->
 
 === "Java"
@@ -898,7 +885,7 @@ matching_asset = [
 ].pop()
 assert matching_asset["is-frozen"] is True
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L109-L132)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L131-L154)
     <!-- ===PYSDK_ASSET_FREEZE=== -->
 
 === "Java"
@@ -1060,7 +1047,7 @@ matching_asset = [
 assert matching_asset["amount"] == 0
 assert matching_asset["is-frozen"] is True
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L135-L160)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L157-L182)
     <!-- ===PYSDK_ASSET_CLAWBACK=== -->
 
 === "Java"
@@ -1225,7 +1212,7 @@ try:
 except Exception as e:
     print("Expected Error:", e)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L163-L182)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L185-L204)
     <!-- ===PYSDK_ASSET_DELETE=== -->
 
 === "Java"
@@ -1361,7 +1348,7 @@ asset_params: Dict[str, Any] = asset_info["params"]
 print(f"Asset Name: {asset_params['name']}")
 print(f"Asset params: {list(asset_params.keys())}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L48-L53)
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L70-L75)
     <!-- ===PYSDK_ASSET_INFO=== -->
 
 === "Java"
