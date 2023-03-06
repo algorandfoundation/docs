@@ -82,7 +82,7 @@ As a counter example, if instead of passing `Int(1)`, we make the program `Retur
 !!! note
     If you ever see any python error like `...has no attribute 'type_of'` PyTeal is probably trying to tell you you included something that is _not_ a valid PyTeal Expression
 
-While _only_ PyTeal Expressions may be included in the Expression tree representing the program, the Expressions may be generated as part of running the Python program. This allows the author to make use of Python scripting logic to generate a the PyTeal Expression tree based on more complex logic. 
+While _only_ PyTeal Expressions may be included in the Expression tree representing the program, the Expressions may be generated as part of running the Python program. This allows the author to make use of Python scripting logic to generate a PyTeal Expression tree based on more complex logic. 
 
 
 ## Writing a simple PyTeal Contract
