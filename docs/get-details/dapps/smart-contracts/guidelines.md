@@ -68,7 +68,6 @@ print(constants.MIN_TXN_FEE)
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
-
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
     ```go
     transaction.MinTxnFee
@@ -87,7 +86,6 @@ print(suggested_params.min_fee)
     <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
-
     <!-- ===JSSDK_SP_MIN_FEE=== -->
     ```js
     // Not supported because getTransactionParams erases the information
@@ -95,7 +93,6 @@ print(suggested_params.min_fee)
     <!-- ===JSSDK_SP_MIN_FEE=== -->
 
 === "Java"
-
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
 ```java
         Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
@@ -106,7 +103,6 @@ print(suggested_params.min_fee)
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"
-
     <!-- ===GOSDK_SP_MIN_FEE=== -->
     ```go
     algodClient, err := algod.MakeClient(algodAddress, algodToken)

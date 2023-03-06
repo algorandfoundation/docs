@@ -106,7 +106,7 @@ To fund this account, any other account in the Algorand network can send algos t
         # If a different sender is needed, it'd have to be an account that has been rekeyed to
         # the application address.
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L8-L22)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L22-L36)
 <!-- ===PYTEAL_ITXN_PAYMENT=== -->
 
 === "TEAL"
@@ -157,7 +157,7 @@ If a smart contract wishes to transfer an asset it holds or needs to opt into an
         # ...
         InnerTxnBuilder.Submit(),
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L30-L42)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L44-L56)
 <!-- ===PYTEAL_ITXN_ASSET_TRANSFER=== -->
 
 === "TEAL"
@@ -203,7 +203,7 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L50-L62)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L64-L76)
 <!-- ===PYTEAL_ITXN_ASSET_FREEZE=== -->
 
 === "TEAL"
@@ -253,7 +253,7 @@ A smart contract can revoke or clawback any asset where the smart contract addre
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L70-L84)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L84-L98)
 <!-- ===PYTEAL_ITXN_ASSET_REVOKE=== -->
 
 === "TEAL"
@@ -310,7 +310,7 @@ Assets can also be created by a smart contract. To create an asset with an inner
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L92-L110)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L106-L124)
 <!-- ===PYTEAL_ITXN_ASSET_CREATE=== -->
 
 === "TEAL"
@@ -367,7 +367,7 @@ As with all assets, the mutable addresses can be changed. For example to change 
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L118-L132)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L132-L146)
 <!-- ===PYTEAL_ITXN_ASSET_CONFIG=== -->
 
 === "TEAL"
@@ -411,7 +411,7 @@ Assets managed by the contract can also be deleted. This can be done with the fo
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L140-L150)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L154-L164)
 <!-- ===PYTEAL_ITXN_ASSET_DESTROY=== -->
 
 === "TEAL"
@@ -462,7 +462,7 @@ A smart contract can make inner transactions consisting of grouped transactions.
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L158-L183)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L172-L197)
 <!-- ===PYTEAL_GROUPED_ITXN=== -->
 
 === "TEAL"
@@ -528,7 +528,7 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
         InnerTxnBuilder.Submit(),
         # ...
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L191-L202)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/itxn.py#L205-L216)
 <!-- ===PYTEAL_ITXN_C2C=== -->
 
 === "TEAL"
@@ -1230,7 +1230,7 @@ The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Con
     program = OnComplete.NoOp == Txn.on_completion()
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L5-L7)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L20-L22)
 <!-- ===PYTEAL_TXN_ONCOMPLETE=== -->
 
 === "TEAL"
@@ -1261,7 +1261,7 @@ These parameters are loaded into the arguments array. TEAL opcodes are available
     program = Txn.application_args[1] == Bytes("claim")
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L12-L14)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L27-L29)
 <!-- ===PYTEAL_TXN_APP_ARGS=== -->
 
 === "TEAL"
@@ -1284,7 +1284,7 @@ A global variable is also available to check the size of the transaction argumen
     program = Txn.application_args.length() == Int(4)
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L19-L21)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L34-L36)
 <!-- ===PYTEAL_TXN_NUM_APP_ARGS=== -->
 
 === "TEAL"
@@ -1304,7 +1304,7 @@ The above TEAL code will push a 0 on the top of the stack if the number of param
     program = Btoi(Txn.application_args[0])
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L26-L28)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L41-L43)
 <!-- ===PYTEAL_TXN_APP_ARG_TO_INT=== -->
 
 === "TEAL"
@@ -1351,7 +1351,7 @@ When this transaction is submitted, the `ApprovalProgram` of the smart contract 
     program = If(OnComplete.OptIn == Txn.on_completion(), Approve(), Reject())
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L93-L97)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L108-L112)
 <!-- ===PYTEAL_APPL_OPTIN=== -->
 
 === "TEAL"
@@ -1379,7 +1379,7 @@ Other contracts may have much more complex opt in logic. TEAL also provides an o
     program = App.optedIn(Int(0), Txn.application_id())
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L5-L7)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L18-L20)
 <!-- ===PYTEAL_APPL_CHECK_OPTEDIN=== -->
 
 === "TEAL"
@@ -1415,7 +1415,7 @@ The call must specify the intended contract using the `--app-id` option. Additio
     program = If(Bytes("myparm") == Txn.application_args[0], Approve(), Reject())
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L61-L66)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L76-L81)
 <!-- ===PYTEAL_APPL_CALL=== -->
 
 === "Teal"
@@ -1452,7 +1452,7 @@ As stated earlier, anyone can update the program. If this is not desired and you
     )
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L71-L76)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L86-L91)
 <!-- ===PYTEAL_APPL_UPDATE=== -->
 
 === "TEAL"
@@ -1486,7 +1486,7 @@ Or alternatively, the TEAL code can always return a 0 when an `UpdateApplication
     )
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L81-L88)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L96-L103)
 <!-- ===PYTEAL_APPL_UPDATE_REJECT=== -->
 
 === "TEAL"
@@ -1523,7 +1523,7 @@ Smart contracts have access to many global variables. These variables are set fo
     program = Global.latest_timestamp() >= App.globalGet(Bytes("StartDate"))
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L12-L14)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L25-L27)
 <!-- ===PYTEAL_GLOBAL_LATEST_TIMESTAMP=== -->
 
 === "TEAL"
@@ -1546,7 +1546,7 @@ The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transa
     program = Txn.amount()
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L33-L35)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L48-L50)
 <!-- ===PYTEAL_TXN_AMOUNT=== -->
 
 === "TEAL"
@@ -1564,7 +1564,7 @@ In many common patterns, the smart contract will be combined with other Algorand
     program = Global.group_size() == Int(2)
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L40-L42)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L55-L57)
 <!-- ===PYTEAL_TXN_GROUP_SIZE=== -->
 
 === "TEAL"
@@ -1584,7 +1584,7 @@ The above TEAL will be true if there are two transactions submitted at once usin
     program = Gtxn[1].type_enum() == TxnType.Payment
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L47-L49)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L62-L64)
 <!-- ===PYTEAL_GTXN_TYPE_ENUM=== -->
 
 === "TEAL"
@@ -1606,7 +1606,7 @@ If any transaction in a group of transactions is a call to a smart contract, the
     program = Gtxn[Txn.group_index() - Int(1)].application_args[0]
     print(compileTeal(program, Mode.Application))
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L54-L56)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/txn.py#L69-L71)
 <!-- ===PYTEAL_GTXN_APP_ARGS=== -->
 
 === "TEAL"
@@ -1789,7 +1789,7 @@ As a way of getting started writing smart contracts, the following boilerplate t
         compiled = compileTeal(approval_program(), Mode.Application, version=5)
         f.write(compiled)
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L19-L45)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L32-L58)
 <!-- ===PYTEAL_BOILERPLATE=== -->
 
 === "TEAL"
