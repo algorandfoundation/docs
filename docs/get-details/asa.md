@@ -985,7 +985,7 @@ assert matching_asset["is-frozen"] is True
 Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires specifying an asset sender (the revoke target account) and an asset receiver (the account to transfer the funds back to). The code below illustrates the clawback transaction.
 
 === "JavaScript"
-    <!-- ===JSSDK_ASSET_CLAWBACK== -->
+    <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 	``` javascript  
     // Revoke an Asset:
     // The asset was also created with the ability for it to be revoked by 
@@ -1029,10 +1029,10 @@ Revoking an asset for an account removes a specific number of the asset from the
     await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
 
     ```
-    <!-- ===JSSDK_ASSET_CLAWBACK== -->
+    <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 
 === "Python"
-    <!-- ===PYSDK_ASSET_CLAWBACK== -->
+    <!-- ===PYSDK_ASSET_CLAWBACK=== -->
 ```python
 sp = algod_client.suggested_params()
 # Create clawback transaction to freeze the asset in acct2 balance

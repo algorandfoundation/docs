@@ -232,7 +232,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	An offline wallet may not accurately reflect account balances, but the state for those accounts (e.g. its balance, online status) are safely stored on the blockchain. kmd will repopulate those balances when connected to a node.
 
 === "JavaScript"
-<!-- ===JSSDK_KMD_RECOVER_WALLET===-->
+<!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
 	```javascript
 	const algosdk = require('algosdk');
 
@@ -261,10 +261,10 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 		console.log(e);
 	});
 	```
-<!-- ===JSSDK_KMD_RECOVER_WALLET===-->
+<!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
 
 === "Python"
-<!-- ===PYSDK_KMD_RECOVER_WALLET===-->
+<!-- ===PYSDK_KMD_RECOVER_WALLET=== -->
 ```python
 # Create the master derivation key from our backed up mnemonic
 mdk = mnemonic.to_master_derivation_key(backup)
@@ -282,10 +282,10 @@ rec_addr = wlt.generate_key()
 print("Recovered account:", rec_addr)
 ```
 [Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L44-L58)
-<!-- ===PYSDK_KMD_RECOVER_WALLET===-->
+<!-- ===PYSDK_KMD_RECOVER_WALLET=== -->
 
 === "Java"
-<!-- ===JAVASDK_KMD_RECOVER_WALLET===-->
+<!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 ```java
         // create a new CreateWalletRequest and set parameters 
         CreateWalletRequest recoverRequest = new CreateWalletRequest();
@@ -300,10 +300,10 @@ print("Recovered account:", rec_addr)
         System.out.printf("Wallet name: %s\n", recoveredWallet.getName());
 ```
 [Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L63-L74)
-<!-- ===JAVASDK_KMD_RECOVER_WALLET===-->
+<!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 
 === "Go"
-<!-- ===GOSDK_KMD_RECOVER_WALLET===-->
+<!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 ```go
   keyBytes, err := mnemonic.ToKey(backupPhrase)
   if err != nil {
@@ -351,10 +351,10 @@ print("Recovered account:", rec_addr)
   }
   fmt.Printf("Recovered address %s\n", genResponse.Address)
 ```
-<!-- ===GOSDK_KMD_RECOVER_WALLET===-->
+<!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 
 === "goal"
-<!-- ===GOAL_KMD_RECOVER_WALLET===-->
+<!-- ===GOAL_KMD_RECOVER_WALLET=== -->
 	```zsh
 	$ goal wallet new -r <recovered-wallet-name>
 	Please type your recovery mnemonic below, and hit return when you are done: 
@@ -367,7 +367,7 @@ print("Recovered account:", rec_addr)
 	$ goal account new -w <recovered-wallet-name>
 	Created new account with address [RECOVERED_ADDRESS]
 	```
-<!-- ===GOAL_KMD_RECOVER_WALLET===-->
+<!-- ===GOAL_KMD_RECOVER_WALLET=== -->
 
 ### Export an account
 Use this to retrieve the 25-word mnemonic for the account.

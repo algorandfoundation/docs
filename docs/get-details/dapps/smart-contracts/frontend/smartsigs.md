@@ -40,13 +40,14 @@ The following TEAL code is used in the examples below.
 ```
 // This code is meant for learning purposes only
 // It should not be used in production
-int 0
+int 1
 ```
 
 !!! info
     The samples on this page use a docker sandbox install.
 
 === "JavaScript"
+    <!-- ===JSSDK_LSIG_COMPILE=== -->
 	```javascript
     const fs = require('fs');
     const path = require('path');
@@ -82,36 +83,23 @@ int 0
     // Hash : KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
     // Result : ASABACI=
     ```
+    <!-- ===JSSDK_LSIG_COMPILE=== -->
 
 === "Python"
-	```python
-    # compile teal code
-    from algosdk.v2client import algod
-
-    try:
-        # create an algod client
-        algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        algod_address = "http://localhost:4001"
-        algod_client = algod.AlgodClient(algod_token, algod_address)
-
-        # int 0 - sample.teal
-        myprogram = "sample.teal"
-        # read teal program
-        data = open(myprogram, 'r').read()
-        # compile teal program
-        response = algod_client.compile(data)
-        # print(response)
-        print("Response Result = ",response['result'])
-        print("Response Hash = ",response['hash'])
-    except Exception as e:
-        print(e)
-
-    # results should look similar to this:
-    # Response Result = ASABACI=
-    # Response Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-    ```
+    <!-- ===PYSDK_LSIG_COMPILE=== -->
+```python
+    # read teal program
+    data = open(lsig_src_path, "r").read()
+    # compile teal program
+    response = algod_client.compile(data)
+    print("Response Result = ", response["result"])
+    print("Response Hash = ", response["hash"])
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L12-L18)
+    <!-- ===PYSDK_LSIG_COMPILE=== -->
 
 === "Java"
+    <!-- ===JAVASDK_LSIG_COMPILE=== -->
 	```java
     package com.algorand.javatest.smart_contracts;
 
@@ -162,8 +150,10 @@ int 0
     // Hash: KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE 
     // Result: ASABACI=
     ```
+    <!-- ===JAVASDK_LSIG_COMPILE=== -->
 
 === "Go"
+    <!-- ===GOSDK_LSIG_COMPILE=== -->
 	```go
     package main
 
@@ -208,6 +198,7 @@ int 0
     // Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
     // Result = ASABACI=
     ```
+    <!-- ===GOSDK_LSIG_COMPILE=== -->
 
 Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
 
@@ -228,23 +219,24 @@ ASABACI=
 The response result from the TEAL `compile` command above is used to create the `program` variable. This variable can then be used as an input parameter to the function to make a logic signature.
 
 === "JavaScript"
+    <!-- ===JSSDK_LSIG_INIT=== -->
 	```javascript
         const program = new Uint8Array(Buffer.from(results.result , "base64"));
         const lsig = new algosdk.LogicSig(program);   
     ```
+    <!-- ===JSSDK_LSIG_INIT=== -->
 
 === "Python"
-	```python
-        import base64
-        from algosdk.transaction import LogicSigAccount
-
-        programstr = response['result']
-        t = programstr.encode()
-        program = base64.decodebytes(t)
-        lsig = LogicSigAccount(program)
-    ```
+    <!-- ===PYSDK_LSIG_INIT=== -->
+```python
+    program = base64.b64decode(compiled_program)
+    lsig = transaction.LogicSigAccount(program)
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L25-L27)
+    <!-- ===PYSDK_LSIG_INIT=== -->
 
 === "Java"
+    <!-- ===JAVASDK_LSIG_INIT=== -->
 	```java
         // byte[] program = {
         //     0x01, 0x20, 0x01, 0x00, 0x22  // int 0
@@ -252,8 +244,10 @@ The response result from the TEAL `compile` command above is used to create the 
         byte[] program = Base64.getDecoder().decode(response.result.toString());
         LogicsigSignature lsig = new LogicsigSignature(program, null);
     ```
+    <!-- ===JAVASDK_LSIG_INIT=== -->
 
 === "Go"
+    <!-- ===GOSDK_LSIG_INIT=== -->
 	```go
         // program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
         program, err :=  base64.StdEncoding.DecodeString(response.Result)	
@@ -262,6 +256,7 @@ The response result from the TEAL `compile` command above is used to create the 
         var args [][]byte
         lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)  
     ```
+    <!-- ===GOSDK_LSIG_INIT=== -->
 
 # Passing parameters using the SDKs
 The SDKs require that parameters to a smart signature TEAL program be in byte arrays. This byte array is passed to the method that creates the logic signature. Currently, these parameters must be either unsigned integers or binary strings. If comparing a constant string in TEAL, the constant within the TEAL program must be encoded in hex or base64. See the TEAL tab below for a simple example of comparing the string argument used in the other examples. SDK native language functions can be used to encode the parameters to the TEAL program correctly. The example below illustrates both a string parameter and an integer.
@@ -270,6 +265,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
     The samples show setting parameters at the creation of the logic signature. These parameters can be changed at the time of submitting the transaction.
 
 === "JavaScript"
+    <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
 	```javascript
         // string parameter
         const args = [];
@@ -281,21 +277,24 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         args.push(algosdk.encodeUint64(123));
         const lsig = new algosdk.LogicSig(program, args);
     ```
+    <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
 
 === "Python"
-	```python
-        from algosdk.transaction import LogicSigAccount
-
-        # string parameter
-        arg_str = "my string"
-        arg1 = arg_str.encode()
-        lsig = LogicSigAccount(program, args=[arg1])
-        # integer parameter
-        arg1 = (123).to_bytes(8, 'big')
-        lsig = LogicSigAccount(program, args=[arg1])
-    ```
+    <!-- ===PYSDK_LSIG_PASS_ARGS=== -->
+```python
+    # string parameter
+    arg_str = "my string"
+    arg1 = arg_str.encode()
+    lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
+    # OR integer parameter
+    arg1 = (123).to_bytes(8, "big")
+    lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L34-L41)
+    <!-- ===PYSDK_LSIG_PASS_ARGS=== -->
 
 === "Java"
+    <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
 	```java
         // string parameter
         ArrayList<byte[]> teal_args = new ArrayList<byte[]>();
@@ -309,8 +308,10 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         teal_args.add(arg1);
         LogicsigSignature lsig = new LogicsigSignature(program, teal_args);
     ```
+    <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
 
 === "Go"
+    <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
 	```go
         // string parameter
         args := make([][]byte, 1)
@@ -323,21 +324,8 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         binary.BigEndian.PutUint64(buf[:], 123)
         args[0] = buf[:]
     ```
+    <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
 
-=== "TEAL"
-	```text
-    // Never use this code for a real transaction
-    // for educational purposes only
-    // string compare
-    arg_0
-    byte b64 bXkgc3RyaW5n
-    ==
-    // integer compare
-    arg_0
-    btoi
-    int 123
-    ==
-    ```
 
 # Contract account SDK usage
 Smart signatures can be used as contract accounts and allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. In most cases, it is preferrable to use [smart contract](../apps/index.md) escrow accounts over smart signatures as smart signatures require the logic to be supplied for every transaction.
@@ -359,10 +347,9 @@ Contract Accounts are created by compiling the TEAL logic within the smart signa
 
 The following example illustrates compiling a TEAL program with one argument and signing a transaction with a created logic signature. The example TEAL program `samplearg.teal` takes one argument. 
 
-`samplearg.teal`
 
+`samplearg.teal`
 ```
-// samplearg.teal
 // This code is meant for learning purposes only
 // It should not be used in production
 arg_0
@@ -372,6 +359,7 @@ int 123
 ```
 
 === "JavaScript"
+    <!-- ===JSSDK_LSIG_SIGN=== -->
 	```javascript
     const algosdk = require('algosdk');
     // const token = "<algod-token>";
@@ -450,102 +438,43 @@ int 123
     }
 
     ```
+    <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
 
 === "Python"
-	```python
-        from algosdk import transaction, account, mnemonic
-        from algosdk.v2client import algod
-        from algosdk.transaction import *
-        import os
-        import base64
-        import json
-        # Read a file
-        def load_resource(res):
-            dir_path = os.path.dirname(os.path.realpath(__file__))
-            path = os.path.join(dir_path, res)
-            with open(path, "rb") as fin:
-                data = fin.read()
-            return data
-        def contract_account_example():
-            # Create an algod client
-            algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
-            algod_address = "http://localhost:4001" 
-            # algod_token = "<algod-token>" 
-            # algod_address = "<algod-address>" 
-            # receiver = "<receiver-address>" 
-            receiver = "NQMDAY2QKOZ4ZKJLE6HEO6LTGRJHP3WQVZ5C2M4HKQQLFHV5BU5AW4NVRY"
-            algod_client = algod.AlgodClient(algod_token, algod_address)        
-            myprogram = "samplearg.teal"
-            # myprogram = "<filename>"
-            # Read TEAL program
-            data = load_resource(myprogram)
-            source = data.decode('utf-8')
-            # Compile TEAL program
-            # // This code is meant for learning purposes only
-            # // It should not be used in production
-            # // sample.teal
-            # arg_0
-            # btoi
-            # int 123
-            # ==
-            # // bto1
-            # // Opcode: 0x17
-            # // Pops: ... stack, []byte
-            # // Pushes: uint64
-            # // converts bytes X as big endian to uint64
-            # // btoi panics if the input is longer than 8 bytes
-            response = algod_client.compile(source)
-            # Print(response)
-            print("Response Result = ", response['result'])
-            print("Response Hash = ", response['hash'])
-            # Create logic sig
-            programstr = response['result']
-            t = programstr.encode("ascii")
-            # program = b"hex-encoded-program"
-            program = base64.decodebytes(t)
-            print(program)
-            print(len(program) * 8)
-            # string parameter
-            # arg_str = "<my string>"
-            # arg1 = arg_str.encode()
-            # lsig = transaction.LogicSigAccount(program, args=[arg1])
-            # see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-            # Create arg to pass if TEAL program requires an arg
-            # if not, omit args param
-            arg1 = (123).to_bytes(8, 'big')
-            lsig = LogicSigAccount(program, args=[arg1])
-            sender = lsig.address()
-            # Get suggested parameters
-            params = algod_client.suggested_params()
-            # Comment out the next two (2) lines to use suggested fees
-            # params.flat_fee = True
-            # params.fee = 1000           
-            # Build transaction  
-            amount = 10000 
-            closeremainderto = None
-            # Create a transaction
-            txn = PaymentTxn(
-                sender, params, receiver, amount, closeremainderto)
-            # Create the LogicSigTransaction with contract account LogicSigAccount
-            lstx = transaction.LogicSigTransaction(txn, lsig)
-            # transaction.write_to_file([lstx], "simple.stxn")
-            # Send raw LogicSigTransaction to network
-            txid = algod_client.send_transaction(lstx)
-            print("Transaction ID: " + txid) 
-            # wait for confirmation	
-            try:
-                confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
-                print("TXID: ", txid)
-                print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-            except Exception as err:
-                print(err)
-            print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        
-        contract_account_example()
-    ```
+    <!-- ===PYSDK_LSIG_SIGN_FULL=== -->
+```python
+    # Create an algod client
+    lsig_args_path = Path("lsig") / "sample_arg.teal"
+    compiled_program = compile_lsig(lsig_args_path)
+    program_binary = base64.b64decode(compiled_program)
+    arg1 = (123).to_bytes(8, "big")
+    lsig = transaction.LogicSigAccount(program_binary, args=[arg1])
+    sender = lsig.address()
+    # Get suggested parameters
+    params = algod_client.suggested_params()
+    # Build transaction
+    amount = 10000
+    # Create a transaction
+    txn = transaction.PaymentTxn(sender, params, receiver, amount)
+    # Create the LogicSigTransaction with contract account LogicSigAccount
+    lstx = transaction.LogicSigTransaction(txn, lsig)
+
+    # Send raw LogicSigTransaction to network
+    txid = algod_client.send_transaction(lstx)
+    print("Transaction ID: " + txid)
+    # wait for confirmation
+    confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)
+    print(
+        "Result confirmed in round: {}".format(
+            confirmed_txn["confirmed-round"]
+        )
+    )
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L66-L92)
+    <!-- ===PYSDK_LSIG_SIGN_FULL=== -->
 
 === "Java"
+    <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
 	```java
     package com.algorand.javatest.smart_contracts;
     import com.algorand.algosdk.account.Account;
@@ -671,8 +600,10 @@ int 123
 
 
     ```
+    <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
 
 === "Go"
+    <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 	```go
     package main
 
@@ -797,6 +728,7 @@ int 123
 
     }
     ```
+    <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 
 # Account delegation SDK usage
 Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. 
@@ -819,6 +751,7 @@ Delegated Logic Signatures require that the logic signature be signed from a spe
 The following example illustrates signing a transaction with a created logic signature that is signed by a specific account.
 
 === "JavaScript"
+    <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
 	```javascript
     const algosdk = require('algosdk');
     // const token = "<algod-token>";
@@ -903,111 +836,48 @@ The following example illustrates signing a transaction with a created logic sig
     }
 
     ```
+    <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Python"
-	```python
-    from algosdk import algod, transaction, account, mnemonic
-    from algosdk.v2client import algod
-    import os
-    import base64
-    from algosdk.transaction import *
-    # Read a file
-    def load_resource(res):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        path = os.path.join(dir_path, res)
-        with open(path, "rb") as fin:
-            data = fin.read()
-        return data
-    try:
-        # Create an algod client
-        algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        algod_address = "http://localhost:4001"
-        # algod_token = "<algod-token>"
-        # algod_address = "<algod-address:port>"
-        # receiver = "<receiver-address>"
-        receiver = "NQMDAY2QKOZ4ZKJLE6HEO6LTGRJHP3WQVZ5C2M4HKQQLFHV5BU5AW4NVRY"
-        algod_client = algod.AlgodClient(algod_token, algod_address)
-        myprogram = "samplearg.teal"
-        # myprogram = "<filename>"
-        # Read TEAL program
-        data = load_resource(myprogram)
-        source = data.decode('utf-8')
-        # Compile TEAL program
-        # // This code is meant for learning purposes only
-        # // It should not be used in production
-        # // sample.teal
+    <!-- ===PYSDK_LSIG_DELEGATE_FULL=== -->
+```python
+    lsig_args_path = Path("lsig") / "sample_arg.teal"
+    compiled_program = compile_lsig(lsig_args_path)
+    program_binary = base64.b64decode(compiled_program)
+    arg1 = (123).to_bytes(8, "big")
+    lsig = transaction.LogicSigAccount(program_binary, args=[arg1])
 
-        # arg_0
-        # btoi
-        # int 123
-        # ==
+    # Sign the logic signature with an account sk
+    lsig.sign(signer_acct.private_key)
 
-        # // bto1
-        # // Opcode: 0x17
-        # // Pops: ... stack, []byte
-        # // Pushes: uint64
-        # // converts bytes X as big endian to uint64
-        # // btoi panics if the input is longer than 8 bytes
-        response = algod_client.compile(source)
-        # Print(response)
-        print("Response Result = ", response['result'])
-        print("Response Hash = ", response['hash'])
+    # Get suggested parameters
+    params = algod_client.suggested_params()
+    amount = 10000
+    # Create a transaction where sender is the account that 
+    # is the delegating account
+    txn = transaction.PaymentTxn(
+        signer_acct.address, params, receiver_acct.address, amount
+    )
 
-        # Create logic sig
-        programstr = response['result']
-        t = programstr.encode("ascii")
-        # program = b"hex-encoded-program"
-        program = base64.decodebytes(t)
-        print(program)
-        print(len(program) * 8)
-        # Create arg to pass
-        # string parameter
-        # arg_str = "<my string>"
-        # arg1 = arg_str.encode()
-        # lsig = transaction.LogicSigAccount(program, args=[arg1])
-        # integer parameter
-        # arg1 = (123).to_bytes(8, 'big')
-        # lsig = transaction.LogicSigAccount(program, args=[arg1])
-        # if TEAL program requires an arg,
-        # if not, omit args param on LogicSigAccount
-        # lsig = LogicSigAccount(program)
-        arg1 = (123).to_bytes(8, 'big')
-        lsig = LogicSigAccount(program, args=[arg1])
-        # Recover the account that is wanting to delegate signature
-        # never use mnemonics in code, for demo purposes    
-        passphrase = "<25-word-mnemonic>"
-        sk = mnemonic.to_private_key(passphrase)
-        addr = account.address_from_private_key(sk)
-        print("Address of Sender/Delegator: " + addr)
-        # Sign the logic signature with an account sk
-        lsig.sign(sk)
+    # Create the LogicSigTransaction with contract account LogicSigAccount
+    lstx = transaction.LogicSigTransaction(txn, lsig)
 
-        # Get suggested parameters
-        params = algod_client.suggested_params()
-        # Comment out the next two (2) lines to use suggested fees
-        # params.flat_fee = True
-        # params.fee = 1000
-        # Build transaction
-        amount = 10000
-        closeremainderto = None
-        # Create a transaction
-        txn = PaymentTxn(
-            addr, params, receiver, amount, closeremainderto)
-        # Create the LogicSigTransaction with contract account LogicSigAccount
-        lstx = transaction.LogicSigTransaction(txn, lsig)
-        txns = [lstx]
-        transaction.write_to_file(txns, "simple.stxn")
-        # Send raw LogicSigTransaction to network
-        txid = algod_client.send_transaction(lstx)
-        print("Transaction ID: " + txid)
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))    
-    except Exception as e:
-        print(e)
-    ```
+    # Send raw LogicSigTransaction to network
+    txid = algod_client.send_transaction(lstx)
+    print("Transaction ID: " + txid)
+
+    confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)
+    print(
+        "Result confirmed in round: {}".format(
+            confirmed_txn["confirmed-round"]
+        )
+    )
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L103-L134)
+    <!-- ===PYSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Java"
+    <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
 	```java
     package com.algorand.javatest.smart_contracts;
     import com.algorand.algosdk.account.Account;
@@ -1142,8 +1012,10 @@ The following example illustrates signing a transaction with a created logic sig
         }
     }
     ```
+    <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
 
 === "Go"
+    <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
 	```go
     package main
 
@@ -1275,11 +1147,10 @@ The following example illustrates signing a transaction with a created logic sig
 
         }
     ```
+    <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
 
 !!! Note
     The samplearg.teal file will compile to the address UVBYHRZIHUNUELDO6HWUAHOZF6G66W6T3JOXIIUSV3LDSBWVCFZ6LM6NCA, please fund this address with at least 11000 microALGO else executing the sample code as written will result in an overspend response from the network node.
 
 !!! info
     The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
-
-

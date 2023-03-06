@@ -473,32 +473,47 @@ The user must [opt-in](../apps/#opt-in-to-the-smart-contract) to use the applica
 Use the user_mnemonic to define sender:
 
 === "Python"
-	```python
-    # declare sender
-    private_key = mnemonic.to_private_key(user_mnemonic)
-    sender = account.address_from_private_key(private_key)
-    ```
+<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+```python
+mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
+pk = mnemonic.to_private_key(mn)
+print(f"Base64 encoded private key: {pk}")
+addr = account.address_from_private_key(pk)
+print(f"Address: {addr}")
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
+<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
+<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```javascript
     // get accounts from mnemonic
     let userAccount = algosdk.mnemonicToSecretKey(userMnemonic);
     let sender = userAccount.addr;
     ```
+<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
-	```Java
-    // declare sender
-    Account userAccount = new Account(userMnemonic);
-    Address sender = userAccount.getAddress();
-    ```
+<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+```java
+                // Space delimited 25 word mnemonic
+                String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
+                // We can get the private key
+                byte[] key = Mnemonic.toKey(mn);
+                // Or just init the account directly from the mnemonic
+                Account acct = new Account(mn);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
+<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```go
     // declare sender
     userAccount := recoverAccount(userMnemonic)
     sender := userAccount.Address
     ```
+<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:
 
