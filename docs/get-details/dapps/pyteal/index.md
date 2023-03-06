@@ -690,8 +690,10 @@ def payment_transaction(
     txid = algod_client.send_transaction(signed)
     pmtx = transaction.wait_for_confirmation(algod_client, txid, 5)
     return pmtx
+
+
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L55-L68)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L55-L70)
 <!-- ===PYTEAL_LSIG_SIMPLE_SEED_PAYMENT=== -->
 
 This function takes a creator mnemonic of the address that is creating the payment transaction as the first parameter. The amount to send and the receiver of the payment transaction are the next two parameters. The final parameter is a connection to a valid Algorand node. In this example, the sandbox installed node is used.
@@ -702,12 +704,14 @@ Another utility function is also added to create a payment transaction that is s
 
 <!-- ===PYTEAL_LSIG_SIMPLE_WITHDRAW=== -->
 ```python
-def lsig_payment_txn(encoded_program: str, amt: int, rcv: str, algod_client: algod.AlgodClient):
+def lsig_payment_txn(
+    encoded_program: str, amt: int, rcv: str, algod_client: algod.AlgodClient
+):
     # Create an lsig object using the compiled, b64 encoded program
     program = base64.b64decode(encoded_program)
     lsig = transaction.LogicSigAccount(program)
 
-    # Create transaction with the lsig address as the sender 
+    # Create transaction with the lsig address as the sender
     params = algod_client.suggested_params()
     unsigned_txn = transaction.PaymentTxn(lsig.address(), params, rcv, amt)
 
@@ -716,8 +720,10 @@ def lsig_payment_txn(encoded_program: str, amt: int, rcv: str, algod_client: alg
     tx_id = algod_client.send_transaction(stxn)
     pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)
     return pmtx
+
+
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L72-L86)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L74-L92)
 <!-- ===PYTEAL_LSIG_SIMPLE_WITHDRAW=== -->
 
 The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSigAccount` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smartsigs/index.md).
@@ -754,11 +760,11 @@ def main():
 
     # Withdraws 1 ALGO from smart signature using logic signature.
     withdrawal_amt = 1000000
-    lsig_payment_txn(
-        escrow_result, withdrawal_amt, receiver_public_key, algod_client
-    )
+    lsig_payment_txn(escrow_result, withdrawal_amt, receiver_public_key, algod_client)
+
+
 ```
-[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L92-L123)
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L96-L127)
 <!-- ===PYTEAL_LSIG_SIMPLE_USAGE=== -->
 
 The main function first makes a connection to the sandbox installed node, then the benefactor’s address is recovered. The `donation_escrow` built in the previous section is called to produce the TEAL for the smart signature. This TEAL is then compiled, returning both the base64 encoded bytes of the program and the address of the escrow.
