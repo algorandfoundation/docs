@@ -61,11 +61,11 @@ This response includes the addition of the "spend" field. This is the "auth-addr
 
 ### Rekey-to Transaction
 
-A _rekey-to transaction_ is a `payment` type transaction which includes the `rekey-to` parameter set to a well-formed Algorand address. Authorization for this transaction must be provided by the existing _authorized address_. As shown in the first example account above, the _authorized address_ is implicitly the "addr" field of this account even though the "auth-addr" field is not explicitly defined. Only the private spending key of this "addr" address may be used to authorize a _rekey-to transaction_.
+A _rekey-to transaction_ is a transaction which includes the `rekey-to` parameter set to a well-formed Algorand address. Authorization for this transaction must be provided by the existing _authorized address_. As shown in the first example account above, the _authorized address_ is implicitly the "addr" field of this account even though the "auth-addr" field is not explicitly defined. Only the private spending key of this "addr" address may be used to authorize a _rekey-to transaction_.
 
 The _rekey-to transaction_ workflow is as follows: 
 
-- Construct a payment transaction which specifies an _address_ for the `rekey-to` parameter
+- Construct a transaction which specifies an _address_ for the `rekey-to` parameter
 - Add required signature(s) from the **current** _authorized address_
 - Send and confirm the transaction on the network
 
