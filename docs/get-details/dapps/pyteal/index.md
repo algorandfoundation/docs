@@ -384,7 +384,10 @@ algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 ```
 
-The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are the Algorand mobile wallet, AlgoSigner, MyAlgo Wallet, and Aikon ORE. When using the Algorand mobile wallet, transactions can be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
+The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. 
+
+!!!warning
+    Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are Pera wallet (mobile and web) and AlgoSigner (web extension). Pera, along with some other wallets in the ecosystem, allow transcations be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
 
 The algod_address and algod_token values are the default values to connect to a sandbox installed node. Also note that in this example, the sandbox node is connected to the Algorand TestNet network (eg `./sandbox up testnet`).
 
