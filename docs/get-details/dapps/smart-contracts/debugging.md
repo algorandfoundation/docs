@@ -84,7 +84,7 @@ drr = transaction.create_dryrun(algod_client, txns)
 with open("dryrun.msgp", "wb") as f:
     f.write(base64.b64decode(encoding.msgpack_encode(drr)))
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L22-L33)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L22-L33)
     <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "JavaScript"
@@ -178,7 +178,7 @@ with open("dryrun.msgp", "wb") as f:
         outfile.write(Encoder.encodeToMsgPack(drr));
         outfile.close();
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
@@ -278,7 +278,7 @@ for txn in drr.txns:
     if txn.app_call_rejected():
         print(txn.app_trace())
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L36-L46)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L36-L46)
     <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "JavaScript"
@@ -318,7 +318,7 @@ for txn in drr.txns:
         System.out.println(dryrunTxnResult.appCallMessages);
         System.out.println(Utils.appTrace(dryrunTxnResult));
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 

@@ -36,7 +36,7 @@ myindexer = indexer.IndexerClient(
     indexer_token=indexer_token, indexer_address=indexer_host
 )
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L5-L11)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L5-L11)
     <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Java"
@@ -47,7 +47,7 @@ myindexer = indexer.IndexerClient(
         String indexerToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
@@ -112,7 +112,7 @@ asset_id = 2044572
 response = myindexer.asset_info(asset_id, include_all=True)
 print(f"Asset Info: {json.dumps(response, indent=2,)}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L14-L19)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L14-L19)
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Java"
@@ -123,7 +123,7 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
         Asset assetInfo = assetResponse.body().asset;
         System.out.printf("Name for %d: %s\n", asaId, assetInfo.params.name);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L19-L23)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L19-L23)
     <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Go"
@@ -181,7 +181,7 @@ response = myindexer.search_transactions(
 )
 print(f"Transaction results: {json.dumps(response, indent=2)}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L22-L26)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L22-L26)
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Java"
@@ -192,7 +192,7 @@ print(f"Transaction results: {json.dumps(response, indent=2)}")
         TransactionsResponse txResp = transactionSearchResult.body();
         System.out.printf("Found %d transactions that match criteria\n", txResp.transactions.size());
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L26-L30)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L26-L30)
     <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Go"
@@ -292,7 +292,7 @@ while has_results:
 
     page += 1
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L29-L48)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L29-L48)
     <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Java"
@@ -313,7 +313,7 @@ while has_results:
             nextToken = txnRes.nextToken;
         }
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L33-L47)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L33-L47)
     <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Go"
@@ -435,7 +435,7 @@ note_prefix = "showing prefix".encode()
 response = myindexer.search_transactions(note_prefix=note_prefix)
 print(f"result: {json.dumps(response, indent=2)}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L51-L54)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L51-L54)
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Java"
@@ -445,7 +445,7 @@ print(f"result: {json.dumps(response, indent=2)}")
         Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix).execute();
         // ...
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L53)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L53)
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Go"

@@ -95,7 +95,7 @@ int 1
     print("Response Result = ", response["result"])
     print("Response Hash = ", response["hash"])
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L12-L18)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L12-L18)
     <!-- ===PYSDK_LSIG_COMPILE=== -->
 
 === "Java"
@@ -107,7 +107,7 @@ int 1
         System.out.printf("Address: %s\n", compileResp.body().hash);
         byte[] tealBinary = Encoder.decodeFromBase64(compileResp.body().result);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
     <!-- ===JAVASDK_LSIG_COMPILE=== -->
 
 === "Go"
@@ -190,7 +190,7 @@ The response result from the TEAL `compile` command above is used to create the 
     program = base64.b64decode(compiled_program)
     lsig = transaction.LogicSigAccount(program)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L25-L27)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L25-L27)
     <!-- ===PYSDK_LSIG_INIT=== -->
 
 === "Java"
@@ -198,7 +198,7 @@ The response result from the TEAL `compile` command above is used to create the 
 ```java
         LogicSigAccount lsig = new LogicSigAccount(tealBinary, null);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
     <!-- ===JAVASDK_LSIG_INIT=== -->
 
 === "Go"
@@ -245,7 +245,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
     arg1 = (123).to_bytes(8, "big")
     lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L34-L41)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L34-L41)
     <!-- ===PYSDK_LSIG_PASS_ARGS=== -->
 
 === "Java"
@@ -257,7 +257,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
         tealArgs.add(arg1);
         LogicSigAccount lsigWithArgs = new LogicSigAccount(tealBinaryWithArgs, tealArgs);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
     <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
 
 === "Go"
@@ -420,7 +420,7 @@ int 123
         )
     )
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L66-L92)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L66-L92)
     <!-- ===PYSDK_LSIG_SIGN_FULL=== -->
 
 === "Java"
@@ -444,7 +444,7 @@ int 123
         PendingTransactionResponse pTrx = Utils.waitForConfirmation(algodClient, txid, 4);
         System.out.printf("Transaction %s confirmed in round %d\n", txid, pTrx.confirmedRound);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
     <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
 
 === "Go"
@@ -718,7 +718,7 @@ The following example illustrates signing a transaction with a created logic sig
         )
     )
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L103-L134)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L103-L134)
     <!-- ===PYSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Java"
@@ -744,7 +744,7 @@ The following example illustrates signing a transaction with a created logic sig
         PendingTransactionResponse delegatResponse = Utils.waitForConfirmation(algodClient, txid, 4);
         System.out.printf("Transaction %s confirmed in round %d\n", txid, delegatResponse.confirmedRound);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
     <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
 
 === "Go"

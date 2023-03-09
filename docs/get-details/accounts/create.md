@@ -90,7 +90,7 @@ kmd_token = "a" * 64
 
 kmd_client = kmd.KMDClient(kmd_token=kmd_token, kmd_address=kmd_address)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L4-L8)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L4-L8)
 <!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
 <!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 ```python
@@ -103,7 +103,7 @@ print(f"Wallet name: {info['wallet']['name']}")
 backup = wlt.get_mnemonic()
 print(f"mnemonic for master derivation key: {backup}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L26-L34)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L26-L34)
 <!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 <!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 ```python
@@ -111,7 +111,7 @@ print(f"mnemonic for master derivation key: {backup}")
 address = wlt.generate_key()
 print(f"New account: {address}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L37-L40)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L37-L40)
 <!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Java"
@@ -126,7 +126,7 @@ print(f"New account: {address}")
 
         KmdApi kmd = new KmdApi(kmdClient);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L26-L34)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L26-L34)
 <!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 <!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 ```java
@@ -140,7 +140,7 @@ print(f"New account: {address}")
         APIV1Wallet wallet = result.getWallet();
         System.out.printf("Wallet name: %s\n", wallet.getName());
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L41-L50)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L41-L50)
 <!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 <!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 ```java
@@ -151,7 +151,7 @@ print(f"New account: {address}")
         String addr = generatedKey.getAddress();
         System.out.printf("New account: %s\n", addr);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L77-L83)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L77-L83)
 <!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Go"
@@ -281,7 +281,7 @@ print(f"Created Wallet: {wallet_id}")
 rec_addr = wlt.generate_key()
 print("Recovered account:", rec_addr)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L44-L58)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L44-L58)
 <!-- ===PYSDK_KMD_RECOVER_WALLET=== -->
 
 === "Java"
@@ -299,7 +299,7 @@ print("Recovered account:", rec_addr)
         APIV1Wallet recoveredWallet = recoverResponse.getWallet();
         System.out.printf("Wallet name: %s\n", recoveredWallet.getName());
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L63-L74)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L63-L74)
 <!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 
 === "Go"
@@ -414,7 +414,7 @@ accountkey = kmd_client.export_key(
 mn = mnemonic.from_private_key(accountkey)
 print(f"Account mnemonic: {mn}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L61-L72)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L61-L72)
 <!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Java"
@@ -429,7 +429,7 @@ print(f"Account mnemonic: {mn}")
         String mn = Mnemonic.fromKey(Arrays.copyOfRange(exportedKey, 0, 32));
         System.out.printf("Exported mnemonic: %s\n", mn);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L86-L94)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L86-L94)
 <!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Go"
@@ -507,7 +507,7 @@ wallethandle = kmd_client.init_wallet_handle(wallet_id, "supersecretpassword")
 importedaccount = kmd_client.import_key(wallethandle, new_private_key)
 print("Account successfully imported: ", importedaccount)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L75-L86)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L75-L86)
 <!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Java"
@@ -517,7 +517,7 @@ print("Account successfully imported: ", importedaccount)
         String recoveredWalletHandleToken = getHandle(kmd, recoveredWallet, password);
 
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L95-L98)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L95-L98)
 <!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Go"
@@ -585,7 +585,7 @@ print(f"address: {address}")
 print(f"private key: {private_key}")
 print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L5-L9)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L5-L9)
 <!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
 === "Java"
@@ -595,7 +595,7 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
         System.out.println("Address: " + acct.getAddress());
         System.out.println("Passphrase: " + acct.toMnemonic());
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L73-L76)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L73-L76)
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 === "Go"
@@ -708,7 +708,7 @@ msig = transaction.Multisig(
 )
 print("Multisig Address: ", msig.address())
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
 <!-- ===PYSDK_MULTISIG_CREATE=== -->
 
 === "Java"
@@ -726,7 +726,7 @@ print("Multisig Address: ", msig.address())
                 MultisigAddress msig = new MultisigAddress(version, threshold, accts);
                 System.out.printf("msig address: %s\n", msig.toAddress().toString());
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
 <!-- ===JAVASDK_MULTISIG_CREATE=== -->
 
 === "Go"

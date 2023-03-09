@@ -353,7 +353,7 @@ txid = algod_client.send_transaction(signed_rekey)
 result = transaction.wait_for_confirmation(algod_client, txid, 4)
 print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L61-L95)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L61-L95)
 <!-- ===PYSDK_ACCOUNT_REKEY=== -->
 
 === "JavaScript"
@@ -384,7 +384,7 @@ print(f"rekey transaction confirmed in round {result['confirmed-round']}")
                                 .rawtxn(Encoder.encodeToMsgPack(signedRekeyBack)).execute();
                 ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
 <!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
 === "Go"

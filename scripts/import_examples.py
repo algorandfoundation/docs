@@ -73,7 +73,7 @@ SDKExamples = dict[str, Example]
 
 sources: list[ExampleSource] = [
     ExampleSource(
-        github_url="https://github.com/algorand/py-algorand-sdk",
+        github_url="https://github.com/barnjamin/py-algorand-sdk",
         git_branch="doc-examples",
         local_dir="../../py-algorand-sdk",
         example_dir="_examples",
@@ -103,7 +103,7 @@ sources: list[ExampleSource] = [
         file_extension=".go",
     ),
     ExampleSource(
-        github_url="https://github.com/algorand/java-algorand-sdk",
+        github_url="https://github.com/barnjamin/java-algorand-sdk",
         git_branch="examples",
         local_dir="../../java-algorand-sdk",
         example_dir="examples",

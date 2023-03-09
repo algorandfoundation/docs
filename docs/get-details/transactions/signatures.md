@@ -235,7 +235,7 @@ msig = transaction.Multisig(
 )
 print("Multisig Address: ", msig.address())
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
     <!-- ===PYSDK_MULTISIG_CREATE=== -->
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 ```python
@@ -251,7 +251,7 @@ print(
     f"Payment made from msig account confirmed in round {result['confirmed-round']}"
 )
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/account.py#L46-L57)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L46-L57)
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 
 === "Java"
@@ -269,7 +269,7 @@ print(
                 MultisigAddress msig = new MultisigAddress(version, threshold, accts);
                 System.out.printf("msig address: %s\n", msig.toAddress().toString());
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 ```java
@@ -287,7 +287,7 @@ print(
                 Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
                                 .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 
 === "Go"

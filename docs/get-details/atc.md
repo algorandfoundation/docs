@@ -33,7 +33,7 @@ from algosdk.atomic_transaction_composer import (
 
 atc = AtomicTransactionComposer()
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L5-L12)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L5-L12)
     <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
@@ -50,7 +50,7 @@ atc = AtomicTransactionComposer()
 ```java
                 AtomicTransactionComposer atc = new AtomicTransactionComposer();
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
@@ -79,7 +79,7 @@ tws = TransactionWithSigner(ptxn, signer)
 # Pass TransactionWithSigner to ATC
 atc.add_transaction(tws)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L22-L38)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L22-L38)
     <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
@@ -155,7 +155,7 @@ atc.add_transaction(tws)
                 // Pass TransactionWithSigner to atc
                 atc.addTransaction(tws);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
@@ -176,7 +176,7 @@ with open("path/to/contract.json") as f:
     js = f.read()
 contract = abi.Contract.from_json(js)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L41-L44)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L41-L44)
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
 
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
@@ -208,7 +208,7 @@ atc.add_method_call(
     method_args=[10000, txn, 1000],
 )
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 
 === "JavaScript"
@@ -304,7 +304,7 @@ atc.add_method_call(
                 // Create Contract from Json
                 Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
 
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
@@ -323,7 +323,7 @@ atc.add_method_call(
 
                 atc.addMethodCall(mcp);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
     <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
     
 ## Execution 
@@ -345,7 +345,7 @@ result = atc.execute(algod_client, 4)
 for res in result.abi_results:
     print(res.return_value)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L81-L87)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L81-L87)
     <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
@@ -390,5 +390,5 @@ for res in result.abi_results:
                                         methodResult.value);
                 });
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
     <!-- ===JAVASDK_ATC_RESULTS=== -->

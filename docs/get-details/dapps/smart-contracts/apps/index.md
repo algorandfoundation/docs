@@ -914,7 +914,7 @@ atc.add_method_call(
     boxes=[[app_id, b"key"]],
 )
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L92-L102)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L92-L102)
     <!-- ===PYSDK_ATC_BOX_REF=== -->
 
 === "JavaScript"
@@ -971,7 +971,7 @@ atc.add_method_call(
                                 .boxReferences(boxRefs)
                                 .build();
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 
 === "Beaker"

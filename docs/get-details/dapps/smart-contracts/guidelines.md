@@ -49,7 +49,7 @@ from algosdk import constants
 
 print(constants.MIN_TXN_FEE)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L82-L85)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L82-L85)
     <!-- ===PYSDK_CONST_MIN_FEE=== -->
 
 === "JavaScript"
@@ -64,7 +64,7 @@ print(constants.MIN_TXN_FEE)
 ```java
         System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
@@ -82,7 +82,7 @@ print(constants.MIN_TXN_FEE)
 suggested_params = algod_client.suggested_params()
 print(suggested_params.min_fee)
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L77-L79)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L77-L79)
     <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
@@ -99,7 +99,7 @@ print(suggested_params.min_fee)
         TransactionParametersResponse sp = tpr.body();
         System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"

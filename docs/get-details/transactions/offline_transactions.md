@@ -56,7 +56,7 @@ with open("pay.txn", "r") as f:
 
 print(recovered_txn.dictify())
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L31-L43)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L31-L43)
 <!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Java"
@@ -73,7 +73,7 @@ print(recovered_txn.dictify())
         Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
         assert decodedTxn.equals(ptxn);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
@@ -221,7 +221,7 @@ with open("signed_pay.txn", "r") as f:
 
 print(recovered_signed_txn.dictify())
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L48-L59)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L48-L59)
 <!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
@@ -234,7 +234,7 @@ print(recovered_signed_txn.dictify())
                 SignedTransaction.class);
         assert decodedSignedTransaction.equals(signedTxn);
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"

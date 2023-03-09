@@ -40,7 +40,7 @@ online_keyreg = transaction.KeyregTxn(
 )
 print(online_keyreg.dictify())
 ```
-[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L6-L26)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L6-L26)
     <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Java"
@@ -68,7 +68,7 @@ print(online_keyreg.dictify())
                 .build();
         // ... sign and send to network
 ```
-[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L13-L34)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L13-L34)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Go"
