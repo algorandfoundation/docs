@@ -293,25 +293,26 @@ print(
 === "Go"
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
 ```go
-  // Get pre-defined set of keys for example
-  _, pks := loadAccounts()
-  addr1, _ := types.DecodeAddress(pks[1])
-  addr2, _ := types.DecodeAddress(pks[2])
-  addr3, _ := types.DecodeAddress(pks[3])
+	// Get pre-defined set of keys for example
+	_, pks := loadAccounts()
+	addr1, _ := types.DecodeAddress(pks[1])
+	addr2, _ := types.DecodeAddress(pks[2])
+	addr3, _ := types.DecodeAddress(pks[3])
 
-  ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
-    addr1,
-    addr2,
-    addr3,
-  })
+	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+		addr1,
+		addr2,
+		addr3,
+	})
 
-  if err != nil {
-    panic("invalid multisig parameters")
-  }
-  fromAddr, _ := ma.Address()
-  // Print multisig account
-  fmt.Printf("Multisig address : %s \n", fromAddr)
+	if err != nil {
+		panic("invalid multisig parameters")
+	}
+	fromAddr, _ := ma.Address()
+	// Print multisig account
+	fmt.Printf("Multisig address : %s \n", fromAddr)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
     <!-- ===GOSDK_MULTISIG_SIGN=== -->
     ```go

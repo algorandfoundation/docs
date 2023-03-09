@@ -90,25 +90,26 @@ special_algod_client = algod.AlgodClient(
 === "Go"
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 ```go
-  // Create a new algod client, configured to connect to out local sandbox
-  var algodAddress = "http://localhost:4001"
-  var algodToken = strings.Repeat("a", 64)
-  algodClient, err := algod.MakeClient(
-    algodAddress,
-    algodToken,
-  )
+	// Create a new algod client, configured to connect to out local sandbox
+	var algodAddress = "http://localhost:4001"
+	var algodToken = strings.Repeat("a", 64)
+	algodClient, err := algod.MakeClient(
+		algodAddress,
+		algodToken,
+	)
 
-  // Or, if necessary, pass alternate headers
+	// Or, if necessary, pass alternate headers
 
-  var algodHeader common.Header
-  algodHeader.Key = "X-API-Key"
-  algodHeader.Value = algodToken
-  algodClientWithHeaders, err := algod.MakeClientWithHeaders(
-    algodAddress,
-    algodToken,
-    []*common.Header{&algodHeader},
-  )
+	var algodHeader common.Header
+	algodHeader.Key = "X-API-Key"
+	algodHeader.Value = algodToken
+	algodClientWithHeaders, err := algod.MakeClientWithHeaders(
+		algodAddress,
+		algodToken,
+		[]*common.Header{&algodHeader},
+	)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/deploy_app.go#L14-L32)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
