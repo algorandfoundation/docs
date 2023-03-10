@@ -53,25 +53,26 @@ myindexer = indexer.IndexerClient(
 === "Go"
 <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 ```go
-  // Create a new indexer client, configured to connect to out local sandbox
-  var indexerAddress = "http://localhost:8980"
-  var indexerToken = strings.Repeat("a", 64)
-  indexerClient, err := indexer.MakeClient(
-    indexerAddress,
-    indexerToken,
-  )
+	// Create a new indexer client, configured to connect to out local sandbox
+	var indexerAddress = "http://localhost:8980"
+	var indexerToken = strings.Repeat("a", 64)
+	indexerClient, err := indexer.MakeClient(
+		indexerAddress,
+		indexerToken,
+	)
 
-  // Or, if necessary, pass alternate headers
+	// Or, if necessary, pass alternate headers
 
-  var indexerHeader common.Header
-  indexerHeader.Key = "X-API-Key"
-  indexerHeader.Value = indexerToken
-  indexerClientWithHeaders, err := indexer.MakeClientWithHeaders(
-    indexerAddress,
-    indexerToken,
-    []*common.Header{&indexerHeader},
-  )
+	var indexerHeader common.Header
+	indexerHeader.Key = "X-API-Key"
+	indexerHeader.Value = indexerToken
+	indexerClientWithHeaders, err := indexer.MakeClientWithHeaders(
+		indexerAddress,
+		indexerToken,
+		[]*common.Header{&indexerHeader},
+	)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
 <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
@@ -129,20 +130,21 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
 === "Go"
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
 ```go
-  // query parameters
-  var assetId uint64 = 2044572
-  var minBalance uint64 = 50
+	// query parameters
+	var assetId uint64 = 2044572
+	var minBalance uint64 = 50
 
-  // Lookup accounts with minimum balance of asset
-  assetResult, err := indexerClient.
-    LookupAssetBalances(assetId).
-    CurrencyGreaterThan(minBalance).
-    Do(context.Background())
+	// Lookup accounts with minimum balance of asset
+	assetResult, err := indexerClient.
+		LookupAssetBalances(assetId).
+		CurrencyGreaterThan(minBalance).
+		Do(context.Background())
 
-  // Print the results
-  assetJson, err := json.MarshalIndent(assetResult, "", "\t")
-  fmt.Printf(string(assetJson) + "\n")
+	// Print the results
+	assetJson, err := json.MarshalIndent(assetResult, "", "\t")
+	fmt.Printf(string(assetJson) + "\n")
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L51-L64)
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "cURL"
@@ -198,19 +200,20 @@ print(f"Transaction results: {json.dumps(response, indent=2)}")
 === "Go"
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 ```go
-  // query parameters
-  var transactionMinAmount uint64 = 10
+	// query parameters
+	var transactionMinAmount uint64 = 10
 
-  // Query
-  transactionResult, err := indexerClient.
-    SearchForTransactions().
-    CurrencyGreaterThan(transactionMinAmount).
-    Do(context.Background())
+	// Query
+	transactionResult, err := indexerClient.
+		SearchForTransactions().
+		CurrencyGreaterThan(transactionMinAmount).
+		Do(context.Background())
 
-  // Print results
-  transactionJson, err := json.MarshalIndent(transactionResult, "", "\t")
-  fmt.Printf(string(transactionJson) + "\n")
+	// Print results
+	transactionJson, err := json.MarshalIndent(transactionResult, "", "\t")
+	fmt.Printf(string(transactionJson) + "\n")
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L69-L81)
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "cURL"
@@ -319,41 +322,42 @@ while has_results:
 === "Go"
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 ```go
-  var nextToken = ""
-  var numTx = 1
-  var numPages = 1
-  var pagedMinAmount uint64 = 10
-  var limit uint64 = 1
+	var nextToken = ""
+	var numTx = 1
+	var numPages = 1
+	var pagedMinAmount uint64 = 10
+	var limit uint64 = 1
 
-  for numTx > 0 {
-    // Query
-    pagedResults, err := indexerClient.
-      SearchForTransactions().
-      CurrencyGreaterThan(pagedMinAmount).
-      Limit(limit).
-      NextToken(nextToken).
-      Do(context.Background())
-    if err != nil {
-        return
-    }
-    pagedTransactions := pagedResults.Transactions
-    numTx = len(pagedTransactions)
-    nextToken = pagedResults.NextToken
+	for numTx > 0 {
+		// Query
+		pagedResults, err := indexerClient.
+			SearchForTransactions().
+			CurrencyGreaterThan(pagedMinAmount).
+			Limit(limit).
+			NextToken(nextToken).
+			Do(context.Background())
+		if err != nil {
+			return
+		}
+		pagedTransactions := pagedResults.Transactions
+		numTx = len(pagedTransactions)
+		nextToken = pagedResults.NextToken
 
-    if numTx > 0 {
-        // Print results
-        pagedJson, err := json.MarshalIndent(pagedTransactions, "", "\t")
-        if err != nil {
-            return
-        }
-        fmt.Printf(string(pagedJson) + "\n")
-        fmt.Println("End of page : ", numPages)
-        fmt.Println("Transaction printed : ", len(pagedTransactions))
-        fmt.Println("Next Token : ", nextToken)
-        numPages++
-    }
-  }
+		if numTx > 0 {
+			// Print results
+			pagedJson, err := json.MarshalIndent(pagedTransactions, "", "\t")
+			if err != nil {
+				return
+			}
+			fmt.Printf(string(pagedJson) + "\n")
+			fmt.Println("End of page : ", numPages)
+			fmt.Println("Transaction printed : ", len(pagedTransactions))
+			fmt.Println("Next Token : ", nextToken)
+			numPages++
+		}
+	}
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L84-L118)
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "cURL"
@@ -451,19 +455,20 @@ print(f"result: {json.dumps(response, indent=2)}")
 === "Go"
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 ```go
-  // Parameters
-  var notePrefix = "showing prefix"
+	// Parameters
+	var notePrefix = "showing prefix"
 
-  // Query
-  prefixResult, err := indexerClient.
-    SearchForTransactions().
-    NotePrefix([]byte(notePrefix)).
-    Do(context.Background())
+	// Query
+	prefixResult, err := indexerClient.
+		SearchForTransactions().
+		NotePrefix([]byte(notePrefix)).
+		Do(context.Background())
 
-  // Print results
-  prefixJson, err := json.MarshalIndent(prefixResult, "", "\t")
-  fmt.Printf(string(prefixJson) + "\n")
+	// Print results
+	prefixJson, err := json.MarshalIndent(prefixResult, "", "\t")
+	fmt.Printf(string(prefixJson) + "\n")
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L121-L133)
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "cURL"

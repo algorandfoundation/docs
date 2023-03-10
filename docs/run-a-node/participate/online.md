@@ -73,39 +73,29 @@ print(online_keyreg.dictify())
 
 === "Go"
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
-    ```go 
-    func saveUnsignedTransaction() {
-
-        // setup connection
-        algodClient := setupConnection()
-
-        // get network suggested parameters
-        txParams, err := algodClient.SuggestedParams()
-        if err != nil {
-            fmt.Printf("error getting suggested tx params: %s\n", err)
-            return
-        }
-
-        // create transaction
-        fromAddr := "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4"
-        genID := txParams.GenesisID
-        genesisHash := base64.StdEncoding.EncodeToString(txParams.GenesisHash)
-        voteKey := "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw="
-        selKey := "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4="
-        voteFirst := uint64(6000000)
-        voteLast := uint64(9000000)
-        keyDilution := uint64(1730)
-        tx, err := transaction.MakeKeyRegTxnWithFlatFee(fromAddr, 2000, 6002000,
-            6003000, nil, genID, genesisHash, voteKey, selKey, voteFirst, voteLast,
-            keyDilution)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-        unsignedTx := types.SignedTxn{
-            Txn: tx,
-        }
-    ```
+```go
+	fromAddr := "MWAPNXBDFFD2V5KWXAHWKBO7FO4JN36VR4CIBDKDDE7WAUAGZIXM3QPJW4"
+	voteKey := "87iBW46PP4BpTDz6+IEGvxY6JqEaOtV0g+VWcJqoqtc="
+	selKey := "1V2BE2lbFvS937H7pJebN0zxkqe1Nrv+aVHDTPbYRlw="
+	sProofKey := "f0CYOA4yXovNBFMFX+1I/tYVBaAl7VN6e0Ki5yZA3H6jGqsU/LYHNaBkMQ/rN4M4F3UmNcpaTmbVbq+GgDsrhQ=="
+	voteFirst := uint64(16532750)
+	voteLast := uint64(19532750)
+	keyDilution := uint64(1732)
+	nonpart := false
+	tx, err := transaction.MakeKeyRegTxnWithStateProofKey(
+		fromAddr,
+		[]byte{},
+		sp,
+		voteKey,
+		selKey,
+		sProofKey,
+		voteFirst,
+		voteLast,
+		keyDilution,
+		nonpart,
+	)
+```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/participation.go#L40-L60)
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"

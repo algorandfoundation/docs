@@ -157,53 +157,56 @@ print(f"New account: {address}")
 === "Go"
 <!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
 ```go
-  // Create a new kmd client, configured to connect to out local sandbox
-  var kmdAddress = "http://localhost:4002"
-  var kmdToken = strings.Repeat("a", 64)
-  kmdClient, err := kmd.MakeClient(
-    kmdAddress,
-    kmdToken,
-  )
+	// Create a new kmd client, configured to connect to out local sandbox
+	var kmdAddress = "http://localhost:4002"
+	var kmdToken = strings.Repeat("a", 64)
+	kmdClient, err := kmd.MakeClient(
+		kmdAddress,
+		kmdToken,
+	)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L22-L29)
 <!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
 <!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 ```go
-  // Create the example wallet, if it doesn't already exist
-  createResponse, err := kmdClient.CreateWallet(
-    "DemoWallet",
-    "password",
-    kmd.DefaultWalletDriver,
-    types.MasterDerivationKey{},
-  )
-  if err != nil {
-    fmt.Printf("error creating wallet: %s\n", err)
-    return
-  }
+	// Create the example wallet, if it doesn't already exist
+	createResponse, err := kmdClient.CreateWallet(
+		"DemoWallet",
+		"password",
+		kmd.DefaultWalletDriver,
+		types.MasterDerivationKey{},
+	)
+	if err != nil {
+		fmt.Printf("error creating wallet: %s\n", err)
+		return
+	}
 
-  // We need the wallet ID in order to get a wallet handle, so we can add accounts
-  exampleWalletID = createResponse.Wallet.ID
-  fmt.Printf("Created wallet '%s' with ID: %s\n", createResponse.Wallet.Name, exampleWalletID)
+	// We need the wallet ID in order to get a wallet handle, so we can add accounts
+	exampleWalletID = createResponse.Wallet.ID
+	fmt.Printf("Created wallet '%s' with ID: %s\n", createResponse.Wallet.Name, exampleWalletID)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L37-L52)
 <!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 
 <!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 ```go
-  // Get a wallet handle.
-  initResponse, _ = kmdClient.InitWalletHandle(
-    exampleWalletID,
-    "password",
-  )
-  exampleWalletHandleToken = initResponse.WalletHandleToken
+	// Get a wallet handle.
+	initResponse, _ = kmdClient.InitWalletHandle(
+		exampleWalletID,
+		"password",
+	)
+	exampleWalletHandleToken = initResponse.WalletHandleToken
 
-  // Generate a new address from the wallet handle
-  genResponse, err = kmdClient.GenerateKey(exampleWalletHandleToken)
-  if err != nil {
-    fmt.Printf("Error generating key: %s\n", err)
-    return
-  }
-  accountAddress := genResponse.Address
-  fmt.Printf("New Account: %s\n", accountAddress)
+	// Generate a new address from the wallet handle
+	genResponse, err = kmdClient.GenerateKey(exampleWalletHandleToken)
+	if err != nil {
+		fmt.Printf("Error generating key: %s\n", err)
+		return
+	}
+	accountAddress := genResponse.Address
+	fmt.Printf("New Account: %s\n", accountAddress)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L55-L70)
 <!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "goal"
@@ -305,52 +308,53 @@ print("Recovered account:", rec_addr)
 === "Go"
 <!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 ```go
-  keyBytes, err := mnemonic.ToKey(backupPhrase)
-  if err != nil {
-    fmt.Printf("failed to get key: %s\n", err)
-    return
-  }
+	keyBytes, err := mnemonic.ToKey(backupPhrase)
+	if err != nil {
+		fmt.Printf("failed to get key: %s\n", err)
+		return
+	}
 
-  var mdk types.MasterDerivationKey
-  copy(mdk[:], keyBytes)
-  recoverResponse, err := kmdClient.CreateWallet(
-    "RecoveryWallet",
-    "password",
-    kmd.DefaultWalletDriver,
-    mdk,
-  )
-  if err != nil {
-    fmt.Printf("error creating wallet: %s\n", err)
-    return
-  }
+	var mdk types.MasterDerivationKey
+	copy(mdk[:], keyBytes)
+	recoverResponse, err := kmdClient.CreateWallet(
+		"RecoveryWallet",
+		"password",
+		kmd.DefaultWalletDriver,
+		mdk,
+	)
+	if err != nil {
+		fmt.Printf("error creating wallet: %s\n", err)
+		return
+	}
 
-  // We need the wallet ID in order to get a wallet handle, so we can add accounts
-  exampleWalletID = recoverResponse.Wallet.ID
-  fmt.Printf("Created wallet '%s' with ID: %s\n", recoverResponse.Wallet.Name, exampleWalletID)
+	// We need the wallet ID in order to get a wallet handle, so we can add accounts
+	exampleWalletID = recoverResponse.Wallet.ID
+	fmt.Printf("Created wallet '%s' with ID: %s\n", recoverResponse.Wallet.Name, exampleWalletID)
 
-  // Get a wallet handle. The wallet handle is used for things like signing transactions
-  // and creating accounts. Wallet handles do expire, but they can be renewed
-  initResponse, err = kmdClient.InitWalletHandle(
-    exampleWalletID,
-    "password",
-  )
-  if err != nil {
-    fmt.Printf("Error initializing wallet handle: %s\n", err)
-    return
-  }
+	// Get a wallet handle. The wallet handle is used for things like signing transactions
+	// and creating accounts. Wallet handles do expire, but they can be renewed
+	initResponse, err = kmdClient.InitWalletHandle(
+		exampleWalletID,
+		"password",
+	)
+	if err != nil {
+		fmt.Printf("Error initializing wallet handle: %s\n", err)
+		return
+	}
 
-  // Extract the wallet handle
-  exampleWalletHandleToken = initResponse.WalletHandleToken
-  fmt.Printf("Got wallet handle: '%s'\n", exampleWalletHandleToken)
+	// Extract the wallet handle
+	exampleWalletHandleToken = initResponse.WalletHandleToken
+	fmt.Printf("Got wallet handle: '%s'\n", exampleWalletHandleToken)
 
-  // Generate a new address from the wallet handle
-  genResponse, err = kmdClient.GenerateKey(exampleWalletHandleToken)
-  if err != nil {
-    fmt.Printf("Error generating key: %s\n", err)
-    return
-  }
-  fmt.Printf("Recovered address %s\n", genResponse.Address)
+	// Generate a new address from the wallet handle
+	genResponse, err = kmdClient.GenerateKey(exampleWalletHandleToken)
+	if err != nil {
+		fmt.Printf("Error generating key: %s\n", err)
+		return
+	}
+	fmt.Printf("Recovered address %s\n", genResponse.Address)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L115-L160)
 <!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 
 === "goal"
@@ -435,21 +439,22 @@ print(f"Account mnemonic: {mn}")
 === "Go"
 <!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 ```go
-  // Extract the account sk
-  accountKeyResponse, err := kmdClient.ExportKey(
-    exampleWalletHandleToken,
-    "password",
-    accountAddress,
-  )
-  accountKey := accountKeyResponse.PrivateKey
-  // Convert sk to mnemonic
-  mn, err := mnemonic.FromPrivateKey(accountKey)
-  if err != nil {
-    fmt.Printf("Error getting backup phrase: %s\n", err)
-    return
-  }
-  fmt.Printf("Account Mnemonic: %v ", mn)
+	// Extract the account sk
+	accountKeyResponse, err := kmdClient.ExportKey(
+		exampleWalletHandleToken,
+		"password",
+		accountAddress,
+	)
+	accountKey := accountKeyResponse.PrivateKey
+	// Convert sk to mnemonic
+	mn, err := mnemonic.FromPrivateKey(accountKey)
+	if err != nil {
+		fmt.Printf("Error getting backup phrase: %s\n", err)
+		return
+	}
+	fmt.Printf("Account Mnemonic: %v ", mn)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L73-L87)
 <!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 
 ### Import an account
@@ -523,20 +528,21 @@ print("Account successfully imported: ", importedaccount)
 === "Go"
 <!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 ```go
-  account := crypto.GenerateAccount()
-  fmt.Println("Account Address: ", account.Address)
-  mn, err = mnemonic.FromPrivateKey(account.PrivateKey)
-  if err != nil {
-    fmt.Printf("Error getting backup phrase: %s\n", err)
-    return
-  }
-  fmt.Printf("Account Mnemonic: %s\n", mn)
-  importedAccount, err := kmdClient.ImportKey(
-    exampleWalletHandleToken,
-    account.PrivateKey,
-  )
-  fmt.Println("Account Successfully Imported: ", importedAccount.Address)
+	account := crypto.GenerateAccount()
+	fmt.Println("Account Address: ", account.Address)
+	mn, err = mnemonic.FromPrivateKey(account.PrivateKey)
+	if err != nil {
+		fmt.Printf("Error getting backup phrase: %s\n", err)
+		return
+	}
+	fmt.Printf("Account Mnemonic: %s\n", mn)
+	importedAccount, err := kmdClient.ImportKey(
+		exampleWalletHandleToken,
+		account.PrivateKey,
+	)
+	fmt.Println("Account Successfully Imported: ", importedAccount.Address)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L90-L103)
 <!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 
 # Standalone 
@@ -601,16 +607,17 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 === "Go"
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 ```go
-  newAccount := crypto.GenerateAccount()
-  passphrase, err := mnemonic.FromPrivateKey(newAccount.PrivateKey)
+	newAccount := crypto.GenerateAccount()
+	passphrase, err := mnemonic.FromPrivateKey(newAccount.PrivateKey)
 
-  if err != nil {
-    fmt.Printf("Error creating transaction: %s\n", err)
-  } else {
-    fmt.Printf("My address: %s\n", newAccount.Address)
-    fmt.Printf("My passphrase: %s\n", passphrase)
-  }
+	if err != nil {
+		fmt.Printf("Error creating transaction: %s\n", err)
+	} else {
+		fmt.Printf("My address: %s\n", newAccount.Address)
+		fmt.Printf("My passphrase: %s\n", passphrase)
+	}
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L163-L172)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 
@@ -732,25 +739,26 @@ print("Multisig Address: ", msig.address())
 === "Go"
 <!-- ===GOSDK_MULTISIG_CREATE=== -->
 ```go
-  // Get pre-defined set of keys for example
-  _, pks := loadAccounts()
-  addr1, _ := types.DecodeAddress(pks[1])
-  addr2, _ := types.DecodeAddress(pks[2])
-  addr3, _ := types.DecodeAddress(pks[3])
+	// Get pre-defined set of keys for example
+	_, pks := loadAccounts()
+	addr1, _ := types.DecodeAddress(pks[1])
+	addr2, _ := types.DecodeAddress(pks[2])
+	addr3, _ := types.DecodeAddress(pks[3])
 
-  ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
-    addr1,
-    addr2,
-    addr3,
-  })
+	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+		addr1,
+		addr2,
+		addr3,
+	})
 
-  if err != nil {
-    panic("invalid multisig parameters")
-  }
-  fromAddr, _ := ma.Address()
-  // Print multisig account
-  fmt.Printf("Multisig address : %s \n", fromAddr)
+	if err != nil {
+		panic("invalid multisig parameters")
+	}
+	fromAddr, _ := ma.Address()
+	// Print multisig account
+	fmt.Printf("Multisig address : %s \n", fromAddr)
 ```
+[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
 <!-- ===GOSDK_MULTISIG_CREATE=== -->
 
 === "goal"

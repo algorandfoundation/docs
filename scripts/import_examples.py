@@ -98,7 +98,7 @@ sources: list[ExampleSource] = [
         local_dir="../../go-algorand-sdk",
         example_dir="_examples",
         language_name="go",
-        src_comment_flag="// example: ",
+        src_comment_flag="\t// example: ",
         name="GOSDK",
         file_extension=".go",
     ),
