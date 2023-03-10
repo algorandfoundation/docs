@@ -617,7 +617,7 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 	log.Printf("Address: %s\n", account.Address)
 	log.Printf("Mnemonic: %s\n", mn)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L11-L20)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L15-L24)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 

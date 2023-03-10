@@ -109,7 +109,7 @@ special_algod_client = algod.AlgodClient(
 		[]*common.Header{&algodHeader},
 	)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L42-L60)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L47-L65)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -302,7 +302,7 @@ print(f"Address: {addr}")
 
 	log.Printf("%+v", recovered)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L23-L34)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Compile the programs using the `compile` endpoint:
@@ -556,7 +556,7 @@ print(f"Address: {addr}")
 
 	log.Printf("%+v", recovered)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L23-L34)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
 <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:

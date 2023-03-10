@@ -389,4 +389,40 @@ print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 
 === "Go"
 <!-- ===GOSDK_ACCOUNT_REKEY=== -->
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get suggested params: %s", err)
+	}
+
+	addr := acct.Address.String()
+	// here we create a payment transaction but rekey is valid
+	// on any transaction type
+	rktxn, err := transaction.MakePaymentTxn(addr, addr, 0, nil, "", sp)
+	if err != nil {
+		log.Fatalf("failed to creating transaction: %s\n", err)
+	}
+	// Set the rekey parameter
+	rktxn.RekeyTo = rekeyTarget.Address
+
+	_, stxn, err := crypto.SignTransaction(acct.PrivateKey, rktxn)
+	if err != nil {
+		fmt.Printf("Failed to sign transaction: %s\n", err)
+	}
+
+	txID, err := algodClient.SendRawTransaction(stxn).Do(context.Background())
+	if err != nil {
+		fmt.Printf("failed to send transaction: %s\n", err)
+		return
+	}
+
+	result, err := transaction.WaitForConfirmation(algodClient, txID, 4, context.Background())
+	if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
+		return
+	}
+
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID, result.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L48-L81)
 <!-- ===GOSDK_ACCOUNT_REKEY=== -->

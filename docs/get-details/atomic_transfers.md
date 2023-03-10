@@ -88,20 +88,23 @@ txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
 === "Go"
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 ```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get suggested params: %s", err)
+	}
+
 	tx1, err := transaction.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 100000, nil, "", sp)
 	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
-		return
+		log.Fatalf("failed creating transaction: %s", err)
 	}
 
 	// from account 2 to account 1
 	tx2, err := transaction.MakePaymentTxn(acct2.Address.String(), acct1.Address.String(), 100000, nil, "", sp)
 	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
-		return
+		log.Fatalf("failed creating transaction: %s", err)
 	}
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L29-L41)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L23-L38)
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "goal"
@@ -171,7 +174,7 @@ txn_2.group = gid
 	tx1.Group = gid
 	tx2.Group = gid
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L44-L48)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L41-L45)
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
@@ -244,7 +247,7 @@ stxn_2 = txn_2.sign(sk2)
 		fmt.Printf("Failed to sign transaction: %s\n", err)
 	}
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L51-L60)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L48-L57)
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "goal"
@@ -302,7 +305,7 @@ signed_group = [stxn_1, stxn_2]
 	signedGroup = append(signedGroup, stx2...)
 
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L63-L67)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L60-L64)
     <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "goal"
@@ -379,7 +382,7 @@ print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 	}
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L70-L81)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L67-L78)
     <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
 
 === "goal"

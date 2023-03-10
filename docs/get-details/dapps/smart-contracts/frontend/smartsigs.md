@@ -112,50 +112,23 @@ int 1
 
 === "Go"
     <!-- ===GOSDK_LSIG_COMPILE=== -->
-	```go
-    package main
+```go
+	teal, err := ioutil.ReadFile("lsig/simple.teal")
+	if err != nil {
+		log.Fatalf("failed to read approval program: %s", err)
+	}
 
-    import (
+	result, err := algodClient.TealCompile(teal).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to compile program: %s", err)
+	}
 
-        "context"
-        "io/ioutil"
-        "log"
-        "fmt"
-        "os"
-        "github.com/algorand/go-algorand-sdk/client/v2/algod"
-    )
-
-    func main() {
-
-        const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        const algodAddress = "http://localhost:4001"
-
-        // Create an algod client
-        algodClient, err := algod.MakeClient(algodAddress, algodToken)
-        if err != nil {
-            fmt.Printf("failed to make algod client: %s\n", err)
-            return
-        }
-        // int 0 in sample.teal
-        file, err := os.Open("./sample.teal")
-        if err != nil {
-            log.Fatal(err)
-        }    
-        defer file.Close()
-        tealFile, err := ioutil.ReadAll(file)
-        if err != nil {
-            fmt.Printf("failed to teal file: %s\n", err)
-            return}
-        // compile teal program
-        response, err := algodClient.TealCompile(tealFile).Do(context.Background())
-        // print response	
-        fmt.Printf("Hash = %s\n", response.Hash)
-        fmt.Printf("Result = %s\n", response.Result)
-    }
-    // results should look similar to
-    // Hash = KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-    // Result = ASABACI=
-    ```
+	lsigBinary, err := base64.StdEncoding.DecodeString(result.Result)
+	if err != nil {
+		log.Fatalf("failed to decode compiled program: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L23-L37)
     <!-- ===GOSDK_LSIG_COMPILE=== -->
 
 Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
@@ -203,14 +176,12 @@ The response result from the TEAL `compile` command above is used to create the 
 
 === "Go"
     <!-- ===GOSDK_LSIG_INIT=== -->
-	```go
-        // program, err :=  base64.StdEncoding.DecodeString("ASABACI=")
-        program, err :=  base64.StdEncoding.DecodeString(response.Result)	
-        var sk ed25519.PrivateKey
-        var ma crypto.MultisigAccount
-        var args [][]byte
-        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)  
-    ```
+```go
+	lsig := crypto.LogicSigAccount{
+		Lsig: types.LogicSig{Logic: lsigBinary, Args: nil},
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L40-L43)
     <!-- ===GOSDK_LSIG_INIT=== -->
 
 # Passing parameters using the SDKs
@@ -262,18 +233,15 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 === "Go"
     <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
-	```go
-        // string parameter
-        args := make([][]byte, 1)
-        args[0] = []byte("my string")
-        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
-        
-        // integer parameter
-        args := make([][]byte, 1)
-        var buf [8]byte
-        binary.BigEndian.PutUint64(buf[:], 123)
-        args[0] = buf[:]
-    ```
+```go
+	encodedArg := make([]byte, 8)
+	binary.BigEndian.PutUint64(encodedArg, 123)
+
+	lsigWithArgs := crypto.LogicSigAccount{
+		Lsig: types.LogicSig{Logic: lsigBinary, Args: [][]byte{encodedArg}},
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L47-L53)
     <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
 
 
@@ -449,130 +417,36 @@ int 123
 
 === "Go"
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
-	```go
-    package main
+```go
+	sp, err = algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get suggested params: %s", err)
+	}
 
-    import (
-        "context"
-        "crypto/ed25519"
-        "encoding/base64"
-        "encoding/binary"
-        "io/ioutil"
-        "log"
-        "os"
-        "fmt"
-        "github.com/algorand/go-algorand-sdk/client/v2/algod"
-        "github.com/algorand/go-algorand-sdk/crypto"
-        "github.com/algorand/go-algorand-sdk/transaction"
-    )
+	lsigAddr, err := lsig.Address()
+	if err != nil {
+		log.Fatalf("failed to get lsig address: %s", err)
+	}
+	ptxn, err := transaction.MakePaymentTxn(lsigAddr.String(), seedAddr, 10000, nil, "", sp)
+	if err != nil {
+		log.Fatalf("failed to make transaction: %s", err)
+	}
+	txid, stxn, err := crypto.SignLogicSigAccountTransaction(lsig, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction with lsig: %s", err)
+	}
+	_, err = algodClient.SendRawTransaction(stxn).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 
-
-    func main() {
-        // const algodToken = "<algod-token>"
-        // const algodAddress = "<algod-address>"
-        // sandbox
-        const algodAddress = "http://localhost:4001"
-        const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        // Create an algod client
-        algodClient, err := algod.MakeClient(algodAddress, algodToken)
-        if err != nil {
-            fmt.Printf("failed to make algod client: %s\n", err)
-            return
-        }
-        // Create logic signature
-        var sk ed25519.PrivateKey
-        var ma crypto.MultisigAccount
-        // samplearg.teal  ... This code is meant for learning purposes only
-        // It should not be used in production
-        // arg_0
-        // btoi
-        // int 123
-        // == 
-        file, err := os.Open("./samplearg.teal")
-        // file, err := os.Open("<filename>")
-        if err != nil {
-            log.Fatal(err)
-        }
-        defer file.Close()
-        tealFile, err := ioutil.ReadAll(file)
-        if err != nil {
-            fmt.Printf("failed to read file: %s\n", err)
-            return}   
-        response, err := algodClient.TealCompile(tealFile).Do(context.Background())
-        fmt.Printf("Hash = %s\n", response.Hash)
-        fmt.Printf("Result = %s\n", response.Result)        
-        program, err :=  base64.StdEncoding.DecodeString(response.Result)	
-        // if no args use these two lines
-        // var args [][]byte
-        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
-        // string parameter
-        // args := make([][]byte, 1)
-        // args[0] = []byte("<my string>")
-        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
-        // integer args parameter
-        args := make([][]byte, 1)
-        var buf [8]byte
-        binary.BigEndian.PutUint64(buf[:], 123)
-        args[0] = buf[:]
-        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)
-        addr := crypto.LogicSigAddress(lsig).String()
-
-        // Get suggested params for the transaction
-        txParams, err := algodClient.SuggestedParams().Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-        // comment out the next two (2) lines to use suggested fees
-        // txParams.FlatFee = true
-        // txParams.Fee = 1000
-
-        // Make transaction
-        // const receiver = "<receiver-address>"
-        // const fee = <fee>
-        // const amount = <amount>
-        const receiver = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ"
-        const fee = 1000
-        const amount = 100000
-        var minFee uint64 = uint64(txParams.MinFee)
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := uint64(txParams.FirstRoundValid)
-        lastValidRound := uint64(txParams.LastRoundValid)
-        tx, err := transaction.MakePaymentTxnWithFlatFee(
-            addr, receiver, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
-        if err != nil {
-            fmt.Printf("Signing failed with %v", err)
-            return
-        }
-        fmt.Printf("Signed tx: %v\n", txID)
-        // logic signature transaction can be written to a file
-        // f, err := os.Create("simple.stxn")
-        // defer f.Close()
-        // if _, err := f.Write(stx); err != nil {
-        //     // handle
-        // }
-        // if err := f.Sync(); err != nil {
-        //     // handle
-        // }
-            
-        // Submit the raw transaction to network
-        transactionID, err := algodClient.SendRawTransaction(stx).Do(context.Background())
-        if err != nil {
-            fmt.Printf("Sending failed with %v\n", err)
-        }
-        // Wait for confirmation
-        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
-        if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
-            return
-        }
-        fmt.Printf("Confirmed Transaction: %s in Round %d\n", transactionID ,confirmedTxn.ConfirmedRound)
-
-    }
-    ```
+	payResult, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("failed while waiting for transaction: %s", err)
+	}
+	log.Printf("Lsig pay confirmed in round: %d", payResult.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L69-L96)
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 
 # Account delegation SDK usage
@@ -749,137 +623,38 @@ The following example illustrates signing a transaction with a created logic sig
 
 === "Go"
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
-	```go
-    package main
+```go
+	// account signs the logic, and now the logic may be passed instead
+	// of a signature for a transaction
+	var args [][]byte
+	delSig, err := crypto.MakeLogicSigAccountDelegated(lsigBinary, args, seedAcct.PrivateKey)
+	if err != nil {
+		log.Fatalf("failed to make delegate lsig: %s", err)
+	}
 
-    import (
-        "context"
-        "crypto/ed25519"
-        "encoding/base64"
-        "encoding/binary"
-        "io/ioutil"
-        "log"
-        "os"
-        "fmt"
-        "github.com/algorand/go-algorand-sdk/client/v2/algod"
-        "github.com/algorand/go-algorand-sdk/crypto"
-        "github.com/algorand/go-algorand-sdk/mnemonic"
-        "github.com/algorand/go-algorand-sdk/transaction"
-        "github.com/algorand/go-algorand-sdk/types"
-    )
+	delSigPay, err := transaction.MakePaymentTxn(seedAddr, lsigAddr.String(), 10000, nil, "", sp)
+	if err != nil {
+		log.Fatalf("failed to make transaction: %s", err)
+	}
 
-    func main() {
-        // sandbox
-        const algodAddress = "http://localhost:4001"
-        const algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        // const algodToken = "<algod-token>"
-        // const algodAddress = "<algod-address>"
-        // Create an algod client
-        algodClient, err := algod.MakeClient(algodAddress, algodToken)
-        if err != nil {
-            fmt.Printf("failed to make algod client: %s\n", err)
-            return
-        }	
-        // Get private key for sender address
-        // Do not use mnemonics in production code. For demo purposes only
-        PASSPHRASE := "<25-word-mnemonic>"
-        sk, err := mnemonic.ToPrivateKey(PASSPHRASE)	
-        pk := sk.Public()
-        var a types.Address
-        cpk := pk.(ed25519.PublicKey)
-        copy(a[:], cpk[:])
-        fmt.Printf("Address: %s\n", a.String())	
-        sender := a.String()
-        // Create logic signature
-        var ma crypto.MultisigAccount
-        // samplearg.teal  ... This code is meant for learning purposes only
-        // It should not be used in production
-        // arg_0
-        // btoi
-        // int 123
-        // == 
-        // file, err := os.Open("<filename>")
-        file, err := os.Open("./samplearg.teal")
-        if err != nil {
-            log.Fatal(err)
-        }
-        defer file.Close()
-        tealFile, err := ioutil.ReadAll(file)
-        if err != nil {
-            fmt.Printf("failed to read file: %s\n", err)
-            return}
-        response, err := algodClient.TealCompile(tealFile).Do(context.Background())
-        fmt.Printf("Hash = %s\n", response.Hash)
-        fmt.Printf("Result = %s\n", response.Result)
-        
-        program, err :=  base64.StdEncoding.DecodeString(response.Result)	
-        // if no args use these two lines
-        // var args [][]byte
-        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, m a)
-        // string parameter
-        // args := make([][]byte, 1)
-        // args[0] = []byte("<my string>")
-        // lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)       
-        // integer args parameter
-        args := make([][]byte, 1)
-        var buf [8]byte
-        binary.BigEndian.PutUint64(buf[:], 123)
-        args[0] = buf[:]
-        lsig, err := crypto.MakeLogicSigAccountEscrowChecked(program, args, sk, ma)       
-        // Construct the transaction
-        txParams, err := algodClient.SuggestedParams().Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-        // comment out the next two (2) lines to use suggested fees
-        // txParams.FlatFee = true
-        // txParams.Fee = 1000
-        // Make transaction
-        // const receiver = "<receiver-address>"
-        const receiver = "QUDVUXBX4Q3Y2H5K2AG3QWEOMY374WO62YNJFFGUTMOJ7FB74CMBKY6LPQ"	
-        // const fee = <fee>
-        // const amount = <amount>
-        const fee = 1000
-        const amount = 200000
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := uint64(txParams.FirstRoundValid)
-        lastValidRound := uint64(txParams.LastRoundValid)
-        tx, err := transaction.MakePaymentTxnWithFlatFee(
-            sender, receiver, fee, amount, firstValidRound, lastValidRound,
-            note, "", genID, genHash )
-        txID, stx, err := crypto.SignLogicSigTransaction(lsig, tx)
-        if err != nil {
-            fmt.Printf("Signing failed with %v", err)
-            return
-        }
-        fmt.Printf("Signed tx: %v\n", txID)
-        // logic signature transaction can be written to a file
-        // f, err := os.Create("simple.stxn")
-        // defer f.Close()
-        // if _, err := f.Write(stx); err != nil {
-        //     // handle
-        // }
-        // if err := f.Sync(); err != nil {
-        //     // handle
-        // }
-        // Submit the raw transaction as normal 
-        transactionID, err := algodClient.SendRawTransaction(stx).Do(context.Background())
-        if err != nil {
-            fmt.Printf("Sending failed with %v\n", err)
-        }
-        // Wait for confirmation
-        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,transactionID,  4, context.Background())
-        if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", transactionID)
-            return
-        }
-        fmt.Printf("Confirmed Transaction: %s in Round %d\n", transactionID ,confirmedTxn.ConfirmedRound)
+	delTxId, delStxn, err := crypto.SignLogicSigAccountTransaction(delSig, delSigPay)
+	if err != nil {
+		log.Fatalf("failed to sign with delegate sig: %s", err)
+	}
 
-        }
-    ```
+	_, err = algodClient.SendRawTransaction(delStxn).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	delPayResult, err := transaction.WaitForConfirmation(algodClient, delTxId, 4, context.Background())
+	if err != nil {
+		log.Fatalf("failed while waiting for transaction: %s", err)
+	}
+
+	log.Printf("Delegated Lsig pay confirmed in round: %d", delPayResult.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L99-L128)
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
 
 !!! Note
