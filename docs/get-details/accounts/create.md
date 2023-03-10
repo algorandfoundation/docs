@@ -607,17 +607,17 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 === "Go"
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 ```go
-	newAccount := crypto.GenerateAccount()
-	passphrase, err := mnemonic.FromPrivateKey(newAccount.PrivateKey)
+	account := crypto.GenerateAccount()
+	mn, err := mnemonic.FromPrivateKey(account.PrivateKey)
 
 	if err != nil {
-		fmt.Printf("Error creating transaction: %s\n", err)
-	} else {
-		fmt.Printf("My address: %s\n", newAccount.Address)
-		fmt.Printf("My passphrase: %s\n", passphrase)
+		log.Fatalf("failed to generate account: %s", err)
 	}
+
+	log.Printf("Address: %s\n", account.Address)
+	log.Printf("Mnemonic: %s\n", mn)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L163-L172)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L11-L20)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 

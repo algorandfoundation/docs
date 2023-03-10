@@ -785,7 +785,13 @@ suggested_params.flat_fee = True
 === "Go"
 <!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 ```go
+	// by using fee pooling and setting our fee to 2x min tx fee
+	// we can cover the fee for another transaction in the group
+	sp.Fee = 2000
+	sp.FlatFee = true
+	// ...
 ```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L32-L37)
 <!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Java"

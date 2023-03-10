@@ -104,18 +104,13 @@ print(suggested_params.min_fee)
     
 === "Go"
     <!-- ===GOSDK_SP_MIN_FEE=== -->
-    ```go
-    algodClient, err := algod.MakeClient(algodAddress, algodToken)
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		panic(fmt.Errorf("Issue with creating algod client: %v\n", err))
+		log.Printf("failed to %s", err)
 	}
-	params, err := algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		panic(fmt.Errorf("Issue with getting suggested params: %v\n", err))
-	}
-    
-	params.MinFee
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L25-L29)
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures

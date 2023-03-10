@@ -93,7 +93,7 @@ special_algod_client = algod.AlgodClient(
 	// Create a new algod client, configured to connect to out local sandbox
 	var algodAddress = "http://localhost:4001"
 	var algodToken = strings.Repeat("a", 64)
-	algodClient, err := algod.MakeClient(
+	algodClient, _ := algod.MakeClient(
 		algodAddress,
 		algodToken,
 	)
@@ -103,13 +103,13 @@ special_algod_client = algod.AlgodClient(
 	var algodHeader common.Header
 	algodHeader.Key = "X-API-Key"
 	algodHeader.Value = algodToken
-	algodClientWithHeaders, err := algod.MakeClientWithHeaders(
+	algodClientWithHeaders, _ := algod.MakeClientWithHeaders(
 		algodAddress,
 		algodToken,
 		[]*common.Header{&algodHeader},
 	)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L13-L31)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L42-L60)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -161,17 +161,20 @@ global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 
 === "Go"
     <!-- ===GOSDK_APP_SCHEMA=== -->
-	```go
-    // declare application state storage (immutable)
-    const localInts = 1
-    const localBytes = 1
-    const globalInts = 1
-    const globalBytes = 0
+```go
+	// declare application state storage (immutable)
+	var (
+		localInts   uint64 = 1
+		localBytes  uint64 = 1
+		globalInts  uint64 = 1
+		globalBytes uint64 = 0
+	)
 
-    // define schema
-    globalSchema := types.StateSchema{NumUint: uint64(globalInts), NumByteSlice: uint64(globalBytes)}
-    localSchema := types.StateSchema{NumUint: uint64(localInts), NumByteSlice: uint64(localBytes)}
-    ```
+	// define schema
+	globalSchema := types.StateSchema{NumUint: globalInts, NumByteSlice: globalBytes}
+	localSchema := types.StateSchema{NumUint: localInts, NumByteSlice: localBytes}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L54-L65)
     <!-- ===GOSDK_APP_SCHEMA=== -->
 
 !!! Info
@@ -221,12 +224,17 @@ with open("application/clear.teal", "r") as f:
 
 === "Go"
     <!-- ===GOSDK_APP_SOURCE=== -->
-	```go
-    // declare clear state program source
-    const clearProgramSource = `#pragma version 4
-    int 1
-    `
-    ```
+```go
+	approvalTeal, err := ioutil.ReadFile("application/approval.teal")
+	if err != nil {
+		log.Fatalf("failed to read approval program: %s", err)
+	}
+	clearTeal, err := ioutil.ReadFile("application/clear.teal")
+	if err != nil {
+		log.Fatalf("failed to read clear program: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L68-L76)
     <!-- ===GOSDK_APP_SOURCE=== -->
 
 # Application methods
@@ -343,17 +351,28 @@ clear_binary = base64.b64decode(clear_result["result"])
 
 === "Go"
     <!-- ===GOSDK_APP_COMPILE=== -->
-	```go
-    func compileProgram(client *algod.Client, programSource string) (compiledProgram []byte) {
-        compileResponse, err := client.TealCompile([]byte(programSource)).Do(context.Background())
-        if err != nil {
-            fmt.Printf("Issue with compile: %s\n", err)
-            return
-        }
-        compiledProgram, _ = base64.StdEncoding.DecodeString(compileResponse.Result)
-        return compiledProgram
-    }
-    ```
+```go
+	approvalResult, err := algodClient.TealCompile(approvalTeal).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to compile program: %s", err)
+	}
+
+	approvalBinary, err := base64.StdEncoding.DecodeString(approvalResult.Result)
+	if err != nil {
+		log.Fatalf("failed to decode compiled program: %s", err)
+	}
+
+	clearResult, err := algodClient.TealCompile(clearTeal).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to compile program: %s", err)
+	}
+
+	clearBinary, err := base64.StdEncoding.DecodeString(clearResult.Result)
+	if err != nil {
+		log.Fatalf("failed to decode compiled program: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L79-L98)
     <!-- ===GOSDK_APP_COMPILE=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation
@@ -438,34 +457,40 @@ print(f"Created app with id: {app_id}")
 
 === "Go"
     <!-- ===GOSDK_APP_CREATE=== -->
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationCreateTx(false, approvalProgram, clearProgram, globalSchema, localSchema, 
-                        nil, nil, nil, nil, params, creatorAccount.Address, nil, 
-                        types.Digest{}, [32]byte{}, types.Address{}, uint32(0))
+```go
+	// Create application
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // Sign the transaction
-    txID, signedTxn, _ := crypto.SignTransaction(creatorAccount.PrivateKey, txn)
-    fmt.Printf("Signed txid: %s\n", txID)
+	txn, err := transaction.MakeApplicationCreateTx(
+		false, approvalBinary, clearBinary, globalSchema, localSchema,
+		nil, nil, nil, nil, sp, creator.Address, nil,
+		types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
 
-    // Submit the transaction
-    sendResponse, _ := client.SendRawTransaction(signedTxn).Do(context.Background())
-    fmt.Printf("Submitted transaction %s\n", sendResponse)
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 
-    // Wait for confirmation
-    confirmedTxn, err := transaction.WaitForConfirmation(client, txID, 4, context.Background())
-    if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
-        return
-    }
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 
-
-    // display results
-    confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
-    appId = confirmedTxn.ApplicationIndex
-    fmt.Printf("Created new app-id: %d\n", appId)
-    ```
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+	appID := confirmedTxn.ApplicationIndex
+	log.Printf("Created app with id: %d", appID)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L101-L132)
     <!-- ===GOSDK_APP_CREATE=== -->
 
 
@@ -582,17 +607,42 @@ assert optin_result["confirmed-round"] > 0
 
 === "Go"
     <!-- ===GOSDK_APP_OPTIN=== -->
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationOptInTx(index, nil, nil, nil, nil, params,
-                            sender, nil, types.Digest{}, [32]byte{}, types.Address{})
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // ... sign, send, await
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeApplicationOptInTx(
+		appID, nil, nil, nil, nil, sp,
+		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 
-    // display results
-    confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
-    fmt.Printf("Oped-in to app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    ```
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L138-L171)
     <!-- ===GOSDK_APP_OPTIN=== -->
 
 
@@ -657,17 +707,51 @@ assert noop_result["confirmed-round"] > 0
 
 === "Go"
     <!-- ===GOSDK_APP_NOOP=== -->
-	```go
-    // create unsigned transaction
-    txn, _:= transaction.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
-                            nil, types.Digest{}, [32]byte{}, types.Address{})
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // sign, send, await 
+	var (
+		appArgs [][]byte
+		accts   []string
+		apps    []uint64
+		assets  []uint64
+	)
 
-    // display results
-    confirmedTxn, _, err := client.PendingTransactionInformation(txID).Do(context.Background())
-    fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    ```
+	// Add an arg to our app call
+	appArgs = append(appArgs, []byte("arg0"))
+
+	txn, err := transaction.MakeApplicationNoOpTx(
+		appID, appArgs, accts, apps, assets, sp,
+		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L176-L218)
     <!-- ===GOSDK_APP_NOOP=== -->
 
 ## Read state
@@ -723,25 +807,24 @@ print(acct_info["app-local-state"]["key-value"])
 
 === "Go"
     <!-- ===GOSDK_APP_READ_STATE=== -->
-	```go
-    func readLocalState(client *algod.Client, account crypto.Account, index uint64) {
-        accountInfo, _ := client.AccountInformation(account.Address.String()).Do(context.Background())
-        for _, ap := range accountInfo.AppsLocalState {
-            if ap.Id == index {
-                fmt.Printf("Local state for app-id %d (account %s):\n", ap.Id, account.Address.String())
-                fmt.Println(ap.KeyValue)
-            }
-        }
-    }
+```go
+	// grab global state and config of application
+	appInfo, err := algodClient.GetApplicationByID(appID).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get app info: %s", err)
+	}
+	log.Printf("app info: %+v", appInfo)
 
-    func readGlobalState(client *algod.Client, index uint64) {
-        applicationInfo, _ := client.GetApplicationByID(index)
-        globalState, _ := applicationInfo.Params.GlobalState
-        if globalState != nil {
-            fmt.Println(globalState)
-        }
-    }
-    ```
+	// grab local state for an app id for a single account
+	acctInfo, err := algodClient.AccountApplicationInformation(
+		acct1.Address.String(), appID,
+	).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get app info: %s", err)
+	}
+	log.Printf("app info: %+v", acctInfo)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L27-L42)
     <!-- ===GOSDK_APP_READ_STATE=== -->
 
 ## Update
@@ -830,19 +913,48 @@ assert update_result["confirmed-round"] > 0
 
 === "Go"
     <!-- ===GOSDK_APP_UPDATE=== -->
-	```go
-        // create unsigned transaction
-        txn, _ := transaction.MakeApplicationUpdateTx(index, nil, nil, nil, nil, 
-                            approvalProgram, clearProgram, params, creatorAccount.Address, 
-                            nil, types.Digest{}, [32]byte{}, types.Address{})
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-        // sign, send, await
-        
-        // display results
-        confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
-        fmt.Printf("Updated app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    }
-    ```
+	var (
+		appArgs [][]byte
+		accts   []string
+		apps    []uint64
+		assets  []uint64
+	)
+
+	txn, err := transaction.MakeApplicationUpdateTx(
+		appID, appArgs, accts, apps, assets, approvalBinary, clearBinary,
+		sp, caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("Update Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L226-L265)
     <!-- ===GOSDK_APP_UPDATE=== -->
 
 ## Call with arguments
@@ -936,22 +1048,51 @@ if "local-state-delta" in call_result:
 
 === "Go"
     <!-- ===GOSDK_APP_CALL=== -->
-	```go
-    // call application with arguments
-    now := time.Now().Format("Mon Jan _2 15:04:05 2006")
-    appArgs := make([][]byte, 1)
-    appArgs[0] = []byte(now)
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationNoOpTx(index, appArgs, nil, nil, nil, params, sender, 
-                                nil, types.Digest{}, [32]byte{}, types.Address{})
+	var (
+		appArgs [][]byte
+		accts   []string
+		apps    []uint64
+		assets  []uint64
+	)
 
-    // sign, send, await
+	datetime := time.Now().Format("2006-01-02 at 15:04:05")
+	appArgs = append(appArgs, []byte(datetime))
 
-    // display results
-    confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
-    fmt.Printf("Called app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    ```
+	txn, err := transaction.MakeApplicationNoOpTx(
+		appID, appArgs, accts, apps, assets, sp,
+		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L358-L400)
     <!-- ===GOSDK_APP_CALL=== -->
 
 ## Close out
@@ -1010,16 +1151,48 @@ assert optin_result["confirmed-round"] > 0
 
 === "Go"
     <!-- ===GOSDK_APP_CLOSEOUT=== -->
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationCloseOutTx(index, nil, nil, nil, nil, params, account.Address, nil, types.Digest{}, [32]byte{}, types.Address{})
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // sign, send, await
+	var (
+		appArgs [][]byte
+		accts   []string
+		apps    []uint64
+		assets  []uint64
+	)
 
-    // display results
-    confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
-    fmt.Printf("Closed out from app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    ```
+	txn, err := transaction.MakeApplicationCloseOutTx(
+		appID, appArgs, accts, apps, assets, sp,
+		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("Closeout Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L270-L309)
     <!-- ===GOSDK_APP_CLOSEOUT=== -->
 
 ## Delete
@@ -1073,18 +1246,48 @@ assert optin_result["confirmed-round"] > 0
 
 === "Go"
     <!-- ===GOSDK_APP_DELETE=== -->
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationDeleteTx(index, nil, nil, nil, nil, params, sender, 
-                            nil, types.Digest{}, [32]byte{}, types.Address{})
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // sign, send, await
+	var (
+		appArgs [][]byte
+		accts   []string
+		apps    []uint64
+		assets  []uint64
+	)
 
-    // display results
-    confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
+	txn, err := transaction.MakeApplicationDeleteTx(
+		appID, appArgs, accts, apps, assets, sp,
+		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
 
-    fmt.Printf("Deleted app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    ```
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("Delete Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L405-L444)
     <!-- ===GOSDK_APP_DELETE=== -->
 
 ## Clear state
@@ -1132,17 +1335,48 @@ clear_txn = transaction.ApplicationClearStateTxn(user.address, sp, app_id)
 
 === "Go"
     <!-- ===GOSDK_APP_CLEAR=== -->
-	```go
-    // create unsigned transaction
-    txn, _ := transaction.MakeApplicationClearStateTx(index, nil, nil, nil, nil, params, sender, 
-                            nil, types.Digest{}, [32]byte{}, types.Address{})
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // sign, send, await
+	var (
+		appArgs [][]byte
+		accts   []string
+		apps    []uint64
+		assets  []uint64
+	)
 
-    // display results
-    confirmedTxn, _, _ := client.PendingTransactionInformation(txID).Do(context.Background())
-    fmt.Printf("Cleared local state for app-id: %d\n", confirmedTxn.Transaction.Txn.ApplicationID)
-    ```
+	txn, err := transaction.MakeApplicationClearStateTx(
+		appID, appArgs, accts, apps, assets, sp,
+		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
+	)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("ClearState Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L314-L353)
     <!-- ===GOSDK_APP_CLEAR=== -->
 
 # Appendix
