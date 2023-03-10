@@ -125,29 +125,43 @@ with open("dryrun.msgp", "wb") as f:
 
 === "Go"
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
-    ```go
+```go
+	var (
+		args     [][]byte
+		accounts []string
+		apps     []uint64
+		assets   []uint64
+	)
 
-	app_txn, err := transaction.MakeApplicationNoOpTx(app_id, nil, []string{other_addr}, nil, []uint64{asset_id}, sp, addr, nil, types.Digest{}, [32]byte{}, types.Address{})
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get suggested params: %s", err)
+	}
+
+	appCallTxn, err := transaction.MakeApplicationNoOpTx(
+		appID, args, accounts, apps, assets, sp, acct1.Address,
+		nil, types.Digest{}, [32]byte{}, types.Address{},
+	)
 	if err != nil {
 		log.Fatalf("Failed to create app call txn: %+v", err)
 	}
 
-    _, s_app_bytes, err := crypto.SignTransaction(sk, app_txn)
+	_, stxn, err := crypto.SignTransaction(acct1.PrivateKey, appCallTxn)
 	if err != nil {
 		log.Fatalf("Failed to sign app txn: %+v", err)
 	}
-	s_app_txn := types.SignedTxn{}
-	msgpack.Decode(s_app_bytes, &s_app)
 
-    drr, err := transaction.CreateDryrun(client, []types.SignedTxn{s_app_txn}, nil, context.Background())
+	signedAppCallTxn := types.SignedTxn{}
+	msgpack.Decode(stxn, &signedAppCallTxn)
+
+	drr, err := transaction.CreateDryrun(algodClient, []types.SignedTxn{signedAppCallTxn}, nil, context.Background())
 	if err != nil {
 		log.Fatalf("Failed to create dryrun: %+v", err)
 	}
 
-	filename := "dryrun.msgp"
-	os.WriteFile(filename, msgpack.Encode(drr), 0666)
-
-    ```
+	os.WriteFile("dryrun.msgp", msgpack.Encode(drr), 0666)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L26-L60)
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Java"
@@ -297,16 +311,25 @@ for txn in drr.txns:
 
 === "Go"
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
-    ```go
-    // ... 
-    // Create the dryrun request object
-    dryrunRequest, _ := transaction.CreateDryrun(client, txns, nil, context.Background())
+```go
+	// Create the dryrun request object
+	drReq, err := transaction.CreateDryrun(algodClient, []types.SignedTxn{signedAppCallTxn}, nil, context.Background())
+	if err != nil {
+		log.Fatalf("Failed to create dryrun: %+v", err)
+	}
 
-    // Pass dryrun request to algod server
-    dryrunResponse, _ := client.TealDryrun(dryrunRequest).Do(context.Background())
+	// Pass dryrun request to algod server
+	dryrunResponse, err := algodClient.TealDryrun(drReq).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to dryrun request: %s", err)
+	}
 
-    // Inspect the response to check result 
-    ```
+	// Inspect the response to check result
+	for _, txn := range dryrunResponse.Txns {
+		log.Printf("%+v", txn.AppCallTrace)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L63-L79)
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Java"

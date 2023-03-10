@@ -953,7 +953,7 @@ atc.add_method_call(
 	}
 	// ...
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L96-L112)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L93-L109)
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 
 === "Java"

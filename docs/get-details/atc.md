@@ -42,7 +42,7 @@ atc = AtomicTransactionComposer()
 	// Create the atc we'll use to compose our transaction group
 	var atc = transaction.AtomicTransactionComposer{}
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L41-L43)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L38-L40)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -131,7 +131,7 @@ atc.add_transaction(tws)
 	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
 	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L46-L60)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L43-L57)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -259,7 +259,7 @@ atc.add_method_call(
 		log.Fatalf("failed to unmarshal contract: %s", err)
 	}
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L29-L38)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L26-L35)
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
     
     <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
@@ -284,7 +284,7 @@ atc.add_method_call(
 		log.Fatalf("failed to add method call: %s", err)
 	}
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L63-L82)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L60-L79)
     <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
     
 === "Java"
@@ -365,7 +365,7 @@ for res in result.abi_results:
 		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L85-L93)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L82-L90)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"

@@ -78,88 +78,24 @@ print(recovered_txn.dictify())
 
 === "Go"
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
-    ``` go
-        // Construct the transaction
-        txParams, err := algodClient.SuggestedParams().Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-        // comment out the next two (2) lines to use suggested fees
-        txParams.FlatFee = true
-        txParams.Fee = 1000
-        fromAddr := myAddress
-        toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        var amount uint64 = 1000000
-        var minFee uint64 = 1000
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := uint64(txParams.FirstRoundValid)
-        lastValidRound := uint64(txParams.LastRoundValid)
-        tx, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-        unsignedTx := types.SignedTxn{
-            Txn: tx,
-        }
-        // save unsigned Transaction to file
-        err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
-        if err == nil {
-            fmt.Printf("Saved unsigned transaction to file\n")
-            return
-        }
-        fmt.Printf("Failed in saving trx to file, error %s\n", err) 
+```go
+	// Error handling omitted for brevity
+	sp, _ := algodClient.SuggestedParams().Do(context.Background())
+	ptxn, _ := transaction.MakePaymentTxn(
+		acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp,
+	)
 
+	// Encode the txn as bytes,
+	// if sending over the wire (like to a frontend) it should also be b64 encoded
+	encodedTxn := msgpack.Encode(ptxn)
+	os.WriteFile("pay.txn", encodedTxn, 0655)
 
-        // read unsigned transaction from file
-        dat, err := ioutil.ReadFile("./unsigned.txn")
-        if err != nil {
-            fmt.Printf("Error reading transaction from file: %s\n", err)
-            return
-        }
-        var unsignedTxRaw types.SignedTxn
-        var unsignedTxn types.Transaction
-        msgpack.Decode(dat, &unsignedTxRaw)
-        unsignedTxn = unsignedTxRaw.Txn
-        // recover account
-        myAddress, privateKey := recoverAccount()
-        fmt.Printf("Address is: %s\n", myAddress)
-        // Check account balance
-        accountInfo, err := algodClient.AccountInformation(myAddress).Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting account info: %s\n", err)
-            return
-        }
-        fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
-        // Sign the transaction
-        txID, signedTxn, err := crypto.SignTransaction(privateKey, unsignedTxn)
-        if err != nil {
-            fmt.Printf("Failed to sign transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Signed txid: %s\n", txID)
-        // Submit the transaction
-        sendResponse, err := algodClient.SendRawTransaction(signedTxn).Do(context.Background())
-        if err != nil {
-            fmt.Printf("failed to send transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Submitted transaction %s\n", sendResponse)
+	var recoveredPayTxn = types.Transaction{}
 
-        // Wait for confirmation
-        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txID,  4, context.Background())
-        if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
-            return
-        }
-        fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
-
-
-        fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
-    ```
+	msgpack.Decode(encodedTxn, &recoveredPayTxn)
+	log.Printf("%+v", recoveredPayTxn)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
@@ -239,71 +175,25 @@ print(recovered_signed_txn.dictify())
 
 === "Go"
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
-    ``` go
-        // Construct the transaction
-        txParams, err := algodClient.SuggestedParams().Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-        // comment out the next two (2) lines to use suggested fees
-        txParams.FlatFee = true
-        txParams.Fee = 1000
-        fromAddr := myAddress
-        toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        var amount uint64 = 1000000
-        var minFee uint64 = 1000
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := uint64(txParams.FirstRoundValid)
-        lastValidRound := uint64(txParams.LastRoundValid)
-        tx, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-        // Sign the transaction
-        txID, signedTxn, err := crypto.SignTransaction(privateKey, tx)
-        if err != nil {
-            fmt.Printf("Failed to sign transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Signed txid: %s\n", txID)
-        // Save the signed transaction to file
-        err = ioutil.WriteFile("./signed.stxn", signedTxn, 0644)
-        if err == nil {
-            fmt.Printf("Saved signed transaction to file\n")
-            return
-        }
-        fmt.Printf("Failed in saving trx to file, error %s\n", err)
+```go
+	// Assuming we already have a pay transaction `ptxn`
 
-        
-        // Read signed transaction from file
-        dat, err := ioutil.ReadFile("./signed.stxn")
-        if err != nil {
-            fmt.Printf("Error reading signed transaction from file: %s\n", err)
-            return
-        }
-        // Submit the transaction
-        sendResponse, err := algodClient.SendRawTransaction(dat).Do(context.Background())
-        if err != nil {
-            fmt.Printf("failed to send transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Submitted transaction %s\n", sendResponse)
+	// Sign the transaction
+	_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 
-        // Wait for confirmation
-        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,sendResponse,  4, context.Background())
-        if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
-            return
-        }
-        fmt.Printf("Confirmed Transaction: %s in Round %d\n", sendResponse ,confirmedTxn.ConfirmedRound)
+	// Save the signed transaction to file
+	os.WriteFile("pay.stxn", signedTxn, 0644)
 
-
-        fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
-    ```
+	signedPayTxn := types.SignedTxn{}
+	err = msgpack.Decode(signedTxn, &signedPayTxn)
+	if err != nil {
+		log.Fatalf("failed to decode signed transaction: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"

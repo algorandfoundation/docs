@@ -70,17 +70,12 @@ assert addr == address
 
 === "Go"
 <!-- ===GOSDK_CODEC_ADDRESS=== -->
-    ```go
-    import "github.com/algorand/go-algorand-sdk/types"
-
-    //...
-
-    address := "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
-    pk, _ := types.DecodeAddress(address)
-    addr := pk.String()
-    
-    //addr == address
-    ```
+```go
+	address := "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
+	pk, _ := types.DecodeAddress(address)
+	addr := pk.String()
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L62-L65)
 <!-- ===GOSDK_CODEC_ADDRESS=== -->
 
 === "Java"
@@ -124,14 +119,12 @@ print(decoded_str)
 
 === "Go"
 <!-- ===GOSDK_CODEC_BASE64=== -->
-    ```go
-    import "encoding/base64"
-
-    //...
-
-    encoded := "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-    decoded, _ := base64.StdEncoding.DecodeString(encoded)
-    ```
+```go
+	encoded := "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
+	decoded, _ := base64.StdEncoding.DecodeString(encoded)
+	reencoded := base64.StdEncoding.EncodeToString(decoded)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L69-L72)
 <!-- ===GOSDK_CODEC_BASE64=== -->
 
 === "Java"
@@ -178,18 +171,15 @@ assert decoded_uint == val
 
 === "Go"
 <!-- ===GOSDK_CODEC_UINT64=== -->
-    ```go
-    import "encoding/binary"
+```go
+	val := 1337
+	encodedInt := make([]byte, 8)
+	binary.BigEndian.PutUint64(encodedInt, uint64(val))
 
-    val := 1337
-
-    encoded := make([]byte, 8)
-    binary.BigEndian.PutUint64(encoded, uint64(val)) 
-
-    decoded := int64(binary.BigEndian.Uint64(encoded))
-
-    // val == decoded
-    ```
+	decodedInt := binary.BigEndian.Uint64(encodedInt)
+	// decodedInt == val
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L76-L82)
 <!-- ===GOSDK_CODEC_UINT64=== -->
 
 === "Java"
@@ -287,50 +277,44 @@ print(recovered_signed_txn.dictify())
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 ```go
 	// Error handling omitted for brevity
-	sp, _ := client.SuggestedParams().Do(context.Background())
-
-	pay_txn, _ := transaction.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 10000, nil, "", sp)
-
-	var pay_txn_bytes = make([]byte, 1e3)
-	base64.StdEncoding.Encode(pay_txn_bytes, msgpack.Encode(pay_txn))
-	f, _ := os.Create("pay.txn")
-	f.Write(pay_txn_bytes)
-
-    // ...
-
-	var (
-		recovered_pay_txn   = types.Transaction{}
-		recovered_pay_bytes = make([]byte, 1e3)
+	sp, _ := algodClient.SuggestedParams().Do(context.Background())
+	ptxn, _ := transaction.MakePaymentTxn(
+		acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp,
 	)
-	b64_pay_bytes, _ := os.ReadFile("pay.txn")
-	base64.StdEncoding.Decode(recovered_pay_bytes, b64_pay_bytes)
 
-	msgpack.Decode(recovered_pay_bytes, &recovered_pay_txn)
-	log.Printf("%+v", recovered_pay_txn)
+	// Encode the txn as bytes,
+	// if sending over the wire (like to a frontend) it should also be b64 encoded
+	encodedTxn := msgpack.Encode(ptxn)
+	os.WriteFile("pay.txn", encodedTxn, 0655)
+
+	var recoveredPayTxn = types.Transaction{}
+
+	msgpack.Decode(encodedTxn, &recoveredPayTxn)
+	log.Printf("%+v", recoveredPayTxn)
 ```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
-    ```go
+```go
+	// Assuming we already have a pay transaction `ptxn`
 
-	_, spay_txn, _ := crypto.SignTransaction(acct1.PrivateKey, pay_txn)
+	// Sign the transaction
+	_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 
-	var spay_txn_bytes = make([]byte, 1e3)
-	base64.StdEncoding.Encode(spay_txn_bytes, spay_txn)
-	f2, _ := os.Create("signed_pay.txn")
-	f2.Write(spay_txn_bytes)
+	// Save the signed transaction to file
+	os.WriteFile("pay.stxn", signedTxn, 0644)
 
-
-	var (
-		recovered_signed_pay_txn   = types.SignedTxn{}
-		recovered_signed_pay_bytes = make([]byte, 1e3)
-	)
-	b64_signed_pay_bytes, _ := os.ReadFile("signed_pay.txn")
-	base64.StdEncoding.Decode(recovered_signed_pay_bytes, b64_signed_pay_bytes)
-
-	msgpack.Decode(recovered_signed_pay_bytes, &recovered_signed_pay_txn)
-	log.Printf("%+v", recovered_signed_pay_txn)
-    ```
+	signedPayTxn := types.SignedTxn{}
+	err = msgpack.Decode(signedTxn, &signedPayTxn)
+	if err != nil {
+		log.Fatalf("failed to decode signed transaction: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
@@ -380,6 +364,9 @@ One type that commonly needs to be decoded are the blocks themselves. Since some
 
 === "Go"
 <!-- ===GOSDK_CODEC_BLOCK=== -->
+```go
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L86-L86)
 <!-- ===GOSDK_CODEC_BLOCK=== -->
 
 === "Java"
