@@ -95,7 +95,7 @@ print(online_keyreg.dictify())
 		nonpart,
 	)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/participation.go#L40-L60)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/participation.go#L40-L60)
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"

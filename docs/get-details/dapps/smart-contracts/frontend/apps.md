@@ -109,7 +109,7 @@ special_algod_client = algod.AlgodClient(
 		[]*common.Header{&algodHeader},
 	)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/deploy_app.go#L14-L32)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L13-L31)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -281,11 +281,20 @@ print(f"Address: {addr}")
 
 === "Go"
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-	```go
-    // get account from mnemonic
-    creatorAccount := recoverAccount(creatorMnemonic)
-    sender := creatorAccount.Address
-    ```
+```go
+	k, err := mnemonic.ToPrivateKey(mn)
+	if err != nil {
+		log.Fatalf("failed to parse mnemonic: %s", err)
+	}
+
+	recovered, err := crypto.AccountFromPrivateKey(k)
+	if err != nil {
+		log.Fatalf("failed to recover account from key: %s", err)
+	}
+
+	log.Printf("%+v", recovered)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L23-L34)
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Compile the programs using the `compile` endpoint:
@@ -509,11 +518,20 @@ print(f"Address: {addr}")
 
 === "Go"
 <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-	```go
-    // declare sender
-    userAccount := recoverAccount(userMnemonic)
-    sender := userAccount.Address
-    ```
+```go
+	k, err := mnemonic.ToPrivateKey(mn)
+	if err != nil {
+		log.Fatalf("failed to parse mnemonic: %s", err)
+	}
+
+	recovered, err := crypto.AccountFromPrivateKey(k)
+	if err != nil {
+		log.Fatalf("failed to recover account from key: %s", err)
+	}
+
+	log.Printf("%+v", recovered)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L23-L34)
 <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:

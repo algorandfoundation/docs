@@ -87,21 +87,21 @@ txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
 
 === "Go"
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
-	``` go
-    // from account 1 to account 3
-    tx1, err := transaction.MakePaymentTxnWithFlatFee(account1, account3, minFee, 100000, firstValidRound, lastValidRound, nil, "", genID, genHash)
-    if err != nil {
-        fmt.Printf("Error creating transaction: %s\n", err)
-        return
-    }
+```go
+	tx1, err := transaction.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 100000, nil, "", sp)
+	if err != nil {
+		fmt.Printf("Error creating transaction: %s\n", err)
+		return
+	}
 
-    // from account 2 to account 1
-    tx2, err := transaction.MakePaymentTxnWithFlatFee(account2, account1, minFee, 200000, firstValidRound, lastValidRound, nil, "", genID, genHash)
-    if err != nil {
-        fmt.Printf("Error creating transaction: %s\n", err)
-        return
-    }
-    ```
+	// from account 2 to account 1
+	tx2, err := transaction.MakePaymentTxn(acct2.Address.String(), acct1.Address.String(), 100000, nil, "", sp)
+	if err != nil {
+		fmt.Printf("Error creating transaction: %s\n", err)
+		return
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L29-L41)
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "goal"
@@ -165,12 +165,13 @@ txn_2.group = gid
 
 === "Go"
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
-	```go
-    // compute group id and put it into each transaction
-    gid, err := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
-    tx1.Group = gid
-    tx2.Group = gid
-    ```
+```go
+	// compute group id and put it into each transaction
+	gid, err := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
+	tx1.Group = gid
+	tx2.Group = gid
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L44-L48)
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
@@ -232,18 +233,18 @@ stxn_2 = txn_2.sign(sk2)
 
 === "Go"
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
-	```go
-    sTxID1, stx1, err := crypto.SignTransaction(sk1, tx1)
-    if err != nil {
-        fmt.Printf("Failed to sign transaction: %s\n", err)
-        return
-    }
-    sTxID2, stx2, err := crypto.SignTransaction(sk2, tx2)
-    if err != nil {
-        fmt.Printf("Failed to sign transaction: %s\n", err)
-        return
-    }
-    ```
+```go
+	_, stx1, err := crypto.SignTransaction(acct1.PrivateKey, tx1)
+	if err != nil {
+		fmt.Printf("Failed to sign transaction: %s\n", err)
+		return
+	}
+	_, stx2, err := crypto.SignTransaction(acct2.PrivateKey, tx2)
+	if err != nil {
+		fmt.Printf("Failed to sign transaction: %s\n", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L51-L60)
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "goal"
@@ -295,11 +296,13 @@ signed_group = [stxn_1, stxn_2]
 
 === "Go"
     <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
-	``` go
-    var signedGroup []byte
-    signedGroup = append(signedGroup, stx1...)
-    signedGroup = append(signedGroup, stx2...)
-    ```
+```go
+	var signedGroup []byte
+	signedGroup = append(signedGroup, stx1...)
+	signedGroup = append(signedGroup, stx2...)
+
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L63-L67)
     <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "goal"
@@ -363,20 +366,20 @@ print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 
 === "Go"
     <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
-	```go
-    pendingTxID, err := algodClient.SendRawTransaction(signedGroup).Do(context.Background())
-    if err != nil {
-        fmt.Printf("failed to send transaction: %s\n", err)
-        return
-    }
-    confirmedTxn, err := transaction.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
-    if err != nil {
+```go
+	pendingTxID, err := algodClient.SendRawTransaction(signedGroup).Do(context.Background())
+	if err != nil {
+		fmt.Printf("failed to send transaction: %s\n", err)
+		return
+	}
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
+	if err != nil {
 		fmt.Printf("Error waiting for confirmation on txID: %s\n", pendingTxID)
-        return
-    }
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID ,confirmedTxn.ConfirmedRound)
-
-    ```
+		return
+	}
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L70-L81)
     <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
 
 === "goal"

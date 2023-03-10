@@ -72,7 +72,7 @@ myindexer = indexer.IndexerClient(
 		[]*common.Header{&indexerHeader},
 	)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
 <!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
@@ -144,7 +144,7 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
 	assetJson, err := json.MarshalIndent(assetResult, "", "\t")
 	fmt.Printf(string(assetJson) + "\n")
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L51-L64)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L51-L64)
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "cURL"
@@ -213,7 +213,7 @@ print(f"Transaction results: {json.dumps(response, indent=2)}")
 	transactionJson, err := json.MarshalIndent(transactionResult, "", "\t")
 	fmt.Printf(string(transactionJson) + "\n")
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L69-L81)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L69-L81)
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "cURL"
@@ -357,7 +357,7 @@ while has_results:
 		}
 	}
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L84-L118)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L84-L118)
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "cURL"
@@ -468,7 +468,7 @@ print(f"result: {json.dumps(response, indent=2)}")
 	prefixJson, err := json.MarshalIndent(prefixResult, "", "\t")
 	fmt.Printf(string(prefixJson) + "\n")
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/indexer.go#L121-L133)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L121-L133)
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "cURL"

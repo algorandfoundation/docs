@@ -38,11 +38,11 @@ atc = AtomicTransactionComposer()
 
 === "Go"
     <!-- ===GOSDK_ATC_CREATE=== -->
-    ```go
-	    import "github.com/algorand/go-algorand-sdk/transaction"
-        //...
-    	var atc = transaction.AtomicTransactionComposer{}
-    ```
+```go
+	// Create the atc we'll use to compose our transaction group
+	var atc = transaction.AtomicTransactionComposer{}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L41-L43)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -115,30 +115,23 @@ atc.add_transaction(tws)
 
 === "Go"
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
-    ```go
+```go
+	// Get suggested params and make a transaction as usual
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // ...
+	txn, err := transaction.MakePaymentTxn(acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp)
+	if err != nil {
+		log.Fatalf("failed to make transaction: %s", err)
+	}
 
-    // Returns Account 
-    acct, _ := GetAccount()
-
-    // Create signer object
-	signer := transaction.BasicAccountTransactionSigner{Account: acct}
-
-    // Get suggested params from client
-	sp, _ := client.SuggestedParams().Do(context.Background())
-
-    // Create a transaction
-	ptxn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
-
-    // Construct TransactionWithSigner
-	tws := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
-
-    // Pass TransactionWithSigner to atc
-
-    atc.AddTransaction(tws)
-
-    ```
+	// Construct a TransactionWithSigner and pass it to the atc
+	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
+	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L46-L60)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -255,45 +248,43 @@ atc.add_method_call(
 
 === "Go"
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
-    ```go
-    // Read in contract json file and marshal into Contract
-	f, _ := os.Open("path/to/contract.json")
-	b, _ := ioutil.ReadAll(f)
+```go
+	b, err := ioutil.ReadFile("calculator/contract.json")
+	if err != nil {
+		log.Fatalf("failed to read contract file: %s", err)
+	}
+
 	contract := &abi.Contract{}
-	_ = json.Unmarshal(b, contract)
-    ```
+	if err := json.Unmarshal(b, contract); err != nil {
+		log.Fatalf("failed to unmarshal contract: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L29-L38)
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
     
     <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
-    ```go
+```go
+	// Grab the method from out contract object
+	addMethod, err := contract.GetMethodByName("add")
+	if err != nil {
+		log.Fatalf("failed to get add method: %s", err)
+	}
 
-
-    func combine(mcp transaction.AddMethodCallParams, m abi.Method, a []interface{}) transaction.AddMethodCallParams {
-        mcp.Method = m
-        mcp.MethodArgs = a
-        return mcp
-    }
-
+	// Set up method call params
 	mcp := transaction.AddMethodCallParams{
-		AppID:           contract.Networks[genesis_hash].AppID,
-		Sender:          acct.Address,
+		AppID:           appID,
+		Sender:          acct1.Address,
 		SuggestedParams: sp,
 		OnComplete:      types.NoOpOC,
 		Signer:          signer,
+		Method:          addMethod,
+		MethodArgs:      []interface{}{1, 1},
 	}
-
-    // Simple call to the `add` method, method_args can be any type but _must_ 
-    // match those in the method signature of the contract
-	atc.AddMethodCall(combine(mcp, contract.GetMethodByName(contract, "add"), []interface{}{1, 1}))
-
-
-    // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
-    // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-	txn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
-	stxn := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
-	atc.AddMethodCall(combine(mcp, contract.GetMethodByName(contract, "txntest"), []interface{}{10000, stxn, 1000}))
-
-    ```
+	if err := atc.AddMethodCall(mcp); err != nil {
+		log.Fatalf("failed to add method call: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L63-L82)
     <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
     
 === "Java"
@@ -364,20 +355,17 @@ for res in result.abi_results:
 
 === "Go"
     <!-- ===GOSDK_ATC_RESULTS=== -->
-    ```go
-    // Other options:
-    // txgroup := atc.BuildGroup()
-    // txids := atc.Submit(client)
-
-	ret, err := atc.Execute(client, context.Background(), 2)
+```go
+	result, err := atc.Execute(algodClient, context.Background(), 4)
 	if err != nil {
-		log.Fatalf("Failed to execute call: %+v", err)
+		log.Fatalf("failed to get add method: %s", err)
 	}
 
-	for _, r := range ret.MethodResults {
-		log.Printf("%s returned %+v", r.TxID, r.ReturnValue)
+	for _, r := range result.MethodResults {
+		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L85-L93)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"

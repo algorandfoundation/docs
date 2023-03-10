@@ -935,20 +935,25 @@ atc.add_method_call(
 
 === "Go"
     <!-- ===GOSDK_ATC_BOX_REF=== -->
-    ```go
-    var boxAtc = transaction.AtomicTransactionComposer{}
-    err := boxAtc.AddMethodCall(transaction.AddMethodCallParams{
-        AppID:           appId,
-        Sender:          acct.Address,
-        SuggestedParams: sp,
-        OnComplete:      types.NoOpOC,
-        Signer:          signer,
-        Method:          method,
-        BoxReferences:   types.AppBoxReference{AppID: appId, Name: []byte("key")},
-        MethodArgs:      []interface{}{1,5},
-    })
-    // ...
-    ```
+```go
+	boxName := "coolBoxName"
+	mcp = transaction.AddMethodCallParams{
+		AppID:           appID,
+		Sender:          acct1.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+		Method:          addMethod,
+		MethodArgs:      []interface{}{1, 1},
+		// Here we're passing a box reference so our app
+		// can reference it during evaluation
+		BoxReferences: []types.AppBoxReference{
+			{AppID: appID, Name: []byte(boxName)},
+		},
+	}
+	// ...
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L96-L112)
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 
 === "Java"

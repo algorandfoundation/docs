@@ -165,7 +165,7 @@ print(f"New account: {address}")
 		kmdToken,
 	)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L22-L29)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L22-L29)
 <!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
 <!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 ```go
@@ -185,7 +185,7 @@ print(f"New account: {address}")
 	exampleWalletID = createResponse.Wallet.ID
 	fmt.Printf("Created wallet '%s' with ID: %s\n", createResponse.Wallet.Name, exampleWalletID)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L37-L52)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L37-L52)
 <!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 
 <!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
@@ -206,7 +206,7 @@ print(f"New account: {address}")
 	accountAddress := genResponse.Address
 	fmt.Printf("New Account: %s\n", accountAddress)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L55-L70)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L55-L70)
 <!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "goal"
@@ -354,7 +354,7 @@ print("Recovered account:", rec_addr)
 	}
 	fmt.Printf("Recovered address %s\n", genResponse.Address)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L115-L160)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L115-L160)
 <!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 
 === "goal"
@@ -454,7 +454,7 @@ print(f"Account mnemonic: {mn}")
 	}
 	fmt.Printf("Account Mnemonic: %v ", mn)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L73-L87)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L73-L87)
 <!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 
 ### Import an account
@@ -542,7 +542,7 @@ print("Account successfully imported: ", importedaccount)
 	)
 	fmt.Println("Account Successfully Imported: ", importedAccount.Address)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L90-L103)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L90-L103)
 <!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 
 # Standalone 
@@ -617,7 +617,7 @@ print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 		fmt.Printf("My passphrase: %s\n", passphrase)
 	}
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L163-L172)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L163-L172)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 
@@ -758,7 +758,7 @@ print("Multisig Address: ", msig.address())
 	// Print multisig account
 	fmt.Printf("Multisig address : %s \n", fromAddr)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
 <!-- ===GOSDK_MULTISIG_CREATE=== -->
 
 === "goal"

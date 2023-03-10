@@ -237,69 +237,65 @@ print(f"Asset ID created: {created_asset}")
 
 === "Go"
     <!-- ===GOSDK_ASSET_CREATE=== -->
-    ``` go
+```go
+	// Configure parameters for asset creation
+	var (
+		creatorAddr       = creator.Address.String()
+		assetName         = "Really Useful Gift"
+		unitName          = "rug"
+		assetURL          = "https://path/to/my/asset/details"
+		assetMetadataHash = "thisIsSomeLength32HashCommitment"
+		defaultFrozen     = false
+		decimals          = uint32(0)
+		totalIssuance     = uint64(1000)
+
+		manager  = creatorAddr
+		reserve  = creatorAddr
+		freeze   = creatorAddr
+		clawback = creatorAddr
+
+		note []byte
+	)
+
 	// Get network-related transaction parameters and assign
 	txParams, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-    // CREATE ASSET
 
 	// Construct the transaction
-	// Set parameters for asset creation 
-	creator := pks[1]
-	assetName := "latinum"
-	unitName := "latinum"
-	assetURL := "https://path/to/my/asset/details"
-	assetMetadataHash := "thisIsSomeLength32HashCommitment"
-	defaultFrozen := false
-	decimals := uint32(0)
-	totalIssuance := uint64(1000)
-	manager := pks[2]
-	reserve := pks[2]
-	freeze := pks[2]
-	clawback := pks[2]
-	note := []byte(nil)
-	txn, err := transaction.MakeAssetCreateTxn(creator,
-		note,
-		txParams, totalIssuance, decimals,
+	txn, err := transaction.MakeAssetCreateTxn(
+		creatorAddr, note, txParams, totalIssuance, decimals,
 		defaultFrozen, manager, reserve, freeze, clawback,
-		unitName, assetName, assetURL, assetMetadataHash)
+		unitName, assetName, assetURL, assetMetadataHash,
+	)
+
 	if err != nil {
-		fmt.Printf("Failed to make asset: %s\n", err)
-		return
+		log.Fatalf("failed to make transaction: %s", err)
 	}
-	fmt.Printf("Asset created AssetName: %s\n", txn.AssetConfigTxnFields.AssetParams.AssetName)
+
 	// sign the transaction
-	txid, stx, err := crypto.SignTransaction(sks[1], txn)
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err := algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	fmt.Printf("Submitted transaction %s\n", sendResponse)
+
 	// Wait for confirmation
-	confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	assetID := confirmedTxn.AssetIndex
-	// print created asset and asset holding info for this asset
-	fmt.Printf("Asset ID: %d\n", assetID)
-	printCreatedAsset(assetID, pks[1], algodClient)
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Create Transaction: %s confirmed in Round %d with new asset id: %d\n",
+		txid, confirmedTxn.ConfirmedRound, confirmedTxn.AssetIndex)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L41-L97)
     <!-- ===GOSDK_ASSET_CREATE=== -->
 
 === "goal"
@@ -411,53 +407,49 @@ print(f"Result confirmed in round: {results['confirmed-round']}")
 === "Go"
 
     <!-- ===GOSDK_ASSET_CONFIG=== -->
-	``` go  
-    // CHANGE MANAGER
-	// Change Asset Manager from Account 2 to Account 1
+```go
+	creatorAddr := creator.Address.String()
+	var (
+		newManager  = creatorAddr
+		newFreeze   = creatorAddr
+		newClawback = creatorAddr
+		newReserve  = ""
+
+		strictAddrCheck = false
+		note            []byte
+	)
+
 	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
-	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-
-	manager = pks[1]
-	oldmanager := pks[2]
-	strictEmptyAddressChecking := true
-	txn, err = transaction.MakeAssetConfigTxn(oldmanager, note, txParams, assetID, manager, reserve, freeze, clawback, strictEmptyAddressChecking)
-	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
 
-	txid, stx, err = crypto.SignTransaction(sks[2], txn)
+	txn, err := transaction.MakeAssetConfigTxn(creatorAddr, note, sp, assetID, newManager, newReserve, newFreeze, newClawback, strictAddrCheck)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to make  txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
 
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
 
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
 
-	// print created assetinfo for this asset
-	fmt.Printf("Asset ID: %d\n", assetID)
-	printCreatedAsset(assetID, pks[1], algodClient)
-
-    ```
+	log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L103-L143)
     <!-- ===GOSDK_ASSET_CONFIG=== -->
 
 === "goal"
@@ -580,46 +572,39 @@ assert matching_asset["is-frozen"] is False
 
 === "Go"
     <!-- ===GOSDK_ASSET_OPTIN=== -->
-	``` go  
-	// OPT-IN
-	// Account 3 opts in to receive latinum
-	// Use previously set transaction parameters and update sending address to account 3
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+```go
+	userAddr := user.Address.String()
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	txn, err = transaction.MakeAssetAcceptanceTxn(pks[3], note, txParams, assetID)
+
+	txn, err := transaction.MakeAssetAcceptanceTxn(userAddr, nil, sp, assetID)
 	if err != nil {
-		fmt.Printf("Failed to send transaction MakeAssetAcceptanceTxn: %s\n", err)
-		return
+		log.Fatalf("failed to make txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[3], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(user.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	// print created assetholding for this asset and Account 3, showing 0 balance
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-    ```
+
+	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L148-L178)
     <!-- ===GOSDK_ASSET_OPTIN=== -->
 
 === "goal"
@@ -738,55 +723,42 @@ assert matching_asset["amount"] == 1
 
 === "Go"
     <!-- ===GOSDK_ASSET_XFER=== -->
-	``` go  
-	// TRANSFER ASSET
-	
-	// Send 10 latinum from Account 1 to Account 3
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+```go
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	sender := pks[1]
-	recipient := pks[3]
-	amount := uint64(10)
-	closeRemainderTo := ""
-	txn, err = transaction.MakeAssetTransferTxn(sender, recipient, amount, note, txParams, closeRemainderTo, 
-		assetID)
+
+	txn, err := transaction.MakeAssetTransferTxn(creatorAddr, userAddr, 1, nil, sp, "", assetID)
 	if err != nil {
-		fmt.Printf("Failed to send transaction MakeAssetTransfer Txn: %s\n", err)
-		return
+		log.Fatalf("failed to make asset txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[1], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	// print created assetholding for this asset and Account 3 and Account 1
-	// You should see amount of 10 in Account 3, and 990 in Account 1
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-	fmt.Printf("Account 1: %s\n", pks[1])
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Asset Transfer Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L183-L216)
     <!-- ===GOSDK_ASSET_XFER=== -->
 
 === "goal"
@@ -909,49 +881,44 @@ assert matching_asset["is-frozen"] is True
 
 === "Go"
     <!-- ===GOSDK_ASSET_FREEZE=== -->
-	``` go  
-	// FREEZE ASSET
-	// The freeze address (Account 2) Freeze's asset for Account 3.
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
-	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	newFreezeSetting := true
-	target := pks[3]
-	txn, err = transaction.MakeAssetFreezeTxn(freeze, note, txParams, assetID, target, newFreezeSetting)
-	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
-	}
-	txid, stx, err = crypto.SignTransaction(sks[2], txn)
-	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
-	}
-	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
-	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
-	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
-	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+```go
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
 
-    // You should now see is-frozen value of true
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-    ```
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
+
+	// Create a freeze asset transaction with the target of the user address
+	// and the new freeze setting of `true`
+	txn, err := transaction.MakeAssetFreezeTxn(creatorAddr, nil, sp, assetID, userAddr, true)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("Freeze Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L221-L256)
     <!-- ===GOSDK_ASSET_FREEZE=== -->
 
 === "goal"
@@ -1072,55 +1039,44 @@ assert matching_asset["is-frozen"] is True
 
 === "Go"
     <!-- ===GOSDK_ASSET_CLAWBACK=== -->
-	``` go  
-	// REVOKE ASSET
-	// Revoke an Asset
-	// The clawback address (Account 2) revokes 10 latinum from Account 3 (target)
-	// and places it back with Account 1 (creator).
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+```go
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	target = pks[3]
-	txn, err = transaction.MakeAssetRevocationTxn(clawback, target, amount, creator, note,
-		txParams, assetID)
+
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeAssetRevocationTxn(creatorAddr, userAddr, 1, creatorAddr, nil, sp, assetID)
 	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
+		log.Fatalf("failed to make txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[2], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	// print created assetholding for this asset and Account 3 and Account 1
-	// You should see amount of 0 in Account 3, and 1000 in Account 1
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("recipient")
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-	fmt.Printf("target")
-	fmt.Printf("Account 1: %s\n", pks[1])
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Clawback Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L261-L296)
     <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 
 === "goal"
@@ -1237,51 +1193,43 @@ except Exception as e:
 
 === "Go"
     <!-- ===GOSDK_ASSET_DELETE=== -->
-	``` go  
-	// DESTROY ASSET
-	// Destroy the asset
-	// Make sure all funds are back in the creator's account. Then use the
-	// Manager account (Account 1) to destroy the asset.
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+```go
+	var (
+		creatorAddr = creator.Address.String()
+	)
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	txn, err = transaction.MakeAssetDestroyTxn(manager, note, txParams, assetID)
+
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeAssetDestroyTxn(creatorAddr, nil, sp, assetID)
 	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
+		log.Fatalf("failed to make txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[1], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	fmt.Printf("Asset ID: %d\n", assetID)	
-	fmt.Printf("Account 3 must do a transaction for an amount of 0, \n" )
-    fmt.Printf("with a closeRemainderTo to the creator account, to clear it from its accountholdings. \n")
-    fmt.Printf("For Account 1, nothing should print after this as the asset is destroyed on the creator account \n")
-	// print created asset and asset holding info for this asset (should not print anything)
-	printCreatedAsset(assetID, pks[1], algodClient)
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Destroy Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L301-L335)
     <!-- ===GOSDK_ASSET_DELETE=== -->
 
 === "goal"
@@ -1364,43 +1312,14 @@ print(f"Asset params: {list(asset_params.keys())}")
 
 === "Go"
     <!-- ===GOSDK_ASSET_INFO=== -->
-	```go
-        // note: if you have an indexer instance available it is easier to just search accounts for an asset
-        // printAssetHolding utility to print asset holding for account
-        func printAssetHolding(assetID uint64, account string, client *algod.Client) {
-
-            act, err := client.AccountInformation(account).Do(context.Background())
-            if err != nil {
-                fmt.Printf("failed to get account information: %s\n", err)
-                return
-            }
-            for _, assetholding := range act.Assets {
-                if assetID == assetholding.AssetId {
-                    prettyPrint(assetholding)
-                    break
-                }
-            }
-        }
-
-        // printCreatedAsset utility to print created assert for account
-        func printCreatedAsset(assetID uint64, account string, client *algod.Client) {
-
-            act, err := client.AccountInformation(account).Do(context.Background())
-            if err != nil {
-                fmt.Printf("failed to get account information: %s\n", err)
-                return
-            }
-            for _, asset := range act.CreatedAssets {
-                if assetID == asset.Index {
-                    prettyPrint(asset)
-                    break
-                }
-            }
-        }
-        ...
-        printCreatedAsset(assetID, pks[1], algodClient)
-        printAssetHolding(assetID, pks[1], algodClient)    
-    ```
+```go
+	info, err := algodClient.GetAssetByID(assetID).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get asset info: %s", err)
+	}
+	log.Printf("Asset info for %d: %+v", assetID, info)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L24-L29)
     <!-- ===GOSDK_ASSET_INFO=== -->
 
 === "goal"

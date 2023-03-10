@@ -312,7 +312,7 @@ print(
 	// Print multisig account
 	fmt.Printf("Multisig address : %s \n", fromAddr)
 ```
-[Snippet Source](https://github.com/nullun/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
     <!-- ===GOSDK_MULTISIG_SIGN=== -->
     ```go
