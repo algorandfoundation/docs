@@ -31,7 +31,7 @@ When calling the API for global or local state, the result returned is in the fo
 
 - for a simple string, just encode it as `ascii` or `utf-8`
 - for an address call `encode_address` or similar depending on SDK
-- for an abi tuple like `(address,uint64,bool)` use `ABIType.from_string("(address,uint64,bool)").decode(value_bytes)` 
+- for an ABI tuple like `(address,uint64,bool)` use `ABIType.from_string("(address,uint64,bool)").decode(value_bytes)` 
 
 
 ```ts
@@ -65,7 +65,7 @@ Common reasons include:
 
 - `underflow on subtracting SEND_AMOUNT from sender amount AVAILABLE_AMOUNT`, `account ADDRESS balance 0 below min XXX (N assets)`
 
-    All of these happen when the some account does not have enough algos to cover the transaction (taking into account their minimum balance requirement and any other transaction in the same group). Fund the account if necessary or cover the fees from its transactions with another transaction in the group.
+    All of these happen when some account does not have enough algos to cover the transaction (taking into account their minimum balance requirement and any other transaction in the same group). Fund the account if necessary or cover the fees from its transactions with another transaction in the group.
 
 - `receiver error: must optin, asset ASSET_ID missing from ACCOUNT_ADDR`
 
@@ -104,12 +104,16 @@ Common reasons include:
 
     This happens when an account that is not opted in to an application tries to opt out or clear state for that app.
 
+- `invalid : program version mismatch: N != M`
+
+    This happens when you attempt to deploy or update a programs approval and clearstate code with two different versions. Check that they both have the same version number.
+
 
 # Logic errors
 
 How can I debug this logic error?
 
-Generally Logic errors can be debugged using [Dryrun, Tealdbg, or Simulate](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/debugging). link to debugging page 
+Generally Logic errors can be debugged using [Dryrun, Tealdbg, or Simulate](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/debugging).
 
 For some common errors, find an explanation below:  
 
@@ -136,7 +140,7 @@ For some common errors, find an explanation below:
 
 - `logic eval error: err opcode executed.`
 
-    Unless you added an `err` to your program explicitly, its likely this is the result of the internal routing of the app finding that there are no matching routes for some conditional block. Typically this happens when something like the abi method selector passed is not present in the application.
+    Unless you added an `err` to your program explicitly, it's likely this is the result of the internal routing of the app finding that there are no matching routes for some conditional block. Typically this happens when something like the ABI method selector passed is not present in the application.
 
 - `logic eval error: overspend` 
 
@@ -145,6 +149,10 @@ For some common errors, find an explanation below:
 - `logic eval error: * overflowed.`
 
     The math operation would have returned a value > max uint64. Use wide math ops or byte math ops like `b*` .
+
+- `logic eval error: - would result negative.`
+
+    The math operation would have returned a negative value < 0. Check the values before using them within the operation.
 
 - `logic eval error: invalid ApplicationArgs index 0.`
 
