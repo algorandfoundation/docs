@@ -151,9 +151,9 @@ Similar guidelines apply to validate incoming transactions for smart signatures,
 ## DO manage key carefully
 
 If the smart contract is not updatable and the dApp is fully web3 (users interacting with it have their own wallet), then the only account needed for deployment is the creator account.
-Te simplest solution is most likely to deploy the smart contract with a throw away account.
+The simplest solution is most likely to deploy the smart contract with a throw away account.
 
-The account mayt then rekeyed to an account without a known secret key (e.g., `737777777777777777777777777777777777777777777777777UFEJ2CI`, the reward pool) so that the account essentially is locked forever.
+The account may then rekey to an account without a known secret key (e.g., `737777777777777777777777777777777777777777777777777UFEJ2CI`, the reward pool) so that the account essentially is locked forever.
 However, note that you must be sure the creator account will never be used for any other purpose (like validating the dApp before rekeying).
 
 If the smart contract is updatable, then extreme care should be taken to secure the key allowing for example.
