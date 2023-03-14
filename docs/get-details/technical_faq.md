@@ -1,4 +1,4 @@
-title: FAQ
+title: Technical FAQ
 
 # Encode address
  
@@ -124,7 +124,7 @@ For some common errors, find an explanation below:
 
 - `logic eval error: assert failed pc=XXX`
 
-    An assert was called on something that evaluated to 0. The `pc` will provide a pointer to where in the program the assert failed. To find where in the TEAL source program this corresponds to, compile the source TEAL with (`source_map`)[TODO: link] enabled and use the result to find the line in the source program. 
+    An assert was called on something that evaluated to 0. The `pc` will provide a pointer to where in the program the assert failed. To find where in the TEAL source program this corresponds to, compile the source TEAL with [`source_map`](https://developer.algorand.org/docs/rest-apis/algod/v2/#post-v2tealcompile) enabled and use the result to find the line in the source program. 
 
 - `logic eval error: program logs too large.`
 
@@ -162,27 +162,17 @@ For some common errors, find an explanation below:
 
 How do I setup the Algod to connect to sandbox?
 
-    [Algokit](TODO: link)
-    [VideoSeries](TODO: link)
+Instructions for [Algokit](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md)
 
-How do I connect to an API? Which API should I use?
+Or
 
-    Link to all api providers
-        AlgoNode
-        AlgoExplorer
-        PureStake - note requires diff api key header
+Instructions for [Sandbox](https://github.com/algorand/sandbox)
 
-    Discuss tradeoffs and fail overs?
 
-# Passing around data
+Which API should I use?
 
-How do I pass a (un)signed transaction from server to front end or vice versa?
-    On one side: msgpack encode it to bytes => base64 encode the bytes to a string => ship the string over the wire 
-    On the other side: base64 decode the string to bytes => msgpack decode the bytes into a signed/unsigned transaction
-# Querying chain state
+Any of these API providers can be used to query Algod or Indexer data.  
 
-How do I get an accounts state for an app?
-
-    On chain or off chain?
-    Off chain: use sdks to query  account data from the algod, itll be in there keyed by app id
-    On Chain: make sure the account and the app id for the app that set the local storage are passed in the transaction then `App.localGetEx()` with [PyTEAL](TODO: link)
+- [AlgoNode](https://algonode.io/api/)
+- [AlgoExplorer](https://algoexplorer.io/api-dev/v2)
+- [PureStake](https://developer.purestake.io/) 
