@@ -46,14 +46,13 @@ The Address developers or users are typically shown is a 58 byte string correspo
 Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, encoding to and from the public key format can be done as follows:
 === "JavaScript"
 <!-- ===JSSDK_CODEC_ADDRESS=== -->
-    ```js
-    import algosdk from 'algosdk'
-
-    const address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
-    const pk = algosdk.decodeAddress(address)
-    const addr = algosdk.encodeAddress(pk.publicKey)
-    // addr === address
-    ```
+```javascript
+  const address = '4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4';
+  const pk = algosdk.decodeAddress(address);
+  const addr = algosdk.encodeAddress(pk.publicKey);
+  console.log(address, addr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L16-L20)
 <!-- ===JSSDK_CODEC_ADDRESS=== -->
 
 === "Python"
@@ -101,10 +100,12 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_BASE64=== -->
-    ```js
-    const encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-    const decoded = Buffer.from(encoded, "base64").toString()
-    ```
+```javascript
+  const b64Encoded = 'SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0';
+  const b64Decoded = Buffer.from(b64Encoded, 'base64').toString();
+  console.log(b64Encoded, b64Decoded);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L23-L26)
 <!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
@@ -148,14 +149,14 @@ Given an integer `1337`, you may encode it as:
 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_UINT64=== -->
-    ```js
-    const val = 1337
-
-    const encoded = algosdk.encodeUint64(val)
-    const decoded = algosdk.decodeUint64(encoded)
-
-    // val === decoded
-    ```
+```javascript
+  const int = 1337;
+  const encoded = algosdk.encodeUint64(int);
+  const safeDecoded = algosdk.decodeUint64(encoded, 'safe');
+  const mixedDecoded = algosdk.decodeUint64(encoded, 'bigint');
+  console.log(int, encoded, safeDecoded, mixedDecoded);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L29-L34)
 <!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
@@ -215,27 +216,33 @@ Create a payment transaction from one account to another using suggested paramet
 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
-    ```js
+```javascript
+  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: sender.addr,
+    to: receiver.addr,
+    amount: 1e6,
+    suggestedParams,
+  });
 
-    const sp = await client.getTransactionParams().do()
-    const pay_txn = algosdk.makePaymentTxnWithSuggestedParams(acct1.addr, acct2.addr, 10000, undefined, undefined, sp)
-
-    const pay_txn_bytes = algosdk.encodeObj(pay_txn.get_obj_for_encoding())
-    fs.writeFileSync("pay.txn", Buffer.from(pay_txn_bytes).toString("base64"))
-
-
-    const recovered_pay_txn = algosdk.decodeUnsignedTransaction(Buffer.from(fs.readFileSync("pay.txn").toString(), "base64"))
-    console.log(recovered_pay_txn)
-
-    ```
+  const txnBytes = txn.toByte();
+  const txnB64 = Buffer.from(txnBytes).toString('base64');
+  const restoredTxn = algosdk.decodeUnsignedTransaction(
+    Buffer.from(txnB64, 'base64')
+  );
+  console.log(restoredTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
 <!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 <!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
-```js
-    const spay_txn_bytes = pay_txn.signTxn(acct1.sk)
-    fs.writeFileSync("signed_pay.txn", Buffer.from(spay_txn_bytes).toString("base64"))
-    const recovered_signed_pay_txn = algosdk.decodeSignedTransaction(Buffer.from(fs.readFileSync("signed_pay.txn").toString(), "base64"))
-    console.log(recovered_signed_pay_txn)
+```javascript
+  const signedTxn = txn.signTxn(sender.privateKey);
+  const signedB64Txn = Buffer.from(signedTxn).toString('base64');
+  const restoredSignedTxn = algosdk.decodeSignedTransaction(
+    Buffer.from(signedB64Txn, 'base64')
+  );
+  console.log(restoredSignedTxn);
 ```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
 <!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"

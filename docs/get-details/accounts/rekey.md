@@ -358,6 +358,85 @@ print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 
 === "JavaScript"
 <!-- ===JSSDK_ACCOUNT_REKEY=== -->
+```javascript
+  // create and fund a new account that we will eventually rekey
+  const originalAccount = algosdk.generateAccount();
+  const fundOriginalAccount = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
+    {
+      from: funder.addr,
+      to: originalAccount.addr,
+      amount: 1_000_000,
+      suggestedParams,
+    }
+  );
+
+  await client
+    .sendRawTransaction(fundOriginalAccount.signTxn(funder.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    client,
+    fundOriginalAccount.txID().toString(),
+    3
+  );
+
+  // authAddr is undefined by default
+  const originalAccountInfo = await client
+    .accountInformation(originalAccount.addr)
+    .do();
+  console.log(
+    'Account Info: ',
+    originalAccountInfo,
+    'Auth Addr: ',
+    originalAccountInfo['auth-addr']
+  );
+
+  // create a new account that will be the new auth addr
+  const newSigner = algosdk.generateAccount();
+  console.log('New Signer Address: ', newSigner.addr);
+
+  // rekey the original account to the new signer via a payment transaction
+  const rekeyTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: originalAccount.addr,
+    to: originalAccount.addr,
+    amount: 0,
+    suggestedParams,
+    rekeyTo: newSigner.addr, // set the rekeyTo field to the new signer
+  });
+
+  await client.sendRawTransaction(rekeyTxn.signTxn(originalAccount.sk)).do();
+  await algosdk.waitForConfirmation(client, rekeyTxn.txID().toString(), 3);
+
+  const originalAccountInfoAfterRekey = await client
+    .accountInformation(originalAccount.addr)
+    .do();
+  console.log(
+    'Account Info: ',
+    originalAccountInfoAfterRekey,
+    'Auth Addr: ',
+    originalAccountInfoAfterRekey['auth-addr']
+  );
+
+  // form new transaction from rekeyed account
+  const txnWithNewSignerSig = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
+    {
+      from: originalAccount.addr,
+      to: funder.addr,
+      amount: 100,
+      suggestedParams,
+    }
+  );
+
+  // the transaction is from originalAccount, but signed with newSigner private key
+  const signedTxn = txnWithNewSignerSig.signTxn(newSigner.sk);
+
+  await client.sendRawTransaction(signedTxn).do();
+  await algosdk.waitForConfirmation(
+    client,
+    txnWithNewSignerSig.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L82-L158)
 <!-- ===JSSDK_ACCOUNT_REKEY=== -->
 
 

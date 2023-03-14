@@ -919,18 +919,42 @@ atc.add_method_call(
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_BOX_REF=== -->
-    ```js
-    const atc = new AtomicTransactionComposer();
-    atc.addMethodCall({
-        appID: appId,
-        method: myMethod,
-        methodArgs: [1,5],
-        boxes: [{ appIndex: appId, name: new Uint8Array(Buffer.from("key")) }],
-        sender: acct.addr,
-        suggestedParams: sp,
-        signer: algosdk.makeBasicAccountTransactionSigner(acct),
-    });
-    ```
+```javascript
+  const boxATC = new AtomicTransactionComposer();
+
+  const fundTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    suggestedParams,
+    from: sender.addr,
+    to: algosdk.getApplicationAddress(contractAppID),
+    amount: 106900,
+  });
+
+  boxATC.addTransaction({ txn: fundTxn, signer: sender.signer });
+
+  const boxKey = new Uint8Array(Buffer.from('Name'));
+  boxATC.addMethodCall({
+    appID: contractAppID,
+    method: contract.getMethodByName('set_name'),
+    methodArgs: ['AlgoDev'],
+    boxes: [
+      {
+        appIndex: 0,
+        name: boxKey,
+      },
+    ],
+    sender: sender.addr,
+    signer: sender.signer,
+    suggestedParams,
+  });
+
+  await boxATC.execute(client, 3);
+
+  const boxVal = await client
+    .getApplicationBoxByName(contractAppID, boxKey)
+    .do();
+  console.log('Name:', Buffer.from(boxVal.value).toString());
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L167-L200)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"

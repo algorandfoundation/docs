@@ -127,99 +127,50 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 === "JavaScript"
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
+```javascript
+  const signerAccounts: algosdk.Account[] = [];
+  signerAccounts.push(algosdk.generateAccount());
+  signerAccounts.push(algosdk.generateAccount());
+
+  // multiSigParams is used when creating the address and when signing transactions
+  const multiSigParams = {
+    version: 1,
+    threshold: 2,
+    addrs: signerAccounts.map((a) => a.addr),
+  };
+  const multisigAddr = algosdk.multisigAddress(multiSigParams);
+
+  console.log('Created MultiSig Address: ', multisigAddr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
-    ```javascript
-    const algosdk = require('algosdk');
+```javascript
+  const msigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: multisigAddr,
+    to: funder.addr,
+    amount: 100,
+    suggestedParams,
+  });
 
+  // First signature uses signMultisigTransaction
+  const msigWithFirstSig = algosdk.signMultisigTransaction(
+    msigTxn,
+    multiSigParams,
+    signerAccounts[0].sk
+  ).blob;
 
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    const server = "http://localhost";
-    const port = 4001;
-    const keypress = async () => {
-        process.stdin.setRawMode(true)
-        return new Promise(resolve => process.stdin.once('data', () => {
-            process.stdin.setRawMode(false)
-            resolve()
-        }))
-    }
+  // Subsequent signatures use appendSignMultisigTransaction
+  const msigWithSecondSig = algosdk.appendSignMultisigTransaction(
+    msigWithFirstSig,
+    multiSigParams,
+    signerAccounts[1].sk
+  ).blob;
 
-    (async () => {
-        // recover accounts
-        // paste in mnemonic phrases here for each account
-        let account1_mnemonic = "PASTE phrase for account 1";
-        let account2_mnemonic = "PASTE phrase for account 2";
-        let account3_mnemonic = "PASTE phrase for account 3"
-        // never use mnemonics in production code, replace for demo purposes only
-
-        let account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
-        let account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
-        let account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
-        console.log(account1.addr);
-        console.log(account2.addr);
-        console.log(account3.addr);
-
-        // Setup the parameters for the multisig account
-        const mparams = {
-            version: 1,
-            threshold: 2,
-            addrs: [
-                account1.addr,
-                account2.addr,
-                account3.addr,
-            ],
-        };
-
-        let multsigaddr = algosdk.multisigAddress(mparams);
-        console.log("Multisig Address: " + multsigaddr);
-        //Pause execution to allow using the dispenser on testnet to put tokens in account
-        console.log("Add funds to multisig account using the TestNet Dispenser: ");
-        console.log("https://dispenser.testnet.aws.algodev.network?account=" + multsigaddr);
-        console.log("Once funded, press any key to continue");
-        await keypress();
-        try {
-            let algodclient = new algosdk.Algodv2(token, server, port);
-
-            // Get the relevant params from the algod
-            let params = await algodclient.getTransactionParams().do();
-            // comment out the next two lines to use suggested fee
-            // params.fee = 1000;
-            // params.flatFee = true;
-
-            const receiver = account3.addr;
-            let names = '{"firstName":"John", "lastName":"Doe"}';
-            const enc = new TextEncoder();
-            const note = enc.encode(names);
-
-
-            let txn = algosdk.makePaymentTxnWithSuggestedParams(multsigaddr, receiver, 100000, undefined, note, params);
-            let txId = txn.txID().toString();
-            // Sign with first signature
-
-            let rawSignedTxn = algosdk.signMultisigTransaction(txn, mparams, account1.sk).blob;
-            //sign with second account
-            let twosigs = algosdk.appendSignMultisigTransaction(rawSignedTxn, mparams, account2.sk).blob;
-            //submit the transaction
-            await algodclient.sendRawTransaction(twosigs).do();
-
-            // Wait for confirmation
-            const confirmedTxn = await algosdk.waitForConfirmation(algodclient, txId, 4);
-            //Get the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-            let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-            console.log("Transaction information: %o", mytxinfo);
-            let string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-            console.log("Note field: ", string);
-            const obj = JSON.parse(string);
-            console.log("Note first name: %s", obj.firstName);
-
-
-        } catch (err) {
-            console.log(err.message);
-        }
-    })().then(process.exit)
-
-    ```
+  await client.sendRawTransaction(msigWithSecondSig).do();
+  await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L49-L72)
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 
 === "Python"

@@ -48,41 +48,16 @@ int 1
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_COMPILE=== -->
-	```javascript
-    const fs = require('fs');
-    const path = require('path');
-    const algosdk = require('algosdk');
-    // We assume that testing is done off of sandbox, hence the settings below
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    const server = "http://localhost";
-    const port = 4001;
+```javascript
+  const smartSigSource = '#pragma version 8\nint 1\nreturn'; // approve everything
+  const result = await client.compile(Buffer.from(smartSigSource)).do();
 
-    // create v2 client
-    const algodClient = new algosdk.Algodv2(token, server, port);
-
-    const main = async () => {
-        // Read file for Teal code - int 0
-        const filePath = path.join(__dirname, 'sample.teal');
-        const data = fs.readFileSync(filePath);
-
-        // Compile teal
-        const results = await algodClient.compile(data).do();
-        return results;
-    };
-
-    main().then((results) => {
-        // Print results
-        console.log("Hash = " + results.hash);
-        console.log("Result = " + results.result);
-    }).catch(e => {
-        const error = e.body && e.body.message ? e.body.message : e;
-        console.log(error);
-    });
-
-    // output would be similar to this... 
-    // Hash : KI4DJG2OOFJGUERJGSWCYGFZWDNEU2KWTU56VRJHITP62PLJ5VYMBFDBFE
-    // Result : ASABACI=
-    ```
+  // Hash is equivalent to the contract address
+  console.log('Hash: ', result.hash);
+  console.log('B64: ', result.result);
+  const b64program = result.result;
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L15-L22)
     <!-- ===JSSDK_LSIG_COMPILE=== -->
 
 === "Python"
@@ -151,10 +126,12 @@ The response result from the TEAL `compile` command above is used to create the 
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_INIT=== -->
-	```javascript
-        const program = new Uint8Array(Buffer.from(results.result , "base64"));
-        const lsig = new algosdk.LogicSig(program);   
-    ```
+```javascript
+  let smartSig = new algosdk.LogicSig(
+    new Uint8Array(Buffer.from(b64program, 'base64'))
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L25-L28)
     <!-- ===JSSDK_LSIG_INIT=== -->
 
 === "Python"
@@ -192,17 +169,14 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
-	```javascript
-        // string parameter
-        const args = [];
-        args.push([...Buffer.from("my string")]);
-        const lsig = new algosdk.LogicSig(program, args);
-        
-        // integer parameter
-        const args = [];
-        args.push(algosdk.encodeUint64(123));
-        const lsig = new algosdk.LogicSig(program, args);
-    ```
+```javascript
+  const args = [Buffer.from('This is an argument!')];
+  smartSig = new algosdk.LogicSig(
+    new Uint8Array(Buffer.from(b64program, 'base64')),
+    args
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L31-L36)
     <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
 
 === "Python"
@@ -278,84 +252,23 @@ int 123
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
-	```javascript
-    const algosdk = require('algosdk');
-    // const token = "<algod-token>";
-    // const server = "<algod-address>";
-    // const port = <algod-port>;
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    const server = "http://localhost";
-    const port = 4001;
-    // Import the filesystem module 
-    const fs = require('fs'); 
-    // create an algod v2 client
-    let algodclient = new algosdk.Algodv2(token, server, port);
-    (async () => {
-        // get suggested parameters
-        let params = await algodclient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee
-        // params.fee = 1000;
-        // params.flatFee = true;
-        console.log(params);
-        // create logic sig
-        // samplearg.teal
-        // This code is meant for learning purposes only
-        // It should not be used in production
-        // arg_0
-        // btoi
-        // int 12345
-        // ==
-        // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-        let  fs = require('fs'),
-            path = require('path'),
-            filePath = path.join(__dirname, 'samplearg.teal');
-            // filePath = path.join(__dirname, '<filename>');
-        let data = fs.readFileSync(filePath);
-        let results = await algodclient.compile(data).do();
-        console.log("Hash = " + results.hash);
-        console.log("Result = " + results.result);
-        // let program = new Uint8Array(Buffer.from("base64-encoded-program" < PLACEHOLDER >, "base64"));
-        let program = new Uint8Array(Buffer.from(results.result, "base64"));
-        //let program = new Uint8Array(Buffer.from("AiABuWAtFyIS", "base64"));
-        // Use this if no args
-        // let lsig = new algosdk.LogicSig(program);
-        // String parameter
-        // let args = ["<my string>"];
-        // let lsig = new algosdk.LogicSig(program, args);
-        // Integer parameter
-        let args = getUint8Int(12345);
-        let lsig = new algosdk.LogicSigAccount(program, args);
-        console.log("lsig : " + lsig.address());   
-        // create a transaction
-        let sender = lsig.address();
-        // let receiver = "<receiver-address>";
-        let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
-        let amount = 10000;
-        let closeToRemaninder = undefined;
-        let note = undefined;
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, receiver, amount, closeToRemaninder, note, params)
-        // Create the LogicSigTransaction with contract account LogicSigAccount
-        let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
-        // send raw LogicSigTransaction to network
-        // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
-        let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
-        console.log("Transaction : " + tx.txId);   
-        const confirmedTxn = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-    })().catch(e => {
-        console.log(e.message);
-        console.log(e);
-    });
+```javascript
+  const smartSigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: smartSig.address(),
+    to: funder.addr,
+    amount: 0.1e6,
+    suggestedParams,
+  });
 
-    function getUint8Int(number) {
-        const buffer = Buffer.alloc(8);
-        const bigIntValue = BigInt(number);
-        buffer.writeBigUInt64BE(bigIntValue);
-        return  [Uint8Array.from(buffer)];
-    }
+  const signedSmartSigTxn = algosdk.signLogicSigTransactionObject(
+    smartSigTxn,
+    smartSig
+  );
 
-    ```
+  await client.sendRawTransaction(signedSmartSigTxn.blob).do();
+  await algosdk.waitForConfirmation(client, signedSmartSigTxn.txID, 3);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L55-L69)
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
 
 === "Python"
@@ -471,90 +384,29 @@ The following example illustrates signing a transaction with a created logic sig
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
-	```javascript
-    const algosdk = require('algosdk');
-    // const token = "<algod-token>";
-    // const server = "<algod-address>";
-    // const port = <algod-port>;
-    // sandbox
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    const server = "http://localhost";
-    const port = 4001;
-    // Import the filesystem module 
-    const fs = require('fs'); 
-    // import your private key mnemonic
-    // mnemonics should not be used in production code, for demo purposes only
-    let PASSPHRASE = "<25-word-mnemonic>";
-    let  myAccount = algosdk.mnemonicToSecretKey(PASSPHRASE);
-    console.log("My Address: " + myAccount.addr);
-    // create an algod v2 client
-    let algodclient = new algosdk.Algodv2(token, server, port);
-    (async () => {
-        // get suggested parameter
-        let params = await algodclient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee 
-        // params.fee = 1000;
-        // params.flatFee = true;
-        console.log(params);
-        // create logic sig
-        // samplearg.teal
-        // This code is meant for learning purposes only
-        // It should not be used in production
-        // arg_0
-        // btoi
-        // int 12345
-        // ==
-        // see more info here: https://developer.algorand.org/docs/features/asc1/sdks/#accessing-teal-program-from-sdks
-        let  fs = require('fs'),
-            path = require('path'),
-            filePath = path.join(__dirname, 'samplearg.teal');
-        // filePath = path.join(__dirname, <'fileName'>);
-        let data = fs.readFileSync(filePath);
-        let results = await algodclient.compile(data).do();
-        console.log("Hash = " + results.hash);
-        console.log("Result = " + results.result);
-        // let program = new Uint8Array(Buffer.from(<"base64-encoded-program">, "base64"));
-        let program = new Uint8Array(Buffer.from(results.result, "base64"));
-        // Use this if no args
-        // let lsig = new algosdk.LogicSig(program);
-        // String parameter
-        // let args = ["<my string>"];
-        // let lsig = new algosdk.LogicSig(program, args);
-        // Integer parameter
-        let args = getUint8Int(12345);
-        let lsig = new algosdk.LogicSigAccount(program, args);
-        // sign the logic signature with an account sk
-        lsig.sign(myAccount.sk);        
-        // Setup a transaction
-        let sender = myAccount.addr;
-        let receiver = "SOEI4UA72A7ZL5P25GNISSVWW724YABSGZ7GHW5ERV4QKK2XSXLXGXPG5Y";
-        // let receiver = "<receiver-address>"";
-        let amount = 10000;
-        let closeToRemaninder = undefined;
-        let note = undefined;
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(sender, 
-            receiver, amount, closeToRemaninder, note, params)
-        // Create the LogicSigTransaction with contract account LogicSigAccount
-        let rawSignedTxn = algosdk.signLogicSigTransactionObject(txn, lsig);
-        // fs.writeFileSync("simple.stxn", rawSignedTxn.blob);
-        // send raw LogicSigTransaction to network    
-        let tx = (await algodclient.sendRawTransaction(rawSignedTxn.blob).do());
-        console.log("Transaction : " + tx.txId);    
-        const confirmedTxn = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-    })().catch(e => {
-        console.log(e.message);
-        console.log(e);
-    });
-    function getUint8Int(number) {
-        const buffer = Buffer.alloc(8);
-        const bigIntValue = BigInt(number);
-        buffer.writeBigUInt64BE(bigIntValue);
-        return  [Uint8Array.from(buffer)];
-    }
+```javascript
+  const userAccount = accounts[1];
 
-    ```
+  // sign sig with userAccount so the program can send transactions from userAccount
+  smartSig.sign(userAccount.privateKey);
+
+  const delegatedTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: userAccount.addr,
+    to: funder.addr,
+    amount: 0.1e6,
+    suggestedParams,
+  });
+
+  // use signLogicSigTransactionObject instead of the typical Transaction.signTxn function
+  const signedDelegatedTxn = algosdk.signLogicSigTransactionObject(
+    delegatedTxn,
+    smartSig
+  );
+
+  await client.sendRawTransaction(signedDelegatedTxn.blob).do();
+  await algosdk.waitForConfirmation(client, signedDelegatedTxn.txID, 3);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L72-L92)
     <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Python"

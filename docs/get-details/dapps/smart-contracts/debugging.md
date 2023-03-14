@@ -89,38 +89,30 @@ with open("dryrun.msgp", "wb") as f:
 
 === "JavaScript"
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
-    ```js
+```javascript
+  const addTxnForDr = algosdk.makeApplicationNoOpTxnFromObject({
+    from: sender.addr,
+    suggestedParams,
+    appIndex,
+    appArgs: [
+      new Uint8Array(Buffer.from('add', 'utf8')),
+      algosdk.encodeUint64(1),
+      algosdk.encodeUint64(2),
+    ],
+  });
 
-    const app_txn = algosdk.makeApplicationNoOpTxn(addr, sp, app_id, undefined, [other_addr], undefined, undefined)
-    const s_app_txn = algosdk.signTransaction(app_txn, sk)
+  const signedDrTxn = algosdk.decodeSignedTransaction(
+    addTxnForDr.signTxn(sender.privateKey)
+  );
 
-    const drr = await algosdk.createDryrun({
-        client: client, 
-        txns: [
-            algosdk.decodeSignedTransaction(s_app_txn['blob']),
-        ]
-    })
+  const dryrunForLogging = await algosdk.createDryrun({
+    client,
+    txns: [signedDrTxn],
+  });
 
-    // If you're running the code in nodejs you can save the file to disk.
-    const filename = 'dryrun.msgp'
-    fs.writeFileSync(filename, algosdk.encodeObj(drr.get_obj_for_encoding(true)))
-    
-    // If you're doing this in the browser you'll need to present the file as a download.
-    const msgp = algosdk.encodeObj(drr.get_obj_for_encoding(true));
-
-    const msgp_bin = new Blob(
-        [msgp],
-        {type: "application/octet-stream"}
-    );
-
-    const filename = 'dryrun.msgp'
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(msgp_bin);
-    link.download = filename;
-    link.click();
-    link.remove();
-
-    ```
+  console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L73-L94)
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"

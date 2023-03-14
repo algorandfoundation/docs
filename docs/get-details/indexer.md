@@ -15,15 +15,16 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 
 === "JavaScript"
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
-	```javascript
-    const algosdk = require('algosdk');
+```javascript
+export function getLocalIndexerClient() {
+  const indexerToken = '';
+  const indexerServer = 'http://localhost';
+  const indexerPort = 8980;
 
-    const indexer_token = "";
-    const indexer_server = "http://localhost";
-    const indexer_port = 8980;
-
-    const indexerClient = new algosdk.Indexer(indexer_token, indexer_server, indexer_port);
-    ```
+  return new algosdk.Indexer(indexerToken, indexerServer, indexerPort);
+}
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L17-L24)
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Python"
@@ -91,17 +92,12 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
-	```javascript
-    (async () => {
-        let assetIndex = 2044572;
-        let assetInfo = await indexerClient.searchForAssets()
-            .index(assetIndex).do();
-        console.log("Information for Asset: " + JSON.stringify(assetInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
+```javascript
+  const indexer = getLocalIndexerClient();
+  const indexerAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
+  console.log('Indexer Asset Info:', indexerAssetInfo);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L67-L70)
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Python"
@@ -162,17 +158,15 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-	```javascript
-    (async () => {
-        let currencyGreater = 10;
-        let transactionInfo = await indexerClient.searchForTransactions()
-            .currencyGreaterThan(currencyGreater).do();
-        console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
+```javascript
+  const indexerClient = getLocalIndexerClient();
+  const transactionInfo = await indexerClient
+    .searchForTransactions()
+    .currencyGreaterThan(100)
+    .do();
+  console.log(transactionInfo.transactions.map((t) => t.id));
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L8-L14)
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Python"
@@ -242,34 +236,26 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
-	```javascript
-    let nexttoken = "";
-    let numtx = 1;
-    // loop until there are no more transactions in the response
-    // for the limit(max limit is 1000  per request)    
-    (async () => {
-        let min_amount = 100000000000000;
-        let limit = 5;
-        while (numtx > 0) {
-            // execute code as long as condition is true
-            let next_page = nexttoken;
-            let response = await indexerClient.searchForTransactions()
-                .limit(limit)
-                .currencyGreaterThan(min_amount)
-                .nextToken(next_page).do();
-            let transactions = response['transactions'];
-            numtx = transactions.length;
-            if (numtx > 0)
-            {
-                nexttoken = response['next-token']; 
-                console.log("Transaction Information: " + JSON.stringify(response, undefined, 2));           
-            }
-        }
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
+```javascript
+  let nextToken = '';
+
+  // nextToken will be undefined if we reached the last page
+  while (nextToken !== undefined) {
+    // eslint-disable-next-line no-await-in-loop
+    const response = await indexerClient
+      .searchForTransactions()
+      .limit(5)
+      .currencyGreaterThan(10)
+      .nextToken(nextToken)
+      .do();
+
+    nextToken = response['next-token'];
+    const txns = response.transactions;
+    if (txns.length > 0)
+      console.log(`Transaction IDs: ${response.transactions.map((t) => t.id)}`);
+  }
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L17-L34)
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Python"

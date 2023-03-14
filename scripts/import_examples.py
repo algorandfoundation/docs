@@ -83,14 +83,14 @@ sources: list[ExampleSource] = [
         file_extension=".py",
     ),
     ExampleSource(
-        github_url="https://github.com/algorand/js-algorand-sdk",
-        git_branch="develop",
+        github_url="https://github.com/joe-p/js-algorand-sdk",
+        git_branch="doc-examples",
         local_dir="../../js-algorand-sdk",
         example_dir="examples",
         language_name="javascript",
         src_comment_flag="// example: ",
         name="JSSDK",
-        file_extension=".js",
+        file_extension=".ts",
     ),
     ExampleSource(
         github_url="https://github.com/barnjamin/go-algorand-sdk",
