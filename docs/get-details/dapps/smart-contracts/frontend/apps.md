@@ -64,12 +64,16 @@ special_algod_client = algod.AlgodClient(
 
 === "JavaScript"
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
-	```javascript
-    // user declared algod connection parameters
-    algodAddress = "http://localhost:4001";
-    algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    let algodClient = new algosdk.Algodv2(algodToken, algodServer);
-    ```
+```javascript
+export function getLocalAlgodClient() {
+  const algodToken = 'a'.repeat(64);
+  const algodServer = 'http://localhost';
+  const algodPort = 4001;
+
+  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
+}
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L27-L34)
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"

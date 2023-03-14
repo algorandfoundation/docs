@@ -15,11 +15,10 @@ To use the Atomic Transaction Composer, first initialize the composer:
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_CREATE=== -->
-    ```js
-    import algosdk from 'algosdk'
-
-    const atc = new algosdk.AtomicTransactionComposer()
-    ```
+```javascript
+  const createATC = new algosdk.AtomicTransactionComposer();
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L127-L128)
     <!-- ===JSSDK_ATC_CREATE=== -->
 
 === "Python"
@@ -85,7 +84,6 @@ atc.add_transaction(tws)
 === "JavaScript"
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 ```javascript
-  const createATC = new AtomicTransactionComposer();
   const createContractTxn = algosdk.makeApplicationCreateTxnFromObject({
     from: sender.addr,
     suggestedParams,
@@ -107,7 +105,7 @@ atc.add_transaction(tws)
     .do();
   const contractAppID = txInfo['application-index'];
 ```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L127-L148)
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L131-L151)
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
@@ -217,7 +215,7 @@ atc.add_method_call(
 
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
 ```javascript
-  const methodATC = new AtomicTransactionComposer();
+  const methodATC = new algosdk.AtomicTransactionComposer();
 
   methodATC.addMethodCall({
     appID: contractAppID,
@@ -231,7 +229,7 @@ atc.add_method_call(
   const methodResult = await methodATC.execute(client, 3);
   console.log('Result:', methodResult.methodResults[0].returnValue);
 ```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L151-L164)
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
     <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:

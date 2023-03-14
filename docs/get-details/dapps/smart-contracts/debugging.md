@@ -289,16 +289,17 @@ for txn in drr.txns:
 
 === "JavaScript"
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
-    ```js
-    // ... 
-    // Create the dryrun request object
-    const dryrunRequest = algosdk.createDryrun(client, txns)
+```javascript
+  const dryrunForResponse = await algosdk.createDryrun({
+    client,
+    txns: [signedDrTxn],
+  });
 
-    // Pass dryrun request to algod server
-    const dryrunResponse = await client.dryrun(dryrunRequest).do()
+  const dryrunResponse = await client.dryrun(dryrunForResponse).do();
 
-    // Inspect the response to check result 
-    ```
+  console.log('Dryrun Response:', dryrunResponse);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L97-L105)
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"

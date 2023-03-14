@@ -920,7 +920,7 @@ atc.add_method_call(
 === "JavaScript"
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 ```javascript
-  const boxATC = new AtomicTransactionComposer();
+  const boxATC = new algosdk.AtomicTransactionComposer();
 
   const fundTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     suggestedParams,
@@ -954,7 +954,7 @@ atc.add_method_call(
     .do();
   console.log('Name:', Buffer.from(boxVal.value).toString());
 ```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L167-L200)
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L170-L203)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"

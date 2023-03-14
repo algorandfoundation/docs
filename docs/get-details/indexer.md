@@ -166,7 +166,7 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
     .do();
   console.log(transactionInfo.transactions.map((t) => t.id));
 ```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L8-L14)
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L14-L20)
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Python"
@@ -255,7 +255,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
       console.log(`Transaction IDs: ${response.transactions.map((t) => t.id)}`);
   }
 ```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L17-L34)
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L23-L40)
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Python"
@@ -403,19 +403,17 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
-	```javascript
-    (async () => {
-        const enc = new TextEncoder();
-        let note = enc.encode("Hello");  
-        let s = Buffer.from(note).toString("base64");
-        let transactionInfo = await indexerClient.searchForTransactions()
-            .notePrefix(s).do();
-        console.log("Information for Transaction search: " + JSON.stringify(transactionInfo, undefined, 2));
-    })().catch(e => {
-        console.log(e);
-        console.trace();
-    });
-    ```
+```javascript
+  const txnsWithNotePrefix = await indexerClient
+    .searchForTransactions()
+    .notePrefix(Buffer.from('Hello'))
+    .do();
+  console.log(
+    `Transactions with note prefix "Hello" ${ 
+      JSON.stringify(txnsWithNotePrefix, undefined, 2)}`
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L62-L70)
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Python"

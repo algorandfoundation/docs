@@ -93,8 +93,8 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
   ).wallet_handle_token;
   console.log('Got wallet handle:', wallethandle);
 
-  const address1 = (await kmdclient.generateKey(wallethandle)).address;
-  console.log('Created new account:', address1);
+  const { address } = await kmdclient.generateKey(wallethandle);
+  console.log('Created new account:', address);
 ```
 [Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L33-L41)
 <!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
@@ -276,7 +276,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
     .address;
   console.log('Recovered account: ', recoveredAddr);
 ```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L44-L65)
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L60-L81)
 <!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
 
 === "Python"
@@ -391,29 +391,12 @@ Use this to retrieve the 25-word mnemonic for the account.
 
 === "JavaScript"
 <!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
-	```javascript
-	const algosdk = require('algosdk');
-
-	const kmdtoken = <kmd-token>;
-	const kmdaddress = <kmd-address>;
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdaddress);
-
-	(async () => {
-		let walletid = null;
-		let wallets = (await kmdclient.listWallets()).wallets;
-		wallets.forEach(function (arrayItem) {
-			if( arrayItem.name === 'MyTestWallet2'){
-				walletid = arrayItem.id;
-			}
-		});
-		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-		let accountKey = (await kmdclient.exportKey(wallethandle, "testpassword", <account address> ));
-		let mn = (await algosdk.secretKeyToMnemonic(accountKey.private_key));
-		console.log("Account Mnemonic: ", mn);
-	})().catch(e => {
-		console.log(e.text);
-	})
-	```
+```javascript
+  const accountKey = await kmdclient.exportKey(wallethandle, password, address);
+  const accountMnemonic = algosdk.secretKeyToMnemonic(accountKey.private_key);
+  console.log('Account Mnemonic: ', accountMnemonic);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L44-L47)
 <!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Python"
@@ -478,36 +461,16 @@ Use these methods to import a 25-word account-level mnemonic.
 
 === "JavaScript"
 <!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
-	```javascript
-	const algosdk = require('algosdk');
-
-	const kmdtoken = <kmd-token>;
-	const kmdserver = <kmd-address>;
-	const kmdport = <kmd-port>;
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
-
-	(async () => {
-		let walletid = null;
-		let wallets = (await kmdclient.listWallets()).wallets;
-		wallets.forEach(function (arrayItem) {
-			if( arrayItem.name === 'MyTestWallet2'){
-				walletid = arrayItem.id;
-			}
-		});
-		console.log("Got wallet id: ", walletid);
-		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-		console.log("Got wallet handle.", wallethandle);
-		
-		let account = algosdk.generateAccount();
-		console.log("Account: ", account.addr);
-		let mn = algosdk.secretKeyToMnemonic(account.sk);
-		console.log("Account Mnemonic: ", mn);
-		let importedAccount = (await kmdclient.importKey(wallethandle, account.sk));
-		console.log("Account successfully imported: ", importedAccount);
-	})().catch(e => {
-		console.log(e.text);
-	})
-	```
+```javascript
+  const newAccount = algosdk.generateAccount();
+  console.log('Account: ', newAccount.addr);
+  const importedAccount = await kmdclient.importKey(
+    wallethandle,
+    newAccount.sk
+  );
+  console.log('Account successfully imported: ', importedAccount);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L50-L57)
 <!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Python"
