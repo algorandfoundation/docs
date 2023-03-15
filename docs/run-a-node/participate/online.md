@@ -46,27 +46,27 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 === "Java"
     <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 	```java
-	        // get suggested parameters
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
+	// get suggested parameters
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
 	
-	        String address = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
+	String address = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
 	
-	        String votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=";
-	        String skey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=";
+	String votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=";
+	String skey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=";
 	
-	        Long numRounds = 100000l; // sets up keys for 100000 rounds
-	        Long keyDilution = (long) Math.sqrt(numRounds); // dilution default is sqrt num rounds
+	Long numRounds = 100000l; // sets up keys for 100000 rounds
+	Long keyDilution = (long) Math.sqrt(numRounds); // dilution default is sqrt num rounds
 	
-	        Transaction keyRegTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
-	                .sender(address)
-	                .selectionPublicKeyBase64(skey)
-	                .participationPublicKeyBase64(votekey)
-	                .voteFirst(sp.lastRound)
-	                .voteLast(sp.lastRound + numRounds)
-	                .voteKeyDilution(keyDilution)
-	                .build();
-	        // ... sign and send to network
+	Transaction keyRegTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
+	        .sender(address)
+	        .selectionPublicKeyBase64(skey)
+	        .participationPublicKeyBase64(votekey)
+	        .voteFirst(sp.lastRound)
+	        .voteLast(sp.lastRound + numRounds)
+	        .voteKeyDilution(keyDilution)
+	        .build();
+	// ... sign and send to network
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L13-L34)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
@@ -74,26 +74,26 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 === "Go"
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 	```go
-		fromAddr := "MWAPNXBDFFD2V5KWXAHWKBO7FO4JN36VR4CIBDKDDE7WAUAGZIXM3QPJW4"
-		voteKey := "87iBW46PP4BpTDz6+IEGvxY6JqEaOtV0g+VWcJqoqtc="
-		selKey := "1V2BE2lbFvS937H7pJebN0zxkqe1Nrv+aVHDTPbYRlw="
-		sProofKey := "f0CYOA4yXovNBFMFX+1I/tYVBaAl7VN6e0Ki5yZA3H6jGqsU/LYHNaBkMQ/rN4M4F3UmNcpaTmbVbq+GgDsrhQ=="
-		voteFirst := uint64(16532750)
-		voteLast := uint64(19532750)
-		keyDilution := uint64(1732)
-		nonpart := false
-		tx, err := transaction.MakeKeyRegTxnWithStateProofKey(
-			fromAddr,
-			[]byte{},
-			sp,
-			voteKey,
-			selKey,
-			sProofKey,
-			voteFirst,
-			voteLast,
-			keyDilution,
-			nonpart,
-		)
+	fromAddr := "MWAPNXBDFFD2V5KWXAHWKBO7FO4JN36VR4CIBDKDDE7WAUAGZIXM3QPJW4"
+	voteKey := "87iBW46PP4BpTDz6+IEGvxY6JqEaOtV0g+VWcJqoqtc="
+	selKey := "1V2BE2lbFvS937H7pJebN0zxkqe1Nrv+aVHDTPbYRlw="
+	sProofKey := "f0CYOA4yXovNBFMFX+1I/tYVBaAl7VN6e0Ki5yZA3H6jGqsU/LYHNaBkMQ/rN4M4F3UmNcpaTmbVbq+GgDsrhQ=="
+	voteFirst := uint64(16532750)
+	voteLast := uint64(19532750)
+	keyDilution := uint64(1732)
+	nonpart := false
+	tx, err := transaction.MakeKeyRegTxnWithStateProofKey(
+		fromAddr,
+		[]byte{},
+		sp,
+		voteKey,
+		selKey,
+		sProofKey,
+		voteFirst,
+		voteLast,
+		keyDilution,
+		nonpart,
+	)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/participation.go#L40-L60)
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->

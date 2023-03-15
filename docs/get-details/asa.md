@@ -91,41 +91,41 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 === "JavaScript"
     <!-- ===JSSDK_ASSET_CREATE=== -->
 	```javascript
-	  const creator = accounts[0];
+	const creator = accounts[0];
 	
-	  const suggestedParams = await algodClient.getTransactionParams().do();
+	const suggestedParams = await algodClient.getTransactionParams().do();
 	
-	  const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
-	    from: creator.addr,
-	    suggestedParams,
-	    defaultFrozen: false,
-	    decimals: 0,
-	    total: 1,
-	    unitName: 'LATINUM',
-	    assetName: 'latinum',
-	    assetURL: 'http://someurl', // can be HTTP or IPFS
-	    assetMetadataHash: '16efaa3924a6fd9d3a4824799a4ac65d',
-	    manager: creator.addr,
-	    reserve: creator.addr,
-	    freeze: creator.addr,
-	    clawback: creator.addr,
-	  });
+	const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
+	  from: creator.addr,
+	  suggestedParams,
+	  defaultFrozen: false,
+	  decimals: 0,
+	  total: 1,
+	  unitName: 'LATINUM',
+	  assetName: 'latinum',
+	  assetURL: 'http://someurl', // can be HTTP or IPFS
+	  assetMetadataHash: '16efaa3924a6fd9d3a4824799a4ac65d',
+	  manager: creator.addr,
+	  reserve: creator.addr,
+	  freeze: creator.addr,
+	  clawback: creator.addr,
+	});
 	
-	  const signedTxn = txn.signTxn(creator.privateKey);
-	  await algodClient.sendRawTransaction(signedTxn).do();
-	  const result = await algosdk.waitForConfirmation(
-	    algodClient,
-	    txn.txID().toString(),
-	    3
-	  );
+	const signedTxn = txn.signTxn(creator.privateKey);
+	await algodClient.sendRawTransaction(signedTxn).do();
+	const result = await algosdk.waitForConfirmation(
+	  algodClient,
+	  txn.txID().toString(),
+	  3
+	);
 	
-	  const assetIndex = result['asset-index'];
+	const assetIndex = result['asset-index'];
 	
-	  console.log(
-	    `Created asset ${assetIndex} in transaction ${txn
-	      .txID()
-	      .toString()} confirmed in round ${result['confirmed-round']}`
-	  );
+	console.log(
+	  `Created asset ${assetIndex} in transaction ${txn
+	    .txID()
+	    .toString()} confirmed in round ${result['confirmed-round']}`
+	);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L17-L52)
     <!-- ===JSSDK_ASSET_CREATE=== -->
@@ -170,35 +170,35 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 === "Java"
     <!-- ===JAVASDK_ASSET_CREATE=== -->
 	```java
-	        // Account 1 creates an asset called `rug` with a total supply
-	        // of 1000 units and sets itself to the freeze/clawback/manager/reserve roles
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
+	// Account 1 creates an asset called `rug` with a total supply
+	// of 1000 units and sets itself to the freeze/clawback/manager/reserve roles
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
 	
-	        // Under the covers, this is an AssetConfig with asset id set to 0
-	        Transaction createTxn = Transaction.AssetCreateTransactionBuilder().suggestedParams(sp)
-	                .sender(acct.getAddress())
-	                .assetTotal(1000)
-	                .assetDecimals(0)
-	                .defaultFrozen(false)
-	                .assetUnitName("rug")
-	                .assetName("Really Useful Gift")
-	                .url("https://path/to/my/asset/details")
-	                .manager(acct.getAddress())
-	                .reserve(acct.getAddress())
-	                .freeze(acct.getAddress())
-	                .clawback(acct.getAddress())
-	                .build();
+	// Under the covers, this is an AssetConfig with asset id set to 0
+	Transaction createTxn = Transaction.AssetCreateTransactionBuilder().suggestedParams(sp)
+	        .sender(acct.getAddress())
+	        .assetTotal(1000)
+	        .assetDecimals(0)
+	        .defaultFrozen(false)
+	        .assetUnitName("rug")
+	        .assetName("Really Useful Gift")
+	        .url("https://path/to/my/asset/details")
+	        .manager(acct.getAddress())
+	        .reserve(acct.getAddress())
+	        .freeze(acct.getAddress())
+	        .clawback(acct.getAddress())
+	        .build();
 	
-	        SignedTransaction signedCreateTxn = acct.signTransaction(createTxn);
-	        Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
-	                .rawtxn(Encoder.encodeToMsgPack(signedCreateTxn)).execute();
-	        String txId = submitResult.body().txId;
-	        PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, txId, 4);
+	SignedTransaction signedCreateTxn = acct.signTransaction(createTxn);
+	Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedCreateTxn)).execute();
+	String txId = submitResult.body().txId;
+	PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, txId, 4);
 	
-	        // Grab the asset id for the asset we just created
-	        Long asaId = result.assetIndex;
-	        System.out.printf("Created asset with id: %d\n", asaId);
+	// Grab the asset id for the asset we just created
+	Long asaId = result.assetIndex;
+	System.out.printf("Created asset with id: %d\n", asaId);
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L48-L78)
@@ -207,62 +207,62 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 === "Go"
     <!-- ===GOSDK_ASSET_CREATE=== -->
 	```go
-		// Configure parameters for asset creation
-		var (
-			creatorAddr       = creator.Address.String()
-			assetName         = "Really Useful Gift"
-			unitName          = "rug"
-			assetURL          = "https://path/to/my/asset/details"
-			assetMetadataHash = "thisIsSomeLength32HashCommitment"
-			defaultFrozen     = false
-			decimals          = uint32(0)
-			totalIssuance     = uint64(1000)
+	// Configure parameters for asset creation
+	var (
+		creatorAddr       = creator.Address.String()
+		assetName         = "Really Useful Gift"
+		unitName          = "rug"
+		assetURL          = "https://path/to/my/asset/details"
+		assetMetadataHash = "thisIsSomeLength32HashCommitment"
+		defaultFrozen     = false
+		decimals          = uint32(0)
+		totalIssuance     = uint64(1000)
 	
-			manager  = creatorAddr
-			reserve  = creatorAddr
-			freeze   = creatorAddr
-			clawback = creatorAddr
+		manager  = creatorAddr
+		reserve  = creatorAddr
+		freeze   = creatorAddr
+		clawback = creatorAddr
 	
-			note []byte
-		)
+		note []byte
+	)
 	
-		// Get network-related transaction parameters and assign
-		txParams, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Fatalf("error getting suggested tx params: %s", err)
-		}
+	// Get network-related transaction parameters and assign
+	txParams, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 	
-		// Construct the transaction
-		txn, err := transaction.MakeAssetCreateTxn(
-			creatorAddr, note, txParams, totalIssuance, decimals,
-			defaultFrozen, manager, reserve, freeze, clawback,
-			unitName, assetName, assetURL, assetMetadataHash,
-		)
+	// Construct the transaction
+	txn, err := transaction.MakeAssetCreateTxn(
+		creatorAddr, note, txParams, totalIssuance, decimals,
+		defaultFrozen, manager, reserve, freeze, clawback,
+		unitName, assetName, assetURL, assetMetadataHash,
+	)
 	
-		if err != nil {
-			log.Fatalf("failed to make transaction: %s", err)
-		}
+	if err != nil {
+		log.Fatalf("failed to make transaction: %s", err)
+	}
 	
-		// sign the transaction
-		txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Broadcast the transaction to the network
-		_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to send transaction: %s", err)
-		}
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 	
-		// Wait for confirmation
-		confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-		if err != nil {
-			log.Fatalf("error waiting for confirmation:  %s", err)
-		}
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
 	
-		log.Printf("Create Transaction: %s confirmed in Round %d with new asset id: %d\n",
-			txid, confirmedTxn.ConfirmedRound, confirmedTxn.AssetIndex)
+	log.Printf("Create Transaction: %s confirmed in Round %d with new asset id: %d\n",
+		txid, confirmedTxn.ConfirmedRound, confirmedTxn.AssetIndex)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L41-L97)
     <!-- ===GOSDK_ASSET_CREATE=== -->
@@ -289,27 +289,27 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 === "JavaScript"
     <!-- ===JSSDK_ASSET_CONFIG=== -->
 	```javascript
-	  const manager = accounts[1];
+	const manager = accounts[1];
 	
-	  const configTxn = algosdk.makeAssetConfigTxnWithSuggestedParamsFromObject({
-	    from: creator.addr,
-	    manager: manager.addr,
-	    freeze: manager.addr,
-	    clawback: manager.addr,
-	    suggestedParams,
-	    assetIndex,
-	    // don't throw error if freeze, clawback, or manager are empty
-	    strictEmptyAddressChecking: false,
-	  });
+	const configTxn = algosdk.makeAssetConfigTxnWithSuggestedParamsFromObject({
+	  from: creator.addr,
+	  manager: manager.addr,
+	  freeze: manager.addr,
+	  clawback: manager.addr,
+	  suggestedParams,
+	  assetIndex,
+	  // don't throw error if freeze, clawback, or manager are empty
+	  strictEmptyAddressChecking: false,
+	});
 	
-	  const signedConfigTxn = configTxn.signTxn(creator.privateKey);
-	  await algodClient.sendRawTransaction(signedConfigTxn).do();
-	  await algosdk.waitForConfirmation(algodClient, txn.txID().toString(), 3);
+	const signedConfigTxn = configTxn.signTxn(creator.privateKey);
+	await algodClient.sendRawTransaction(signedConfigTxn).do();
+	await algosdk.waitForConfirmation(algodClient, txn.txID().toString(), 3);
 	
-	  await new Promise((f) => setTimeout(f, 1000)); // sleep to ensure indexer is caught up
+	await new Promise((f) => setTimeout(f, 1000)); // sleep to ensure indexer is caught up
 	
-	  const configAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
-	  console.log('Asset Info:', configAssetInfo);
+	const configAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
+	console.log('Asset Info:', configAssetInfo);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L74-L95)
     <!-- ===JSSDK_ASSET_CONFIG=== -->
@@ -344,18 +344,18 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 === "Java"
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // Wipe the `reserve` address through an AssetConfigTransaction
-	        Transaction reconfigureTxn = Transaction.AssetConfigureTransactionBuilder().suggestedParams(sp)
-	                .sender(acct.getAddress())
-	                .assetIndex(asaId)
-	                .manager(acct.getAddress())
-	                .freeze(acct.getAddress())
-	                .clawback(acct.getAddress())
-	                .strictEmptyAddressChecking(false)
-	                .reserve(new byte[32])
-	                .build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Wipe the `reserve` address through an AssetConfigTransaction
+	Transaction reconfigureTxn = Transaction.AssetConfigureTransactionBuilder().suggestedParams(sp)
+	        .sender(acct.getAddress())
+	        .assetIndex(asaId)
+	        .manager(acct.getAddress())
+	        .freeze(acct.getAddress())
+	        .clawback(acct.getAddress())
+	        .strictEmptyAddressChecking(false)
+	        .reserve(new byte[32])
+	        .build();
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L84-L97)
@@ -365,46 +365,46 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 
     <!-- ===GOSDK_ASSET_CONFIG=== -->
 ```go
-	creatorAddr := creator.Address.String()
-	var (
-		newManager  = creatorAddr
-		newFreeze   = creatorAddr
-		newClawback = creatorAddr
-		newReserve  = ""
+creatorAddr := creator.Address.String()
+var (
+	newManager  = creatorAddr
+	newFreeze   = creatorAddr
+	newClawback = creatorAddr
+	newReserve  = ""
 
-		strictAddrCheck = false
-		note            []byte
-	)
+	strictAddrCheck = false
+	note            []byte
+)
 
-	// Get network-related transaction parameters and assign
-	sp, err := algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		log.Fatalf("error getting suggested tx params: %s", err)
-	}
+// Get network-related transaction parameters and assign
+sp, err := algodClient.SuggestedParams().Do(context.Background())
+if err != nil {
+	log.Fatalf("error getting suggested tx params: %s", err)
+}
 
-	txn, err := transaction.MakeAssetConfigTxn(creatorAddr, note, sp, assetID, newManager, newReserve, newFreeze, newClawback, strictAddrCheck)
-	if err != nil {
-		log.Fatalf("failed to make  txn: %s", err)
-	}
-	// sign the transaction
-	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-	if err != nil {
-		log.Fatalf("failed to sign transaction: %s", err)
-	}
+txn, err := transaction.MakeAssetConfigTxn(creatorAddr, note, sp, assetID, newManager, newReserve, newFreeze, newClawback, strictAddrCheck)
+if err != nil {
+	log.Fatalf("failed to make  txn: %s", err)
+}
+// sign the transaction
+txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+if err != nil {
+	log.Fatalf("failed to sign transaction: %s", err)
+}
 
-	// Broadcast the transaction to the network
-	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-	if err != nil {
-		log.Fatalf("failed to send transaction: %s", err)
-	}
+// Broadcast the transaction to the network
+_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+if err != nil {
+	log.Fatalf("failed to send transaction: %s", err)
+}
 
-	// Wait for confirmation
-	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-	if err != nil {
-		log.Fatalf("error waiting for confirmation:  %s", err)
-	}
+// Wait for confirmation
+confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+if err != nil {
+	log.Fatalf("error waiting for confirmation:  %s", err)
+}
 
-	log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 ```
 [Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L103-L143)
     <!-- ===GOSDK_ASSET_CONFIG=== -->
@@ -431,20 +431,20 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 === "JavaScript"
     <!-- ===JSSDK_ASSET_OPTIN=== -->
 	```javascript
-	  const receiver = accounts[2];
+	const receiver = accounts[2];
 	
-	  // opt-in is simply a 0 amount transfer of the asset to oneself
-	  const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-	    from: receiver.addr,
-	    to: receiver.addr,
-	    suggestedParams,
-	    assetIndex,
-	    amount: 0,
-	  });
+	// opt-in is simply a 0 amount transfer of the asset to oneself
+	const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+	  from: receiver.addr,
+	  to: receiver.addr,
+	  suggestedParams,
+	  assetIndex,
+	  amount: 0,
+	});
 	
-	  const signedOptInTxn = optInTxn.signTxn(receiver.privateKey);
-	  await algodClient.sendRawTransaction(signedOptInTxn).do();
-	  await algosdk.waitForConfirmation(algodClient, optInTxn.txID().toString(), 3);
+	const signedOptInTxn = optInTxn.signTxn(receiver.privateKey);
+	await algodClient.sendRawTransaction(signedOptInTxn).do();
+	await algosdk.waitForConfirmation(algodClient, optInTxn.txID().toString(), 3);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L99-L113)
     <!-- ===JSSDK_ASSET_OPTIN=== -->
@@ -481,14 +481,14 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 === "Java"
     <!-- ===JAVASDK_ASSET_OPTIN=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // Under the covers, this is an AssetTransfer from me to me for amount 0
-	        // with asset id set to the asset we wish to start accepting
-	        Transaction optInTxn = Transaction.AssetAcceptTransactionBuilder().suggestedParams(sp)
-	                .sender(acct.getAddress())
-	                .assetIndex(asaId)
-	                .build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Under the covers, this is an AssetTransfer from me to me for amount 0
+	// with asset id set to the asset we wish to start accepting
+	Transaction optInTxn = Transaction.AssetAcceptTransactionBuilder().suggestedParams(sp)
+	        .sender(acct.getAddress())
+	        .assetIndex(asaId)
+	        .build();
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L104-L113)
@@ -497,36 +497,36 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 === "Go"
     <!-- ===GOSDK_ASSET_OPTIN=== -->
 	```go
-		userAddr := user.Address.String()
+	userAddr := user.Address.String()
 	
-		sp, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Fatalf("error getting suggested tx params: %s", err)
-		}
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 	
-		txn, err := transaction.MakeAssetAcceptanceTxn(userAddr, nil, sp, assetID)
-		if err != nil {
-			log.Fatalf("failed to make txn: %s", err)
-		}
-		// sign the transaction
-		txid, stx, err := crypto.SignTransaction(user.PrivateKey, txn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	txn, err := transaction.MakeAssetAcceptanceTxn(userAddr, nil, sp, assetID)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(user.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Broadcast the transaction to the network
-		_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to send transaction: %s", err)
-		}
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 	
-		// Wait for confirmation
-		confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-		if err != nil {
-			log.Fatalf("error waiting for confirmation:  %s", err)
-		}
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
 	
-		log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L148-L178)
     <!-- ===GOSDK_ASSET_OPTIN=== -->
@@ -551,17 +551,17 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 === "JavaScript"
     <!-- ===JSSDK_ASSET_XFER=== -->
 	```javascript
-	  const xferTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-	    from: creator.addr,
-	    to: receiver.addr,
-	    suggestedParams,
-	    assetIndex,
-	    amount: 1,
-	  });
+	const xferTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+	  from: creator.addr,
+	  to: receiver.addr,
+	  suggestedParams,
+	  assetIndex,
+	  amount: 1,
+	});
 	
-	  const signedXferTxn = xferTxn.signTxn(creator.privateKey);
-	  await algodClient.sendRawTransaction(signedXferTxn).do();
-	  await algosdk.waitForConfirmation(algodClient, xferTxn.txID().toString(), 3);
+	const signedXferTxn = xferTxn.signTxn(creator.privateKey);
+	await algodClient.sendRawTransaction(signedXferTxn).do();
+	await algosdk.waitForConfirmation(algodClient, xferTxn.txID().toString(), 3);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L117-L128)
     <!-- ===JSSDK_ASSET_XFER=== -->
@@ -599,16 +599,16 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 === "Java"
     <!-- ===JAVASDK_ASSET_XFER=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // Under the covers, this is an AssetTransfer from me to me for amount 0
-	        // with asset id set to the asset we wish to start accepting
-	        Transaction xferTxn = Transaction.AssetTransferTransactionBuilder().suggestedParams(sp)
-	                .sender(sender.getAddress())
-	                .assetReceiver(receiver.getAddress())
-	                .assetIndex(asaId)
-	                .assetAmount(1)
-	                .build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Under the covers, this is an AssetTransfer from me to me for amount 0
+	// with asset id set to the asset we wish to start accepting
+	Transaction xferTxn = Transaction.AssetTransferTransactionBuilder().suggestedParams(sp)
+	        .sender(sender.getAddress())
+	        .assetReceiver(receiver.getAddress())
+	        .assetIndex(asaId)
+	        .assetAmount(1)
+	        .build();
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L121-L132)
@@ -617,39 +617,39 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 === "Go"
     <!-- ===GOSDK_ASSET_XFER=== -->
 	```go
-		var (
-			creatorAddr = creator.Address.String()
-			userAddr    = user.Address.String()
-		)
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
 	
-		sp, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Fatalf("error getting suggested tx params: %s", err)
-		}
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 	
-		txn, err := transaction.MakeAssetTransferTxn(creatorAddr, userAddr, 1, nil, sp, "", assetID)
-		if err != nil {
-			log.Fatalf("failed to make asset txn: %s", err)
-		}
-		// sign the transaction
-		txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	txn, err := transaction.MakeAssetTransferTxn(creatorAddr, userAddr, 1, nil, sp, "", assetID)
+	if err != nil {
+		log.Fatalf("failed to make asset txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Broadcast the transaction to the network
-		_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to send transaction: %s", err)
-		}
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 	
-		// Wait for confirmation
-		confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-		if err != nil {
-			log.Fatalf("error waiting for confirmation:  %s", err)
-		}
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
 	
-		log.Printf("Asset Transfer Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	log.Printf("Asset Transfer Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L183-L216)
     <!-- ===GOSDK_ASSET_XFER=== -->
@@ -676,23 +676,23 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 === "JavaScript"
     <!-- ===JSSDK_ASSET_FREEZE=== -->
 	```javascript
-	  const freezeTxn = algosdk.makeAssetFreezeTxnWithSuggestedParamsFromObject({
-	    from: manager.addr,
-	    suggestedParams,
-	    assetIndex,
-	    // freezeState: false would unfreeze the account's asset holding
-	    freezeState: true,
-	    // freezeTarget is the account that is being frozen or unfrozen
-	    freezeTarget: receiver.addr,
-	  });
+	const freezeTxn = algosdk.makeAssetFreezeTxnWithSuggestedParamsFromObject({
+	  from: manager.addr,
+	  suggestedParams,
+	  assetIndex,
+	  // freezeState: false would unfreeze the account's asset holding
+	  freezeState: true,
+	  // freezeTarget is the account that is being frozen or unfrozen
+	  freezeTarget: receiver.addr,
+	});
 	
-	  const signedFreezeTxn = freezeTxn.signTxn(manager.privateKey);
-	  await algodClient.sendRawTransaction(signedFreezeTxn).do();
-	  await algosdk.waitForConfirmation(
-	    algodClient,
-	    freezeTxn.txID().toString(),
-	    3
-	  );
+	const signedFreezeTxn = freezeTxn.signTxn(manager.privateKey);
+	await algodClient.sendRawTransaction(signedFreezeTxn).do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  freezeTxn.txID().toString(),
+	  3
+	);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L132-L149)
     <!-- ===JSSDK_ASSET_FREEZE=== -->
@@ -730,17 +730,17 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 === "Java"
     <!-- ===JAVASDK_ASSET_FREEZE=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // Set the freeze state on the account, only the account that is set to the
-	        // freeze role
-	        // on the asset may issue this transaction
-	        Transaction freezeTxn = Transaction.AssetFreezeTransactionBuilder().suggestedParams(sp)
-	                .sender(sender.getAddress())
-	                .freezeTarget(receiver.getAddress())
-	                .freezeState(true)
-	                .assetIndex(asaId)
-	                .build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Set the freeze state on the account, only the account that is set to the
+	// freeze role
+	// on the asset may issue this transaction
+	Transaction freezeTxn = Transaction.AssetFreezeTransactionBuilder().suggestedParams(sp)
+	        .sender(sender.getAddress())
+	        .freezeTarget(receiver.getAddress())
+	        .freezeState(true)
+	        .assetIndex(asaId)
+	        .build();
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L140-L152)
@@ -749,41 +749,41 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 === "Go"
     <!-- ===GOSDK_ASSET_FREEZE=== -->
 	```go
-		var (
-			creatorAddr = creator.Address.String()
-			userAddr    = user.Address.String()
-		)
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
 	
-		sp, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Fatalf("error getting suggested tx params: %s", err)
-		}
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 	
-		// Create a freeze asset transaction with the target of the user address
-		// and the new freeze setting of `true`
-		txn, err := transaction.MakeAssetFreezeTxn(creatorAddr, nil, sp, assetID, userAddr, true)
-		if err != nil {
-			log.Fatalf("failed to make txn: %s", err)
-		}
-		// sign the transaction
-		txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	// Create a freeze asset transaction with the target of the user address
+	// and the new freeze setting of `true`
+	txn, err := transaction.MakeAssetFreezeTxn(creatorAddr, nil, sp, assetID, userAddr, true)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Broadcast the transaction to the network
-		_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to send transaction: %s", err)
-		}
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 	
-		// Wait for confirmation
-		confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-		if err != nil {
-			log.Fatalf("error waiting for confirmation:  %s", err)
-		}
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
 	
-		log.Printf("Freeze Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	log.Printf("Freeze Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L221-L256)
     <!-- ===GOSDK_ASSET_FREEZE=== -->
@@ -808,25 +808,25 @@ Revoking an asset for an account removes a specific number of the asset from the
 === "JavaScript"
     <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 	```javascript
-	  const clawbackTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(
-	    {
-	      from: manager.addr,
-	      to: creator.addr,
-	      // revocationTarget is the account that is being clawed back from
-	      revocationTarget: receiver.addr,
-	      suggestedParams,
-	      assetIndex,
-	      amount: 1,
-	    }
-	  );
+	const clawbackTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(
+	  {
+	    from: manager.addr,
+	    to: creator.addr,
+	    // revocationTarget is the account that is being clawed back from
+	    revocationTarget: receiver.addr,
+	    suggestedParams,
+	    assetIndex,
+	    amount: 1,
+	  }
+	);
 	
-	  const signedClawbackTxn = clawbackTxn.signTxn(manager.privateKey);
-	  await algodClient.sendRawTransaction(signedClawbackTxn).do();
-	  await algosdk.waitForConfirmation(
-	    algodClient,
-	    clawbackTxn.txID().toString(),
-	    3
-	  );
+	const signedClawbackTxn = clawbackTxn.signTxn(manager.privateKey);
+	await algodClient.sendRawTransaction(signedClawbackTxn).do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  clawbackTxn.txID().toString(),
+	  3
+	);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L153-L172)
     <!-- ===JSSDK_ASSET_CLAWBACK=== -->
@@ -866,18 +866,18 @@ Revoking an asset for an account removes a specific number of the asset from the
 === "Java"
     <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // revoke an asset from an account, only the account that is set to the clawback
-	        // role
-	        // on the asset may issue this transaction
-	        Transaction clawbackTxn = Transaction.AssetClawbackTransactionBuilder().suggestedParams(sp)
-	                .sender(sender.getAddress())
-	                .assetClawbackFrom(receiver.getAddress())
-	                .assetReceiver(sender.getAddress())
-	                .assetIndex(asaId)
-	                .assetAmount(1)
-	                .build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// revoke an asset from an account, only the account that is set to the clawback
+	// role
+	// on the asset may issue this transaction
+	Transaction clawbackTxn = Transaction.AssetClawbackTransactionBuilder().suggestedParams(sp)
+	        .sender(sender.getAddress())
+	        .assetClawbackFrom(receiver.getAddress())
+	        .assetReceiver(sender.getAddress())
+	        .assetIndex(asaId)
+	        .assetAmount(1)
+	        .build();
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L160-L173)
@@ -886,41 +886,41 @@ Revoking an asset for an account removes a specific number of the asset from the
 === "Go"
     <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 	```go
-		var (
-			creatorAddr = creator.Address.String()
-			userAddr    = user.Address.String()
-		)
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
 	
-		sp, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Fatalf("error getting suggested tx params: %s", err)
-		}
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 	
-		// Create a new clawback transaction with the target of the user address and the recipient as the creator
-		// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
-		txn, err := transaction.MakeAssetRevocationTxn(creatorAddr, userAddr, 1, creatorAddr, nil, sp, assetID)
-		if err != nil {
-			log.Fatalf("failed to make txn: %s", err)
-		}
-		// sign the transaction
-		txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeAssetRevocationTxn(creatorAddr, userAddr, 1, creatorAddr, nil, sp, assetID)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Broadcast the transaction to the network
-		_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to send transaction: %s", err)
-		}
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 	
-		// Wait for confirmation
-		confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-		if err != nil {
-			log.Fatalf("error waiting for confirmation:  %s", err)
-		}
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
 	
-		log.Printf("Clawback Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	log.Printf("Clawback Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L261-L296)
     <!-- ===GOSDK_ASSET_CLAWBACK=== -->
@@ -945,19 +945,19 @@ Created assets can be destroyed only by the asset manager account. All of the as
 === "JavaScript"
     <!-- ===JSSDK_ASSET_DELETE=== -->
 	```javascript
-	  const deleteTxn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
-	    from: manager.addr,
-	    suggestedParams,
-	    assetIndex,
-	  });
+	const deleteTxn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
+	  from: manager.addr,
+	  suggestedParams,
+	  assetIndex,
+	});
 	
-	  const signedDeleteTxn = deleteTxn.signTxn(manager.privateKey);
-	  await algodClient.sendRawTransaction(signedDeleteTxn).do();
-	  await algosdk.waitForConfirmation(
-	    algodClient,
-	    deleteTxn.txID().toString(),
-	    3
-	  );
+	const signedDeleteTxn = deleteTxn.signTxn(manager.privateKey);
+	await algodClient.sendRawTransaction(signedDeleteTxn).do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  deleteTxn.txID().toString(),
+	  3
+	);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L176-L189)
     <!-- ===JSSDK_ASSET_DELETE=== -->
@@ -991,18 +991,18 @@ Created assets can be destroyed only by the asset manager account. All of the as
 === "Java"
     <!-- ===JAVASDK_ASSET_DELETE=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // Under the covers, an AssetDestroyTransaction is an AssetConfig with all of
-	        // its
-	        // configurable fields set to empty
-	        // All units of the asset _must_ be owned by the creator account and this
-	        // transaction _must_
-	        // be issued by the account set to the manager role on the asset
-	        Transaction destroyTxn = Transaction.AssetDestroyTransactionBuilder().suggestedParams(sp)
-	                .sender(acct.getAddress())
-	                .assetIndex(asaId)
-	                .build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Under the covers, an AssetDestroyTransaction is an AssetConfig with all of
+	// its
+	// configurable fields set to empty
+	// All units of the asset _must_ be owned by the creator account and this
+	// transaction _must_
+	// be issued by the account set to the manager role on the asset
+	Transaction destroyTxn = Transaction.AssetDestroyTransactionBuilder().suggestedParams(sp)
+	        .sender(acct.getAddress())
+	        .assetIndex(asaId)
+	        .build();
 	
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L180-L193)
@@ -1011,40 +1011,40 @@ Created assets can be destroyed only by the asset manager account. All of the as
 === "Go"
     <!-- ===GOSDK_ASSET_DELETE=== -->
 	```go
-		var (
-			creatorAddr = creator.Address.String()
-		)
+	var (
+		creatorAddr = creator.Address.String()
+	)
 	
-		sp, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Fatalf("error getting suggested tx params: %s", err)
-		}
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 	
-		// Create a new clawback transaction with the target of the user address and the recipient as the creator
-		// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
-		txn, err := transaction.MakeAssetDestroyTxn(creatorAddr, nil, sp, assetID)
-		if err != nil {
-			log.Fatalf("failed to make txn: %s", err)
-		}
-		// sign the transaction
-		txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeAssetDestroyTxn(creatorAddr, nil, sp, assetID)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Broadcast the transaction to the network
-		_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to send transaction: %s", err)
-		}
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
 	
-		// Wait for confirmation
-		confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-		if err != nil {
-			log.Fatalf("error waiting for confirmation:  %s", err)
-		}
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
 	
-		log.Printf("Destroy Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	log.Printf("Destroy Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L301-L335)
     <!-- ===GOSDK_ASSET_DELETE=== -->
@@ -1070,12 +1070,12 @@ Retrieve an asset's configuration information from the network using the SDKs or
 === "JavaScript"
     <!-- ===JSSDK_ASSET_INFO=== -->
 	```javascript
-	  const accountInfo = await algodClient.accountInformation(creator.addr).do();
-	  console.log('Account Info:', accountInfo);
+	const accountInfo = await algodClient.accountInformation(creator.addr).do();
+	console.log('Account Info:', accountInfo);
 	
-	  const mostRecentAsset = accountInfo['created-assets'].at(-1).index;
-	  const assetInfo = await algodClient.getAssetByID(mostRecentAsset).do();
-	  console.log('Asset Info:', assetInfo);
+	const mostRecentAsset = accountInfo['created-assets'].at(-1).index;
+	const assetInfo = await algodClient.getAssetByID(mostRecentAsset).do();
+	console.log('Asset Info:', assetInfo);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L56-L62)
     <!-- ===JSSDK_ASSET_INFO=== -->
@@ -1095,10 +1095,10 @@ Retrieve an asset's configuration information from the network using the SDKs or
 === "Java"
     <!-- ===JAVASDK_ASSET_INFO=== -->
 	```java
-	        // Retrieve the asset info of the newly created asset
-	        Response<Asset> assetResp = algodClient.GetAssetByID(asaId).execute();
-	        Asset assetInfo = assetResp.body();
-	        System.out.printf("Asset Name: %s\n", assetInfo.params.name);
+	// Retrieve the asset info of the newly created asset
+	Response<Asset> assetResp = algodClient.GetAssetByID(asaId).execute();
+	Asset assetInfo = assetResp.body();
+	System.out.printf("Asset Name: %s\n", assetInfo.params.name);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L39-L43)
     <!-- ===JAVASDK_ASSET_INFO=== -->
@@ -1106,11 +1106,11 @@ Retrieve an asset's configuration information from the network using the SDKs or
 === "Go"
     <!-- ===GOSDK_ASSET_INFO=== -->
 	```go
-		info, err := algodClient.GetAssetByID(assetID).Do(context.Background())
-		if err != nil {
-			log.Fatalf("failed to get asset info: %s", err)
-		}
-		log.Printf("Asset info for %d: %+v", assetID, info)
+	info, err := algodClient.GetAssetByID(assetID).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get asset info: %s", err)
+	}
+	log.Printf("Asset info for %d: %+v", assetID, info)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L24-L29)
     <!-- ===GOSDK_ASSET_INFO=== -->

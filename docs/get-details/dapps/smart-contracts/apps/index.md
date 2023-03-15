@@ -920,39 +920,39 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 === "JavaScript"
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 	```javascript
-	  const boxATC = new algosdk.AtomicTransactionComposer();
+	const boxATC = new algosdk.AtomicTransactionComposer();
 	
-	  const fundTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-	    suggestedParams,
-	    from: sender.addr,
-	    to: algosdk.getApplicationAddress(contractAppID),
-	    amount: 106900,
-	  });
+	const fundTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  suggestedParams,
+	  from: sender.addr,
+	  to: algosdk.getApplicationAddress(contractAppID),
+	  amount: 106900,
+	});
 	
-	  boxATC.addTransaction({ txn: fundTxn, signer: sender.signer });
+	boxATC.addTransaction({ txn: fundTxn, signer: sender.signer });
 	
-	  const boxKey = new Uint8Array(Buffer.from('Name'));
-	  boxATC.addMethodCall({
-	    appID: contractAppID,
-	    method: contract.getMethodByName('set_name'),
-	    methodArgs: ['AlgoDev'],
-	    boxes: [
-	      {
-	        appIndex: 0,
-	        name: boxKey,
-	      },
-	    ],
-	    sender: sender.addr,
-	    signer: sender.signer,
-	    suggestedParams,
-	  });
+	const boxKey = new Uint8Array(Buffer.from('Name'));
+	boxATC.addMethodCall({
+	  appID: contractAppID,
+	  method: contract.getMethodByName('set_name'),
+	  methodArgs: ['AlgoDev'],
+	  boxes: [
+	    {
+	      appIndex: 0,
+	      name: boxKey,
+	    },
+	  ],
+	  sender: sender.addr,
+	  signer: sender.signer,
+	  suggestedParams,
+	});
 	
-	  await boxATC.execute(client, 3);
+	await boxATC.execute(client, 3);
 	
-	  const boxVal = await client
-	    .getApplicationBoxByName(contractAppID, boxKey)
-	    .do();
-	  console.log('Name:', Buffer.from(boxVal.value).toString());
+	const boxVal = await client
+	  .getApplicationBoxByName(contractAppID, boxKey)
+	  .do();
+	console.log('Name:', Buffer.from(boxVal.value).toString());
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L170-L203)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
@@ -960,22 +960,22 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 === "Go"
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 	```go
-		boxName := "coolBoxName"
-		mcp = transaction.AddMethodCallParams{
-			AppID:           appID,
-			Sender:          acct1.Address,
-			SuggestedParams: sp,
-			OnComplete:      types.NoOpOC,
-			Signer:          signer,
-			Method:          addMethod,
-			MethodArgs:      []interface{}{1, 1},
-			// Here we're passing a box reference so our app
-			// can reference it during evaluation
-			BoxReferences: []types.AppBoxReference{
-				{AppID: appID, Name: []byte(boxName)},
-			},
-		}
-		// ...
+	boxName := "coolBoxName"
+	mcp = transaction.AddMethodCallParams{
+		AppID:           appID,
+		Sender:          acct1.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+		Method:          addMethod,
+		MethodArgs:      []interface{}{1, 1},
+		// Here we're passing a box reference so our app
+		// can reference it during evaluation
+		BoxReferences: []types.AppBoxReference{
+			{AppID: appID, Name: []byte(boxName)},
+		},
+	}
+	// ...
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L93-L109)
     <!-- ===GOSDK_ATC_BOX_REF=== -->
@@ -983,22 +983,22 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 === "Java"
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 	```java
-	                MethodCallTransactionBuilder<?> mct_builder = MethodCallTransactionBuilder.Builder();
+	MethodCallTransactionBuilder<?> mct_builder = MethodCallTransactionBuilder.Builder();
 	
-	                List<AppBoxReference> boxRefs = new ArrayList<>();
-	                boxRefs.add(new AppBoxReference(appId.intValue(), "cool-box".getBytes()));
-	                MethodCallParams box_ref_mcp = mct_builder
-	                                .suggestedParams(sp)
-	                                .applicationId(appId)
-	                                .sender(acct.getAddress())
-	                                .method(contract.getMethodByName("add"))
-	                                .methodArguments(methodArgs)
-	                                .signer(acct.getTransactionSigner())
-	                                .onComplete(Transaction.OnCompletion.NoOpOC)
-	                                // Include reference to a box so the app logic may
-	                                // use it during evaluation
-	                                .boxReferences(boxRefs)
-	                                .build();
+	List<AppBoxReference> boxRefs = new ArrayList<>();
+	boxRefs.add(new AppBoxReference(appId.intValue(), "cool-box".getBytes()));
+	MethodCallParams box_ref_mcp = mct_builder
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .sender(acct.getAddress())
+	                .method(contract.getMethodByName("add"))
+	                .methodArguments(methodArgs)
+	                .signer(acct.getTransactionSigner())
+	                .onComplete(Transaction.OnCompletion.NoOpOC)
+	                // Include reference to a box so the app logic may
+	                // use it during evaluation
+	                .boxReferences(boxRefs)
+	                .build();
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
