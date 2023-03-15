@@ -1,29 +1,25 @@
 title: Technical FAQ
 
-# Encode address
- 
-How do I decode/encode an address?
+# Address Encoding/Decoding 
 
-    An address comes in 2 forms:
-        1) encoded, 58 byte, looks something like `7K5TT4US7M3FM7L3XBJXSXLJGF2WCXPBV2YZJJO2FH46VCZOS3ICJ7E4QU`
-        2) decoded, 32 byte, looks something like `0xfabb39f292fb36567d7bb853795d693175615de1aeb194a5da29f9ea8b2e96d0` as hexadecimal
+An address comes in 2 forms:
+    1) encoded, 58 byte, looks something like `7K5TT4US7M3FM7L3XBJXSXLJGF2WCXPBV2YZJJO2FH46VCZOS3ICJ7E4QU`
+    2) decoded, 32 byte, looks something like `0xfabb39f292fb36567d7bb853795d693175615de1aeb194a5da29f9ea8b2e96d0` as hexadecimal
 
-    You can translate from one to the other by using the SDK supplied methods. 
-    
-    For example, in python `encoding.encode_address` will convert the 32 byte version to the encoded 58 byte version and `encoding.decode_address` will perform the opposite translation.
+You can translate from one to the other by using the SDK supplied methods. 
 
-    All SDKs have a similarly named method.
+For example, in python `encoding.encode_address` will convert the 32 byte version to the encoded 58 byte version and `encoding.decode_address` will perform the opposite translation.
 
-    !! Note that smart contracts operate _only_ on the 32 byte version, so any interaction where an address is used should be translated prior to passing it to the smart contract. This is handled for you automatically in some cases (e.g. sender on a transaction)
+All SDKs have a similarly named method.
 
-    Resources:
-    https://developer.algorand.org/docs/get-details/accounts/#keys-and-addresses
-    https://developer.algorand.org/docs/get-details/encoding/#address
+!! Note that smart contracts operate _only_ on the 32 byte version, so any interaction where an address is used should be translated prior to passing it to the smart contract. This is handled for you automatically in some cases (e.g. sender on a transaction)
+
+Resources:
+https://developer.algorand.org/docs/get-details/accounts/#keys-and-addresses
+https://developer.algorand.org/docs/get-details/encoding/#address
 
 
-# Decode state
-
-How do I decode state values?
+# Application State Encoding/Decoding 
 
 When calling the API for global or local state, the result returned is in the form of an array of state values. Each entry in the array represents a key/value pair in global or local state. To decode the key or bytes value, just base64 decode the string into bytes, then encode the bytes in whatever format is required. 
 
@@ -53,7 +49,7 @@ When calling the API for global or local state, the result returned is in the fo
 ```
 
 
-# What is this 400 error?
+# Deciphering Algod Errors 
 
 A 400 error typically occurs because there was some issue with the transactions. The exact reason will depend on the circumstances but the error message will contain more information.
 
@@ -109,7 +105,7 @@ Common reasons include:
     This happens when you attempt to deploy or update a programs approval and clearstate code with two different versions. Check that they both have the same version number.
 
 
-# Logic errors
+# Deciphering Logic errors
 
 How can I debug this logic error?
 
