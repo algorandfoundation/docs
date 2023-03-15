@@ -15,4 +15,5 @@ arrange:
     - parameter_tables.md
     - algorand-networks
     - algorand_consensus.md
+    - technical_faq.md
     - useful_resources.md

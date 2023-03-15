@@ -82,7 +82,7 @@ As a counter example, if instead of passing `Int(1)`, we make the program `Retur
 !!! note
     If you ever see any python error like `...has no attribute 'type_of'` PyTeal is probably trying to tell you you included something that is _not_ a valid PyTeal Expression
 
-While _only_ PyTeal Expressions may be included in the Expression tree representing the program, the Expressions may be generated as part of running the Python program. This allows the author to make use of Python scripting logic to generate a the PyTeal Expression tree based on more complex logic. 
+While _only_ PyTeal Expressions may be included in the Expression tree representing the program, the Expressions may be generated as part of running the Python program. This allows the author to make use of Python scripting logic to generate a PyTeal Expression tree based on more complex logic. 
 
 
 ## Writing a simple PyTeal Contract
@@ -384,7 +384,10 @@ algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 ```
 
-The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are the Algorand mobile wallet, AlgoSigner, MyAlgo Wallet, and Aikon ORE. When using the Algorand mobile wallet, transactions can be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
+The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. 
+
+!!!warning
+    Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are Pera wallet (mobile and web) and AlgoSigner (web extension). Pera, along with some other wallets in the ecosystem, allow transcations be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
 
 The algod_address and algod_token values are the default values to connect to a sandbox installed node. Also note that in this example, the sandbox node is connected to the Algorand TestNet network (eg `./sandbox up testnet`).
 
