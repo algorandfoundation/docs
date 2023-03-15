@@ -71,120 +71,120 @@ This file may be msgpack or json and can be created using goal or the SDKs
 
 === "Python"
     <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
-```python
-sp = algod_client.suggested_params()
-
-atc = atomic_transaction_composer.AtomicTransactionComposer()
-atc.add_method_call(app_id, my_method, acct1.address, sp, acct1.signer)
-txns = atc.gather_signatures()
-
-drr = transaction.create_dryrun(algod_client, txns)
-
-# Write the file as binary result of msgpack encoding
-with open("dryrun.msgp", "wb") as f:
-    f.write(base64.b64decode(encoding.msgpack_encode(drr)))
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L22-L33)
+	```python
+	sp = algod_client.suggested_params()
+	
+	atc = atomic_transaction_composer.AtomicTransactionComposer()
+	atc.add_method_call(app_id, my_method, acct1.address, sp, acct1.signer)
+	txns = atc.gather_signatures()
+	
+	drr = transaction.create_dryrun(algod_client, txns)
+	
+	# Write the file as binary result of msgpack encoding
+	with open("dryrun.msgp", "wb") as f:
+	    f.write(base64.b64decode(encoding.msgpack_encode(drr)))
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L22-L33)
     <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
-```javascript
-  const addTxnForDr = algosdk.makeApplicationNoOpTxnFromObject({
-    from: sender.addr,
-    suggestedParams,
-    appIndex,
-    appArgs: [
-      new Uint8Array(Buffer.from('add', 'utf8')),
-      algosdk.encodeUint64(1),
-      algosdk.encodeUint64(2),
-    ],
-  });
-
-  const signedDrTxn = algosdk.decodeSignedTransaction(
-    addTxnForDr.signTxn(sender.privateKey)
-  );
-
-  const dryrunForLogging = await algosdk.createDryrun({
-    client,
-    txns: [signedDrTxn],
-  });
-
-  console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L73-L94)
+	```javascript
+	  const addTxnForDr = algosdk.makeApplicationNoOpTxnFromObject({
+	    from: sender.addr,
+	    suggestedParams,
+	    appIndex,
+	    appArgs: [
+	      new Uint8Array(Buffer.from('add', 'utf8')),
+	      algosdk.encodeUint64(1),
+	      algosdk.encodeUint64(2),
+	    ],
+	  });
+	
+	  const signedDrTxn = algosdk.decodeSignedTransaction(
+	    addTxnForDr.signTxn(sender.privateKey)
+	  );
+	
+	  const dryrunForLogging = await algosdk.createDryrun({
+	    client,
+	    txns: [signedDrTxn],
+	  });
+	
+	  console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L73-L94)
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
-```go
-	var (
-		args     [][]byte
-		accounts []string
-		apps     []uint64
-		assets   []uint64
-	)
-
-	sp, err := algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		log.Fatalf("failed to get suggested params: %s", err)
-	}
-
-	appCallTxn, err := transaction.MakeApplicationNoOpTx(
-		appID, args, accounts, apps, assets, sp, acct1.Address,
-		nil, types.Digest{}, [32]byte{}, types.Address{},
-	)
-	if err != nil {
-		log.Fatalf("Failed to create app call txn: %+v", err)
-	}
-
-	_, stxn, err := crypto.SignTransaction(acct1.PrivateKey, appCallTxn)
-	if err != nil {
-		log.Fatalf("Failed to sign app txn: %+v", err)
-	}
-
-	signedAppCallTxn := types.SignedTxn{}
-	msgpack.Decode(stxn, &signedAppCallTxn)
-
-	drr, err := transaction.CreateDryrun(algodClient, []types.SignedTxn{signedAppCallTxn}, nil, context.Background())
-	if err != nil {
-		log.Fatalf("Failed to create dryrun: %+v", err)
-	}
-
-	os.WriteFile("dryrun.msgp", msgpack.Encode(drr), 0666)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L26-L60)
+	```go
+		var (
+			args     [][]byte
+			accounts []string
+			apps     []uint64
+			assets   []uint64
+		)
+	
+		sp, err := algodClient.SuggestedParams().Do(context.Background())
+		if err != nil {
+			log.Fatalf("failed to get suggested params: %s", err)
+		}
+	
+		appCallTxn, err := transaction.MakeApplicationNoOpTx(
+			appID, args, accounts, apps, assets, sp, acct1.Address,
+			nil, types.Digest{}, [32]byte{}, types.Address{},
+		)
+		if err != nil {
+			log.Fatalf("Failed to create app call txn: %+v", err)
+		}
+	
+		_, stxn, err := crypto.SignTransaction(acct1.PrivateKey, appCallTxn)
+		if err != nil {
+			log.Fatalf("Failed to sign app txn: %+v", err)
+		}
+	
+		signedAppCallTxn := types.SignedTxn{}
+		msgpack.Decode(stxn, &signedAppCallTxn)
+	
+		drr, err := transaction.CreateDryrun(algodClient, []types.SignedTxn{signedAppCallTxn}, nil, context.Background())
+		if err != nil {
+			log.Fatalf("Failed to create dryrun: %+v", err)
+		}
+	
+		os.WriteFile("dryrun.msgp", msgpack.Encode(drr), 0666)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L26-L60)
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Java"
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
-```java
-        // Set up the transactions we'd like to dryrun
-        AtomicTransactionComposer atc = new AtomicTransactionComposer();
-
-        List<Object> methodArgs = new ArrayList<Object>();
-        methodArgs.add(1);
-        methodArgs.add(1);
-
-        TransactionParametersResponse sp = algodClient.TransactionParams().execute().body();
-
-        MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
-        MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
-                        .suggestedParams(sp)
-                        .sender(acct.getAddress())
-                        .method(contract.getMethodByName("add"))
-                        .methodArguments(methodArgs)
-                        .onComplete(Transaction.OnCompletion.NoOpOC)
-                        .build();
-        atc.addMethodCall(mcp);
-
-        DryrunRequest drr = Utils.createDryrun(algodClient, atc.gatherSignatures(), "", 0L, 0L);
-
-        FileOutputStream outfile = new FileOutputStream("my-dryrun.msgpack");
-        outfile.write(Encoder.encodeToMsgPack(drr));
-        outfile.close();
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
+	```java
+	        // Set up the transactions we'd like to dryrun
+	        AtomicTransactionComposer atc = new AtomicTransactionComposer();
+	
+	        List<Object> methodArgs = new ArrayList<Object>();
+	        methodArgs.add(1);
+	        methodArgs.add(1);
+	
+	        TransactionParametersResponse sp = algodClient.TransactionParams().execute().body();
+	
+	        MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
+	        MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
+	                        .suggestedParams(sp)
+	                        .sender(acct.getAddress())
+	                        .method(contract.getMethodByName("add"))
+	                        .methodArguments(methodArgs)
+	                        .onComplete(Transaction.OnCompletion.NoOpOC)
+	                        .build();
+	        atc.addMethodCall(mcp);
+	
+	        DryrunRequest drr = Utils.createDryrun(algodClient, atc.gatherSignatures(), "", 0L, 0L);
+	
+	        FileOutputStream outfile = new FileOutputStream("my-dryrun.msgpack");
+	        outfile.write(Encoder.encodeToMsgPack(drr));
+	        outfile.close();
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
@@ -272,69 +272,69 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 
 === "Python"
     <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
-```python
-# Create the dryrun request object
-dryrun_request = transaction.create_dryrun(algod_client, txns)
-
-# Pass dryrun request to algod server
-dryrun_result = algod_client.dryrun(dryrun_request)
-drr = dryrun_results.DryrunResponse(dryrun_result)
-
-for txn in drr.txns:
-    if txn.app_call_rejected():
-        print(txn.app_trace())
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L36-L46)
+	```python
+	# Create the dryrun request object
+	dryrun_request = transaction.create_dryrun(algod_client, txns)
+	
+	# Pass dryrun request to algod server
+	dryrun_result = algod_client.dryrun(dryrun_request)
+	drr = dryrun_results.DryrunResponse(dryrun_result)
+	
+	for txn in drr.txns:
+	    if txn.app_call_rejected():
+	        print(txn.app_trace())
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L36-L46)
     <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
-```javascript
-  const dryrunForResponse = await algosdk.createDryrun({
-    client,
-    txns: [signedDrTxn],
-  });
-
-  const dryrunResponse = await client.dryrun(dryrunForResponse).do();
-
-  console.log('Dryrun Response:', dryrunResponse);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L97-L105)
+	```javascript
+	  const dryrunForResponse = await algosdk.createDryrun({
+	    client,
+	    txns: [signedDrTxn],
+	  });
+	
+	  const dryrunResponse = await client.dryrun(dryrunForResponse).do();
+	
+	  console.log('Dryrun Response:', dryrunResponse);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L97-L105)
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
-```go
-	// Create the dryrun request object
-	drReq, err := transaction.CreateDryrun(algodClient, []types.SignedTxn{signedAppCallTxn}, nil, context.Background())
-	if err != nil {
-		log.Fatalf("Failed to create dryrun: %+v", err)
-	}
-
-	// Pass dryrun request to algod server
-	dryrunResponse, err := algodClient.TealDryrun(drReq).Do(context.Background())
-	if err != nil {
-		log.Fatalf("failed to dryrun request: %s", err)
-	}
-
-	// Inspect the response to check result
-	for _, txn := range dryrunResponse.Txns {
-		log.Printf("%+v", txn.AppCallTrace)
-	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L63-L79)
+	```go
+		// Create the dryrun request object
+		drReq, err := transaction.CreateDryrun(algodClient, []types.SignedTxn{signedAppCallTxn}, nil, context.Background())
+		if err != nil {
+			log.Fatalf("Failed to create dryrun: %+v", err)
+		}
+	
+		// Pass dryrun request to algod server
+		dryrunResponse, err := algodClient.TealDryrun(drReq).Do(context.Background())
+		if err != nil {
+			log.Fatalf("failed to dryrun request: %s", err)
+		}
+	
+		// Inspect the response to check result
+		for _, txn := range dryrunResponse.Txns {
+			log.Printf("%+v", txn.AppCallTrace)
+		}
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L63-L79)
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Java"
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
-```java
-        Response<DryrunResponse> resp = algodClient.TealDryrun().request(drr).execute();
-        DryrunResponse drResp = resp.body();
-        DryrunTxnResult dryrunTxnResult = drResp.txns.get(0);
-        System.out.println(dryrunTxnResult.appCallMessages);
-        System.out.println(Utils.appTrace(dryrunTxnResult));
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
+	```java
+	        Response<DryrunResponse> resp = algodClient.TealDryrun().request(drr).execute();
+	        DryrunResponse drResp = resp.body();
+	        DryrunTxnResult dryrunTxnResult = drResp.txns.get(0);
+	        System.out.println(dryrunTxnResult.appCallMessages);
+	        System.out.println(Utils.appTrace(dryrunTxnResult));
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 
