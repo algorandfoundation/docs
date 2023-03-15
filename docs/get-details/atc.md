@@ -13,31 +13,44 @@ The Atomic Transaction Composer is a convenient way to build out an atomic group
 
 To use the Atomic Transaction Composer, first initialize the composer: 
 
-=== "Python"
-    ```py
-    from algosdk.atomic_transaction_composer import AtomicTransactionComposer
-
-    atc = AtomicTransactionComposer()
-    ```
-
 === "JavaScript"
-    ```js
-    import algosdk from 'algosdk'
+    <!-- ===JSSDK_ATC_CREATE=== -->
+```javascript
+  const createATC = new algosdk.AtomicTransactionComposer();
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L127-L128)
+    <!-- ===JSSDK_ATC_CREATE=== -->
 
-    const atc = new algosdk.AtomicTransactionComposer()
-    ```
+=== "Python"
+    <!-- ===PYSDK_ATC_CREATE=== -->
+```python
+from algosdk.atomic_transaction_composer import (
+    AtomicTransactionComposer,
+    AccountTransactionSigner,
+    TransactionWithSigner,
+)
+
+atc = AtomicTransactionComposer()
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L5-L12)
+    <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
-    ```go
-	    import "github.com/algorand/go-algorand-sdk/transaction"
-        //...
-    	var atc = transaction.AtomicTransactionComposer{}
-    ```
+    <!-- ===GOSDK_ATC_CREATE=== -->
+```go
+	// Create the atc we'll use to compose our transaction group
+	var atc = transaction.AtomicTransactionComposer{}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L38-L40)
+    <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
-    ```java
-        AtomicTransactionComposer atc = new AtomicTransactionComposer();
-    ```
+    <!-- ===JAVASDK_ATC_CREATE=== -->
+```java
+                AtomicTransactionComposer atc = new AtomicTransactionComposer();
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
+    <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
 
@@ -46,109 +59,92 @@ Individual transactions being passed to the composer must be wrapped in a `Trans
 Constructing a Transaction with Signer and adding it to the transaction composer can be done as follows:
 
 === "Python"
-    ```py
+    <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
+```python
+addr, sk = acct.address, acct.private_key
 
-    #...
+# Create signer object
+signer = AccountTransactionSigner(sk)
 
-    addr, sk = get_account()
+# Get suggested params from the client
+sp = algod_client.suggested_params()
 
-    # Create signer object
-    signer = AccountTransactionSigner(sk)
+# Create a transaction
+ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
 
-    # Get suggested params from the client
-    sp = client.suggested_params()
+# Construct TransactionWithSigner
+tws = TransactionWithSigner(ptxn, signer)
 
-    # Create a transaction
-    ptxn = PaymentTxn(addr, sp, addr, 10000)
-
-    # Construct TransactionWithSigner
-    tws = TransactionWithSigner(ptxn, signer)
-
-    # Pass TransactionWithSigner to ATC
-    atc.add_transaction(tws)
-    ```
+# Pass TransactionWithSigner to ATC
+atc.add_transaction(tws)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L22-L38)
+    <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
-    ```js
-    // ...
+    <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
+```javascript
+  const createContractTxn = algosdk.makeApplicationCreateTxnFromObject({
+    from: sender.addr,
+    suggestedParams,
+    onComplete: algosdk.OnApplicationComplete.NoOpOC,
+    approvalProgram: compiledContractApprovalProgram,
+    clearProgram: compiledClearProgram,
+    numGlobalByteSlices: 0,
+    numGlobalInts: 0,
+    numLocalByteSlices: 0,
+    numLocalInts: 0,
+  });
 
-    // Returns Account object
-    const acct = get_account()
+  createATC.addTransaction({ txn: createContractTxn, signer: sender.signer });
 
-    // Create signer object
-    const signer = algosdk.makeBasicAccountTransactionSigner(acct)
+  const createContractResult = await createATC.execute(client, 3);
 
-    // Get suggested params from the client
-    const sp = await client.getTransactionParams().do()
-
-    // Create a transaction
-    const ptxn = new Transaction({
-        from: acct.addr,
-        to: acct.addr, 
-        amount: 10000,
-        ...sp
-    })
-
-    // Construct TransactionWithSigner
-    const tws = {txn: ptxn, signer: signer}
-
-    // Pass TransactionWithSigner to ATC
-    atc.addTransaction(tws)
-
-    ```
+  const txInfo = await client
+    .pendingTransactionInformation(createContractResult.txIDs[0])
+    .do();
+  const contractAppID = txInfo['application-index'];
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L131-L151)
+    <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
-    ```go
+    <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
+```go
+	// Get suggested params and make a transaction as usual
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
 
-    // ...
+	txn, err := transaction.MakePaymentTxn(acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp)
+	if err != nil {
+		log.Fatalf("failed to make transaction: %s", err)
+	}
 
-    // Returns Account 
-    acct, _ := GetAccount()
-
-    // Create signer object
-	signer := transaction.BasicAccountTransactionSigner{Account: acct}
-
-    // Get suggested params from client
-	sp, _ := client.SuggestedParams().Do(context.Background())
-
-    // Create a transaction
-	ptxn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
-
-    // Construct TransactionWithSigner
-	tws := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
-
-    // Pass TransactionWithSigner to atc
-
-    atc.AddTransaction(tws)
-
-    ```
+	// Construct a TransactionWithSigner and pass it to the atc
+	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
+	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L43-L57)
+    <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
-    ```java
+    <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
+```java
+                // Create a transaction
+                Transaction ptxn = PaymentTransactionBuilder.Builder().amount(10000).suggestedParams(sp)
+                                .sender(acct.getAddress()).receiver(acct.getAddress()).build();
 
-    // ...
+                // Construct TransactionWithSigner
+                TransactionWithSigner tws = new TransactionWithSigner(ptxn,
+                                acct.getTransactionSigner());
 
-    // Returns Account 
-    Account acct = getAccount();
-
-    // Create signer object
-	TxnSigner signer = acct.getTransactionSigner();
-
-    // Get suggested params from client
-    Response<TransactionParametersResponse> rsp = client.TransactionParams().execute();
-    TransactionParametersResponse sp = rsp.body();
-
-    // Create a transaction
-    Transaction ptxn = PaymentTransactionBuilder.Builder().amount(10000).suggestedParams(sp)
-            .sender(acct.getAddress()).receiver(acct.getAddress()).build();
-
-    // Construct TransactionWithSigner
-	TransactionWithSigner tws = new TransactionWithSigner(ptxn, signer);
-
-    // Pass TransactionWithSigner to atc
-    atc.addTransaction(tws);
-
-    ```
+                // Pass TransactionWithSigner to atc
+                atc.addTransaction(tws);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
+    <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
 
@@ -162,191 +158,79 @@ In order to call the methods, a Contract or Interface is constructed. Typically 
 Once the Contract object is constructed, it can be used to look up and pass method objects into the Atomic Transaction Composers `add_method_call`
 
 === "Python"
-    ```py
-    from algosdk.abi import Contract
+    <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
+```python
+with open("path/to/contract.json") as f:
+    js = f.read()
+contract = abi.Contract.from_json(js)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L41-L44)
+    <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
 
-    with open("path/to/contract.json") as f:
-        js = f.read()
-    c = Contract.from_json(js)
+    <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
+```python
 
-    # Using the app id from the "sandnet" network, which is hardcoded in the json file
-    app_id = c.networks[genesis_hash].app_id
+# Simple call to the `add` method, method_args can be any type but _must_
+# match those in the method signature of the contract
+atc.add_method_call(
+    app_id,
+    contract.get_method_by_name("add"),
+    addr,
+    sp,
+    signer,
+    method_args=[1, 1],
+)
 
-    # Utility function to get the Method object for a given method name
-    def get_method(name: str) -> Method:
-        for m in c.methods:
-            if m.name == name:
-                return m
-        raise Exception("No method with the name {}".format(name))
-
-
-
-    # Simple call to the `add` method, method_args can be any type but _must_ 
-    # match those in the method signature of the contract
-    atc.add_method_call(app_id, get_method("add"), addr, sp, signer, method_args=[1,1])
-
-    # This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
-    # The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-    ptxn = PaymentTxn(addr, sp, addr, 10000)
-    txn = TransactionWithSigner(ptxn, signer)
-    atc.add_method_call(app_id, get_method("txntest"), addr, sp, signer, method_args=[10000, txn, 1000])
-
-    ```
-
-=== "JavaScript"
-    ```js
-
-    // Read in the local contract.json file
-    const buff = fs.readFileSync("path/to/contract.json")
-
-    // Parse the json file into an object, pass it to create an ABIContract object
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-
-    // Utility function to return an ABIMethod by its name
-    function getMethodByName(name: string): algosdk.ABIMethod  {
-        const m = contract.methods.find((mt: algosdk.ABIMethod)=>{ return mt.name==name })
-        if(m === undefined)
-            throw Error("Method undefined: "+name)
-        return m
-    }
-
-    const commonParams = {
-        appID:contract.networks[genesis_hash].appID,
-        sender:acct.addr,
-        suggestedParams:sp,
-        signer: algosdk.makeBasicAccountTransactionSigner(acct)
-    }
-
-
-    // Simple call to the `add` method, method_args can be any type but _must_ 
-    // match those in the method signature of the contract
-    atc.addMethodCall({
-        method: getMethodByName("add"), methodArgs: [1,1], ...commonParams
-    })
-
-    // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
-    // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-    txn = {
-        txn: new Transaction({ from: acct.addr, to: acct.addr, amount: 10000, ...sp }),
-        signer: algosdk.makeBasicAccountTransactionSigner(acct)
-    }
-    atc.addMethodCall({
-        method: getMethodByName("txntest"), 
-        methodArgs: [ 10000, txn, 1000 ], 
-        ...commonParams
-    })
-
-    ```
-
-=== "Go"
-    ```go
-
-    // Read in contract json file and marshal into Contract
-	f, _ := os.Open("path/to/contract.json")
-	b, _ := ioutil.ReadAll(f)
-	contract := &abi.Contract{}
-	_ = json.Unmarshal(b, contract)
-
-
-    // Utility function to get a Method given the name 
-    func getMethod(c *abi.Contract, name string) (abi.Method, error) {
-        for _, m = range c.Methods {
-            if m.Name == name {
-                return m, nil
-            }
-        }
-        return abi.Method{}, fmt.Errorf("No method named: %s", name)
-    }
-
-    func combine(mcp transaction.AddMethodCallParams, m abi.Method, a []interface{}) transaction.AddMethodCallParams {
-        mcp.Method = m
-        mcp.MethodArgs = a
-        return mcp
-    }
-
-	mcp := transaction.AddMethodCallParams{
-		AppID:           contract.Networks[genesis_hash].AppID,
-		Sender:          acct.Address,
-		SuggestedParams: sp,
-		OnComplete:      types.NoOpOC,
-		Signer:          signer,
-	}
-
-    // Simple call to the `add` method, method_args can be any type but _must_ 
-    // match those in the method signature of the contract
-	atc.AddMethodCall(combine(mcp, getMethod(contract, "add"), []interface{}{1, 1}))
-
-
-    // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
-    // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-	txn, _ := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 10000, nil, "", sp)
-	stxn := transaction.TransactionWithSigner{Txn: txn, Signer: signer}
-	atc.AddMethodCall(combine(mcp, getMethod(contract, "txntest"), []interface{}{10000, stxn, 1000}))
-
-    ```
-    
-=== "Java"
-    ```java
-	    // Utility function to return an ABIMethod by its name
-        public static Method getMethodByName(String name, Contract contract) throws Exception {
-            Optional<Method> m = contract.methods.stream().filter(mt -> mt.name.equals(name)).findFirst();
-            return m.orElseThrow(() -> new Exception("Method undefined: " + name));
-    	} 
-
-        // ...
-
-    	List<String> lines = Files.readAllLines(Paths.get("/path/to/contract.json"), Charset.defaultCharset());
-    	String jsonContract = StringUtils.join(lines, "");
-
-    	// convert Json to contract
-    	Contract contract = new Gson().fromJson(jsonContract, Contract.class);
-
-
-	    // get transaction params
-        Response<TransactionParametersResponse> sp = client.TransactionParams().execute();
-        TransactionParametersResponse tsp = sp.body();
-
-        List<Object> method_args = new ArrayList<Object>(); 
-        method_args.add(1);
-        method_args.add(1);
-
-        // create methodCallParams by builder (or create by constructor) for add method
-        MethodCallTransactionBuilder mctb = MethodCallTransactionBuilder.Builder();
-        mctb.applicationId(getAppId());
-        mctb.sender(acct.getAddress().toString());
-        mctb.signer(acct.getTransactionSigner());
-        mctb.suggestedParams(tsp);
-        mctb.method(getMethodByName("add", contract));
-        mctb.methodArguments(method_args);
-
-        AtomicTransactionComposer atc = new AtomicTransactionComposer();
-        atc.addMethodCall(mctb.build());
-
-        ExecuteResult res = atc.execute(client, 2);
-
-    ```
-    
-## Execution 
-
-Once all the transactions are added to the atomic group the Atomic Transaction Composer allows several ways to perform the transactions. 
-
-    - Build Group will construct the group of transactions and taking care of assigning the group id, returning an array of unsigned TransactionWithSigner objects.
-    - Submit will call build group first, then gather the signatures associated to the transactions, then submit the group without blocking. It will return the full list of transaction ids that can be passed to a wait for confirmation function.
-    - Execute will perform submit then wait for confirmation given a number of rounds. It will return the resulting confirmed round, list of transaction ids and any parsed ABI return values if relevant.  
-
-
-=== "Python"
-    ```py
-    # Other options:
-    # txngroup = atc.build_group()
-    # txids = atc.submit(client)
-
-    result = atc.execute(client, 2)
-    for res in result.abi_results:
-        print(res.return_value)
-    ```
+# This method requires a `transaction` as its second argument.
+# Construct the transaction and pass it in as an argument.
+# The ATC will handle adding it to the group transaction and
+# setting the reference in the application arguments.
+ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
+txn = TransactionWithSigner(ptxn, signer)
+atc.add_method_call(
+    app_id,
+    contract.get_method_by_name("txntest"),
+    addr,
+    sp,
+    signer,
+    method_args=[10000, txn, 1000],
+)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
+    <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 
 === "JavaScript"
+    <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
+```javascript
+  const abi = JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, '/contracts/beaker_add_artifacts/contract.json'),
+      'utf8'
+    )
+  );
+  const contract = new algosdk.ABIContract(abi);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L108-L115)
+    <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
+
+    <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
+```javascript
+  const methodATC = new algosdk.AtomicTransactionComposer();
+
+  methodATC.addMethodCall({
+    appID: contractAppID,
+    method: contract.getMethodByName('add'),
+    methodArgs: [1, 2],
+    sender: sender.addr,
+    signer: sender.signer,
+    suggestedParams,
+  });
+
+  const methodResult = await methodATC.execute(client, 3);
+  console.log('Result:', methodResult.methodResults[0].returnValue);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
+    <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:
     // const txgroup = atc.buildGroup()
@@ -357,31 +241,32 @@ Once all the transactions are added to the atomic group the Atomic Transaction C
         console.log(result.methodResults[idx])
     }
     ```
+    <!-- ===JSSDK_ATC_RESULTS=== -->
 
 === "Go"
-    ```go
-    // Other options:
-    // txgroup := atc.BuildGroup()
-    // txids := atc.Submit(client)
-
-	ret, err := atc.Execute(client, context.Background(), 2)
+    <!-- ===GOSDK_ATC_RESULTS=== -->
+```go
+	result, err := atc.Execute(algodClient, context.Background(), 4)
 	if err != nil {
-		log.Fatalf("Failed to execute call: %+v", err)
+		log.Fatalf("failed to get add method: %s", err)
 	}
 
-	for _, r := range ret.MethodResults {
-		log.Printf("%s returned %+v", r.TxID, r.ReturnValue)
+	for _, r := range result.MethodResults {
+		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L82-L90)
+    <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"
-    ```java
-	
-	AtomicTransactionComposer.ExecuteResult resultExecute = atc.execute(client, 5);
-        resultExecute.methodResults.forEach(methodResult -> {
-            System.out.println(methodResult);
-        });
-	
-    ```
-
-	
+    <!-- ===JAVASDK_ATC_RESULTS=== -->
+```java
+                ExecuteResult res = atc.execute(algodClient, 2);
+                System.out.printf("App call (%s) confirmed in round %d\n", res.txIDs, res.confirmedRound);
+                res.methodResults.forEach(methodResult -> {
+                        System.out.printf("Result from calling '%s' method: %s\n", methodResult.method.name,
+                                        methodResult.value);
+                });
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
+    <!-- ===JAVASDK_ATC_RESULTS=== -->

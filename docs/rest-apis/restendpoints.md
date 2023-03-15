@@ -7,7 +7,7 @@ Integration with the Algorand protocol daemon (`algod`), Algorand key management
 
 All REST methods and models are fully described within reference documentation.
 
-- [Algod REST APIs](../../rest-apis/algod/v2/)
+- [Algod REST APIs](../../rest-apis/algod/)
 
 - [Indexer REST APIs](../../rest-apis/indexer/)
 

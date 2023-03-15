@@ -45,51 +45,50 @@ The Address developers or users are typically shown is a 58 byte string correspo
 
 Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, encoding to and from the public key format can be done as follows:
 === "JavaScript"
-    ```js
-    import algosdk from 'algosdk'
-
-    const address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
-    const pk = algosdk.decodeAddress(address)
-    const addr = algosdk.encodeAddress(pk.publicKey)
-    // addr === address
-    ```
+<!-- ===JSSDK_CODEC_ADDRESS=== -->
+```javascript
+  const address = '4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4';
+  const pk = algosdk.decodeAddress(address);
+  const addr = algosdk.encodeAddress(pk.publicKey);
+  console.log(address, addr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L16-L20)
+<!-- ===JSSDK_CODEC_ADDRESS=== -->
 
 === "Python"
-    ```python
-    from algosdk.encoding import decode_address, encode_address
+<!-- ===PYSDK_CODEC_ADDRESS=== -->
+```python
+address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
+pk = encoding.decode_address(address)
+addr = encoding.encode_address(pk)
 
-    address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
-    pk = decode_address(address)
-    addr = encode_address(pk)
-
-    assert addr == address
-    ```
+assert addr == address
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L7-L12)
+<!-- ===PYSDK_CODEC_ADDRESS=== -->
 
 === "Go"
-    ```go
-    import "github.com/algorand/go-algorand-sdk/types"
-
-    //...
-
-    address := "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
-    pk, _ := types.DecodeAddress(address)
-    addr := pk.String()
-    
-    //addr == address
-    ```
+<!-- ===GOSDK_CODEC_ADDRESS=== -->
+```go
+	address := "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4"
+	pk, _ := types.DecodeAddress(address)
+	addr := pk.String()
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L62-L65)
+<!-- ===GOSDK_CODEC_ADDRESS=== -->
 
 === "Java"
-    ```java
-    import com.algorand.algosdk.crypto.Address;
-
-    //...
-
-    String address = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4";
-    Address pk = new Address(address);
-    String addr = new Address(pk.getBytes());
-
-    // addr == address
-    ```
+<!-- ===JAVASDK_CODEC_ADDRESS=== -->
+```java
+        String addrAsStr = "4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4";
+        // Instantiate a new Address object with string
+        Address addr = new Address(addrAsStr);
+        // Or with the bytes
+        Address addrAgain = new Address(addr.getBytes());
+        assert addrAgain.equals(addr);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L25-L31)
+<!-- ===JAVASDK_CODEC_ADDRESS=== -->
 
 ### Byte Arrays
 
@@ -100,38 +99,45 @@ When transmitting an array of bytes over the network, byte arrays are base64 enc
 Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may be decoded as follows:
 
 === "JavaScript"
-    ```js
-    const encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-    const decoded = Buffer.from(encoded, "base64").toString()
-    ```
+<!-- ===JSSDK_CODEC_BASE64=== -->
+```javascript
+  const b64Encoded = 'SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0';
+  const b64Decoded = Buffer.from(b64Encoded, 'base64').toString();
+  console.log(b64Encoded, b64Decoded);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L23-L26)
+<!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
-    ```python
-    import base64
-
-    encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-    decoded = base64.b64decode(encoded).encode('ascii')
-    ```
+<!-- ===PYSDK_CODEC_BASE64=== -->
+```python
+encoded_str = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
+decoded_str = base64.b64decode(encoded_str).decode("utf-8")
+print(decoded_str)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L15-L18)
+<!-- ===PYSDK_CODEC_BASE64=== -->
 
 === "Go"
-    ```go
-    import "encoding/base64"
-
-    //...
-
-    encoded := "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
-    decoded, _ := base64.StdEncoding.DecodeString(encoded)
-    ```
+<!-- ===GOSDK_CODEC_BASE64=== -->
+```go
+	encoded := "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0"
+	decoded, _ := base64.StdEncoding.DecodeString(encoded)
+	reencoded := base64.StdEncoding.EncodeToString(decoded)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L69-L72)
+<!-- ===GOSDK_CODEC_BASE64=== -->
 
 === "Java"
-    ```java
-    import java.util.Base64
-
-    //...
-
-    String encoded = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0";
-    String decoded = new String(Base64.getDecoder().decode(encoded));
-    ```
+<!-- ===JAVASDK_CODEC_BASE64=== -->
+```java
+        String encodedStr = "SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0";
+        byte[] decodedBytes = Encoder.decodeFromBase64(encodedStr);
+        String reEncodedStr = Encoder.encodeToBase64(decodedBytes);
+        assert encodedStr.equals(reEncodedStr);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L34-L38)
+<!-- ===JAVASDK_CODEC_BASE64=== -->
 
 ### Integers
 
@@ -142,49 +148,51 @@ Integers in algorand are almost always uint64, sometimes its required to encode 
 Given an integer `1337`, you may encode it as:
 
 === "JavaScript"
-    ```js
-    const val = 1337
-
-    const encoded = algosdk.encodeUint64(val)
-    const decoded = algosdk.decodeUint64(encoded)
-
-    // val === decoded
-    ```
+<!-- ===JSSDK_CODEC_UINT64=== -->
+```javascript
+  const int = 1337;
+  const encoded = algosdk.encodeUint64(int);
+  const safeDecoded = algosdk.decodeUint64(encoded, 'safe');
+  const mixedDecoded = algosdk.decodeUint64(encoded, 'bigint');
+  console.log(int, encoded, safeDecoded, mixedDecoded);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L29-L34)
+<!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
-    ```python
-    val = 1337
-
-    encoded = (val).to_bytes(8,'big')
-    decoded = int.from_bytes(encoded, byteorder='big)
-
-    assert decoded == val
-    ```
+<!-- ===PYSDK_CODEC_UINT64=== -->
+```python
+val = 1337
+encoded_uint = val.to_bytes(8, "big")
+decoded_uint = int.from_bytes(encoded_uint, byteorder="big")
+assert decoded_uint == val
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L21-L25)
+<!-- ===PYSDK_CODEC_UINT64=== -->
 
 === "Go"
-    ```go
-    import "encoding/binary"
+<!-- ===GOSDK_CODEC_UINT64=== -->
+```go
+	val := 1337
+	encodedInt := make([]byte, 8)
+	binary.BigEndian.PutUint64(encodedInt, uint64(val))
 
-    val := 1337
-
-    encoded := make([]byte, 8)
-    binary.BigEndian.PutUint64(encoded, uint64(val)) 
-
-    decoded := int64(binary.BigEndian.Uint64(encoded))
-
-    // val == decoded
-    ```
+	decodedInt := binary.BigEndian.Uint64(encodedInt)
+	// decodedInt == val
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L76-L82)
+<!-- ===GOSDK_CODEC_UINT64=== -->
 
 === "Java"
-    ```java
-    long val = 1337;
-
-    byte[] encoded = Encoder.encodeUint64(val);
-
-    BigInteger decoded = Encoder.decodeUint64(encoded);
-
-    //decoded.toLong() == val
-    ```
+<!-- ===JAVASDK_CODEC_UINT64=== -->
+```java
+        BigInteger val = BigInteger.valueOf(1337);
+        byte[] encodedVal = Encoder.encodeUint64(val);
+        BigInteger decodedVal = Encoder.decodeUint64(encodedVal);
+        assert val.equals(decodedVal);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L41-L45)
+<!-- ===JAVASDK_CODEC_UINT64=== -->
 
 
 ## Working with encoded structures
@@ -207,91 +215,142 @@ and decoding is:
 Create a payment transaction from one account to another using suggested parameters and amount 10000, we write the msgpack encoded bytes
 
 === "JavaScript"
-    ```js
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```javascript
+  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: sender.addr,
+    to: receiver.addr,
+    amount: 1e6,
+    suggestedParams,
+  });
 
-    const sp = await client.getTransactionParams().do()
-    const pay_txn = algosdk.makePaymentTxnWithSuggestedParams(acct1.addr, acct2.addr, 10000, undefined, undefined, sp)
-
-    const pay_txn_bytes = algosdk.encodeObj(pay_txn.get_obj_for_encoding())
-    fs.writeFileSync("pay.txn", Buffer.from(pay_txn_bytes).toString("base64"))
-
-    const spay_txn_bytes = pay_txn.signTxn(acct1.sk)
-    fs.writeFileSync("signed_pay.txn", Buffer.from(spay_txn_bytes).toString("base64"))
-
-
-    const recovered_pay_txn = algosdk.decodeUnsignedTransaction(Buffer.from(fs.readFileSync("pay.txn").toString(), "base64"))
-    console.log(recovered_pay_txn)
-
-    const recovered_signed_pay_txn = algosdk.decodeSignedTransaction(Buffer.from(fs.readFileSync("signed_pay.txn").toString(), "base64"))
-    console.log(recovered_signed_pay_txn)
-
-    ```
+  const txnBytes = txn.toByte();
+  const txnB64 = Buffer.from(txnBytes).toString('base64');
+  const restoredTxn = algosdk.decodeUnsignedTransaction(
+    Buffer.from(txnB64, 'base64')
+  );
+  console.log(restoredTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
+```javascript
+  const signedTxn = txn.signTxn(sender.privateKey);
+  const signedB64Txn = Buffer.from(signedTxn).toString('base64');
+  const restoredSignedTxn = algosdk.decodeSignedTransaction(
+    Buffer.from(signedB64Txn, 'base64')
+  );
+  console.log(restoredSignedTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
-    ```py
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```python
+sp = algod_client.suggested_params()
+pay_txn = transaction.PaymentTxn(acct.address, sp, acct.address, 10000)
 
-    sp = client.suggested_params()
-    pay_txn = transaction.PaymentTxn(addr1, sp, addr2, 10000)
-    with open("pay.txn", "w") as f:
-        f.write(encoding.msgpack_encode(pay_txn))
+# Write message packed transaction to disk
+with open("pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(pay_txn))
 
-    spay_txn = pay_txn.sign(pk1)
-    with open("signed_pay.txn", "w") as f:
-        f.write(encoding.msgpack_encode(spay_txn))
+# Read message packed transaction and decode it to a Transaction object
+with open("pay.txn", "r") as f:
+    recovered_txn = encoding.msgpack_decode(f.read())
 
+print(recovered_txn.dictify())
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L31-L43)
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
+```python
+# Sign transaction
+spay_txn = pay_txn.sign(acct.private_key)
+# write message packed signed transaction to disk
+with open("signed_pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(spay_txn))
 
-    with open("pay.txn", "r") as f:
-        recovered_txn = encoding.msgpack_decode(f.read())
+# read message packed signed transaction into a SignedTransaction object
+with open("signed_pay.txn", "r") as f:
+    recovered_signed_txn = encoding.msgpack_decode(f.read())
 
-    print(recovered_txn)
-
-    with open("signed_pay.txn", "r") as f:
-        recovered_signed_txn = encoding.msgpack_decode(f.read())
-
-    print(recovered_signed_txn)
-
-    ```
+print(recovered_signed_txn.dictify())
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L48-L59)
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
-    ```go
-
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```go
 	// Error handling omitted for brevity
-	sp, _ := client.SuggestedParams().Do(context.Background())
-
-	pay_txn, _ := transaction.MakePaymentTxn(acct1.Address.String(), acct2.Address.String(), 10000, nil, "", sp)
-
-	var pay_txn_bytes = make([]byte, 1e3)
-	base64.StdEncoding.Encode(pay_txn_bytes, msgpack.Encode(pay_txn))
-	f, _ := os.Create("pay.txn")
-	f.Write(pay_txn_bytes)
-
-	_, spay_txn, _ := crypto.SignTransaction(acct1.PrivateKey, pay_txn)
-
-	var spay_txn_bytes = make([]byte, 1e3)
-	base64.StdEncoding.Encode(spay_txn_bytes, spay_txn)
-	f2, _ := os.Create("signed_pay.txn")
-	f2.Write(spay_txn_bytes)
-
-	var (
-		recovered_pay_txn   = types.Transaction{}
-		recovered_pay_bytes = make([]byte, 1e3)
+	sp, _ := algodClient.SuggestedParams().Do(context.Background())
+	ptxn, _ := transaction.MakePaymentTxn(
+		acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp,
 	)
-	b64_pay_bytes, _ := os.ReadFile("pay.txn")
-	base64.StdEncoding.Decode(recovered_pay_bytes, b64_pay_bytes)
 
-	msgpack.Decode(recovered_pay_bytes, &recovered_pay_txn)
-	log.Printf("%+v", recovered_pay_txn)
+	// Encode the txn as bytes,
+	// if sending over the wire (like to a frontend) it should also be b64 encoded
+	encodedTxn := msgpack.Encode(ptxn)
+	os.WriteFile("pay.txn", encodedTxn, 0655)
 
-	var (
-		recovered_signed_pay_txn   = types.SignedTxn{}
-		recovered_signed_pay_bytes = make([]byte, 1e3)
-	)
-	b64_signed_pay_bytes, _ := os.ReadFile("signed_pay.txn")
-	base64.StdEncoding.Decode(recovered_signed_pay_bytes, b64_signed_pay_bytes)
+	var recoveredPayTxn = types.Transaction{}
 
-	msgpack.Decode(recovered_signed_pay_bytes, &recovered_signed_pay_txn)
-	log.Printf("%+v", recovered_signed_pay_txn)
-    ```
+	msgpack.Decode(encodedTxn, &recoveredPayTxn)
+	log.Printf("%+v", recoveredPayTxn)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+```go
+	// Assuming we already have a pay transaction `ptxn`
+
+	// Sign the transaction
+	_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Save the signed transaction to file
+	os.WriteFile("pay.stxn", signedTxn, 0644)
+
+	signedPayTxn := types.SignedTxn{}
+	err = msgpack.Decode(signedTxn, &signedPayTxn)
+	if err != nil {
+		log.Fatalf("failed to decode signed transaction: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+
+=== "Java"
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Wipe the `reserve` address through an AssetConfigTransaction
+        Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
+
+        byte[] encodedTxn = Encoder.encodeToMsgPack(ptxn);
+
+        Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
+        assert decodedTxn.equals(ptxn);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
+```java
+        SignedTransaction signedTxn = acct.signTransaction(ptxn);
+        byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
+
+        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(encodedSignedTxn,
+                SignedTransaction.class);
+        assert decodedSignedTransaction.equals(signedTxn);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 
 
@@ -300,24 +359,23 @@ Create a payment transaction from one account to another using suggested paramet
 One type that commonly needs to be decoded are the blocks themselves. Since some fields are raw byte arrays (like state deltas) the msgpack format should be used.
 
 === "Python"
-    ```py
+<!-- ===PYSDK_CODEC_BLOCK=== -->
+```python
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L65-L65)
+<!-- ===PYSDK_CODEC_BLOCK=== -->
 
-    from algosdk import encoding
-    from algosdk.v2client.algod import AlgodClient
-    import msgpack
+=== "JavaScript"
+<!-- ===JSSDK_CODEC_BLOCK=== -->
+<!-- ===JSSDK_CODEC_BLOCK=== -->
 
-    client = AlgodClient("a"*64, "http://localhost:4001")
+=== "Go"
+<!-- ===GOSDK_CODEC_BLOCK=== -->
+```go
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L86-L86)
+<!-- ===GOSDK_CODEC_BLOCK=== -->
 
-    # Get the block in msgpack format
-    block = client.block_info(round_num=1234, response_format='msgpack')
-
-    # Be sure to specify `raw=True` or msgpack will try to decode as utf8
-    res = msgpack.unpackb(block, raw=True)
-
-    # Lets get the 4th transaction
-    txn = res[b'block'][b'txns'][3]
-
-    # Grab the byte value for the key `KEY`
-    address = encoding.encode_address(txn[b'dt'][b'gd'][b'KEY'][b'bs'])
-
-    ```
+=== "Java"
+<!-- ===JAVASDK_CODEC_BLOCK=== -->
+<!-- ===JAVASDK_CODEC_BLOCK=== -->

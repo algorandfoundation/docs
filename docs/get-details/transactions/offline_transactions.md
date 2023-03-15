@@ -13,211 +13,85 @@ Algorand SDK's and `goal` support writing and reading both signed and unsigned t
 Unsigned transactions require the transaction object to be created before writing to a file.
 
 === "JavaScript"
-    ``` javascript
-        // get network suggested parameters
-        let params = await algodClient.getTransactionParams().do();
-        const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
-        console.log(note);
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
-        // Save transaction to file
-        fs.writeFileSync('./unsigned.txn', algosdk.encodeUnsignedTransaction( txn ));     
-    
-        // read transaction from file and sign it
-        let txn = algosdk.decodeUnsignedTransaction(fs.readFileSync('./unsigned.txn'));  
-        let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-        let txId = signedTxn.txID;
-        console.log("Signed transaction with txID: %s", txId);
-        // send signed transaction to node
-        await algodClient.sendRawTransaction(signedTxn.blob).do();
-        // Wait for transaction to be confirmed
-        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);       
-    ```
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```javascript
+  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: sender.addr,
+    to: receiver.addr,
+    amount: 1e6,
+    suggestedParams,
+  });
+
+  const txnBytes = txn.toByte();
+  const txnB64 = Buffer.from(txnBytes).toString('base64');
+  const restoredTxn = algosdk.decodeUnsignedTransaction(
+    Buffer.from(txnB64, 'base64')
+  );
+  console.log(restoredTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
+<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
-    ``` python
-        # build transaction
-        params = algod_client.suggested_params()
-        # comment out the next two (2) lines to use suggested fees
-        params.flat_fee = True
-        params.fee = 1000
-        receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        note = "Hello World".encode()
-        unsigned_txn = PaymentTxn(
-            my_address, params, receiver, 1000000, None, note)
-        # write to file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        transaction.write_to_file([unsigned_txn], dir_path + "/unsigned.txn")
-        
-        # read from file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        txns = transaction.retrieve_from_file(dir_path + "/unsigned.txn")
-        # sign and submit transaction
-        txn = txns[0]
-        signed_txn = txn.sign(mnemonic.to_private_key(passphrase))
-        txid = signed_txn.transaction.get_txid()
-        print("Signed transaction with txID: {}".format(txid))	
-        try:
-            txid = algod_client.send_transaction(signed_txn)
-            # wait for confirmation              
-            confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-            print("TXID: ", txid)
-            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-        except Exception as err:
-            print(err)
-            return
-        print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        print("Decoded note: {}".format(base64.b64decode(
-            confirmed_txn["txn"]["txn"]["note"]).decode()))  
-    ```
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```python
+sp = algod_client.suggested_params()
+pay_txn = transaction.PaymentTxn(acct.address, sp, acct.address, 10000)
+
+# Write message packed transaction to disk
+with open("pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(pay_txn))
+
+# Read message packed transaction and decode it to a Transaction object
+with open("pay.txn", "r") as f:
+    recovered_txn = encoding.msgpack_decode(f.read())
+
+print(recovered_txn.dictify())
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L31-L43)
+<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Java"
-    ```java
-        // Construct the transaction
-        final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
-        String note = "Hello World";
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        System.out.println("Algorand suggested parameters: " + params);
-        Transaction tx = Transaction.PaymentTransactionBuilder()
-            .sender(myAddress)
-            .note(note.getBytes())
-            .amount(100000)
-            .receiver(new Address(RECEIVER))
-            .suggestedParams(params)
-            .build();
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Wipe the `reserve` address through an AssetConfigTransaction
+        Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
 
-        // save as signed even though it has not been
-        SignedTransaction stx = myAccount.signTransaction(tx);
-        System.out.println("Signed transaction with txid: " + stx.transactionID);
-        stx.tx = tx;  
-        // Save transaction to a file 
-        Files.write(Paths.get("./unsigned.txn"), Encoder.encodeToMsgPack(stx));
-        System.out.println("Transaction written to a file");
+        byte[] encodedTxn = Encoder.encodeToMsgPack(ptxn);
 
-        // read transaction from file
-        SignedTransaction decodedTransaction = Encoder.decodeFromMsgPack(
-            Files.readAllBytes(Paths.get("./unsigned.txn")), SignedTransaction.class);            
-        Transaction tx = decodedTransaction.tx;           
-        // Sign the transaction
-        SignedTransaction signedTxn = myAccount.signTransaction(tx);
-        System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
-        // Submit the transaction to the network
-        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-        if (!rawtxresponse.isSuccessful()) {
-            throw new Exception(rawtxresponse.message());
-        }
-        String id = rawtxresponse.body().txId;
-        System.out.println("Successfully sent tx with ID: " + id);
-
-        // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-        System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-
-        // Read the transaction
-        JSONObject jsonObj = new JSONObject(pTrx.toString());
-        System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
-        System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-        printBalance(myAccount);
-    ```
+        Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
+        assert decodedTxn.equals(ptxn);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
-    ``` go
-        // Construct the transaction
-        txParams, err := algodClient.SuggestedParams().Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-        // comment out the next two (2) lines to use suggested fees
-        txParams.FlatFee = true
-        txParams.Fee = 1000
-        fromAddr := myAddress
-        toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        var amount uint64 = 1000000
-        var minFee uint64 = 1000
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := uint64(txParams.FirstRoundValid)
-        lastValidRound := uint64(txParams.LastRoundValid)
-        tx, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-        unsignedTx := types.SignedTxn{
-            Txn: tx,
-        }
-        // save unsigned Transaction to file
-        err = ioutil.WriteFile("./unsigned.txn", msgpack.Encode(unsignedTx), 0644)
-        if err == nil {
-            fmt.Printf("Saved unsigned transaction to file\n")
-            return
-        }
-        fmt.Printf("Failed in saving trx to file, error %s\n", err) 
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+```go
+	// Error handling omitted for brevity
+	sp, _ := algodClient.SuggestedParams().Do(context.Background())
+	ptxn, _ := transaction.MakePaymentTxn(
+		acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp,
+	)
 
+	// Encode the txn as bytes,
+	// if sending over the wire (like to a frontend) it should also be b64 encoded
+	encodedTxn := msgpack.Encode(ptxn)
+	os.WriteFile("pay.txn", encodedTxn, 0655)
 
-        // read unsigned transaction from file
-        dat, err := ioutil.ReadFile("./unsigned.txn")
-        if err != nil {
-            fmt.Printf("Error reading transaction from file: %s\n", err)
-            return
-        }
-        var unsignedTxRaw types.SignedTxn
-        var unsignedTxn types.Transaction
-        msgpack.Decode(dat, &unsignedTxRaw)
-        unsignedTxn = unsignedTxRaw.Txn
-        // recover account
-        myAddress, privateKey := recoverAccount()
-        fmt.Printf("Address is: %s\n", myAddress)
-        // Check account balance
-        accountInfo, err := algodClient.AccountInformation(myAddress).Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting account info: %s\n", err)
-            return
-        }
-        fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
-        // Sign the transaction
-        txID, signedTxn, err := crypto.SignTransaction(privateKey, unsignedTxn)
-        if err != nil {
-            fmt.Printf("Failed to sign transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Signed txid: %s\n", txID)
-        // Submit the transaction
-        sendResponse, err := algodClient.SendRawTransaction(signedTxn).Do(context.Background())
-        if err != nil {
-            fmt.Printf("failed to send transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Submitted transaction %s\n", sendResponse)
+	var recoveredPayTxn = types.Transaction{}
 
-        // Wait for confirmation
-        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txID,  4, context.Background())
-        if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
-            return
-        }
-        fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID ,confirmedTxn.ConfirmedRound)
-
-
-        fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
-    ```
+	msgpack.Decode(encodedTxn, &recoveredPayTxn)
+	log.Printf("%+v", recoveredPayTxn)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
+<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
+<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
     ``` goal
     $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
 
@@ -226,196 +100,84 @@ Unsigned transactions require the transaction object to be created before writin
     $ goal clerk rawsend --filename signed.txn
 
     ```
+<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
 # Signed Transaction File Operations 
 Signed Transactions are similar, but require an account to sign the transaction before writing it to a file.
 
 === "JavaScript"
-    ``` javascript
-        // get network suggested parameters
-        let params = await algodClient.getTransactionParams().do();
-        // setup a transaction
-        const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
-        console.log(note);
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
-        // sign transaction and write to file
-        let signedTxn = txn.signTxn(myAccount.sk);
-        fs.writeFileSync('./signed.stxn', signedTxn );  
-        
-        // read signed transaction from file
-        let stx = fs.readFileSync("./signed.stxn");
-        // send signed transaction to node
-        let tx = await algodClient.sendRawTransaction(stx).do();
-        console.log("Signed transaction with txID: %s", tx.txId);
-        // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, tx.txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-        console.log("Transaction information: %o", mytxinfo);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);    
-    ```
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
+```javascript
+  const signedTxn = txn.signTxn(sender.privateKey);
+  const signedB64Txn = Buffer.from(signedTxn).toString('base64');
+  const restoredSignedTxn = algosdk.decodeSignedTransaction(
+    Buffer.from(signedB64Txn, 'base64')
+  );
+  console.log(restoredSignedTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
+<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
-    ``` python
-        # build transaction
-        params = algod_client.suggested_params()
-        # comment out the next two (2) lines to use suggested fees
-        params.flat_fee = True
-        params.fee = 1000
-        receiver = "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        note = "Hello World".encode()
-        unsigned_txn = PaymentTxn(
-            my_address, params, receiver, 1000000, None, note)
-        # sign transaction
-        signed_txn = unsigned_txn.sign(mnemonic.to_private_key(passphrase))
-        # write to file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        transaction.write_to_file([signed_txn], dir_path + "/signed.txn")
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
+```python
+# Sign transaction
+spay_txn = pay_txn.sign(acct.private_key)
+# write message packed signed transaction to disk
+with open("signed_pay.txn", "w") as f:
+    f.write(encoding.msgpack_encode(spay_txn))
 
-        # read signed transaction from file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        txns = transaction.retrieve_from_file(dir_path + "/signed.txn")
-        signed_txn = txns[0]
-        try:
-            txid = algod_client.send_transaction(signed_txn)
-            print("Signed transaction with txID: {}".format(txid))
-            # wait for confirmation
-            confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-            print("TXID: ", txid)
-            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
+# read message packed signed transaction into a SignedTransaction object
+with open("signed_pay.txn", "r") as f:
+    recovered_signed_txn = encoding.msgpack_decode(f.read())
 
-        except Exception as err:
-            print(err)
-            return
-        print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        print("Decoded note: {}".format(base64.b64decode(
-            confirmed_txn["txn"]["txn"]["note"]).decode())) 
-    ```
+print(recovered_signed_txn.dictify())
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L48-L59)
+<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
-    ```java
-        // Construct the transaction
-        final String RECEIVER = "L5EUPCF4ROKNZMAE37R5FY2T5DF2M3NVYLPKSGWTUKVJRUGIW4RKVPNPD4";
-        String note = "Hello World";
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        System.out.println("Algorand suggested parameters: " + params);
-        Transaction txn = Transaction.PaymentTransactionBuilder()
-            .sender(myAddress)
-            .note(note.getBytes())
-            .amount(100000)
-            .receiver(new Address(RECEIVER))
-            .suggestedParams(params)
-            .build();
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
+```java
+        SignedTransaction signedTxn = acct.signTransaction(ptxn);
+        byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
 
-        // Sign the transaction
-        SignedTransaction signedTx = myAccount.signTransaction(txn);
-        System.out.println("Signed transaction with txid: " + signedTx.transactionID);
-        // save signed transaction to  a file 
-        Files.write(Paths.get("./signed.txn"), Encoder.encodeToMsgPack(signedTx));
-
-        // read signed transaction
-        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(
-        Files.readAllBytes(Paths.get("./signed.txn")), SignedTransaction.class);     
-        // Msgpack encode the signed transaction
-        byte[] encodedTxBytes = Encoder.encodeToMsgPack(decodedSignedTransaction);
-        // Submit the transaction to the network          
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-        if (!rawtxresponse.isSuccessful()) {
-            throw new Exception(rawtxresponse.message());
-        }
-        String id = rawtxresponse.body().txId;
-        System.out.println("Successfully sent tx with ID: " + id);
-        // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = waitForConfirmation(client, id, 4);
-        System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-        // Read the transaction
-        JSONObject jsonObj = new JSONObject(pTrx.toString());
-        System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
-        System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-        printBalance(myAccount); 
-    ```
+        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(encodedSignedTxn,
+                SignedTransaction.class);
+        assert decodedSignedTransaction.equals(signedTxn);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
-    ``` go
-        // Construct the transaction
-        txParams, err := algodClient.SuggestedParams().Do(context.Background())
-        if err != nil {
-            fmt.Printf("Error getting suggested tx params: %s\n", err)
-            return
-        }
-        // comment out the next two (2) lines to use suggested fees
-        txParams.FlatFee = true
-        txParams.Fee = 1000
-        fromAddr := myAddress
-        toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-        var amount uint64 = 1000000
-        var minFee uint64 = 1000
-        note := []byte("Hello World")
-        genID := txParams.GenesisID
-        genHash := txParams.GenesisHash
-        firstValidRound := uint64(txParams.FirstRoundValid)
-        lastValidRound := uint64(txParams.LastRoundValid)
-        tx, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-        // Sign the transaction
-        txID, signedTxn, err := crypto.SignTransaction(privateKey, tx)
-        if err != nil {
-            fmt.Printf("Failed to sign transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Signed txid: %s\n", txID)
-        // Save the signed transaction to file
-        err = ioutil.WriteFile("./signed.stxn", signedTxn, 0644)
-        if err == nil {
-            fmt.Printf("Saved signed transaction to file\n")
-            return
-        }
-        fmt.Printf("Failed in saving trx to file, error %s\n", err)
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+```go
+	// Assuming we already have a pay transaction `ptxn`
 
-        
-        // Read signed transaction from file
-        dat, err := ioutil.ReadFile("./signed.stxn")
-        if err != nil {
-            fmt.Printf("Error reading signed transaction from file: %s\n", err)
-            return
-        }
-        // Submit the transaction
-        sendResponse, err := algodClient.SendRawTransaction(dat).Do(context.Background())
-        if err != nil {
-            fmt.Printf("failed to send transaction: %s\n", err)
-            return
-        }
-        fmt.Printf("Submitted transaction %s\n", sendResponse)
+	// Sign the transaction
+	_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 
-        // Wait for confirmation
-        confirmedTxn, err := transaction.WaitForConfirmation(algodClient,sendResponse,  4, context.Background())
-        if err != nil {
-            fmt.Printf("Error waiting for confirmation on txID: %s\n", sendResponse)
-            return
-        }
-        fmt.Printf("Confirmed Transaction: %s in Round %d\n", sendResponse ,confirmedTxn.ConfirmedRound)
+	// Save the signed transaction to file
+	os.WriteFile("pay.stxn", signedTxn, 0644)
 
-
-        fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
-    ```
+	signedPayTxn := types.SignedTxn{}
+	err = msgpack.Decode(signedTxn, &signedPayTxn)
+	if err != nil {
+		log.Fatalf("failed to decode signed transaction: %s", err)
+	}
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
+<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"
+<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
     ``` goal
     $ goal clerk rawsend --filename signed.txn
     ```
+<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
+
 !!! info
     Example transaction code snippets are provided throughout this page. Full running code transaction examples as well as **offline multisig** for each SDK are available within the GitHub repo at [/examples/offline](https://github.com/algorand/docs/tree/master/examples/offline) and for [download](https://github.com/algorand/docs/blob/master/examples/offine/offline.zip?raw=true) (.zip).
     

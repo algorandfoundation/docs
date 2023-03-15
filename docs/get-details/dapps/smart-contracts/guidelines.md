@@ -43,69 +43,77 @@ There are two options:
 * using SDK constants:
 
 === "Python"
+    <!-- ===PYSDK_CONST_MIN_FEE=== -->
+```python
+from algosdk import constants
 
-    ```py
-    algosdk.constants.MIN_TXN_FEE
-    ```
+print(constants.MIN_TXN_FEE)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L82-L85)
+    <!-- ===PYSDK_CONST_MIN_FEE=== -->
 
 === "JavaScript"
-
-    ```js
-    algosdk.ALGORAND_MIN_TX_FEE
-    ```
+    <!-- ===JSSDK_CONST_MIN_FEE=== -->
+```javascript
+  const minFee = algosdk.ALGORAND_MIN_TX_FEE;
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
+    <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"
-
-    ```java
-    Account.MIN_TX_FEE_UALGOS
-    ```
+    <!-- ===JAVASDK_CONST_MIN_FEE=== -->
+```java
+        System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
+    <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
-
-    ```go
-    transaction.MinTxnFee
-    ```
+    <!-- ===GOSDK_CONST_MIN_FEE=== -->
+```go
+	log.Printf("Min fee const: %d", transaction.MinTxnFee)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L33-L34)
+    <!-- ===GOSDK_CONST_MIN_FEE=== -->
     
 * using an algod API:
 
 === "Python"
-
-    ```py
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-    params = algod_client.suggested_params()
-
-    params.min_fee
-    ```
+    <!-- ===PYSDK_SP_MIN_FEE=== -->
+```python
+suggested_params = algod_client.suggested_params()
+print(suggested_params.min_fee)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L77-L79)
+    <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
-
+    <!-- ===JSSDK_SP_MIN_FEE=== -->
     ```js
     // Not supported because getTransactionParams erases the information
     ```
+    <!-- ===JSSDK_SP_MIN_FEE=== -->
 
 === "Java"
-
-    ```java
-    AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-    TransactionParametersResponse params = client.TransactionParams().execute().body();
-    
-    params.minFee
-    ```
+    <!-- ===JAVASDK_SP_MIN_FEE=== -->
+```java
+        Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = tpr.body();
+        System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
+    <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"
-
-    ```go
-    algodClient, err := algod.MakeClient(algodAddress, algodToken)
+    <!-- ===GOSDK_SP_MIN_FEE=== -->
+```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		panic(fmt.Errorf("Issue with creating algod client: %v\n", err))
+		log.Printf("failed to %s", err)
 	}
-	params, err := algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		panic(fmt.Errorf("Issue with getting suggested params: %v\n", err))
-	}
-    
-	params.MinFee
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L26-L30)
+    <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures
 
@@ -380,6 +388,3 @@ These guidelines are specific to smart signatures. They complement the other gui
 
 * [Trails of Bits guideslines](https://github.com/crytic/building-secure-contracts/tree/master/not-so-smart-contracts/algorand)
 * [ASC Security Guidelines from Joe Polny](https://github.com/joe-p/algo-edu/blob/master/resources/en-US/asc_security.md) on which this document is partially based
-
-
-

@@ -12,132 +12,101 @@ Registering an account online requires authorizing a [key registration transacti
 Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../get-details/transactions/offline_transactions.md#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register online transaction example](../../get-details/transactions/index.md#register-account-online). 
 
 
+=== "JavaScript"
+    <!-- ===JSSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+    <!-- ===JSSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+
 === "Python"
-    ```python 
-    from algosdk import encoding
-    ...
-    def write_unsigned():
-        # setup connection
-        algod_client = connect_to_network()
+    <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+```python
+# get suggested parameters
+params = algod_client.suggested_params()
 
-        # get suggested parameters
-        params = algod_client.suggested_params()
+votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw="
+selkey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4="
 
-        b64votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw="
-        votekey_addr = encoding.encode_address(base64.b64decode(b64votekey))
-        b64selkey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4="
-        selkey_addr = encoding.encode_address(base64.b64decode(b64selkey))
+num_rounds = int(1e5)  # sets up keys for 100000 rounds
+key_dilution = int(num_rounds**0.5)  # dilution default is sqrt num rounds
 
-        # create transaction
-        data = {
-            "sender": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
-            "votekey": votekey_addr,
-            "selkey": selkey_addr,
-            "votefst": 6000000,
-            "votelst":9000000,
-            "votekd": 1730,
-            "fee": 2000,
-            "flat_fee": True,
-            "first": 6002000,
-            "last": 6003000,
-            "gen": params.get('genesisID'),
-            "gh": params.get('genesishashb64')
-        }
-        txn = transaction.KeyregTxn(**data)
-    ...
-    ```
+# create transaction
+online_keyreg = transaction.KeyregTxn(
+    sender="EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
+    votekey=votekey,
+    selkey=selkey,
+    votefst=params.first,
+    votelst=params.first + num_rounds,
+    votekd=key_dilution,
+    sp=params,
+)
+print(online_keyreg.dictify())
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L6-L26)
+    <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Java"
-    ```java
-        // ...
-        import java.util.Base64;
-        // ...
-        import com.algorand.algosdk.crypto.ParticipationPublicKey;
-        import com.algorand.algosdk.crypto.VRFPublicKey;
-        // ...
+    <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+```java
+        // get suggested parameters
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
 
-        public void writeUnsignedTransaction(){
+        String address = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
 
-            // connect to node
-            if( algodApiInstance == null ) connectToNetwork();
+        String votekey = "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=";
+        String skey = "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=";
 
-            final String SRC_ADDR = "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4";
-            String selKeyEncoded = new String("X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=");
-            byte[] decodedSelKey = Base64.getDecoder().decode(selKeyEncoded);
-            String voteKeyEncoded = new String("eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=");
-            byte[] decodedVoteKey = Base64.getDecoder().decode(voteKeyEncoded);
+        Long numRounds = 100000l; // sets up keys for 100000 rounds
+        Long keyDilution = (long) Math.sqrt(numRounds); // dilution default is sqrt num rounds
 
-            try {
-                // Get suggested parameters from the node
-                Response<TransactionParametersResponse> params = algodApiInstance.TransactionParams().execute();
-
-                // create transaction
-                String genId = params.getGenesisID();
-                Digest genesisHash = new Digest(params.getGenesishashb64());
-                ParticipationPublicKey voteKey = new ParticipationPublicKey(decodedSelKey);
-                VRFPublicKey selKey = new VRFPublicKey(decodedVoteKey);
-                BigInteger voteFst = BigInteger.valueOf(6000000);
-                BigInteger voteLst = BigInteger.valueOf(9000000);
-                BigInteger firstRound = BigInteger.valueOf(6002000);
-                BigInteger lastRound = BigInteger.valueOf(6003000);
-                BigInteger fee = BigInteger.valueOf(2000);
-                BigInteger voteKd = BigInteger.valueOf(1730);
-
-                // Get suggested parameters from the node
-                // Prepare the transaction 
-                KeyRegistrationTransaction ktxn = Transaction.KeyRegistrationTransactionBuilder()
-                    .participationPublicKey(voteKey)
-                    .selectionPublicKey(selKey)
-                    .suggestedParams(params.body())
-                    .voteFirst(voteFst)
-                    .voteLast(voteLst)
-                    .voteKeyDilution(voteKd)
-                // ...
-
-    ```
+        Transaction keyRegTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
+                .sender(address)
+                .selectionPublicKeyBase64(skey)
+                .participationPublicKeyBase64(votekey)
+                .voteFirst(sp.lastRound)
+                .voteLast(sp.lastRound + numRounds)
+                .voteKeyDilution(keyDilution)
+                .build();
+        // ... sign and send to network
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L13-L34)
+    <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Go"
-    ```go 
-    func saveUnsignedTransaction() {
-
-        // setup connection
-        algodClient := setupConnection()
-
-        // get network suggested parameters
-        txParams, err := algodClient.SuggestedParams()
-        if err != nil {
-            fmt.Printf("error getting suggested tx params: %s\n", err)
-            return
-        }
-
-        // create transaction
-        fromAddr := "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4"
-        genID := txParams.GenesisID
-        genesisHash := base64.StdEncoding.EncodeToString(txParams.GenesisHash)
-        voteKey := "eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw="
-        selKey := "X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4="
-        voteFirst := uint64(6000000)
-        voteLast := uint64(9000000)
-        keyDilution := uint64(1730)
-        tx, err := transaction.MakeKeyRegTxnWithFlatFee(fromAddr, 2000, 6002000,
-            6003000, nil, genID, genesisHash, voteKey, selKey, voteFirst, voteLast,
-            keyDilution)
-        if err != nil {
-            fmt.Printf("Error creating transaction: %s\n", err)
-            return
-        }
-        unsignedTx := types.SignedTxn{
-            Txn: tx,
-        }
-    ```
+    <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
+```go
+	fromAddr := "MWAPNXBDFFD2V5KWXAHWKBO7FO4JN36VR4CIBDKDDE7WAUAGZIXM3QPJW4"
+	voteKey := "87iBW46PP4BpTDz6+IEGvxY6JqEaOtV0g+VWcJqoqtc="
+	selKey := "1V2BE2lbFvS937H7pJebN0zxkqe1Nrv+aVHDTPbYRlw="
+	sProofKey := "f0CYOA4yXovNBFMFX+1I/tYVBaAl7VN6e0Ki5yZA3H6jGqsU/LYHNaBkMQ/rN4M4F3UmNcpaTmbVbq+GgDsrhQ=="
+	voteFirst := uint64(16532750)
+	voteLast := uint64(19532750)
+	keyDilution := uint64(1732)
+	nonpart := false
+	tx, err := transaction.MakeKeyRegTxnWithStateProofKey(
+		fromAddr,
+		[]byte{},
+		sp,
+		voteKey,
+		selKey,
+		sProofKey,
+		voteFirst,
+		voteLast,
+		keyDilution,
+		nonpart,
+	)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/participation.go#L40-L60)
+    <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"
+    <!-- ===GOAL_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
     ```zsh 
     # WARNING: This command must be run on the node where the partkey lives and the node
     # must only have a single partkey for the account. Otherwise the command will
     # choose one at random.
     $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=2000 --firstvalid=6002000 --lastvalid=6003000 --online=true --txfile=online.txn
     ```
+    <!-- ===GOAL_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 # Authorize and Send the Transaction
 Use the appropriate [authorization method](../../../get-details/transactions/signatures) to sign the transaction. 

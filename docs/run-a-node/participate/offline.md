@@ -10,37 +10,51 @@ To mark an account **offline** send a key registration transaction to the networ
 Create an offline key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4` by inserting the following code snippet into the construction portion of the example shown in [Authorizing Transactions Offline](../../../get-details/transactions/offline_transactions#unsigned-transaction-file-operations). The file produced and displayed with `goal clerk inspect` should look almost exactly the same as the output shown in the [constructing a register offline transaction example](../../../get-details/transactions#register-account-offline). 
 
 === "Python"
-    ```python
-    ...
-    def write_unsigned():
-        # setup none connection
-        algod_client = connect_to_network()
+    <!-- ===PYSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+```python
+# get suggested parameters
+params = algod_client.suggested_params()
 
-        # get suggested parameters
-        params = algod_client.suggested_params()
-        # create transaction
-        data = {
-            "sender": "EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
-            "votekey": None,
-            "selkey": None,
-            "votefst": None,
-            "votelst": None,
-            "votekd": None,
-            "fee": 1000,
-            "flat_fee": True,
-            "first": 7000000,
-            "last": 7001000,
-            "gen": params.get('genesisID'),
-            "gh": params.get('genesishashb64')
-        }
-        txn = transaction.KeyregTxn(**data)
-    ...
-    ```
+# create keyreg transaction to take this account offline
+offline_keyreg = transaction.KeyregTxn(
+    sender="EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4",
+    sp=params,
+    votekey=None,
+    selkey=None,
+    votefst=None,
+    votelst=None,
+    votekd=None,
+)
+print(online_keyreg.dictify())
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L29-L43)
+    <!-- ===PYSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+
+=== "JavaScript"
+    <!-- ===JSSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+    <!-- ===JSSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+
+=== "Go"
+    <!-- ===GOSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+    <!-- ===GOSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+
+=== "Java"
+    <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+```java
+        // create keyreg transaction to take this account offline
+        Transaction keyRegOfflineTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
+                .sender(address)
+                .build();
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
+    <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "goal"
+    <!-- ===GOAL_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
     ```zsh
     $ goal account changeonlinestatus --address=EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4 --fee=1000 --firstvalid=7000000 --lastvalid=7001000 --online=false --txfile=offline.txn
     ```
+    <!-- ===GOAL_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 # Authorize and Send the Transaction
 Use the appropriate [authorization method](../../../get-details/transactions/signatures) to sign the transaction. 

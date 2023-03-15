@@ -89,263 +89,193 @@ If any of these four addresses is set to `""` that address will be cleared and c
 Create assets using either the SDKs or `goal`. When using the SDKs supply all creation parameters. With `goal`, managing the various addresses associated with the asset must be done after executing an asset creation. See Modifying an Asset in the next section for more details on changing addresses for the asset.
 
 === "JavaScript"
-    ``` javascript
-        let params = await algodclient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee
-        // params.fee = 1000;
-        // params.flatFee = true;
-        let note = undefined; // arbitrary data to be stored in the transaction; here, none is stored
-        // Asset creation specific parameters
-        // The following parameters are asset specific
-        // Throughout the example these will be re-used. 
-        // We will also change the manager later in the example
-        let addr = recoveredAccount1.addr;
-        // Whether user accounts will need to be unfrozen before transacting    
-        let defaultFrozen = false;
-        // integer number of decimals for asset unit calculation
-        let decimals = 0;
-        // total number of this asset available for circulation   
-        let totalIssuance = 1000;
-        // Used to display asset units to user    
-        let unitName = "LATINUM";
-        // Friendly name of the asset    
-        let assetName = "latinum";
-        // Optional string pointing to a URL relating to the asset
-        let assetURL = "http://someurl";
-        // Optional hash commitment of some sort relating to the asset. 32 character length.
-        let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
-        // The following parameters are the only ones
-        // that can be changed, and they have to be changed
-        // by the current manager
-        // Specified address can change reserve, freeze, clawback, and manager
-        let manager = recoveredAccount2.addr;
-        // Specified address is considered the asset reserve
-        // (it has no special privileges, this is only informational)
-        let reserve = recoveredAccount2.addr;
-        // Specified address can freeze or unfreeze user asset holdings 
-        let freeze = recoveredAccount2.addr;
-        // Specified address can revoke user asset holdings and send 
-        // them to other addresses    
-        let clawback = recoveredAccount2.addr;
+    <!-- ===JSSDK_ASSET_CREATE=== -->
+```javascript
+  const creator = accounts[0];
 
-        // signing and sending "txn" allows "addr" to create an asset
-        let txn = algosdk.makeAssetCreateTxnWithSuggestedParams(
-            addr, 
-            note,
-            totalIssuance, 
-            decimals, 
-            defaultFrozen, 
-            manager, 
-            reserve, 
-            freeze,
-            clawback, 
-            unitName, 
-            assetName, 
-            assetURL, 
-            assetMetadataHash, 
-            params);
+  const suggestedParams = await algodClient.getTransactionParams().do();
 
-        let rawSignedTxn = txn.signTxn(recoveredAccount1.sk)
-        let tx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
+  const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
+    from: creator.addr,
+    suggestedParams,
+    defaultFrozen: false,
+    decimals: 0,
+    total: 1,
+    unitName: 'LATINUM',
+    assetName: 'latinum',
+    assetURL: 'http://someurl', // can be HTTP or IPFS
+    assetMetadataHash: '16efaa3924a6fd9d3a4824799a4ac65d',
+    manager: creator.addr,
+    reserve: creator.addr,
+    freeze: creator.addr,
+    clawback: creator.addr,
+  });
 
-        let assetID = null;
-        // wait for transaction to be confirmed
-        const ptx = await algosdk.waitForConfirmation(algodclient, tx.txId, 4);
-        // Get the new asset's information from the creator account
-        assetID = ptx["asset-index"];
-        //Get the completed Transaction
-        console.log("Transaction " + tx.txId + " confirmed in round " + ptx["confirmed-round"]);
-        
-    ```
+  const signedTxn = txn.signTxn(creator.privateKey);
+  await algodClient.sendRawTransaction(signedTxn).do();
+  const result = await algosdk.waitForConfirmation(
+    algodClient,
+    txn.txID().toString(),
+    3
+  );
+
+  const assetIndex = result['asset-index'];
+
+  console.log(
+    `Created asset ${assetIndex} in transaction ${txn
+      .txID()
+      .toString()} confirmed in round ${result['confirmed-round']}`
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L17-L52)
+    <!-- ===JSSDK_ASSET_CREATE=== -->
 
 === "Python"
-    ``` python 
-    # CREATE ASSET
-    # Get network params for transactions before every transaction.
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    # Account 1 creates an asset called latinum and
-    # sets Account 2 as the manager, reserve, freeze, and clawback address.
-    # Asset Creation transaction
-    txn = AssetConfigTxn(
-        sender=accounts[1]['pk'],
-        sp=params,
-        total=1000,
-        default_frozen=False,
-        unit_name="LATINUM",
-        asset_name="latinum",
-        manager=accounts[2]['pk'],
-        reserve=accounts[2]['pk'],
-        freeze=accounts[2]['pk'],
-        clawback=accounts[2]['pk'],
-        url="https://path/to/my/asset/details", 
-        decimals=0)
-    # Sign with secret key of creator
-    stxn = txn.sign(accounts[1]['sk'])
-    # Send the transaction to the network and retrieve the txid.
-    try:
-        txid = algod_client.send_transaction(stxn)
-        print("Signed transaction with txID: {}".format(txid))
-        # Wait for the transaction to be confirmed
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))   
-    except Exception as err:
-        print(err)
-    # Retrieve the asset ID of the newly created asset by first
-    # ensuring that the creation transaction was confirmed,
-    # then grabbing the asset id from the transaction.
-    print("Transaction information: {}".format(
-        json.dumps(confirmed_txn, indent=4)))
-    # print("Decoded note: {}".format(base64.b64decode(
-    #     confirmed_txn["txn"]["txn"]["note"]).decode()))
-    try:
-        # Pull account info for the creator
-        # account_info = algod_client.account_info(accounts[1]['pk'])
-        # get asset_id from tx
-        # Get the new asset's information from the creator account
-        ptx = algod_client.pending_transaction_info(txid)
-        asset_id = ptx["asset-index"]
-        print_created_asset(algod_client, accounts[1]['pk'], asset_id)
-        print_asset_holding(algod_client, accounts[1]['pk'], asset_id)
-    except Exception as e:
-        print(e)
+    <!-- ===PYSDK_ASSET_CREATE=== -->
+```python
 
-    ```
+
+# Account 1 creates an asset called `rug` with a total supply
+# of 1000 units and sets itself to the freeze/clawback/manager/reserve roles
+sp = algod_client.suggested_params()
+txn = transaction.AssetConfigTxn(
+    sender=acct1.address,
+    sp=sp,
+    default_frozen=False,
+    unit_name="rug",
+    asset_name="Really Useful Gift",
+    manager=acct1.address,
+    reserve=acct1.address,
+    freeze=acct1.address,
+    clawback=acct1.address,
+    url="https://path/to/my/asset/details",
+    total=1000,
+    decimals=0,
+)
+
+# Sign with secret key of creator
+stxn = txn.sign(acct1.private_key)
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(f"Sent asset create transaction with txid: {txid}")
+# Wait for the transaction to be confirmed
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+
+# grab the asset id for the asset we just created
+created_asset = results["asset-index"]
+print(f"Asset ID created: {created_asset}")
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L13-L45)
+    <!-- ===PYSDK_ASSET_CREATE=== -->
 
 === "Java"
-    ``` java 
-        // CREATE ASSET
-        // get changing network parameters for each transaction
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;        
-        // Create the Asset:
-        BigInteger assetTotal = BigInteger.valueOf(10000);
-        boolean defaultFrozen = false;
-        String unitName = "myunit";
-        String assetName = "my longer asset name";
-        String url = "http://this.test.com";
-        String assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
-        Address manager = acct2.getAddress();
-        Address reserve = acct2.getAddress();
-        Address freeze = acct2.getAddress();
-        Address clawback = acct2.getAddress();
-        Integer decimals = 0;
-        Transaction tx = Transaction.AssetCreateTransactionBuilder()
-                .sender(acct1.getAddress())
-                .assetTotal(assetTotal)
-                .assetDecimals(decimals)
-                .assetUnitName(unitName)
-                .assetName(assetName).url(url)
-                .metadataHashUTF8(assetMetadataHash)
-                .manager(manager)
-                .reserve(reserve)
-                .freeze(freeze)
-                .defaultFrozen(defaultFrozen)
-                .clawback(clawback)
-                .suggestedParams(params).build();
+    <!-- ===JAVASDK_ASSET_CREATE=== -->
+```java
+        // Account 1 creates an asset called `rug` with a total supply
+        // of 1000 units and sets itself to the freeze/clawback/manager/reserve roles
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
 
-        // Sign the Transaction with creator account
-        SignedTransaction signedTx = acct1.signTransaction(tx);
-        Long assetID = null;
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // Now that the transaction is confirmed we can get the assetID
-            assetID = pTrx.assetIndex;
-            System.out.println("AssetID = " + assetID);
-            printCreatedAsset(acct1, assetID);
-            printAssetHolding(acct1, assetID);
+        // Under the covers, this is an AssetConfig with asset id set to 0
+        Transaction createTxn = Transaction.AssetCreateTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetTotal(1000)
+                .assetDecimals(0)
+                .defaultFrozen(false)
+                .assetUnitName("rug")
+                .assetName("Really Useful Gift")
+                .url("https://path/to/my/asset/details")
+                .manager(acct.getAddress())
+                .reserve(acct.getAddress())
+                .freeze(acct.getAddress())
+                .clawback(acct.getAddress())
+                .build();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
+        SignedTransaction signedCreateTxn = acct.signTransaction(createTxn);
+        Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
+                .rawtxn(Encoder.encodeToMsgPack(signedCreateTxn)).execute();
+        String txId = submitResult.body().txId;
+        PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, txId, 4);
 
-    ```
+        // Grab the asset id for the asset we just created
+        Long asaId = result.assetIndex;
+        System.out.printf("Created asset with id: %d\n", asaId);
+
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L48-L78)
+    <!-- ===JAVASDK_ASSET_CREATE=== -->
 
 === "Go"
-    ``` go
+    <!-- ===GOSDK_ASSET_CREATE=== -->
+```go
+	// Configure parameters for asset creation
+	var (
+		creatorAddr       = creator.Address.String()
+		assetName         = "Really Useful Gift"
+		unitName          = "rug"
+		assetURL          = "https://path/to/my/asset/details"
+		assetMetadataHash = "thisIsSomeLength32HashCommitment"
+		defaultFrozen     = false
+		decimals          = uint32(0)
+		totalIssuance     = uint64(1000)
+
+		manager  = creatorAddr
+		reserve  = creatorAddr
+		freeze   = creatorAddr
+		clawback = creatorAddr
+
+		note []byte
+	)
+
 	// Get network-related transaction parameters and assign
 	txParams, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-    // CREATE ASSET
 
 	// Construct the transaction
-	// Set parameters for asset creation 
-	creator := pks[1]
-	assetName := "latinum"
-	unitName := "latinum"
-	assetURL := "https://path/to/my/asset/details"
-	assetMetadataHash := "thisIsSomeLength32HashCommitment"
-	defaultFrozen := false
-	decimals := uint32(0)
-	totalIssuance := uint64(1000)
-	manager := pks[2]
-	reserve := pks[2]
-	freeze := pks[2]
-	clawback := pks[2]
-	note := []byte(nil)
-	txn, err := transaction.MakeAssetCreateTxn(creator,
-		note,
-		txParams, totalIssuance, decimals,
+	txn, err := transaction.MakeAssetCreateTxn(
+		creatorAddr, note, txParams, totalIssuance, decimals,
 		defaultFrozen, manager, reserve, freeze, clawback,
-		unitName, assetName, assetURL, assetMetadataHash)
+		unitName, assetName, assetURL, assetMetadataHash,
+	)
+
 	if err != nil {
-		fmt.Printf("Failed to make asset: %s\n", err)
-		return
+		log.Fatalf("failed to make transaction: %s", err)
 	}
-	fmt.Printf("Asset created AssetName: %s\n", txn.AssetConfigTxnFields.AssetParams.AssetName)
+
 	// sign the transaction
-	txid, stx, err := crypto.SignTransaction(sks[1], txn)
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err := algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	fmt.Printf("Submitted transaction %s\n", sendResponse)
+
 	// Wait for confirmation
-	confirmedTxn, err := transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	assetID := confirmedTxn.AssetIndex
-	// print created asset and asset holding info for this asset
-	fmt.Printf("Asset ID: %d\n", assetID)
-	printCreatedAsset(assetID, pks[1], algodClient)
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Create Transaction: %s confirmed in Round %d with new asset id: %d\n",
+		txid, confirmedTxn.ConfirmedRound, confirmedTxn.AssetIndex)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L41-L97)
+    <!-- ===GOSDK_ASSET_CREATE=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_CREATE=== -->
     ``` goal
         goal asset create --creator <address> --total 1000 --unitname <unit-name> --asseturl "https://path/to/my/asset/details" --decimals 0   -d data
     ```
+    <!-- ===GOAL_ASSET_CREATE=== -->
 
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
 **See also**
 
@@ -359,178 +289,135 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 After an asset has been created only the manager, reserve, freeze and clawback accounts can be changed. All other parameters are locked for the life of the asset. If any of these addresses are set to `""` that address will be cleared and can never be reset for the life of the asset. Only the manager account can make configuration changes and must authorize the transaction.
 
 === "JavaScript"
-	``` javascript
-    params = await algodclient.getTransactionParams().do();
-    // comment out the next two lines to use suggested fee
-    // params.fee = 1000;
-    // params.flatFee = true;
-    // Asset configuration specific parameters
-    // all other values are the same so we leave 
-    // them set.
-    // specified address can change reserve, freeze, clawback, and manager
-    manager = recoveredAccount1.addr;
+    <!-- ===JSSDK_ASSET_CONFIG=== -->
+```javascript
+  const manager = accounts[1];
 
-    // Note that the change has to come from the existing manager
-    let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(
-        recoveredAccount2.addr, 
-        note, 
-        assetID, 
-        manager, 
-        reserve, 
-        freeze, 
-        clawback, 
-        params);
+  const configTxn = algosdk.makeAssetConfigTxnWithSuggestedParamsFromObject({
+    from: creator.addr,
+    manager: manager.addr,
+    freeze: manager.addr,
+    clawback: manager.addr,
+    suggestedParams,
+    assetIndex,
+    // don't throw error if freeze, clawback, or manager are empty
+    strictEmptyAddressChecking: false,
+  });
 
-    // This transaction must be signed by the current manager
-    rawSignedTxn = ctxn.signTxn(recoveredAccount2.sk)
-    let ctx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    // Wait for confirmation
-    let confirmedTxn = await algosdk.waitForConfirmation(algodclient, ctx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + ctx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-    
-    // Get the asset information for the newly changed asset
-    // use indexer or utiltiy function for Account info
-    // The manager should now be the same as the creator
-    await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
- 
-    ```
+  const signedConfigTxn = configTxn.signTxn(creator.privateKey);
+  await algodClient.sendRawTransaction(signedConfigTxn).do();
+  await algosdk.waitForConfirmation(algodClient, txn.txID().toString(), 3);
+
+  await new Promise((f) => setTimeout(f, 1000)); // sleep to ensure indexer is caught up
+
+  const configAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
+  console.log('Asset Info:', configAssetInfo);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L74-L95)
+    <!-- ===JSSDK_ASSET_CONFIG=== -->
 
 === "Python"
-	``` python  
-    # CHANGE MANAGER
-    # The current manager(Account 2) issues an asset configuration transaction that assigns Account 1 as the new manager.
-    # Keep reserve, freeze, and clawback address same as before, i.e. account 2
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    txn = AssetConfigTxn(
-        sender=accounts[2]['pk'],
-        sp=params,
-        index=asset_id, 
-        manager=accounts[1]['pk'],
-        reserve=accounts[2]['pk'],
-        freeze=accounts[2]['pk'],
-        clawback=accounts[2]['pk'])
-    # sign by the current manager - Account 2
-    stxn = txn.sign(accounts[2]['sk'])
-    # txid = algod_client.send_transaction(stxn)
-    # print(txid)
-    # Wait for the transaction to be confirmed
-    # Send the transaction to the network and retrieve the txid.
-    try:
-        txid = algod_client.send_transaction(stxn)
-        print("Signed transaction with txID: {}".format(txid))
-        # Wait for the transaction to be confirmed
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4) 
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))   
-    except Exception as err:
-        print(err)
-    # Check asset info to view change in management. manager should now be account 1
-    print_created_asset(algod_client, accounts[1]['pk'], asset_id)
-    ```
+    <!-- ===PYSDK_ASSET_CONFIG=== -->
+```python
+sp = algod_client.suggested_params()
+# Create a config transaction that wipes the
+# reserve address for the asset
+txn = transaction.AssetConfigTxn(
+    sender=acct1.address,
+    sp=sp,
+    manager=acct1.address,
+    reserve=None,
+    freeze=acct1.address,
+    clawback=acct1.address,
+    strict_empty_address_check=False,
+)
+# Sign with secret key of manager
+stxn = txn.sign(acct1.private_key)
+# Send the transaction to the network and retrieve the txid.
+txid = algod_client.send_transaction(stxn)
+print(f"Sent asset config transaction with txid: {txid}")
+# Wait for the transaction to be confirmed
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L46-L66)
+    <!-- ===PYSDK_ASSET_CONFIG=== -->
 
 === "Java"
-    ``` java  
-        // CHANGE MANAGER
-        // Change Asset Configuration:
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // configuration changes must be done by
-        // the manager account - changing manager of the asset
-        tx = Transaction.AssetConfigureTransactionBuilder()
-                .sender(acct2.getAddress())
-                .assetIndex(assetID)
-                .manager(acct1.getAddress())
-                .reserve(reserve)
-                .freeze(freeze)
-                .clawback(clawback)
-                .suggestedParams(params)
+    <!-- ===JAVASDK_ASSET_CONFIG=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Wipe the `reserve` address through an AssetConfigTransaction
+        Transaction reconfigureTxn = Transaction.AssetConfigureTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetIndex(asaId)
+                .manager(acct.getAddress())
+                .freeze(acct.getAddress())
+                .clawback(acct.getAddress())
+                .strictEmptyAddressChecking(false)
+                .reserve(new byte[32])
                 .build();
-        // the transaction must be signed by the current manager account
-        signedTx = acct2.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
 
-            // the manager should now be the same as the creator
-            System.out.println("AssetID = " + assetID);
-            printCreatedAsset(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L84-L97)
+    <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
-	``` go  
-    // CHANGE MANAGER
-	// Change Asset Manager from Account 2 to Account 1
+
+    <!-- ===GOSDK_ASSET_CONFIG=== -->
+```go
+	creatorAddr := creator.Address.String()
+	var (
+		newManager  = creatorAddr
+		newFreeze   = creatorAddr
+		newClawback = creatorAddr
+		newReserve  = ""
+
+		strictAddrCheck = false
+		note            []byte
+	)
+
 	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
-	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-
-	manager = pks[1]
-	oldmanager := pks[2]
-	strictEmptyAddressChecking := true
-	txn, err = transaction.MakeAssetConfigTxn(oldmanager, note, txParams, assetID, manager, reserve, freeze, clawback, strictEmptyAddressChecking)
-	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
 
-	txid, stx, err = crypto.SignTransaction(sks[2], txn)
+	txn, err := transaction.MakeAssetConfigTxn(creatorAddr, note, sp, assetID, newManager, newReserve, newFreeze, newClawback, strictAddrCheck)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to make  txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
 
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
 
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
 
-	// print created assetinfo for this asset
-	fmt.Printf("Asset ID: %d\n", assetID)
-	printCreatedAsset(assetID, pks[1], algodClient)
-
-    ```
+	log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L103-L143)
+    <!-- ===GOSDK_ASSET_CONFIG=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_CONFIG=== -->
 	``` goal  
     goal asset config  --manager <address> --new-reserve <address> --assetid <asset-id> -d data 
     ```
+    <!-- ===GOAL_ASSET_CONFIG=== -->
 
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
 **See also**
 
@@ -544,187 +431,114 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 Before an account can receive a specific asset it must opt-in to receive it. An opt-in transaction places an asset holding of 0 into the account and increases its minimum balance by 100,000 microAlgos. An opt-in transaction is simply an asset transfer with an amount of 0, both to and from the account opting in. The following code illustrates this transaction.
 
 === "JavaScript"
-	``` javascript  
-    // Opting in to transact with the new asset
-    // Allow accounts that want recieve the new asset
-    // Have to opt in. To do this they send an asset transfer
-    // of the new asset to themseleves 
-    // In this example we are setting up the 3rd recovered account to 
-    // receive the new asset
+    <!-- ===JSSDK_ASSET_OPTIN=== -->
+```javascript
+  const receiver = accounts[2];
 
-    // First update changing transaction parameters
-    // We will account for changing transaction parameters
-    // before every transaction in this example
-    params = await algodclient.getTransactionParams().do();
-    //comment out the next two lines to use suggested fee
-    // params.fee = 1000;
-    // params.flatFee = true;
+  // opt-in is simply a 0 amount transfer of the asset to oneself
+  const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    from: receiver.addr,
+    to: receiver.addr,
+    suggestedParams,
+    assetIndex,
+    amount: 0,
+  });
 
-    let sender = recoveredAccount3.addr;
-    let recipient = sender;
-    // We set revocationTarget to undefined as 
-    // This is not a clawback operation
-    let revocationTarget = undefined;
-    // CloseReaminerTo is set to undefined as
-    // we are not closing out an asset
-    let closeRemainderTo = undefined;
-    // We are sending 0 assets
-    amount = 0;
-    // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
-    let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
-        sender, 
-        recipient, 
-        closeRemainderTo, 
-        revocationTarget,
-        amount, 
-        note, 
-        assetID, 
-        params);
-
-    // Must be signed by the account wishing to opt in to the asset    
-    rawSignedTxn = opttxn.signTxn(recoveredAccount3.sk);
-    let opttx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    // Wait for confirmation
-    confirmedTxn = await algosdk.waitForConfirmation(algodclient, opttx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + opttx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
-    //You should now see the new asset listed in the account information
-    console.log("Account 3 = " + recoveredAccount3.addr);
-    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
-
-    ```
+  const signedOptInTxn = optInTxn.signTxn(receiver.privateKey);
+  await algodClient.sendRawTransaction(signedOptInTxn).do();
+  await algosdk.waitForConfirmation(algodClient, optInTxn.txID().toString(), 3);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L99-L113)
+    <!-- ===JSSDK_ASSET_OPTIN=== -->
 
 === "Python"
-	``` python  
-    # OPT-IN
-    # Check if asset_id is in account 3's asset holdings prior
-    # to opt-in
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    account_info = algod_client.account_info(accounts[3]['pk'])
-    holding = None
-    idx = 0
-    for my_account_info in account_info['assets']:
-        scrutinized_asset = account_info['assets'][idx]
-        idx = idx + 1    
-        if (scrutinized_asset['asset-id'] == asset_id):
-            holding = True
-            break
-    if not holding:
-        # Use the AssetTransferTxn class to transfer assets and opt-in
-        txn = AssetTransferTxn(
-            sender=accounts[3]['pk'],
-            sp=params,
-            receiver=accounts[3]["pk"],
-            amt=0,
-            index=asset_id)
-        stxn = txn.sign(accounts[3]['sk'])
-        # Send the transaction to the network and retrieve the txid.
-        try:
-            txid = algod_client.send_transaction(stxn)
-            print("Signed transaction with txID: {}".format(txid))
-            # Wait for the transaction to be confirmed
-            confirmed_txn = wait_for_confirmation(algod_client, txid, 4) 
-            print("TXID: ", txid)
-            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))    
-        except Exception as err:
-            print(err)
-        # Now check the asset holding for that account.
-        # This should now show a holding with a balance of 0.
-        print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
-    ```
+    <!-- ===PYSDK_ASSET_OPTIN=== -->
+```python
+sp = algod_client.suggested_params()
+# Create opt-in transaction
+# asset transfer from me to me for asset id we want to opt-in to with amt==0
+optin_txn = transaction.AssetOptInTxn(
+    sender=acct2.address, sp=sp, index=created_asset
+)
+signed_optin_txn = optin_txn.sign(acct2.private_key)
+txid = algod_client.send_transaction(signed_optin_txn)
+print(f"Sent opt in transaction with txid: {txid}")
+
+# Wait for the transaction to be confirmed
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+
+acct_info = algod_client.account_info(acct2.address)
+matching_asset = [
+    asset
+    for asset in acct_info["assets"]
+    if asset["asset-id"] == created_asset
+].pop()
+assert matching_asset["amount"] == 0
+assert matching_asset["is-frozen"] is False
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L57-L79)
+    <!-- ===PYSDK_ASSET_OPTIN=== -->
 
 === "Java"
-	``` java  
-        // OPT-IN
-        // Opt in to Receiving the Asset
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // configuration changes must be done by
-        // the manager account - changing manager of the asset
-        tx = Transaction.AssetAcceptTransactionBuilder()
-                .acceptingAccount(acct3.getAddress())
-                .assetIndex(assetID)
-                .suggestedParams(params)
+    <!-- ===JAVASDK_ASSET_OPTIN=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Under the covers, this is an AssetTransfer from me to me for amount 0
+        // with asset id set to the asset we wish to start accepting
+        Transaction optInTxn = Transaction.AssetAcceptTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetIndex(asaId)
                 .build();
-        // The transaction must be signed by the current manager account
-        signedTx = acct3.signTransaction(tx);
-        // send the transaction to the network and
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // We can now list the account information for acct3
-            // and see that it can accept the new asset
-            System.out.println("Account 3 = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L104-L113)
+    <!-- ===JAVASDK_ASSET_OPTIN=== -->
 
 === "Go"
-	``` go  
-	// OPT-IN
-	// Account 3 opts in to receive latinum
-	// Use previously set transaction parameters and update sending address to account 3
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+    <!-- ===GOSDK_ASSET_OPTIN=== -->
+```go
+	userAddr := user.Address.String()
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	txn, err = transaction.MakeAssetAcceptanceTxn(pks[3], note, txParams, assetID)
+
+	txn, err := transaction.MakeAssetAcceptanceTxn(userAddr, nil, sp, assetID)
 	if err != nil {
-		fmt.Printf("Failed to send transaction MakeAssetAcceptanceTxn: %s\n", err)
-		return
+		log.Fatalf("failed to make txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[3], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(user.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	// print created assetholding for this asset and Account 3, showing 0 balance
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-    ```
+
+	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L148-L178)
+    <!-- ===GOSDK_ASSET_OPTIN=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_OPTIN=== -->
 	``` goal  
     goal asset send -a 0 --asset <asset-name>  -f <opt-in-account> -t <opt-in-account> --creator <asset-creator>  -d data
     ```
-
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
+    <!-- ===GOAL_ASSET_OPTIN=== -->
 
 **See also**
 
@@ -737,181 +551,117 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 Assets can be transferred between accounts that have opted-in to receiving the asset. These are analogous to standard payment transactions but for Algorand Standard Assets. 
 
 === "JavaScript"
-	``` javascript  
-    // Transfer New Asset:
-    // Now that account3 can recieve the new tokens 
-    // we can tranfer tokens in from the creator
-    // to account3
-    // First update changing transaction parameters
-    // We will account for changing transaction parameters
-    // before every transaction in this example
+    <!-- ===JSSDK_ASSET_XFER=== -->
+```javascript
+  const xferTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    from: creator.addr,
+    to: receiver.addr,
+    suggestedParams,
+    assetIndex,
+    amount: 1,
+  });
 
-    params = await algodclient.getTransactionParams().do();
-    //comment out the next two lines to use suggested fee
-    // params.fee = 1000;
-    // params.flatFee = true;
-
-    sender = recoveredAccount1.addr;
-    recipient = recoveredAccount3.addr;
-    revocationTarget = undefined;
-    closeRemainderTo = undefined;
-    //Amount of the asset to transfer
-    amount = 10;
-
-    // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
-    let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
-        sender, 
-        recipient, 
-        closeRemainderTo, 
-        revocationTarget,
-        amount,  
-        note, 
-        assetID, 
-        params);
-    // Must be signed by the account sending the asset  
-    rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
-    let xtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-
-    // Wait for confirmation
-    confirmedTxn = await algosdk.waitForConfirmation(algodclient, xtx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + xtx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
-    // You should now see the 10 assets listed in the account information
-    console.log("Account 3 = " + recoveredAccount3.addr);
-    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
-
-    ```
+  const signedXferTxn = xferTxn.signTxn(creator.privateKey);
+  await algodClient.sendRawTransaction(signedXferTxn).do();
+  await algosdk.waitForConfirmation(algodClient, xferTxn.txID().toString(), 3);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L117-L128)
+    <!-- ===JSSDK_ASSET_XFER=== -->
 
 === "Python"
-	``` python  
-    # TRANSFER ASSET
-    # transfer asset of 10 from account 1 to account 3
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    txn = AssetTransferTxn(
-        sender=accounts[1]['pk'],
-        sp=params,
-        receiver=accounts[3]["pk"],
-        amt=10,
-        index=asset_id)
-    stxn = txn.sign(accounts[1]['sk'])
-    # Send the transaction to the network and retrieve the txid.
-    try:
-        txid = algod_client.send_transaction(stxn)
-        print("Signed transaction with txID: {}".format(txid))
-        # Wait for the transaction to be confirmed
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4) 
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-    except Exception as err:
-        print(err)
-    # The balance should now be 10.
-    print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
-    ```
+    <!-- ===PYSDK_ASSET_XFER=== -->
+```python
+sp = algod_client.suggested_params()
+# Create transfer transaction
+xfer_txn = transaction.AssetTransferTxn(
+    sender=acct1.address,
+    sp=sp,
+    receiver=acct2.address,
+    amt=1,
+    index=created_asset,
+)
+signed_xfer_txn = xfer_txn.sign(acct1.private_key)
+txid = algod_client.send_transaction(signed_xfer_txn)
+print(f"Sent transfer transaction with txid: {txid}")
+
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+
+acct_info = algod_client.account_info(acct2.address)
+matching_asset = [
+    asset
+    for asset in acct_info["assets"]
+    if asset["asset-id"] == created_asset
+].pop()
+assert matching_asset["amount"] == 1
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L83-L106)
+    <!-- ===PYSDK_ASSET_XFER=== -->
 
 === "Java"
-	``` java  
-        // TRANSFER ASSET
-        // Transfer the Asset:
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // set asset xfer specific parameters
-        BigInteger assetAmount = BigInteger.valueOf(10);
-        Address sender = acct1.getAddress();
-        Address receiver = acct3.getAddress();
-        tx = Transaction.AssetTransferTransactionBuilder()
-                .sender(sender)
-                .assetReceiver(receiver)
-                .assetAmount(assetAmount)
-                .assetIndex(assetID)
-                .suggestedParams(params)
+    <!-- ===JAVASDK_ASSET_XFER=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Under the covers, this is an AssetTransfer from me to me for amount 0
+        // with asset id set to the asset we wish to start accepting
+        Transaction xferTxn = Transaction.AssetTransferTransactionBuilder().suggestedParams(sp)
+                .sender(sender.getAddress())
+                .assetReceiver(receiver.getAddress())
+                .assetIndex(asaId)
+                .assetAmount(1)
                 .build();
-        // The transaction must be signed by the sender account
-        signedTx = acct1.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // list the account information for acct1 and acct3
-            System.out.println("Account 3  = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-            System.out.println("Account 1  = " + acct1.getAddress().toString());
-            printAssetHolding(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L121-L132)
+    <!-- ===JAVASDK_ASSET_XFER=== -->
 
 === "Go"
-	``` go  
-	// TRANSFER ASSET
-	
-	// Send 10 latinum from Account 1 to Account 3
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+    <!-- ===GOSDK_ASSET_XFER=== -->
+```go
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	sender := pks[1]
-	recipient := pks[3]
-	amount := uint64(10)
-	closeRemainderTo := ""
-	txn, err = transaction.MakeAssetTransferTxn(sender, recipient, amount, note, txParams, closeRemainderTo, 
-		assetID)
+
+	txn, err := transaction.MakeAssetTransferTxn(creatorAddr, userAddr, 1, nil, sp, "", assetID)
 	if err != nil {
-		fmt.Printf("Failed to send transaction MakeAssetTransfer Txn: %s\n", err)
-		return
+		log.Fatalf("failed to make asset txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[1], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	// print created assetholding for this asset and Account 3 and Account 1
-	// You should see amount of 10 in Account 3, and 990 in Account 1
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-	fmt.Printf("Account 1: %s\n", pks[1])
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Asset Transfer Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L183-L216)
+    <!-- ===GOSDK_ASSET_XFER=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_XFER=== -->
 	``` goal  
     goal asset send -a <asset-amount> --asset <asset-name> -f <asset-sender> -t <asset-receiver> --creator <asset-creator> -d data
     ```
+    <!-- ===GOAL_ASSET_XFER=== -->
 
 [See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
@@ -926,176 +676,126 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 Freezing or unfreezing an asset for an account requires a transaction that is signed by the freeze account. The code below illustrates the freeze transaction.
 
 === "JavaScript"
-	``` javascript  
-    // freeze asset
-    // The asset was created and configured to allow freezing an account
-    // If the freeze address is set "", it will no longer be possible to do this.
-    // In this example we will now freeze account3 from transacting with the 
-    // The newly created asset. 
-    // The freeze transaction is sent from the freeze acount
-    // Which in this example is account2 
+    <!-- ===JSSDK_ASSET_FREEZE=== -->
+```javascript
+  const freezeTxn = algosdk.makeAssetFreezeTxnWithSuggestedParamsFromObject({
+    from: manager.addr,
+    suggestedParams,
+    assetIndex,
+    // freezeState: false would unfreeze the account's asset holding
+    freezeState: true,
+    // freezeTarget is the account that is being frozen or unfrozen
+    freezeTarget: receiver.addr,
+  });
 
-    // First update changing transaction parameters
-    // We will account for changing transaction parameters
-    // before every transaction in this example
-    // await getChangingParms(algodclient);
-    params = await algodclient.getTransactionParams().do();
-    //comment out the next two lines to use suggested fee
-    // params.fee = 1000;
-    // params.flatFee = true;
-
-    from = recoveredAccount2.addr;
-    freezeTarget = recoveredAccount3.addr;
-    freezeState = true;
-
-    // The freeze transaction needs to be signed by the freeze account
-    let ftxn = algosdk.makeAssetFreezeTxnWithSuggestedParams(
-        from, 
-        note,
-        assetID, 
-        freezeTarget, 
-        freezeState, 
-        params)
-
-    // Must be signed by the freeze account   
-    rawSignedTxn = ftxn.signTxn(recoveredAccount2.sk)
-    let ftx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-
-    // Wait for confirmation
-    confirmedTxn = await algosdk.waitForConfirmation(algodclient, ftx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + ftx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
-    // You should now see the asset is frozen listed in the account information
-    console.log("Account 3 = " + recoveredAccount3.addr);
-    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
-
-
-    ```
+  const signedFreezeTxn = freezeTxn.signTxn(manager.privateKey);
+  await algodClient.sendRawTransaction(signedFreezeTxn).do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    freezeTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L132-L149)
+    <!-- ===JSSDK_ASSET_FREEZE=== -->
 
 === "Python"
-	``` python  
-    # FREEZE ASSET
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    # The freeze address (Account 2) freezes Account 3's latinum holdings.
-    txn = AssetFreezeTxn(
-        sender=accounts[2]['pk'],
-        sp=params,
-        index=asset_id,
-        target=accounts[3]["pk"],
-        new_freeze_state=True   
-        )
-    stxn = txn.sign(accounts[2]['sk'])
-    # Send the transaction to the network and retrieve the txid.
-    try:
-        txid = algod_client.send_transaction(stxn)
-        print("Signed transaction with txID: {}".format(txid))
-        # Wait for the transaction to be confirmed
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)  
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))    
-    except Exception as err:
-        print(err)
-    # The balance should now be 10 with frozen set to true.
-    print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
-    ```
+    <!-- ===PYSDK_ASSET_FREEZE=== -->
+```python
+sp = algod_client.suggested_params()
+# Create freeze transaction to freeze the asset in acct2 balance
+freeze_txn = transaction.AssetFreezeTxn(
+    sender=acct1.address,
+    sp=sp,
+    index=created_asset,
+    target=acct2.address,
+    new_freeze_state=True,
+)
+signed_freeze_txn = freeze_txn.sign(acct1.private_key)
+txid = algod_client.send_transaction(signed_freeze_txn)
+print(f"Sent freeze transaction with txid: {txid}")
+
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+
+acct_info = algod_client.account_info(acct2.address)
+matching_asset = [
+    asset
+    for asset in acct_info["assets"]
+    if asset["asset-id"] == created_asset
+].pop()
+assert matching_asset["is-frozen"] is True
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L109-L132)
+    <!-- ===PYSDK_ASSET_FREEZE=== -->
 
 === "Java"
-	``` java  
-        // FREEZE
-        // Freeze the Asset:
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // The asset was created and configured to allow freezing an account
-        // set asset specific parameters
-        boolean freezeState = true;
-        // The sender should be freeze account
-        tx = Transaction.AssetFreezeTransactionBuilder()
-                .sender(acct2.getAddress())
-                .freezeTarget(acct3.getAddress())
-                .freezeState(freezeState)
-                .assetIndex(assetID)
-                .suggestedParams(params)
+    <!-- ===JAVASDK_ASSET_FREEZE=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Set the freeze state on the account, only the account that is set to the
+        // freeze role
+        // on the asset may issue this transaction
+        Transaction freezeTxn = Transaction.AssetFreezeTransactionBuilder().suggestedParams(sp)
+                .sender(sender.getAddress())
+                .freezeTarget(receiver.getAddress())
+                .freezeState(true)
+                .assetIndex(asaId)
                 .build();
-        // The transaction must be signed by the freeze account
-        signedTx = acct2.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            System.out.println("Account 3 = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L140-L152)
+    <!-- ===JAVASDK_ASSET_FREEZE=== -->
 
 === "Go"
-	``` go  
-	// FREEZE ASSET
-	// The freeze address (Account 2) Freeze's asset for Account 3.
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
-	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
-	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	newFreezeSetting := true
-	target := pks[3]
-	txn, err = transaction.MakeAssetFreezeTxn(freeze, note, txParams, assetID, target, newFreezeSetting)
-	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
-	}
-	txid, stx, err = crypto.SignTransaction(sks[2], txn)
-	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
-	}
-	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
-	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
-	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
-	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
+    <!-- ===GOSDK_ASSET_FREEZE=== -->
+```go
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
 
-    // You should now see is-frozen value of true
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-    ```
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
+
+	// Create a freeze asset transaction with the target of the user address
+	// and the new freeze setting of `true`
+	txn, err := transaction.MakeAssetFreezeTxn(creatorAddr, nil, sp, assetID, userAddr, true)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+
+	log.Printf("Freeze Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L221-L256)
+    <!-- ===GOSDK_ASSET_FREEZE=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_FREEZE=== -->
 	``` goal  
     goal asset freeze --freezer <asset-freeze-account> --freeze=true --account <account-to-freeze> --creator <asset-creator> --asset <asset-name> -d data
     ```
-
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
+    <!-- ===GOAL_ASSET_FREEZE=== -->
 
 **See also**
 
@@ -1108,192 +808,131 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 Revoking an asset for an account removes a specific number of the asset from the revoke target account. Revoking an asset from an account requires specifying an asset sender (the revoke target account) and an asset receiver (the account to transfer the funds back to). The code below illustrates the clawback transaction.
 
 === "JavaScript"
-	``` javascript  
-    // Revoke an Asset:
-    // The asset was also created with the ability for it to be revoked by 
-    // the clawbackaddress. If the asset was created or configured by the manager
-    // to not allow this by setting the clawbackaddress to "" then this would 
-    // not be possible.
-    // We will now clawback the 10 assets in account3. account2
-    // is the clawbackaccount and must sign the transaction
-    // The sender will be be the clawback adress.
-    // the recipient will also be be the creator in this case
-    // that is account3
-    // First update changing transaction parameters
-    // We will account for changing transaction parameters
-    // before every transaction in this example
-    params = await algodclient.getTransactionParams().do();
-    //comment out the next two lines to use suggested fee
-    // params.fee = 1000;
-    // params.flatFee = true;   
+    <!-- ===JSSDK_ASSET_CLAWBACK=== -->
+```javascript
+  const clawbackTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(
+    {
+      from: manager.addr,
+      to: creator.addr,
+      // revocationTarget is the account that is being clawed back from
+      revocationTarget: receiver.addr,
+      suggestedParams,
+      assetIndex,
+      amount: 1,
+    }
+  );
 
-    sender = recoveredAccount2.addr;
-    recipient = recoveredAccount1.addr;
-    revocationTarget = recoveredAccount3.addr;
-    closeRemainderTo = undefined;
-    amount = 10;
-    // signing and sending "txn" will send "amount" assets from "revocationTarget" to "recipient",
-    // if and only if sender == clawback manager for this asset
-
-    let rtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
-        amount, note, assetID, params);
-    // Must be signed by the account that is the clawback address    
-    rawSignedTxn = rtxn.signTxn(recoveredAccount2.sk)
-    let rtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-    // Wait for confirmation
-    confirmedTxn = await algosdk.waitForConfirmation(algodclient, rtx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + rtx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
-    // You should now see 0 assets listed in the account information
-    // for the third account
-    console.log("Account 3 = " + recoveredAccount3.addr);
-    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
-
-    ```
+  const signedClawbackTxn = clawbackTxn.signTxn(manager.privateKey);
+  await algodClient.sendRawTransaction(signedClawbackTxn).do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    clawbackTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L153-L172)
+    <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 
 === "Python"
-	``` python
+    <!-- ===PYSDK_ASSET_CLAWBACK=== -->
+```python
+sp = algod_client.suggested_params()
+# Create clawback transaction to freeze the asset in acct2 balance
+clawback_txn = transaction.AssetTransferTxn(
+    sender=acct1.address,
+    sp=sp,
+    receiver=acct1.address,
+    amt=1,
+    index=created_asset,
+    revocation_target=acct2.address,
+)
+signed_clawback_txn = clawback_txn.sign(acct1.private_key)
+txid = algod_client.send_transaction(signed_clawback_txn)
+print(f"Sent clawback transaction with txid: {txid}")
 
-    # REVOKE ASSET
-    # The clawback address (Account 2) revokes 10 latinum from Account 3 and places it back with Account 1.
-    params = algod_client.suggested_params()
-    # comment these two lines if you want to use suggested params
-    # params.fee = 1000
-    # params.flat_fee = True
-    # Must be signed by the account that is the Asset's clawback address
-    txn = AssetTransferTxn(
-        sender=accounts[2]['pk'],
-        sp=params,
-        receiver=accounts[1]["pk"],
-        amt=10,
-        index=asset_id,
-        revocation_target=accounts[3]['pk']
-        )
-    stxn = txn.sign(accounts[2]['sk'])
-    # Send the transaction to the network and retrieve the txid.
-    try:
-        txid = algod_client.send_transaction(stxn)
-        print("Signed transaction with txID: {}".format(txid))
-        # Wait for the transaction to be confirmed
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))      
-    except Exception as err:
-        print(err)
-    # The balance of account 3 should now be 0.
-    # account_info = algod_client.account_info(accounts[3]['pk'])
-    print("Account 3")
-    print_asset_holding(algod_client, accounts[3]['pk'], asset_id)
-    # The balance of account 1 should increase by 10 to 1000.
-    print("Account 1")
-    print_asset_holding(algod_client, accounts[1]['pk'], asset_id)
-    ```
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
+
+acct_info = algod_client.account_info(acct2.address)
+matching_asset = [
+    asset
+    for asset in acct_info["assets"]
+    if asset["asset-id"] == created_asset
+].pop()
+assert matching_asset["amount"] == 0
+assert matching_asset["is-frozen"] is True
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L135-L160)
+    <!-- ===PYSDK_ASSET_CLAWBACK=== -->
 
 === "Java"
-	``` java  
-        // REVOKE (or clawback)
-        // Revoke the asset:
-        // The asset was also created with the ability for it to be revoked by
-        // clawbackaddress.
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // set asset specific parameters
-        assetAmount = BigInteger.valueOf(10);
-        tx = Transaction.AssetClawbackTransactionBuilder()
-                .sender(acct2.getAddress())
-                .assetClawbackFrom(acct3.getAddress())
-                .assetReceiver(acct1.getAddress())
-                .assetAmount(assetAmount)
-                .assetIndex(assetID)
-                .suggestedParams(params)
+    <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // revoke an asset from an account, only the account that is set to the clawback
+        // role
+        // on the asset may issue this transaction
+        Transaction clawbackTxn = Transaction.AssetClawbackTransactionBuilder().suggestedParams(sp)
+                .sender(sender.getAddress())
+                .assetClawbackFrom(receiver.getAddress())
+                .assetReceiver(sender.getAddress())
+                .assetIndex(asaId)
+                .assetAmount(1)
                 .build();
-        // The transaction must be signed by the clawback account
-        signedTx = acct2.signTransaction(tx);
-        // send the transaction to the network and
-        // wait for the transaction to be confirmed
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // list the account information for acct1 and acct3
-            System.out.println("Account 3  = " + acct3.getAddress().toString());
-            printAssetHolding(acct3, assetID);
-            System.out.println("Account 1  = " + acct1.getAddress().toString());
-            printAssetHolding(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L160-L173)
+    <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 
 === "Go"
-	``` go  
-	// REVOKE ASSET
-	// Revoke an Asset
-	// The clawback address (Account 2) revokes 10 latinum from Account 3 (target)
-	// and places it back with Account 1 (creator).
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+    <!-- ===GOSDK_ASSET_CLAWBACK=== -->
+```go
+	var (
+		creatorAddr = creator.Address.String()
+		userAddr    = user.Address.String()
+	)
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	target = pks[3]
-	txn, err = transaction.MakeAssetRevocationTxn(clawback, target, amount, creator, note,
-		txParams, assetID)
+
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeAssetRevocationTxn(creatorAddr, userAddr, 1, creatorAddr, nil, sp, assetID)
 	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
+		log.Fatalf("failed to make txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[2], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	// print created assetholding for this asset and Account 3 and Account 1
-	// You should see amount of 0 in Account 3, and 1000 in Account 1
-	fmt.Printf("Asset ID: %d\n", assetID)
-	fmt.Printf("recipient")
-	fmt.Printf("Account 3: %s\n", pks[3])
-	printAssetHolding(assetID, pks[3], algodClient)
-	fmt.Printf("target")
-	fmt.Printf("Account 1: %s\n", pks[1])
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Clawback Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L261-L296)
+    <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_CLAWBACK=== -->
 	``` goal  
     goal asset send -a <amount-to-revoke> --asset <asset-name> -f <address-of-revoke-target> -t <address-to-send-assets-to> --clawback <clawback-address> --creator <creator-address> -d data
     ```
-
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
+    <!-- ===GOAL_ASSET_CLAWBACK=== -->
 
 **See also**
 
@@ -1306,194 +945,119 @@ Revoking an asset for an account removes a specific number of the asset from the
 Created assets can be destroyed only by the asset manager account. All of the assets must be owned by the creator of the asset before the asset can be deleted. 
 
 === "JavaScript"
-	``` javascript  
-    // Destroy an Asset:
-    // All of the created assets should now be back in the creators
-    // Account so we can delete the asset.
-    // If this is not the case the asset deletion will fail
+    <!-- ===JSSDK_ASSET_DELETE=== -->
+```javascript
+  const deleteTxn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
+    from: manager.addr,
+    suggestedParams,
+    assetIndex,
+  });
 
-    // First update changing transaction parameters
-    // We will account for changing transaction parameters
-    // before every transaction in this example
-
-    params = await algodclient.getTransactionParams().do();
-    //comment out the next two lines to use suggested fee
-    // params.fee = 1000;
-    // params.flatFee = true;
-
-    // The address for the from field must be the manager account
-    // Which is currently the creator addr1
-    addr = recoveredAccount1.addr;
-    note = undefined;
-    // if all assets are held by the asset creator,
-    // the asset creator can sign and issue "txn" to remove the asset from the ledger. 
-    let dtxn = algosdk.makeAssetDestroyTxnWithSuggestedParams(
-        addr, 
-        note, 
-        assetID, 
-        params);
-    // The transaction must be signed by the manager which 
-    // is currently set to account1
-    rawSignedTxn = dtxn.signTxn(recoveredAccount1.sk)
-    let dtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
-
-    // Wait for confirmation
-    confirmedTxn = await algosdk.waitForConfirmation(algodclient, dtx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + dtx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
-    // The account3 and account1 should no longer contain the asset as it has been destroyed
-    console.log("Asset ID: " + assetID);
-    console.log("Account 1 = " + recoveredAccount1.addr);
-    await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
-    await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
-    console.log("Account 3 = " + recoveredAccount3.addr);
-    await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);  
-
-    ```
+  const signedDeleteTxn = deleteTxn.signTxn(manager.privateKey);
+  await algodClient.sendRawTransaction(signedDeleteTxn).do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    deleteTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L176-L189)
+    <!-- ===JSSDK_ASSET_DELETE=== -->
 
 === "Python"
-	``` python
+    <!-- ===PYSDK_ASSET_DELETE=== -->
+```python
+sp = algod_client.suggested_params()
+# Create asset destroy transaction to destroy the asset
+destroy_txn = transaction.AssetDestroyTxn(
+    sender=acct1.address,
+    sp=sp,
+    index=created_asset,
+)
+signed_destroy_txn = destroy_txn.sign(acct1.private_key)
+txid = algod_client.send_transaction(signed_destroy_txn)
+print(f"Sent destroy transaction with txid: {txid}")
 
-        # DESTROY ASSET
-        # With all assets back in the creator's account,
-        # the manager (Account 1) destroys the asset.
-        params = algod_client.suggested_params()
-        # comment these two lines if you want to use suggested params
-        # params.fee = 1000
-        # params.flat_fee = True
-        # Asset destroy transaction
-        txn = AssetConfigTxn(
-            sender=accounts[1]['pk'],
-            sp=params,
-            index=asset_id,
-            strict_empty_address_check=False
-            )
-        # Sign with secret key of creator
-        stxn = txn.sign(accounts[1]['sk'])
-        # Send the transaction to the network and retrieve the txid.
-        # Send the transaction to the network and retrieve the txid.
-        try:
-            txid = algod_client.send_transaction(stxn)
-            print("Signed transaction with txID: {}".format(txid))
-            # Wait for the transaction to be confirmed
-            confirmed_txn = wait_for_confirmation(algod_client, txid, 4) 
-            print("TXID: ", txid)
-            print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))     
-        except Exception as err:
-            print(err)
-        # Asset was deleted.
-        try:
-            print("Account 3 must do a transaction for an amount of 0, " )
-            print("with a close_assets_to to the creator account, to clear it from its accountholdings")
-            print("For Account 1, nothing should print after this as the asset is destroyed on the creator account")    
-            print_asset_holding(algod_client, accounts[1]['pk'], asset_id)
-            print_created_asset(algod_client, accounts[1]['pk'], asset_id)
-            # asset_info = algod_client.asset_info(asset_id)
-        except Exception as e:
-            print(e)    
+results = transaction.wait_for_confirmation(algod_client, txid, 4)
+print(f"Result confirmed in round: {results['confirmed-round']}")
 
-    ```
+# now, trying to fetch the asset info should result in an error
+try:
+    info = algod_client.asset_info(created_asset)
+except Exception as e:
+    print("Expected Error:", e)
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L163-L182)
+    <!-- ===PYSDK_ASSET_DELETE=== -->
 
 === "Java"
-	``` java  
-        // DESTROY
-        // Destroy the Asset:
-        // All assets should now be back in
-        // creators account
-        // assetID = Long.valueOf((your asset id));
-        // get changing network parameters for each transaction
-        resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        // params.fee = (long) 1000;
-        // set destroy asset specific parameters
-        // The manager must sign and submit the transaction
-        tx = Transaction.AssetDestroyTransactionBuilder()
-                .sender(acct1.getAddress())
-                .assetIndex(assetID)
-                .suggestedParams(params)
+    <!-- ===JAVASDK_ASSET_DELETE=== -->
+```java
+        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+        TransactionParametersResponse sp = rsp.body();
+        // Under the covers, an AssetDestroyTransaction is an AssetConfig with all of
+        // its
+        // configurable fields set to empty
+        // All units of the asset _must_ be owned by the creator account and this
+        // transaction _must_
+        // be issued by the account set to the manager role on the asset
+        Transaction destroyTxn = Transaction.AssetDestroyTransactionBuilder().suggestedParams(sp)
+                .sender(acct.getAddress())
+                .assetIndex(asaId)
                 .build();
-        // The transaction must be signed by the manager account
-        signedTx = acct1.signTransaction(tx);
-        // send the transaction to the network
-        try {
-            String id = submitTransaction(signedTx);
-            System.out.println("Transaction ID: " + id);
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client,id,4);          
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // We list the account information for acct1
-            // and check that the asset is no longer exist
-            System.out.println("Account 3 must do a transaction for an amount of 0, ");
-            System.out.println("with a assetCloseTo to the creator account, to clear it from its accountholdings");
-            System.out.println("Account 1  = " + acct1.getAddress().toString());            
-            System.out.println("Nothing should print after this, Account 1 asset is sucessfully deleted");
-            printAssetHolding(acct1, assetID);
-            printCreatedAsset(acct1, assetID);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    ```
+
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L180-L193)
+    <!-- ===JAVASDK_ASSET_DELETE=== -->
 
 === "Go"
-	``` go  
-	// DESTROY ASSET
-	// Destroy the asset
-	// Make sure all funds are back in the creator's account. Then use the
-	// Manager account (Account 1) to destroy the asset.
-	// Get network-related transaction parameters and assign
-	txParams, err = algodClient.SuggestedParams().Do(context.Background())
+    <!-- ===GOSDK_ASSET_DELETE=== -->
+```go
+	var (
+		creatorAddr = creator.Address.String()
+	)
+
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		fmt.Printf("Error getting suggested tx params: %s\n", err)
-		return
+		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-	// comment out the next two (2) lines to use suggested fees
-	// txParams.FlatFee = true
-	// txParams.Fee = 1000
-	txn, err = transaction.MakeAssetDestroyTxn(manager, note, txParams, assetID)
+
+	// Create a new clawback transaction with the target of the user address and the recipient as the creator
+	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
+	txn, err := transaction.MakeAssetDestroyTxn(creatorAddr, nil, sp, assetID)
 	if err != nil {
-		fmt.Printf("Failed to send txn: %s\n", err)
-		return
+		log.Fatalf("failed to make txn: %s", err)
 	}
-	txid, stx, err = crypto.SignTransaction(sks[1], txn)
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
-		fmt.Printf("Failed to sign transaction: %s\n", err)
-		return
+		log.Fatalf("failed to sign transaction: %s", err)
 	}
+
 	// Broadcast the transaction to the network
-	sendResponse, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
-		fmt.Printf("failed to send transaction: %s\n", err)
-		return
+		log.Fatalf("failed to send transaction: %s", err)
 	}
-	// Wait for transaction to be confirmed
-	confirmedTxn, err = transaction.WaitForConfirmation(algodClient,txid,  4, context.Background())
+
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
-		fmt.Printf("Error waiting for confirmation on txID: %s\n", txid)
-		return
+		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txid ,confirmedTxn.ConfirmedRound)
-	fmt.Printf("Asset ID: %d\n", assetID)	
-	fmt.Printf("Account 3 must do a transaction for an amount of 0, \n" )
-    fmt.Printf("with a closeRemainderTo to the creator account, to clear it from its accountholdings. \n")
-    fmt.Printf("For Account 1, nothing should print after this as the asset is destroyed on the creator account \n")
-	// print created asset and asset holding info for this asset (should not print anything)
-	printCreatedAsset(assetID, pks[1], algodClient)
-	printAssetHolding(assetID, pks[1], algodClient)
-    ```
+
+	log.Printf("Destroy Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L301-L335)
+    <!-- ===GOSDK_ASSET_DELETE=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_DELETE=== -->
 	``` goal  
     goal asset destroy --creator <creator-address> --manager <asset-manager-address> --asset <asset-name> -d data 
     ```
+    <!-- ===GOAL_ASSET_DELETE=== -->
 
-[See complete code...](https://github.com/algorand/docs/tree/master/examples/assets/v2)
 
 **See also**
 
@@ -1506,170 +1070,55 @@ Retrieve an asset's configuration information from the network using the SDKs or
     The code below illustrates getting asset information without the Indexer. If you have the Indexer installed use the Indexer API to [search for asset](../../rest-apis/indexer/#search-assets) information.
 
 === "JavaScript"
-	``` javascript
-    // Function used to print created asset for account and assetid
-    const printCreatedAsset = async function (algodclient, account, assetid) {
-        // note: if you have an indexer instance available it is easier to just search accounts for an asset
-        let accountInfo = await algodclient.accountInformation(account).do();
-        for (idx = 0; idx < accountInfo['created-assets'].length; idx++) {
-            let scrutinizedAsset = accountInfo['created-assets'][idx];
-            if (scrutinizedAsset['index'] == assetid) {
-                console.log("AssetID = " + scrutinizedAsset['index']);
-                let myparms = JSON.stringify(scrutinizedAsset['params'], undefined, 2);
-                console.log("parms = " + myparms);
-                break;
-            }
-        }
-    };
-    // Function used to print asset holding for account and assetid
-    const printAssetHolding = async function (algodclient, account, assetid) {
-        // note: if you have an indexer instance available it is easier to just search accounts for an asset
-        let accountInfo = await algodclient.accountInformation(account).do();
-        for (idx = 0; idx < accountInfo['assets'].length; idx++) {
-            let scrutinizedAsset = accountInfo['assets'][idx];
-            if (scrutinizedAsset['asset-id'] == assetid) {
-                let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
-                console.log("assetholdinginfo = " + myassetholding);
-                break;
-            }
-        }
-    };
-    ...
-        await printCreatedAsset(algodclient, recoveredAccount1.addr, assetID);
-        await printAssetHolding(algodclient, recoveredAccount1.addr, assetID);
+    <!-- ===JSSDK_ASSET_INFO=== -->
+```javascript
+  const accountInfo = await algodClient.accountInformation(creator.addr).do();
+  console.log('Account Info:', accountInfo);
 
-    ```
+  const mostRecentAsset = accountInfo['created-assets'].at(-1).index;
+  const assetInfo = await algodClient.getAssetByID(mostRecentAsset).do();
+  console.log('Asset Info:', assetInfo);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L56-L62)
+    <!-- ===JSSDK_ASSET_INFO=== -->
 
 === "Python"
-	```python
-    #   note: if you have an indexer instance available it may be easier to just search accounts for an asset
-    #   Utility function used to print created asset for account and assetid
-    def print_created_asset(algodclient, account, assetid):    
-        # note: if you have an indexer instance available it is easier to just use this
-        # response = myindexer.accounts(asset_id = assetid)
-        # then use 'account_info['created-assets'][0] to get info on the created asset
-        account_info = algodclient.account_info(account)
-        idx = 0;
-        for my_account_info in account_info['created-assets']:
-            scrutinized_asset = account_info['created-assets'][idx]
-            idx = idx + 1       
-            if (scrutinized_asset['index'] == assetid):
-                print("Asset ID: {}".format(scrutinized_asset['index']))
-                print(json.dumps(my_account_info['params'], indent=4))
-                break
-
-    #   Utility function used to print asset holding for account and assetid
-    def print_asset_holding(algodclient, account, assetid):
-        # note: if you have an indexer instance available it is easier to just use this
-        # response = myindexer.accounts(asset_id = assetid)
-        # then loop thru the accounts returned and match the account you are looking for
-        account_info = algodclient.account_info(account)
-        idx = 0
-        for my_account_info in account_info['assets']:
-            scrutinized_asset = account_info['assets'][idx]
-            idx = idx + 1        
-            if (scrutinized_asset['asset-id'] == assetid):
-                print("Asset ID: {}".format(scrutinized_asset['asset-id']))
-                print(json.dumps(scrutinized_asset, indent=4))
-                break
-    ...
-        print_created_asset(algod_client, accounts[1]['pk'], asset_id)
-        print_asset_holding(algod_client, accounts[1]['pk'], asset_id)
-    ```
+    <!-- ===PYSDK_ASSET_INFO=== -->
+```python
+# Retrieve the asset info of the newly created asset
+asset_info = algod_client.asset_info(created_asset)
+asset_params: Dict[str, Any] = asset_info["params"]
+print(f"Asset Name: {asset_params['name']}")
+print(f"Asset params: {list(asset_params.keys())}")
+```
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L48-L53)
+    <!-- ===PYSDK_ASSET_INFO=== -->
 
 === "Java"
-	```java
-        //note: if you have an indexer instance available it may be easier to just search accounts for an asset
-        // utility function to print created asset
-        public void printCreatedAsset(Account account, Long assetID) throws Exception {
-            if (client == null)
-                this.client = connectToNetwork();
-            String accountInfo = client.AccountInformation(account.getAddress()).execute().toString();
-            JSONObject jsonObj = new JSONObject(accountInfo.toString());
-            JSONArray jsonArray = (JSONArray) jsonObj.get("created-assets");
-            if (jsonArray.length() > 0) {
-                try {
-                    for (Object o : jsonArray) {
-                        JSONObject ca = (JSONObject) o;
-                        Integer myassetIDInt = (Integer) ca.get("index");
-                        if (assetID.longValue() == myassetIDInt.longValue()) {
-                            System.out.println("Created Asset Info: " + ca.toString(2)); // pretty print
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    throw (e);
-                }
-            }
-        }
-
-        // utility function to print asset holding
-        public void printAssetHolding(Account account, Long assetID) throws Exception {
-            if (client == null)
-                this.client = connectToNetwork();
-            String accountInfo = client.AccountInformation(account.getAddress()).execute().toString();
-            JSONObject jsonObj = new JSONObject(accountInfo.toString());
-            JSONArray jsonArray = (JSONArray) jsonObj.get("assets");
-            if (jsonArray.length() > 0) {
-                try {
-                    for (Object o : jsonArray) {
-                        JSONObject ca = (JSONObject) o;
-                        Integer myassetIDInt = (Integer) ca.get("asset-id");
-                        if (assetID.longValue() == myassetIDInt.longValue()) {
-                            System.out.println("Asset Holding Info: " + ca.toString(2)); // pretty print
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    throw (e);
-                }
-            }
-        }
-        ...
-        printCreatedAsset(acct1, assetID);
-        printAssetHolding(acct1, assetID);
-    ```
+    <!-- ===JAVASDK_ASSET_INFO=== -->
+```java
+        // Retrieve the asset info of the newly created asset
+        Response<Asset> assetResp = algodClient.GetAssetByID(asaId).execute();
+        Asset assetInfo = assetResp.body();
+        System.out.printf("Asset Name: %s\n", assetInfo.params.name);
+```
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L39-L43)
+    <!-- ===JAVASDK_ASSET_INFO=== -->
 
 === "Go"
-	```go
-        // note: if you have an indexer instance available it is easier to just search accounts for an asset
-        // printAssetHolding utility to print asset holding for account
-        func printAssetHolding(assetID uint64, account string, client *algod.Client) {
-
-            act, err := client.AccountInformation(account).Do(context.Background())
-            if err != nil {
-                fmt.Printf("failed to get account information: %s\n", err)
-                return
-            }
-            for _, assetholding := range act.Assets {
-                if assetID == assetholding.AssetId {
-                    prettyPrint(assetholding)
-                    break
-                }
-            }
-        }
-
-        // printCreatedAsset utility to print created assert for account
-        func printCreatedAsset(assetID uint64, account string, client *algod.Client) {
-
-            act, err := client.AccountInformation(account).Do(context.Background())
-            if err != nil {
-                fmt.Printf("failed to get account information: %s\n", err)
-                return
-            }
-            for _, asset := range act.CreatedAssets {
-                if assetID == asset.Index {
-                    prettyPrint(asset)
-                    break
-                }
-            }
-        }
-        ...
-        printCreatedAsset(assetID, pks[1], algodClient)
-        printAssetHolding(assetID, pks[1], algodClient)    
-    ```
+    <!-- ===GOSDK_ASSET_INFO=== -->
+```go
+	info, err := algodClient.GetAssetByID(assetID).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get asset info: %s", err)
+	}
+	log.Printf("Asset info for %d: %+v", assetID, info)
+```
+[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L24-L29)
+    <!-- ===GOSDK_ASSET_INFO=== -->
 
 === "goal"
+    <!-- ===GOAL_ASSET_INFO=== -->
 	``` goal  
     goal asset info --creator <creator-address> --asset unitname  -d ~/node/data -w testwall
     Asset ID:         <created-asset-id>
@@ -1686,6 +1135,4 @@ Retrieve an asset's configuration information from the network using the SDKs or
     Freeze address:   <freeze-address>
     Clawback address: <clawback-address>
     ```
-
-!!! info
-    Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
+    <!-- ===GOAL_ASSET_INFO=== -->
