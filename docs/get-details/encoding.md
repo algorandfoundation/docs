@@ -301,27 +301,26 @@ Create a payment transaction from one account to another using suggested paramet
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
-
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
-```go
-// Assuming we already have a pay transaction `ptxn`
-
-// Sign the transaction
-_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
-if err != nil {
-	log.Fatalf("failed to sign transaction: %s", err)
-}
-
-// Save the signed transaction to file
-os.WriteFile("pay.stxn", signedTxn, 0644)
-
-signedPayTxn := types.SignedTxn{}
-err = msgpack.Decode(signedTxn, &signedPayTxn)
-if err != nil {
-	log.Fatalf("failed to decode signed transaction: %s", err)
-}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
+	```go
+	// Assuming we already have a pay transaction `ptxn`
+	
+	// Sign the transaction
+	_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+	
+	// Save the signed transaction to file
+	os.WriteFile("pay.stxn", signedTxn, 0644)
+	
+	signedPayTxn := types.SignedTxn{}
+	err = msgpack.Decode(signedTxn, &signedPayTxn)
+	if err != nil {
+		log.Fatalf("failed to decode signed transaction: %s", err)
+	}
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
