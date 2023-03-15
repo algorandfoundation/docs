@@ -762,7 +762,7 @@ For atomic transactions, the fees set on all transactions in the group are summe
 An example of setting a pooled fee on a group of two transactions:
 
 === "JavaScript"
-<!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```javascript
 	const alicesTxnWithDoubleFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
 	  {
@@ -801,10 +801,10 @@ An example of setting a pooled fee on a group of two transactions:
 	);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L58-L93)
-<!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Python"
-<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```python
 	suggested_params = algod_client.suggested_params()
 	suggested_params.fee = 2 * suggested_params.min_fee
@@ -813,10 +813,10 @@ An example of setting a pooled fee on a group of two transactions:
 	suggested_params.flat_fee = True
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L68-L73)
-<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Go"
-<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```go
 	// by using fee pooling and setting our fee to 2x min tx fee
 	// we can cover the fee for another transaction in the group
@@ -825,10 +825,10 @@ An example of setting a pooled fee on a group of two transactions:
 	// ...
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L37-L42)
-<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Java"
-<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```java
 	Transaction feeOverrideTxn = Transaction.PaymentTransactionBuilder()
 	        .sender(acct.getAddress())
@@ -840,7 +840,7 @@ An example of setting a pooled fee on a group of two transactions:
 	        .flatFee(2 * suggestedParams.body().minFee).build();
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L64)
-<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
+  <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 
 
