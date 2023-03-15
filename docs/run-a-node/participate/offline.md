@@ -41,10 +41,10 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
 === "Java"
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 	```java
-	        // create keyreg transaction to take this account offline
-	        Transaction keyRegOfflineTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
-	                .sender(address)
-	                .build();
+	// create keyreg transaction to take this account offline
+	Transaction keyRegOfflineTxn = Transaction.KeyRegistrationTransactionBuilder().suggestedParams(sp)
+	        .sender(address)
+	        .build();
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->

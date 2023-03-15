@@ -15,19 +15,19 @@ Unsigned transactions require the transaction object to be created before writin
 === "JavaScript"
 <!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```javascript
-	  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-	    from: sender.addr,
-	    to: receiver.addr,
-	    amount: 1e6,
-	    suggestedParams,
-	  });
+	const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  from: sender.addr,
+	  to: receiver.addr,
+	  amount: 1e6,
+	  suggestedParams,
+	});
 	
-	  const txnBytes = txn.toByte();
-	  const txnB64 = Buffer.from(txnBytes).toString('base64');
-	  const restoredTxn = algosdk.decodeUnsignedTransaction(
-	    Buffer.from(txnB64, 'base64')
-	  );
-	  console.log(restoredTxn);
+	const txnBytes = txn.toByte();
+	const txnB64 = Buffer.from(txnBytes).toString('base64');
+	const restoredTxn = algosdk.decodeUnsignedTransaction(
+	  Buffer.from(txnB64, 'base64')
+	);
+	console.log(restoredTxn);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
 <!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
@@ -54,16 +54,16 @@ Unsigned transactions require the transaction object to be created before writin
 === "Java"
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```java
-	        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = rsp.body();
-	        // Wipe the `reserve` address through an AssetConfigTransaction
-	        Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
-	                .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Wipe the `reserve` address through an AssetConfigTransaction
+	Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
+	        .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
 	
-	        byte[] encodedTxn = Encoder.encodeToMsgPack(ptxn);
+	byte[] encodedTxn = Encoder.encodeToMsgPack(ptxn);
 	
-	        Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
-	        assert decodedTxn.equals(ptxn);
+	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
+	assert decodedTxn.equals(ptxn);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
 <!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
@@ -71,21 +71,21 @@ Unsigned transactions require the transaction object to be created before writin
 === "Go"
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```go
-		// Error handling omitted for brevity
-		sp, _ := algodClient.SuggestedParams().Do(context.Background())
-		ptxn, _ := transaction.MakePaymentTxn(
-			acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp,
-		)
+	// Error handling omitted for brevity
+	sp, _ := algodClient.SuggestedParams().Do(context.Background())
+	ptxn, _ := transaction.MakePaymentTxn(
+		acct1.Address.String(), acct1.Address.String(), 10000, nil, "", sp,
+	)
 	
-		// Encode the txn as bytes,
-		// if sending over the wire (like to a frontend) it should also be b64 encoded
-		encodedTxn := msgpack.Encode(ptxn)
-		os.WriteFile("pay.txn", encodedTxn, 0655)
+	// Encode the txn as bytes,
+	// if sending over the wire (like to a frontend) it should also be b64 encoded
+	encodedTxn := msgpack.Encode(ptxn)
+	os.WriteFile("pay.txn", encodedTxn, 0655)
 	
-		var recoveredPayTxn = types.Transaction{}
+	var recoveredPayTxn = types.Transaction{}
 	
-		msgpack.Decode(encodedTxn, &recoveredPayTxn)
-		log.Printf("%+v", recoveredPayTxn)
+	msgpack.Decode(encodedTxn, &recoveredPayTxn)
+	log.Printf("%+v", recoveredPayTxn)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
 <!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
@@ -107,12 +107,12 @@ Signed Transactions are similar, but require an account to sign the transaction 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
-	  const signedTxn = txn.signTxn(sender.privateKey);
-	  const signedB64Txn = Buffer.from(signedTxn).toString('base64');
-	  const restoredSignedTxn = algosdk.decodeSignedTransaction(
-	    Buffer.from(signedB64Txn, 'base64')
-	  );
-	  console.log(restoredSignedTxn);
+	const signedTxn = txn.signTxn(sender.privateKey);
+	const signedB64Txn = Buffer.from(signedTxn).toString('base64');
+	const restoredSignedTxn = algosdk.decodeSignedTransaction(
+	  Buffer.from(signedB64Txn, 'base64')
+	);
+	console.log(restoredSignedTxn);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
 <!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
@@ -138,12 +138,12 @@ Signed Transactions are similar, but require an account to sign the transaction 
 === "Java"
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 	```java
-	        SignedTransaction signedTxn = acct.signTransaction(ptxn);
-	        byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
+	SignedTransaction signedTxn = acct.signTransaction(ptxn);
+	byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
 	
-	        SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(encodedSignedTxn,
-	                SignedTransaction.class);
-	        assert decodedSignedTransaction.equals(signedTxn);
+	SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(encodedSignedTxn,
+	        SignedTransaction.class);
+	assert decodedSignedTransaction.equals(signedTxn);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 <!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
@@ -151,22 +151,22 @@ Signed Transactions are similar, but require an account to sign the transaction 
 === "Go"
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```go
-		// Assuming we already have a pay transaction `ptxn`
+	// Assuming we already have a pay transaction `ptxn`
 	
-		// Sign the transaction
-		_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
-		if err != nil {
-			log.Fatalf("failed to sign transaction: %s", err)
-		}
+	// Sign the transaction
+	_, signedTxn, err := crypto.SignTransaction(acct1.PrivateKey, ptxn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
 	
-		// Save the signed transaction to file
-		os.WriteFile("pay.stxn", signedTxn, 0644)
+	// Save the signed transaction to file
+	os.WriteFile("pay.stxn", signedTxn, 0644)
 	
-		signedPayTxn := types.SignedTxn{}
-		err = msgpack.Decode(signedTxn, &signedPayTxn)
-		if err != nil {
-			log.Fatalf("failed to decode signed transaction: %s", err)
-		}
+	signedPayTxn := types.SignedTxn{}
+	err = msgpack.Decode(signedTxn, &signedPayTxn)
+	if err != nil {
+		log.Fatalf("failed to decode signed transaction: %s", err)
+	}
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
 <!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->

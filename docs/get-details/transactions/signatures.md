@@ -128,49 +128,49 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 === "JavaScript"
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
 	```javascript
-	  const signerAccounts: algosdk.Account[] = [];
-	  signerAccounts.push(algosdk.generateAccount());
-	  signerAccounts.push(algosdk.generateAccount());
+	const signerAccounts: algosdk.Account[] = [];
+	signerAccounts.push(algosdk.generateAccount());
+	signerAccounts.push(algosdk.generateAccount());
 	
-	  // multiSigParams is used when creating the address and when signing transactions
-	  const multiSigParams = {
-	    version: 1,
-	    threshold: 2,
-	    addrs: signerAccounts.map((a) => a.addr),
-	  };
-	  const multisigAddr = algosdk.multisigAddress(multiSigParams);
+	// multiSigParams is used when creating the address and when signing transactions
+	const multiSigParams = {
+	  version: 1,
+	  threshold: 2,
+	  addrs: signerAccounts.map((a) => a.addr),
+	};
+	const multisigAddr = algosdk.multisigAddress(multiSigParams);
 	
-	  console.log('Created MultiSig Address: ', multisigAddr);
+	console.log('Created MultiSig Address: ', multisigAddr);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
-```javascript
-  const msigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-    from: multisigAddr,
-    to: funder.addr,
-    amount: 100,
-    suggestedParams,
-  });
-
-  // First signature uses signMultisigTransaction
-  const msigWithFirstSig = algosdk.signMultisigTransaction(
-    msigTxn,
-    multiSigParams,
-    signerAccounts[0].sk
-  ).blob;
-
-  // Subsequent signatures use appendSignMultisigTransaction
-  const msigWithSecondSig = algosdk.appendSignMultisigTransaction(
-    msigWithFirstSig,
-    multiSigParams,
-    signerAccounts[1].sk
-  ).blob;
-
-  await client.sendRawTransaction(msigWithSecondSig).do();
-  await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L49-L72)
+	```javascript
+	const msigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  from: multisigAddr,
+	  to: funder.addr,
+	  amount: 100,
+	  suggestedParams,
+	});
+	
+	// First signature uses signMultisigTransaction
+	const msigWithFirstSig = algosdk.signMultisigTransaction(
+	  msigTxn,
+	  multiSigParams,
+	  signerAccounts[0].sk
+	).blob;
+	
+	// Subsequent signatures use appendSignMultisigTransaction
+	const msigWithSecondSig = algosdk.appendSignMultisigTransaction(
+	  msigWithFirstSig,
+	  multiSigParams,
+	  signerAccounts[1].sk
+	).blob;
+	
+	await client.sendRawTransaction(msigWithSecondSig).do();
+	await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L49-L72)
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 
 === "Python"
@@ -189,79 +189,79 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
     <!-- ===PYSDK_MULTISIG_CREATE=== -->
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
-```python
-msig_pay = transaction.PaymentTxn(
-    msig.address(), sp, account_1.address, int(1e5)
-)
-msig_txn = transaction.MultisigTransaction(msig_pay, msig)
-msig_txn.sign(account_2.private_key)
-msig_txn.sign(account_3.private_key)
-txid = algod_client.send_transaction(msig_txn)
-result = transaction.wait_for_confirmation(algod_client, txid, 4)
-print(
-    f"Payment made from msig account confirmed in round {result['confirmed-round']}"
-)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L46-L57)
+	```python
+	msig_pay = transaction.PaymentTxn(
+	    msig.address(), sp, account_1.address, int(1e5)
+	)
+	msig_txn = transaction.MultisigTransaction(msig_pay, msig)
+	msig_txn.sign(account_2.private_key)
+	msig_txn.sign(account_3.private_key)
+	txid = algod_client.send_transaction(msig_txn)
+	result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(
+	    f"Payment made from msig account confirmed in round {result['confirmed-round']}"
+	)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L46-L57)
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 
 === "Java"
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
 	```java
-	                int version = 1; // no other versions at the time of writing
-	                int threshold = 2; // we're making a 2/3 msig
+	int version = 1; // no other versions at the time of writing
+	int threshold = 2; // we're making a 2/3 msig
 	
-	                // Populate a list of Ed25519 pubkeys
-	                List<Ed25519PublicKey> accts = new ArrayList<>();
-	                accts.add(addr1.getEd25519PublicKey());
-	                accts.add(addr2.getEd25519PublicKey());
-	                accts.add(addr3.getEd25519PublicKey());
-	                // create the MultisigAddress object
-	                MultisigAddress msig = new MultisigAddress(version, threshold, accts);
-	                System.out.printf("msig address: %s\n", msig.toAddress().toString());
+	// Populate a list of Ed25519 pubkeys
+	List<Ed25519PublicKey> accts = new ArrayList<>();
+	accts.add(addr1.getEd25519PublicKey());
+	accts.add(addr2.getEd25519PublicKey());
+	accts.add(addr3.getEd25519PublicKey());
+	// create the MultisigAddress object
+	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
+	System.out.printf("msig address: %s\n", msig.toAddress().toString());
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
-```java
-                // Construct transaction with sender as address of msig
-                Transaction msigPayTxn = Transaction.PaymentTransactionBuilder()
-                                .sender(msig.toAddress())
-                                .amount(1000)
-                                .receiver(acct1.getAddress())
-                                .suggestedParams(sp)
-                                .build();
-
-                // For each subsig, sign or append to the existing partially signed transaction
-                SignedTransaction signedMsigPayTxn = acct1.signMultisigTransaction(msig, msigPayTxn);
-                signedMsigPayTxn = acct2.appendMultisigTransaction(msig, signedMsigPayTxn);
-                Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
-                                .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
+	```java
+	// Construct transaction with sender as address of msig
+	Transaction msigPayTxn = Transaction.PaymentTransactionBuilder()
+	                .sender(msig.toAddress())
+	                .amount(1000)
+	                .receiver(acct1.getAddress())
+	                .suggestedParams(sp)
+	                .build();
+	
+	// For each subsig, sign or append to the existing partially signed transaction
+	SignedTransaction signedMsigPayTxn = acct1.signMultisigTransaction(msig, msigPayTxn);
+	signedMsigPayTxn = acct2.appendMultisigTransaction(msig, signedMsigPayTxn);
+	Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
+	                .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 
 === "Go"
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
 	```go
-		// Get pre-defined set of keys for example
-		_, pks := loadAccounts()
-		addr1, _ := types.DecodeAddress(pks[1])
-		addr2, _ := types.DecodeAddress(pks[2])
-		addr3, _ := types.DecodeAddress(pks[3])
+	// Get pre-defined set of keys for example
+	_, pks := loadAccounts()
+	addr1, _ := types.DecodeAddress(pks[1])
+	addr2, _ := types.DecodeAddress(pks[2])
+	addr3, _ := types.DecodeAddress(pks[3])
 	
-		ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
-			addr1,
-			addr2,
-			addr3,
-		})
+	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+		addr1,
+		addr2,
+		addr3,
+	})
 	
-		if err != nil {
-			panic("invalid multisig parameters")
-		}
-		fromAddr, _ := ma.Address()
-		// Print multisig account
-		fmt.Printf("Multisig address : %s \n", fromAddr)
+	if err != nil {
+		panic("invalid multisig parameters")
+	}
+	fromAddr, _ := ma.Address()
+	// Print multisig account
+	fmt.Printf("Multisig address : %s \n", fromAddr)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
     <!-- ===GOSDK_MULTISIG_CREATE=== -->

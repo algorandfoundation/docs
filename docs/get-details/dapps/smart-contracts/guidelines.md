@@ -55,7 +55,7 @@ There are two options:
 === "JavaScript"
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
 	```javascript
-	  const minFee = algosdk.ALGORAND_MIN_TX_FEE;
+	const minFee = algosdk.ALGORAND_MIN_TX_FEE;
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
@@ -63,7 +63,7 @@ There are two options:
 === "Java"
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
 	```java
-	        System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
+	System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
@@ -71,7 +71,7 @@ There are two options:
 === "Go"
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
 	```go
-		log.Printf("Min fee const: %d", transaction.MinTxnFee)
+	log.Printf("Min fee const: %d", transaction.MinTxnFee)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L33-L34)
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
@@ -97,9 +97,9 @@ There are two options:
 === "Java"
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
 	```java
-	        Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
-	        TransactionParametersResponse sp = tpr.body();
-	        System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
+	Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = tpr.body();
+	System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
@@ -107,10 +107,10 @@ There are two options:
 === "Go"
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 	```go
-		sp, err := algodClient.SuggestedParams().Do(context.Background())
-		if err != nil {
-			log.Printf("failed to %s", err)
-		}
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Printf("failed to %s", err)
+	}
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L26-L30)
     <!-- ===GOSDK_SP_MIN_FEE=== -->
