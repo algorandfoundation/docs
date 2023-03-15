@@ -52,7 +52,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
-<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 	```go
 	// Create a new indexer client, configured to connect to out local sandbox
 	var indexerAddress = "http://localhost:8980"
@@ -74,7 +74,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
-<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
