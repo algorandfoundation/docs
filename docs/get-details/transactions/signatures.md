@@ -127,22 +127,22 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 === "JavaScript"
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
-```javascript
-  const signerAccounts: algosdk.Account[] = [];
-  signerAccounts.push(algosdk.generateAccount());
-  signerAccounts.push(algosdk.generateAccount());
-
-  // multiSigParams is used when creating the address and when signing transactions
-  const multiSigParams = {
-    version: 1,
-    threshold: 2,
-    addrs: signerAccounts.map((a) => a.addr),
-  };
-  const multisigAddr = algosdk.multisigAddress(multiSigParams);
-
-  console.log('Created MultiSig Address: ', multisigAddr);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
+	```javascript
+	  const signerAccounts: algosdk.Account[] = [];
+	  signerAccounts.push(algosdk.generateAccount());
+	  signerAccounts.push(algosdk.generateAccount());
+	
+	  // multiSigParams is used when creating the address and when signing transactions
+	  const multiSigParams = {
+	    version: 1,
+	    threshold: 2,
+	    addrs: signerAccounts.map((a) => a.addr),
+	  };
+	  const multisigAddr = algosdk.multisigAddress(multiSigParams);
+	
+	  console.log('Created MultiSig Address: ', multisigAddr);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 ```javascript
@@ -175,18 +175,18 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 === "Python"
     <!-- ===PYSDK_MULTISIG_CREATE=== -->
-```python
-version = 1  # multisig version
-threshold = 2  # how many signatures are necessary
-# create a Multisig given the set of participants and threshold
-msig = transaction.Multisig(
-    version,
-    threshold,
-    [account_1.address, account_2.address, account_3.address],
-)
-print("Multisig Address: ", msig.address())
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
+	```python
+	version = 1  # multisig version
+	threshold = 2  # how many signatures are necessary
+	# create a Multisig given the set of participants and threshold
+	msig = transaction.Multisig(
+	    version,
+	    threshold,
+	    [account_1.address, account_2.address, account_3.address],
+	)
+	print("Multisig Address: ", msig.address())
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
     <!-- ===PYSDK_MULTISIG_CREATE=== -->
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 ```python
@@ -207,20 +207,20 @@ print(
 
 === "Java"
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
-```java
-                int version = 1; // no other versions at the time of writing
-                int threshold = 2; // we're making a 2/3 msig
-
-                // Populate a list of Ed25519 pubkeys
-                List<Ed25519PublicKey> accts = new ArrayList<>();
-                accts.add(addr1.getEd25519PublicKey());
-                accts.add(addr2.getEd25519PublicKey());
-                accts.add(addr3.getEd25519PublicKey());
-                // create the MultisigAddress object
-                MultisigAddress msig = new MultisigAddress(version, threshold, accts);
-                System.out.printf("msig address: %s\n", msig.toAddress().toString());
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+	```java
+	                int version = 1; // no other versions at the time of writing
+	                int threshold = 2; // we're making a 2/3 msig
+	
+	                // Populate a list of Ed25519 pubkeys
+	                List<Ed25519PublicKey> accts = new ArrayList<>();
+	                accts.add(addr1.getEd25519PublicKey());
+	                accts.add(addr2.getEd25519PublicKey());
+	                accts.add(addr3.getEd25519PublicKey());
+	                // create the MultisigAddress object
+	                MultisigAddress msig = new MultisigAddress(version, threshold, accts);
+	                System.out.printf("msig address: %s\n", msig.toAddress().toString());
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 ```java
@@ -243,27 +243,27 @@ print(
 
 === "Go"
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
-```go
-	// Get pre-defined set of keys for example
-	_, pks := loadAccounts()
-	addr1, _ := types.DecodeAddress(pks[1])
-	addr2, _ := types.DecodeAddress(pks[2])
-	addr3, _ := types.DecodeAddress(pks[3])
-
-	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
-		addr1,
-		addr2,
-		addr3,
-	})
-
-	if err != nil {
-		panic("invalid multisig parameters")
-	}
-	fromAddr, _ := ma.Address()
-	// Print multisig account
-	fmt.Printf("Multisig address : %s \n", fromAddr)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
+	```go
+		// Get pre-defined set of keys for example
+		_, pks := loadAccounts()
+		addr1, _ := types.DecodeAddress(pks[1])
+		addr2, _ := types.DecodeAddress(pks[2])
+		addr3, _ := types.DecodeAddress(pks[3])
+	
+		ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+			addr1,
+			addr2,
+			addr3,
+		})
+	
+		if err != nil {
+			panic("invalid multisig parameters")
+		}
+		fromAddr, _ := ma.Address()
+		// Print multisig account
+		fmt.Printf("Multisig address : %s \n", fromAddr)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
     <!-- ===GOSDK_MULTISIG_SIGN=== -->
     ```go

@@ -763,83 +763,83 @@ An example of setting a pooled fee on a group of two transactions:
 
 === "JavaScript"
 <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
-```javascript
-  const alicesTxnWithDoubleFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
-    {
-      from: alice.addr,
-      to: carol.addr,
-      amount: 1e6,
-      // set the fee to 0 so alice doesn't need to pay a fee
-      // use flatFee to ensure the given fee is used
-      suggestedParams: { ...suggestedParams, fee: 0, flatFee: true },
-    }
-  );
-
-  const bobsTxnWithZeroFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
-    {
-      from: bob.addr,
-      to: alice.addr,
-      amount: 1e6,
-      // set the fee to "minFee * 2" so Bob covers the fee for his transaction AND Alice's transaction
-      // use flatFee to ensure the given fee is used
-      suggestedParams: { ...suggestedParams, fee: minFee * 2, flatFee: true },
-    }
-  );
-
-  const feeTxnArray = [alicesTxnWithDoubleFee, bobsTxnWithZeroFee];
-  const feeTxnGroup = algosdk.assignGroupID(feeTxnArray);
-  const signedFeeTxns = [
-    feeTxnGroup[0].signTxn(alice.privateKey),
-    feeTxnGroup[1].signTxn(bob.privateKey),
-  ];
-
-  await client.sendRawTransaction(signedFeeTxns).do();
-  await algosdk.waitForConfirmation(
-    client,
-    alicesTxnWithDoubleFee.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L58-L93)
+	```javascript
+	  const alicesTxnWithDoubleFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
+	    {
+	      from: alice.addr,
+	      to: carol.addr,
+	      amount: 1e6,
+	      // set the fee to 0 so alice doesn't need to pay a fee
+	      // use flatFee to ensure the given fee is used
+	      suggestedParams: { ...suggestedParams, fee: 0, flatFee: true },
+	    }
+	  );
+	
+	  const bobsTxnWithZeroFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
+	    {
+	      from: bob.addr,
+	      to: alice.addr,
+	      amount: 1e6,
+	      // set the fee to "minFee * 2" so Bob covers the fee for his transaction AND Alice's transaction
+	      // use flatFee to ensure the given fee is used
+	      suggestedParams: { ...suggestedParams, fee: minFee * 2, flatFee: true },
+	    }
+	  );
+	
+	  const feeTxnArray = [alicesTxnWithDoubleFee, bobsTxnWithZeroFee];
+	  const feeTxnGroup = algosdk.assignGroupID(feeTxnArray);
+	  const signedFeeTxns = [
+	    feeTxnGroup[0].signTxn(alice.privateKey),
+	    feeTxnGroup[1].signTxn(bob.privateKey),
+	  ];
+	
+	  await client.sendRawTransaction(signedFeeTxns).do();
+	  await algosdk.waitForConfirmation(
+	    client,
+	    alicesTxnWithDoubleFee.txID().toString(),
+	    3
+	  );
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L58-L93)
 <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Python"
 <!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
-```python
-suggested_params = algod_client.suggested_params()
-suggested_params.fee = 2 * suggested_params.min_fee
-# Important to set flat_fee = True here or the fee will be
-# treated as fee-per-byte of the encoded transaction
-suggested_params.flat_fee = True
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L68-L73)
+	```python
+	suggested_params = algod_client.suggested_params()
+	suggested_params.fee = 2 * suggested_params.min_fee
+	# Important to set flat_fee = True here or the fee will be
+	# treated as fee-per-byte of the encoded transaction
+	suggested_params.flat_fee = True
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L68-L73)
 <!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Go"
 <!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
-```go
-	// by using fee pooling and setting our fee to 2x min tx fee
-	// we can cover the fee for another transaction in the group
-	sp.Fee = 2 * transaction.MinTxnFee
-	sp.FlatFee = true
-	// ...
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L37-L42)
+	```go
+		// by using fee pooling and setting our fee to 2x min tx fee
+		// we can cover the fee for another transaction in the group
+		sp.Fee = 2 * transaction.MinTxnFee
+		sp.FlatFee = true
+		// ...
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L37-L42)
 <!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Java"
 <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
-```java
-        Transaction feeOverrideTxn = Transaction.PaymentTransactionBuilder()
-                .sender(acct.getAddress())
-                .receiver(acct2.getAddress())
-                .suggestedParams(suggestedParams.body())
-                // override the fee given by suggested params
-                // to set a flat fee of 2x minfee to cover another transaction
-                // in the same group
-                .flatFee(2 * suggestedParams.body().minFee).build();
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L64)
+	```java
+	        Transaction feeOverrideTxn = Transaction.PaymentTransactionBuilder()
+	                .sender(acct.getAddress())
+	                .receiver(acct2.getAddress())
+	                .suggestedParams(suggestedParams.body())
+	                // override the fee given by suggested params
+	                // to set a flat fee of 2x minfee to cover another transaction
+	                // in the same group
+	                .flatFee(2 * suggestedParams.body().minFee).build();
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L64)
 <!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 
