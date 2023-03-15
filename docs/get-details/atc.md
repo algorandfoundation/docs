@@ -15,11 +15,10 @@ To use the Atomic Transaction Composer, first initialize the composer:
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_CREATE=== -->
-    ```js
-    import algosdk from 'algosdk'
-
-    const atc = new algosdk.AtomicTransactionComposer()
-    ```
+```javascript
+  const createATC = new algosdk.AtomicTransactionComposer();
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L127-L128)
     <!-- ===JSSDK_ATC_CREATE=== -->
 
 === "Python"
@@ -84,33 +83,29 @@ atc.add_transaction(tws)
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
-    ```js
-    // ...
+```javascript
+  const createContractTxn = algosdk.makeApplicationCreateTxnFromObject({
+    from: sender.addr,
+    suggestedParams,
+    onComplete: algosdk.OnApplicationComplete.NoOpOC,
+    approvalProgram: compiledContractApprovalProgram,
+    clearProgram: compiledClearProgram,
+    numGlobalByteSlices: 0,
+    numGlobalInts: 0,
+    numLocalByteSlices: 0,
+    numLocalInts: 0,
+  });
 
-    // Returns Account object
-    const acct = get_account()
+  createATC.addTransaction({ txn: createContractTxn, signer: sender.signer });
 
-    // Create signer object
-    const signer = algosdk.makeBasicAccountTransactionSigner(acct)
+  const createContractResult = await createATC.execute(client, 3);
 
-    // Get suggested params from the client
-    const sp = await client.getTransactionParams().do()
-
-    // Create a transaction
-    const ptxn = new Transaction({
-        from: acct.addr,
-        to: acct.addr, 
-        amount: 10000,
-        ...sp
-    })
-
-    // Construct TransactionWithSigner
-    const tws = {txn: ptxn, signer: signer}
-
-    // Pass TransactionWithSigner to ATC
-    atc.addTransaction(tws)
-
-    ```
+  const txInfo = await client
+    .pendingTransactionInformation(createContractResult.txIDs[0])
+    .do();
+  const contractAppID = txInfo['application-index'];
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L131-L151)
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
@@ -206,140 +201,35 @@ atc.add_method_call(
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
-    ```js
-
-    // Read in the local contract.json file
-    const buff = fs.readFileSync("path/to/contract.json")
-
-    // Parse the json file into an object, pass it to create an ABIContract object
-    const contract = new algosdk.ABIContract(JSON.parse(buff.toString()))
-    ```
+```javascript
+  const abi = JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, '/contracts/beaker_add_artifacts/contract.json'),
+      'utf8'
+    )
+  );
+  const contract = new algosdk.ABIContract(abi);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L108-L115)
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
 
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
-    ```js
-    const commonParams = {
-        appID:contract.networks[genesis_hash].appID,
-        sender:acct.addr,
-        suggestedParams:sp,
-        signer: algosdk.makeBasicAccountTransactionSigner(acct)
-    }
+```javascript
+  const methodATC = new algosdk.AtomicTransactionComposer();
 
+  methodATC.addMethodCall({
+    appID: contractAppID,
+    method: contract.getMethodByName('add'),
+    methodArgs: [1, 2],
+    sender: sender.addr,
+    signer: sender.signer,
+    suggestedParams,
+  });
 
-    // Simple call to the `add` method, method_args can be any type but _must_ 
-    // match those in the method signature of the contract
-    atc.addMethodCall({
-        method: contract.getMethodByName("add"), methodArgs: [1,1], ...commonParams
-    })
-
-    // This method requires a `transaction` as its second argument. Construct the transaction and pass it in as an argument.
-    // The ATC will handle adding it to the group transaction and setting the reference in the application arguments.
-    txn = {
-        txn: new Transaction({ from: acct.addr, to: acct.addr, amount: 10000, ...sp }),
-        signer: algosdk.makeBasicAccountTransactionSigner(acct)
-    }
-    atc.addMethodCall({
-        method: getMethodByName("txntest"), 
-        methodArgs: [ 10000, txn, 1000 ], 
-        ...commonParams
-    })
-
-    ```
-
-=== "Go"
-    <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
-```go
-	b, err := ioutil.ReadFile("calculator/contract.json")
-	if err != nil {
-		log.Fatalf("failed to read contract file: %s", err)
-	}
-
-	contract := &abi.Contract{}
-	if err := json.Unmarshal(b, contract); err != nil {
-		log.Fatalf("failed to unmarshal contract: %s", err)
-	}
+  const methodResult = await methodATC.execute(client, 3);
+  console.log('Result:', methodResult.methodResults[0].returnValue);
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L26-L35)
-    <!-- ===GOSDK_ATC_CONTRACT_INIT=== --->
-    
-    <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
-```go
-	// Grab the method from out contract object
-	addMethod, err := contract.GetMethodByName("add")
-	if err != nil {
-		log.Fatalf("failed to get add method: %s", err)
-	}
-
-	// Set up method call params
-	mcp := transaction.AddMethodCallParams{
-		AppID:           appID,
-		Sender:          acct1.Address,
-		SuggestedParams: sp,
-		OnComplete:      types.NoOpOC,
-		Signer:          signer,
-		Method:          addMethod,
-		MethodArgs:      []interface{}{1, 1},
-	}
-	if err := atc.AddMethodCall(mcp); err != nil {
-		log.Fatalf("failed to add method call: %s", err)
-	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L60-L79)
-    <!-- ===GOSDK_ATC_ADD_METHOD_CALL=== --->
-    
-=== "Java"
-    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
-```java
-                // Read the json from disk
-                String jsonContract = Files.readString(Paths.get("calculator/contract.json"));
-                // Create Contract from Json
-                Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
-    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== --->
-
-    <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
-```java
-                // create methodCallParams by builder (or create by constructor) for add method
-                List<Object> methodArgs = new ArrayList<Object>();
-                methodArgs.add(1);
-                methodArgs.add(1);
-
-                MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
-
-                MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
-                                .sender(acct.getAddress())
-                                .method(contract.getMethodByName("add")).methodArguments(methodArgs)
-                                .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
-
-                atc.addMethodCall(mcp);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
-    <!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== --->
-    
-## Execution 
-
-Once all the transactions are added to the atomic group the Atomic Transaction Composer allows several ways to perform the transactions. 
-
-    - Build Group will construct the group of transactions and taking care of assigning the group id, returning an array of unsigned TransactionWithSigner objects.
-    - Submit will call build group first, then gather the signatures associated to the transactions, then submit the group without blocking. It will return the full list of transaction ids that can be passed to a wait for confirmation function.
-    - Execute will perform submit then wait for confirmation given a number of rounds. It will return the resulting confirmed round, list of transaction ids and any parsed ABI return values if relevant.  
-
-
-=== "Python"
-    <!-- ===PYSDK_ATC_RESULTS=== -->
-```python
-# Other options:
-# txngroup = atc.build_group()
-# txids = atc.submit(client)
-result = atc.execute(algod_client, 4)
-for res in result.abi_results:
-    print(res.return_value)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L81-L87)
-    <!-- ===PYSDK_ATC_RESULTS=== -->
-
-=== "JavaScript"
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
     <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:

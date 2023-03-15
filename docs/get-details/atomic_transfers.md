@@ -47,12 +47,28 @@ The example below illustrates Account A sending a transaction to Account C and A
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->
-	``` javascript
-    // Transaction A to C 
-    let transaction1 = algosdk.makePaymentTxnWithSuggestedParams(myAccountA.addr, myAccountC.addr, 100000, undefined, undefined, params);  
-    // Create transaction B to A
-    let transaction2 = algosdk.makePaymentTxnWithSuggestedParams(myAccountB.addr, myAccountA.addr, 200000, undefined, undefined, params);  
-    ```
+```javascript
+  const suggestedParams = await client.getTransactionParams().do();
+
+  const alice = accounts[0];
+  const bob = accounts[1];
+  const carol = accounts[2];
+
+  const alicesTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: alice.addr,
+    to: carol.addr,
+    amount: 1e6,
+    suggestedParams,
+  });
+
+  const bobsTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: bob.addr,
+    to: alice.addr,
+    amount: 1e6,
+    suggestedParams,
+  });
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L12-L31)
     <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Python"
@@ -126,11 +142,12 @@ The result of this step is what ultimately guarantees that a particular transact
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
-	```javascript
-    // Group both transactions
-    let txns = [transaction1, transaction2]
-    let txgroup = algosdk.assignGroupID(txns);
-    ```
+```javascript
+  const txnArray = [alicesTxn, bobsTxn];
+  // assignGroupID returns the same txns with the group ID set
+  const txnGroup = algosdk.assignGroupID(txnArray);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L34-L37)
     <!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Python"
@@ -207,11 +224,11 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
-	```javascript
-    // Sign each transaction in the group 
-    signedTx1 = transaction1.signTxn( myAccountA.sk )
-    signedTx2 = transaction2.signTxn( myAccountB.sk )
-    ```
+```javascript
+  const alicesSignedTxn = txnGroup[0].signTxn(alice.privateKey);
+  const bobsSignedTxn = txnGroup[1].signTxn(bob.privateKey);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L40-L42)
     <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Python"
@@ -270,11 +287,10 @@ All authorized transactions are now assembled into an array, maintaining the ori
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_GROUP_ASSEMBLE=== -->
-	``` javascript
-    let signed = []
-    signed.push( signedTx1 )
-    signed.push( signedTx2 )
-    ```
+```javascript
+  const signedTxns = [alicesSignedTxn, bobsSignedTxn];
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L45-L46)
     <!-- ===JSSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Python"
@@ -321,15 +337,11 @@ The transaction group is now broadcast to the network.
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_GROUP_SEND=== -->
-	```javascript
-    let tx = (await algodClient.sendRawTransaction(signed).do());
-    console.log("Transaction : " + tx.txId);
-
-    // Wait for transaction to be confirmed
-    confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-    ```
+```javascript
+  await client.sendRawTransaction(signedTxns).do();
+  await algosdk.waitForConfirmation(client, alicesTxn.txID().toString(), 3);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L49-L51)
     <!-- ===JSSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Python"

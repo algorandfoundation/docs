@@ -54,9 +54,10 @@ print(constants.MIN_TXN_FEE)
 
 === "JavaScript"
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
-    ```js
-    algosdk.ALGORAND_MIN_TX_FEE
-    ```
+```javascript
+  const minFee = algosdk.ALGORAND_MIN_TX_FEE;
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"

@@ -14,30 +14,22 @@ Unsigned transactions require the transaction object to be created before writin
 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
-    ``` javascript
-        // get network suggested parameters
-        let params = await algodClient.getTransactionParams().do();
-        const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
-        console.log(note);
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
-        // Save transaction to file
-        fs.writeFileSync('./unsigned.txn', algosdk.encodeUnsignedTransaction( txn ));     
-    
-        // read transaction from file and sign it
-        let txn = algosdk.decodeUnsignedTransaction(fs.readFileSync('./unsigned.txn'));  
-        let signedTxn = algosdk.signTransaction(txn, myAccount.sk);
-        let txId = signedTxn.txID;
-        console.log("Signed transaction with txID: %s", txId);
-        // send signed transaction to node
-        await algodClient.sendRawTransaction(signedTxn.blob).do();
-        // Wait for transaction to be confirmed
-        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);       
-    ```
+```javascript
+  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: sender.addr,
+    to: receiver.addr,
+    amount: 1e6,
+    suggestedParams,
+  });
+
+  const txnBytes = txn.toByte();
+  const txnB64 = Buffer.from(txnBytes).toString('base64');
+  const restoredTxn = algosdk.decodeUnsignedTransaction(
+    Buffer.from(txnB64, 'base64')
+  );
+  console.log(restoredTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
 <!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
@@ -114,32 +106,15 @@ Signed Transactions are similar, but require an account to sign the transaction 
 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
-    ``` javascript
-        // get network suggested parameters
-        let params = await algodClient.getTransactionParams().do();
-        // setup a transaction
-        const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
-        console.log(note);
-        let txn = algosdk.makePaymentTxnWithSuggestedParams(myAccount.addr, receiver, 1000000, undefined, note, params);        
-        // sign transaction and write to file
-        let signedTxn = txn.signTxn(myAccount.sk);
-        fs.writeFileSync('./signed.stxn', signedTxn );  
-        
-        // read signed transaction from file
-        let stx = fs.readFileSync("./signed.stxn");
-        // send signed transaction to node
-        let tx = await algodClient.sendRawTransaction(stx).do();
-        console.log("Signed transaction with txID: %s", tx.txId);
-        // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation(algodClient, tx.txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-        console.log("Transaction information: %o", mytxinfo);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);    
-    ```
+```javascript
+  const signedTxn = txn.signTxn(sender.privateKey);
+  const signedB64Txn = Buffer.from(signedTxn).toString('base64');
+  const restoredSignedTxn = algosdk.decodeSignedTransaction(
+    Buffer.from(signedB64Txn, 'base64')
+  );
+  console.log(restoredSignedTxn);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
 <!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"

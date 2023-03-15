@@ -55,31 +55,48 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 
 === "JavaScript"
 <!-- ===JSSDK_KMD_CREATE_CLIENT=== -->
+```javascript
+  const kmdtoken = 'a'.repeat(64);
+  const kmdserver = 'http://localhost';
+  const kmdport = 4002;
 
-```js
-	const kmdtoken = '';
-	const kmdserver = 'http://localhost';
-	const kmdport = 4002;
-
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
+  const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 ```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L8-L13)
 <!-- ===JSSDK_KMD_CREATE_CLIENT=== -->
 
 <!-- ===JSSDK_KMD_CREATE_WALLET=== -->
-```js
-	let walletid = (await kmdclient.createWallet("MyTestWallet1", "testpassword", "", "sqlite")).wallet.id;
-	console.log("Created wallet:", walletid);
+```javascript
+  const walletName = 'testWallet1';
+  const password = 'testpassword';
+  // MDK is undefined since we are creating a completely new wallet
+  const masterDerivationKey = undefined;
+  const driver = 'sqlite';
+
+  const wallet = await kmdclient.createWallet(
+    walletName,
+    password,
+    masterDerivationKey,
+    driver
+  );
+  const walletID = wallet.wallet.id;
+  console.log('Created wallet:', walletID);
 ```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L16-L30)
 <!-- ===JSSDK_KMD_CREATE_WALLET=== -->
 
 <!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
-```js
-	let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-	console.log("Got wallet handle:", wallethandle);
+```javascript
+  // wallet handle is used to establish a session with the wallet
+  const wallethandle = (
+    await kmdclient.initWalletHandle(walletID, 'testpassword')
+  ).wallet_handle_token;
+  console.log('Got wallet handle:', wallethandle);
 
-	let address1 = (await kmdclient.generateKey(wallethandle)).address;
-	console.log("Created new account:", address1);
+  const { address } = await kmdclient.generateKey(wallethandle);
+  console.log('Created new account:', address);
 ```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L33-L41)
 <!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Python"
@@ -236,34 +253,30 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 
 === "JavaScript"
 <!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
-	```javascript
-	const algosdk = require('algosdk');
+```javascript
+  const exportedMDK = (
+    await kmdclient.exportMasterDerivationKey(wallethandle, 'testpassword')
+  ).master_derivation_key;
+  const recoveredWallet = await kmdclient.createWallet(
+    'testWallet2',
+    'testpassword',
+    exportedMDK,
+    'sqlite'
+  );
+  const recoeveredWalletID = recoveredWallet.wallet.id;
 
-	const kmdtoken = <kmd-token>;
-	const kmdserver = <kmd-address>;
-	const kmdport = <kmd-port>;
+  console.log('Created wallet: ', recoeveredWalletID);
 
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
+  const recoveredWalletHandle = (
+    await kmdclient.initWalletHandle(recoeveredWalletID, 'testpassword')
+  ).wallet_handle_token;
+  console.log('Got wallet handle: ', recoveredWalletHandle);
 
-	let walletid = null;
-	let wallethandle = null;
-
-	(async () => {
-		let mn = <wallet-menmonic>
-		let mdk =  (await algosdk.mnemonicToMasterDerivationKey(mn));
-		console.log(mdk);
-		let walletid = (await kmdclient.createWallet("MyTestWallet2", "testpassword", mdk)).wallet.id;
-		console.log("Created wallet: ", walletid);
-
-		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-		console.log("Got wallet handle: ", wallethandle);
-
-		let rec_addr = (await kmdclient.generateKey(wallethandle)).address;
-		console.log("Recovered account: ", rec_addr);
-	})().catch(e => {
-		console.log(e);
-	});
-	```
+  const recoveredAddr = (await kmdclient.generateKey(recoveredWalletHandle))
+    .address;
+  console.log('Recovered account: ', recoveredAddr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L60-L81)
 <!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
 
 === "Python"
@@ -378,29 +391,12 @@ Use this to retrieve the 25-word mnemonic for the account.
 
 === "JavaScript"
 <!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
-	```javascript
-	const algosdk = require('algosdk');
-
-	const kmdtoken = <kmd-token>;
-	const kmdaddress = <kmd-address>;
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdaddress);
-
-	(async () => {
-		let walletid = null;
-		let wallets = (await kmdclient.listWallets()).wallets;
-		wallets.forEach(function (arrayItem) {
-			if( arrayItem.name === 'MyTestWallet2'){
-				walletid = arrayItem.id;
-			}
-		});
-		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-		let accountKey = (await kmdclient.exportKey(wallethandle, "testpassword", <account address> ));
-		let mn = (await algosdk.secretKeyToMnemonic(accountKey.private_key));
-		console.log("Account Mnemonic: ", mn);
-	})().catch(e => {
-		console.log(e.text);
-	})
-	```
+```javascript
+  const accountKey = await kmdclient.exportKey(wallethandle, password, address);
+  const accountMnemonic = algosdk.secretKeyToMnemonic(accountKey.private_key);
+  console.log('Account Mnemonic: ', accountMnemonic);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L44-L47)
 <!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Python"
@@ -465,36 +461,16 @@ Use these methods to import a 25-word account-level mnemonic.
 
 === "JavaScript"
 <!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
-	```javascript
-	const algosdk = require('algosdk');
-
-	const kmdtoken = <kmd-token>;
-	const kmdserver = <kmd-address>;
-	const kmdport = <kmd-port>;
-	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
-
-	(async () => {
-		let walletid = null;
-		let wallets = (await kmdclient.listWallets()).wallets;
-		wallets.forEach(function (arrayItem) {
-			if( arrayItem.name === 'MyTestWallet2'){
-				walletid = arrayItem.id;
-			}
-		});
-		console.log("Got wallet id: ", walletid);
-		let wallethandle = (await kmdclient.initWalletHandle(walletid, "testpassword")).wallet_handle_token;
-		console.log("Got wallet handle.", wallethandle);
-		
-		let account = algosdk.generateAccount();
-		console.log("Account: ", account.addr);
-		let mn = algosdk.secretKeyToMnemonic(account.sk);
-		console.log("Account Mnemonic: ", mn);
-		let importedAccount = (await kmdclient.importKey(wallethandle, account.sk));
-		console.log("Account successfully imported: ", importedAccount);
-	})().catch(e => {
-		console.log(e.text);
-	})
-	```
+```javascript
+  const newAccount = algosdk.generateAccount();
+  console.log('Account: ', newAccount.addr);
+  const importedAccount = await kmdclient.importKey(
+    wallethandle,
+    newAccount.sk
+  );
+  console.log('Account successfully imported: ', importedAccount);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L50-L57)
 <!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Python"
@@ -571,16 +547,13 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 === "JavaScript"
 <!-- ===JSSDK_ACCOUNT_GENERATE=== -->
-	```javascript
-	const algosdk = require('algosdk');
-
-	function generateAlgorandKeyPair() {
-		let account = algosdk.generateAccount();
-		let passphrase = algosdk.secretKeyToMnemonic(account.sk);
-		console.log( "My address: " + account.addr );
-		console.log( "My passphrase: " + passphrase );
-	}
-	```
+```javascript
+  const generatedAccount = algosdk.generateAccount();
+  const passphrase = algosdk.secretKeyToMnemonic(generatedAccount.sk);
+  console.log(`My address: ${generatedAccount.addr}`);
+  console.log(`My passphrase: ${passphrase}`);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L75-L79)
 <!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 === "Python"
@@ -662,43 +635,22 @@ The following code shows how to generate a multisignature account composed of th
 
 === "JavaScript"
 <!-- ===JSSDK_MULTISIG_CREATE=== -->
-	```javascript
-	const algosdk = require('algosdk');
+```javascript
+  const signerAccounts: algosdk.Account[] = [];
+  signerAccounts.push(algosdk.generateAccount());
+  signerAccounts.push(algosdk.generateAccount());
 
-	(async() => {
-		// recover accounts
-		// paste in mnemonic phrases here for each account
-		// Shown for demonstration purposes. NEVER reveal secret mnemonics in practice.
-		// Change these values to use the accounts created previously.
-		let account1_mnemonic = "PASTE your phrase for account 1";
-		let account2_mnemonic = "PASTE your phrase for account 2";
-		let account3_mnemonic = "PASTE your phrase for account 3"
+  // multiSigParams is used when creating the address and when signing transactions
+  const multiSigParams = {
+    version: 1,
+    threshold: 2,
+    addrs: signerAccounts.map((a) => a.addr),
+  };
+  const multisigAddr = algosdk.multisigAddress(multiSigParams);
 
-		let account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
-		let account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
-		let account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
-		console.log(account1.addr);
-		console.log(account2.addr);
-		console.log(account3.addr);
-
-		//Setup the parameters for the multisig account
-		const mparams = {
-			version: 1,
-			threshold: 2,
-			addrs: [
-				account1.addr,
-				account2.addr,
-				account3.addr,
-			],
-		};
-
-		let multsigaddr = algosdk.multisigAddress(mparams);
-		console.log("Multisig Address: " + multsigaddr);
-		// Fund TestNet account
-		console.log("Add funds to multisig account using the TestNet Dispenser: ");
-		console.log("https://dispenser.testnet.aws.algodev.network?account=" + multsigaddr);
-
-	```
+  console.log('Created MultiSig Address: ', multisigAddr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
 <!-- ===JSSDK_MULTISIG_CREATE=== -->
 
 

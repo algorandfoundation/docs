@@ -64,12 +64,16 @@ special_algod_client = algod.AlgodClient(
 
 === "JavaScript"
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
-	```javascript
-    // user declared algod connection parameters
-    algodAddress = "http://localhost:4001";
-    algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    let algodClient = new algosdk.Algodv2(algodToken, algodServer);
-    ```
+```javascript
+export function getLocalAlgodClient() {
+  const algodToken = 'a'.repeat(64);
+  const algodServer = 'http://localhost';
+  const algodPort = 4001;
+
+  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
+}
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L27-L34)
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"
@@ -137,13 +141,14 @@ global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 
 === "JavaScript"
     <!-- ===JSSDK_APP_SCHEMA=== -->
-	```javascript
-    // declare application state storage (immutable)
-    localInts = 1;
-    localBytes = 1;
-    globalInts = 1;
-    globalBytes = 0;
-    ```
+```javascript
+  // define uint64s and byteslices stored in global/local storage
+  const numGlobalByteSlices = 1;
+  const numGlobalInts = 0;
+  const numLocalByteSlices = 0;
+  const numLocalInts = 1;
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L33-L38)
     <!-- ===JSSDK_APP_SCHEMA=== -->
 
 === "Java"
@@ -204,12 +209,22 @@ with open("application/clear.teal", "r") as f:
 
 === "JavaScript"
     <!-- ===JSSDK_APP_SOURCE=== -->
-	```javascript
-    // declare clear state program source
-    clearProgramSource = `#pragma version 4
-    int 1
-    `;
-    ```
+```javascript
+  // define TEAL source from string or from a file
+  const approvalProgram = fs.readFileSync(
+    path.join(__dirname, '/contracts/app_approval.teal'),
+    'utf8'
+  );
+  const clearProgram = '#pragma version 8\nint 1\nreturn';
+
+  // compile with helper function
+  const compiledApprovalProgram = await compileProgram(
+    algodClient,
+    approvalProgram
+  );
+  const compiledClearProgram = await compileProgram(algodClient, clearProgram);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L17-L30)
     <!-- ===JSSDK_APP_SOURCE=== -->
 
 === "Java"
@@ -267,11 +282,14 @@ print(f"Address: {addr}")
 
 === "JavaScript"
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-	```javascript
-    // get account from mnemonic
-    let creatorAccount = algosdk.mnemonicToSecretKey(creatorMnemonic);
-    let sender = creatorAccount.addr;
-    ```
+```javascript
+  // restore 25-word mnemonic from environment variable
+  const mnemonicAccount = algosdk.mnemonicToSecretKey(
+    process.env.SAMPLE_MNEMONIC!
+  );
+  console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -323,16 +341,19 @@ clear_binary = base64.b64decode(clear_result["result"])
 
 === "JavaScript"
     <!-- ===JSSDK_APP_COMPILE=== -->
-	```javascript
-    // helper function to compile program source  
-    async function compileProgram(client, programSource) {
-        let encoder = new TextEncoder();
-        let programBytes = encoder.encode(programSource);
-        let compileResponse = await client.compile(programBytes).do();
-        let compiledBytes = new Uint8Array(Buffer.from(compileResponse.result, "base64"));
-        return compiledBytes;
-    }
-    ```
+```javascript
+export async function compileProgram(
+  client: algosdk.Algodv2,
+  programSource: string
+) {
+  const compileResponse = await client.compile(Buffer.from(programSource)).do();
+  const compiledBytes = new Uint8Array(
+    Buffer.from(compileResponse.result, 'base64')
+  );
+  return compiledBytes;
+}
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L4-L14)
     <!-- ===JSSDK_APP_COMPILE=== -->
 
 === "Java"
@@ -395,7 +416,7 @@ app_create_txn = transaction.ApplicationCreateTxn(
 signed_create_txn = app_create_txn.sign(creator.private_key)
 txid = algod_client.send_transaction(signed_create_txn)
 result = transaction.wait_for_confirmation(algod_client, txid, 4)
-app_id = result["application-index"]
+app_id = result['application-index']
 print(f"Created app with id: {app_id}")
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L39-L56)
@@ -403,30 +424,31 @@ print(f"Created app with id: {app_id}")
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CREATE=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationCreateTxn(sender, params, onComplete, 
-                                            approvalProgram, clearProgram, 
-                                            localInts, localBytes, globalInts, globalBytes,);
-    let txId = txn.txID().toString();
+```javascript
+  const appCreateTxn = algosdk.makeApplicationCreateTxnFromObject({
+    from: creator.addr,
+    approvalProgram: compiledApprovalProgram,
+    clearProgram: compiledClearProgram,
+    numGlobalByteSlices,
+    numGlobalInts,
+    numLocalByteSlices,
+    numLocalInts,
+    suggestedParams,
+    onComplete: algosdk.OnApplicationComplete.NoOpOC,
+  });
 
-    // Sign the transaction
-    let signedTxn = txn.signTxn(creatorAccount.sk);
-    console.log("Signed transaction with txID: %s", txId);
-
-    // Submit the transaction
-    await client.sendRawTransaction(signedTxn).do();
-
-    // Wait for transaction to be confirmed
-    confirmedTxn = await algosdk.waitForConfirmation(client, txId, 4);
-    //Get the completed Transaction
-    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    let appId = transactionResponse['application-index'];
-    console.log("Created new app-id: ",appId);
-    ```
+  await algodClient
+    .sendRawTransaction(appCreateTxn.signTxn(creator.privateKey))
+    .do();
+  const result = await algosdk.waitForConfirmation(
+    algodClient,
+    appCreateTxn.txID().toString(),
+    3
+  );
+  const createdApp = result['application-index'];
+  console.log(`Created app with index: ${createdApp}`);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L41-L63)
     <!-- ===JSSDK_APP_CREATE=== -->
 
 === "Java"
@@ -521,11 +543,14 @@ print(f"Address: {addr}")
 
 === "JavaScript"
 <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-	```javascript
-    // get accounts from mnemonic
-    let userAccount = algosdk.mnemonicToSecretKey(userMnemonic);
-    let sender = userAccount.addr;
-    ```
+```javascript
+  // restore 25-word mnemonic from environment variable
+  const mnemonicAccount = algosdk.mnemonicToSecretKey(
+    process.env.SAMPLE_MNEMONIC!
+  );
+  console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
 <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -568,22 +593,30 @@ opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
 signed_opt_in = opt_in_txn.sign(user.private_key)
 txid = algod_client.send_transaction(signed_opt_in)
 optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert optin_result["confirmed-round"] > 0
+assert optin_result['confirmed-round'] > 0
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L59-L64)
     <!-- ===PYSDK_APP_OPTIN=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_OPTIN=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationOptInTxn(sender, params, app_id);
+```javascript
+  const appOptInTxn = algosdk.makeApplicationOptInTxnFromObject({
+    from: caller.addr,
+    appIndex: createdApp,
+    suggestedParams,
+  });
 
-    // ... sign send wait
-
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid'])
-    ```
+  await algodClient
+    .sendRawTransaction(appOptInTxn.signTxn(caller.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    appOptInTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L67-L81)
     <!-- ===JSSDK_APP_OPTIN=== -->
 
 === "Java"
@@ -661,29 +694,30 @@ noop_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id)
 signed_noop = noop_txn.sign(user.private_key)
 txid = algod_client.send_transaction(signed_noop)
 noop_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert noop_result["confirmed-round"] > 0
+assert noop_result['confirmed-round']>0
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L67-L72)
     <!-- ===PYSDK_APP_NOOP=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_NOOP=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationNoOpTxn(sender, params, index, appArgs)
+```javascript
+  const appNoOpTxn = algosdk.makeApplicationNoOpTxnFromObject({
+    from: caller.addr,
+    appIndex: createdApp,
+    suggestedParams,
+  });
 
-    // ... sign, send, wait
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Called app-id:",transactionResponse['txn']['txn']['apid'])
-    if (transactionResponse['global-state-delta'] !== undefined ) {
-        console.log("Global State updated:",transactionResponse['global-state-delta']);
-    }
-    if (transactionResponse['local-state-delta'] !== undefined ) {
-        console.log("Local State updated:",transactionResponse['local-state-delta']);
-    }
-    ```
+  await algodClient
+    .sendRawTransaction(appNoOpTxn.signTxn(caller.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    appNoOpTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L84-L98)
     <!-- ===JSSDK_APP_NOOP=== -->
 
 === "Java"
@@ -763,39 +797,42 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
 ```python
 acct_info = algod_client.account_application_info(user.address, app_id)
 # base64 encoded keys and values
-print(acct_info["app-local-state"]["key-value"])
+print(acct_info['app-local-state']['key-value'])
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L75-L78)
     <!-- ===PYSDK_APP_READ_STATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_READ_STATE=== -->
-	```javascript
-    // read local state of application from user account
-    async function readLocalState(client, account, index){
-        let accountInfoResponse = await client.accountInformation(account.addr).do();
-        for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
-            if (accountInfoResponse['apps-local-state'][i].id == index) {
-                console.log("User's local state:");
-                for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].length; n++) {
-                    console.log(accountInfoResponse['apps-local-state'][i][`key-value`][n]);
-                }
-            }
-        }
-    }
+```javascript
+  const appInfo = await algodClient.getApplicationByID(createdApp).do();
+  const globalState = appInfo.params['global-state'][0];
+  console.log(`Raw global state - ${JSON.stringify(globalState)}`);
 
-    // read global state of application
-    async function readGlobalState(client, index){
-        let applicationInfoResponse = await client.applicationInfo(index).do();
-        let globalState = []
-        if(applicationInfoResponse['params'].includes('global-state')) {
-            globalState = applicationInfoResponse['params']['global-state']
-        }
-        for (let n = 0; n < globalState.length; n++) {
-            console.log(applicationInfoResponse['params']['global-state'][n]);
-        }
-    }
-    ```
+  // decode b64 string key with Buffer
+  const globalKey = Buffer.from(globalState.key, 'base64').toString();
+  // decode b64 address value with encodeAddress and Buffer
+  const globalValue = algosdk.encodeAddress(
+    Buffer.from(globalState.value.bytes, 'base64')
+  );
+
+  console.log(`Decoded global state - ${globalKey}: ${globalValue}`);
+
+  const accountAppInfo = await algodClient
+    .accountApplicationInformation(caller.addr, createdApp)
+    .do();
+
+  const localState = accountAppInfo['app-local-state']['key-value'][0];
+  console.log(`Raw local state - ${JSON.stringify(localState)}`);
+
+  // decode b64 string key with Buffer
+  const localKey = Buffer.from(localState.key, 'base64').toString();
+  // get uint value directly
+  const localValue = localState.value.uint;
+
+  console.log(`Decoded local state - ${localKey}: ${localValue}`);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L118-L144)
     <!-- ===JSSDK_APP_READ_STATE=== -->
 
 === "Java"
@@ -865,24 +902,39 @@ app_update_txn = transaction.ApplicationUpdateTxn(
 signed_update = app_update_txn.sign(creator.private_key)
 txid = algod_client.send_transaction(signed_update)
 update_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert update_result["confirmed-round"] > 0
+assert update_result['confirmed-round']>0
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L81-L102)
     <!-- ===PYSDK_APP_UPDATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_UPDATE=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationUpdateTxn(sender, params, index, approvalProgram, clearProgram);
+```javascript
+  const newProgram = fs.readFileSync(
+    path.join(__dirname, '/contracts/app_updated_approval.teal'),
+    'utf8'
+  );
+  const compiledNewProgram = await compileProgram(algodClient, newProgram);
 
-    // sign, send, await
+  const appUpdateTxn = algosdk.makeApplicationUpdateTxnFromObject({
+    from: creator.addr,
+    suggestedParams,
+    appIndex: createdApp,
+    // updates must define both approval and clear programs, even if unchanged
+    approvalProgram: compiledNewProgram,
+    clearProgram: compiledClearProgram,
+  });
 
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    let appId = transactionResponse['txn']['txn'].apid;
-    console.log("Updated app-id: ",appId);
-    ```
+  await algodClient
+    .sendRawTransaction(appUpdateTxn.signTxn(creator.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    appUpdateTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L164-L187)
     <!-- ===JSSDK_APP_UPDATE=== -->
 
 === "Java"
@@ -973,42 +1025,45 @@ call_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id, app_args)
 signed_call = call_txn.sign(user.private_key)
 txid = algod_client.send_transaction(signed_call)
 call_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert call_result["confirmed-round"] > 0
+assert call_result['confirmed-round']>0
 
 # display results
-print("Called app-id: ", call_result["txn"]["txn"]["apid"])
-if "global-state-delta" in call_result:
-    print("Global State updated :\n", call_result["global-state-delta"])
-if "local-state-delta" in call_result:
-    print("Local State updated :\n", call_result["local-state-delta"])
+print("Called app-id: ",call_result['txn']['txn']['apid'])
+if "global-state-delta" in call_result :
+    print("Global State updated :\n",call_result['global-state-delta'])
+if "local-state-delta" in call_result :
+    print("Local State updated :\n",call_result['local-state-delta'])
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L105-L120)
     <!-- ===PYSDK_APP_CALL=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CALL=== -->
-	```javascript
-    // call application with arguments
-    let ts = new Date(new Date().toUTCString());
-    console.log(ts)
-    let appArgs = [];
-    appArgs.push(new Uint8Array(Buffer.from(ts)));
+```javascript
+  const simpleAddTxn = algosdk.makeApplicationNoOpTxnFromObject({
+    from: sender.addr,
+    suggestedParams,
+    appIndex,
+    appArgs: [
+      new Uint8Array(Buffer.from('add', 'utf8')),
+      algosdk.encodeUint64(1),
+      algosdk.encodeUint64(2),
+    ],
+  });
 
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationNoOpTxn(sender, params, index, appArgs)
+  await client.sendRawTransaction(simpleAddTxn.signTxn(sender.privateKey)).do();
+  const simpleAddResult = await algosdk.waitForConfirmation(
+    client,
+    simpleAddTxn.txID().toString(),
+    3
+  );
 
-    // sign, send, await
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Called app-id:",transactionResponse['txn']['txn']['apid'])
-    if (transactionResponse['global-state-delta'] !== undefined ) {
-        console.log("Global State updated:",transactionResponse['global-state-delta']);
-    }
-    if (transactionResponse['local-state-delta'] !== undefined ) {
-        console.log("Local State updated:",transactionResponse['local-state-delta']);
-    }
-    ```
+  console.log(
+    'Result:',
+    algosdk.decodeUint64(simpleAddResult.logs[0], 'bigint')
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L48-L70)
     <!-- ===JSSDK_APP_CALL=== -->
 
 === "Java"
@@ -1110,23 +1165,30 @@ close_txn = transaction.ApplicationCloseOutTxn(user.address, sp, app_id)
 signed_close = close_txn.sign(user.private_key)
 txid = algod_client.send_transaction(signed_close)
 optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert optin_result["confirmed-round"] > 0
+assert optin_result['confirmed-round'] > 0
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L123-L128)
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationCloseOutTxn(sender, params, index)
+```javascript
+  const appCloseOutTxn = algosdk.makeApplicationCloseOutTxnFromObject({
+    from: caller.addr,
+    appIndex: createdApp,
+    suggestedParams,
+  });
 
-    // sign, send, await
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    console.log("Closed out from app-id:",transactionResponse['txn']['txn']['apid'])
-    ```
+  await algodClient
+    .sendRawTransaction(appCloseOutTxn.signTxn(caller.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    appCloseOutTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L147-L161)
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
 
 === "Java"
@@ -1206,24 +1268,30 @@ delete_txn = transaction.ApplicationDeleteTxn(creator.address, sp, app_id)
 signed_delete = delete_txn.sign(creator.private_key)
 txid = algod_client.send_transaction(signed_delete)
 optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert optin_result["confirmed-round"] > 0
+assert optin_result['confirmed-round'] > 0
 ```
 [Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L131-L136)
     <!-- ===PYSDK_APP_DELETE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_DELETE=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationDeleteTxn(sender, params, index);
+```javascript
+  const appDeleteTxn = algosdk.makeApplicationDeleteTxnFromObject({
+    from: creator.addr,
+    suggestedParams,
+    appIndex: createdApp,
+  });
 
-    // sign, send, await
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    let appId = transactionResponse['txn']['txn'].apid;
-    console.log("Deleted app-id: ",appId);
-    ```
+  await algodClient
+    .sendRawTransaction(appDeleteTxn.signTxn(creator.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    appDeleteTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L207-L221)
     <!-- ===JSSDK_APP_DELETE=== -->
 
 === "Java"
@@ -1297,25 +1365,29 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 === "Python"
     <!-- ===PYSDK_APP_CLEAR=== -->
 ```python
-clear_txn = transaction.ApplicationClearStateTxn(user.address, sp, app_id)
-# .. sign, send, wait
 ```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L139-L141)
+[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L139-L139)
     <!-- ===PYSDK_APP_CLEAR=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CLEAR=== -->
-	```javascript
-    // create unsigned transaction
-    let txn = algosdk.makeApplicationClearStateTxn(sender, params, index);
+```javascript
+  const appClearTxn = algosdk.makeApplicationClearStateTxnFromObject({
+    from: anotherCaller.addr,
+    suggestedParams,
+    appIndex: createdApp,
+  });
 
-    // sign, send, await
-
-    // display results
-    let transactionResponse = await client.pendingTransactionInformation(txId).do();
-    let appId = transactionResponse['txn']['txn'].apid;
-    console.log("Cleared local state for app-id: ",appId);
-    ```
+  await algodClient
+    .sendRawTransaction(appClearTxn.signTxn(anotherCaller.privateKey))
+    .do();
+  await algosdk.waitForConfirmation(
+    algodClient,
+    appClearTxn.txID().toString(),
+    3
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L190-L204)
     <!-- ===JSSDK_APP_CLEAR=== -->
 
 === "Java"
