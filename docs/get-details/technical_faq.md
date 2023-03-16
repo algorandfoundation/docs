@@ -1,5 +1,16 @@
 title: Technical FAQ
 
+
+# Protocol Limits
+
+How many transactions can be in an atomic group?
+How large can my approval program be?
+How many arguments can I pass? 
+What is the Minimum Balance Requirement increase for an asset opt-in?  
+
+The limits applied at the protocol level are documented [here](./parameter_tables.md).
+
+
 # Address Encoding/Decoding 
 
 An address comes in 2 forms:
@@ -14,10 +25,8 @@ All SDKs have a similarly named method.
 
 !! Note that smart contracts operate _only_ on the 32 byte version, so any interaction where an address is used should be translated prior to passing it to the smart contract. This is handled for you automatically in some cases (e.g. sender on a transaction)
 
-Resources:
-https://developer.algorand.org/docs/get-details/accounts/#keys-and-addresses
-https://developer.algorand.org/docs/get-details/encoding/#address
-
+[Address Details](./accounts/#keys-and-addresses)
+[Encoding Details](./encoding/#address)
 
 # Application State Encoding/Decoding 
 
@@ -51,17 +60,17 @@ When calling the API for global or local state, the result returned is in the fo
 
 # Deciphering Algod Errors 
 
-A 400 error typically occurs because there was some issue with the transactions. The exact reason will depend on the circumstances but the error message will contain more information.
+A 400 error typically occurs because there was some issue with the transactions. The exact reason will depend on the circumstances, but the error message will contain more information.
 
 Common reasons include:
 
 - `transaction already in ledger: ...`
 
-    This happens when resending a transaction that has already been approved. To make the transaction unique, add a nonce to the notefield or change the valid rounds.
+    This happens when resending a transaction that has already been approved. To make the transaction unique, add a nonce to the note field or change the valid rounds.
 
 - `underflow on subtracting SEND_AMOUNT from sender amount AVAILABLE_AMOUNT`, `account ADDRESS balance 0 below min XXX (N assets)`
 
-    All of these happen when some account does not have enough algos to cover the transaction (taking into account their minimum balance requirement and any other transaction in the same group). Fund the account if necessary or cover the fees from its transactions with another transaction in the group.
+    All of these happen when some account does not have enough Algos to cover the transaction (taking into account their minimum balance requirement and any other transaction in the same group). Fund the account if necessary or cover the fees from its transactions with another transaction in the group.
 
 - `receiver error: must optin, asset ASSET_ID missing from ACCOUNT_ADDR`
 
@@ -102,7 +111,7 @@ Common reasons include:
 
 - `invalid : program version mismatch: N != M`
 
-    This happens when you attempt to deploy or update a programs approval and clearstate code with two different versions. Check that they both have the same version number.
+    This happens when you attempt to deploy or update a programs approval and clear state code with two different versions. Check that they both have the same version number.
 
 
 # Deciphering Logic errors
@@ -120,7 +129,7 @@ For some common errors, find an explanation below:
 
 - `logic eval error: assert failed pc=XXX`
 
-    An assert was called on something that evaluated to 0. The `pc` will provide a pointer to where in the program the assert failed. To find where in the TEAL source program this corresponds to, compile the source TEAL with [`source_map`](https://developer.algorand.org/docs/rest-apis/algod/v2/#post-v2tealcompile) enabled and use the result to find the line in the source program. 
+    An `assert` was invoked on something that evaluated to 0. The `pc` will provide a pointer to where in the program the `assert` failed. To find where in the TEAL source program this corresponds to, compile the source TEAL with [`source_map`](https://developer.algorand.org/docs/rest-apis/algod/v2/#post-v2tealcompile) enabled and use the result to find the line in the source program. 
 
 - `logic eval error: program logs too large.`
 
@@ -132,11 +141,11 @@ For some common errors, find an explanation below:
 
 - `logic eval error: store TYPE count N exceeds schema TYPE count M`
 
-    Schema needs to be large enough to allow storage requirements. immutable so need to recreate app
+    Schema needs to be large enough to allow storage requirements. Since the schema immutable after creation, a new application must be created if more storage is required.
 
 - `logic eval error: err opcode executed.`
 
-    Unless you added an `err` to your program explicitly, it's likely this is the result of the internal routing of the app finding that there are no matching routes for some conditional block. Typically this happens when something like the ABI method selector passed is not present in the application.
+    Typically, this is the result of the internal routing of the app finding that there are no matching routes for some conditional block. This often happens when something like the ABI method selector passed is not present in the application.
 
 - `logic eval error: overspend` 
 
@@ -144,15 +153,15 @@ For some common errors, find an explanation below:
 
 - `logic eval error: * overflowed.`
 
-    The math operation would have returned a value > max uint64. Use wide math ops or byte math ops like `b*` .
+    The math operation would have returned a value > max uint64 (2^64 - 1). A solution is to use wide math opcodes to perform the arithmetic or byte math ops like `b*`.
 
 - `logic eval error: - would result negative.`
 
-    The math operation would have returned a negative value < 0. Check the values before using them within the operation.
+    The math operation would have returned a negative value (< 0). Consider checking the values before using them within the operation.
 
 - `logic eval error: invalid ApplicationArgs index 0.`
 
-    An attempt was made by the contract to access an Application Arguments array element that was not set. Check that the correct app args are passed and that the flow of the program does not accidentally reference an invalid index. 
+    An attempt was made by the contract to access an Application Arguments array element that was not set. Check that the correct Application Arguments are passed and that the flow of the program does not accidentally reference an invalid index.  
 
 # Environment Setup
 
@@ -162,8 +171,10 @@ Instructions for [Algokit](https://github.com/algorandfoundation/algokit-cli/blo
 
 Or
 
-Instructions for [Sandbox](https://github.com/algorand/sandbox)
+Instructions for [Sandbox](https://github.com/algorand/sandbox/README.md)
 
+
+# API Providers
 
 Which API should I use?
 
@@ -172,3 +183,6 @@ Any of these API providers can be used to query Algod or Indexer data.
 - [AlgoNode](https://algonode.io/api/)
 - [AlgoExplorer](https://algoexplorer.io/api-dev/v2)
 - [PureStake](https://developer.purestake.io/) 
+
+Or find others [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
+
