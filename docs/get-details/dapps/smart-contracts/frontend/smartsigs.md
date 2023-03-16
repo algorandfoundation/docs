@@ -48,62 +48,62 @@ int 1
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_COMPILE=== -->
-```javascript
-  const smartSigSource = '#pragma version 8\nint 1\nreturn'; // approve everything
-  const result = await client.compile(Buffer.from(smartSigSource)).do();
-
-  // Hash is equivalent to the contract address
-  console.log('Hash: ', result.hash);
-  console.log('B64: ', result.result);
-  const b64program = result.result;
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L15-L22)
+	```javascript
+	const smartSigSource = '#pragma version 8\nint 1\nreturn'; // approve everything
+	const result = await client.compile(Buffer.from(smartSigSource)).do();
+	
+	// Hash is equivalent to the contract address
+	console.log('Hash: ', result.hash);
+	console.log('B64: ', result.result);
+	const b64program = result.result;
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L15-L22)
     <!-- ===JSSDK_LSIG_COMPILE=== -->
 
 === "Python"
     <!-- ===PYSDK_LSIG_COMPILE=== -->
-```python
-    # read teal program
-    data = open(lsig_src_path, "r").read()
-    # compile teal program
-    response = algod_client.compile(data)
-    print("Response Result = ", response["result"])
-    print("Response Hash = ", response["hash"])
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L12-L18)
+	```python
+	# read teal program
+	data = open(lsig_src_path, "r").read()
+	# compile teal program
+	response = algod_client.compile(data)
+	print("Response Result = ", response["result"])
+	print("Response Hash = ", response["hash"])
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L12-L18)
     <!-- ===PYSDK_LSIG_COMPILE=== -->
 
 === "Java"
     <!-- ===JAVASDK_LSIG_COMPILE=== -->
-```java
-        String tealsrc = Files.readString(Paths.get("lsig/simple.teal"));
-        Response<CompileResponse> compileResp = algodClient.TealCompile().source(tealsrc.getBytes()).execute();
-        System.out.printf("Program: %s\n", compileResp.body().result);
-        System.out.printf("Address: %s\n", compileResp.body().hash);
-        byte[] tealBinary = Encoder.decodeFromBase64(compileResp.body().result);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
+	```java
+	String tealsrc = Files.readString(Paths.get("lsig/simple.teal"));
+	Response<CompileResponse> compileResp = algodClient.TealCompile().source(tealsrc.getBytes()).execute();
+	System.out.printf("Program: %s\n", compileResp.body().result);
+	System.out.printf("Address: %s\n", compileResp.body().hash);
+	byte[] tealBinary = Encoder.decodeFromBase64(compileResp.body().result);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
     <!-- ===JAVASDK_LSIG_COMPILE=== -->
 
 === "Go"
     <!-- ===GOSDK_LSIG_COMPILE=== -->
-```go
+	```go
 	teal, err := ioutil.ReadFile("lsig/simple.teal")
 	if err != nil {
 		log.Fatalf("failed to read approval program: %s", err)
 	}
-
+	
 	result, err := algodClient.TealCompile(teal).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to compile program: %s", err)
 	}
-
+	
 	lsigBinary, err := base64.StdEncoding.DecodeString(result.Result)
 	if err != nil {
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L23-L37)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L23-L37)
     <!-- ===GOSDK_LSIG_COMPILE=== -->
 
 Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
@@ -126,39 +126,39 @@ The response result from the TEAL `compile` command above is used to create the 
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_INIT=== -->
-```javascript
-  let smartSig = new algosdk.LogicSig(
-    new Uint8Array(Buffer.from(b64program, 'base64'))
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L25-L28)
+	```javascript
+	let smartSig = new algosdk.LogicSig(
+	  new Uint8Array(Buffer.from(b64program, 'base64'))
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L25-L28)
     <!-- ===JSSDK_LSIG_INIT=== -->
 
 === "Python"
     <!-- ===PYSDK_LSIG_INIT=== -->
-```python
-    program = base64.b64decode(compiled_program)
-    lsig = transaction.LogicSigAccount(program)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L25-L27)
+	```python
+	program = base64.b64decode(compiled_program)
+	lsig = transaction.LogicSigAccount(program)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L25-L27)
     <!-- ===PYSDK_LSIG_INIT=== -->
 
 === "Java"
     <!-- ===JAVASDK_LSIG_INIT=== -->
-```java
-        LogicSigAccount lsig = new LogicSigAccount(tealBinary, null);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
+	```java
+	LogicSigAccount lsig = new LogicSigAccount(tealBinary, null);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
     <!-- ===JAVASDK_LSIG_INIT=== -->
 
 === "Go"
     <!-- ===GOSDK_LSIG_INIT=== -->
-```go
+	```go
 	lsig := crypto.LogicSigAccount{
 		Lsig: types.LogicSig{Logic: lsigBinary, Args: nil},
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L40-L43)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L40-L43)
     <!-- ===GOSDK_LSIG_INIT=== -->
 
 # Passing parameters using the SDKs
@@ -169,53 +169,53 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
-```javascript
-  const args = [Buffer.from('This is an argument!')];
-  smartSig = new algosdk.LogicSig(
-    new Uint8Array(Buffer.from(b64program, 'base64')),
-    args
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L31-L36)
+	```javascript
+	const args = [Buffer.from('This is an argument!')];
+	smartSig = new algosdk.LogicSig(
+	  new Uint8Array(Buffer.from(b64program, 'base64')),
+	  args
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L31-L36)
     <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
 
 === "Python"
     <!-- ===PYSDK_LSIG_PASS_ARGS=== -->
-```python
-    # string parameter
-    arg_str = "my string"
-    arg1 = arg_str.encode()
-    lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
-    # OR integer parameter
-    arg1 = (123).to_bytes(8, "big")
-    lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L34-L41)
+	```python
+	# string parameter
+	arg_str = "my string"
+	arg1 = arg_str.encode()
+	lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
+	# OR integer parameter
+	arg1 = (123).to_bytes(8, "big")
+	lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L34-L41)
     <!-- ===PYSDK_LSIG_PASS_ARGS=== -->
 
 === "Java"
     <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
-```java
-        List<byte[]> tealArgs = new ArrayList<byte[]>();
-        // The arguments _must_ be byte arrays
-        byte[] arg1 = Encoder.encodeUint64(123l);
-        tealArgs.add(arg1);
-        LogicSigAccount lsigWithArgs = new LogicSigAccount(tealBinaryWithArgs, tealArgs);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
+	```java
+	List<byte[]> tealArgs = new ArrayList<byte[]>();
+	// The arguments _must_ be byte arrays
+	byte[] arg1 = Encoder.encodeUint64(123l);
+	tealArgs.add(arg1);
+	LogicSigAccount lsigWithArgs = new LogicSigAccount(tealBinaryWithArgs, tealArgs);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
     <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
 
 === "Go"
     <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
-```go
+	```go
 	encodedArg := make([]byte, 8)
 	binary.BigEndian.PutUint64(encodedArg, 123)
-
+	
 	lsigWithArgs := crypto.LogicSigAccount{
 		Lsig: types.LogicSig{Logic: lsigBinary, Args: [][]byte{encodedArg}},
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L47-L53)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L47-L53)
     <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
 
 
@@ -252,90 +252,90 @@ int 123
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
-```javascript
-  const smartSigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-    from: smartSig.address(),
-    to: funder.addr,
-    amount: 0.1e6,
-    suggestedParams,
-  });
-
-  const signedSmartSigTxn = algosdk.signLogicSigTransactionObject(
-    smartSigTxn,
-    smartSig
-  );
-
-  await client.sendRawTransaction(signedSmartSigTxn.blob).do();
-  await algosdk.waitForConfirmation(client, signedSmartSigTxn.txID, 3);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L55-L69)
+	```javascript
+	const smartSigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  from: smartSig.address(),
+	  to: funder.addr,
+	  amount: 0.1e6,
+	  suggestedParams,
+	});
+	
+	const signedSmartSigTxn = algosdk.signLogicSigTransactionObject(
+	  smartSigTxn,
+	  smartSig
+	);
+	
+	await client.sendRawTransaction(signedSmartSigTxn.blob).do();
+	await algosdk.waitForConfirmation(client, signedSmartSigTxn.txID, 3);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L55-L69)
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
 
 === "Python"
     <!-- ===PYSDK_LSIG_SIGN_FULL=== -->
-```python
-    # Create an algod client
-    lsig_args_path = Path("lsig") / "sample_arg.teal"
-    compiled_program = compile_lsig(lsig_args_path)
-    program_binary = base64.b64decode(compiled_program)
-    arg1 = (123).to_bytes(8, "big")
-    lsig = transaction.LogicSigAccount(program_binary, args=[arg1])
-    sender = lsig.address()
-    # Get suggested parameters
-    params = algod_client.suggested_params()
-    # Build transaction
-    amount = 10000
-    # Create a transaction
-    txn = transaction.PaymentTxn(sender, params, receiver, amount)
-    # Create the LogicSigTransaction with contract account LogicSigAccount
-    lstx = transaction.LogicSigTransaction(txn, lsig)
-
-    # Send raw LogicSigTransaction to network
-    txid = algod_client.send_transaction(lstx)
-    print("Transaction ID: " + txid)
-    # wait for confirmation
-    confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)
-    print(
-        "Result confirmed in round: {}".format(
-            confirmed_txn["confirmed-round"]
-        )
-    )
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L66-L92)
+	```python
+	# Create an algod client
+	lsig_args_path = Path("lsig") / "sample_arg.teal"
+	compiled_program = compile_lsig(lsig_args_path)
+	program_binary = base64.b64decode(compiled_program)
+	arg1 = (123).to_bytes(8, "big")
+	lsig = transaction.LogicSigAccount(program_binary, args=[arg1])
+	sender = lsig.address()
+	# Get suggested parameters
+	params = algod_client.suggested_params()
+	# Build transaction
+	amount = 10000
+	# Create a transaction
+	txn = transaction.PaymentTxn(sender, params, receiver, amount)
+	# Create the LogicSigTransaction with contract account LogicSigAccount
+	lstx = transaction.LogicSigTransaction(txn, lsig)
+	
+	# Send raw LogicSigTransaction to network
+	txid = algod_client.send_transaction(lstx)
+	print("Transaction ID: " + txid)
+	# wait for confirmation
+	confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(
+	    "Result confirmed in round: {}".format(
+	        confirmed_txn["confirmed-round"]
+	    )
+	)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L66-L92)
     <!-- ===PYSDK_LSIG_SIGN_FULL=== -->
 
 === "Java"
     <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
-```java
-        TransactionParametersResponse params = algodClient.TransactionParams().execute().body();
-        // create a transaction
-        Transaction txn = Transaction.PaymentTransactionBuilder()
-                .sender(lsig.getAddress())
-                .amount(100000)
-                .receiver(seedAcct.getAddress())
-                .suggestedParams(params)
-                .build();
-        // create the LogicSigTransaction with contract account LogicSigAccount
-        SignedTransaction stx = Account.signLogicsigTransaction(lsig.lsig, txn);
-        // send raw LogicSigTransaction to network
-        Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(stx)).execute();
-        String txid = submitResult.body().txId;
-        // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = Utils.waitForConfirmation(algodClient, txid, 4);
-        System.out.printf("Transaction %s confirmed in round %d\n", txid, pTrx.confirmedRound);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
+	```java
+	TransactionParametersResponse params = algodClient.TransactionParams().execute().body();
+	// create a transaction
+	Transaction txn = Transaction.PaymentTransactionBuilder()
+	        .sender(lsig.getAddress())
+	        .amount(100000)
+	        .receiver(seedAcct.getAddress())
+	        .suggestedParams(params)
+	        .build();
+	// create the LogicSigTransaction with contract account LogicSigAccount
+	SignedTransaction stx = Account.signLogicsigTransaction(lsig.lsig, txn);
+	// send raw LogicSigTransaction to network
+	Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(stx)).execute();
+	String txid = submitResult.body().txId;
+	// Wait for transaction confirmation
+	PendingTransactionResponse pTrx = Utils.waitForConfirmation(algodClient, txid, 4);
+	System.out.printf("Transaction %s confirmed in round %d\n", txid, pTrx.confirmedRound);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
     <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
 
 === "Go"
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
-```go
+	```go
 	sp, err = algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to get suggested params: %s", err)
 	}
-
+	
 	lsigAddr, err := lsig.Address()
 	if err != nil {
 		log.Fatalf("failed to get lsig address: %s", err)
@@ -352,14 +352,14 @@ int 123
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	payResult, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("failed while waiting for transaction: %s", err)
 	}
 	log.Printf("Lsig pay confirmed in round: %d", payResult.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L69-L96)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L69-L96)
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 
 # Account delegation SDK usage
@@ -384,98 +384,98 @@ The following example illustrates signing a transaction with a created logic sig
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
-```javascript
-  const userAccount = accounts[1];
-
-  // sign sig with userAccount so the program can send transactions from userAccount
-  smartSig.sign(userAccount.privateKey);
-
-  const delegatedTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-    from: userAccount.addr,
-    to: funder.addr,
-    amount: 0.1e6,
-    suggestedParams,
-  });
-
-  // use signLogicSigTransactionObject instead of the typical Transaction.signTxn function
-  const signedDelegatedTxn = algosdk.signLogicSigTransactionObject(
-    delegatedTxn,
-    smartSig
-  );
-
-  await client.sendRawTransaction(signedDelegatedTxn.blob).do();
-  await algosdk.waitForConfirmation(client, signedDelegatedTxn.txID, 3);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L72-L92)
+	```javascript
+	const userAccount = accounts[1];
+	
+	// sign sig with userAccount so the program can send transactions from userAccount
+	smartSig.sign(userAccount.privateKey);
+	
+	const delegatedTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  from: userAccount.addr,
+	  to: funder.addr,
+	  amount: 0.1e6,
+	  suggestedParams,
+	});
+	
+	// use signLogicSigTransactionObject instead of the typical Transaction.signTxn function
+	const signedDelegatedTxn = algosdk.signLogicSigTransactionObject(
+	  delegatedTxn,
+	  smartSig
+	);
+	
+	await client.sendRawTransaction(signedDelegatedTxn.blob).do();
+	await algosdk.waitForConfirmation(client, signedDelegatedTxn.txID, 3);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L72-L92)
     <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Python"
     <!-- ===PYSDK_LSIG_DELEGATE_FULL=== -->
-```python
-    lsig_args_path = Path("lsig") / "sample_arg.teal"
-    compiled_program = compile_lsig(lsig_args_path)
-    program_binary = base64.b64decode(compiled_program)
-    arg1 = (123).to_bytes(8, "big")
-    lsig = transaction.LogicSigAccount(program_binary, args=[arg1])
-
-    # Sign the logic signature with an account sk
-    lsig.sign(signer_acct.private_key)
-
-    # Get suggested parameters
-    params = algod_client.suggested_params()
-    amount = 10000
-    # Create a transaction where sender is the account that
-    # is the delegating account
-    txn = transaction.PaymentTxn(
-        signer_acct.address, params, receiver_acct.address, amount
-    )
-
-    # Create the LogicSigTransaction with contract account LogicSigAccount
-    lstx = transaction.LogicSigTransaction(txn, lsig)
-
-    # Send raw LogicSigTransaction to network
-    txid = algod_client.send_transaction(lstx)
-    print("Transaction ID: " + txid)
-
-    confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)
-    print(
-        "Result confirmed in round: {}".format(
-            confirmed_txn["confirmed-round"]
-        )
-    )
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L103-L134)
+	```python
+	lsig_args_path = Path("lsig") / "sample_arg.teal"
+	compiled_program = compile_lsig(lsig_args_path)
+	program_binary = base64.b64decode(compiled_program)
+	arg1 = (123).to_bytes(8, "big")
+	lsig = transaction.LogicSigAccount(program_binary, args=[arg1])
+	
+	# Sign the logic signature with an account sk
+	lsig.sign(signer_acct.private_key)
+	
+	# Get suggested parameters
+	params = algod_client.suggested_params()
+	amount = 10000
+	# Create a transaction where sender is the account that
+	# is the delegating account
+	txn = transaction.PaymentTxn(
+	    signer_acct.address, params, receiver_acct.address, amount
+	)
+	
+	# Create the LogicSigTransaction with contract account LogicSigAccount
+	lstx = transaction.LogicSigTransaction(txn, lsig)
+	
+	# Send raw LogicSigTransaction to network
+	txid = algod_client.send_transaction(lstx)
+	print("Transaction ID: " + txid)
+	
+	confirmed_txn = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(
+	    "Result confirmed in round: {}".format(
+	        confirmed_txn["confirmed-round"]
+	    )
+	)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L103-L134)
     <!-- ===PYSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Java"
     <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
-```java
-        // account signs the logic, and now the logic may be passed instead
-        // of a signature for a transaction
-        LogicsigSignature delegateLsig = seedAcct.signLogicsig(lsigWithArgs.lsig);
-        params = algodClient.TransactionParams().execute().body();
-        // create a transaction where the sender is the signer of the lsig
-        txn = Transaction.PaymentTransactionBuilder()
-                .sender(seedAcct.getAddress())
-                .amount(100000)
-                .receiver(delegateLsig.toAddress())
-                .suggestedParams(params)
-                .build();
-        // Sign the transaction with the delegate lsig
-        stx = Account.signLogicsigTransaction(delegateLsig, txn);
-        // send raw LogicSigTransaction to network
-        submitResult = algodClient.RawTransaction().rawtxn(Encoder.encodeToMsgPack(stx)).execute();
-        txid = submitResult.body().txId;
-        // Wait for transaction confirmation
-        PendingTransactionResponse delegatResponse = Utils.waitForConfirmation(algodClient, txid, 4);
-        System.out.printf("Transaction %s confirmed in round %d\n", txid, delegatResponse.confirmedRound);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
+	```java
+	// account signs the logic, and now the logic may be passed instead
+	// of a signature for a transaction
+	LogicsigSignature delegateLsig = seedAcct.signLogicsig(lsigWithArgs.lsig);
+	params = algodClient.TransactionParams().execute().body();
+	// create a transaction where the sender is the signer of the lsig
+	txn = Transaction.PaymentTransactionBuilder()
+	        .sender(seedAcct.getAddress())
+	        .amount(100000)
+	        .receiver(delegateLsig.toAddress())
+	        .suggestedParams(params)
+	        .build();
+	// Sign the transaction with the delegate lsig
+	stx = Account.signLogicsigTransaction(delegateLsig, txn);
+	// send raw LogicSigTransaction to network
+	submitResult = algodClient.RawTransaction().rawtxn(Encoder.encodeToMsgPack(stx)).execute();
+	txid = submitResult.body().txId;
+	// Wait for transaction confirmation
+	PendingTransactionResponse delegatResponse = Utils.waitForConfirmation(algodClient, txid, 4);
+	System.out.printf("Transaction %s confirmed in round %d\n", txid, delegatResponse.confirmedRound);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
     <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
 
 === "Go"
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
-```go
+	```go
 	// account signs the logic, and now the logic may be passed instead
 	// of a signature for a transaction
 	var args [][]byte
@@ -483,30 +483,30 @@ The following example illustrates signing a transaction with a created logic sig
 	if err != nil {
 		log.Fatalf("failed to make delegate lsig: %s", err)
 	}
-
+	
 	delSigPay, err := transaction.MakePaymentTxn(seedAddr, lsigAddr.String(), 10000, nil, "", sp)
 	if err != nil {
 		log.Fatalf("failed to make transaction: %s", err)
 	}
-
+	
 	delTxId, delStxn, err := crypto.SignLogicSigAccountTransaction(delSig, delSigPay)
 	if err != nil {
 		log.Fatalf("failed to sign with delegate sig: %s", err)
 	}
-
+	
 	_, err = algodClient.SendRawTransaction(delStxn).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	delPayResult, err := transaction.WaitForConfirmation(algodClient, delTxId, 4, context.Background())
 	if err != nil {
 		log.Fatalf("failed while waiting for transaction: %s", err)
 	}
-
+	
 	log.Printf("Delegated Lsig pay confirmed in round: %d", delPayResult.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L99-L128)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L99-L128)
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
 
 !!! Note

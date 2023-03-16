@@ -46,54 +46,54 @@ An `algod` client connection is also required. The following connects using Sand
 
 === "Python"
     <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
-```python
-# Create a new algod client, configured to connect to our local sandbox
-algod_address = "http://localhost:4001"
-algod_token = "a" * 64
-algod_client = algod.AlgodClient(algod_token, algod_address)
-
-# Or, if necessary, pass alternate headers
-
-# Create a new client with an alternate api key header
-special_algod_client = algod.AlgodClient(
-    "", algod_address, headers={"X-API-Key": algod_token}
-)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L10-L21)
+	```python
+	# Create a new algod client, configured to connect to our local sandbox
+	algod_address = "http://localhost:4001"
+	algod_token = "a" * 64
+	algod_client = algod.AlgodClient(algod_token, algod_address)
+	
+	# Or, if necessary, pass alternate headers
+	
+	# Create a new client with an alternate api key header
+	special_algod_client = algod.AlgodClient(
+	    "", algod_address, headers={"X-API-Key": algod_token}
+	)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L10-L21)
     <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
-```javascript
-export function getLocalAlgodClient() {
-  const algodToken = 'a'.repeat(64);
-  const algodServer = 'http://localhost';
-  const algodPort = 4001;
-
-  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
-}
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L27-L34)
+	```javascript
+	export function getLocalAlgodClient() {
+	  const algodToken = 'a'.repeat(64);
+	  const algodServer = 'http://localhost';
+	  const algodPort = 4001;
+	
+	  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
+	}
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L27-L34)
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
-```java
-        String algodHost = "http://localhost";
-        int algodPort = 4001;
-        String algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
-
-        // OR if the API provider requires a specific header key for the token
-        String tokenHeader = "X-API-Key";
-        AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
+	```java
+	String algodHost = "http://localhost";
+	int algodPort = 4001;
+	String algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
+	
+	// OR if the API provider requires a specific header key for the token
+	String tokenHeader = "X-API-Key";
+	AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Go"
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
-```go
+	```go
 	// Create a new algod client, configured to connect to out local sandbox
 	var algodAddress = "http://localhost:4001"
 	var algodToken = strings.Repeat("a", 64)
@@ -101,9 +101,9 @@ export function getLocalAlgodClient() {
 		algodAddress,
 		algodToken,
 	)
-
+	
 	// Or, if necessary, pass alternate headers
-
+	
 	var algodHeader common.Header
 	algodHeader.Key = "X-API-Key"
 	algodHeader.Value = algodToken
@@ -112,8 +112,8 @@ export function getLocalAlgodClient() {
 		algodToken,
 		[]*common.Header{&algodHeader},
 	)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L47-L65)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L47-L65)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -130,43 +130,43 @@ The example application defined below may hold up to one each of `bytes` and `in
 
 === "Python"
     <!-- ===PYSDK_APP_SCHEMA=== -->
-```python
-# create schema for both global and local state, specifying
-# how many keys of each type we need to have available
-local_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
-global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L11-L15)
+	```python
+	# create schema for both global and local state, specifying
+	# how many keys of each type we need to have available
+	local_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
+	global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L11-L15)
     <!-- ===PYSDK_APP_SCHEMA=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_SCHEMA=== -->
-```javascript
-  // define uint64s and byteslices stored in global/local storage
-  const numGlobalByteSlices = 1;
-  const numGlobalInts = 0;
-  const numLocalByteSlices = 0;
-  const numLocalInts = 1;
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L33-L38)
+	```javascript
+	// define uint64s and byteslices stored in global/local storage
+	const numGlobalByteSlices = 1;
+	const numGlobalInts = 0;
+	const numLocalByteSlices = 0;
+	const numLocalInts = 1;
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L33-L38)
     <!-- ===JSSDK_APP_SCHEMA=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_SCHEMA=== -->
-```java
-        int localInts = 1;
-        int localBytes = 1;
-        int globalInts = 1;
-        int globalBytes = 0;
-        StateSchema localSchema = new StateSchema(localInts, localBytes);
-        StateSchema globalSchema = new StateSchema(globalInts, globalBytes);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L40-L46)
+	```java
+	int localInts = 1;
+	int localBytes = 1;
+	int globalInts = 1;
+	int globalBytes = 0;
+	StateSchema localSchema = new StateSchema(localInts, localBytes);
+	StateSchema globalSchema = new StateSchema(globalInts, globalBytes);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L40-L46)
     <!-- ===JAVASDK_APP_SCHEMA=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_SCHEMA=== -->
-```go
+	```go
 	// declare application state storage (immutable)
 	var (
 		localInts   uint64 = 1
@@ -174,12 +174,12 @@ global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 		globalInts  uint64 = 1
 		globalBytes uint64 = 0
 	)
-
+	
 	// define schema
 	globalSchema := types.StateSchema{NumUint: globalInts, NumByteSlice: globalBytes}
 	localSchema := types.StateSchema{NumUint: localInts, NumByteSlice: localBytes}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L54-L65)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L54-L65)
     <!-- ===GOSDK_APP_SCHEMA=== -->
 
 !!! Info
@@ -196,50 +196,50 @@ This is the most basic [clear program](../apps/#the-lifecycle-of-a-stateful-smar
 
 === "Python"
     <!-- ===PYSDK_APP_SOURCE=== -->
-```python
-# read the `.teal` source files from disk
-with open("application/approval.teal", "r") as f:
-    approval_program = f.read()
-
-with open("application/clear.teal", "r") as f:
-    clear_program = f.read()
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L18-L24)
+	```python
+	# read the `.teal` source files from disk
+	with open("application/approval.teal", "r") as f:
+	    approval_program = f.read()
+	
+	with open("application/clear.teal", "r") as f:
+	    clear_program = f.read()
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L18-L24)
     <!-- ===PYSDK_APP_SOURCE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_SOURCE=== -->
-```javascript
-  // define TEAL source from string or from a file
-  const approvalProgram = fs.readFileSync(
-    path.join(__dirname, '/contracts/app_approval.teal'),
-    'utf8'
-  );
-  const clearProgram = '#pragma version 8\nint 1\nreturn';
-
-  // compile with helper function
-  const compiledApprovalProgram = await compileProgram(
-    algodClient,
-    approvalProgram
-  );
-  const compiledClearProgram = await compileProgram(algodClient, clearProgram);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L17-L30)
+	```javascript
+	// define TEAL source from string or from a file
+	const approvalProgram = fs.readFileSync(
+	  path.join(__dirname, '/contracts/app_approval.teal'),
+	  'utf8'
+	);
+	const clearProgram = '#pragma version 8\nint 1\nreturn';
+	
+	// compile with helper function
+	const compiledApprovalProgram = await compileProgram(
+	  algodClient,
+	  approvalProgram
+	);
+	const compiledClearProgram = await compileProgram(algodClient, clearProgram);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L17-L30)
     <!-- ===JSSDK_APP_SOURCE=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_SOURCE=== -->
-```java
-        // Read in the `teal` source files as a string
-        String approvalSource = Files.readString(Paths.get("application/approval.teal"));
-        String clearSource = Files.readString(Paths.get("application/clear.teal"));
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L49-L52)
+	```java
+	// Read in the `teal` source files as a string
+	String approvalSource = Files.readString(Paths.get("application/approval.teal"));
+	String clearSource = Files.readString(Paths.get("application/clear.teal"));
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L49-L52)
     <!-- ===JAVASDK_APP_SOURCE=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_SOURCE=== -->
-```go
+	```go
 	approvalTeal, err := ioutil.ReadFile("application/approval.teal")
 	if err != nil {
 		log.Fatalf("failed to read approval program: %s", err)
@@ -248,8 +248,8 @@ with open("application/clear.teal", "r") as f:
 	if err != nil {
 		log.Fatalf("failed to read clear program: %s", err)
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L68-L76)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L68-L76)
     <!-- ===GOSDK_APP_SOURCE=== -->
 
 # Application methods
@@ -270,222 +270,222 @@ Use the creator_mnemonic to define sender:
 
 === "Python"
     <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```python
-mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
-pk = mnemonic.to_private_key(mn)
-print(f"Base64 encoded private key: {pk}")
-addr = account.address_from_private_key(pk)
-print(f"Address: {addr}")
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
+	```python
+	mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
+	pk = mnemonic.to_private_key(mn)
+	print(f"Base64 encoded private key: {pk}")
+	addr = account.address_from_private_key(pk)
+	print(f"Address: {addr}")
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
     <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```javascript
-  // restore 25-word mnemonic from environment variable
-  const mnemonicAccount = algosdk.mnemonicToSecretKey(
-    process.env.SAMPLE_MNEMONIC!
-  );
-  console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
+	```javascript
+	// restore 25-word mnemonic from environment variable
+	const mnemonicAccount = algosdk.mnemonicToSecretKey(
+	  process.env.SAMPLE_MNEMONIC!
+	);
+	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```java
-                // Space delimited 25 word mnemonic
-                String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
-                // We can get the private key
-                byte[] key = Mnemonic.toKey(mn);
-                // Or just init the account directly from the mnemonic
-                Account acct = new Account(mn);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+	```java
+	// Space delimited 25 word mnemonic
+	String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
+	// We can get the private key
+	byte[] key = Mnemonic.toKey(mn);
+	// Or just init the account directly from the mnemonic
+	Account acct = new Account(mn);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```go
+	```go
 	k, err := mnemonic.ToPrivateKey(mn)
 	if err != nil {
 		log.Fatalf("failed to parse mnemonic: %s", err)
 	}
-
+	
 	recovered, err := crypto.AccountFromPrivateKey(k)
 	if err != nil {
 		log.Fatalf("failed to recover account from key: %s", err)
 	}
-
+	
 	log.Printf("%+v", recovered)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Compile the programs using the `compile` endpoint:
 
 === "Python"
     <!-- ===PYSDK_APP_COMPILE=== -->
-```python
-# pass the `.teal` files to the compile endpoint
-# and b64 decode the result to bytes
-approval_result = algod_client.compile(approval_program)
-approval_binary = base64.b64decode(approval_result["result"])
-
-clear_result = algod_client.compile(clear_program)
-clear_binary = base64.b64decode(clear_result["result"])
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L29-L36)
+	```python
+	# pass the `.teal` files to the compile endpoint
+	# and b64 decode the result to bytes
+	approval_result = algod_client.compile(approval_program)
+	approval_binary = base64.b64decode(approval_result["result"])
+	
+	clear_result = algod_client.compile(clear_program)
+	clear_binary = base64.b64decode(clear_result["result"])
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L29-L36)
     <!-- ===PYSDK_APP_COMPILE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_COMPILE=== -->
-```javascript
-export async function compileProgram(
-  client: algosdk.Algodv2,
-  programSource: string
-) {
-  const compileResponse = await client.compile(Buffer.from(programSource)).do();
-  const compiledBytes = new Uint8Array(
-    Buffer.from(compileResponse.result, 'base64')
-  );
-  return compiledBytes;
-}
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L4-L14)
+	```javascript
+	export async function compileProgram(
+	  client: algosdk.Algodv2,
+	  programSource: string
+	) {
+	  const compileResponse = await client.compile(Buffer.from(programSource)).do();
+	  const compiledBytes = new Uint8Array(
+	    Buffer.from(compileResponse.result, 'base64')
+	  );
+	  return compiledBytes;
+	}
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L4-L14)
     <!-- ===JSSDK_APP_COMPILE=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_COMPILE=== -->
-```java
-        CompileResponse approvalResponse = algodClient.TealCompile().source(approvalSource.getBytes()).execute()
-                .body();
-        CompileResponse clearResponse = algodClient.TealCompile().source(clearSource.getBytes()).execute()
-                .body();
-
-        TEALProgram approvalProg = new TEALProgram(approvalResponse.result);
-        TEALProgram clearProg = new TEALProgram(clearResponse.result);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L55-L62)
+	```java
+	CompileResponse approvalResponse = algodClient.TealCompile().source(approvalSource.getBytes()).execute()
+	        .body();
+	CompileResponse clearResponse = algodClient.TealCompile().source(clearSource.getBytes()).execute()
+	        .body();
+	
+	TEALProgram approvalProg = new TEALProgram(approvalResponse.result);
+	TEALProgram clearProg = new TEALProgram(clearResponse.result);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L55-L62)
     <!-- ===JAVASDK_APP_COMPILE=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_COMPILE=== -->
-```go
+	```go
 	approvalResult, err := algodClient.TealCompile(approvalTeal).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to compile program: %s", err)
 	}
-
+	
 	approvalBinary, err := base64.StdEncoding.DecodeString(approvalResult.Result)
 	if err != nil {
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
-
+	
 	clearResult, err := algodClient.TealCompile(clearTeal).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to compile program: %s", err)
 	}
-
+	
 	clearBinary, err := base64.StdEncoding.DecodeString(clearResult.Result)
 	if err != nil {
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L79-L98)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L79-L98)
     <!-- ===GOSDK_APP_COMPILE=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation
 
 === "Python"
     <!-- ===PYSDK_APP_CREATE=== -->
-```python
-sp = algod_client.suggested_params()
-# create the app create transaction, passing compiled programs and schema
-app_create_txn = transaction.ApplicationCreateTxn(
-    creator.address,
-    sp,
-    transaction.OnComplete.NoOpOC,
-    approval_program=approval_binary,
-    clear_program=clear_binary,
-    global_schema=global_schema,
-    local_schema=local_schema,
-)
-# sign transaction
-signed_create_txn = app_create_txn.sign(creator.private_key)
-txid = algod_client.send_transaction(signed_create_txn)
-result = transaction.wait_for_confirmation(algod_client, txid, 4)
-app_id = result['application-index']
-print(f"Created app with id: {app_id}")
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L39-L56)
+	```python
+	sp = algod_client.suggested_params()
+	# create the app create transaction, passing compiled programs and schema
+	app_create_txn = transaction.ApplicationCreateTxn(
+	    creator.address,
+	    sp,
+	    transaction.OnComplete.NoOpOC,
+	    approval_program=approval_binary,
+	    clear_program=clear_binary,
+	    global_schema=global_schema,
+	    local_schema=local_schema,
+	)
+	# sign transaction
+	signed_create_txn = app_create_txn.sign(creator.private_key)
+	txid = algod_client.send_transaction(signed_create_txn)
+	result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	app_id = result["application-index"]
+	print(f"Created app with id: {app_id}")
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L39-L56)
     <!-- ===PYSDK_APP_CREATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CREATE=== -->
-```javascript
-  const appCreateTxn = algosdk.makeApplicationCreateTxnFromObject({
-    from: creator.addr,
-    approvalProgram: compiledApprovalProgram,
-    clearProgram: compiledClearProgram,
-    numGlobalByteSlices,
-    numGlobalInts,
-    numLocalByteSlices,
-    numLocalInts,
-    suggestedParams,
-    onComplete: algosdk.OnApplicationComplete.NoOpOC,
-  });
-
-  await algodClient
-    .sendRawTransaction(appCreateTxn.signTxn(creator.privateKey))
-    .do();
-  const result = await algosdk.waitForConfirmation(
-    algodClient,
-    appCreateTxn.txID().toString(),
-    3
-  );
-  const createdApp = result['application-index'];
-  console.log(`Created app with index: ${createdApp}`);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L41-L63)
+	```javascript
+	const appCreateTxn = algosdk.makeApplicationCreateTxnFromObject({
+	  from: creator.addr,
+	  approvalProgram: compiledApprovalProgram,
+	  clearProgram: compiledClearProgram,
+	  numGlobalByteSlices,
+	  numGlobalInts,
+	  numLocalByteSlices,
+	  numLocalInts,
+	  suggestedParams,
+	  onComplete: algosdk.OnApplicationComplete.NoOpOC,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appCreateTxn.signTxn(creator.privateKey))
+	  .do();
+	const result = await algosdk.waitForConfirmation(
+	  algodClient,
+	  appCreateTxn.txID().toString(),
+	  3
+	);
+	const createdApp = result['application-index'];
+	console.log(`Created app with index: ${createdApp}`);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L41-L63)
     <!-- ===JSSDK_APP_CREATE=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_CREATE=== -->
-```java
-        Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
-        TransactionParametersResponse sp = rsp.body();
-
-        Transaction appCreate = ApplicationCreateTransactionBuilder.Builder()
-                .sender(creator.getAddress())
-                .suggestedParams(sp)
-                .approvalProgram(approvalProg)
-                .clearStateProgram(clearProg)
-                .localStateSchema(localSchema)
-                .globalStateSchema(globalSchema)
-                .build();
-
-        SignedTransaction signedAppCreate = creator.signTransaction(appCreate);
-        Response<PostTransactionsResponse> createResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedAppCreate)).execute();
-
-        PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, createResponse.body().txId, 4);
-        Long appId = result.applicationIndex;
-        System.out.printf("Created application with id: %d\n", appId);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L84)
+	```java
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	
+	Transaction appCreate = ApplicationCreateTransactionBuilder.Builder()
+	        .sender(creator.getAddress())
+	        .suggestedParams(sp)
+	        .approvalProgram(approvalProg)
+	        .clearStateProgram(clearProg)
+	        .localStateSchema(localSchema)
+	        .globalStateSchema(globalSchema)
+	        .build();
+	
+	SignedTransaction signedAppCreate = creator.signTransaction(appCreate);
+	Response<PostTransactionsResponse> createResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedAppCreate)).execute();
+	
+	PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, createResponse.body().txId, 4);
+	Long appId = result.applicationIndex;
+	System.out.printf("Created application with id: %d\n", appId);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L84)
     <!-- ===JAVASDK_APP_CREATE=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_CREATE=== -->
-```go
+	```go
 	// Create application
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	txn, err := transaction.MakeApplicationCreateTx(
 		false, approvalBinary, clearBinary, globalSchema, localSchema,
 		nil, nil, nil, nil, sp, creator.Address, nil,
@@ -494,25 +494,25 @@ print(f"Created app with id: {app_id}")
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
 	appID := confirmedTxn.ApplicationIndex
 	log.Printf("Created app with id: %d", appID)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L101-L132)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L101-L132)
     <!-- ===GOSDK_APP_CREATE=== -->
 
 
@@ -530,122 +530,122 @@ The user must [opt-in](../apps/#opt-in-to-the-smart-contract) to call the applic
 Use the user_mnemonic to define sender:
 
 === "Python"
-<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```python
-mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
-pk = mnemonic.to_private_key(mn)
-print(f"Base64 encoded private key: {pk}")
-addr = account.address_from_private_key(pk)
-print(f"Address: {addr}")
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
-<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	```python
+	mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
+	pk = mnemonic.to_private_key(mn)
+	print(f"Base64 encoded private key: {pk}")
+	addr = account.address_from_private_key(pk)
+	print(f"Address: {addr}")
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
+	<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
-<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```javascript
-  // restore 25-word mnemonic from environment variable
-  const mnemonicAccount = algosdk.mnemonicToSecretKey(
-    process.env.SAMPLE_MNEMONIC!
-  );
-  console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
-<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	```javascript
+	// restore 25-word mnemonic from environment variable
+	const mnemonicAccount = algosdk.mnemonicToSecretKey(
+	  process.env.SAMPLE_MNEMONIC!
+	);
+	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
+	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
-<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```java
-                // Space delimited 25 word mnemonic
-                String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
-                // We can get the private key
-                byte[] key = Mnemonic.toKey(mn);
-                // Or just init the account directly from the mnemonic
-                Account acct = new Account(mn);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
-<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	```java
+	// Space delimited 25 word mnemonic
+	String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
+	// We can get the private key
+	byte[] key = Mnemonic.toKey(mn);
+	// Or just init the account directly from the mnemonic
+	Account acct = new Account(mn);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+	<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
-<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
-```go
+	<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	```go
 	k, err := mnemonic.ToPrivateKey(mn)
 	if err != nil {
 		log.Fatalf("failed to parse mnemonic: %s", err)
 	}
-
+	
 	recovered, err := crypto.AccountFromPrivateKey(k)
 	if err != nil {
 		log.Fatalf("failed to recover account from key: %s", err)
 	}
-
+	
 	log.Printf("%+v", recovered)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
-<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
+	<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:
 
 === "Python"
     <!-- ===PYSDK_APP_OPTIN=== -->
-```python
-opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
-signed_opt_in = opt_in_txn.sign(user.private_key)
-txid = algod_client.send_transaction(signed_opt_in)
-optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert optin_result['confirmed-round'] > 0
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L59-L64)
+	```python
+	opt_in_txn = transaction.ApplicationOptInTxn(user.address, sp, app_id)
+	signed_opt_in = opt_in_txn.sign(user.private_key)
+	txid = algod_client.send_transaction(signed_opt_in)
+	optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	assert optin_result["confirmed-round"] > 0
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L59-L64)
     <!-- ===PYSDK_APP_OPTIN=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_OPTIN=== -->
-```javascript
-  const appOptInTxn = algosdk.makeApplicationOptInTxnFromObject({
-    from: caller.addr,
-    appIndex: createdApp,
-    suggestedParams,
-  });
-
-  await algodClient
-    .sendRawTransaction(appOptInTxn.signTxn(caller.privateKey))
-    .do();
-  await algosdk.waitForConfirmation(
-    algodClient,
-    appOptInTxn.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L67-L81)
+	```javascript
+	const appOptInTxn = algosdk.makeApplicationOptInTxnFromObject({
+	  from: caller.addr,
+	  appIndex: createdApp,
+	  suggestedParams,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appOptInTxn.signTxn(caller.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  appOptInTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L67-L81)
     <!-- ===JSSDK_APP_OPTIN=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_OPTIN=== -->
-```java
-        Transaction optInTxn = ApplicationOptInTransactionBuilder.Builder()
-                .sender(user.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .build();
-
-        SignedTransaction signedOptIn = user.signTransaction(optInTxn);
-        Response<PostTransactionsResponse> optInResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedOptIn)).execute();
-
-        PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient, optInResponse.body().txId, 4);
-        assert optInResult.confirmedRound > 0;
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L87-L99)
+	```java
+	Transaction optInTxn = ApplicationOptInTransactionBuilder.Builder()
+	        .sender(user.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .build();
+	
+	SignedTransaction signedOptIn = user.signTransaction(optInTxn);
+	Response<PostTransactionsResponse> optInResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedOptIn)).execute();
+	
+	PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient, optInResponse.body().txId, 4);
+	assert optInResult.confirmedRound > 0;
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L87-L99)
     <!-- ===JAVASDK_APP_OPTIN=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_OPTIN=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	// Create a new clawback transaction with the target of the user address and the recipient as the creator
 	// address, being sent from the address marked as `clawback` on the asset, in this case the same as creator
 	txn, err := transaction.MakeApplicationOptInTx(
@@ -660,22 +660,22 @@ assert optin_result['confirmed-round'] > 0
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L138-L171)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L138-L171)
     <!-- ===GOSDK_APP_OPTIN=== -->
 
 
@@ -689,74 +689,74 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
 
 === "Python"
     <!-- ===PYSDK_APP_NOOP=== -->
-```python
-noop_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id)
-signed_noop = noop_txn.sign(user.private_key)
-txid = algod_client.send_transaction(signed_noop)
-noop_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert noop_result['confirmed-round']>0
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L67-L72)
+	```python
+	noop_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id)
+	signed_noop = noop_txn.sign(user.private_key)
+	txid = algod_client.send_transaction(signed_noop)
+	noop_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	assert noop_result["confirmed-round"] > 0
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L67-L72)
     <!-- ===PYSDK_APP_NOOP=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_NOOP=== -->
-```javascript
-  const appNoOpTxn = algosdk.makeApplicationNoOpTxnFromObject({
-    from: caller.addr,
-    appIndex: createdApp,
-    suggestedParams,
-  });
-
-  await algodClient
-    .sendRawTransaction(appNoOpTxn.signTxn(caller.privateKey))
-    .do();
-  await algosdk.waitForConfirmation(
-    algodClient,
-    appNoOpTxn.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L84-L98)
+	```javascript
+	const appNoOpTxn = algosdk.makeApplicationNoOpTxnFromObject({
+	  from: caller.addr,
+	  appIndex: createdApp,
+	  suggestedParams,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appNoOpTxn.signTxn(caller.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  appNoOpTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L84-L98)
     <!-- ===JSSDK_APP_NOOP=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_NOOP=== -->
-```java
-        Transaction noopTxn = ApplicationCallTransactionBuilder.Builder()
-                .sender(user.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .build();
-
-        SignedTransaction signedNoop = user.signTransaction(noopTxn);
-        Response<PostTransactionsResponse> noopResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedNoop)).execute();
-
-        PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId, 4);
-        assert noopResult.confirmedRound > 0;
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L102-L114)
+	```java
+	Transaction noopTxn = ApplicationCallTransactionBuilder.Builder()
+	        .sender(user.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .build();
+	
+	SignedTransaction signedNoop = user.signTransaction(noopTxn);
+	Response<PostTransactionsResponse> noopResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedNoop)).execute();
+	
+	PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId, 4);
+	assert noopResult.confirmedRound > 0;
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L102-L114)
     <!-- ===JAVASDK_APP_NOOP=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_NOOP=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	var (
 		appArgs [][]byte
 		accts   []string
 		apps    []uint64
 		assets  []uint64
 	)
-
+	
 	// Add an arg to our app call
 	appArgs = append(appArgs, []byte("arg0"))
-
+	
 	txn, err := transaction.MakeApplicationNoOpTx(
 		appID, appArgs, accts, apps, assets, sp,
 		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
@@ -764,28 +764,28 @@ assert noop_result['confirmed-round']>0
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	// sign the transaction
 	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L176-L218)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L176-L218)
     <!-- ===GOSDK_APP_NOOP=== -->
 
 ## Read state
@@ -794,64 +794,65 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
 
 === "Python"
     <!-- ===PYSDK_APP_READ_STATE=== -->
-```python
-acct_info = algod_client.account_application_info(user.address, app_id)
-# base64 encoded keys and values
-print(acct_info['app-local-state']['key-value'])
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L75-L78)
+	```python
+	acct_info = algod_client.account_application_info(user.address, app_id)
+	# base64 encoded keys and values
+	print(acct_info["app-local-state"]["key-value"])
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L75-L78)
     <!-- ===PYSDK_APP_READ_STATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_READ_STATE=== -->
-```javascript
-  const appInfo = await algodClient.getApplicationByID(createdApp).do();
-  const globalState = appInfo.params['global-state'][0];
-  console.log(`Raw global state - ${JSON.stringify(globalState)}`);
-
-  // decode b64 string key with Buffer
-  const globalKey = Buffer.from(globalState.key, 'base64').toString();
-  // decode b64 address value with encodeAddress and Buffer
-  const globalValue = algosdk.encodeAddress(
-    Buffer.from(globalState.value.bytes, 'base64')
-  );
-
-  console.log(`Decoded global state - ${globalKey}: ${globalValue}`);
-
-  const accountAppInfo = await algodClient
-    .accountApplicationInformation(caller.addr, createdApp)
-    .do();
-
-  const localState = accountAppInfo['app-local-state']['key-value'][0];
-  console.log(`Raw local state - ${JSON.stringify(localState)}`);
-
-  // decode b64 string key with Buffer
-  const localKey = Buffer.from(localState.key, 'base64').toString();
-  // get uint value directly
-  const localValue = localState.value.uint;
-
-  console.log(`Decoded local state - ${localKey}: ${localValue}`);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L118-L144)
+	```javascript
+	const appInfo = await algodClient.getApplicationByID(createdApp).do();
+	const globalState = appInfo.params['global-state'][0];
+	console.log(`Raw global state - ${JSON.stringify(globalState)}`);
+	
+	// decode b64 string key with Buffer
+	const globalKey = Buffer.from(globalState.key, 'base64').toString();
+	// decode b64 address value with encodeAddress and Buffer
+	const globalValue = algosdk.encodeAddress(
+	  Buffer.from(globalState.value.bytes, 'base64')
+	);
+	
+	console.log(`Decoded global state - ${globalKey}: ${globalValue}`);
+	
+	const accountAppInfo = await algodClient
+	  .accountApplicationInformation(caller.addr, createdApp)
+	  .do();
+	
+	const localState = accountAppInfo['app-local-state']['key-value'][0];
+	console.log(`Raw local state - ${JSON.stringify(localState)}`);
+	
+	// decode b64 string key with Buffer
+	const localKey = Buffer.from(localState.key, 'base64').toString();
+	// get uint value directly
+	const localValue = localState.value.uint;
+	
+	console.log(`Decoded local state - ${localKey}: ${localValue}`);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L118-L144)
     <!-- ===JSSDK_APP_READ_STATE=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_READ_STATE=== -->
-```java
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L117-L117)
+	```java
+	
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L117-L118)
     <!-- ===JAVASDK_APP_READ_STATE=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_READ_STATE=== -->
-```go
+	```go
 	// grab global state and config of application
 	appInfo, err := algodClient.GetApplicationByID(appID).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to get app info: %s", err)
 	}
 	log.Printf("app info: %+v", appInfo)
-
+	
 	// grab local state for an app id for a single account
 	acctInfo, err := algodClient.AccountApplicationInformation(
 		acct1.Address.String(), appID,
@@ -860,8 +861,8 @@ print(acct_info['app-local-state']['key-value'])
 		log.Fatalf("failed to get app info: %s", err)
 	}
 	log.Printf("app info: %+v", acctInfo)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L27-L42)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L27-L42)
     <!-- ===GOSDK_APP_READ_STATE=== -->
 
 ## Update
@@ -881,103 +882,103 @@ Construct the update transaction and await the response:
 
 === "Python"
     <!-- ===PYSDK_APP_UPDATE=== -->
-```python
-with open("application/approval_refactored.teal", "r") as f:
-    approval_program = f.read()
-
-approval_result = algod_client.compile(approval_program)
-approval_binary = base64.b64decode(approval_result["result"])
-
-
-sp = algod_client.suggested_params()
-# create the app update transaction, passing compiled programs and schema
-# note that schema is immutable, we cant change it after create
-app_update_txn = transaction.ApplicationUpdateTxn(
-    creator.address,
-    sp,
-    app_id,
-    approval_program=approval_binary,
-    clear_program=clear_binary,
-)
-signed_update = app_update_txn.sign(creator.private_key)
-txid = algod_client.send_transaction(signed_update)
-update_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert update_result['confirmed-round']>0
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L81-L102)
+	```python
+	with open("application/approval_refactored.teal", "r") as f:
+	    approval_program = f.read()
+	
+	approval_result = algod_client.compile(approval_program)
+	approval_binary = base64.b64decode(approval_result["result"])
+	
+	
+	sp = algod_client.suggested_params()
+	# create the app update transaction, passing compiled programs and schema
+	# note that schema is immutable, we cant change it after create
+	app_update_txn = transaction.ApplicationUpdateTxn(
+	    creator.address,
+	    sp,
+	    app_id,
+	    approval_program=approval_binary,
+	    clear_program=clear_binary,
+	)
+	signed_update = app_update_txn.sign(creator.private_key)
+	txid = algod_client.send_transaction(signed_update)
+	update_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	assert update_result["confirmed-round"] > 0
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L81-L102)
     <!-- ===PYSDK_APP_UPDATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_UPDATE=== -->
-```javascript
-  const newProgram = fs.readFileSync(
-    path.join(__dirname, '/contracts/app_updated_approval.teal'),
-    'utf8'
-  );
-  const compiledNewProgram = await compileProgram(algodClient, newProgram);
-
-  const appUpdateTxn = algosdk.makeApplicationUpdateTxnFromObject({
-    from: creator.addr,
-    suggestedParams,
-    appIndex: createdApp,
-    // updates must define both approval and clear programs, even if unchanged
-    approvalProgram: compiledNewProgram,
-    clearProgram: compiledClearProgram,
-  });
-
-  await algodClient
-    .sendRawTransaction(appUpdateTxn.signTxn(creator.privateKey))
-    .do();
-  await algosdk.waitForConfirmation(
-    algodClient,
-    appUpdateTxn.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L164-L187)
+	```javascript
+	const newProgram = fs.readFileSync(
+	  path.join(__dirname, '/contracts/app_updated_approval.teal'),
+	  'utf8'
+	);
+	const compiledNewProgram = await compileProgram(algodClient, newProgram);
+	
+	const appUpdateTxn = algosdk.makeApplicationUpdateTxnFromObject({
+	  from: creator.addr,
+	  suggestedParams,
+	  appIndex: createdApp,
+	  // updates must define both approval and clear programs, even if unchanged
+	  approvalProgram: compiledNewProgram,
+	  clearProgram: compiledClearProgram,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appUpdateTxn.signTxn(creator.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  appUpdateTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L164-L187)
     <!-- ===JSSDK_APP_UPDATE=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_UPDATE=== -->
-```java
-        String approvalSourceUpdated = Files.readString(Paths.get("application/approval_refactored.teal"));
-        CompileResponse approvalUpdatedResponse = algodClient.TealCompile().source(approvalSourceUpdated.getBytes())
-                .execute()
-                .body();
-        TEALProgram approvalProgUpdated = new TEALProgram(approvalUpdatedResponse.result);
-
-        Transaction appUpdate = ApplicationUpdateTransactionBuilder.Builder()
-                .sender(creator.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .approvalProgram(approvalProgUpdated)
-                .clearStateProgram(clearProg)
-                .build();
-
-        SignedTransaction signedAppUpdate = creator.signTransaction(appUpdate);
-        Response<PostTransactionsResponse> updateResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedAppUpdate)).execute();
-        PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient, updateResponse.body().txId, 4);
-        assert updateResult.confirmedRound > 0;
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L139)
+	```java
+	String approvalSourceUpdated = Files.readString(Paths.get("application/approval_refactored.teal"));
+	CompileResponse approvalUpdatedResponse = algodClient.TealCompile().source(approvalSourceUpdated.getBytes())
+	        .execute()
+	        .body();
+	TEALProgram approvalProgUpdated = new TEALProgram(approvalUpdatedResponse.result);
+	
+	Transaction appUpdate = ApplicationUpdateTransactionBuilder.Builder()
+	        .sender(creator.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .approvalProgram(approvalProgUpdated)
+	        .clearStateProgram(clearProg)
+	        .build();
+	
+	SignedTransaction signedAppUpdate = creator.signTransaction(appUpdate);
+	Response<PostTransactionsResponse> updateResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedAppUpdate)).execute();
+	PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient, updateResponse.body().txId, 4);
+	assert updateResult.confirmedRound > 0;
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L139)
     <!-- ===JAVASDK_APP_UPDATE=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_UPDATE=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	var (
 		appArgs [][]byte
 		accts   []string
 		apps    []uint64
 		assets  []uint64
 	)
-
+	
 	txn, err := transaction.MakeApplicationUpdateTx(
 		appID, appArgs, accts, apps, assets, approvalBinary, clearBinary,
 		sp, caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
@@ -985,28 +986,28 @@ assert update_result['confirmed-round']>0
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	// sign the transaction
 	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("Update Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L226-L265)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L226-L265)
     <!-- ===GOSDK_APP_UPDATE=== -->
 
 ## Call with arguments
@@ -1017,108 +1018,108 @@ The refactored application expects a timestamp be supplied with the application 
 
 === "Python"
     <!-- ===PYSDK_APP_CALL=== -->
-```python
-now = datetime.datetime.now().strftime("%H:%M:%S")
-app_args = [now.encode("utf-8")]
-call_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id, app_args)
-
-signed_call = call_txn.sign(user.private_key)
-txid = algod_client.send_transaction(signed_call)
-call_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert call_result['confirmed-round']>0
-
-# display results
-print("Called app-id: ",call_result['txn']['txn']['apid'])
-if "global-state-delta" in call_result :
-    print("Global State updated :\n",call_result['global-state-delta'])
-if "local-state-delta" in call_result :
-    print("Local State updated :\n",call_result['local-state-delta'])
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L105-L120)
+	```python
+	now = datetime.datetime.now().strftime("%H:%M:%S")
+	app_args = [now.encode("utf-8")]
+	call_txn = transaction.ApplicationNoOpTxn(user.address, sp, app_id, app_args)
+	
+	signed_call = call_txn.sign(user.private_key)
+	txid = algod_client.send_transaction(signed_call)
+	call_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	assert call_result["confirmed-round"] > 0
+	
+	# display results
+	print("Called app-id: ", call_result["txn"]["txn"]["apid"])
+	if "global-state-delta" in call_result:
+	    print("Global State updated :\n", call_result["global-state-delta"])
+	if "local-state-delta" in call_result:
+	    print("Local State updated :\n", call_result["local-state-delta"])
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L105-L120)
     <!-- ===PYSDK_APP_CALL=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CALL=== -->
-```javascript
-  const simpleAddTxn = algosdk.makeApplicationNoOpTxnFromObject({
-    from: sender.addr,
-    suggestedParams,
-    appIndex,
-    appArgs: [
-      new Uint8Array(Buffer.from('add', 'utf8')),
-      algosdk.encodeUint64(1),
-      algosdk.encodeUint64(2),
-    ],
-  });
-
-  await client.sendRawTransaction(simpleAddTxn.signTxn(sender.privateKey)).do();
-  const simpleAddResult = await algosdk.waitForConfirmation(
-    client,
-    simpleAddTxn.txID().toString(),
-    3
-  );
-
-  console.log(
-    'Result:',
-    algosdk.decodeUint64(simpleAddResult.logs[0], 'bigint')
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L48-L70)
+	```javascript
+	const simpleAddTxn = algosdk.makeApplicationNoOpTxnFromObject({
+	  from: sender.addr,
+	  suggestedParams,
+	  appIndex,
+	  appArgs: [
+	    new Uint8Array(Buffer.from('add', 'utf8')),
+	    algosdk.encodeUint64(1),
+	    algosdk.encodeUint64(2),
+	  ],
+	});
+	
+	await client.sendRawTransaction(simpleAddTxn.signTxn(sender.privateKey)).do();
+	const simpleAddResult = await algosdk.waitForConfirmation(
+	  client,
+	  simpleAddTxn.txID().toString(),
+	  3
+	);
+	
+	console.log(
+	  'Result:',
+	  algosdk.decodeUint64(simpleAddResult.logs[0], 'bigint')
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L48-L70)
     <!-- ===JSSDK_APP_CALL=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_CALL=== -->
-```java
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-
-        List<byte[]> appArgs = new ArrayList<byte[]>();
-        appArgs.add(formatter.format(date).toString().getBytes());
-
-        // create unsigned transaction
-        Transaction callTransaction = ApplicationCallTransactionBuilder.Builder()
-                .sender(user.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .args(appArgs)
-                .build();
-
-        SignedTransaction signedCallTransaction = user.signTransaction(callTransaction);
-        Response<PostTransactionsResponse> callResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedCallTransaction)).execute();
-
-        PendingTransactionResponse callResult = Utils.waitForConfirmation(algodClient, callResponse.body().txId, 4);
-        assert callResult.confirmedRound > 0;
-        // display results
-        if (callResult.globalStateDelta != null) {
-            System.out.printf("\tGlobal state: %s\n", callResult.globalStateDelta);
-        }
-
-        if (callResult.localStateDelta != null) {
-            System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
-        }
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L142-L170)
+	```java
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
+	Date date = new Date(System.currentTimeMillis());
+	
+	List<byte[]> appArgs = new ArrayList<byte[]>();
+	appArgs.add(formatter.format(date).toString().getBytes());
+	
+	// create unsigned transaction
+	Transaction callTransaction = ApplicationCallTransactionBuilder.Builder()
+	        .sender(user.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .args(appArgs)
+	        .build();
+	
+	SignedTransaction signedCallTransaction = user.signTransaction(callTransaction);
+	Response<PostTransactionsResponse> callResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedCallTransaction)).execute();
+	
+	PendingTransactionResponse callResult = Utils.waitForConfirmation(algodClient, callResponse.body().txId, 4);
+	assert callResult.confirmedRound > 0;
+	// display results
+	if (callResult.globalStateDelta != null) {
+	    System.out.printf("\tGlobal state: %s\n", callResult.globalStateDelta);
+	}
+	
+	if (callResult.localStateDelta != null) {
+	    System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
+	}
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L142-L170)
     <!-- ===JAVASDK_APP_CALL=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_CALL=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	var (
 		appArgs [][]byte
 		accts   []string
 		apps    []uint64
 		assets  []uint64
 	)
-
+	
 	datetime := time.Now().Format("2006-01-02 at 15:04:05")
 	appArgs = append(appArgs, []byte(datetime))
-
+	
 	txn, err := transaction.MakeApplicationNoOpTx(
 		appID, appArgs, accts, apps, assets, sp,
 		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
@@ -1126,28 +1127,28 @@ if "local-state-delta" in call_result :
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	// sign the transaction
 	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L358-L400)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L358-L400)
     <!-- ===GOSDK_APP_CALL=== -->
 
 ## Close out
@@ -1160,72 +1161,72 @@ The user may discontinue use of the application by sending a [close out](../apps
 
 === "Python"
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
-```python
-close_txn = transaction.ApplicationCloseOutTxn(user.address, sp, app_id)
-signed_close = close_txn.sign(user.private_key)
-txid = algod_client.send_transaction(signed_close)
-optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert optin_result['confirmed-round'] > 0
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L123-L128)
+	```python
+	close_txn = transaction.ApplicationCloseOutTxn(user.address, sp, app_id)
+	signed_close = close_txn.sign(user.private_key)
+	txid = algod_client.send_transaction(signed_close)
+	optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	assert optin_result["confirmed-round"] > 0
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L123-L128)
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
-```javascript
-  const appCloseOutTxn = algosdk.makeApplicationCloseOutTxnFromObject({
-    from: caller.addr,
-    appIndex: createdApp,
-    suggestedParams,
-  });
-
-  await algodClient
-    .sendRawTransaction(appCloseOutTxn.signTxn(caller.privateKey))
-    .do();
-  await algosdk.waitForConfirmation(
-    algodClient,
-    appCloseOutTxn.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L147-L161)
+	```javascript
+	const appCloseOutTxn = algosdk.makeApplicationCloseOutTxnFromObject({
+	  from: caller.addr,
+	  appIndex: createdApp,
+	  suggestedParams,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appCloseOutTxn.signTxn(caller.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  appCloseOutTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L147-L161)
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
-```java
-        Transaction closeOutTxn = ApplicationCloseTransactionBuilder.Builder()
-                .sender(user.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .build();
-
-        SignedTransaction signedCloseOut = user.signTransaction(closeOutTxn);
-        Response<PostTransactionsResponse> closeOutResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedCloseOut)).execute();
-
-        PendingTransactionResponse closeOutResult = Utils.waitForConfirmation(algodClient, closeOutResponse.body().txId,
-                4);
-        assert closeOutResult.confirmedRound > 0;
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L173-L186)
+	```java
+	Transaction closeOutTxn = ApplicationCloseTransactionBuilder.Builder()
+	        .sender(user.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .build();
+	
+	SignedTransaction signedCloseOut = user.signTransaction(closeOutTxn);
+	Response<PostTransactionsResponse> closeOutResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedCloseOut)).execute();
+	
+	PendingTransactionResponse closeOutResult = Utils.waitForConfirmation(algodClient, closeOutResponse.body().txId,
+	        4);
+	assert closeOutResult.confirmedRound > 0;
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L173-L186)
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_CLOSEOUT=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	var (
 		appArgs [][]byte
 		accts   []string
 		apps    []uint64
 		assets  []uint64
 	)
-
+	
 	txn, err := transaction.MakeApplicationCloseOutTx(
 		appID, appArgs, accts, apps, assets, sp,
 		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
@@ -1233,28 +1234,28 @@ assert optin_result['confirmed-round'] > 0
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	// sign the transaction
 	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("Closeout Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L270-L309)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L270-L309)
     <!-- ===GOSDK_APP_CLOSEOUT=== -->
 
 ## Delete
@@ -1263,70 +1264,70 @@ The approval program defines the creator as the only account able to [delete the
 
 === "Python"
     <!-- ===PYSDK_APP_DELETE=== -->
-```python
-delete_txn = transaction.ApplicationDeleteTxn(creator.address, sp, app_id)
-signed_delete = delete_txn.sign(creator.private_key)
-txid = algod_client.send_transaction(signed_delete)
-optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
-assert optin_result['confirmed-round'] > 0
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L131-L136)
+	```python
+	delete_txn = transaction.ApplicationDeleteTxn(creator.address, sp, app_id)
+	signed_delete = delete_txn.sign(creator.private_key)
+	txid = algod_client.send_transaction(signed_delete)
+	optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	assert optin_result["confirmed-round"] > 0
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L131-L136)
     <!-- ===PYSDK_APP_DELETE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_DELETE=== -->
-```javascript
-  const appDeleteTxn = algosdk.makeApplicationDeleteTxnFromObject({
-    from: creator.addr,
-    suggestedParams,
-    appIndex: createdApp,
-  });
-
-  await algodClient
-    .sendRawTransaction(appDeleteTxn.signTxn(creator.privateKey))
-    .do();
-  await algosdk.waitForConfirmation(
-    algodClient,
-    appDeleteTxn.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L207-L221)
+	```javascript
+	const appDeleteTxn = algosdk.makeApplicationDeleteTxnFromObject({
+	  from: creator.addr,
+	  suggestedParams,
+	  appIndex: createdApp,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appDeleteTxn.signTxn(creator.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  appDeleteTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L207-L221)
     <!-- ===JSSDK_APP_DELETE=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_DELETE=== -->
-```java
-        Transaction appDelete = ApplicationDeleteTransactionBuilder.Builder()
-                .sender(creator.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .build();
-
-        SignedTransaction signedAppDelete = creator.signTransaction(appDelete);
-        Response<PostTransactionsResponse> deleteResponse = algodClient.RawTransaction()
-                .rawtxn(Encoder.encodeToMsgPack(signedAppDelete)).execute();
-        PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient, deleteResponse.body().txId, 4);
-        assert deleteResult.confirmedRound > 0;
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L189-L200)
+	```java
+	Transaction appDelete = ApplicationDeleteTransactionBuilder.Builder()
+	        .sender(creator.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .build();
+	
+	SignedTransaction signedAppDelete = creator.signTransaction(appDelete);
+	Response<PostTransactionsResponse> deleteResponse = algodClient.RawTransaction()
+	        .rawtxn(Encoder.encodeToMsgPack(signedAppDelete)).execute();
+	PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient, deleteResponse.body().txId, 4);
+	assert deleteResult.confirmedRound > 0;
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L189-L200)
     <!-- ===JAVASDK_APP_DELETE=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_DELETE=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	var (
 		appArgs [][]byte
 		accts   []string
 		apps    []uint64
 		assets  []uint64
 	)
-
+	
 	txn, err := transaction.MakeApplicationDeleteTx(
 		appID, appArgs, accts, apps, assets, sp,
 		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
@@ -1334,28 +1335,28 @@ assert optin_result['confirmed-round'] > 0
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	// sign the transaction
 	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("Delete Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L405-L444)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L405-L444)
     <!-- ===GOSDK_APP_DELETE=== -->
 
 ## Clear state
@@ -1364,62 +1365,64 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 
 === "Python"
     <!-- ===PYSDK_APP_CLEAR=== -->
-```python
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L139-L139)
+	```python
+	clear_txn = transaction.ApplicationClearStateTxn(user.address, sp, app_id)
+	# .. sign, send, wait
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L139-L141)
     <!-- ===PYSDK_APP_CLEAR=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CLEAR=== -->
-```javascript
-  const appClearTxn = algosdk.makeApplicationClearStateTxnFromObject({
-    from: anotherCaller.addr,
-    suggestedParams,
-    appIndex: createdApp,
-  });
-
-  await algodClient
-    .sendRawTransaction(appClearTxn.signTxn(anotherCaller.privateKey))
-    .do();
-  await algosdk.waitForConfirmation(
-    algodClient,
-    appClearTxn.txID().toString(),
-    3
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L190-L204)
+	```javascript
+	const appClearTxn = algosdk.makeApplicationClearStateTxnFromObject({
+	  from: anotherCaller.addr,
+	  suggestedParams,
+	  appIndex: createdApp,
+	});
+	
+	await algodClient
+	  .sendRawTransaction(appClearTxn.signTxn(anotherCaller.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  appClearTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L190-L204)
     <!-- ===JSSDK_APP_CLEAR=== -->
 
 === "Java"
     <!-- ===JAVASDK_APP_CLEAR=== -->
-```java
-        Transaction clearTxn = ApplicationClearTransactionBuilder.Builder()
-                .sender(user.getAddress())
-                .suggestedParams(sp)
-                .applicationId(appId)
-                .build();
-
-        SignedTransaction signedClear = user.signTransaction(clearTxn);
-        // ... sign, send, wait
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L203-L211)
+	```java
+	Transaction clearTxn = ApplicationClearTransactionBuilder.Builder()
+	        .sender(user.getAddress())
+	        .suggestedParams(sp)
+	        .applicationId(appId)
+	        .build();
+	
+	SignedTransaction signedClear = user.signTransaction(clearTxn);
+	// ... sign, send, wait
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L203-L211)
     <!-- ===JAVASDK_APP_CLEAR=== -->
 
 === "Go"
     <!-- ===GOSDK_APP_CLEAR=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Fatalf("error getting suggested tx params: %s", err)
 	}
-
+	
 	var (
 		appArgs [][]byte
 		accts   []string
 		apps    []uint64
 		assets  []uint64
 	)
-
+	
 	txn, err := transaction.MakeApplicationClearStateTx(
 		appID, appArgs, accts, apps, assets, sp,
 		caller.Address, nil, types.Digest{}, [32]byte{}, types.ZeroAddress,
@@ -1427,28 +1430,28 @@ The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-
 	if err != nil {
 		log.Fatalf("failed to make txn: %s", err)
 	}
-
+	
 	// sign the transaction
 	txid, stx, err := crypto.SignTransaction(caller.PrivateKey, txn)
 	if err != nil {
 		log.Fatalf("failed to sign transaction: %s", err)
 	}
-
+	
 	// Broadcast the transaction to the network
 	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
 	if err != nil {
 		log.Fatalf("failed to send transaction: %s", err)
 	}
-
+	
 	// Wait for confirmation
 	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
 	if err != nil {
 		log.Fatalf("error waiting for confirmation:  %s", err)
 	}
-
+	
 	log.Printf("ClearState Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L314-L353)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L314-L353)
     <!-- ===GOSDK_APP_CLEAR=== -->
 
 # Appendix

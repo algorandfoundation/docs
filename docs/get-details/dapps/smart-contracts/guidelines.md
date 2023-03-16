@@ -44,47 +44,47 @@ There are two options:
 
 === "Python"
     <!-- ===PYSDK_CONST_MIN_FEE=== -->
-```python
-from algosdk import constants
-
-print(constants.MIN_TXN_FEE)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L82-L85)
+	```python
+	from algosdk import constants
+	
+	print(constants.MIN_TXN_FEE)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L82-L85)
     <!-- ===PYSDK_CONST_MIN_FEE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
-```javascript
-  const minFee = algosdk.ALGORAND_MIN_TX_FEE;
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
+	```javascript
+	const minFee = algosdk.ALGORAND_MIN_TX_FEE;
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
-```java
-        System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
+	```java
+	System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
-```go
+	```go
 	log.Printf("Min fee const: %d", transaction.MinTxnFee)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L33-L34)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L33-L34)
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
     
 * using an algod API:
 
 === "Python"
     <!-- ===PYSDK_SP_MIN_FEE=== -->
-```python
-suggested_params = algod_client.suggested_params()
-print(suggested_params.min_fee)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L77-L79)
+	```python
+	suggested_params = algod_client.suggested_params()
+	print(suggested_params.min_fee)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L77-L79)
     <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
@@ -96,23 +96,23 @@ print(suggested_params.min_fee)
 
 === "Java"
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
-```java
-        Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
-        TransactionParametersResponse sp = tpr.body();
-        System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
+	```java
+	Response<TransactionParametersResponse> tpr = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = tpr.body();
+	System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"
     <!-- ===GOSDK_SP_MIN_FEE=== -->
-```go
+	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
 		log.Printf("failed to %s", err)
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L26-L30)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L26-L30)
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures
@@ -159,9 +159,9 @@ Similar guidelines apply to validate incoming transactions for smart signatures,
 ## DO manage key carefully
 
 If the smart contract is not updatable and the dApp is fully web3 (users interacting with it have their own wallet), then the only account needed for deployment is the creator account.
-Te simplest solution is most likely to deploy the smart contract with a throw away account.
+The simplest solution is most likely to deploy the smart contract with a throw away account.
 
-The account mayt then rekeyed to an account without a known secret key (e.g., `737777777777777777777777777777777777777777777777777UFEJ2CI`, the reward pool) so that the account essentially is locked forever.
+The account may then rekey to an account without a known secret key (e.g., `737777777777777777777777777777777777777777777777777UFEJ2CI`, the reward pool) so that the account essentially is locked forever.
 However, note that you must be sure the creator account will never be used for any other purpose (like validating the dApp before rekeying).
 
 If the smart contract is updatable, then extreme care should be taken to secure the key allowing for example.

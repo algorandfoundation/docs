@@ -15,45 +15,45 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 
 === "JavaScript"
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
-```javascript
-export function getLocalIndexerClient() {
-  const indexerToken = '';
-  const indexerServer = 'http://localhost';
-  const indexerPort = 8980;
-
-  return new algosdk.Indexer(indexerToken, indexerServer, indexerPort);
-}
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L17-L24)
+	```javascript
+	export function getLocalIndexerClient() {
+	  const indexerToken = '';
+	  const indexerServer = 'http://localhost';
+	  const indexerPort = 8980;
+	
+	  return new algosdk.Indexer(indexerToken, indexerServer, indexerPort);
+	}
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L17-L24)
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Python"
     <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
-```python
-# instantiate indexer client
-indexer_host = "http://localhost:8980"
-indexer_token = "a" * 64
-myindexer = indexer.IndexerClient(
-    indexer_token=indexer_token, indexer_address=indexer_host
-)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L5-L11)
+	```python
+	# instantiate indexer client
+	indexer_host = "http://localhost:8980"
+	indexer_token = "a" * 64
+	myindexer = indexer.IndexerClient(
+	    indexer_token=indexer_token, indexer_address=indexer_host
+	)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L5-L11)
     <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Java"
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
-```java
-        String indexerHost = "http://localhost";
-        int indexerPort = 8980;
-        String indexerToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)
+	```java
+	String indexerHost = "http://localhost";
+	int indexerPort = 8980;
+	String indexerToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
-<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
-```go
+	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	```go
 	// Create a new indexer client, configured to connect to out local sandbox
 	var indexerAddress = "http://localhost:8980"
 	var indexerToken = strings.Repeat("a", 64)
@@ -61,9 +61,9 @@ myindexer = indexer.IndexerClient(
 		indexerAddress,
 		indexerToken,
 	)
-
+	
 	// Or, if necessary, pass alternate headers
-
+	
 	var indexerHeader common.Header
 	indexerHeader.Key = "X-API-Key"
 	indexerHeader.Value = indexerToken
@@ -72,9 +72,9 @@ myindexer = indexer.IndexerClient(
 		indexerToken,
 		[]*common.Header{&indexerHeader},
 	)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
-<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
+	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
@@ -92,55 +92,55 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
-```javascript
-  const indexer = getLocalIndexerClient();
-  const indexerAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
-  console.log('Indexer Asset Info:', indexerAssetInfo);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L67-L70)
+	```javascript
+	const indexer = getLocalIndexerClient();
+	const indexerAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
+	console.log('Indexer Asset Info:', indexerAssetInfo);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L67-L70)
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Python"
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
-```python
-# lookup a single asset
-asset_id = 2044572
-# by passing include_all, we specify that we want to see deleted assets as well
-response = myindexer.asset_info(asset_id, include_all=True)
-print(f"Asset Info: {json.dumps(response, indent=2,)}")
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L14-L19)
+	```python
+	# lookup a single asset
+	asset_id = 2044572
+	# by passing include_all, we specify that we want to see deleted assets as well
+	response = myindexer.asset_info(asset_id, include_all=True)
+	print(f"Asset Info: {json.dumps(response, indent=2,)}")
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L14-L19)
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
-```java
-        Long asaId = 25l;
-        Response<AssetResponse> assetResponse = indexerClient.lookupAssetByID(asaId).execute();
-        Asset assetInfo = assetResponse.body().asset;
-        System.out.printf("Name for %d: %s\n", asaId, assetInfo.params.name);
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L19-L23)
+	```java
+	Long asaId = 25l;
+	Response<AssetResponse> assetResponse = indexerClient.lookupAssetByID(asaId).execute();
+	Asset assetInfo = assetResponse.body().asset;
+	System.out.printf("Name for %d: %s\n", asaId, assetInfo.params.name);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L19-L23)
     <!-- ===JAVASDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Go"
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
-```go
+	```go
 	// query parameters
 	var assetId uint64 = 2044572
 	var minBalance uint64 = 50
-
+	
 	// Lookup accounts with minimum balance of asset
 	assetResult, err := indexerClient.
 		LookupAssetBalances(assetId).
 		CurrencyGreaterThan(minBalance).
 		Do(context.Background())
-
+	
 	// Print the results
 	assetJson, err := json.MarshalIndent(assetResult, "", "\t")
 	fmt.Printf(string(assetJson) + "\n")
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L51-L64)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L51-L64)
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "cURL"
@@ -158,56 +158,56 @@ print(f"Asset Info: {json.dumps(response, indent=2,)}")
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-```javascript
-  const indexerClient = getLocalIndexerClient();
-  const transactionInfo = await indexerClient
-    .searchForTransactions()
-    .currencyGreaterThan(100)
-    .do();
-  console.log(transactionInfo.transactions.map((t) => t.id));
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L14-L20)
+	```javascript
+	const indexerClient = getLocalIndexerClient();
+	const transactionInfo = await indexerClient
+	  .searchForTransactions()
+	  .currencyGreaterThan(100)
+	  .do();
+	console.log(transactionInfo.transactions.map((t) => t.id));
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L14-L20)
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Python"
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-```python
-response = myindexer.search_transactions(
-    min_amount=10, min_round=1000, max_round=1500
-)
-print(f"Transaction results: {json.dumps(response, indent=2)}")
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L22-L26)
+	```python
+	response = myindexer.search_transactions(
+	    min_amount=10, min_round=1000, max_round=1500
+	)
+	print(f"Transaction results: {json.dumps(response, indent=2)}")
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L22-L26)
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-```java
-        Response<TransactionsResponse> transactionSearchResult = indexerClient.searchForTransactions()
-                .minRound(10l).maxRound(500l).currencyGreaterThan(10l).execute();
-        TransactionsResponse txResp = transactionSearchResult.body();
-        System.out.printf("Found %d transactions that match criteria\n", txResp.transactions.size());
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L26-L30)
+	```java
+	Response<TransactionsResponse> transactionSearchResult = indexerClient.searchForTransactions()
+	        .minRound(10l).maxRound(500l).currencyGreaterThan(10l).execute();
+	TransactionsResponse txResp = transactionSearchResult.body();
+	System.out.printf("Found %d transactions that match criteria\n", txResp.transactions.size());
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L26-L30)
     <!-- ===JAVASDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Go"
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
-```go
+	```go
 	// query parameters
 	var transactionMinAmount uint64 = 10
-
+	
 	// Query
 	transactionResult, err := indexerClient.
 		SearchForTransactions().
 		CurrencyGreaterThan(transactionMinAmount).
 		Do(context.Background())
-
+	
 	// Print results
 	transactionJson, err := json.MarshalIndent(transactionResult, "", "\t")
 	fmt.Printf(string(transactionJson) + "\n")
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L69-L81)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L69-L81)
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "cURL"
@@ -236,84 +236,84 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
-```javascript
-  let nextToken = '';
-
-  // nextToken will be undefined if we reached the last page
-  while (nextToken !== undefined) {
-    // eslint-disable-next-line no-await-in-loop
-    const response = await indexerClient
-      .searchForTransactions()
-      .limit(5)
-      .currencyGreaterThan(10)
-      .nextToken(nextToken)
-      .do();
-
-    nextToken = response['next-token'];
-    const txns = response.transactions;
-    if (txns.length > 0)
-      console.log(`Transaction IDs: ${response.transactions.map((t) => t.id)}`);
-  }
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L23-L40)
+	```javascript
+	let nextToken = '';
+	
+	// nextToken will be undefined if we reached the last page
+	while (nextToken !== undefined) {
+	  // eslint-disable-next-line no-await-in-loop
+	  const response = await indexerClient
+	    .searchForTransactions()
+	    .limit(5)
+	    .currencyGreaterThan(10)
+	    .nextToken(nextToken)
+	    .do();
+	
+	  nextToken = response['next-token'];
+	  const txns = response.transactions;
+	  if (txns.length > 0)
+	    console.log(`Transaction IDs: ${response.transactions.map((t) => t.id)}`);
+	}
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L23-L40)
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Python"
     <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
-```python
-
-nexttoken = ""
-has_results = True
-page = 0
-
-# loop using next_page to paginate until there are
-# no more transactions in the response
-while has_results:
-    response = myindexer.search_transactions(
-        min_amount=10, min_round=1000, max_round=1500
-    )
-
-    has_results = len(response["transactions"]) > 0
-
-    if has_results:
-        nexttoken = response["next-token"]
-        print(f"Tranastion on page {page}: " + json.dumps(response, indent=2))
-
-    page += 1
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L29-L48)
+	```python
+	
+	nexttoken = ""
+	has_results = True
+	page = 0
+	
+	# loop using next_page to paginate until there are
+	# no more transactions in the response
+	while has_results:
+	    response = myindexer.search_transactions(
+	        min_amount=10, min_round=1000, max_round=1500
+	    )
+	
+	    has_results = len(response["transactions"]) > 0
+	
+	    if has_results:
+	        nexttoken = response["next-token"]
+	        print(f"Tranastion on page {page}: " + json.dumps(response, indent=2))
+	
+	    page += 1
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L29-L48)
     <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
-```java
-        String nextToken = "";
-        boolean hasResults = true;
-        // Start with empty nextToken and while there are
-        // results in the transaction results, query again with the next page 
-        while(hasResults){
-            Response<TransactionsResponse> searchResults = indexerClient.searchForTransactions().minRound(1000l)
-                    .maxRound(1500l).currencyGreaterThan(10l).next(nextToken).execute();
-            TransactionsResponse txnRes = searchResults.body();
-            //
-            // ... do something with transaction results
-            //
-            hasResults = txnRes.transactions.size()>0;
-            nextToken = txnRes.nextToken;
-        }
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L33-L47)
+	```java
+	String nextToken = "";
+	boolean hasResults = true;
+	// Start with empty nextToken and while there are
+	// results in the transaction results, query again with the next page 
+	while(hasResults){
+	    Response<TransactionsResponse> searchResults = indexerClient.searchForTransactions().minRound(1000l)
+	            .maxRound(1500l).currencyGreaterThan(10l).next(nextToken).execute();
+	    TransactionsResponse txnRes = searchResults.body();
+	    //
+	    // ... do something with transaction results
+	    //
+	    hasResults = txnRes.transactions.size()>0;
+	    nextToken = txnRes.nextToken;
+	}
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L33-L47)
     <!-- ===JAVASDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Go"
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
-```go
+	```go
 	var nextToken = ""
 	var numTx = 1
 	var numPages = 1
 	var pagedMinAmount uint64 = 10
 	var limit uint64 = 1
-
+	
 	for numTx > 0 {
 		// Query
 		pagedResults, err := indexerClient.
@@ -328,7 +328,7 @@ while has_results:
 		pagedTransactions := pagedResults.Transactions
 		numTx = len(pagedTransactions)
 		nextToken = pagedResults.NextToken
-
+	
 		if numTx > 0 {
 			// Print results
 			pagedJson, err := json.MarshalIndent(pagedTransactions, "", "\t")
@@ -342,8 +342,8 @@ while has_results:
 			numPages++
 		}
 	}
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L84-L118)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L84-L118)
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "cURL"
@@ -421,41 +421,41 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "Python"
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
-```python
-note_prefix = "showing prefix".encode()
-response = myindexer.search_transactions(note_prefix=note_prefix)
-print(f"result: {json.dumps(response, indent=2)}")
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L51-L54)
+	```python
+	note_prefix = "showing prefix".encode()
+	response = myindexer.search_transactions(note_prefix=note_prefix)
+	print(f"result: {json.dumps(response, indent=2)}")
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/indexer.py#L51-L54)
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
-```java
-        byte[] prefix = new String("showing prefix").getBytes();
-        Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix).execute();
-        // ...
-```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L53)
+	```java
+	byte[] prefix = new String("showing prefix").getBytes();
+	Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix).execute();
+	// ...
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L53)
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Go"
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
-```go
+	```go
 	// Parameters
 	var notePrefix = "showing prefix"
-
+	
 	// Query
 	prefixResult, err := indexerClient.
 		SearchForTransactions().
 		NotePrefix([]byte(notePrefix)).
 		Do(context.Background())
-
+	
 	// Print results
 	prefixJson, err := json.MarshalIndent(prefixResult, "", "\t")
 	fmt.Printf(string(prefixJson) + "\n")
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L121-L133)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L121-L133)
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "cURL"

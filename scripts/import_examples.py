@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import textwrap
 from dataclasses import dataclass
 
 SKIP_DIRS = [".venv", "__pycache__", "node_modules"]
@@ -60,12 +61,13 @@ class DocExampleMatch:
     """Represents a match between source and docs"""
 
     name: str
+    apply_tabs: bool
     line_start: int
     line_stop: int
 
     @staticmethod
     def empty() -> "DocExampleMatch":
-        return DocExampleMatch("", 0, 0)
+        return DocExampleMatch("", False, 0, 0)
 
 
 # Example Name => source lines
@@ -85,7 +87,7 @@ sources: list[ExampleSource] = [
     ExampleSource(
         github_url="https://github.com/joe-p/js-algorand-sdk",
         git_branch="doc-examples",
-        local_dir="../../js-algorand-sdk",
+        local_dir="../../joes-js-algorand-sdk",
         example_dir="examples",
         language_name="javascript",
         src_comment_flag="// example: ",
@@ -167,10 +169,13 @@ def find_examples_in_sdk(dir: str, prefix: str, lang: str, ext: str) -> SDKExamp
                 for lno, line in enumerate(lines):
                     if prefix in line:
                         name = line.strip(prefix)
+                        formatted_example = textwrap.dedent(
+                            "\n".join(local_example)
+                        ).split("\n")
                         name_to_src[name] = Example(
                             path=path,
                             line_start=lno - len(local_example),
-                            lines=local_example,
+                            lines=formatted_example,
                             matches=0,
                         )
                         local_example = []
@@ -208,8 +213,12 @@ def replace_matches_in_docs(
                 if prefix not in line:
                     continue
 
-                # First time finding seeing this one
+                # First time finding this one
                 if current_match.name == "":
+                    # Its in the tabbed multilanguage section
+                    if "===" in page_lines[lno - 1]:
+                        current_match.apply_tabs = True
+
                     current_match.name = line.strip()[len(prefix) :].strip("= ->_")
                     current_match.line_start = lno + 1
                 # Second time finding it, add it to matches and wipe current
@@ -246,8 +255,11 @@ def replace_matches_in_docs(
                 "```" + src.language_name,
                 *src_example.lines,
                 "```",
-                f"[Snippet Source]({example_link})"
+                f"[Snippet Source]({example_link})",
             ]
+
+            if match.apply_tabs:
+                example_lines = ["\t" + l for l in example_lines]
 
             page_lines[
                 match.line_start + offset : match.line_stop + offset
