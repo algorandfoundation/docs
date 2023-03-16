@@ -754,10 +754,8 @@ The Algorand protocol supports pooled fees, where one transaction can pay the fe
 
 For atomic transactions, the fees set on all transactions in the group are summed. This sum is compared against the protocol determined expected fee for the group and may proceed as long as the sum of the fees is at least the required fee for the group.
 
-<!-- 
 <center>![Atomic Pooled Fees](../../imgs/atomic_transfers-2.png)</center>
 <center>*Atomic Pooled Fees*</center>
--->
 
 !!! note
     [Inner transactions](../dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested inner transactions as well.
