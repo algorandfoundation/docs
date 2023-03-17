@@ -45,7 +45,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	```java
 	String indexerHost = "http://localhost";
 	int indexerPort = 8980;
-	String indexerToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	String indexerToken = "a".repeat(64);
 	IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)

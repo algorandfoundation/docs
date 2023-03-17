@@ -197,6 +197,17 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
+    <!-- ===PYSDK_ATC_RESULTS=== -->
+	```python
+	# Other options:
+	# txngroup = atc.build_group()
+	# txids = atc.submit(client)
+	result = atc.execute(algod_client, 4)
+	for res in result.abi_results:
+	    print(res.return_value)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L81-L87)
+    <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
@@ -242,6 +253,44 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     <!-- ===JSSDK_ATC_RESULTS=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
+	```go
+	b, err := ioutil.ReadFile("calculator/contract.json")
+	if err != nil {
+		log.Fatalf("failed to read contract file: %s", err)
+	}
+	
+	contract := &abi.Contract{}
+	if err := json.Unmarshal(b, contract); err != nil {
+		log.Fatalf("failed to unmarshal contract: %s", err)
+	}
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L26-L35)
+    <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
+	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
+	```go
+	// Grab the method from out contract object
+	addMethod, err := contract.GetMethodByName("add")
+	if err != nil {
+		log.Fatalf("failed to get add method: %s", err)
+	}
+	
+	// Set up method call params
+	mcp := transaction.AddMethodCallParams{
+		AppID:           appID,
+		Sender:          acct1.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+		Method:          addMethod,
+		MethodArgs:      []interface{}{1, 1},
+	}
+	if err := atc.AddMethodCall(mcp); err != nil {
+		log.Fatalf("failed to add method call: %s", err)
+	}
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L60-L79)
+	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===GOSDK_ATC_RESULTS=== -->
 	```go
 	result, err := atc.Execute(algodClient, context.Background(), 4)
@@ -257,6 +306,33 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== -->
+	```java
+	// Read the json from disk
+	String jsonContract = Files.readString(Paths.get("calculator/contract.json"));
+	// Create Contract from Json
+	Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
+    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== -->
+	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
+	```java
+	// create methodCallParams by builder (or create by constructor) for add method
+	List<Object> methodArgs = new ArrayList<Object>();
+	methodArgs.add(1);
+	methodArgs.add(1);
+	
+	MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
+	
+	MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
+	                .sender(acct.getAddress())
+	                .method(contract.getMethodByName("add")).methodArguments(methodArgs)
+	                .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
+	
+	atc.addMethodCall(mcp);
+	```
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
+	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JAVASDK_ATC_RESULTS=== -->
 	```java
 	ExecuteResult res = atc.execute(algodClient, 2);

@@ -802,16 +802,19 @@ An example of setting a pooled fee on a group of two transactions:
 === "Java"
   	<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```java
+	BigInteger nullFee = null;
 	Transaction feeOverrideTxn = Transaction.PaymentTransactionBuilder()
 	        .sender(acct.getAddress())
 	        .receiver(acct2.getAddress())
 	        .suggestedParams(suggestedParams.body())
-	        // override the fee given by suggested params
-	        // to set a flat fee of 2x minfee to cover another transaction
-	        // in the same group
+	        // since suggestedParams sets a fee, we have to `null` it out
+	        // or trying to set flatFee will fail with both set
+	        .fee(nullFee)
+	        // override the fee given by suggested params to set a flat 
+	        // fee of 2x minfee to cover another transaction in the same group
 	        .flatFee(2 * suggestedParams.body().minFee).build();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L64)
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L67)
   	<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 

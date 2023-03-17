@@ -61,7 +61,7 @@ Account acct = new Account();
 System.out.println("Address: " + acct.getAddress());
 System.out.println("Passphrase: " + acct.toMnemonic());
 ```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L73-L76)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L76-L79)
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 [More Information](../../get-details/accounts/create/#standalone){:target="_blank"}
@@ -91,14 +91,14 @@ Communication with the Algorand network is performed using transactions. To crea
 ```java
 String algodHost = "http://localhost";
 int algodPort = 4001;
-String algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+String algodToken = "a".repeat(64);
 AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
 
 // OR if the API provider requires a specific header key for the token
 String tokenHeader = "X-API-Key";
 AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
 ```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L94-L102)
 <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 
@@ -116,7 +116,7 @@ com.algorand.algosdk.v2.client.model.Account acctInfo = acctInfoResp.body();
 // print one of the fields in the account info response
 System.out.printf("Current balance: %d", acctInfo.amount);
 ```
-[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L81-L86)
+[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L84-L89)
 <!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 

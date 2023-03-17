@@ -81,14 +81,14 @@ An `algod` client connection is also required. The following connects using Sand
 	```java
 	String algodHost = "http://localhost";
 	int algodPort = 4001;
-	String algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	String algodToken = "a".repeat(64);
 	AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
 	
 	// OR if the API provider requires a specific header key for the token
 	String tokenHeader = "X-API-Key";
 	AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L94-L102)
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Go"

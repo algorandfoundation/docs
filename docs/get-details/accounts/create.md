@@ -133,7 +133,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 	```java
 	String kmdHost = "http://localhost:4002";
-	String kmdToken =  "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	String kmdToken =  "a".repeat(64);
 	
 	KmdClient kmdClient = new KmdClient();
 	kmdClient.setBasePath(kmdHost);
@@ -571,7 +571,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	System.out.println("Address: " + acct.getAddress());
 	System.out.println("Passphrase: " + acct.toMnemonic());
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L73-L76)
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L76-L79)
 	<!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 === "Go"

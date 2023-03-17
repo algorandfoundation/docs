@@ -65,7 +65,7 @@ There are two options:
 	```java
 	System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
+	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L70-L71)
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
