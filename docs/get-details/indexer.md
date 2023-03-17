@@ -403,20 +403,20 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
-```javascript
-  const txnsWithNotePrefix = await indexerClient
-    .searchForTransactions()
-    .notePrefix(Buffer.from('Hello'))
-    .do();
-  console.log(
-    `Transactions with note prefix "Hello" ${JSON.stringify(
-      txnsWithNotePrefix,
-      undefined,
-      2
-    )}`
-  );
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L62-L73)
+	```javascript
+	const txnsWithNotePrefix = await indexerClient
+	  .searchForTransactions()
+	  .notePrefix(Buffer.from('Hello'))
+	  .do();
+	console.log(
+	  `Transactions with note prefix "Hello" ${JSON.stringify(
+	    txnsWithNotePrefix,
+	    undefined,
+	    2
+	  )}`
+	);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L62-L73)
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Python"

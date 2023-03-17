@@ -767,12 +767,12 @@ An example of setting a pooled fee on a group of two transactions:
 
 === "JavaScript"
 <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
-```javascript
-  const sp = await client.getTransactionParams().do();
-  sp.fee = 2 * minFee;
-  sp.flatFee = true; // use flatFee to ensure the given fee is used
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L69-L72)
+	```javascript
+	const sp = await client.getTransactionParams().do();
+	sp.fee = 2 * minFee;
+	sp.flatFee = true; // use flatFee to ensure the given fee is used
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L69-L72)
 <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Python"

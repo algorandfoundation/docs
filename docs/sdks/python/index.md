@@ -100,7 +100,7 @@ special_algod_client = algod.AlgodClient(
     The example code connects to the sandbox Algod client. If you want to connect to a Purestake client, see Purestake's [code samples](https://developer.purestake.io/code-samples){target=_blank}.
 
 # Check Your Balance
-Before moving on to the next step, make sure your account has been funded by the faucet.
+Before moving on to the next step, make sure your account has been funded.
 
 <!-- ===PYSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 ```python
@@ -167,8 +167,6 @@ print(f"Decoded note: {b64decode(txn_result['txn']['txn']['note'])}")
 # Complete Example
 The complete example below illustrates how to quickly submit your first transaction.
 ​
-# TODO::
-[...](https://github.com/algorand/py-algorand-sdk/blob/master/examples/overview.py)
 
 !!! Warning 
     In order for this transaction to be successful, the account must be funded. 
@@ -182,5 +180,3 @@ To view the transaction, open [AlgoExplorer](https://testnet.algoexplorer.io/){t
 The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.  
 
 * [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/){target=_blank}  
-* [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/){target=_blank}  
-* [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/){target=_blank}  

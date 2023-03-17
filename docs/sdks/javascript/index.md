@@ -61,27 +61,17 @@ The SDK is installed with the specific runtime and can now interact with the San
 ​
 # Create an Account on Algorand
 In order to interact with the Algorand blockchain, you must have a funded account. To quickly create a test account use the following code. The account object contains an address (`addr`) and private key (`sk`). You can also export the mnemonic so you can later import the account in key management software like AlgoSigner.
-​
-```javascript
-const algosdk = require('algosdk');
-const createAccount = function() {
-    try {  
-        const myaccount = algosdk.generateAccount();
-        console.log("Account Address = " + myaccount.addr);
-        let account_mnemonic = algosdk.secretKeyToMnemonic(myaccount.sk);
-        console.log("Account Mnemonic = "+ account_mnemonic);
-        console.log("Account created. Save off Mnemonic and address");
-        console.log("Add funds to account using the TestNet Dispenser: ");
-        console.log("https://dispenser.testnet.aws.algodev.network/ ");
-        return myaccount;
-    }
-    catch (err) {
-        console.log("err", err);
-    }
-};
-```
 
-[Watch Video](https://youtu.be/WuhaGp2yrak?t=212){:target="_blank"}
+<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
+```javascript
+const generatedAccount = algosdk.generateAccount();
+const passphrase = algosdk.secretKeyToMnemonic(generatedAccount.sk);
+console.log(`My address: ${generatedAccount.addr}`);
+console.log(`My passphrase: ${passphrase}`);
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L75-L79)
+<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
+
 
 [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
  
@@ -110,6 +100,8 @@ To view the transaction, click on the transaction link in the dispenser or copy 
 ​​
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value (64 "a"s) with server address `http://localhost` and port `4001`.
+
+<!-- ===JSSDK_ALGOD_CLIENT_CREATE=== -->
  
 ```javascript
 async function firstTransaction() {
@@ -125,6 +117,7 @@ async function firstTransaction() {
         let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
 ```
+<!-- ===JSSDK_ALGOD_CLIENT_CREATE=== -->
  
 !!! Info
     The example code connects to the sandbox Algod client. If you want to connect to a other clients, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2).
@@ -132,6 +125,7 @@ async function firstTransaction() {
 # Check Your Balance
 Before moving on to the next step, make sure your account has been funded by the faucet.
  
+<!-- ===JSSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 ```javascript
         //Check your balance
         let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
@@ -139,11 +133,13 @@ Before moving on to the next step, make sure your account has been funded by the
 
 
 ```
+<!-- ===JSSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
  
 # Build First Transaction
 To interact with the Algorand blockchain, you can send different types of transactions. The following code shows how to create a payment transaction to transfer Algo tokens to a different address. To construct a transaction, you need to retrieve the parameters about the Algorand network first. You can choose to set a fee yourself, however, by default the fee is set to 1000 microAlgos (0.001 Algo). Optionally, you can add a message to the transaction using the `note` field (up to 1000 bytes). You can find more information about transaction fields in the [documentation](https://developer.algorand.org/docs/get-details/transactions/transactions/#common-fields-header-and-type).
 ​
+<!-- ===JSSDK_TRANSACTION_PAYMENT_CREATE=== -->
 ```javascript 
         // Construct the transaction
         let params = await algodClient.getTransactionParams().do();
@@ -167,6 +163,7 @@ To interact with the Algorand blockchain, you can send different types of transa
 ```
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386){:target="_blank"}
 
+<!-- ===JSSDK_TRANSACTION_PAYMENT_CREATE=== -->
 
 ​
 !!! Info
@@ -175,6 +172,7 @@ To interact with the Algorand blockchain, you can send different types of transa
 # Sign First Transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction. Now, you can extract the transaction ID. Actually, you can even extract the transaction ID before signing the transaction. You'll use the `txId` to look up the status of the transaction in the following sections of this guide.
 ​
+<!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
 ```javascript 
         // Sign the transaction
         let signedTxn = txn.signTxn(myAccount.sk);
@@ -183,6 +181,8 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ```
 ​
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500){:target="_blank"}
+
+<!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
     Algorand provides many ways to sign transactions. To see other ways see [Authorization](https://developer.algorand.org/docs/features/transactions/signatures/#single-signatures).
@@ -193,6 +193,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 The signed transaction can now be submitted to the network.`waitForConfirmation` is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. The below snippet also shows how you can decode the data in the node field again to make it readable.
  
  
+ <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 ​
 ```javascript
         // Submit the transaction
@@ -214,113 +215,8 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
 ```
 
 [`Watch Video`](https://youtu.be/WuhaGp2yrak?t=508){:target="_blank"}
+ <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
-# Complete Example
- 
-​The complete example below illustrates how to quickly submit your first transaction. If you want to learn more about other transaction types, you can read the documentation and try out some of the [examples listed on GitHub](https://github.com/algorand/js-algorand-sdk/tree/develop/examples) to quickly learn more.
- 
-```javascript 
-const algosdk = require('algosdk');
-const keypress = async () => {
-    process.stdin.setRawMode(true)
-    return new Promise(resolve => process.stdin.once('data', () => {
-        process.stdin.setRawMode(false)
-        resolve()
-    })) 
-}
-// Create an account and add funds to it. Copy the address off
-// The Algorand TestNet Dispenser is located here: 
-// https://dispenser.testnet.aws.algodev.network/
-
-const createAccount =  function (){
-    try{  
-        const myaccount = algosdk.generateAccount();
-        console.log("Account Address = " + myaccount.addr);
-        let account_mnemonic = algosdk.secretKeyToMnemonic(myaccount.sk);
-        console.log("Account Mnemonic = "+ account_mnemonic);
-        console.log("Account created. Save off Mnemonic and address");
-        console.log("Add funds to account using the TestNet Dispenser: ");
-        console.log("https://dispenser.testnet.aws.algodev.network/ ");
-
-        return myaccount;
-    }
-    catch (err) {
-        console.log("err", err);
-    }
-};
-
-
-async function firstTransaction() {
-
-    try {
-        let myAccount = createAccount();
-        console.log("Press any key when the account is funded");
-        await keypress();
-        // Connect your client
-        const algodToken = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-        const algodServer = 'http://localhost';
-        const algodPort = 4001;
-        let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
-
-        //Check your balance
-        let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
-        console.log("Account balance: %d microAlgos", accountInfo.amount);
-
-        // Construct the transaction
-        let params = await algodClient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee
-        params.fee = algosdk.ALGORAND_MIN_TX_FEE;
-        params.flatFee = true;
-
-        // receiver defined as TestNet faucet address 
-        const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
-        const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
-        let amount = 1000000;
-        let sender = myAccount.addr;
-        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-            from: sender, 
-            to: receiver, 
-            amount: amount, 
-            note: note, 
-            suggestedParams: params
-        });
-
-
-        // Sign the transaction
-        let signedTxn = txn.signTxn(myAccount.sk);
-        let txId = txn.txID().toString();
-        console.log("Signed transaction with txID: %s", txId);
-
-        // Submit the transaction
-        await algodClient.sendRawTransaction(signedTxn).do();
-
-        // Wait for confirmation
-        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        let string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);
-        accountInfo = await algodClient.accountInformation(myAccount.addr).do();
-        console.log("Transaction Amount: %d microAlgos", confirmedTxn.txn.txn.amt);        
-        console.log("Transaction Fee: %d microAlgos", confirmedTxn.txn.txn.fee);
-     
-        console.log("Account balance: %d microAlgos", accountInfo.amount);
-    }
-    catch (err) {
-        console.log("err", err);
-    }
-    process.exit();
-};
-
-firstTransaction();
-```
-
-[Run Code](https://replit.com/@Algorand/Getting-Started-with-JavaScript){:target="_blank"}
-
-[Watch Video](https://youtu.be/WuhaGp2yrak){:target="_blank"}
-
-
 ​
 !!! Warning
     In order for this transaction to be successful, the generated account must be [funded](https://dispenser.testnet.aws.algodev.network/).
@@ -335,4 +231,3 @@ The Algorand community provides many editors, frameworks, and plugins that can b
 * [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
 
 * [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/) and [Algo Builder Tutorial series](https://developer.algorand.org/tutorials/algorand-builder-tutorial-part1-creating-local-network-and-deploying-asa/)
-
