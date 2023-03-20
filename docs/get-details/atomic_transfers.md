@@ -2,7 +2,7 @@ title: Atomic transfers
 
 In traditional finance, trading assets generally requires a trusted intermediary, like a bank or an exchange, to make sure that both sides receive what they agreed to. On the Algorand blockchain, this type of trade is implemented within the protocol as an **Atomic Transfer**. This simply means that transactions that are part of the transfer either all succeed or all fail. Atomic transfers allow complete strangers to trade assets without the need for a trusted intermediary, all while guaranteeing that each party will receive what they agreed to. 
 
-On Algorand, atomic transfers are implemented as irreducible batch operations, where a group of [transactions](../transactions) are submitted as a unit and all transactions in the batch either pass or fail. This also eliminates the need for more complex solutions like [hashed timelock contracts](https://en.bitcoinwiki.org/wiki/Hashed_Timelock_Contracts) that are implemented on other blockchains. An atomic transfer on Algorand is confirmed in less than 5 seconds, just like any other transaction. Transactions can contain Algos or Algorand Standard Assets and may also be governed by Algorand Smart Contracts. 
+On Algorand, atomic transfers are implemented as irreducible batch operations, where a group of [transactions](../transactions) are submitted as a unit and all transactions in the batch either pass or fail. This also eliminates the need for more complex solutions like [hashed timelock contracts](https://en.bitcoinwiki.org/wiki/Hashed_Timelock_Contracts) that are implemented on other blockchains. An atomic transfer on Algorand is confirmed in less than 4 seconds, just like any other transaction. Transactions can contain Algos or Algorand Standard Assets and may also be governed by Algorand Smart Contracts. 
 
 # Use cases
 
@@ -31,7 +31,7 @@ To implement an atomic transfer, generate all of the transactions that will be i
 Below you will find examples for creating and sending group transactions to the network in each of the available SDKs and with `goal`. 
 
 !!! tip
-    The following processes may be simplified with the SDKs use of the [atomic transaction composer](atc.md).
+    The following processes may be simplified with the SDKs use of the [atomic transaction composer (ATC)](atc.md). The ATC supports ABI compliant smart contract calls with Argument and Return Value encoding/decoding.
 
 # Step-by-step guide
 
@@ -40,10 +40,8 @@ Create two or more (up to 16 total) unsigned transactions of any type. Read abou
 
 This could be done by a service or by each party involved in the transaction. For example, an asset exchange application can create the entire atomic transfer and allow individual parties to sign from their location.
 
-The example below illustrates Account A sending a transaction to Account C and Account B sending a transaction to Account A.
+The example below illustrates creating, grouping, and signing transactions atomically and submitting to the network.
 
-!!! info
-    Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
 
 === "JavaScript"
     <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->

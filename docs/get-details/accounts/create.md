@@ -7,6 +7,9 @@ The three primary ways to create accounts on Algorand are as [wallet-derived acc
 !!! info
     Remember that accounts participating in transactions are required to maintain a minimum balance of 100,000 micro Algos. Prior to using a newly created account in transactions, make sure that it has a sufficient balance by transferring at least 100,000 micro Algos to it.  An initial transfer of under that amount will fail due to the minimum balance constraint.
 
+!!! info
+	The Algorand community provides many wallets that can be used to create an Algorand account as well. See [Wallets](https://developer.algorand.org/ecosystem-projects/?tags=wallets)	for more details.
+
 # Wallet-derived (kmd)
 
 The Key Management Daemon is a process that runs on [Algorand nodes](../../../run-a-node/reference/artifacts#kmd), so if you are using a [third-party API service](../../../archive/build-apps/setup#1-use-a-third-party-service), this process likely will not be available to you. kmd is the underlying key storage mechanism used with `goal`.  The SDKs also connect to kmd through a REST endpoint and access token. 
@@ -728,5 +731,3 @@ The following code shows how to generate a multisignature account composed of th
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
 
-!!! info
-    Example multisignature code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig/v2) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).

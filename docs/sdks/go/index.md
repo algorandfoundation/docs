@@ -1,12 +1,8 @@
 title: Your First Transaction
 
 This section is a quick start guide for sending your first transaction on the Algorand TestNet network using the Go programming language. This guide installs the Go SDK, creates an account and submits a payment transaction. This guide also installs Algorand Sandbox, which provides required infrastructure for development and testing. 
-
-!!! Info
-    If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-Go) or watch a [video walkthrough](https://youtu.be/rFG7Zo2JvIY?t=) explaining all the code in the steps below.
  
 # Install Algorand Sandbox
-
 Algorand Sandbox is developer-focused tool for quickly spinning up the Algorand infrastructure portion of your development environment. It uses Docker to provide an `algod` instance for connecting to the network of your choosing and an `indexer` instance for querying blockchain data. APIs are exposed by both instances for client access provided within the SDK. Read more about [Algorand networks](../../get-details/algorand-networks/index.md), their capabilities and intended use.
 
 !!! Prerequisites
@@ -24,14 +20,11 @@ cd sandbox
 !!! Warning
     The Algorand Sandbox installation may take a few minutes to complete in order to catch up to the current round on TestNet. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup).
 
-!!! Info
-    The `indexer` is enabled **only** for _private networks_. Therefore, all blockchain queries in this guide will use the `algod` API.
 
 - [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=18)
 - [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/)
 
 # Install Go SDK
-
 Algorand provides an SDK for Go. 
 
 !!! Prerequisites
@@ -49,7 +42,6 @@ go get -u github.com/algorand/go-algorand-sdk/...
 The SDK is installed and can now interact with the running Algorand Sandbox environment, as configured above.
 
 # Create account
-
 In order to interact with the Algorand blockchain, you must have a funded account on the network. To quickly create an account on Algorand TestNet create a new file **yourFirstTransaction.go** and insert the following code:
 
 ```go linenums="1"
@@ -100,7 +92,6 @@ func main() {
 - [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
  
 # Fund account
-
 The code below prompts to fund the newly generated account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/). 
 
 ```go linenums="35"
@@ -116,7 +107,6 @@ fmt.Scanln()
 - [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=138)
 
 # Instantiate client
-
 You must instantiate a client prior to making calls to the API endpoints. The Go SDK implements the client natively using the following code:
 
 ```go  linenums="40"
@@ -137,7 +127,6 @@ if err != nil {
 - [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=149)
 
 # Check account balance
-
 Before moving on to the next step, make sure your account has been funded by the faucet.
  
 ```go  linenums="50"
@@ -158,7 +147,6 @@ fmt.Scanln()
 - [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=161)
 
 # Build transaction
-
 Communication with the Algorand network is performed using transactions. Create a payment transaction sending 1 ALGO from your account to the TestNet faucet address:
 
 ```go linenums="62"
@@ -192,7 +180,6 @@ if err != nil {
 [`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=178)
 
 # Sign transaction
-
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 
 ```go linenums="83"
@@ -211,7 +198,6 @@ fmt.Printf("Signed txid: %s\n", txID)
 [`Watch Video`](https://youtu.be/rFG7Zo2JvIY?t=204)
 
 # Submit transaction
-
 The signed transaction can now be broadcast to the network for validation and inclusion in a future block. The `waitForConfirmation` SDK method polls the `algod` node for the transaction ID to ensure it succeeded.
 
 ```go linenums="91"
@@ -234,7 +220,6 @@ if err != nil {
 - [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=216)
 
 # Display completed transaction
-
 Finally, we can query the blockchain for the committed transaction data and display in on the command line. 
 
 ```go linenums="106"
@@ -256,7 +241,6 @@ fmt.Printf("Decoded note: %s\n", string(confirmedTxn.Transaction.Txn.Note))
  
  
 # Run the program
- 
 Save your file and execute the program:
 
 ```bash
@@ -266,26 +250,15 @@ go run yourFirstTransaction.go
 !!! Warning
     In order for your transaction to be successful, you must fund the generated account during runtime.
 
-!!! Info
-	View the confirmed transaction in your web browser by clicking the link to these third-party block explorers and inserting the transactionID within their search bar:
-	
-	- [AlgoExplorer](https://testnet.algoexplorer.io/)
-	- [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet)
 
 - [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=232)
  
 # Complete example
-
 If you have any trouble compiling or running your program, please check the complete example below which details how to quickly submit your first transaction.
  
 [Run Code](https://replit.com/@Algorand/Getting-Started-with-Go)
 
 [Watch Video](https://youtu.be/rFG7Zo2JvIY?t=)
 
-# Setting up your editor/framework
-
-The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
-
-* [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-go/)
-* [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
-* [Algo Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
+# Viewing the Transaction
+To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.)

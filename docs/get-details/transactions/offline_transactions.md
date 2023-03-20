@@ -178,8 +178,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
     ```
 <!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
 
-!!! info
-    Example transaction code snippets are provided throughout this page. Full running code transaction examples as well as **offline multisig** for each SDK are available within the GitHub repo at [/examples/offline](https://github.com/algorand/docs/tree/master/examples/offline) and for [download](https://github.com/algorand/docs/blob/master/examples/offine/offline.zip?raw=true) (.zip).
+
     
 ??? example "Saving Signed and Unsigned Multisig Transactions to a File using goal"
     
