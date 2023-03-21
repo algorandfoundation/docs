@@ -22,19 +22,7 @@ To get you started quickly, we recommend checking out the SDK getting started pa
     [Your first Algo payment transaction](../../../sdks/go){: target="_blank"}
  
 
-And for ASAs, the following code will show you how to opt-in, transfer, and close out ASA balances.
-
-=== "Python"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationPython#main.py){: target="_blank"}
-
-=== "JavaScript"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationsJS#main.js){: target="_blank"}
-
-=== "Java"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationsJava#Main.go){: target="_blank"}
-
-=== "Go"
-    [Run code](https://replit.com/@Algorand/ASAIntegrationGo#main.go){: target="_blank"}
+And for ASAs, the [example code here](../../get-details/asa.md) will show you how to opt-in, transfer, and close out ASA balances.
 
 Continue on for further explanations of these features and links to more details.
 
@@ -109,17 +97,13 @@ If you are doing your own accounting of transactions and updates to balances, be
 Transactions can be sent from smart contracts and these are called [inner transactions](../../../get-details/dapps/avm/teal/specification/#inner-transactions){: target="_blank"}. These transactions can be found in the [`inner-txns`](../../../rest-apis/algod/v2/#pendingtransactionresponse){: target="_blank"} field of the application call transaction that triggered them. See sample output from `algod` and `indexer` APIs. 
 
 === "algod"
-    ```json
-    {
-        "dt": {
-        .
-        .
-        .
-        "inner-txns": [
-            {
-            "pool-error": "",
+
+    ```js
+{
+    // ...
+    "inner-txns": [{
+        "txn": {
             "txn": {
-                "txn": {
                 "amt": 20000,
                 "fee": 1000,
                 "fv": 11,
@@ -127,59 +111,18 @@ Transactions can be sent from smart contracts and these are called [inner transa
                 "rcv": "GDA5MWDRLWIQ7G2YZABYYLAA2ZCCZYRZTXR35CTCECL52FNUMXYCC2JXYU",
                 "snd": "LMTOYRT2WPSUY6JTCW2URER6YN3GETJ5FHTQBA55EVK66JG2QOB32WPIHY",
                 "type": "pay"
-                }
             }
-            }
-        ]
-        .
-        .
-        .
-                },
-        .
-        .
-        .
-            "txn": {
-                    .
-        .
-        .
-                "type": "appl"
-                }
-            },
-        {
-
-        .
-        .
-        .
-
-        "inner-txns": [
-            {
-            "pool-error": "",
-            "txn": {
-                "txn": {
-                "amt": 20000,
-                "fee": 1000,
-                "fv": 11,
-                "lv": 1011,
-                "rcv": "GDA5MWDRLWIQ7G2YZABYYLAA2ZCCZYRZTXR35CTCECL52FNUMXYCC2JXYU",
-                "snd": "LMTOYRT2WPSUY6JTCW2URER6YN3GETJ5FHTQBA55EVK66JG2QOB32WPIHY",
-                "type": "pay"
-                }
-            }
-            }
-        ]
-        .
-        .
-        .
-    }
+        }
+    }]
+    // ...
+}
     ```
 
 === "indexer"
-	```json
+	```js
         {
         "application-transaction":{
-            .
-            .
-            .
+            // ...
             "confirmed-round":1,
             "fee":0,
             "first-valid":0,
@@ -190,8 +133,8 @@ Transactions can be sent from smart contracts and these are called [inner transa
                         "amount":222,
                         "Asset-id":11,
                         "Close-amount":0,
-            "receiver":"PIJRXIH5EJF7HT43AZQOQBPEZUTTCJCZ3E5U3QHLE33YP2ZHGXP7O7WN3U",
-                    "sender":"PT4K5LK4KYIQYYRAYPAZIEF47NVEQRDX3CPYWJVH25LKO2METIRBKRHRAE"
+                        "receiver":"PIJRXIH5EJF7HT43AZQOQBPEZUTTCJCZ3E5U3QHLE33YP2ZHGXP7O7WN3U",
+                        "sender":"PT4K5LK4KYIQYYRAYPAZIEF47NVEQRDX3CPYWJVH25LKO2METIRBKRHRAE"
                     },
                     "close-rewards":0,
                     "closing-amount":0,
@@ -211,9 +154,7 @@ Transactions can be sent from smart contracts and these are called [inner transa
                     "tx-type":"axfer"
                 }
             ],
-            .
-            .
-            .
+            // ...
         },
         "tx-type":"appl"
     }

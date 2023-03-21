@@ -16,7 +16,6 @@ cd sandbox
 ./sandbox up testnet
 ```
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=21){:target="_blank"}
 
 [More Information](https://developer.algorand.org/articles/introducing-sandbox-20/){:target="_blank"}
 
@@ -27,7 +26,6 @@ This will install a Sandbox node connected to the Algorand TestNet. To read more
 .
 
 # Install SDK For Runtime
-
 Algorand provides an SDK for Java. The instructions for installing the SDK are as follows. The Java SDK is available in the MVN repository and can be used in your Maven project by including the following dependency.
 
 Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}.
@@ -36,11 +34,10 @@ Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for
 <dependency>
     <groupId>com.algorand</groupId>
     <artifactId>algosdk</artifactId>
-    <version>1.11.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=98){:target="_blank"}
 
 [`More Information`](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}
 
@@ -50,47 +47,17 @@ See the [Java SDK reference documentation](https://algorand.github.io/java-algor
 
 The SDK is installed and can now interact with the Sandbox created earlier.
 
-!!! Info
-    Web based solutions require the AlgoSigner Chrome plugin or other web-based private key management software. For more information see [community wallets](../../../../ecosystem-projects/#wallets){:target="_blank"}.
-
 # Create an Account on Algorand
-
 In order to interact with the Algorand blockchain, you must have a funded account. To quickly create a test account use the following code.
 
+<!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 ```java
-import com.algorand.algosdk.account.Account;
-class GettingStarted{
-    // Create Account
-    static Scanner scan = new Scanner(System.in);
-    public Account createAccount()  throws Exception {
-        try {
-            Account myAccount1 = new Account();
-            System.out.println("My Address: " + myAccount1.getAddress());
-            System.out.println("My Passphrase: " + myAccount1.toMnemonic());
-            System.out.println("Navigate to this link and dispense funds:  https://dispenser.testnet.aws.algodev.network?account=" + myAccount1.getAddress().toString());            
-
-            System.out.println("PRESS ENTER KEY TO CONTINUE...");
-            scan.nextLine();
-            return myAccount1;
-            // Copy off account and mnemonic
-            // Dispense TestNet Algos to account:
-            // https://dispenser.testnet.aws.algodev.network/
-            // resource:
-            // https://developer.algorand.org/docs/features/accounts/create/#standalone
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Account creation error " + e.getMessage() );
-        }
-        public static void main(String args[]) throws Exception {
-            GettingStarted t = new GettingStarted();
-            Account myAccount1 = t.createAccount();
-            t.gettingStartedExample(myAccount1); // to be added below
-        }
-    }
-}
+Account acct = new Account();
+System.out.println("Address: " + acct.getAddress());
+System.out.println("Passphrase: " + acct.toMnemonic());
 ```
-
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=139){:target="_blank"}
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L76-L79)
+<!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 [More Information](../../get-details/accounts/create/#standalone){:target="_blank"}
 
@@ -98,297 +65,115 @@ class GettingStarted{
     Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](../../../../ecosystem-projects/#wallets){:target="_blank"}. For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/){:target="_blank"}, click [here](https://github.com/algorand/algorand-wallet){:target="_blank"}.
 
 # Fund the Account
-
-
 The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}.
 
 
 !!! Info
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](../../get-details/accounts/#minimum-balance){:target="_blank"}.
 
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=178){:target="_blank"}
 
-# Viewing the Transaction
+# Connect Your Client
+Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value and the `algodHost` corresponds to `http://localhost:4001`.
 
-To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
-
-[Watch Video](https://youtu.be/_EEMXHrbMzU?t=209){:target="_blank"}
 
 # Build First Transaction
-
 Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code, which also includes some utility functions, `connectToNetwork` ,  and `PrintBalance`. Add this code to the GettingStarted class above.
 
+<!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 ```java
-package com.algorand.javatest.firsttransaction;
-import com.algorand.algosdk.account.Account;
-import com.algorand.algosdk.crypto.Address;
-import com.algorand.algosdk.transaction.SignedTransaction;
-import com.algorand.algosdk.transaction.Transaction;
-import com.algorand.algosdk.util.Encoder;
-import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Response;
-import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
-import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
-import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
-import com.algorand.algosdk.v2.client.Utils;
-import org.json.JSONObject;
-private AlgodClient client = null;
-    // utility function to connect to a node
-    private AlgodClient connectToNetwork() {
-    final String ALGOD_API_ADDR = "localhost";
-    final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    final Integer ALGOD_PORT = 4001;
-    AlgodClient client = new AlgodClient(ALGOD_API_ADDR,
-        ALGOD_PORT, ALGOD_API_TOKEN);
-    return client;
-}
+String algodHost = "http://localhost";
+int algodPort = 4001;
+String algodToken = "a".repeat(64);
+AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
 
-private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
-        String myAddress = myAccount.getAddress().toString();
-        Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
-        if (!respAcct.isSuccessful()) {
-            throw new Exception(respAcct.message());
-        }
-        com.algorand.algosdk.v2.client.model.Account accountInfo = respAcct.body();
-        System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
-        return myAddress;
-}
-public void gettingStartedExample(Account myAccount) throws Exception {
-    if (client == null)
-        this.client = connectToNetwork();
-    printBalance(myAccount);
-    try {
-        // Construct the transaction
-        final String RECEIVER = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
-        String note = "Hello World";
-        Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-        if (!resp.isSuccessful()) {
-            throw new Exception(resp.message());
-        }
-        TransactionParametersResponse params = resp.body();
-        if (params == null) {
-            throw new Exception("Params retrieval error");
-        }
-        JSONObject jsonObj = new JSONObject(params.toString());
-        System.out.println("Algorand suggested parameters: " + jsonObj.toString(2));
-        Transaction txn = Transaction.PaymentTransactionBuilder()
-            .sender(myAccount.getAddress().toString())
-            .note(note.getBytes())
-            .amount(1000000) // 1 algo = 1000000 microalgos
-            .receiver(new Address(RECEIVER))
-            .suggestedParams(params)
-            .build();
-        // more code below
+// OR if the API provider requires a specific header key for the token
+String tokenHeader = "X-API-Key";
+AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L94-L102)
+<!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=288){:target="\_blank"}
+
 !!! Info
     Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/){: target="_blank"}.
 
-# Sign First Transaction
+# Check Your Balance
+Before moving on to the next step, make sure your account has been funded by the faucet.
 
+<!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
+```java
+Response<com.algorand.algosdk.v2.client.model.Account> acctInfoResp = algodClient
+        .AccountInformation(acct.getAddress()).execute();
+com.algorand.algosdk.v2.client.model.Account acctInfo = acctInfoResp.body();
+// print one of the fields in the account info response
+System.out.printf("Current balance: %d", acctInfo.amount);
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L84-L89)
+<!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
+
+
+# Build First Transaction
+Transactions are used to interact with the Algorand network. To create a payment transaction use the following code.
+​
+<!-- ===JAVASDK_TRANSACTION_PAYMENT_CREATE=== -->
+```java
+Response<TransactionParametersResponse> suggestedParams = algodClient.TransactionParams().execute();
+Integer amount = 1000000; // 1 Algo
+Transaction ptxn = Transaction.PaymentTransactionBuilder()
+        .sender(acct.getAddress())
+        .amount(amount)
+        .receiver(acct2.getAddress())
+        .suggestedParams(suggestedParams.body()).build();
+```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L25-L32)
+<!-- ===JAVASDK_TRANSACTION_PAYMENT_CREATE=== -->
+​
+!!! Info
+    Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/index.md#transaction-types){target=_blank}. 
+
+# Sign First Transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 
+<!-- ===JAVASDK_TRANSACTION_PAYMENT_SIGN=== -->
 ```java
-        // Sign the transaction
-        SignedTransaction signedTxn = myAccount.signTransaction(txn);
-        System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
+SignedTransaction sptxn = acct.signTransaction(ptxn);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L35-L36)
+<!-- ===JAVASDK_TRANSACTION_PAYMENT_SIGN=== -->
 
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=401){:target="_blank"}
 !!! Info
     Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](../../get-details/transactions/signatures){:target="_blank"}.
 
 # Submit the Transaction
-
 The signed transaction can now be submitted to the network. The SDK `waitForConfirmation` utility function is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
 
+<!-- ===JAVASDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 ```java
-        // Submit the transaction to the network
-        byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-        Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-        if (!rawtxresponse.isSuccessful()) {
-            throw new Exception(rawtxresponse.message());
-        }
-        String id = rawtxresponse.body().txId;
-        // Wait for transaction confirmation
-        PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-        System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-        // Read the transaction
-        JSONObject jsonObj2 = new JSONObject(pTrx.toString());
-        System.out.println("Transaction information (with notes): " + jsonObj2.toString(2));
-        System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-        System.out.println("Amount: " + new String(pTrx.txn.tx.amount.toString()));
-        System.out.println("Fee: " + new String(pTrx.txn.tx.fee.toString()));
-
-        printBalance(myAccount);
-    } catch (Exception e) {
-        System.err.println("Exception when calling algod#transactionInformation: " + e.getMessage());
-    }
-}
+// encode the transaction
+byte[] encodedTxBytes = Encoder.encodeToMsgPack(sptxn);
+// submit the transaction to the algod server
+Response<PostTransactionsResponse> resp = algodClient.RawTransaction().rawtxn(encodedTxBytes).execute();
+// wait for the transaction to be confirmed
+String txid = resp.body().txId;
+PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, txid, 4);
+System.out.printf("Transaction %s confirmed in round %d\n", txid, result.confirmedRound);
 ```
+[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L39-L47)
+<!-- ===JAVASDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 
 [`Run Code`](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="_blank"}
-[`Watch Video`](https://youtu.be/_EEMXHrbMzU?t=410){:target="_blank"}
+
 
 # Complete Example
+The complete example below illustrates how to quickly submit your first transaction.
+​
+# TODO::
+[...](https://github.com/algorand/java-algorand-sdk/blob/master/examples/src/main/java/com/algorand/examples/Example.java)
 
-The example below illustrates creating an account and using it to submit your first transaction.
+!!! Warning 
+    In order for this transaction to be successful, the account must be funded. 
 
-```java
-package com.algorand.javatest.firsttransaction;
-import com.algorand.algosdk.account.Account;
-import java.util.Scanner;
-import com.algorand.algosdk.crypto.Address;
-import com.algorand.algosdk.transaction.SignedTransaction;
-import com.algorand.algosdk.transaction.Transaction;
-import com.algorand.algosdk.util.Encoder;
-import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Response;
-import com.algorand.algosdk.v2.client.model.NodeStatusResponse;
-import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
-import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
-import org.json.JSONObject;
-import com.algorand.algosdk.v2.client.Utils;
+# Viewing the Transaction
+To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
 
-
-class GettingStarted{
-
-    // Create Account
-    static Scanner scan = new Scanner(System.in);
-
-    public Account createAccount()  throws Exception {
-        try {
-            Account myAccount1 = new Account();
-            System.out.println("My Address: " + myAccount1.getAddress());
-            System.out.println("My Passphrase: " + myAccount1.toMnemonic());
-  
-            System.out.println("Navigate to this link and dispense:  https://dispenser.testnet.aws.algodev.network?account=" + myAccount1.getAddress());            
-            System.out.println("PRESS ENTER KEY TO CONTINUE...");     
-            scan.nextLine();
-            return myAccount1;
-            // Copy off account and mnemonic
-            // Dispense TestNet Algos to account:
-            // https://dispenser.testnet.aws.algodev.network/
-            // resource:
-            // https://developer.algorand.org/docs/features/accounts/create/#standalone        
-        
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Account creation error " + e.getMessage() );
-        }
-
-    } 
-
-    private AlgodClient client = null; 
-      // utility function to connect to a node
-    private AlgodClient connectToNetwork() {
-        final String ALGOD_API_ADDR = "localhost";
-        final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        final Integer ALGOD_PORT = 4001;
-
-        AlgodClient client = new AlgodClient(ALGOD_API_ADDR,
-            ALGOD_PORT, ALGOD_API_TOKEN);
-        return client;
-    }
-
-    private String printBalance(com.algorand.algosdk.account.Account myAccount) throws Exception {
-        String myAddress = myAccount.getAddress().toString();
-        Response < com.algorand.algosdk.v2.client.model.Account > respAcct = client.AccountInformation(myAccount.getAddress()).execute();
-        if (!respAcct.isSuccessful()) {
-            throw new Exception(respAcct.message());
-        }
-        com.algorand.algosdk.v2.client.model.Account accountInfo = respAcct.body();
-        System.out.println(String.format("Account Balance: %d microAlgos", accountInfo.amount));
-        return myAddress;
-    }  
-
-    public void firstTransaction(Account myAccount) throws Exception {
-
-        if (client == null)
-            this.client = connectToNetwork();
-
-        printBalance(myAccount);
-
-        try {
-            // Construct the transaction
-            final String RECEIVER = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
-            String note = "Hello World";
-            Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-            if (!resp.isSuccessful()) {
-                throw new Exception(resp.message());
-            }
-            TransactionParametersResponse params = resp.body();
-            if (params == null) {
-                throw new Exception("Params retrieval error");
-            }
-            JSONObject jsonObj = new JSONObject(params.toString());
-            System.out.println("Algorand suggested parameters: " + jsonObj.toString(2));
-            Transaction txn = Transaction.PaymentTransactionBuilder()
-                .sender(myAccount.getAddress().toString())
-                .note(note.getBytes())
-                .amount(1000000) // 1 algo = 1000000 microalgos
-                .receiver(new Address(RECEIVER))
-                .suggestedParams(params)
-                .build();
-           
-            // Sign the transaction
-            SignedTransaction signedTxn = myAccount.signTransaction(txn);
-            System.out.println("Signed transaction with txid: " + signedTxn.transactionID);
-
-            // Submit the transaction to the network
-            String[] headers = {"Content-Type"};
-            String[] values = {"application/x-binary"};
-            // Submit the transaction to the network
-            byte[] encodedTxBytes = Encoder.encodeToMsgPack(signedTxn);
-            Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute(headers, values);
-            if (!rawtxresponse.isSuccessful()) {
-                throw new Exception(rawtxresponse.message());
-            }
-            String id = rawtxresponse.body().txId;
-
-            // Wait for transaction confirmation
-            PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-
-            System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-            // Read the transaction
-            JSONObject jsonObj2 = new JSONObject(pTrx.toString());
-            System.out.println("Transaction information (with notes): " + jsonObj2.toString(2));
-            System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-            System.out.println("Amount: " + new String(pTrx.txn.tx.amount.toString())); 
-            System.out.println("Fee: " + new String(pTrx.txn.tx.fee.toString())); 
-            if (pTrx.closingAmount != null){
-             System.out.println("Closing Amount: " + new String(pTrx.closingAmount.toString()));                 
-            }          
-            printBalance(myAccount);
-
-        } catch (Exception e) {
-            System.err.println("Exception when calling algod#transactionInformation: " + e.getMessage());
-        }
-    }
-
-    public static void main(String args[]) throws Exception {
-        GettingStarted t = new GettingStarted();
-        Account myAccount1 = t.createAccount();
-        t.firstTransaction(myAccount1);
-    }  
-  } 
- 
-```
-
-[Run Code](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="_blank"}
-
-[Watch Video](https://youtu.be/_EEMXHrbMzU){:target="_blank"}
-!!! Warning
-    In order for this transaction to be successful, the account must be funded.
-
-# Setting Up Your Editor/Framework
-
-The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
-
-- [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-java/)
-- [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
-- [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
   

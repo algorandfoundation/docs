@@ -31,24 +31,23 @@ For more information on smart contracts, see the [smart contract documentation](
 
 When building smart contracts in PyTeal it is important to realize that a smart contract actually consists of two programs. These are called the approval and the clear programs. In PyTeal both of these programs are generally created in the same Python file. So the beginning of a PyTeal program will contain logic similar to the following:
 
+<!-- ===PYTEAL_APP_EMPTY_LOGIC=== -->
 ```python
-#samplecontract.py
-from pyteal import *
+    def approval_program():
+        program = Return(Int(1))
+        # Mode.Application specifies that this is a smart contract
+        return compileTeal(program, Mode.Application, version=5)
 
-"""Basic Counter Application"""
+    def clear_state_program():
+        program = Return(Int(1))
+        # Mode.Application specifies that this is a smart contract
+        return compileTeal(program, Mode.Application, version=5)
 
-def approval_program():
-    program = Return(Int(1))
-    # Mode.Application specifies that this is a smart contract
-    return compileTeal(program, Mode.Application, version=5)
-
-def clear_state_program():
-    program = Return(Int(1))
-    # Mode.Application specifies that this is a smart contract
-    return compileTeal(program, Mode.Application, version=5)
-
-print(approval_program())
+    print(approval_program())
+    print(clear_state_program())
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/app_walkthrough.py#L27-L39)
+<!-- ===PYTEAL_APP_EMPTY_LOGIC=== -->
 
 In the above example, a function is defined to return each of the two programs. The `compileTeal` function compiles the program set to the `program` variable. In this case, we are just returning the integer 1 for both programs. The other arguments passed to `compileTeal` set the mode (Application or Signature) and version of TEAL to produce. The output from calling the `compileTeal` method is a string representing the compiled TEAL source.
 
@@ -59,7 +58,7 @@ int 1
 return
 ```
 
-This output represents the TEAL source for the program. The TEAL source must be compiled to bytecode in order to make use of it on-chain.  This can be done using [goal](../../../clis/goal/clerk/compile.md) or one of the SDKs through the [REST](../../../rest-apis/algod/v2.md#post-v2tealcompile) interface.
+This output represents the TEAL source for the program. The TEAL source must be compiled to bytecode in order to make use of it on-chain.  This can be done using [goal](../../../clis/goal/clerk/compile.md) or one of the SDKs through the [REST](../../../rest-apis/algod.md#post-v2tealcompile) interface.
 
 
 ## A note about PyTeal Expressions
@@ -91,19 +90,31 @@ Here we'll start updating our example to allow a more complex logical flow, show
 
 Below is a simple logical switch statement used to route evaluation to different set of logic based on a Transaction's [`OnComplete`](../../transactions/transactions.md#application-call-transaction) value.  
 
+<!-- ===PYTEAL_APP_MANUAL_ROUTER=== -->
 ```python
-def approval_program():
-    program = Cond(
-        [Txn.application_id() == Int(0), handle_creation],
-        [Txn.on_completion() == OnComplete.OptIn, handle_optin],
-        [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
-        [Txn.on_completion() == OnComplete.UpdateApplication, handle_updateapp],
-        [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteapp],
-        [Txn.on_completion() == OnComplete.NoOp, handle_noop]
-    )
+    def approval_program():
 
-    return compileTeal(program, Mode.Application, version=5)
+        handle_creation = Approve()
+        handle_optin = Reject()
+        handle_closeout = Reject()
+        handle_update = Reject()
+        handle_delete = Reject()
+        handle_noop = Reject()
+
+        program = Cond(
+            [Txn.application_id() == Int(0), handle_creation],
+            [Txn.on_completion() == OnComplete.OptIn, handle_optin],
+            [Txn.on_completion() == OnComplete.CloseOut, handle_closeout],
+            [Txn.on_completion() == OnComplete.UpdateApplication, handle_update],
+            [Txn.on_completion() == OnComplete.DeleteApplication, handle_delete],
+            [Txn.on_completion() == OnComplete.NoOp, handle_noop],
+        )
+        return program
+
+    return compileTeal(approval_program(), Mode.Application, version=5)
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/app_walkthrough.py#L44-L64)
+<!-- ===PYTEAL_APP_MANUAL_ROUTER=== -->
 
 The `program` variable is set to a [PyTeal `Cond` Expression](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=Cond#chaining-tests-cond) which is an example of a Control Flow statement. Other Control flow statements are documented in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#).
 
@@ -123,14 +134,13 @@ The only condition above that does _not_ check the `on_completion` field is the 
 
 While the above method of constructing distinct Expression trees for both the approval and clear state programs works, it is often preferable to use the [Router](https://pyteal.readthedocs.io/en/stable/abi.html#registering-methods) class provided in `PyTeal`. The `Router` class abstracts much of the handling for method routing when constructing ABI compliant applications. This is especially useful for encoding and decoding ABI types and returning ABI types.
 
+<!-- ===PYTEAL_APP_ROUTER_BASIC=== -->
 ```python
-from pyteal import *
+## Contract logic
+count_key = Bytes("Count")
 
 # Create an expression to store 0 in the `Count` global variable and return 1
-handle_creation = Seq(
-    App.globalPut(Bytes("Count"), Int(0)),
-    Approve()
-)
+handle_creation = Seq(App.globalPut(count_key, Int(0)), Approve())
 
 # Main router class
 router = Router(
@@ -143,13 +153,14 @@ router = Router(
         # Always let creator update/delete but only by the creator of this contract
         update_application=OnCompleteAction.always(Reject()),
         delete_application=OnCompleteAction.always(Reject()),
-        # No local state, don't bother handling it. 
-        close_out=OnCompleteAction.never(),   # Equivalent to omitting completely
-        opt_in=OnCompleteAction.never(),      # Equivalent to omitting completely
+        # No local state, don't bother handling it.
+        close_out=OnCompleteAction.never(),
+        opt_in=OnCompleteAction.never(),
     ),
 )
-
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L81-L103)
+<!-- ===PYTEAL_APP_ROUTER_BASIC=== -->
 
 Here we defined the `handle_creation` variable to be a Sequence of Expressions using [`Seq`](https://pyteal.readthedocs.io/en/latest/control_structures.html?highlight=seq#chaining-expressions-seq).
 
@@ -180,48 +191,22 @@ Since our example will be an ARC4 contract, the application_args first argument 
 
 Our example requires an increment function and a decrement function to be handle incrementing and decrementing the counter. 
 
+<!-- ===PYTEAL_APP_ROUTER_METHODS=== -->
 ```python
-from pyteal import *
-
-
-count_key = Bytes("Count")
-
-# Create an expression to store 0 in the `Count` global variable and return 1
-handle_creation = Seq(
-    App.globalPut(count_key, Int(0)),
-    Approve()
-)
-
-# Main router class
-router = Router(
-    # Name of the contract
-    "my-first-router",
-    # What to do for each on-complete type when no arguments are passed (bare call)
-    BareCallActions(
-        # On create only, just approve
-        no_op=OnCompleteAction.create_only(handle_creation),
-        # Always let creator update/delete but only by the creator of this contract
-        update_application=OnCompleteAction.always(Reject()),
-        delete_application=OnCompleteAction.always(Reject()),
-        # No local state, don't bother handling it. 
-        close_out=OnCompleteAction.never(),
-        opt_in=OnCompleteAction.never(),
-    ),
-)
-
 @router.method
 def increment():
     # Declare the ScratchVar as a Python variable _outside_ the expression tree
     scratchCount = ScratchVar(TealType.uint64)
     return Seq(
         Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to 
+        # The initial `store` for the scratch var sets the value to
         # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(count_key)), 
-        # Increment the value stored in the scratch var 
-        # and update the global state variable 
+        scratchCount.store(App.globalGet(count_key)),
+        # Increment the value stored in the scratch var
+        # and update the global state variable
         App.globalPut(count_key, scratchCount.load() + Int(1)),
     )
+
 
 @router.method
 def decrement():
@@ -229,18 +214,22 @@ def decrement():
     scratchCount = ScratchVar(TealType.uint64)
     return Seq(
         Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to 
+        # The initial `store` for the scratch var sets the value to
         # whatever is in the `Count` global state variable
         scratchCount.store(App.globalGet(count_key)),
-        # Check if the value would be negative by decrementing 
-        If(scratchCount.load() > Int(0),
-            # If the value is > 0, decrement the value stored 
+        # Check if the value would be negative by decrementing
+        If(
+            scratchCount.load() > Int(0),
+            # If the value is > 0, decrement the value stored
             # in the scratch var and update the global state variable
             App.globalPut(count_key, scratchCount.load() - Int(1)),
         ),
     )
 
+
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L117-L151)
+<!-- ===PYTEAL_APP_ROUTER_METHODS=== -->
 
 In the example, we've implemented the `increment` and `decrement` methods as python methods that return a PyTeal `Expression`. They are attached to the router using the `@router.method` decorator which handles determining the method selector that should be used for routing when an application call is made.
 
@@ -262,68 +251,10 @@ Finally, both methods exit the smart contract call. Assuming no errors were thro
 
 ### Final product
 
-Because no opt-in is allowed, a clear program need not do anything so we simply return 1, indicating success. The full example is presented below. 
+Because no opt-in is allowed, a clear program need not do anything so we simply return 1, indicating success. The `Router` can now be used to compile our application to the `TEAL` programs and provide a `Contract` object to allow clients to call the `ABI` methods.
 
+<!-- ===PYTEAL_APP_ROUTER_COMPILE=== -->
 ```python
-from pyteal import *
-
-count_key = Bytes("Count")
-
-# Create an expression to store 0 in the `Count` global variable and return 1
-handle_creation = Seq(
-    App.globalPut(count_key, Int(0)),
-    Approve()
-)
-
-# Main router class
-router = Router(
-    # Name of the contract
-    "my-first-router",
-    # What to do for each on-complete type when no arguments are passed (bare call)
-    BareCallActions(
-        # On create only, just approve
-        no_op=OnCompleteAction.create_only(handle_creation),
-        # Always let creator update/delete but only by the creator of this contract
-        update_application=OnCompleteAction.always(Reject()),
-        delete_application=OnCompleteAction.always(Reject()),
-        # No local state, don't bother handling it. 
-        close_out=OnCompleteAction.never(),
-        opt_in=OnCompleteAction.never(),
-    ),
-)
-
-@router.method
-def increment():
-    # Declare the ScratchVar as a Python variable _outside_ the expression tree
-    scratchCount = ScratchVar(TealType.uint64)
-    return Seq(
-        Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to 
-        # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(count_key)), 
-        # Increment the value stored in the scratch var 
-        # and update the global state variable 
-        App.globalPut(count_key, scratchCount.load() + Int(1)),
-    )
-
-@router.method
-def decrement():
-    # Declare the ScratchVar as a Python variable _outside_ the expression tree
-    scratchCount = ScratchVar(TealType.uint64)
-    return Seq(
-        Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to 
-        # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(count_key)),
-        # Check if the value would be negative by decrementing 
-        If(scratchCount.load() > Int(0),
-            # If the value is > 0, decrement the value stored 
-            # in the scratch var and update the global state variable
-            App.globalPut(count_key, scratchCount.load() - Int(1)),
-        ),
-    )
-
-
 # Compile the program
 approval_program, clear_program, contract = router.compile_program(version=6)
 
@@ -331,9 +262,10 @@ approval_program, clear_program, contract = router.compile_program(version=6)
 print(approval_program)
 print(clear_program)
 
-import json
 print(json.dumps(contract.dictify()))
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L106-L114)
+<!-- ===PYTEAL_APP_ROUTER_COMPILE=== -->
 
 The last bit to add is the `router.compile_program` which compiles the PyTeal into TEAL and returns the `approval` program, the `clear` program, and even the Python SDK `contract` object that can be used to make method calls or written to a file and shared.
 
@@ -375,14 +307,16 @@ In the previous section, the development of a simple smart contract was explaine
 
 Before getting into the details of deploying the contract, a couple of global variables must be added to the PyTeal Python example.
 
+<!-- ===PYTEAL_APP_ROUTER_SETUP=== -->
 ```python
 # user declared account mnemonics
-creator_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
-# user declared algod connection parameters.
-# Node must have EnableDeveloperAPI set to true in its config
+creator_mnemonic = "TODO: Add your mnemonic"
+# user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L28-L33)
+<!-- ===PYTEAL_APP_ROUTER_SETUP=== -->
 
 The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. 
 
@@ -395,295 +329,22 @@ In this example, the TEAL for the smart contract will be compiled programmatical
 
 Next, a few helper functions need to be added to the sample.
 
+<!-- ===PYTEAL_APP_ROUTER_HELPERS=== -->
 ```python
 # helper function to compile program source
-def compile_program(client, source_code):
-    compile_response = client.compile(source_code)
-    return base64.b64decode(compile_response['result'])
-
-# helper function that converts a mnemonic passphrase into a private signing key
-def get_private_key_from_mnemonic(mn) :
-    private_key = mnemonic.to_private_key(mn)
-    return private_key
-```
-
-The `compile_program` function is a utility function that allows passing the generated TEAL code to a node that will compile and return the byte code. This returned byte code will be used with the application creation transaction (deploying the contract) later.
-
-The `get_private_key_from_mnemonic` function is a utility function that takes a mnemonic (account backup phrase) and returns the private key of the specific account. This will be used in this sample to recover the private key of the funded account of the smart contract creator.
-
-The `wait_for_confirmation` SDK function is a utility function that when called will wait until a specific transaction is confirmed on the Algorand blockchain. This will be used to confirm that the application creation transaction is successful and the smart contract is actively deployed.
-
-As the sample smart contract manipulates global variables, a couple of helper functions are needed to display the contents of these values.
-
-```python
-# helper function that formats global state for printing
-def format_state(state):
-    formatted = {}
-    for item in state:
-        key = item['key']
-        value = item['value']
-        formatted_key = base64.b64decode(key).decode('utf-8')
-        if value['type'] == 1:
-            # byte string
-            if formatted_key == 'voted':
-                formatted_value = base64.b64decode(value['bytes']).decode('utf-8')
-            else:
-                formatted_value = value['bytes']
-            formatted[formatted_key] = formatted_value
-        else:
-            # integer
-            formatted[formatted_key] = value['uint']
-    return formatted
-
-# helper function to read app global state
-def read_global_state(client, app_id):
-    app = client.application_info(app_id)
-    global_state = app['params']['global-state'] if "global-state" in app['params'] else []
-    return format_state(global_state)
-```
-
-Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the application data including the global state. In this example, the function `read_global_state` uses the Python SDK function `application_info` to connect to the Algorand node and retrieve the application information. The function then extracts the global state values if they exist, otherwise returns an empty array. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
-
-As covered earlier in this guide, to deploy the contract an application creation transaction must be created and submitted to the blockchain. The SDKs provide a method for creating this transaction. The following code illustrates creating and submitting this transaction.
-
-```python
-# create new application
-def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema):
-    # define sender as creator
-    sender = account.address_from_private_key(private_key)
-
-    # declare on_complete as NoOp
-    on_complete = transaction.OnComplete.NoOpOC.real
-
-    # get node suggested parameters
-    params = client.suggested_params()
-
-    # create unsigned transaction
-    txn = transaction.ApplicationCreateTxn(sender, params, on_complete, \
-                                            approval_program, clear_program, \
-                                            global_schema, local_schema)
-
-    # sign transaction
-    signed_txn = txn.sign(private_key)
-    tx_id = signed_txn.transaction.get_txid()
-
-    # send transaction
-    client.send_transactions([signed_txn])
-
-    # wait for confirmation
-    try:
-        transaction_response = transaction.wait_for_confirmation(client, tx_id, 4)
-        print("TXID: ", tx_id)
-        print("Result confirmed in round: {}".format(transaction_response['confirmed-round']))
-       
-    except Exception as err:
-        print(err)
-        return
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    app_id = transaction_response['application-index']
-    print("Created new app-id:", app_id)
-
-    return app_id
-```
-
-This function is a simple example of creating an application creation transaction, which when submitted will deploy a smart contract. This example is very generic and can be used to deploy any smart contract. First, the creator’s address is resolved from the private key passed to the function, the transaction type is set to a NoOp application transaction, and the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction.
-
-The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction. This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. More information on state values can be found in the [smart contract documentation](../smart-contracts/apps/index.md#modifying-state-in-smart-contract).
-
-The passed-in private key is then used to sign the transaction and the ID of the transaction is retrieved. This ID is unique and can be used to look up the transaction later.
-
-The transaction is then submitted to the connected node and the `wait_for_confirmation` SDK function is called to wait for the blockchain to process the transaction. Once the blockchain processes the transaction, a unique ID, called application ID, is returned for the smart contract. This can be used later to issue calls against the smart contract.
-
-Now that all required functions are implemented, the main function can be created to deploy the contract.
-
-```python
-def main() :
-    # initialize an algodClient
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-
-    # define private keys
-    creator_private_key = get_private_key_from_mnemonic(creator_mnemonic)
-
-    # declare application state storage (immutable)
-    local_ints = 0
-    local_bytes = 0
-    global_ints = 1
-    global_bytes = 0
-    global_schema = transaction.StateSchema(global_ints, global_bytes)
-    local_schema = transaction.StateSchema(local_ints, local_bytes)
-
-    # compile program to TEAL assembly
-    with open("./approval.teal", "w") as f:
-        f.write(approval_program)
-
-    # compile program to TEAL assembly
-    with open("./clear.teal", "w") as f:
-        f.write(clear_state_program)
-
-    # compile program to binary
-    approval_program_compiled = compile_program(algod_client, approval_program)
-
-    # compile program to binary
-    clear_state_program_compiled = compile_program(algod_client, clear_state_program)
-
-    print("--------------------------------------------")
-    print("Deploying Counter application......")
-
-    # create new application
-    app_id = create_app(algod_client, creator_private_key, approval_program_compiled, clear_state_program_compiled, global_schema, local_schema)
-
-    # read global state of application
-    print("Global state:", read_global_state(algod_client, app_id))
-```
-
-First, a connection to the sandbox node is established. This is followed by recovering the account of the creator. Next, the amount of state to be used is defined. In this example, only one global integer is specified.
-
-The SDK is then used to first convert the approval and clear programs to TEAL using the PyTeal library and both are written to local files. Each is then complied to byte code by the connected node. Finally, the smart contract is deployed using the `create_app` function created earlier and the current global state is then printed out for the contract. On deployment, this value will be set to 0.
-
-## Calling the deployed smart contract
-
-Now that the contract is deployed, the Add or Deduct functions can be called using a standard NoOp application transaction. The example created throughout this guide can be further modified to illustrate making a call to the smart contract.
-
-To begin with, a function can be added to support calling the smart contract.
-
-```python
-
-from algosdk.atomic_transaction_composer import *
-
-# call application
-def call_app(client, private_key, index, contract) :
-    # get sender address
-    sender = account.address_from_private_key(private_key)
-    # create a Signer object 
-    signer = AccountTransactionSigner(private_key)
-
-    # get node suggested parameters
-    sp = client.suggested_params()
-
-    # Create an instance of AtomicTransactionComposer
-    atc = AtomicTransactionComposer()
-    atc.add_method_call(
-        app_id=index,
-        method=contract.get_method_by_name("increment"),
-        sender=sender,
-        sp=sp,
-        signer=signer,
-        method_args=[], # No method args needed here
-    )
-
-    # send transaction
-    results = atc.execute(client, 2)
-
-    # wait for confirmation
-    print("TXID: ", results.tx_ids[0])
-    print("Result confirmed in round: {}".format(results.confirmed_round))
-```
-
-This function constructs an AtomicTransactionComposer to handle adding the appropriate arguments. The only argument we need to pass in this case is the method selector for the method we wish to call (`increment`) but it is added automatically to the application args of the created transaction. Any arguments that the method specifies in the contract would be passed to the `method_args` array.
-
-The `main` function can then be modified to call the smart contract after deploying by adding the following to the bottom of the `main` function.
-
-```python
-    print("--------------------------------------------")
-    print("Calling Counter application......")
-    call_app(algod_client, creator_private_key, app_id, contract)
-
-    # read global state of application
-    print("Global state:", read_global_state(algod_client, app_id))
-```
-
-In this example, the Add string is added to the application arguments array and the smart contract is called. The updated global state is then printed out. The value should now be set to 1.
-
-The complete example is shown below.
-
-```python
-import base64
-
-from algosdk import transaction
-from algosdk import account, mnemonic
-from algosdk.atomic_transaction_composer import *
-from algosdk.v2client import algod
-from pyteal import *
-
-# user declared account mnemonics
-creator_mnemonic = "TODO: Add your mnemonic"
-# user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
-algod_address = "http://localhost:4001"
-algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
-## Contract logic
-count_key = Bytes("Count")
-
-# Create an expression to store 0 in the `Count` global variable and return 1
-handle_creation = Seq(App.globalPut(count_key, Int(0)), Approve())
-
-# Main router class
-router = Router(
-    # Name of the contract
-    "my-first-router",
-    # What to do for each on-complete type when no arguments are passed (bare call)
-    BareCallActions(
-        # On create only, just approve
-        no_op=OnCompleteAction.create_only(handle_creation),
-        # Always let creator update/delete but only by the creator of this contract
-        update_application=OnCompleteAction.always(Reject()),
-        delete_application=OnCompleteAction.always(Reject()),
-        # No local state, don't bother handling it.
-        close_out=OnCompleteAction.never(),
-        opt_in=OnCompleteAction.never(),
-    ),
-)
-
-
-@router.method
-def increment():
-    # Declare the ScratchVar as a Python variable _outside_ the expression tree
-    scratchCount = ScratchVar(TealType.uint64)
-    return Seq(
-        Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to
-        # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(count_key)),
-        # Increment the value stored in the scratch var
-        # and update the global state variable
-        App.globalPut(count_key, scratchCount.load() + Int(1)),
-    )
-
-
-@router.method
-def decrement():
-    # Declare the ScratchVar as a Python variable _outside_ the expression tree
-    scratchCount = ScratchVar(TealType.uint64)
-    return Seq(
-        Assert(Global.group_size() == Int(1)),
-        # The initial `store` for the scratch var sets the value to
-        # whatever is in the `Count` global state variable
-        scratchCount.store(App.globalGet(count_key)),
-        # Check if the value would be negative by decrementing
-        If(
-            scratchCount.load() > Int(0),
-            # If the value is > 0, decrement the value stored
-            # in the scratch var and update the global state variable
-            App.globalPut(count_key, scratchCount.load() - Int(1)),
-        ),
-    )
-
-# helper function to compile program source
-def compile_program(client, source_code):
+def compile_program(client: algod.AlgodClient, source_code: str):
     compile_response = client.compile(source_code)
     return base64.b64decode(compile_response["result"])
 
 
 # helper function that converts a mnemonic passphrase into a private signing key
-def get_private_key_from_mnemonic(mn):
+def get_private_key_from_mnemonic(mn: str):
     private_key = mnemonic.to_private_key(mn)
     return private_key
 
 
 # helper function that formats global state for printing
-def format_state(state):
+def format_state(state: List[Dict[str, Any]]):
     formatted = {}
     for item in state:
         key = item["key"]
@@ -703,17 +364,42 @@ def format_state(state):
 
 
 # helper function to read app global state
-def read_global_state(client, app_id):
+def read_global_state(client: algod.AlgodClient, app_id: int):
     app = client.application_info(app_id)
     global_state = (
         app["params"]["global-state"] if "global-state" in app["params"] else []
     )
     return format_state(global_state)
 
+
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L36-L77)
+<!-- ===PYTEAL_APP_ROUTER_HELPERS=== -->
+
+The `compile_program` function is a utility function that allows passing the generated TEAL code to a node that will compile and return the byte code. This returned byte code will be used with the application creation transaction (deploying the contract) later.
+
+The `get_private_key_from_mnemonic` function is a utility function that takes a mnemonic (account backup phrase) and returns the private key of the specific account. This will be used in this sample to recover the private key of the funded account of the smart contract creator.
+
+The `wait_for_confirmation` SDK function is a utility function that when called will wait until a specific transaction is confirmed on the Algorand blockchain. This will be used to confirm that the application creation transaction is successful and the smart contract is actively deployed.
+
+As the sample smart contract manipulates global variables, a couple of helper functions are needed to display the contents of these values.
+
+
+Global variables for smart contracts are actually stored in the creator account’s ledger entry on the blockchain. The location is referred to as global state and the SDKs provide a function to retrieve the application data including the global state. In this example, the function `read_global_state` uses the Python SDK function `application_info` to connect to the Algorand node and retrieve the application information. The function then extracts the global state values if they exist, otherwise returns an empty array. The `format_state` function takes the application data and formats the values for display. For more information on global and local state see the [smart contract documentation](../smart-contracts/apps/index.md).
+
+As covered earlier in this guide, to deploy the contract an application creation transaction must be created and submitted to the blockchain. The SDKs provide a method for creating this transaction. The following code illustrates creating and submitting this transaction.
+
+<!-- ===PYTEAL_APP_ROUTER_CREATOR=== -->
+```python
 # create new application
 def create_app(
-    client, private_key, approval_program, clear_program, global_schema, local_schema
-):
+    client: algod.AlgodClient,
+    private_key: str,
+    approval_program: bytes,
+    clear_program: bytes,
+    global_schema: transaction.StateSchema,
+    local_schema: transaction.StateSchema,
+) -> int:
     # define sender as creator
     sender = account.address_from_private_key(private_key)
 
@@ -750,10 +436,9 @@ def create_app(
                 transaction_response["confirmed-round"]
             )
         )
-
     except Exception as err:
         print(err)
-        return
+        return 0
 
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
@@ -763,36 +448,22 @@ def create_app(
     return app_id
 
 
-# call application
-def call_app(client, private_key, index, contract):
-    # get sender address
-    sender = account.address_from_private_key(private_key)
-    # create a Signer object
-    signer = AccountTransactionSigner(private_key)
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L155-L212)
+<!-- ===PYTEAL_APP_ROUTER_CREATOR=== -->
 
-    # get node suggested parameters
-    sp = client.suggested_params()
+This function is a simple example of creating an application creation transaction, which when submitted will deploy a smart contract. This example is very generic and can be used to deploy any smart contract. First, the creator’s address is resolved from the private key passed to the function, the transaction type is set to a NoOp application transaction, and the blockchain suggested parameters are retrieved from the connected node. These suggested parameters provide the default values that are required to submit a transaction, such as the expected fee for the transaction.
 
-    # Create an instance of AtomicTransactionComposer
-    atc = AtomicTransactionComposer()
-    atc.add_method_call(
-        app_id=index,
-        method=contract.get_method_by_name("increment"),
-        sender=sender,
-        sp=sp,
-        signer=signer,
-        method_args=[],  # No method args needed here
-    )
+The Python SDK’s `ApplicationCreateTxn` function is called to create the transaction. This function takes the creator’s address, the approval and clear programs byte code, and a declaration of how much global and local state the smart contract will reserve. When creating a smart contract, the creation transaction has to specify how much state will be reserved. A contract can store up to 64 key-value pairs in global state and up to 16 key-value pairs per user who opts into the contract. Once these values are set, they can never be changed. The key is limited to 64 bytes. The key plus the value is limited to 128 bytes total. Using smaller keys to have more storage available for the value is possible. The keys are stored as byte slices (byte-array value) and the values are stored as either byte slices (byte-array value) or uint64s. More information on state values can be found in the [smart contract documentation](../smart-contracts/apps/index.md#modifying-state-in-smart-contract).
 
-    # send transaction
-    results = atc.execute(client, 2)
+The passed-in private key is then used to sign the transaction and the ID of the transaction is retrieved. This ID is unique and can be used to look up the transaction later.
 
-    # wait for confirmation
-    print("TXID: ", results.tx_ids[0])
-    print("Result confirmed in round: {}".format(results.confirmed_round))
+The transaction is then submitted to the connected node and the `wait_for_confirmation` SDK function is called to wait for the blockchain to process the transaction. Once the blockchain processes the transaction, a unique ID, called application ID, is returned for the smart contract. This can be used later to issue calls against the smart contract.
 
+Now that all required functions are implemented, the main function can be created to deploy the contract.
 
-def main():
+<!-- ===PYTEAL_APP_ROUTER_DEPLOY=== -->
+```python
     # initialize an algodClient
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
@@ -827,7 +498,6 @@ def main():
     # compile program to binary
     clear_state_program_compiled = compile_program(algod_client, clear_program)
 
-    print("--------------------------------------------")
     print("Deploying Counter application......")
 
     # create new application
@@ -842,19 +512,71 @@ def main():
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, app_id))
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L250-L298)
+<!-- ===PYTEAL_APP_ROUTER_DEPLOY=== -->
 
-    print("--------------------------------------------")
+First, a connection to the sandbox node is established. This is followed by recovering the account of the creator. Next, the amount of state to be used is defined. In this example, only one global integer is specified.
+
+The SDK is then used to first convert the approval and clear programs to TEAL using the PyTeal library and both are written to local files. Each is then complied to byte code by the connected node. Finally, the smart contract is deployed using the `create_app` function created earlier and the current global state is then printed out for the contract. On deployment, this value will be set to 0.
+
+## Calling the deployed smart contract
+
+Now that the contract is deployed, the Add or Deduct functions can be called using a standard NoOp application transaction. The example created throughout this guide can be further modified to illustrate making a call to the smart contract.
+
+To begin with, a function can be added to support calling the smart contract.
+
+<!-- ===PYTEAL_APP_ROUTER_CALLER=== -->
+```python
+# call application
+def call_app(client, private_key, index, contract):
+    # get sender address
+    sender = account.address_from_private_key(private_key)
+    # create a Signer object
+    signer = AccountTransactionSigner(private_key)
+
+    # get node suggested parameters
+    sp = client.suggested_params()
+
+    # Create an instance of AtomicTransactionComposer
+    atc = AtomicTransactionComposer()
+    atc.add_method_call(
+        app_id=index,
+        method=contract.get_method_by_name("increment"),
+        sender=sender,
+        sp=sp,
+        signer=signer,
+        method_args=[],  # No method args needed here
+    )
+
+    # send transaction
+    results = atc.execute(client, 2)
+
+    # wait for confirmation
+    print("TXID: ", results.tx_ids[0])
+    print("Result confirmed in round: {}".format(results.confirmed_round))
+
+
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L216-L245)
+<!-- ===PYTEAL_APP_ROUTER_CALLER=== -->
+
+This function constructs an AtomicTransactionComposer to handle adding the appropriate arguments. The only argument we need to pass in this case is the method selector for the method we wish to call (`increment`) but it is added automatically to the application args of the created transaction. Any arguments that the method specifies in the contract would be passed to the `method_args` array.
+
+The `main` function can then be modified to call the smart contract after deploying by adding the following to the bottom of the `main` function.
+
+<!-- ===PYTEAL_APP_ROUTER_CALL=== -->
+```python
     print("Calling Counter application......")
     call_app(algod_client, creator_private_key, app_id, contract)
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, app_id))
-
-
-if __name__ == "__main__":
-    main()
-
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/simple_router.py#L301-L306)
+<!-- ===PYTEAL_APP_CALL=== -->
+
+In this example, the Add string is added to the application arguments array and the smart contract is called. The updated global state is then printed out. The value should now be set to 1.
 
 For more information on using the SDKs to deploy and interact with smart contracts see the [developer documentation](../smart-contracts/frontend/smartsigs.md).
 
@@ -870,58 +592,40 @@ Any time a smart signature is used the complete logic must be submitted as part 
 
 PyTeal supports building smart signatures in Python. For example, assume an escrow account is needed. This escrow can be funded by anyone but only a specific account is the beneficiary of the escrow and that account can withdraw funds at any time.
 
+<!-- ===PYTEAL_LSIG_SIMPLE_ESCROW=== -->
 ```python
-#sample_smart_sig.py
-from pyteal import *
-
-"""Basic Donation Escrow"""
 def donation_escrow(benefactor):
     Fee = Int(1000)
 
-    #Only the benefactor account can withdraw from this escrow
+    # Only the benefactor account can withdraw from this escrow
     program = And(
         Txn.type_enum() == TxnType.Payment,
         Txn.fee() <= Fee,
         Txn.receiver() == Addr(benefactor),
         Global.group_size() == Int(1),
-        Txn.rekey_to() == Global.zero_address()
+        Txn.rekey_to() == Global.zero_address(),
     )
+
     # Mode.Signature specifies that this is a smart signature
     return compileTeal(program, Mode.Signature, version=5)
+
+
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L7-L23)
+<!-- ===PYTEAL_LSIG_SIMPLE_ESCROW=== -->
 
 This is a very simplistic smart signature. The code for the complete signature is defined in the `donation_escrow` function. This function takes an Algorand address as a parameter. This address represents the beneficiary of the escrow. The entire program is a set of conditions anded together using the [`And` logical expression](https://pyteal.readthedocs.io/en/latest/api.html#pyteal.And). This expression takes two or more arguments that are logically anded and produces a 0 (logically false) or 1 (logically true). In this sample, a set of transaction fields are compared to expected values. The transaction type is first verified to be a payment transaction, the transaction fee is compared to make sure it is less than 1000 microAlgos, the transaction receiver is compared to the benefactor’s address, the group size is verified to guarantee that this transaction is not submitted with other transactions in a group, and the rekey field of the transaction is verified to be the zero address. The zero address is used to verify that the rekey field is not set. This prevents the escrow from being rekeyed to another account. This sample uses transaction fields and global properties. See the PyTeal documentation for additional [transaction fields](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#id1) and [global properties](https://pyteal.readthedocs.io/en/latest/accessing_transaction_field.html?highlight=global#global-parameters). The entire program is compiled to TEAL using the `compileTeal` PyTeal function. This function compiles the program as defined by the program variable. The `compileTeal` method also sets the Mode.Signature. This lets PyTeal know this is for a smart signature and not a smart contract. The version parameter instructs PyTeal on which version of program version to produce when compiling. 
 
 To test this sample, a sample address can be defined and a print command calling the `donation_escrow` function can be added to the sample.
 
+<!-- ===PYTEAL_LSIG_SIMPLE_ESCROW_INIT=== -->
 ```python
-#sample_smart_sig.py
-from pyteal import *
-
-"""Basic Donation Escrow"""
-def donation_escrow(benefactor):
-    Fee = Int(1000)
-
-    #Only the benefactor account can withdraw from this escrow
-    program = And(
-        Txn.type_enum() == TxnType.Payment,
-        Txn.fee() <= Fee,
-        Txn.receiver() == Addr(benefactor),
-        Global.group_size() == Int(1),
-        Txn.rekey_to() == Global.zero_address()
-    )
-    # Mode.Signature specifies that this is a smart signature
-    return compileTeal(program, Mode.Signature, version=5)
-
-test_benefactor = "CZHGG36RBYTTK36N3ZC7MENGFOL3R6D4NNEJQU3G43U5GH457SU34ZGRLY"
-print( donation_escrow(test_benefactor))
+rando_addr, _ = account.generate_account()
+teal_program = donation_escrow(rando_addr)
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L26-L28)
+<!-- ===PYTEAL_LSIG_SIMPLE_ESCROW_INIT=== -->
 
-This sample can be executed using the following command.
-
-```bash
-python3 sample_smart_sig.py
-```
 
 This will print out the compiled TEAL. The Algorand address of the escrow can be retrieved by first saving the produced TEAL to a file and then compiled to byte code using the `goal` command-line tool. In the next section, using this smart signature with a transaction will be demonstrated.
 
@@ -941,59 +645,59 @@ As stated in the previous section, smart signatures are used in conjunction with
 
 A few global variables are created and some utility functions are added to the previous section’s sample. The `benefactor_mnemonic` is the backup phrase for the address of the benefactor and the `sender_mnemonic` represents the account that will fund the escrow. Mnemonics should never be included in the source of a production environment. It is done here for learning purposes only. Key management should be handled by a proper wallet.
 
+<!-- ===PYTEAL_LSIG_SIMPLE_SETUP=== -->
 ```python
-import base64
-
-from algosdk import transaction
-from algosdk import mnemonic
-from algosdk.v2client import algod
-from pyteal import *
-
 # user declared account mnemonics
 benefactor_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
 sender_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
 
+
 # user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
-# helper function to compile program source
-def compile_smart_signature(client, source_code):
-    compile_response = client.compile(source_code)
-    return compile_response['result'], compile_response['hash']
-
-# helper function that converts a mnemonic passphrase into a private signing key
-def get_private_key_from_mnemonic(mn) :
-    private_key = mnemonic.to_private_key(mn)
-    return private_key
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L32-L40)
+<!-- ===PYTEAL_LSIG_SIMPLE_SETUP=== -->
 
+<!-- ===PYTEAL_LSIG_SIMPLE_HELPERS=== -->
+```python
+# helper function to compile program source
+def compile_smart_signature(
+    client: algod.AlgodClient, source_code: str
+) -> Tuple[str, str]:
+    compile_response = client.compile(source_code)
+    return compile_response["result"], compile_response["hash"]
+
+
+```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L43-L51)
+<!-- ===PYTEAL_LSIG_SIMPLE_HELPERS=== -->
 
 
 The `compile_smart_contract` and `get_private_key_from_mnemonic` functions are explained in [Deploying and calling a smart contract](#deploying-the-contract).
 
 A utility function is then added to create and submit a simple payment transaction.
 
+<!-- ===PYTEAL_LSIG_SIMPLE_SEED_PAYMENT=== -->
 ```python
-def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
-    params = algod_client.suggested_params()
-    key = mnemonic.to_private_key(creator_mnemonic)
-    add = account.address_from_private_key(key)
-    unsigned_txn = transaction.PaymentTxn(add, params, rcv, amt)
-    signed = unsigned_txn.sign(key)
-    txid = algod_client.send_transaction(signed)
+def payment_transaction(
+    creator_mnemonic: str, amt: int, rcv: str, algod_client: algod.AlgodClient
+) -> dict:
+    creator_pk = mnemonic.to_private_key(creator_mnemonic)
+    creator_address = account.address_from_private_key(creator_pk)
 
-    # wait for confirmation
-    try:
-        pmtx = transaction.wait_for_confirmation(algod_client, txid, 5)
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(pmtx['confirmed-round']))
-       
-    except Exception as err:
-        print(err)
-        return
+    params = algod_client.suggested_params()
+    unsigned_txn = transaction.PaymentTxn(creator_address, params, rcv, amt)
+    signed = unsigned_txn.sign(creator_pk)
+
+    txid = algod_client.send_transaction(signed)
+    pmtx = transaction.wait_for_confirmation(algod_client, txid, 5)
     return pmtx
+
+
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L55-L70)
+<!-- ===PYTEAL_LSIG_SIMPLE_SEED_PAYMENT=== -->
 
 This function takes a creator mnemonic of the address that is creating the payment transaction as the first parameter. The amount to send and the receiver of the payment transaction are the next two parameters. The final parameter is a connection to a valid Algorand node. In this example, the sandbox installed node is used.
 
@@ -1001,33 +705,37 @@ In this function, the blockchain suggested parameters are retrieved from the con
 
 Another utility function is also added to create a payment transaction that is signed by the escrow logic. This function is very similar to the previous function.
 
+<!-- ===PYTEAL_LSIG_SIMPLE_WITHDRAW=== -->
 ```python
-def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
-    params = algod_client.suggested_params()
-    unsigned_txn = transaction.PaymentTxn(escrow_address, params, rcv, amt)
-    encodedProg = escrowProg.encode()
-    program = base64.decodebytes(encodedProg)
+def lsig_payment_txn(
+    encoded_program: str, amt: int, rcv: str, algod_client: algod.AlgodClient
+):
+    # Create an lsig object using the compiled, b64 encoded program
+    program = base64.b64decode(encoded_program)
     lsig = transaction.LogicSigAccount(program)
+
+    # Create transaction with the lsig address as the sender
+    params = algod_client.suggested_params()
+    unsigned_txn = transaction.PaymentTxn(lsig.address(), params, rcv, amt)
+
+    # sign the transaction using the logic
     stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
     tx_id = algod_client.send_transaction(stxn)
-    # wait for confirmation
-    try:
-        pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)
-        print("TXID: ", tx_id)
-        print("Result confirmed in round: {}".format(pmtx['confirmed-round']))
-       
-    except Exception as err:
-        print(err)
-        return    
+    pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)
     return pmtx
+
+
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L74-L92)
+<!-- ===PYTEAL_LSIG_SIMPLE_WITHDRAW=== -->
 
 The primary difference is that the function is passed the base64 encoded string of the compiled bytecode for the smart signature and the escrow’s Algorand address. The program is then converted to a byte array and the Python SDK’s `LogicSigAccount` function is used to create a logic signature from the program bytes. The payment transaction is then signed with the logic using the SDKs `LogicSigTransaction` function. For more information on Logic Signatures and smart signatures see the [smart signatures documentation](../smart-contracts/smartsigs/index.md).
 
 The solution can be completed by adding a main function to put the utility functions to use.
 
+<!-- ===PYTEAL_LSIG_SIMPLE_USAGE=== -->
 ```python
-def main() :
+def main():
     # initialize an algodClient
     algod_client = algod.AlgodClient(algod_token, algod_address)
 
@@ -1035,135 +743,35 @@ def main() :
     private_key = mnemonic.to_private_key(benefactor_mnemonic)
     receiver_public_key = account.address_from_private_key(private_key)
 
-    print("--------------------------------------------")
     print("Compiling Donation Smart Signature......")
 
     stateless_program_teal = donation_escrow(receiver_public_key)
-    escrow_result, escrow_address= compile_smart_signature(algod_client, stateless_program_teal)
+    escrow_result, escrow_address = compile_smart_signature(
+        algod_client, stateless_program_teal
+    )
 
     print("Program:", escrow_result)
-    print("hash: ", escrow_address)
+    print("LSig Address: ", escrow_address)
 
-    print("--------------------------------------------")
     print("Activating Donation Smart Signature......")
 
     # Activate escrow contract by sending 2 algo and 1000 microalgo for transaction fee from creator
     amt = 2001000
     payment_transaction(sender_mnemonic, amt, escrow_address, algod_client)
 
-    print("--------------------------------------------")
     print("Withdraw from Donation Smart Signature......")
 
     # Withdraws 1 ALGO from smart signature using logic signature.
     withdrawal_amt = 1000000
-    lsig_payment_txn(escrow_result, escrow_address, withdrawal_amt, receiver_public_key, algod_client)
+    lsig_payment_txn(escrow_result, withdrawal_amt, receiver_public_key, algod_client)
+
 
 ```
+[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/lsig.py#L96-L127)
+<!-- ===PYTEAL_LSIG_SIMPLE_USAGE=== -->
 
 The main function first makes a connection to the sandbox installed node, then the benefactor’s address is recovered. The `donation_escrow` built in the previous section is called to produce the TEAL for the smart signature. This TEAL is then compiled, returning both the base64 encoded bytes of the program and the address of the escrow.
 
-A simple payment transaction is then created to fund the escrow with a little over 2 Algos. Finally, 1 Algo is dispensed from the escrow to the benefactor using a payment transaction signed by the smart signature. The complete example is shown below.
-
-```python
-import base64
-
-from algosdk import transaction
-from algosdk import mnemonic
-from algosdk.v2client import algod
-from pyteal import *
-
-# user declared account mnemonics
-benefactor_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
-sender_mnemonic = "REPLACE WITH YOUR OWN MNEMONIC"
-
-
-# user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
-algod_address = "http://localhost:4001"
-algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
-# helper function to compile program source
-def compile_smart_signature(client, source_code):
-    compile_response = client.compile(source_code)
-    return compile_response['result'], compile_response['hash']
-
-# helper function that converts a mnemonic passphrase into a private signing key
-def get_private_key_from_mnemonic(mn) :
-    private_key = mnemonic.to_private_key(mn)
-    return private_key
-
-
-
-def payment_transaction(creator_mnemonic, amt, rcv, algod_client)->dict:
-    params = algod_client.suggested_params()
-    key = mnemonic.to_private_key(creator_mnemonic)
-    add = account.address_from_private_key(key)
-    unsigned_txn = transaction.PaymentTxn(add, params, rcv, amt)
-    signed = unsigned_txn.sign(key)
-    txid = algod_client.send_transaction(signed)
-    pmtx = transaction.wait_for_confirmation(algod_client, txid , 5)
-    return pmtx
-
-def lsig_payment_txn(escrowProg, escrow_address, amt, rcv, algod_client):
-    params = algod_client.suggested_params()
-    unsigned_txn = transaction.PaymentTxn(escrow_address, params, rcv, amt)
-    encodedProg = escrowProg.encode()
-    program = base64.decodebytes(encodedProg)
-    lsig = transaction.LogicSigAccount(program)
-    stxn = transaction.LogicSigTransaction(unsigned_txn, lsig)
-    tx_id = algod_client.send_transaction(stxn)
-    pmtx = transaction.wait_for_confirmation(algod_client, tx_id, 10)
-    return pmtx
-
-"""Basic Donation Escrow"""
-
-def donation_escrow(benefactor):
-    Fee = Int(1000)
-
-    #Only the benefactor account can withdraw from this escrow
-    program = And(
-        Txn.type_enum() == TxnType.Payment,
-        Txn.fee() <= Fee,
-        Txn.receiver() == Addr(benefactor),
-        Global.group_size() == Int(1),
-        Txn.rekey_to() == Global.zero_address()
-    )
-
-    # Mode.Signature specifies that this is a smart signature
-    return compileTeal(program, Mode.Signature, version=5)
-
-def main() :
-    # initialize an algodClient
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-
-    # define private keys
-    private_key = mnemonic.to_private_key(benefactor)
-    receiver_public_key = account.address_from_private_key(private_key)
-
-    print("--------------------------------------------")
-    print("Compiling Donation Smart Signature......")
-
-    stateless_program_teal = donation_escrow(receiver_public_key)
-    escrow_result, escrow_address= compile_smart_signature(algod_client, stateless_program_teal)
-
-    print("Program:", escrow_result)
-    print("hash: ", escrow_address)
-
-    print("--------------------------------------------")
-    print("Activating Donation Smart Signature......")
-
-    # Activate escrow contract by sending 2 algo and 1000 microalgo for transaction fee from creator
-    amt = 2001000
-    payment_transaction(sender_mnemonic, amt, escrow_address, algod_client)
-
-    print("--------------------------------------------")
-    print("Withdraw from Donation Smart Signature......")
-
-    # Withdraws 1 ALGO from smart signature using logic signature.
-    withdrawal_amt = 1000000
-    lsig_payment_txn(escrow_result, escrow_address, withdrawal_amt, receiver_public_key, algod_client)
-
-main()
-
-```
+A simple payment transaction is then created to fund the escrow with a little over 2 Algos. Finally, 1 Algo is dispensed from the escrow to the benefactor using a payment transaction signed by the smart signature. 
 
 For more information on smart signatures, see the [developer documentation](../smart-contracts/smartsigs/index.md).

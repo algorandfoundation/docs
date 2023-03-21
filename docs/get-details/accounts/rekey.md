@@ -10,6 +10,16 @@ Rekeying is a powerful protocol feature which enables an Algorand account holder
 !!! warning
     Using the `--close-to` parameter on any transaction from a _rekeyed account_ will remove the **auth-addr** field, thus reverting signing authority to the original address. The `--close-to` parameter should be used with caution by keyholder(s) of **auth-addr** as the effects remove their authority to access this account thereafter.
 
+!!! warning
+	Rekeying an account affects the **authorizing address** for that account only. Note that an Account is distinct from an address so there are several important points that may not be obvious:
+
+	**1)** If an account is closed (balance to 0) the rekey setting is lost (see previous warning).
+
+  	**2)** Rekeys are not recursively resolved, that is, if A is rekeyed to B and B rekeyed to C, A will have it's transactions authorized by B not C.
+	
+  	**3)** Rekeying members of a Multisig has no effect on the Multisig authorization since it's composed of Addresses not accounts. If necessary the Multisig account would need to be rekeyed itself.
+	
+
 ### Account Review
 
 The [account overview](../#keys-and-addresses) page introduces _keys_, _addresses_ and _accounts_. During initial account generation, a public key and corresponding private spending key are created and used to derive the Algorand address. This public address is commonly displayed within wallet software and remains static for each account. When you receive Algos or other assets, they will be sent to your public Algorand address. When you send from your account, the transaction must be authorized using the appropriate private spending key(s).  
@@ -312,125 +322,195 @@ Use the established pattern:
 This transaction will succeed as _private spending key_ for `$ADDR_C` provided the authorization and meets the threshold requirement for the MultiSig account.
 
 ## SDK Example:
-In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2, send from account 3 to account 2 and sign from Account 1.
-
+In the following example Account 1 is rekeyed to Account 2. The code then illustrates that signing a transaction from Account 1 will fail if signed with Account 1's private key and succeed if signed with Account 2's private key.
 
 === "Python"
-  ```python
-    import json
-    from algosdk import account, mnemonic
-    from algosdk.v2client import algod
-    from algosdk.transaction import *
+	<!-- ===PYSDK_ACCOUNT_REKEY=== -->
+	```python
+	# Any kind of transaction can contain a rekey
+	rekey_txn = transaction.PaymentTxn(
+	    account_1.address, sp, account_1.address, 0, rekey_to=account_2.address
+	)
+	signed_rekey = rekey_txn.sign(account_1.private_key)
+	txid = algod_client.send_transaction(signed_rekey)
+	result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(f"rekey transaction confirmed in round {result['confirmed-round']}")
+	
+	# Now we should get an error if we try to submit a transaction
+	# signed with account_1s private key
+	expect_err_txn = transaction.PaymentTxn(
+	    account_1.address, sp, account_1.address, 0
+	)
+	signed_expect_err_txn = expect_err_txn.sign(account_1.private_key)
+	try:
+	    txid = algod_client.send_transaction(signed_expect_err_txn)
+	except Exception as e:
+	    print("Expected error: ", e)
+	
+	# But its fine if we sign it with the account we rekeyed to
+	signed_expect_err_txn = expect_err_txn.sign(account_2.private_key)
+	txid = algod_client.send_transaction(signed_expect_err_txn)
+	result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(f"transaction confirmed in round {result['confirmed-round']}")
+	
+	# rekey account1 back to itself so we can actually use it later
+	rekey_txn = transaction.PaymentTxn(
+	    account_1.address, sp, account_1.address, 0, rekey_to=account_1.address
+	)
+	signed_rekey = rekey_txn.sign(account_2.private_key)
+	txid = algod_client.send_transaction(signed_rekey)
+	result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(f"rekey transaction confirmed in round {result['confirmed-round']}")
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L61-L95)
+	<!-- ===PYSDK_ACCOUNT_REKEY=== -->
+
+=== "JavaScript"
+	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
+	```javascript
+	// create and fund a new account that we will eventually rekey
+	const originalAccount = algosdk.generateAccount();
+	const fundOriginalAccount = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
+	  {
+	    from: funder.addr,
+	    to: originalAccount.addr,
+	    amount: 1_000_000,
+	    suggestedParams,
+	  }
+	);
+	
+	await client
+	  .sendRawTransaction(fundOriginalAccount.signTxn(funder.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  client,
+	  fundOriginalAccount.txID().toString(),
+	  3
+	);
+	
+	// authAddr is undefined by default
+	const originalAccountInfo = await client
+	  .accountInformation(originalAccount.addr)
+	  .do();
+	console.log(
+	  'Account Info: ',
+	  originalAccountInfo,
+	  'Auth Addr: ',
+	  originalAccountInfo['auth-addr']
+	);
+	
+	// create a new account that will be the new auth addr
+	const newSigner = algosdk.generateAccount();
+	console.log('New Signer Address: ', newSigner.addr);
+	
+	// rekey the original account to the new signer via a payment transaction
+	const rekeyTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  from: originalAccount.addr,
+	  to: originalAccount.addr,
+	  amount: 0,
+	  suggestedParams,
+	  rekeyTo: newSigner.addr, // set the rekeyTo field to the new signer
+	});
+	
+	await client.sendRawTransaction(rekeyTxn.signTxn(originalAccount.sk)).do();
+	await algosdk.waitForConfirmation(client, rekeyTxn.txID().toString(), 3);
+	
+	const originalAccountInfoAfterRekey = await client
+	  .accountInformation(originalAccount.addr)
+	  .do();
+	console.log(
+	  'Account Info: ',
+	  originalAccountInfoAfterRekey,
+	  'Auth Addr: ',
+	  originalAccountInfoAfterRekey['auth-addr']
+	);
+	
+	// form new transaction from rekeyed account
+	const txnWithNewSignerSig = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
+	  {
+	    from: originalAccount.addr,
+	    to: funder.addr,
+	    amount: 100,
+	    suggestedParams,
+	  }
+	);
+	
+	// the transaction is from originalAccount, but signed with newSigner private key
+	const signedTxn = txnWithNewSignerSig.signTxn(newSigner.sk);
+	
+	await client.sendRawTransaction(signedTxn).do();
+	await algosdk.waitForConfirmation(
+	  client,
+	  txnWithNewSignerSig.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L82-L158)
+	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 
 
-    def getting_started_example():
-        algod_address = "http://localhost:4001"
-        algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        algod_client = algod.AlgodClient(algod_token, algod_address)
+=== "Java"
+	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
+	```java
+	
+	// Any kind of transaction can contain a rekey, here we use a Payment
+	// transaction
+	Transaction rekeyTxn = Transaction.PaymentTransactionBuilder().sender(acct1.getAddress())
+	                .receiver(acct1.getAddress()).suggestedParams(sp).rekey(acct2.getAddress()).build();
+	SignedTransaction signedRekeyTxn = acct1.signTransaction(rekeyTxn);
+	Response<PostTransactionsResponse> resp = algodClient.RawTransaction()
+	                .rawtxn(Encoder.encodeToMsgPack(signedRekeyTxn)).execute();
+	ExampleUtils.printTxnResults(algodClient, resp.body(), "rekey");
+	
+	// Create a transaction to rekey it back
+	Transaction rekeyBack = Transaction.PaymentTransactionBuilder().sender(acct1.getAddress())
+	                .receiver(acct1.getAddress()).suggestedParams(sp).rekey(acct1.getAddress()).build();
+	
+	// note we sign with acct2's key
+	SignedTransaction signedRekeyBack = acct2.signTransaction(rekeyBack);
+	Response<PostTransactionsResponse> rekeyBackResponse = algodClient.RawTransaction()
+	                .rawtxn(Encoder.encodeToMsgPack(signedRekeyBack)).execute();
+	ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
+	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
-        # Part 1
-        # rekey from Account 3 to allow to sign from Account 1
-
-        # Part 2
-        # send from account 3 to account 2 and sign from Account 1
-
-        # never use mnemonics in production code, replace for demo purposes only
-
-        account1_passphrase = "PASTE your phrase for account 1"
-        account2_passphrase = "PASTE your phrase for account 2"
-        account3_passphrase = "PASTE your phrase for account 3"
-
-        private_key1 = mnemonic.to_private_key(account1_passphrase)
-        private_key2 = mnemonic.to_private_key(account2_passphrase)
-        private_key3 = mnemonic.to_private_key(account3_passphrase)
-        
-        account1 = account.address_from_private_key(private_key1)
-        account2 = account.address_from_private_key(private_key2)    
-        account3 = account.address_from_private_key(private_key3)
-
-        print("Account 1 : {}".format(account1))
-        print("Account 2 : {}".format(account2))
-        print("Account 3 : {}".format(account3))
-        
-        # Part 1
-        # build transaction
-        params = algod_client.suggested_params()
-        # comment out the next two (2) lines to use suggested fees
-        # params.flat_fee = True
-        # params.fee = 1000
-
-
-        # opt-in send tx to same address as sender and use 0 for amount w rekey account
-        # to account 1
-        amount = int(0)   
-        rekeyaccount = account1
-        sender = account3
-        receiver = account3    
-        unsigned_txn = PaymentTxn(
-          sender, params, receiver, amount, None, None, None, rekeyaccount)
-
-        # sign transaction with account 3
-        signed_txn = unsigned_txn.sign(
-          mnemonic.to_private_key(account3_passphrase))
-        txid = algod_client.send_transaction(signed_txn)
-        print("Signed transaction with txID: {}".format(txid))
-
-        # wait for confirmation
-
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-
-        # read transction
-        try:
-            confirmed_txn = algod_client.pending_transaction_info(txid)
-            account_info = algod_client.account_info(account3)
-            
-        except Exception as err:
-            print(err)
-        print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        print("Account 3 information : {}".format(
-            json.dumps(account_info, indent=4)))
-
-        #  Part 2
-        #  send payment from account 3
-        #  to acct 2 and signed by account 1
-
-
-        private_key_account1 = mnemonic.to_private_key(account1_passphrase)  
-        account1 = account.address_from_private_key(private_key_account1)
-
-        private_key_account2 = mnemonic.to_private_key(account2_passphrase)  
-        account2 = account.address_from_private_key(private_key_account2)
-
-        private_key_account3 = mnemonic.to_private_key(account3_passphrase)  
-        account3 = account.address_from_private_key(private_key_account3)
-
-        amount = int(1000000)
-        receiver = account2
-        unsigned_txn = PaymentTxn(
-          account3, params, receiver, amount, None, None, None, account1)
-        # sign transaction
-        signed_txn = unsigned_txn.sign(
-          mnemonic.to_private_key(account1_passphrase))
-        txid = algod_client.send_transaction(signed_txn)
-        print("Signed transaction with txID: {}".format(txid))
-
-        # wait for confirmation
-
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 4)
-        print("TXID: ", txid)
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-        account_info_rekey = algod_client.account_info(account3)
-        print("Account 3 information (from) : {}".format(
-            json.dumps(account_info_rekey, indent=4)))
-        account_info_rekey = algod_client.account_info(account2)
-        print("Account 2 information (to) : {}".format(
-            json.dumps(account_info_rekey, indent=4)))
-
-
-    getting_started_example()
-
-  ```
-
+=== "Go"
+	<!-- ===GOSDK_ACCOUNT_REKEY=== -->
+	```go
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to get suggested params: %s", err)
+	}
+	
+	addr := acct.Address.String()
+	// here we create a payment transaction but rekey is valid
+	// on any transaction type
+	rktxn, err := transaction.MakePaymentTxn(addr, addr, 0, nil, "", sp)
+	if err != nil {
+		log.Fatalf("failed to creating transaction: %s\n", err)
+	}
+	// Set the rekey parameter
+	rktxn.RekeyTo = rekeyTarget.Address
+	
+	_, stxn, err := crypto.SignTransaction(acct.PrivateKey, rktxn)
+	if err != nil {
+		fmt.Printf("Failed to sign transaction: %s\n", err)
+	}
+	
+	txID, err := algodClient.SendRawTransaction(stxn).Do(context.Background())
+	if err != nil {
+		fmt.Printf("failed to send transaction: %s\n", err)
+		return
+	}
+	
+	result, err := transaction.WaitForConfirmation(algodClient, txID, 4, context.Background())
+	if err != nil {
+		fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
+		return
+	}
+	
+	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID, result.ConfirmedRound)
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L48-L81)
+	<!-- ===GOSDK_ACCOUNT_REKEY=== -->

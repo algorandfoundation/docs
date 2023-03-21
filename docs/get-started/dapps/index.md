@@ -26,7 +26,7 @@ In summary, you go from trusting an entity and _hoping_ that they will do what t
 An important sidebar here is that it is critical for smart contract code to be reviewed and audited for security flaws. Badly written code that does not account for all potential attack vectors of course will not secure anything. 
 
 # What language can I use to write smart contracts?
-On Algorand, you can write smart contracts in Python with the PyTeal library. You can also use a JavaScript-like language called Reach. The next section will explain how to build your dApp with Python. You can find more details on how to build dApps with Reach [here](https://docs.reach.sh/){: target="_blank"}.
+On Algorand, you can write smart contracts in Python with the PyTeal library. The next section will explain how to build your dApp with Python. 
 
 Before proceeding, let's revisit Alice and Bob's auction and make sure we've settled on the important on-chain components.
 
@@ -39,4 +39,4 @@ Alice and Bob think through the features for their dApp. They list off the follo
 4. For each bid, if the new bid is higher than the previous bid, the previous bid will be refunded to the previous bidder and the new bid will be recorded and held by the contract.
 5. At the end of a successful auction, where the reserve price was met, the highest bidder will receive the artwork and the seller will receive the full bid amount.
 
-Now onto the next sections where you will learn how to build the auction dApp using [Python and the PyTeal library](https://developer.algorand.org/docs/get-started/dapps/pyteal/) or using [Reach](https://developer.algorand.org/docs/get-started/dapps/reach/). 
+Now onto the next sections where you will learn how to build the auction dApp using [Python and the PyTeal library](https://developer.algorand.org/docs/get-started/dapps/pyteal/). 

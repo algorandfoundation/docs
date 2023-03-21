@@ -1,0 +1,5 @@
+title: Conduit
+arrange:
+  - GettingStarted.md
+  - Configuration.md
+  - Development.md

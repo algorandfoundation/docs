@@ -126,333 +126,146 @@ The two signatures are added underneath their respective addresses. Since 2 meet
 Extend the example from the [Multisignature Account](../../accounts/create#multisignature) section by creating, signing, and sending a transaction from a multisig account on TestNet.
 
 === "JavaScript"
-    ```javascript
-    const algosdk = require('algosdk');
-
-
-    const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    const server = "http://localhost";
-    const port = 4001;
-    const keypress = async () => {
-        process.stdin.setRawMode(true)
-        return new Promise(resolve => process.stdin.once('data', () => {
-            process.stdin.setRawMode(false)
-            resolve()
-        }))
-    }
-
-    (async () => {
-        // recover accounts
-        // paste in mnemonic phrases here for each account
-        let account1_mnemonic = "PASTE phrase for account 1";
-        let account2_mnemonic = "PASTE phrase for account 2";
-        let account3_mnemonic = "PASTE phrase for account 3"
-        // never use mnemonics in production code, replace for demo purposes only
-
-        let account1 = algosdk.mnemonicToSecretKey(account1_mnemonic);
-        let account2 = algosdk.mnemonicToSecretKey(account2_mnemonic);
-        let account3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
-        console.log(account1.addr);
-        console.log(account2.addr);
-        console.log(account3.addr);
-
-        // Setup the parameters for the multisig account
-        const mparams = {
-            version: 1,
-            threshold: 2,
-            addrs: [
-                account1.addr,
-                account2.addr,
-                account3.addr,
-            ],
-        };
-
-        let multsigaddr = algosdk.multisigAddress(mparams);
-        console.log("Multisig Address: " + multsigaddr);
-        //Pause execution to allow using the dispenser on testnet to put tokens in account
-        console.log("Add funds to multisig account using the TestNet Dispenser: ");
-        console.log("https://dispenser.testnet.aws.algodev.network?account=" + multsigaddr);
-        console.log("Once funded, press any key to continue");
-        await keypress();
-        try {
-            let algodclient = new algosdk.Algodv2(token, server, port);
-
-            // Get the relevant params from the algod
-            let params = await algodclient.getTransactionParams().do();
-            // comment out the next two lines to use suggested fee
-            // params.fee = 1000;
-            // params.flatFee = true;
-
-            const receiver = account3.addr;
-            let names = '{"firstName":"John", "lastName":"Doe"}';
-            const enc = new TextEncoder();
-            const note = enc.encode(names);
-
-
-            let txn = algosdk.makePaymentTxnWithSuggestedParams(multsigaddr, receiver, 100000, undefined, note, params);
-            let txId = txn.txID().toString();
-            // Sign with first signature
-
-            let rawSignedTxn = algosdk.signMultisigTransaction(txn, mparams, account1.sk).blob;
-            //sign with second account
-            let twosigs = algosdk.appendSignMultisigTransaction(rawSignedTxn, mparams, account2.sk).blob;
-            //submit the transaction
-            await algodclient.sendRawTransaction(twosigs).do();
-
-            // Wait for confirmation
-            const confirmedTxn = await algosdk.waitForConfirmation(algodclient, txId, 4);
-            //Get the completed Transaction
-            console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-            let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-            console.log("Transaction information: %o", mytxinfo);
-            let string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-            console.log("Note field: ", string);
-            const obj = JSON.parse(string);
-            console.log("Note first name: %s", obj.firstName);
-
-
-        } catch (err) {
-            console.log(err.message);
-        }
-    })().then(process.exit)
-
-    ```
+    <!-- ===JSSDK_MULTISIG_CREATE=== -->
+	```javascript
+	const signerAccounts: algosdk.Account[] = [];
+	signerAccounts.push(algosdk.generateAccount());
+	signerAccounts.push(algosdk.generateAccount());
+	
+	// multiSigParams is used when creating the address and when signing transactions
+	const multiSigParams = {
+	  version: 1,
+	  threshold: 2,
+	  addrs: signerAccounts.map((a) => a.addr),
+	};
+	const multisigAddr = algosdk.multisigAddress(multiSigParams);
+	
+	console.log('Created MultiSig Address: ', multisigAddr);
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L36)
+    <!-- ===JSSDK_MULTISIG_CREATE=== -->
+    <!-- ===JSSDK_MULTISIG_SIGN=== -->
+	```javascript
+	const msigTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	  from: multisigAddr,
+	  to: funder.addr,
+	  amount: 100,
+	  suggestedParams,
+	});
+	
+	// First signature uses signMultisigTransaction
+	const msigWithFirstSig = algosdk.signMultisigTransaction(
+	  msigTxn,
+	  multiSigParams,
+	  signerAccounts[0].sk
+	).blob;
+	
+	// Subsequent signatures use appendSignMultisigTransaction
+	const msigWithSecondSig = algosdk.appendSignMultisigTransaction(
+	  msigWithFirstSig,
+	  multiSigParams,
+	  signerAccounts[1].sk
+	).blob;
+	
+	await client.sendRawTransaction(msigWithSecondSig).do();
+	await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L49-L72)
+    <!-- ===JSSDK_MULTISIG_SIGN=== -->
 
 === "Python"
-    ```python
-    import json
-    from algosdk.v2client import algod
-    from algosdk import account, encoding, mnemonic
-    from algosdk.transaction import Multisig, PaymentTxn, MultisigTransaction
-    import base64
-    from algosdk.transaction import *
-
-    # Change these values with mnemonics
-    mnemonic1 = "PASTE phrase for account 1"
-    mnemonic2 = "PASTE phrase for account 2"
-    mnemonic3 = "PASTE phrase for account 3"
-    # never use mnemonics in production code, replace for demo purposes only
-
-    # For ease of reference, add account public and private keys to
-    # an accounts dict.
-
-    private_key_1 = mnemonic.to_private_key(mnemonic1)
-    account_1 = account.address_from_private_key(private_key_1)
-
-    private_key_2 = mnemonic.to_private_key(mnemonic2)
-    account_2 = account.address_from_private_key(private_key_2)
-
-    private_key_3 = mnemonic.to_private_key(mnemonic3)
-    account_3 = address.address_from_private_key(private_key_3)
-
-
-
-    # create a multisig account
-    version = 1  # multisig version
-    threshold = 2  # how many signatures are necessary
-    msig = Multisig(version, threshold, [account_1, account_2, account_3])
-
-    print("Multisig Address: ", msig.address())
-    print('Go to the below link to fund the created account using testnet faucet: \n https://dispenser.testnet.aws.algodev.network/?account={}'.format(msig.address())) 
-
-    input("Press Enter to continue...")
-
-    # Specify your node address and token. This must be updated.
-    # algod_address = ""  # ADD ADDRESS
-    # algod_token = ""  # ADD TOKEN
-
-    # sandbox
-    algod_address = "http://localhost:4001"
-    algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
-    # Initialize an algod client
-    algod_client = algod.AlgodClient(algod_token, algod_address)
-
-    # get suggested parameters
-    params = algod_client.suggested_params()
-    # comment out the next two (2) lines to use suggested fees
-    # params.flat_fee = True
-    # params.fee = 1000
-
-    # create a transaction
-    sender = msig.address()
-    recipient = account_3
-    amount = 10000
-    note = "Hello Multisig".encode()
-    txn = PaymentTxn(sender, params, recipient, amount, None, note, None)
-
-    # create a SignedTransaction object
-    mtx = MultisigTransaction(txn, msig)
-
-    # sign the transaction
-    mtx.sign(private_key_1)
-    mtx.sign(private_key_2)
-
-    # print encoded transaction
-    # print(encoding.msgpack_encode(mtx))
-
-
-        # wait for confirmation	
-    try:
-    # send the transaction
-        txid = algod_client.send_raw_transaction(
-        encoding.msgpack_encode(mtx))    
-        print("TXID: ", txid)   
-        confirmed_txn = wait_for_confirmation(algod_client, txid, 6)  
-        print("Result confirmed in round: {}".format(confirmed_txn['confirmed-round']))
-        print("Transaction information: {}".format(
-            json.dumps(confirmed_txn, indent=4)))
-        print("Decoded note: {}".format(base64.b64decode(
-            confirmed_txn["txn"]["txn"]["note"]).decode()))
-    except Exception as err:
-        print(err)
-
-
-
-
-    ```
+    <!-- ===PYSDK_MULTISIG_CREATE=== -->
+	```python
+	version = 1  # multisig version
+	threshold = 2  # how many signatures are necessary
+	# create a Multisig given the set of participants and threshold
+	msig = transaction.Multisig(
+	    version,
+	    threshold,
+	    [account_1.address, account_2.address, account_3.address],
+	)
+	print("Multisig Address: ", msig.address())
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L25-L34)
+    <!-- ===PYSDK_MULTISIG_CREATE=== -->
+    <!-- ===PYSDK_MULTISIG_SIGN=== -->
+	```python
+	msig_pay = transaction.PaymentTxn(
+	    msig.address(), sp, account_1.address, int(1e5)
+	)
+	msig_txn = transaction.MultisigTransaction(msig_pay, msig)
+	msig_txn.sign(account_2.private_key)
+	msig_txn.sign(account_3.private_key)
+	txid = algod_client.send_transaction(msig_txn)
+	result = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(
+	    f"Payment made from msig account confirmed in round {result['confirmed-round']}"
+	)
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L46-L57)
+    <!-- ===PYSDK_MULTISIG_SIGN=== -->
 
 === "Java"
-    ```java
-    package com.algorand.javatest.multisig;
-
-
-    import java.math.BigInteger;
-    import java.util.ArrayList;
-    import java.util.List;
-
-    import com.algorand.algosdk.account.Account;
-    import com.algorand.algosdk.v2.client.common.AlgodClient;
-    import com.algorand.algosdk.v2.client.common.Response;
-    import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
-    import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
-    import com.algorand.algosdk.algod.client.ApiException;
-    import com.algorand.algosdk.crypto.Address;
-    import com.algorand.algosdk.crypto.Ed25519PublicKey;
-    import com.algorand.algosdk.crypto.MultisigAddress;
-    import com.algorand.algosdk.transaction.SignedTransaction;
-    import com.algorand.algosdk.transaction.Transaction;
-    import com.algorand.algosdk.util.Encoder;
-    import java.util.Scanner;
-    import org.json.JSONObject;
-    import com.algorand.algosdk.v2.client.model.PostTransactionsResponse;
-    import com.algorand.algosdk.v2.client.Utils;
-
-    /**
-    * Test Multisignature
-    *
-    */
-    public class Multisig {
-
-        public AlgodClient client = null;
-        
-        // utility function to connect to a node
-        private AlgodClient connectToNetwork() {
-
-            // Initialize an algod client
-            // final String ALGOD_API_ADDR = "algod-address<PLACEHOLDER>";
-            // final String ALGOD_API_TOKEN = "algod-token<PLACEHOLDER>";
-
-
-            // sandbox
-            // Initialize an algod client
-            final String ALGOD_API_ADDR = "localhost";
-            final Integer ALGOD_PORT = 4001;
-            final String ALGOD_API_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-            AlgodClient client = new AlgodClient(ALGOD_API_ADDR, ALGOD_PORT, ALGOD_API_TOKEN);
-            return client;
-
-        }
-
-    
-        
-        static Scanner scan = new Scanner(System.in);
-        public void multisigExample() throws Exception {
-    
-            if (client == null)
-                this.client = connectToNetwork();
-            //  never use mnemonics in production code, replace for demo purposes only
-
-
-            final String account1_mnemonic = "<var>your-25-word-mnemonic</var>"
-            final String account2_mnemonic = "<var>your-25-word-mnemonic</var>"
-            final String account3_mnemonic = "<var>your-25-word-mnemonic</var>"
-
-            Account act1 = new Account(account1_mnemonic);
-            Account act2 = new Account(account2_mnemonic);
-            Account act3 = new Account(account3_mnemonic);
-            System.out.println("Account1: " + act1.getAddress());
-            System.out.println("Account2: " + act2.getAddress());
-            System.out.println("Account3: " + act3.getAddress());
-            final String DEST_ADDR = act3.getAddress().toString();
-            // List for Pks for multisig account
-            List<Ed25519PublicKey> publicKeys = new ArrayList<>();
-            publicKeys.add(act1.getEd25519PublicKey());
-            publicKeys.add(act2.getEd25519PublicKey());
-            publicKeys.add(act3.getEd25519PublicKey());
-            // Instantiate the Multisig Account
-            MultisigAddress msa = new MultisigAddress(1, 2, publicKeys);
-        ;
-            System.out.println("Multisignature Address: " + msa.toString());
-            System.out.println("Navigate to this link and dispense:  https://dispenser.testnet.aws.algodev.network?account=" + msa.toString());            
-            System.out.println("PRESS ENTER KEY TO CONTINUE...");     
-            scan.nextLine();
-            // setup transaction   
-            try {
-                Response < TransactionParametersResponse > resp = client.TransactionParams().execute();
-                if (!resp.isSuccessful()) {
-                    throw new Exception(resp.message());
-                }
-                TransactionParametersResponse params = resp.body();
-                if (params == null) {
-                    throw new Exception("Params retrieval error");
-                }                      
-                BigInteger amount = BigInteger.valueOf(100000); // 100000 microAlgos = .1 Algo
-                // add some notes to the transaction
-                byte[] notes = "These are some notes encoded in some way!".getBytes();
-                // Setup Transaction
-                Address sender = new Address(msa.toString());
-
-                Transaction tx = Transaction.PaymentTransactionBuilder()
-                        .sender(sender)
-                        .amount(amount)
-                        .receiver(DEST_ADDR)
-                        .note(notes)
-                        .suggestedParams(params).build();
-                // Sign the Transaction for two accounts
-                SignedTransaction signedTx = act1.signMultisigTransaction(msa, tx);
-                SignedTransaction completeTx = act2.appendMultisigTransaction(msa, signedTx);
-                // Msgpack encode the signed transaction
-                byte[] encodedTxBytes = Encoder.encodeToMsgPack(completeTx);
-
-                // Submit the transaction to the network
-                Response < PostTransactionsResponse > rawtxresponse = client.RawTransaction().rawtxn(encodedTxBytes).execute();
-                if (!rawtxresponse.isSuccessful()) {
-                    throw new Exception(rawtxresponse.message());
-                }
-                String id = rawtxresponse.body().txId;
-                // Wait for transaction confirmation
-                PendingTransactionResponse pTrx = Utils.waitForConfirmation(client, id, 4);
-
-                System.out.println("Transaction " + id + " confirmed in round " + pTrx.confirmedRound);
-                // Read the transaction
-                JSONObject jsonObj = new JSONObject(pTrx.toString());
-                System.out.println("Transaction information (with notes): " + jsonObj.toString(2));
-                System.out.println("Decoded note: " + new String(pTrx.txn.tx.note));
-            } catch (ApiException e) {
-                // This is generally expected, but should give us an informative error message.
-                System.err.println("Exception when calling algod#rawTransaction: " + e.getResponseBody());
-            }
-        }  
-        public static void main(String args[]) throws Exception {
-            Multisig t = new Multisig();
-            t.multisigExample();
-        }
-    }
-    ```
+    <!-- ===JAVASDK_MULTISIG_CREATE=== -->
+	```java
+	int version = 1; // no other versions at the time of writing
+	int threshold = 2; // we're making a 2/3 msig
+	
+	// Populate a list of Ed25519 pubkeys
+	List<Ed25519PublicKey> accts = new ArrayList<>();
+	accts.add(addr1.getEd25519PublicKey());
+	accts.add(addr2.getEd25519PublicKey());
+	accts.add(addr3.getEd25519PublicKey());
+	// create the MultisigAddress object
+	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
+	System.out.printf("msig address: %s\n", msig.toAddress().toString());
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+    <!-- ===JAVASDK_MULTISIG_CREATE=== -->
+    <!-- ===JAVASDK_MULTISIG_SIGN=== -->
+	```java
+	// Construct transaction with sender as address of msig
+	Transaction msigPayTxn = Transaction.PaymentTransactionBuilder()
+	                .sender(msig.toAddress())
+	                .amount(1000)
+	                .receiver(acct1.getAddress())
+	                .suggestedParams(sp)
+	                .build();
+	
+	// For each subsig, sign or append to the existing partially signed transaction
+	SignedTransaction signedMsigPayTxn = acct1.signMultisigTransaction(msig, msigPayTxn);
+	signedMsigPayTxn = acct2.appendMultisigTransaction(msig, signedMsigPayTxn);
+	Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
+	                .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
+    <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 
 === "Go"
+    <!-- ===GOSDK_MULTISIG_CREATE=== -->
+	```go
+	// Get pre-defined set of keys for example
+	_, pks := loadAccounts()
+	addr1, _ := types.DecodeAddress(pks[1])
+	addr2, _ := types.DecodeAddress(pks[2])
+	addr3, _ := types.DecodeAddress(pks[3])
+	
+	ma, err := crypto.MultisigAccountWithParams(1, 2, []types.Address{
+		addr1,
+		addr2,
+		addr3,
+	})
+	
+	if err != nil {
+		panic("invalid multisig parameters")
+	}
+	fromAddr, _ := ma.Address()
+	// Print multisig account
+	fmt.Printf("Multisig address : %s \n", fromAddr)
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L175-L193)
+    <!-- ===GOSDK_MULTISIG_CREATE=== -->
+    <!-- ===GOSDK_MULTISIG_SIGN=== -->
     ```go
     package main
 
@@ -629,8 +442,8 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
     }
 
-
     ```
+    <!-- ===GOSDK_MULTISIG_SIGN=== -->
 
 === "goal"
     ```zsh
@@ -656,14 +469,11 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 # Logic Signatures
 
-Logic signatures authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-account).
+Logic signatures authorize transactions associated with an Algorand Smart Signature. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-approval).
 
-A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../../dapps/smart-contracts/smartsigs/modes#logic-signatures).
+A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../../dapps/smart-contracts/smartsigs/modes).
 
 **Related How-To**
 
 - [Use LogicSigs with the SDKs](../../dapps/smart-contracts/frontend/smartsigs)
 - [Attach a LogicSig with `goal`](../../dapps/smart-contracts/smartsigs/walkthrough)
-
-!!! info
-    Full running code examples for each SDK are available within the GitHub at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).

@@ -97,7 +97,7 @@ As we mentioned earlier, Algorand does not have forking so transactions are fina
 Algorand makes it easy to tokenize, transfer, and program conditions on any instrument of value. Create fungible tokens, NFTs, and security tokens with a single transaction (no smart contract code required). Or program sophisticated decentralized applications (dApps) with Algorand smart contracts.
 
 # Developer tools
-Developers can write smart contracts in Python or Reach (a Javascript-like language) and can use one of four SDKs (Python, JavaScript, Golang, Java) to connect to on-chain assets or applications.
+Developers can write smart contracts in Python and can use one of four SDKs (Python, JavaScript, Golang, Java) to connect to on-chain assets or applications.
 
 Algorand has a growing ecosystem of developer tools like IDEs, tools for monitoring, etc.
 > [Explore developer tools from the community](../../../../ecosystem-projects/){: target="_blank" }

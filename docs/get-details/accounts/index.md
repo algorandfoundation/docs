@@ -79,7 +79,7 @@ Creating an Algorand address from a public key is not the only way. A valid addr
 
 ### Special Accounts
 
-Two accounts carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool holds the Algos that are distributed as rewards to Algorand accounts as defined by the protocol. 
+Two accounts carry special meaning on the Algorand blockchain. They are the **FeeSink** and the **RewardsPool**. The FeeSink is where all fees from transactions are sent. The FeeSink can only spend to the RewardsPool account. The RewardsPool was first used to distribute rewards to balance holding accounts. Currently this account is not used. 
 
 In addition, the ZeroAddress `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ` is an address that represents a blank byte array. It is used when you leave an address field in a transaction blank.
 
