@@ -1,6 +1,16 @@
 title: Useful Resources
 
 This page contains resources that don't necessarily have their own page or we don't provide comprehensive details on how to use them, but are interesting enough that we encourage you to check them out.
+# AlgoKit Developer Tool
+
+[AlgoKit](https://github.com/algorandfoundation/algokit-cli) is a developer tool that is designed to help developers quickly get into writing and testing their Algorand applications. The tool provides support for building, testing, and deploying smart contracts. In addition, the tool supports running a local instance of Algorand. AlgoKit is in active development with many new features on the project's roadmap. Check out the [install guide](https://github.com/algorandfoundation/algokit-cli#install) and the [documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md). The [AlgoDevs](https://www.youtube.com/@algodevs) YouTube channel provides a [quick start](https://www.youtube.com/watch?v=dow6U8DxOGc) guide and also detailed videos for installing on [Windows](https://www.youtube.com/watch?v=22RvINnZsRo) and [Mac](https://www.youtube.com/watch?v=zsurtpCGmgE).
+
+# AlgoDevs YouTube Channel
+
+The [AlgoDevs](https://www.youtube.com/@algodevs) YouTube channel is focused on short-form developer content that provides a quick way to get up to speed on all things Algorand. These 5-10 minute videos cover topics, like writting PyTeal smart contracts, the Algorand Virtual Machine(AVM), Asset creation, transactions, and much more. These videos are actively maintained to be up to date with the current release of Algorand. Make sure to check them out and subscribe.
+# Algorand Developer Discord
+
+Join the Algorand developer [Discord](https://discord.gg/algorand) to keep up to date, ask questions, get code examples, comment on new features, and discuss Algorand standards. 
 
 # Smart Contract Examples
 
@@ -15,9 +25,3 @@ When it comes to standardising practises this is the place the be. Whether it's 
 [GitHub Repository](https://github.com/algorandfoundation/ARCs)
 
 [GitHub Discussions](https://github.com/algorandfoundation/ARCs/issues)
-
-# PyTeal Course
-
-New to Algorand Smart Contracts? Checkout this great series that guides you from setting up your environment for the first time to writing and debugging smart contracts on Algorand.
-
-[YouTube Playlist](https://www.youtube.com/watch?v=V3d3VTlgMo8&list=PLpAdAjL5F75CNnmGbz9Dm_k-z5I6Sv9_x)
