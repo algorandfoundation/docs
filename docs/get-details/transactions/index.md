@@ -674,7 +674,7 @@ For atomic transactions, the fees set on all transactions in the group are summe
 <center>*Atomic Pooled Fees*</center>
 
 !!! note
-    [Smart Contract Inner transactions](../dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested smart contract inner transactions as well (for example, Smart Contract A is called which calls Smart Contract B, which calls Smart Contract C. C's fee can not cover the call for B, which can not cover the call to A).
+    [Smart Contract Inner transactions](../dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested smart contract inner transactions as well (for example, if Smart Contract A is called, which then calls Smart Contract B, which then calls Smart Contract C. Then C's fee can not cover the call for B, which can not cover the call to A).
 
 
 An example of setting a pooled fee on a group of two transactions:
