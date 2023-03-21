@@ -1,10 +1,6 @@
 title: Your first transaction
 
-This section is a quick start guide for interacting with the Algorand network using Python. This guide will help to install ***sandbox***, which provides a node for testing and development. This guide will also help to install the Python SDK, create an account and submit your first transaction on Algorand. 
-
-# Alternative Guide
-
-[`Try Live Demo`](https://replit.com/@Algorand/gettingStartedPython#main.py){target=_blank}   
+This section is a quick start guide for interacting with the Algorand network using Python. This guide will help to install ***sandbox***, which provides a node for testing and development. This guide will also help to install the Python SDK, create an account and submit your first transaction on Algorand.  
 
 # Install Sandbox
 
@@ -174,9 +170,3 @@ The complete example below illustrates how to quickly submit your first transact
 # View the Transaction
 
 To view the transaction, open [AlgoExplorer](https://testnet.algoexplorer.io/){target=_blank} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){target=_blank} and paste the transaction ID into the search bar.  
-
-
-# Set Up Your Editor/Framework
-The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.  
-
-* [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/){target=_blank}  

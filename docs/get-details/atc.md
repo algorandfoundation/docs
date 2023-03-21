@@ -6,7 +6,7 @@ Constructing [atomic transactions](../get-details/atomic_transfers.md) requires 
 The Atomic Transaction Composer is a convenient way to build out an atomic group of transactions that handles encoding and decoding of ABI arguments and return values. 
 
 !!! Note 
-    The following code examples are snippits to demonstrate usage. The full code for the below snippits is available [here](https://github.com/algorand-devrel/demo-abi).
+    The following code examples are snippits to demonstrate usage. Additional examples are available [here](https://github.com/algorand-devrel/demo-abi).
 
 
 ## Create Atomic Transaction Composer 

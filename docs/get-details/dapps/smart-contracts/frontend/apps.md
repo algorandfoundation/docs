@@ -3,9 +3,6 @@ title: Interact with smart contracts
 This guide covers using smart contracts with the Algorand SDKs. Smart contracts form the basis for applications written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
 
 
-!!! info
-    The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
-
 # Application lifecycle
 
 This guide follows an application throughout its [lifecycle](../apps/index.md#the-lifecycle-of-a-smart-contract) from initial creation, to usage, to modification and finally deletion. The application stores the number of times it is called within its _global state_ and also stores the number of times each user account calls the application within their _local state_. Midway through the lifecycle, the application is upgraded to add an additional key:value pair to the user's _local storage_ for storing the call timestamp. 
@@ -188,11 +185,11 @@ The example application defined below may hold up to one each of `bytes` and `in
 
 ## Approval program
 
-The [approval program](../apps/#the-lifecycle-of-a-stateful-smart-contract) handles the main logic of the application.
+The [approval program](../apps/index.md#the-lifecycle-of-a-smart-contract) handles the main logic of the application.
 
 ## Clear program
 
-This is the most basic [clear program](../apps/#the-lifecycle-of-a-stateful-smart-contract) and returns _true_ when an account clears its participation in a smart contract:
+This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart-contract) and returns _true_ when an account clears its participation in a smart contract:
 
 === "Python"
     <!-- ===PYSDK_APP_SOURCE=== -->
@@ -256,7 +253,7 @@ This is the most basic [clear program](../apps/#the-lifecycle-of-a-stateful-smar
 
 ## Create
 
-The creator will deploy the application using the [create app](../apps#creating-the-smart-contract) method. It requires 7 parameters:
+The creator will deploy the application using the [create app](../apps/index.md#creating-the-smart-contract) method. It requires 7 parameters:
 
 - sender: address, representing the creator of the app
 - sp: suggested parameters obtained from the network
@@ -521,7 +518,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 
 ## Opt-in
 
-The user must [opt-in](../apps/#opt-in-to-the-smart-contract) to call the application if some local state is used during evaluation of the call. This method requires 3 parameters:
+The user must [opt-in](../apps/index.md#opt-into-the-smart-contract) to call the application if some local state is used during evaluation of the call. This method requires 3 parameters:
 
 - sender: address, representing the user intending to opt-in to using the app
 - sp: suggested parameters obtained from the network
@@ -681,7 +678,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 
 ## Call (NoOp)
 
-The user may now [call](../apps/#call-the-stateful-smart-contract) the application. This method requires 3 parameters:
+The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the application. This method requires 3 parameters:
 
 - sender: address, representing the user intending to optin to using the app
 - sp: suggested parameters obtained from the network
@@ -790,7 +787,7 @@ The user may now [call](../apps/#call-the-stateful-smart-contract) the applicati
 
 ## Read state
 
-Anyone may read the [global state](../apps/#reading-global-state-from-other-smart-contracts) of any application or the [local state](../apps/#reading-local-state-from-other-accounts) of an application within a given user account using the REST API account_info endpoint. 
+Anyone may read the [global state](../apps/index.md#reading-global-state-from-other-smart-contracts) of any application or the [local state](../apps/index.md#reading-local-state-from-other-accounts) of an application within a given user account using the REST API account_info endpoint. 
 
 === "Python"
     <!-- ===PYSDK_APP_READ_STATE=== -->
@@ -867,7 +864,7 @@ Anyone may read the [global state](../apps/#reading-global-state-from-other-smar
 
 ## Update
 
-The creator may [update the approval program](../apps/#update-stateful-smart-contract) using the update method (if the current approval program allows it). The refactored approval program source code adds a key/value pair to the user's local storage indicating the timestamp when the application was called. Refer to the [appendix](#refactored-approval-program) for details. The original clear program will be reused.
+The creator may [update the approval program](../apps/index.md#update-smart-contract) using the update method (if the current approval program allows it). The refactored approval program source code adds a key/value pair to the user's local storage indicating the timestamp when the application was called. Refer to the [appendix](#refactored-approval-program) for details. The original clear program will be reused.
 
 The update method method requires 6 parameters:
 
@@ -1012,9 +1009,7 @@ Construct the update transaction and await the response:
 
 ## Call with arguments
 
-A program may [process arguments passed](../apps/#passing-arguments-to-stateful-smart-contracts) at run-time. The NoOp call method has an optional app_args parameter where the timestamp may be supplied:
-
-The refactored application expects a timestamp be supplied with the application call.
+A program may [process arguments passed](../apps/index.md##passing-arguments-to-smart-contracts) at run-time. The NoOp call method has an optional app_args parameter where smart contract parameters can be supplied:
 
 === "Python"
     <!-- ===PYSDK_APP_CALL=== -->
@@ -1153,7 +1148,7 @@ The refactored application expects a timestamp be supplied with the application 
 
 ## Close out
 
-The user may discontinue use of the application by sending a [close out](../apps/#the-lifecycle-of-a-stateful-smart-contract) transaction. This will remove the local state for this application from the user's account. This method requires 3 parameters:
+The user may discontinue use of the application by sending a [close out](../apps/index.md#the-lifecycle-of-a-smart-contract) transaction. This will remove the local state for this application from the user's account. This method requires 3 parameters:
 
 - sender: address, representing the user intending to optin to using the app
 - sp: suggested parameters obtained from the network
@@ -1260,7 +1255,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 
 ## Delete
 
-The approval program defines the creator as the only account able to [delete the application](../apps/#delete-stateful-smart-contract). This removes the global state, but does not impact any user's local state. This method uses the same 3 parameters.
+The approval program defines the creator as the only account able to [delete the application](../apps/index.md#delete-smart-contract). This removes the global state, but does not impact any user's local state. This method uses the same 3 parameters.
 
 === "Python"
     <!-- ===PYSDK_APP_DELETE=== -->
@@ -1361,7 +1356,7 @@ The approval program defines the creator as the only account able to [delete the
 
 ## Clear state
 
-The user may [clear the local state](../apps/#the-lifecycle-of-a-stateful-smart-contract) for an application at any time, even if the application was deleted by the creator. This method uses the same 3 parameter.
+The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-contract) for an application at any time, even if the application was deleted by the creator. This method uses the same 3 parameters.
 
 === "Python"
     <!-- ===PYSDK_APP_CLEAR=== -->

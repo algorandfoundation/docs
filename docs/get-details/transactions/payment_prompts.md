@@ -1,6 +1,6 @@
 title: URI scheme
 
-This URI specification represents a standardized way for applications and websites to send requests and information through deeplinks, QR codes, etc. It is heavily based on Bitcoin’s [BIP-0021](https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki) and should be seen as derivative of it. The decision to base it on BIP-0021 was made to make it easy and compatible as possible for any other application.
+This URI specification represents a standardized way for applications and websites to send requests and information through deeplinks, QR codes, etc. It is heavily based on Bitcoin’s [BIP-0021](https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki) and should be seen as derivative of it. The decision to base it on BIP-0021 was made to make it easy and compatible as possible for any other applications.
 
 # Specifications
 

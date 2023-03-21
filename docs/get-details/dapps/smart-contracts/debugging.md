@@ -238,7 +238,7 @@ $ goal clerk dryrun -t signout.tx --dryrun-dump  -o dryrun.json
 $ tealdbg debug program.teal -d dryrun.json --group-index 0
 ```
 
-A similar flow may be implemented in any of the sdks, passing the list of transactions to the `create_dryrun` function will produce the DryrunDump object and either write the object out to a file as shown above or send it directly to the [/v2/teal/dryrun](../../../../rest-apis/algod/v2#post-v2tealdryrun) endpoint
+A similar flow may be implemented in any of the sdks, passing the list of transactions to the `create_dryrun` function will produce the DryrunDump object and either write the object out to a file as shown above or send it directly to the [/v2/teal/dryrun](../../../rest-apis/algod.md#post-v2tealdryrun) endpoint
 
 Debugging a smart signature functions identically to the process described above except the state is not required. For example, a smart signature may act as an escrow account. The following call exports the transaction for debugging purposes. This call will not execute on the blockchain as it is not submitted to the network but is written to the output file.
 
@@ -265,7 +265,7 @@ The `tealdbg` utility has many more options for setting specific context items. 
     $ goal node restart
     ```
 
-Using the [Dryrun](../../../../rest-apis/algod/v2/#post-v2tealdryrun) REST endpoint to debug programs can be very helpful for debugging or even running unit tests.
+Using the [Dryrun](../../../rest-apis/algod.md#post-v2tealdryrun) REST endpoint to debug programs can be very helpful for debugging or even running unit tests.
 
 The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has the same contents as the dryrun dump file. After Sending the Dryrun Request object to the server the response will contain evaluation results for all the transactions that invoked smart contracts including a Stack Trace, cost (as budget-*), logs (if successful) and errors encountered.
 

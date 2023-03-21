@@ -469,14 +469,12 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 
 # Logic Signatures
 
-Logic signatures authorize transactions associated with an Algorand Smart Contract. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-account).
+Logic signatures authorize transactions associated with an Algorand Smart Signature. Logic signatures are added to transactions to authorize spends from a [Contract Account](../../dapps/smart-contracts/smartsigs/modes#contract-account) or from a [Delegated Account](../../dapps/smart-contracts/smartsigs/modes#delegated-approval).
 
-A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../../dapps/smart-contracts/smartsigs/modes#logic-signatures).
+A full explanation of Logic Signatures can be found in the [Algorand Smart Contract Usage Modes Guide](../../dapps/smart-contracts/smartsigs/modes).
 
 **Related How-To**
 
 - [Use LogicSigs with the SDKs](../../dapps/smart-contracts/frontend/smartsigs)
 - [Attach a LogicSig with `goal`](../../dapps/smart-contracts/smartsigs/walkthrough)
 
-!!! info
-    Full running code examples for each SDK are available within the GitHub at [/examples/multisig](https://github.com/algorand/docs/tree/master/examples/multisig) and for [download](https://github.com/algorand/docs/blob/master/examples/multisig/multisig.zip?raw=true) (.zip).

@@ -358,7 +358,7 @@ In particular, any TEAL program that does not start with `#pragma version <N>` i
 ## Additional guidelines specific to smart signatures
 
 !!! info
-   As mentioned above, smart signatures should only be used in very few niche use cases. Most likely you should not be using them. These guidelines are only there for these very few niche use cases.
+    As mentioned above, smart signatures should only be used in very few niche use cases. Most likely you should not be using them. These guidelines are only there for these very few niche use cases.
    
 These guidelines are specific to smart signatures. They complement the other guidelines in this document. Smart signatures should also obey the other guidelines.
    
