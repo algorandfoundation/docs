@@ -490,4 +490,3 @@ The following example illustrates signing a transaction with a created logic sig
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L99-L128)
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
-

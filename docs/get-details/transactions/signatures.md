@@ -477,4 +477,3 @@ A full explanation of Logic Signatures can be found in the [Algorand Smart Contr
 
 - [Use LogicSigs with the SDKs](../../dapps/smart-contracts/frontend/smartsigs)
 - [Attach a LogicSig with `goal`](../../dapps/smart-contracts/smartsigs/walkthrough)
-

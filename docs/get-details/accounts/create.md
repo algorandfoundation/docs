@@ -726,4 +726,3 @@ The following code shows how to generate a multisignature account composed of th
 	<!-- ===GOAL_MULTISIG_CREATE=== -->
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
-
