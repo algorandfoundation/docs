@@ -16,15 +16,17 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 === "JavaScript"
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 	```javascript
-	export function getLocalIndexerClient() {
-	  const indexerToken = '';
-	  const indexerServer = 'http://localhost';
-	  const indexerPort = 8980;
+	const indexerToken = '';
+	const indexerServer = 'http://localhost';
+	const indexerPort = 8980;
 	
-	  return new algosdk.Indexer(indexerToken, indexerServer, indexerPort);
-	}
+	const indexerClient = new algosdk.Indexer(
+	  indexerToken,
+	  indexerServer,
+	  indexerPort
+	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L17-L24)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L16-L25)
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Python"
@@ -102,7 +104,7 @@ As an example, to get the details of a specific asset the indexer provides the `
 	const indexerAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
 	console.log('Indexer Asset Info:', indexerAssetInfo);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L67-L70)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L54-L57)
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Python"

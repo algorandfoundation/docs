@@ -62,15 +62,13 @@ An `algod` client connection is also required. The following connects using Sand
 === "JavaScript"
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 	```javascript
-	export function getLocalAlgodClient() {
-	  const algodToken = 'a'.repeat(64);
-	  const algodServer = 'http://localhost';
-	  const algodPort = 4001;
+	const algodToken = 'a'.repeat(64);
+	const algodServer = 'http://localhost';
+	const algodPort = 4001;
 	
-	  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
-	}
+	const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L27-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L10-L15)
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"
@@ -145,7 +143,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	const numLocalByteSlices = 0;
 	const numLocalInts = 1;
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L33-L38)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L47-L52)
     <!-- ===JSSDK_APP_SCHEMA=== -->
 
 === "Java"
@@ -209,19 +207,15 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 	```javascript
 	// define TEAL source from string or from a file
 	const approvalProgram = fs.readFileSync(
-	  path.join(__dirname, '/contracts/app_approval.teal'),
+	  path.join(__dirname, '/application/approval.teal'),
 	  'utf8'
 	);
-	const clearProgram = '#pragma version 8\nint 1\nreturn';
-	
-	// compile with helper function
-	const compiledApprovalProgram = await compileProgram(
-	  algodClient,
-	  approvalProgram
+	const clearProgram = fs.readFileSync(
+	  path.join(__dirname, '/application/clear.teal'),
+	  'utf8'
 	);
-	const compiledClearProgram = await compileProgram(algodClient, clearProgram);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L17-L30)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L17-L26)
     <!-- ===JSSDK_APP_SOURCE=== -->
 
 === "Java"
@@ -339,18 +333,23 @@ Compile the programs using the `compile` endpoint:
 === "JavaScript"
     <!-- ===JSSDK_APP_COMPILE=== -->
 	```javascript
-	export async function compileProgram(
-	  client: algosdk.Algodv2,
-	  programSource: string
-	) {
-	  const compileResponse = await client.compile(Buffer.from(programSource)).do();
-	  const compiledBytes = new Uint8Array(
-	    Buffer.from(compileResponse.result, 'base64')
-	  );
-	  return compiledBytes;
-	}
+	const approvalCompileResp = await algodClient
+	  .compile(Buffer.from(approvalProgram))
+	  .do();
+	
+	const compiledApprovalProgram = new Uint8Array(
+	  Buffer.from(approvalCompileResp.result, 'base64')
+	);
+	
+	const clearCompileResp = await algodClient
+	  .compile(Buffer.from(clearProgram))
+	  .do();
+	
+	const compiledClearProgram = new Uint8Array(
+	  Buffer.from(clearCompileResp.result, 'base64')
+	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L4-L14)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L29-L44)
     <!-- ===JSSDK_APP_COMPILE=== -->
 
 === "Java"
@@ -434,6 +433,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  onComplete: algosdk.OnApplicationComplete.NoOpOC,
 	});
 	
+	// Sign and send
 	await algodClient
 	  .sendRawTransaction(appCreateTxn.signTxn(creator.privateKey))
 	  .do();
@@ -442,10 +442,11 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  appCreateTxn.txID().toString(),
 	  3
 	);
-	const createdApp = result['application-index'];
-	console.log(`Created app with index: ${createdApp}`);
+	// Grab app id from confirmed transaction result
+	const appId = result['application-index'];
+	console.log(`Created app with index: ${appId}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L41-L63)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L55-L79)
     <!-- ===JSSDK_APP_CREATE=== -->
 
 === "Java"
@@ -600,7 +601,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	```javascript
 	const appOptInTxn = algosdk.makeApplicationOptInTxnFromObject({
 	  from: caller.addr,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  suggestedParams,
 	});
 	
@@ -613,7 +614,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L67-L81)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L84-L98)
     <!-- ===JSSDK_APP_OPTIN=== -->
 
 === "Java"
@@ -701,7 +702,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	```javascript
 	const appNoOpTxn = algosdk.makeApplicationNoOpTxnFromObject({
 	  from: caller.addr,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  suggestedParams,
 	});
 	
@@ -714,7 +715,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L84-L98)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L101-L115)
     <!-- ===JSSDK_APP_NOOP=== -->
 
 === "Java"
@@ -802,7 +803,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 === "JavaScript"
     <!-- ===JSSDK_APP_READ_STATE=== -->
 	```javascript
-	const appInfo = await algodClient.getApplicationByID(createdApp).do();
+	const appInfo = await algodClient.getApplicationByID(appId).do();
 	const globalState = appInfo.params['global-state'][0];
 	console.log(`Raw global state - ${JSON.stringify(globalState)}`);
 	
@@ -816,7 +817,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	console.log(`Decoded global state - ${globalKey}: ${globalValue}`);
 	
 	const accountAppInfo = await algodClient
-	  .accountApplicationInformation(caller.addr, createdApp)
+	  .accountApplicationInformation(caller.addr, appId)
 	  .do();
 	
 	const localState = accountAppInfo['app-local-state']['key-value'][0];
@@ -829,7 +830,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	
 	console.log(`Decoded local state - ${localKey}: ${localValue}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L118-L144)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L154-L180)
     <!-- ===JSSDK_APP_READ_STATE=== -->
 
 === "Java"
@@ -909,7 +910,7 @@ Construct the update transaction and await the response:
     <!-- ===JSSDK_APP_UPDATE=== -->
 	```javascript
 	const newProgram = fs.readFileSync(
-	  path.join(__dirname, '/contracts/app_updated_approval.teal'),
+	  path.join(__dirname, '/application/approval_refactored.teal'),
 	  'utf8'
 	);
 	const compiledNewProgram = await compileProgram(algodClient, newProgram);
@@ -917,7 +918,7 @@ Construct the update transaction and await the response:
 	const appUpdateTxn = algosdk.makeApplicationUpdateTxnFromObject({
 	  from: creator.addr,
 	  suggestedParams,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  // updates must define both approval and clear programs, even if unchanged
 	  approvalProgram: compiledNewProgram,
 	  clearProgram: compiledClearProgram,
@@ -932,7 +933,7 @@ Construct the update transaction and await the response:
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L164-L187)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L200-L223)
     <!-- ===JSSDK_APP_UPDATE=== -->
 
 === "Java"
@@ -1036,30 +1037,24 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 === "JavaScript"
     <!-- ===JSSDK_APP_CALL=== -->
 	```javascript
+	const now = new Date().toString();
 	const simpleAddTxn = algosdk.makeApplicationNoOpTxnFromObject({
-	  from: sender.addr,
+	  from: caller.addr,
 	  suggestedParams,
-	  appIndex,
-	  appArgs: [
-	    new Uint8Array(Buffer.from('add', 'utf8')),
-	    algosdk.encodeUint64(1),
-	    algosdk.encodeUint64(2),
-	  ],
+	  appIndex: appId,
+	  appArgs: [new Uint8Array(Buffer.from(now))],
 	});
 	
-	await client.sendRawTransaction(simpleAddTxn.signTxn(sender.privateKey)).do();
-	const simpleAddResult = await algosdk.waitForConfirmation(
-	  client,
+	await algodClient
+	  .sendRawTransaction(simpleAddTxn.signTxn(creator.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
 	  simpleAddTxn.txID().toString(),
 	  3
 	);
-	
-	console.log(
-	  'Result:',
-	  algosdk.decodeUint64(simpleAddResult.logs[0], 'bigint')
-	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L48-L70)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L135-L151)
     <!-- ===JSSDK_APP_CALL=== -->
 
 === "Java"
@@ -1171,7 +1166,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	```javascript
 	const appCloseOutTxn = algosdk.makeApplicationCloseOutTxnFromObject({
 	  from: caller.addr,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  suggestedParams,
 	});
 	
@@ -1184,7 +1179,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L147-L161)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L183-L197)
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
 
 === "Java"
@@ -1275,7 +1270,7 @@ The approval program defines the creator as the only account able to [delete the
 	const appDeleteTxn = algosdk.makeApplicationDeleteTxnFromObject({
 	  from: creator.addr,
 	  suggestedParams,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	});
 	
 	await algodClient
@@ -1287,7 +1282,7 @@ The approval program defines the creator as the only account able to [delete the
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L207-L221)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L243-L257)
     <!-- ===JSSDK_APP_DELETE=== -->
 
 === "Java"
@@ -1373,7 +1368,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	const appClearTxn = algosdk.makeApplicationClearStateTxnFromObject({
 	  from: anotherCaller.addr,
 	  suggestedParams,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	});
 	
 	await algodClient
@@ -1385,7 +1380,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L190-L204)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L226-L240)
     <!-- ===JSSDK_APP_CLEAR=== -->
 
 === "Java"

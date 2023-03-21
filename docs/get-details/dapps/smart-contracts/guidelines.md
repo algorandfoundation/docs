@@ -57,7 +57,7 @@ There are two options:
 	```javascript
 	const minFee = algosdk.ALGORAND_MIN_TX_FEE;
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L54-L55)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L53-L54)
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"
@@ -89,9 +89,10 @@ There are two options:
 
 === "JavaScript"
     <!-- ===JSSDK_SP_MIN_FEE=== -->
-    ```js
-    // Not supported because getTransactionParams erases the information
-    ```
+	```javascript
+	// Not supported because getTransactionParams erases the information
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L63-L64)
     <!-- ===JSSDK_SP_MIN_FEE=== -->
 
 === "Java"

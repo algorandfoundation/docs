@@ -16,9 +16,9 @@ To use the Atomic Transaction Composer, first initialize the composer:
 === "JavaScript"
     <!-- ===JSSDK_ATC_CREATE=== -->
 	```javascript
-	const createATC = new algosdk.AtomicTransactionComposer();
+	const atc = new algosdk.AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L127-L128)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L51-L52)
     <!-- ===JSSDK_ATC_CREATE=== -->
 
 === "Python"
@@ -84,28 +84,18 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 === "JavaScript"
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 	```javascript
-	const createContractTxn = algosdk.makeApplicationCreateTxnFromObject({
+	// construct a transaction
+	const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
 	  from: sender.addr,
 	  suggestedParams,
-	  onComplete: algosdk.OnApplicationComplete.NoOpOC,
-	  approvalProgram: compiledContractApprovalProgram,
-	  clearProgram: compiledClearProgram,
-	  numGlobalByteSlices: 0,
-	  numGlobalInts: 0,
-	  numLocalByteSlices: 0,
-	  numLocalInts: 0,
+	  to: sender.addr,
+	  amount: 1000,
 	});
 	
-	createATC.addTransaction({ txn: createContractTxn, signer: sender.signer });
-	
-	const createContractResult = await createATC.execute(client, 3);
-	
-	const txInfo = await client
-	  .pendingTransactionInformation(createContractResult.txIDs[0])
-	  .do();
-	const contractAppID = txInfo['application-index'];
+	// add the transaction to the ATC with a signer
+	atc.addTransaction({ txn: paymentTxn, signer: sender.signer });
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L131-L151)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L62-L72)
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
@@ -213,21 +203,16 @@ Once the Contract object is constructed, it can be used to look up and pass meth
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
 	```javascript
 	const abi = JSON.parse(
-	  fs.readFileSync(
-	    path.join(__dirname, '/contracts/beaker_add_artifacts/contract.json'),
-	    'utf8'
-	  )
+	  fs.readFileSync(path.join(__dirname, '/calculator/contract.json'), 'utf8')
 	);
 	const contract = new algosdk.ABIContract(abi);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L108-L115)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L55-L59)
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
 	```javascript
-	const methodATC = new algosdk.AtomicTransactionComposer();
-	
-	methodATC.addMethodCall({
-	  appID: contractAppID,
+	atc.addMethodCall({
+	  appID: appIndex,
 	  method: contract.getMethodByName('add'),
 	  methodArgs: [1, 2],
 	  sender: sender.addr,
@@ -235,21 +220,35 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	  suggestedParams,
 	});
 	
-	const methodResult = await methodATC.execute(client, 3);
-	console.log('Result:', methodResult.methodResults[0].returnValue);
+	const otherPayTxn: algosdk.TransactionWithSigner = {
+	  txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	    from: sender.addr,
+	    suggestedParams,
+	    to: sender.addr,
+	    amount: 1000,
+	  }),
+	  signer: sender.signer,
+	};
+	
+	atc.addMethodCall({
+	  appID: appIndex,
+	  method: contract.getMethodByName('txntest'),
+	  methodArgs: [10000, otherPayTxn, 1000],
+	  sender: sender.addr,
+	  signer: sender.signer,
+	  suggestedParams,
+	});
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L154-L167)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L75-L102)
+    <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JSSDK_ATC_RESULTS=== -->
-    ```js
-    // Other options:
-    // const txgroup = atc.buildGroup()
-    // const txids = atc.submit(client)
-
-    const result = await atc.execute(client, 2)
-    for(const idx in result.methodResults){
-        console.log(result.methodResults[idx])
-    }
-    ```
+	```javascript
+	const result = await atc.execute(client, 4);
+	for (const mr of result.methodResults) {
+	  console.log(`${mr.returnValue}`);
+	}
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L105-L109)
     <!-- ===JSSDK_ATC_RESULTS=== -->
 
 === "Go"

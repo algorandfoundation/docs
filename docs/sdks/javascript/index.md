@@ -89,15 +89,13 @@ Client must be instantiated prior to making calls to the API endpoints. You must
 
 <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 ```javascript
-export function getLocalAlgodClient() {
-  const algodToken = 'a'.repeat(64);
-  const algodServer = 'http://localhost';
-  const algodPort = 4001;
+const algodToken = 'a'.repeat(64);
+const algodServer = 'http://localhost';
+const algodPort = 4001;
 
-  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
-}
+const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L27-L34)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L10-L15)
 <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
@@ -108,12 +106,10 @@ Before moving on to the next step, make sure your account has been funded by the
  
 <!-- ===JSSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 ```javascript
-        //Check your balance
-        let accountInfo = await algodClient.accountInformation(myAccount.addr).do();
-        console.log("Account balance: %d microAlgos", accountInfo.amount);
-
-
+const acctInfo = await algodClient.accountInformation(acct.addr).do();
+console.log(`Account balance: ${acctInfo.amount} microAlgos`);
 ```
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L40-L42)
 <!-- ===JSSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
  
@@ -121,29 +117,17 @@ Before moving on to the next step, make sure your account has been funded by the
 To interact with the Algorand blockchain, you can send different types of transactions. The following code shows how to create a payment transaction to transfer Algo tokens to a different address. To construct a transaction, you need to retrieve the parameters about the Algorand network first. You can choose to set a fee yourself, however, by default the fee is set to 1000 microAlgos (0.001 Algo). Optionally, you can add a message to the transaction using the `note` field (up to 1000 bytes). You can find more information about transaction fields in the [documentation](https://developer.algorand.org/docs/get-details/transactions/transactions/#common-fields-header-and-type).
 ​
 <!-- ===JSSDK_TRANSACTION_PAYMENT_CREATE=== -->
-```javascript 
-        // Construct the transaction
-        let params = await algodClient.getTransactionParams().do();
-        // comment out the next two lines to use suggested fee
-        params.fee = algosdk.ALGORAND_MIN_TX_FEE;
-        params.flatFee = true;
-
-        const receiver = "HZ57J3K46JIJXILONBBZOHX6BKPXEM2VVXNRFSUED6DKFD5ZD24PMJ3MVA";
-        const enc = new TextEncoder();
-        const note = enc.encode("Hello World");
-        let amount = 1000000; // equals 1 ALGO
-        let sender = myAccount.addr;
-
-        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-            from: sender, 
-            to: receiver, 
-            amount: amount, 
-            note: note, 
-            suggestedParams: params
-        });
+```javascript
+const suggestedParams = await algodClient.getTransactionParams().do();
+const ptxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+  from: acct.addr,
+  suggestedParams,
+  to: acct2.addr,
+  amount: 10000,
+  note: new Uint8Array(Buffer.from('hello world')),
+});
 ```
-[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=386){:target="_blank"}
-
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L18-L26)
 <!-- ===JSSDK_TRANSACTION_PAYMENT_CREATE=== -->
 
 ​
@@ -154,15 +138,10 @@ To interact with the Algorand blockchain, you can send different types of transa
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction. Now, you can extract the transaction ID. Actually, you can even extract the transaction ID before signing the transaction. You'll use the `txId` to look up the status of the transaction in the following sections of this guide.
 ​
 <!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
-```javascript 
-        // Sign the transaction
-        let signedTxn = txn.signTxn(myAccount.sk);
-        let txId = txn.txID().toString();
-        console.log("Signed transaction with txID: %s", txId);
+```javascript
+const signedTxn = ptxn.signTxn(acct.privateKey);
 ```
-​
-[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=500){:target="_blank"}
-
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L29-L30)
 <!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
@@ -175,27 +154,13 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
  
  
  <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
-​
 ```javascript
-        // Submit the transaction
-        await algodClient.sendRawTransaction(signedTxn).do();
-
-        // Wait for confirmation
-        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        // let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-        // console.log("Transaction information: %o", mytxinfo);
-        let string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);
-        accountInfo = await algodClient.accountInformation(myAccount.addr).do();
-        console.log("Transaction Amount: %d microAlgos", confirmedTxn.txn.txn.amt);        
-        console.log("Transaction Fee: %d microAlgos", confirmedTxn.txn.txn.fee);
-        console.log("Account balance: %d microAlgos", accountInfo.amount);
-
+const { txID } = await algodClient.sendRawTransaction(signedTxn).do();
+const result = await algosdk.waitForConfirmation(algodClient, txID, 4);
+console.log(`Transaction Information: ${result}`);
+console.log(`Decoded Node: ${Buffer.from(result.note, 'base64')}`);
 ```
-
-[`Watch Video`](https://youtu.be/WuhaGp2yrak?t=508){:target="_blank"}
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L33-L37)
  <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 ​

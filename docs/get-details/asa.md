@@ -90,24 +90,20 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 === "JavaScript"
     <!-- ===JSSDK_ASSET_CREATE=== -->
 	```javascript
-	const creator = accounts[0];
-	
 	const suggestedParams = await algodClient.getTransactionParams().do();
-	
 	const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
 	  from: creator.addr,
 	  suggestedParams,
 	  defaultFrozen: false,
-	  decimals: 0,
-	  total: 1,
-	  unitName: 'LATINUM',
-	  assetName: 'latinum',
-	  assetURL: 'http://someurl', // can be HTTP or IPFS
-	  assetMetadataHash: '16efaa3924a6fd9d3a4824799a4ac65d',
+	  unitName: 'rug',
+	  assetName: 'Really Useful Gift',
 	  manager: creator.addr,
 	  reserve: creator.addr,
 	  freeze: creator.addr,
 	  clawback: creator.addr,
+	  assetURL: 'http://path/to/my/asset/details',
+	  total: 1000,
+	  decimals: 0,
 	});
 	
 	const signedTxn = txn.signTxn(creator.privateKey);
@@ -119,14 +115,9 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	);
 	
 	const assetIndex = result['asset-index'];
-	
-	console.log(
-	  `Created asset ${assetIndex} in transaction ${txn
-	    .txID()
-	    .toString()} confirmed in round ${result['confirmed-round']}`
-	);
+	console.log(`Asset ID created: ${assetIndex}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L17-L52)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L17-L43)
     <!-- ===JSSDK_ASSET_CREATE=== -->
 
 === "Python"
@@ -306,14 +297,14 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	
 	const signedConfigTxn = configTxn.signTxn(creator.privateKey);
 	await algodClient.sendRawTransaction(signedConfigTxn).do();
-	await algosdk.waitForConfirmation(algodClient, txn.txID().toString(), 3);
-	
-	await new Promise((f) => setTimeout(f, 1000)); // sleep to ensure indexer is caught up
-	
-	const configAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
-	console.log('Asset Info:', configAssetInfo);
+	const configResult = await algosdk.waitForConfirmation(
+	  algodClient,
+	  txn.txID().toString(),
+	  3
+	);
+	console.log(`Result confirmed in round: ${configResult['confirmed-round']}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L74-L95)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L60-L81)
     <!-- ===JSSDK_ASSET_CONFIG=== -->
 
 === "Python"
@@ -432,7 +423,6 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 === "JavaScript"
     <!-- ===JSSDK_ASSET_OPTIN=== -->
 	```javascript
-	const receiver = accounts[2];
 	
 	// opt-in is simply a 0 amount transfer of the asset to oneself
 	const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -447,7 +437,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	await algodClient.sendRawTransaction(signedOptInTxn).do();
 	await algosdk.waitForConfirmation(algodClient, optInTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L99-L113)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L85-L98)
     <!-- ===JSSDK_ASSET_OPTIN=== -->
 
 === "Python"
@@ -564,7 +554,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	await algodClient.sendRawTransaction(signedXferTxn).do();
 	await algosdk.waitForConfirmation(algodClient, xferTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L117-L128)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L101-L112)
     <!-- ===JSSDK_ASSET_XFER=== -->
 
 === "Python"
@@ -695,7 +685,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L132-L149)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L115-L132)
     <!-- ===JSSDK_ASSET_FREEZE=== -->
 
 === "Python"
@@ -829,7 +819,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L153-L172)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L135-L154)
     <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 
 === "Python"
@@ -960,7 +950,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L176-L189)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L157-L170)
     <!-- ===JSSDK_ASSET_DELETE=== -->
 
 === "Python"
@@ -1071,14 +1061,11 @@ Retrieve an asset's configuration information from the network using the SDKs or
 === "JavaScript"
     <!-- ===JSSDK_ASSET_INFO=== -->
 	```javascript
-	const accountInfo = await algodClient.accountInformation(creator.addr).do();
-	console.log('Account Info:', accountInfo);
-	
-	const mostRecentAsset = accountInfo['created-assets'].at(-1).index;
-	const assetInfo = await algodClient.getAssetByID(mostRecentAsset).do();
-	console.log('Asset Info:', assetInfo);
+	const assetInfo = await algodClient.getAssetByID(assetIndex).do();
+	console.log(`Asset Name: ${assetInfo.params.name}`);
+	console.log(`Asset Params: ${assetInfo.params}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L56-L62)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L46-L49)
     <!-- ===JSSDK_ASSET_INFO=== -->
 
 === "Python"
