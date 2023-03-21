@@ -527,7 +527,7 @@ The user must [opt-in](../apps/index.md#opt-into-the-smart-contract) to call the
 Use the user_mnemonic to define sender:
 
 === "Python"
-<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```python
 	mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair"
 	pk = mnemonic.to_private_key(mn)
@@ -536,10 +536,10 @@ Use the user_mnemonic to define sender:
 	print(f"Address: {addr}")
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
-<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
-<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```javascript
 	// restore 25-word mnemonic from environment variable
 	const mnemonicAccount = algosdk.mnemonicToSecretKey(
@@ -548,10 +548,10 @@ Use the user_mnemonic to define sender:
 	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
-<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
-<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```java
 	// Space delimited 25 word mnemonic
 	String mn = "cost piano sample enough south bar diet garden nasty mystery mesh sadness convince bacon best patch surround protect drum actress entire vacuum begin abandon hair";
@@ -561,10 +561,10 @@ Use the user_mnemonic to define sender:
 	Account acct = new Account(mn);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
-<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
-<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```go
 	k, err := mnemonic.ToPrivateKey(mn)
 	if err != nil {
@@ -579,7 +579,7 @@ Use the user_mnemonic to define sender:
 	log.Printf("%+v", recovered)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
-<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
+	<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:
 

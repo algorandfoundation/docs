@@ -272,6 +272,7 @@ Here is an example of an opt-in transaction:
   }
 }
 ```
+
 The `"type": "axfer"` distinguishes this as an asset transfer transaction. The fields used in the transaction are the same as any other asset transfer. What distinguishes it as an opt-in transaction is in how those fields are specified and the sender account's asset holdings state prior to sending the transaction. In particular, the address `"QC7XT7...` is both the [sender](transactions#sender) and [asset receiver](transactions#assetreceiver) and it is assumed that the sender does not yet possess any of the desired asset identified with the [asset ID](transactions#xferasset) `168103`. The asset amount is not specified in this example. This transaction is valid on TestNet between rounds 6631154 and 6632154.
 
 **Related How-To**
@@ -281,6 +282,7 @@ The `"type": "axfer"` distinguishes this as an asset transfer transaction. The f
 ### Transfer an Asset
 
 Here is an example of an asset transfer transaction. 
+
 ```json
 {
   "txn": {
@@ -296,6 +298,7 @@ Here is an example of an asset transfer transaction.
   }
 }
 ```
+
 An asset transfer transaction assumes that the asset receiver has already [opted-in](#opt-in-to-an-asset). The account represented by address `"EW64GC6..."` sends 1 million base units (or 10,000.00 units) of asset `168103` between rounds 7631196 and 7632196 on TestNet. `"EW64GC6..."` pays a fee of 3000 microAlgos.
 
 !!! tip
@@ -325,6 +328,7 @@ Here is an example of the clawback account revoking assets from another account.
   }
 }
 ```
+
 The existence of an [asset sender](transactions#assetsender) tells us that this transaction is utilizing the clawback workflow. During a clawback, the clawback address (`"EW64GC..."`) sends the transactions and therefore authorizes it and pays the `1000` microAlgo fee. The [asset sender](transactions#assetsender) (`"QC7XT7..."`) is the address of the account from which the assets will be revoked. In this case, 5 million base units (5,000.00 units) of asset `168103` will be revoked from `"QC7XT7..."` and transferred to `"EW64GC..."`.
 
 **Related How-To**
@@ -575,7 +579,7 @@ Application NoOp Transactions make up a majority of the Application Call methods
 
 A State Proof Transaction is a transaction that's submitted to the network during the consensus process. These types of transactions are not submitted by individuals, nor can a Smart Contract issue inner state proof transactions.
 
-```js
+```json
 {
   "txn": {
     "txn": {
@@ -583,9 +587,7 @@ A State Proof Transaction is a transaction that's submitted to the network durin
       "gh": "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=",
       "lv": 24193139,
       "snd": "XM6FEYVJ2XDU2IBH4OT6VZGW75YM63CM4TC6AV6BD3JZXFJUIICYTVB5EU",
-      "sp": {
-        //...
-      },
+      "sp": { },
       "spmsg": {
         "P": 2230170,
         "b": "8LkpbqSqlWcsfUr9EgpxBmrTDqQBg2tcubN7cpcFRM8=",
@@ -679,48 +681,16 @@ An example of setting a pooled fee on a group of two transactions:
 
 === "JavaScript"
 <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
-	```javascript
-	const alicesTxnWithDoubleFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
-	  {
-	    from: alice.addr,
-	    to: carol.addr,
-	    amount: 1e6,
-	    // set the fee to 0 so alice doesn't need to pay a fee
-	    // use flatFee to ensure the given fee is used
-	    suggestedParams: { ...suggestedParams, fee: 0, flatFee: true },
-	  }
-	);
-	
-	const bobsTxnWithZeroFee = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
-	  {
-	    from: bob.addr,
-	    to: alice.addr,
-	    amount: 1e6,
-	    // set the fee to "minFee * 2" so Bob covers the fee for his transaction AND Alice's transaction
-	    // use flatFee to ensure the given fee is used
-	    suggestedParams: { ...suggestedParams, fee: minFee * 2, flatFee: true },
-	  }
-	);
-	
-	const feeTxnArray = [alicesTxnWithDoubleFee, bobsTxnWithZeroFee];
-	const feeTxnGroup = algosdk.assignGroupID(feeTxnArray);
-	const signedFeeTxns = [
-	  feeTxnGroup[0].signTxn(alice.privateKey),
-	  feeTxnGroup[1].signTxn(bob.privateKey),
-	];
-	
-	await client.sendRawTransaction(signedFeeTxns).do();
-	await algosdk.waitForConfirmation(
-	  client,
-	  alicesTxnWithDoubleFee.txID().toString(),
-	  3
-	);
-	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L58-L93)
+```javascript
+  const sp = await client.getTransactionParams().do();
+  sp.fee = 2 * minFee;
+  sp.flatFee = true; // use flatFee to ensure the given fee is used
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L69-L72)
 <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Python"
-<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
+	<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```python
 	suggested_params = algod_client.suggested_params()
 	suggested_params.fee = 2 * suggested_params.min_fee
@@ -729,10 +699,10 @@ An example of setting a pooled fee on a group of two transactions:
 	suggested_params.flat_fee = True
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L68-L73)
-<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
+	<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Go"
-<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  	<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```go
 	// by using fee pooling and setting our fee to 2x min tx fee
 	// we can cover the fee for another transaction in the group
@@ -741,10 +711,10 @@ An example of setting a pooled fee on a group of two transactions:
 	// ...
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L37-L42)
-<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
+  	<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Java"
-<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
+  	<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```java
 	Transaction feeOverrideTxn = Transaction.PaymentTransactionBuilder()
 	        .sender(acct.getAddress())
@@ -756,7 +726,7 @@ An example of setting a pooled fee on a group of two transactions:
 	        .flatFee(2 * suggestedParams.body().minFee).build();
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L56-L64)
-<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
+  	<!-- ===JAVASDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 Here we're directly setting the fee to be 2x the min fee since we want to cover both transactions. 
 

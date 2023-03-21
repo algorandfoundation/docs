@@ -52,7 +52,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
     <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Go"
-<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 	```go
 	// Create a new indexer client, configured to connect to out local sandbox
 	var indexerAddress = "http://localhost:8980"
@@ -74,7 +74,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/indexer.go#L14-L32)
-<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
@@ -402,17 +402,20 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
-	```javascript
-	const txnsWithNotePrefix = await indexerClient
-	  .searchForTransactions()
-	  .notePrefix(Buffer.from('Hello'))
-	  .do();
-	console.log(
-	  `Transactions with note prefix "Hello" ${ 
-	    JSON.stringify(txnsWithNotePrefix, undefined, 2)}`
-	);
-	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L62-L70)
+```javascript
+  const txnsWithNotePrefix = await indexerClient
+    .searchForTransactions()
+    .notePrefix(Buffer.from('Hello'))
+    .do();
+  console.log(
+    `Transactions with note prefix "Hello" ${JSON.stringify(
+      txnsWithNotePrefix,
+      undefined,
+      2
+    )}`
+  );
+```
+[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L62-L73)
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Python"

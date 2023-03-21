@@ -166,37 +166,36 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L41-L44)
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
-
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
-```python
-
-# Simple call to the `add` method, method_args can be any type but _must_
-# match those in the method signature of the contract
-atc.add_method_call(
-    app_id,
-    contract.get_method_by_name("add"),
-    addr,
-    sp,
-    signer,
-    method_args=[1, 1],
-)
-
-# This method requires a `transaction` as its second argument.
-# Construct the transaction and pass it in as an argument.
-# The ATC will handle adding it to the group transaction and
-# setting the reference in the application arguments.
-ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
-txn = TransactionWithSigner(ptxn, signer)
-atc.add_method_call(
-    app_id,
-    contract.get_method_by_name("txntest"),
-    addr,
-    sp,
-    signer,
-    method_args=[10000, txn, 1000],
-)
-```
-[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
+	```python
+	
+	# Simple call to the `add` method, method_args can be any type but _must_
+	# match those in the method signature of the contract
+	atc.add_method_call(
+	    app_id,
+	    contract.get_method_by_name("add"),
+	    addr,
+	    sp,
+	    signer,
+	    method_args=[1, 1],
+	)
+	
+	# This method requires a `transaction` as its second argument.
+	# Construct the transaction and pass it in as an argument.
+	# The ATC will handle adding it to the group transaction and
+	# setting the reference in the application arguments.
+	ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
+	txn = TransactionWithSigner(ptxn, signer)
+	atc.add_method_call(
+	    app_id,
+	    contract.get_method_by_name("txntest"),
+	    addr,
+	    sp,
+	    signer,
+	    method_args=[10000, txn, 1000],
+	)
+	```
+	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 
 === "JavaScript"
@@ -212,24 +211,23 @@ atc.add_method_call(
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L108-L115)
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
-
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
-```javascript
-const methodATC = new algosdk.AtomicTransactionComposer();
-
-methodATC.addMethodCall({
-  appID: contractAppID,
-  method: contract.getMethodByName('add'),
-  methodArgs: [1, 2],
-  sender: sender.addr,
-  signer: sender.signer,
-  suggestedParams,
-});
-
-const methodResult = await methodATC.execute(client, 3);
-console.log('Result:', methodResult.methodResults[0].returnValue);
-```
-[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
+	```javascript
+	const methodATC = new algosdk.AtomicTransactionComposer();
+	
+	methodATC.addMethodCall({
+	  appID: contractAppID,
+	  method: contract.getMethodByName('add'),
+	  methodArgs: [1, 2],
+	  sender: sender.addr,
+	  signer: sender.signer,
+	  suggestedParams,
+	});
+	
+	const methodResult = await methodATC.execute(client, 3);
+	console.log('Result:', methodResult.methodResults[0].returnValue);
+	```
+	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
     <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:

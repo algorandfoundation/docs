@@ -325,7 +325,7 @@ This transaction will succeed as _private spending key_ for `$ADDR_C` provided t
 In the following example Account 1 is rekeyed to Account 2. The code then illustrates that signing a transaction from Account 1 will fail if signed with Account 1's private key and succeed if signed with Account 2's private key.
 
 === "Python"
-<!-- ===PYSDK_ACCOUNT_REKEY=== -->
+	<!-- ===PYSDK_ACCOUNT_REKEY=== -->
 	```python
 	# Any kind of transaction can contain a rekey
 	rekey_txn = transaction.PaymentTxn(
@@ -363,10 +363,10 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L61-L95)
-<!-- ===PYSDK_ACCOUNT_REKEY=== -->
+	<!-- ===PYSDK_ACCOUNT_REKEY=== -->
 
 === "JavaScript"
-<!-- ===JSSDK_ACCOUNT_REKEY=== -->
+	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 	```javascript
 	// create and fund a new account that we will eventually rekey
 	const originalAccount = algosdk.generateAccount();
@@ -446,11 +446,11 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L82-L158)
-<!-- ===JSSDK_ACCOUNT_REKEY=== -->
+	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 
 
 === "Java"
-<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
+	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 	```java
 	
 	// Any kind of transaction can contain a rekey, here we use a Payment
@@ -473,10 +473,10 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
-<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
+	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
 === "Go"
-<!-- ===GOSDK_ACCOUNT_REKEY=== -->
+	<!-- ===GOSDK_ACCOUNT_REKEY=== -->
 	```go
 	sp, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
@@ -513,4 +513,4 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID, result.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L48-L81)
-<!-- ===GOSDK_ACCOUNT_REKEY=== -->
+	<!-- ===GOSDK_ACCOUNT_REKEY=== -->

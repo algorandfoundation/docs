@@ -364,51 +364,50 @@ After an asset has been created only the manager, reserve, freeze and clawback a
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
-
     <!-- ===GOSDK_ASSET_CONFIG=== -->
-```go
-creatorAddr := creator.Address.String()
-var (
-	newManager  = creatorAddr
-	newFreeze   = creatorAddr
-	newClawback = creatorAddr
-	newReserve  = ""
-
-	strictAddrCheck = false
-	note            []byte
-)
-
-// Get network-related transaction parameters and assign
-sp, err := algodClient.SuggestedParams().Do(context.Background())
-if err != nil {
-	log.Fatalf("error getting suggested tx params: %s", err)
-}
-
-txn, err := transaction.MakeAssetConfigTxn(creatorAddr, note, sp, assetID, newManager, newReserve, newFreeze, newClawback, strictAddrCheck)
-if err != nil {
-	log.Fatalf("failed to make  txn: %s", err)
-}
-// sign the transaction
-txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
-if err != nil {
-	log.Fatalf("failed to sign transaction: %s", err)
-}
-
-// Broadcast the transaction to the network
-_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
-if err != nil {
-	log.Fatalf("failed to send transaction: %s", err)
-}
-
-// Wait for confirmation
-confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
-if err != nil {
-	log.Fatalf("error waiting for confirmation:  %s", err)
-}
-
-log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
-```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L103-L143)
+	```go
+	creatorAddr := creator.Address.String()
+	var (
+		newManager  = creatorAddr
+		newFreeze   = creatorAddr
+		newClawback = creatorAddr
+		newReserve  = ""
+	
+		strictAddrCheck = false
+		note            []byte
+	)
+	
+	// Get network-related transaction parameters and assign
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
+	
+	txn, err := transaction.MakeAssetConfigTxn(creatorAddr, note, sp, assetID, newManager, newReserve, newFreeze, newClawback, strictAddrCheck)
+	if err != nil {
+		log.Fatalf("failed to make  txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(creator.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+	
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+	
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+	
+	log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	```
+	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L103-L143)
     <!-- ===GOSDK_ASSET_CONFIG=== -->
 
 === "goal"

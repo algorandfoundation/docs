@@ -13,7 +13,7 @@ Algorand SDK's and `goal` support writing and reading both signed and unsigned t
 Unsigned transactions require the transaction object to be created before writing to a file.
 
 === "JavaScript"
-<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```javascript
 	const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
 	  from: sender.addr,
@@ -30,10 +30,10 @@ Unsigned transactions require the transaction object to be created before writin
 	console.log(restoredTxn);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
-<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
-<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```python
 	sp = algod_client.suggested_params()
 	pay_txn = transaction.PaymentTxn(acct.address, sp, acct.address, 10000)
@@ -49,10 +49,10 @@ Unsigned transactions require the transaction object to be created before writin
 	print(recovered_txn.dictify())
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L31-L43)
-<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Java"
-<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```java
 	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
 	TransactionParametersResponse sp = rsp.body();
@@ -66,10 +66,10 @@ Unsigned transactions require the transaction object to be created before writin
 	assert decodedTxn.equals(ptxn);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
-<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
-<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	```go
 	// Error handling omitted for brevity
 	sp, _ := algodClient.SuggestedParams().Do(context.Background())
@@ -88,10 +88,10 @@ Unsigned transactions require the transaction object to be created before writin
 	log.Printf("%+v", recoveredPayTxn)
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L25-L40)
-<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
-<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
     ``` goal
     $ goal clerk send --from=<my-account> --to=GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A --fee=1000 --amount=1000000 --out="unsigned.txn"
 
@@ -100,12 +100,12 @@ Unsigned transactions require the transaction object to be created before writin
     $ goal clerk rawsend --filename signed.txn
 
     ```
-<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
+	<!-- ===GOAL_CODEC_TRANSACTION_UNSIGNED=== -->
 # Signed Transaction File Operations 
 Signed Transactions are similar, but require an account to sign the transaction before writing it to a file.
 
 === "JavaScript"
-<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
 	const signedTxn = txn.signTxn(sender.privateKey);
 	const signedB64Txn = Buffer.from(signedTxn).toString('base64');
@@ -115,10 +115,10 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	console.log(restoredSignedTxn);
 	```
 	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
-<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
-<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```python
 	# Sign transaction
 	spay_txn = pay_txn.sign(acct.private_key)
@@ -133,10 +133,10 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	print(recovered_signed_txn.dictify())
 	```
 	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/codec.py#L48-L59)
-<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
-<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 	```java
 	SignedTransaction signedTxn = acct.signTransaction(ptxn);
 	byte[] encodedSignedTxn = Encoder.encodeToMsgPack(signedTxn);
@@ -146,10 +146,10 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
 	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
-<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
-<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```go
 	// Assuming we already have a pay transaction `ptxn`
 	
@@ -169,14 +169,14 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	}
 	```
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/codec.go#L43-L59)
-<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"
-<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
     ``` goal
     $ goal clerk rawsend --filename signed.txn
     ```
-<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
+	<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
 
 
     
