@@ -61,7 +61,7 @@ const passphrase = algosdk.secretKeyToMnemonic(generatedAccount.sk);
 console.log(`My address: ${generatedAccount.addr}`);
 console.log(`My passphrase: ${passphrase}`);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L75-L79)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L75-L79)
 <!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 
@@ -87,23 +87,18 @@ The code below prompts to fund the newly created account. Before sending transac
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value (64 "a"s) with server address `http://localhost` and port `4001`.
 
-<!-- ===JSSDK_ALGOD_CLIENT_CREATE=== -->
- 
+<!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 ```javascript
-async function firstTransaction() {
+export function getLocalAlgodClient() {
+  const algodToken = 'a'.repeat(64);
+  const algodServer = 'http://localhost';
+  const algodPort = 4001;
 
-    try {
-        let myAccount = createAccount();
-        console.log("Press any key when the account is funded");
-        await keypress();
-        // Connect your client
-        const algodToken = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-        const algodServer = 'http://localhost';
-        const algodPort = 4001;
-        let algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
-
+  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
+}
 ```
-<!-- ===JSSDK_ALGOD_CLIENT_CREATE=== -->
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L27-L34)
+<!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
     The example code connects to the sandbox Algod client. If you want to connect to a other clients, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2).

@@ -27,7 +27,7 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
 	)
 	print(online_keyreg.dictify())
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L29-L43)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/participation.py#L29-L43)
     <!-- ===PYSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "JavaScript"
@@ -46,7 +46,7 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
 	        .sender(address)
 	        .build();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "goal"

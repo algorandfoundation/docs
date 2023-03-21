@@ -52,7 +52,7 @@ if err != nil {
 log.Printf("Address: %s\n", account.Address)
 log.Printf("Mnemonic: %s\n", mn)
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L15-L24)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L15-L24)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 !!! Note 
@@ -98,7 +98,7 @@ algodClientWithHeaders, _ := algod.MakeClientWithHeaders(
 	[]*common.Header{&algodHeader},
 )
 ```
-[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L47-L65)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L47-L65)
 <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info

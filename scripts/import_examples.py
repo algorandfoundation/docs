@@ -76,9 +76,9 @@ SDKExamples = dict[str, Example]
 sources: list[ExampleSource] = [
     ExampleSource(
         github_url="https://github.com/algorand/py-algorand-sdk",
-        git_branch="master",
+        git_branch="examples",
         local_dir="../../py-algorand-sdk",
-        example_dir="_examples",
+        example_dir="examples",
         language_name="python",
         src_comment_flag="# example: ",
         name="PYSDK",
@@ -86,7 +86,7 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
         github_url="https://github.com/algorand/js-algorand-sdk",
-        git_branch="develop",
+        git_branch="examples",
         local_dir="../../js-algorand-sdk",
         example_dir="examples",
         language_name="javascript",
@@ -96,9 +96,9 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
         github_url="https://github.com/algorand/go-algorand-sdk",
-        git_branch="develop",
+        git_branch="examples",
         local_dir="../../go/src/github.com/algorand/go-algorand-sdk",
-        example_dir="_examples",
+        example_dir="examples",
         language_name="go",
         src_comment_flag="\t// example: ",
         name="GOSDK",
@@ -106,7 +106,7 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
         github_url="https://github.com/algorand/java-algorand-sdk",
-        git_branch="develop",
+        git_branch="examples",
         local_dir="../../java-algorand-sdk",
         example_dir="examples",
         language_name="java",
@@ -116,9 +116,9 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
         github_url="https://github.com/algorand-devrel/algorand-teal-examples",
-        git_branch="master",
+        git_branch="examples",
         local_dir="../../algorand-teal-examples",
-        example_dir="_examples",
+        example_dir="examples",
         language_name="teal",
         src_comment_flag="// example: ",
         name="TEAL",
@@ -126,9 +126,9 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
         github_url="https://github.com/barnjamin/pyteal",
-        git_branch="examples-for-docs",
+        git_branch="examples",
         local_dir="../../pyteal",
-        example_dir="_examples",
+        example_dir="examples",
         language_name="python",
         src_comment_flag="# example: ",
         name="PYTEAL",
@@ -136,7 +136,7 @@ sources: list[ExampleSource] = [
     ),
     ExampleSource(
         github_url="https://github.com/algorand-devrel/beaker",
-        git_branch="master",
+        git_branch="examples",
         local_dir="../../beaker",
         example_dir="examples",
         language_name="python",

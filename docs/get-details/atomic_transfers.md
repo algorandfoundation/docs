@@ -66,7 +66,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 	  suggestedParams,
 	});
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L12-L31)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L12-L31)
     <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Python"
@@ -79,7 +79,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 	txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L16-L22)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L16-L22)
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Java"
@@ -96,7 +96,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 	Transaction ptxn2 = Transaction.PaymentTransactionBuilder().sender(acct2.getAddress())
 	        .amount(2000000).receiver(acct1.getAddress()).suggestedParams(rsp.body()).build();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L26-L36)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L26-L36)
     <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Go"
@@ -118,7 +118,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 		log.Fatalf("failed creating transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L23-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L23-L38)
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "goal"
@@ -145,7 +145,7 @@ The result of this step is what ultimately guarantees that a particular transact
 	// assignGroupID returns the same txns with the group ID set
 	const txnGroup = algosdk.assignGroupID(txnArray);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L34-L37)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L34-L37)
     <!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Python"
@@ -163,7 +163,7 @@ The result of this step is what ultimately guarantees that a particular transact
 	txn_2.group = gid
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L25-L36)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L25-L36)
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
@@ -178,7 +178,7 @@ The result of this step is what ultimately guarantees that a particular transact
 	ptxn1.group = gid;
 	ptxn2.group = gid;
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L39-L47)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L39-L47)
     <!-- ===JAVASDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Go"
@@ -189,7 +189,7 @@ The result of this step is what ultimately guarantees that a particular transact
 	tx1.Group = gid
 	tx2.Group = gid
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L41-L45)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L41-L45)
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
@@ -226,7 +226,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 	const alicesSignedTxn = txnGroup[0].signTxn(alice.privateKey);
 	const bobsSignedTxn = txnGroup[1].signTxn(bob.privateKey);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L40-L42)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L40-L42)
     <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Python"
@@ -238,7 +238,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 	stxn_2 = txn_2.sign(sk2)
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L39-L44)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L39-L44)
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
@@ -246,7 +246,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 	```java
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L48-L49)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L48-L49)
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Go"
@@ -262,7 +262,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 		fmt.Printf("Failed to sign transaction: %s\n", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L48-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L48-L57)
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "goal"
@@ -288,7 +288,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	```javascript
 	const signedTxns = [alicesSignedTxn, bobsSignedTxn];
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L45-L46)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L45-L46)
     <!-- ===JSSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Python"
@@ -299,7 +299,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	signed_group = [stxn_1, stxn_2]
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L47-L51)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L47-L51)
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
@@ -308,7 +308,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	// combine the signed transactions into a single list
 	SignedTransaction[] stxns = new SignedTransaction[] { signedPtxn1, signedPtxn2 };
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L56-L58)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L56-L58)
     <!-- ===JAVASDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Go"
@@ -319,7 +319,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	signedGroup = append(signedGroup, stx2...)
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L60-L64)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L60-L64)
     <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "goal"
@@ -339,7 +339,7 @@ The transaction group is now broadcast to the network.
 	await client.sendRawTransaction(signedTxns).do();
 	await algosdk.waitForConfirmation(client, alicesTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L49-L51)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L49-L51)
     <!-- ===JSSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Python"
@@ -356,7 +356,7 @@ The transaction group is now broadcast to the network.
 	print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atomic_transfers.py#L54-L64)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L54-L64)
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"
@@ -374,7 +374,7 @@ The transaction group is now broadcast to the network.
 	PendingTransactionResponse txResult = Utils.waitForConfirmation(algodClient, txid, 4);
 	System.out.printf("Transaction %s confirmed in round %d\n", txid, txResult.confirmedRound);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L61-L72)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L61-L72)
     <!-- ===JAVASDK_ATOMIC_GROUP_SEND=== -->
 
 === "Go"
@@ -392,7 +392,7 @@ The transaction group is now broadcast to the network.
 	}
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atomic_transfer.go#L67-L78)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L67-L78)
     <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
 
 === "goal"

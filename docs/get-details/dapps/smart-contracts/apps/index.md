@@ -928,7 +928,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	    boxes=[[app_id, b"key"]],
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L92-L102)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L92-L102)
     <!-- ===PYSDK_ATC_BOX_REF=== -->
 
 === "JavaScript"
@@ -968,7 +968,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	  .do();
 	console.log('Name:', Buffer.from(boxVal.value).toString());
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L170-L203)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L170-L203)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"
@@ -991,7 +991,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	}
 	// ...
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L93-L109)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L93-L109)
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 
 === "Java"
@@ -1014,7 +1014,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	                .boxReferences(boxRefs)
 	                .build();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 
 === "Beaker"

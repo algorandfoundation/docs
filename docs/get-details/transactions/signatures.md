@@ -142,7 +142,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L23-L36)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L36)
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 	```javascript
@@ -170,7 +170,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	await client.sendRawTransaction(msigWithSecondSig).do();
 	await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L49-L72)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L49-L72)
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 
 === "Python"
@@ -186,7 +186,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	)
 	print("Multisig Address: ", msig.address())
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L25-L34)
     <!-- ===PYSDK_MULTISIG_CREATE=== -->
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 	```python
@@ -202,7 +202,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	    f"Payment made from msig account confirmed in round {result['confirmed-round']}"
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L46-L57)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L46-L57)
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 
 === "Java"
@@ -220,7 +220,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
 	System.out.printf("msig address: %s\n", msig.toAddress().toString());
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 	```java
@@ -238,7 +238,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	Response<PostTransactionsResponse> msigSubResponse = algodClient.RawTransaction()
 	                .rawtxn(Encoder.encodeToMsgPack(signedMsigPayTxn)).execute();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L42-L55)
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 
 === "Go"
@@ -263,7 +263,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	// Print multisig account
 	fmt.Printf("Multisig address : %s \n", fromAddr)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L175-L193)
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
     <!-- ===GOSDK_MULTISIG_SIGN=== -->
     ```go

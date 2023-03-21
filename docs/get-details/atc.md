@@ -18,7 +18,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	```javascript
 	const createATC = new algosdk.AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L127-L128)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L127-L128)
     <!-- ===JSSDK_ATC_CREATE=== -->
 
 === "Python"
@@ -32,7 +32,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	
 	atc = AtomicTransactionComposer()
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L5-L12)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L5-L12)
     <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
@@ -41,7 +41,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	// Create the atc we'll use to compose our transaction group
 	var atc = transaction.AtomicTransactionComposer{}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L38-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L38-L40)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -49,7 +49,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	```java
 	AtomicTransactionComposer atc = new AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
@@ -78,7 +78,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	# Pass TransactionWithSigner to ATC
 	atc.add_transaction(tws)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L22-L38)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L22-L38)
     <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
@@ -105,7 +105,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	  .do();
 	const contractAppID = txInfo['application-index'];
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L131-L151)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L131-L151)
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
@@ -126,7 +126,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
 	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L43-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L43-L57)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -143,7 +143,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	// Pass TransactionWithSigner to atc
 	atc.addTransaction(tws);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
@@ -164,7 +164,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	    js = f.read()
 	contract = abi.Contract.from_json(js)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L41-L44)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L41-L44)
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 	```python
@@ -195,7 +195,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	    method_args=[10000, txn, 1000],
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L51-L77)
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===PYSDK_ATC_RESULTS=== -->
 	```python
@@ -206,7 +206,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	for res in result.abi_results:
 	    print(res.return_value)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L81-L87)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L81-L87)
     <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
@@ -220,7 +220,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	);
 	const contract = new algosdk.ABIContract(abi);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L108-L115)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L108-L115)
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
 	```javascript
@@ -238,7 +238,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	const methodResult = await methodATC.execute(client, 3);
 	console.log('Result:', methodResult.methodResults[0].returnValue);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L154-L167)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L154-L167)
     <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:
@@ -265,7 +265,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to unmarshal contract: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L26-L35)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L26-L35)
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
 	```go
@@ -289,7 +289,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to add method call: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L60-L79)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L60-L79)
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===GOSDK_ATC_RESULTS=== -->
 	```go
@@ -302,7 +302,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L82-L90)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L82-L90)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"
@@ -313,7 +313,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	// Create Contract from Json
 	Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== -->
 	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
 	```java
@@ -331,7 +331,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	
 	atc.addMethodCall(mcp);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
 	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JAVASDK_ATC_RESULTS=== -->
 	```java
@@ -342,5 +342,5 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	                        methodResult.value);
 	});
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
     <!-- ===JAVASDK_ATC_RESULTS=== -->

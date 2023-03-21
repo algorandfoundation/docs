@@ -362,7 +362,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L61-L95)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L61-L95)
 	<!-- ===PYSDK_ACCOUNT_REKEY=== -->
 
 === "JavaScript"
@@ -445,7 +445,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L82-L158)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L82-L158)
 	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 
 
@@ -472,7 +472,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	                .rawtxn(Encoder.encodeToMsgPack(signedRekeyBack)).execute();
 	ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
 	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
 === "Go"
@@ -512,5 +512,5 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID, result.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L48-L81)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L48-L81)
 	<!-- ===GOSDK_ACCOUNT_REKEY=== -->

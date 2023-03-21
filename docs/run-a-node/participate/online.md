@@ -40,7 +40,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 	)
 	print(online_keyreg.dictify())
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L6-L26)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/participation.py#L6-L26)
     <!-- ===PYSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Java"
@@ -68,7 +68,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 	        .build();
 	// ... sign and send to network
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L13-L34)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L13-L34)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Go"
@@ -95,7 +95,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 		nonpart,
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/participation.go#L40-L60)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/participation.go#L40-L60)
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"
