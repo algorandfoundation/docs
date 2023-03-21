@@ -26,7 +26,6 @@ This will install a Sandbox node connected to the Algorand TestNet. To read more
 .
 
 # Install SDK For Runtime
-
 Algorand provides an SDK for Java. The instructions for installing the SDK are as follows. The Java SDK is available in the MVN repository and can be used in your Maven project by including the following dependency.
 
 Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}.
@@ -48,11 +47,7 @@ See the [Java SDK reference documentation](https://algorand.github.io/java-algor
 
 The SDK is installed and can now interact with the Sandbox created earlier.
 
-!!! Info
-    Web based solutions require the AlgoSigner Chrome plugin or other web-based private key management software. For more information see [community wallets](../../../../ecosystem-projects/#wallets){:target="_blank"}.
-
 # Create an Account on Algorand
-
 In order to interact with the Algorand blockchain, you must have a funded account. To quickly create a test account use the following code.
 
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
@@ -70,8 +65,6 @@ System.out.println("Passphrase: " + acct.toMnemonic());
     Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](../../../../ecosystem-projects/#wallets){:target="_blank"}. For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/){:target="_blank"}, click [here](https://github.com/algorand/algorand-wallet){:target="_blank"}.
 
 # Fund the Account
-
-
 The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}.
 
 
@@ -84,7 +77,6 @@ Client must be instantiated prior to making calls to the API endpoints. You must
 
 
 # Build First Transaction
-
 Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code, which also includes some utility functions, `connectToNetwork` ,  and `PrintBalance`. Add this code to the GettingStarted class above.
 
 <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
@@ -140,7 +132,6 @@ Transaction ptxn = Transaction.PaymentTransactionBuilder()
     Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/index.md#transaction-types){target=_blank}. 
 
 # Sign First Transaction
-
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_SIGN=== -->
@@ -154,7 +145,6 @@ SignedTransaction sptxn = acct.signTransaction(ptxn);
     Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](../../get-details/transactions/signatures){:target="_blank"}.
 
 # Submit the Transaction
-
 The signed transaction can now be submitted to the network. The SDK `waitForConfirmation` utility function is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
 
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_SUBMIT=== -->
@@ -184,14 +174,6 @@ The complete example below illustrates how to quickly submit your first transact
     In order for this transaction to be successful, the account must be funded. 
 
 # Viewing the Transaction
-
 To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
 
-# Setting Up Your Editor/Framework
-
-The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
-
-- [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-java/)
-- [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
-- [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/)
   

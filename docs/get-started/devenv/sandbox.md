@@ -54,4 +54,4 @@ Now you have a private network with transactions being created, you're going to 
 
 https://explorer.dappflow.org/
 
-![Dappflow Explorer](/imgs/dappflow.png "Dappflow Explorer")
+![Dappflow Explorer](/imgs/dappflow.png)

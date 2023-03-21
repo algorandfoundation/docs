@@ -12,14 +12,13 @@ With Algorand Standard Assets you can represent stablecoins, loyalty points, sys
 
 This section begins with an [overview](#assets-overview) of the asset implementation on Algorand including a review of all [asset parameters](#asset-parameters). This is followed by [how-tos](#asset-functions) in the SDKs and `goal` for all on-chain asset functions.
 
-!!! info
-    Example code snippets are provided throughout this page. Full running code examples for each SDK are available within the GitHub repo at [/examples/assets](https://github.com/algorand/docs/tree/master/examples/assets) and for [download](https://github.com/algorand/docs/blob/master/examples/assets/assets.zip?raw=true) (.zip).
 
 # Assets overview
 
 Here are several things to be aware of before getting started with assets.
 
 - For every asset an account creates or owns, its minimum balance is increased by 0.1 Algos (100,000 microAlgos). 
+- This minimum balance requirement will be placed on the original creator as long as the the asset has not been destroyed. Transfering the asset does not alleviate the creator's minimum balance requirement.
 - Before a new asset can be transferred to a specific account the receiver must opt-in to receive the asset. This process is described below in [Receiving an asset](#receiving-an-asset). 
 - If any transaction is issued that would violate the minimum balance requirements, the transaction will fail.
 
@@ -274,6 +273,9 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
     ```
     <!-- ===GOAL_ASSET_CREATE=== -->
 
+
+!!!note
+	The Algorand Foundation [hosts many standards (ARCs)](https://arc.algorand.foundation/) associated with asset creation. Conforming to these standards allows your apps/assets to work well with existing community tools that support them.
 
 **See also**
 

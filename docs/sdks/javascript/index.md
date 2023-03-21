@@ -2,11 +2,6 @@ title: Your First Transaction
 
 This section is a quick start guide for interacting with the Algorand network using JavaScript. This guide will help to install the ***[Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}***, which provides a node for testing and development. This guide will also help to install the JavaScript SDK, create an account and submit your first transaction using different JavaScript Runtimes.
 ​
-# Alternative Guide
- 
-If you are a visual learner, try our [live demo](https://replit.com/@Algorand/Getting-Started-with-JavaScript){:target="_blank"} of submitting your first transaction or watch a [full video](https://youtu.be/WuhaGp2yrak){:target="_blank"} that explains the following steps.
-
- 
 # Sandbox Install
 !!! Prerequisites
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
@@ -25,9 +20,6 @@ cd sandbox
 
 This will install a sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](https://developer.algorand.org/docs/reference/algorand-networks/).
 ​
-
-!!! Info 
-    The Indexer allows quick searching of the entire  blockchain for transactions, assets, applications and accounts in a timely manner. To learn more about this capability, see [Searching the Blockchain](https://developer.algorand.org/docs/features/indexer/). When running Algorand Sandbox for TestNet, BetaNet or MainNet, you will not have access to the Sandbox Algorand Indexer. When running a private network with `./sandbox up`, you'll have access to the indexer configured for your private network.
  
 !!! Warning
     The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup)
@@ -101,13 +93,7 @@ The code below prompts to fund the newly created account. Before sending transac
  
 ​
 [Watch Video](https://youtu.be/WuhaGp2yrak?t=307){:target="_blank"}
-
-# Viewing the Transaction
-To view the transaction, click on the transaction link in the dispenser or copy the transaction ID and paste to the search bar on the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/) or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet).
 ​
-
-[Watch Video](https://youtu.be/WuhaGp2yrak?t=326){:target="_blank"}
-​​
 # Connect Your Client
 Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value (64 "a"s) with server address `http://localhost` and port `4001`.
  
@@ -325,14 +311,5 @@ firstTransaction();
 !!! Warning
     In order for this transaction to be successful, the generated account must be [funded](https://dispenser.testnet.aws.algodev.network/).
 ​
-
-# Setting Up Your Editor/Framework
-The Algorand community provides many editors, frameworks, and plugins that can be used to work with the Algorand Network. Tutorials have been created for configuring each of these for use with Algorand. Select your Editor preference below.
-​
-
-* [Setting Up VSCode](https://developer.algorand.org/tutorials/vs-code-javascript/)
-
-* [AlgoDEA IntelliJ Plugin](https://developer.algorand.org/articles/making-development-easier-algodea-intellij-plugin/)
-
-* [Algorand Builder Framework](https://developer.algorand.org/articles/introducing-algorand-builder/) and [Algo Builder Tutorial series](https://developer.algorand.org/tutorials/algorand-builder-tutorial-part1-creating-local-network-and-deploying-asa/)
-
+# View the Transaction
+To view the transaction, open [AlgoExplorer](https://testnet.algoexplorer.io/){target=_blank} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){target=_blank} and paste the transaction ID into the search bar.  

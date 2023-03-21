@@ -60,8 +60,10 @@ This transaction is valid on MainNet, as per the genesis hash value which corres
 
 **Related How-To**
 
-- [Create a Payment Transaction](../../archive/build-apps/hello_world). 
-
+- [Create a Payment Transaction Using Python](../../sdks/python/#build-first-transaction). 
+- [Create a Payment Transaction Using JavScript](../../sdks/javascript/#build-first-transaction). 
+- [Create a Payment Transaction Using Java](../../sdks/java/#build-first-transaction). 
+- [Create a Payment Transaction Using Go](../../sdks/go/#build-transaction). 
 ### Close an Account
 
 Closing an account means removing it from the Algorand ledger. Since there is a minimum balance requirement for every account on Algorand, the only way to completely remove it is to use the [Close Remainder To](transactions#closeremainderto) field as in the transaction below.
@@ -610,11 +612,11 @@ Calculating the round range requires you to know the **current round**, the **av
 
 ## Current Round
 
-To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](https://developer.algorand.org/ecosystem-projects/#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](../../archive/build-apps/connect#check-node-status-and-network-version).
+To retrieve the **current round** check the latest round passed for the network where you plan to submit the transaction/s. Check existing [block explorers](https://developer.algorand.org/ecosystem-projects/#block-explorers) or get this info from your node's REST endpoint or `goal`. See [Check Node Status and Version](../../clis/goal/node/status/).
 
 ## Average Block Time
 
-This refers to the number of seconds it takes, on average, for a block to be committed on the Algorand blockchain. This number is not dynamically available through the Algorand developer tools, but at the time of writing this, blocks are confirmed in less than 5 seconds on Algorand so you can use a rough estimate of 4.5 seconds if precision is not critical. It is highly recommended that you validate this number against your own analytics or check our [Community Projects](https://developer.algorand.org/ecosystem-projects/) for other projects that may provide this information since the average has shown above may be out of date at the time of reading this.
+This refers to the number of seconds it takes, on average, for a block to be committed on the Algorand blockchain. This number is not dynamically available through the Algorand developer tools, but at the time of writing this, blocks are confirmed in less than 4 seconds on Algorand so you can use a rough estimate of 3.7 seconds if precision is not critical. It is highly recommended that you validate this number against your own analytics or check our [Community Projects](https://developer.algorand.org/ecosystem-projects/) for other projects that may provide this information since the average shown above may be out of date at the time of reading this.
 
 ## Target Submission Time
 
@@ -623,94 +625,7 @@ This is the clock time at which you are targeting to send the transaction.
 ## Calculation
 Calculate the delta between the target submission time and the current time in seconds. Divide that time by the average seconds per block to get the number of blocks spanning that time period. Add that number to the current round to get the first valid round for your transaction. Add 1000 to the first valid round to get the last valid round.
 
-Keep in mind that these block times are estimations and it is not possible to be exactly precise for a given target time. Also, the longer out you project a round range, the wider the potential drift of round against clock time given natural variability in block times (i.e. 4.5 is just the average now but may vary during certain time periods).
-
-## Example Scenarios
-
-Here are three example scenarios and how the round range may be calculated for each. 
-
-??? Example "Example - Today is Jan. 31, 2020 and I want to transfer funds on Feb. 2, 2020 at 20:00 UTC."
-
-	Calculate the delta in seconds between current time (January 31, 2020 09:58 UTC) and February 2, 2020 20:00 UTC:
-	
-	```
-	  2 days + 10 hours + 2 minutes = 
-		(2 days * 24 hours/day * 3600 seconds/hour) + 
-		(10 hours * 3600 seconds/hour) + 
-		(2 minutes * 60/seconds per minute) = 208,920 seconds
-	```
-		
-	Calculate the average number of blocks produced in that time period, i.e. divide the total number of seconds by the average number of seconds it takes to produce a block. Assume for this example, that the average block time is 4.5 seconds.
-		
-	```
-	208920 seconds/4.5 seconds per block ~ 46,427 blocks
-	```
-
-	Calculate the first valid round for the transaction by addng the total number of blocks to the current block. Assume the current block (i.e. round) is round 5,000,000. Then:
-	
-	```
-	firstValidRound = 5000000 + 46427 = 5,046,427
-	```
-
-	Add 1000 rounds to get the last valid round for the transaction.
-	
-	```
-	lastValidRound = 5046427 + 1000 = 5,047,427
-	```
-
-??? Example "Example I want to transfer funds in about 24 hours, but I need the flexibility to submit up to 3 hours after that."
-
-	Given that I need some flexibility on when to submit, I create three [roughly] duplicate transactions with consecutive valid round ranges starting at roughly 24 hours from now. I will assume a max round range of 1000 which will give me between 3 and 4 hours to submit given an average block time of 4.5 secons. Assume the current time is January 31, 2020 09:58 UTC.
-
-	Convert 24 hours to seconds (to determine the delta from now to target time):
-
-  ```
-	24 hours * 60 minutes/hour * 60 seconds/minute = 86,400 seconds
-	```
-	Calculate the number of blocks produced on average during that time period:
-   
-  ```
-	86400 seconds/4.5 seconds per block: about 19,200 blocks
-	```
-
-	Determine first valid round and last valid round for first transaction. Assume current network round is 6,000,000:
-
-  ```
-	First Valid Round =  6,000,000 + 19,200 = 6,019,200
-	Last Valid Round = 6,019,200 + 1000 = 6,020,200
-	```
-
-	Calculate the first and last valid rounds for the next 2 duplicate transactions:
-
-	```
-	Duplicate transaction 1:
-	First Valid Round = 6,020,200
-	Last Valid Round = 6,020,200 + 1000 = 6,021,200
-	Duplicate transaction 2:
-	First Valid Round = 6,021,200
-	Last Valid Round = 6,021,200 + 1000 = 6,022,200
-	```
-
-
-
-??? Example "Example - I want to transfer funds daily to a predetermined account."
-
-	In this situation, I may create two transactions per day (every 12 hours) and submit one each day, with a backup in case the first one cannot be submitted for some reason. I assume a longer average block time of 4.7 seconds to make it more likely that I will have at least 2 valid transactions in one day. I schedule the first one for 12 hours from the current time. Transaction A and B below would be projected out for the number of days that this type of transaction should be in effect.
-
-	Transaction A:
-
-	```
-	12 hours * 60 minutes/hour * 60 seconds/minute = 43200 seconds
-	43200 seconds/4.7 seconds per block ~ 9191 blocks
-	First Valid Round = 6000000 + 9191 = 6009191
-	Last Valid Round = 6009191 + 1000 = 6010191
-	```
-	Transaction B:
-
-	```
-	First Valid Round = 6009191 + 9191 = 6018382
-	Last Valid Round = 6018382 + 1000 = 6019382
-	```
+Keep in mind that these block times are estimations and it is not possible to be exactly precise for a given target time. Also, the longer out you project a round range, the wider the potential drift of round against clock time given natural variability in block times (i.e. 3.7 is just the average now but may vary during certain time periods).
 
 # Fees
 
@@ -735,18 +650,19 @@ There are two primary ways to set fees on a transaction.
 
 ## Suggested Fee
 
-The SDK provides a method to get the suggested parameters from an the algod REST server, including the [**suggested fee** per byte (`fee`)](../../rest-apis/algod/v2#transactionparams) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
+The SDK provides a method to get the suggested parameters from an the algod REST server, including the [**suggested fee** per byte (`fee`)](../../rest-apis/algod/#get-v2transactionsparams) which can be used to set the total fee for a transaction. This value is multiplied by the estimated size of the transaction in bytes to determine the total transaction fee. If the result is less than the minimum fee, the minimum fee is used instead. 
 
 When using the SDK to build a transaction, if the suggested parameters are passed to one of the helper methods, the fee for the transaction will be set based on the above computation.
 
 ## Flat Fee
-You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../rest-apis/algod/v2#transactionparams), which can be obtained from the suggested parameters method call in each of the SDKs or as a constant in the SDK.  
+You can also manually set a **flat fee**. If you choose this method, make sure that your fee covers at least the [minimum transaction fee (`min-fee`)](../../rest-apis/algod/#get-v2transactionsparams), which can be obtained from the suggested parameters method call in each of the SDKs or as a constant in the SDK.  
 
 Flat fees may be useful for:
-* for applications that want to guarantee showing a specific rounded fee to users 
-* for transactions that are meant to be sent in the future where the network traffic conditions are unknown
-* for transactions that are not urgent and may be retried later if they are rejected
-* etc
+
+- Applications that want to guarantee showing a specific rounded fee to users 
+- Transactions that are meant to be sent in the future where the network traffic conditions are unknown
+- Transactions that are not urgent and may be retried later if they are rejected
+
 
 # Pooled transaction fees
 
@@ -758,10 +674,8 @@ For atomic transactions, the fees set on all transactions in the group are summe
 <center>*Atomic Pooled Fees*</center>
 
 !!! note
-    [Inner transactions](../dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested inner transactions as well.
+    [Smart Contract Inner transactions](../dapps/smart-contracts/apps/#inner-transactions) may have their fees covered by the outer transactions but they may not cover outer transaction fees. This limitation that only outer transactions may cover the inner transactions is true in the case of nested smart contract inner transactions as well (for example, if Smart Contract A is called, which then calls Smart Contract B, which then calls Smart Contract C. Then C's fee can not cover the call for B, which can not cover the call to A).
 
-!!! info
-    Full running code examples for each SDK and both API versions are available within the GitHub repo at [/examples/atomic_transfers](https://github.com/algorand/docs/tree/master/examples/atomic_transfers) and for [download](https://github.com/algorand/docs/blob/master/examples/atomic_transfers/atomic_transfers.zip?raw=true) (.zip).
 
 An example of setting a pooled fee on a group of two transactions:
 

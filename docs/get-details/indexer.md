@@ -81,14 +81,19 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 
 The indexer provides two primary ways to access information:
 
-1) [Lookup](#lookup) a single item (a single account, a single transaction, a single block)
+1) Lookup a single item (a single account, a single transaction, a single block)
+   
 2) Search for items that match a query (transactions for > 100A and between round N and M)
 
+Each SDK provides methods for looking up or searching for transactions, assets, applications(smart contracts), and blocks. For a full list of method calls see the SDK docs:
+
+-  [Python](https://py-algorand-sdk.readthedocs.io/en/latest/algosdk/v2client/indexer.html)
+-  [JavaScript](https://algorand.github.io/js-algorand-sdk/classes/Indexer.html)
+-  [Java](https://algorand.github.io/java-algorand-sdk/com/algorand/algosdk/v2/client/indexer/package-summary.html) 
+-  [Go](https://pkg.go.dev/github.com/algorand/go-algorand-sdk/v2@v2.0.0/client/v2/indexer)
+
 # Lookup
-
-When performing a lookup of a single item ...
-
-To get the details of a specific asset the indexer provides the `/assets/{asset-id}` REST call.  This call takes no parameters as the asset id is passed in the URL. This call returns the details of the asset and the round the results were calculated in. 
+As an example, to get the details of a specific asset the indexer provides the `/assets/{asset-id}` REST call.  This call takes no parameters as the asset id is passed in the URL. This call returns the details of the asset and the round the results were calculated in. 
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
@@ -153,8 +158,7 @@ To get the details of a specific asset the indexer provides the `/assets/{asset-
 
 
 # Search
-
-... show search with chained filters
+Searching is similar to lookup with the ability to return multiple or filtered results. This example searches for transctions based on a few filters. 
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->

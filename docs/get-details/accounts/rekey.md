@@ -10,6 +10,16 @@ Rekeying is a powerful protocol feature which enables an Algorand account holder
 !!! warning
     Using the `--close-to` parameter on any transaction from a _rekeyed account_ will remove the **auth-addr** field, thus reverting signing authority to the original address. The `--close-to` parameter should be used with caution by keyholder(s) of **auth-addr** as the effects remove their authority to access this account thereafter.
 
+!!! warning
+	Rekeying an account affects the **authorizing address** for that account only. Note that an Account is distinct from an address so there are several important points that may not be obvious:
+
+	**1)** If an account is closed (balance to 0) the rekey setting is lost (see previous warning).
+
+  	**2)** Rekeys are not recursively resolved, that is, if A is rekeyed to B and B rekeyed to C, A will have it's transactions authorized by B not C.
+	
+  	**3)** Rekeying members of a Multisig has no effect on the Multisig authorization since it's composed of Addresses not accounts. If necessary the Multisig account would need to be rekeyed itself.
+	
+
 ### Account Review
 
 The [account overview](../#keys-and-addresses) page introduces _keys_, _addresses_ and _accounts_. During initial account generation, a public key and corresponding private spending key are created and used to derive the Algorand address. This public address is commonly displayed within wallet software and remains static for each account. When you receive Algos or other assets, they will be sent to your public Algorand address. When you send from your account, the transaction must be authorized using the appropriate private spending key(s).  
@@ -312,8 +322,7 @@ Use the established pattern:
 This transaction will succeed as _private spending key_ for `$ADDR_C` provided the authorization and meets the threshold requirement for the MultiSig account.
 
 ## SDK Example:
-In part 1, rekey from Account 3 to allow to sign from Account 1. Then in part 2, send from account 3 to account 2 and sign from Account 1.
-
+In the following example Account 1 is rekeyed to Account 2. The code then illustrates that signing a transaction from Account 1 will fail if signed with Account 1's private key and succeed if signed with Account 2's private key.
 
 === "Python"
 	<!-- ===PYSDK_ACCOUNT_REKEY=== -->

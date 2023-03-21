@@ -3,12 +3,8 @@ title: Interact with smart signatures
 This guide covers using smart signatures with the Algorand SDKs. Smart signatures are also referred to as stateless smart contracts. Smart signatures can be used to create contract accounts or to handle account delegation which is described in the [Modes](../smartsigs/modes.md) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
 
 
-!!! info
-    The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
-
-
 # Compiling TEAL program from SDKs
-Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section read a file called `sample.teal` which contains one line of TEAL code, `int 0` . This will always return `false`. So, any transactions that use this TEAL file will fail. 
+Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section use a simple contract which contains one line of TEAL code, `int 1` . This will always return an approval for the transaction. So, any transactions that use this TEAL file will succeed. Never use this TEAL in a production application as it approves all transactions. 
 
 
 To use the SDK compile command, the [config settings](../../../../run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](../../../../run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
@@ -112,11 +108,8 @@ The binary bytes are used in the SDKs as shown below. If using the `goal` comman
 
 
 ``` bash
-//simple.teal contains int 0
 //hexdump 
 $ hexdump -C simple.teal.tok
-00000000  01 20 01 00 22                                    |. .."|
-00000005
 //base64 format
 $ cat simple.teal.tok | base64
 ASABACI=
@@ -237,18 +230,7 @@ Contract Accounts are created by compiling the TEAL logic within the smart signa
 <center>![Transaction From Contract Account](../../../../imgs/asc1_sdk_usage-1.png)</center>
 <center>*Transaction From Contract Account*</center>
 
-The following example illustrates compiling a TEAL program with one argument and signing a transaction with a created logic signature. The example TEAL program `samplearg.teal` takes one argument. 
-
-
-`samplearg.teal`
-```
-// This code is meant for learning purposes only
-// It should not be used in production
-arg_0
-btoi
-int 123
-==
-```
+The following example illustrates compiling a TEAL program and signing a transaction with a created logic signature. 
 
 === "JavaScript"
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
@@ -509,8 +491,3 @@ The following example illustrates signing a transaction with a created logic sig
 	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L99-L128)
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
 
-!!! Note
-    The samplearg.teal file will compile to the address UVBYHRZIHUNUELDO6HWUAHOZF6G66W6T3JOXIIUSV3LDSBWVCFZ6LM6NCA, please fund this address with at least 11000 microALGO else executing the sample code as written will result in an overspend response from the network node.
-
-!!! info
-    The example code snippets are provided throughout this page and are abbreviated for conciseness and clarity. Full running code examples for each SDK are available within the GitHub repo at [/examples/smart_contracts](https://github.com/algorand/docs/tree/master/examples/smart_contracts) and for [download](https://github.com/algorand/docs/blob/master/examples/smart_contracts/smart_contracts.zip?raw=true) (.zip).
