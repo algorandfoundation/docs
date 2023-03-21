@@ -62,7 +62,7 @@ This transaction is valid on MainNet, as per the genesis hash value which corres
 
 - [Create a Payment Transaction Using Python](../../sdks/python/#build-first-transaction). 
 - [Create a Payment Transaction Using JavScript](../../sdks/javascript/#build-first-transaction). 
-- [Create a Payment Transaction Using Java](../../sdks/java/#build-first-transaction_1). 
+- [Create a Payment Transaction Using Java](../../sdks/java/#build-first-transaction). 
 - [Create a Payment Transaction Using Go](../../sdks/go/#build-transaction). 
 ### Close an Account
 

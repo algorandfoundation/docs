@@ -85,7 +85,12 @@ The indexer provides two primary ways to access information:
    
 2) Search for items that match a query (transactions for > 100A and between round N and M)
 
-Each SDK provides methods for looking up or searching for transactions, assets, applications(smart contracts), and blocks. For a full list of method calls see the SDK docs ([Python](https://py-algorand-sdk.readthedocs.io/en/latest/algosdk/v2client/indexer.html), [JavaScript](https://algorand.github.io/js-algorand-sdk/classes/Indexer.html),[Java](https://algorand.github.io/java-algorand-sdk/com/algorand/algosdk/v2/client/indexer/package-summary.html), [Go](https://pkg.go.dev/github.com/algorand/go-algorand-sdk/v2@v2.0.0/client/v2/indexer))
+Each SDK provides methods for looking up or searching for transactions, assets, applications(smart contracts), and blocks. For a full list of method calls see the SDK docs:
+
+-  [Python](https://py-algorand-sdk.readthedocs.io/en/latest/algosdk/v2client/indexer.html)
+-  [JavaScript](https://algorand.github.io/js-algorand-sdk/classes/Indexer.html)
+-  [Java](https://algorand.github.io/java-algorand-sdk/com/algorand/algosdk/v2/client/indexer/package-summary.html) 
+-  [Go](https://pkg.go.dev/github.com/algorand/go-algorand-sdk/v2@v2.0.0/client/v2/indexer)
 
 # Lookup
 As an example, to get the details of a specific asset the indexer provides the `/assets/{asset-id}` REST call.  This call takes no parameters as the asset id is passed in the URL. This call returns the details of the asset and the round the results were calculated in. 

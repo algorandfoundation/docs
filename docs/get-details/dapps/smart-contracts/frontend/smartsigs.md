@@ -4,7 +4,7 @@ This guide covers using smart signatures with the Algorand SDKs. Smart signature
 
 
 # Compiling TEAL program from SDKs
-Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section use simple contract which contains one line of TEAL code, `int 1` . This will always return `true`. So, any transactions that use this TEAL file will succeed. Never use this TEAL in a production application as it approves all transactions. 
+Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section use a simple contract which contains one line of TEAL code, `int 1` . This will always return an approval for the transaction. So, any transactions that use this TEAL file will succeed. Never use this TEAL in a production application as it approves all transactions. 
 
 
 To use the SDK compile command, the [config settings](../../../../run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](../../../../run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
