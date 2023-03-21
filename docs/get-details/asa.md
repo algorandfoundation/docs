@@ -90,24 +90,20 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 === "JavaScript"
     <!-- ===JSSDK_ASSET_CREATE=== -->
 	```javascript
-	const creator = accounts[0];
-	
 	const suggestedParams = await algodClient.getTransactionParams().do();
-	
 	const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({
 	  from: creator.addr,
 	  suggestedParams,
 	  defaultFrozen: false,
-	  decimals: 0,
-	  total: 1,
-	  unitName: 'LATINUM',
-	  assetName: 'latinum',
-	  assetURL: 'http://someurl', // can be HTTP or IPFS
-	  assetMetadataHash: '16efaa3924a6fd9d3a4824799a4ac65d',
+	  unitName: 'rug',
+	  assetName: 'Really Useful Gift',
 	  manager: creator.addr,
 	  reserve: creator.addr,
 	  freeze: creator.addr,
 	  clawback: creator.addr,
+	  assetURL: 'http://path/to/my/asset/details',
+	  total: 1000,
+	  decimals: 0,
 	});
 	
 	const signedTxn = txn.signTxn(creator.privateKey);
@@ -119,14 +115,9 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	);
 	
 	const assetIndex = result['asset-index'];
-	
-	console.log(
-	  `Created asset ${assetIndex} in transaction ${txn
-	    .txID()
-	    .toString()} confirmed in round ${result['confirmed-round']}`
-	);
+	console.log(`Asset ID created: ${assetIndex}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L17-L52)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L17-L43)
     <!-- ===JSSDK_ASSET_CREATE=== -->
 
 === "Python"
@@ -163,7 +154,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	created_asset = results["asset-index"]
 	print(f"Asset ID created: {created_asset}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L13-L43)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L13-L43)
     <!-- ===PYSDK_ASSET_CREATE=== -->
 
 === "Java"
@@ -200,7 +191,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	System.out.printf("Created asset with id: %d\n", asaId);
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L48-L78)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L48-L78)
     <!-- ===JAVASDK_ASSET_CREATE=== -->
 
 === "Go"
@@ -263,7 +254,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	log.Printf("Create Transaction: %s confirmed in Round %d with new asset id: %d\n",
 		txid, confirmedTxn.ConfirmedRound, confirmedTxn.AssetIndex)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L41-L97)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L41-L97)
     <!-- ===GOSDK_ASSET_CREATE=== -->
 
 === "goal"
@@ -306,14 +297,14 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	
 	const signedConfigTxn = configTxn.signTxn(creator.privateKey);
 	await algodClient.sendRawTransaction(signedConfigTxn).do();
-	await algosdk.waitForConfirmation(algodClient, txn.txID().toString(), 3);
-	
-	await new Promise((f) => setTimeout(f, 1000)); // sleep to ensure indexer is caught up
-	
-	const configAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
-	console.log('Asset Info:', configAssetInfo);
+	const configResult = await algosdk.waitForConfirmation(
+	  algodClient,
+	  txn.txID().toString(),
+	  3
+	);
+	console.log(`Result confirmed in round: ${configResult['confirmed-round']}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L74-L95)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L60-L81)
     <!-- ===JSSDK_ASSET_CONFIG=== -->
 
 === "Python"
@@ -340,7 +331,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	results = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"Result confirmed in round: {results['confirmed-round']}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L46-L66)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L46-L66)
     <!-- ===PYSDK_ASSET_CONFIG=== -->
 
 === "Java"
@@ -360,7 +351,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L84-L97)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L84-L97)
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
@@ -407,7 +398,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	
 	log.Printf("Asset Config Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L103-L143)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L103-L143)
     <!-- ===GOSDK_ASSET_CONFIG=== -->
 
 === "goal"
@@ -432,7 +423,6 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 === "JavaScript"
     <!-- ===JSSDK_ASSET_OPTIN=== -->
 	```javascript
-	const receiver = accounts[2];
 	
 	// opt-in is simply a 0 amount transfer of the asset to oneself
 	const optInTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
@@ -447,7 +437,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	await algodClient.sendRawTransaction(signedOptInTxn).do();
 	await algosdk.waitForConfirmation(algodClient, optInTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L99-L113)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L85-L98)
     <!-- ===JSSDK_ASSET_OPTIN=== -->
 
 === "Python"
@@ -476,7 +466,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	assert matching_asset["amount"] == 0
 	assert matching_asset["is-frozen"] is False
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L79-L101)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L79-L101)
     <!-- ===PYSDK_ASSET_OPTIN=== -->
 
 === "Java"
@@ -492,7 +482,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L104-L113)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L104-L113)
     <!-- ===JAVASDK_ASSET_OPTIN=== -->
 
 === "Go"
@@ -529,7 +519,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	
 	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L148-L178)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L148-L178)
     <!-- ===GOSDK_ASSET_OPTIN=== -->
 
 === "goal"
@@ -564,7 +554,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	await algodClient.sendRawTransaction(signedXferTxn).do();
 	await algosdk.waitForConfirmation(algodClient, xferTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L117-L128)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L101-L112)
     <!-- ===JSSDK_ASSET_XFER=== -->
 
 === "Python"
@@ -594,7 +584,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	].pop()
 	assert matching_asset["amount"] == 1
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L105-L128)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L105-L128)
     <!-- ===PYSDK_ASSET_XFER=== -->
 
 === "Java"
@@ -612,7 +602,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L121-L132)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L121-L132)
     <!-- ===JAVASDK_ASSET_XFER=== -->
 
 === "Go"
@@ -652,7 +642,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	
 	log.Printf("Asset Transfer Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L183-L216)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L183-L216)
     <!-- ===GOSDK_ASSET_XFER=== -->
 
 === "goal"
@@ -695,7 +685,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L132-L149)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L115-L132)
     <!-- ===JSSDK_ASSET_FREEZE=== -->
 
 === "Python"
@@ -725,7 +715,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	].pop()
 	assert matching_asset["is-frozen"] is True
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L131-L154)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L131-L154)
     <!-- ===PYSDK_ASSET_FREEZE=== -->
 
 === "Java"
@@ -744,7 +734,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L140-L152)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L140-L152)
     <!-- ===JAVASDK_ASSET_FREEZE=== -->
 
 === "Go"
@@ -786,7 +776,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	
 	log.Printf("Freeze Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L221-L256)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L221-L256)
     <!-- ===GOSDK_ASSET_FREEZE=== -->
 
 === "goal"
@@ -829,7 +819,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L153-L172)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L135-L154)
     <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 
 === "Python"
@@ -861,7 +851,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	assert matching_asset["amount"] == 0
 	assert matching_asset["is-frozen"] is True
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L157-L182)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L157-L182)
     <!-- ===PYSDK_ASSET_CLAWBACK=== -->
 
 === "Java"
@@ -881,7 +871,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L160-L173)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L160-L173)
     <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 
 === "Go"
@@ -923,7 +913,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	
 	log.Printf("Clawback Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L261-L296)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L261-L296)
     <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 
 === "goal"
@@ -960,7 +950,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L176-L189)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L157-L170)
     <!-- ===JSSDK_ASSET_DELETE=== -->
 
 === "Python"
@@ -986,7 +976,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	except Exception as e:
 	    print("Expected Error:", e)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L185-L204)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L185-L204)
     <!-- ===PYSDK_ASSET_DELETE=== -->
 
 === "Java"
@@ -1006,7 +996,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L180-L193)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L180-L193)
     <!-- ===JAVASDK_ASSET_DELETE=== -->
 
 === "Go"
@@ -1047,7 +1037,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	
 	log.Printf("Destroy Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L301-L335)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L301-L335)
     <!-- ===GOSDK_ASSET_DELETE=== -->
 
 === "goal"
@@ -1071,14 +1061,11 @@ Retrieve an asset's configuration information from the network using the SDKs or
 === "JavaScript"
     <!-- ===JSSDK_ASSET_INFO=== -->
 	```javascript
-	const accountInfo = await algodClient.accountInformation(creator.addr).do();
-	console.log('Account Info:', accountInfo);
-	
-	const mostRecentAsset = accountInfo['created-assets'].at(-1).index;
-	const assetInfo = await algodClient.getAssetByID(mostRecentAsset).do();
-	console.log('Asset Info:', assetInfo);
+	const assetInfo = await algodClient.getAssetByID(assetIndex).do();
+	console.log(`Asset Name: ${assetInfo.params.name}`);
+	console.log(`Asset Params: ${assetInfo.params}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L56-L62)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L46-L49)
     <!-- ===JSSDK_ASSET_INFO=== -->
 
 === "Python"
@@ -1090,7 +1077,7 @@ Retrieve an asset's configuration information from the network using the SDKs or
 	print(f"Asset Name: {asset_params['name']}")
 	print(f"Asset params: {list(asset_params.keys())}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/asa.py#L70-L75)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L70-L75)
     <!-- ===PYSDK_ASSET_INFO=== -->
 
 === "Java"
@@ -1101,7 +1088,7 @@ Retrieve an asset's configuration information from the network using the SDKs or
 	Asset assetInfo = assetResp.body();
 	System.out.printf("Asset Name: %s\n", assetInfo.params.name);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L39-L43)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L39-L43)
     <!-- ===JAVASDK_ASSET_INFO=== -->
 
 === "Go"
@@ -1113,7 +1100,7 @@ Retrieve an asset's configuration information from the network using the SDKs or
 	}
 	log.Printf("Asset info for %d: %+v", assetID, info)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/asa.go#L24-L29)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L24-L29)
     <!-- ===GOSDK_ASSET_INFO=== -->
 
 === "goal"

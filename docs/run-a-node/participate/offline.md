@@ -27,11 +27,25 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
 	)
 	print(online_keyreg.dictify())
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/participation.py#L29-L43)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/participation.py#L29-L43)
     <!-- ===PYSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
+	```javascript
+	// get suggested parameters
+	const suggestedParams = await algodClient.getTransactionParams().do();
+	// create keyreg transaction to take this account offline
+	const offlineKeyReg = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject(
+	  {
+	    from: 'EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4',
+	    suggestedParams,
+	    nonParticipation: true,
+	  }
+	);
+	console.log(offlineKeyReg.get_obj_for_encoding());
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L35-L46)
     <!-- ===JSSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "Go"
@@ -46,7 +60,7 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
 	        .sender(address)
 	        .build();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Participation.java#L37-L41)
     <!-- ===JAVASDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "goal"

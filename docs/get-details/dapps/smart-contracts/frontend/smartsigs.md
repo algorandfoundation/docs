@@ -53,7 +53,7 @@ int 1
 	console.log('B64: ', result.result);
 	const b64program = result.result;
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L15-L22)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/lsig.ts#L15-L22)
     <!-- ===JSSDK_LSIG_COMPILE=== -->
 
 === "Python"
@@ -66,7 +66,7 @@ int 1
 	print("Response Result = ", response["result"])
 	print("Response Hash = ", response["hash"])
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L12-L18)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/lsig.py#L12-L18)
     <!-- ===PYSDK_LSIG_COMPILE=== -->
 
 === "Java"
@@ -78,7 +78,7 @@ int 1
 	System.out.printf("Address: %s\n", compileResp.body().hash);
 	byte[] tealBinary = Encoder.decodeFromBase64(compileResp.body().result);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L98-L103)
     <!-- ===JAVASDK_LSIG_COMPILE=== -->
 
 === "Go"
@@ -99,7 +99,7 @@ int 1
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L23-L37)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L23-L37)
     <!-- ===GOSDK_LSIG_COMPILE=== -->
 
 Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
@@ -124,7 +124,7 @@ The response result from the TEAL `compile` command above is used to create the 
 	  new Uint8Array(Buffer.from(b64program, 'base64'))
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L25-L28)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/lsig.ts#L25-L28)
     <!-- ===JSSDK_LSIG_INIT=== -->
 
 === "Python"
@@ -133,7 +133,7 @@ The response result from the TEAL `compile` command above is used to create the 
 	program = base64.b64decode(compiled_program)
 	lsig = transaction.LogicSigAccount(program)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L25-L27)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/lsig.py#L25-L27)
     <!-- ===PYSDK_LSIG_INIT=== -->
 
 === "Java"
@@ -141,7 +141,7 @@ The response result from the TEAL `compile` command above is used to create the 
 	```java
 	LogicSigAccount lsig = new LogicSigAccount(tealBinary, null);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L31-L32)
     <!-- ===JAVASDK_LSIG_INIT=== -->
 
 === "Go"
@@ -151,7 +151,7 @@ The response result from the TEAL `compile` command above is used to create the 
 		Lsig: types.LogicSig{Logic: lsigBinary, Args: nil},
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L40-L43)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L40-L43)
     <!-- ===GOSDK_LSIG_INIT=== -->
 
 # Passing parameters using the SDKs
@@ -169,7 +169,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 	  args
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L31-L36)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/lsig.ts#L31-L36)
     <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
 
 === "Python"
@@ -183,7 +183,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 	arg1 = (123).to_bytes(8, "big")
 	lsig = transaction.LogicSigAccount(compiled_program, args=[arg1])
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L34-L41)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/lsig.py#L34-L41)
     <!-- ===PYSDK_LSIG_PASS_ARGS=== -->
 
 === "Java"
@@ -195,7 +195,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 	tealArgs.add(arg1);
 	LogicSigAccount lsigWithArgs = new LogicSigAccount(tealBinaryWithArgs, tealArgs);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L36-L41)
     <!-- ===JAVASDK_LSIG_PASS_ARGS=== -->
 
 === "Go"
@@ -208,7 +208,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 		Lsig: types.LogicSig{Logic: lsigBinary, Args: [][]byte{encodedArg}},
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L47-L53)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L47-L53)
     <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
 
 
@@ -250,7 +250,7 @@ The following example illustrates compiling a TEAL program and signing a transac
 	await client.sendRawTransaction(signedSmartSigTxn.blob).do();
 	await algosdk.waitForConfirmation(client, signedSmartSigTxn.txID, 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L55-L69)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/lsig.ts#L55-L69)
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
 
 === "Python"
@@ -283,7 +283,7 @@ The following example illustrates compiling a TEAL program and signing a transac
 	    )
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L66-L92)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/lsig.py#L66-L92)
     <!-- ===PYSDK_LSIG_SIGN_FULL=== -->
 
 === "Java"
@@ -307,7 +307,7 @@ The following example illustrates compiling a TEAL program and signing a transac
 	PendingTransactionResponse pTrx = Utils.waitForConfirmation(algodClient, txid, 4);
 	System.out.printf("Transaction %s confirmed in round %d\n", txid, pTrx.confirmedRound);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L54-L71)
     <!-- ===JAVASDK_LSIG_SIGN_FULL=== -->
 
 === "Go"
@@ -341,7 +341,7 @@ The following example illustrates compiling a TEAL program and signing a transac
 	}
 	log.Printf("Lsig pay confirmed in round: %d", payResult.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L69-L96)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L69-L96)
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 
 # Account delegation SDK usage
@@ -388,7 +388,7 @@ The following example illustrates signing a transaction with a created logic sig
 	await client.sendRawTransaction(signedDelegatedTxn.blob).do();
 	await algosdk.waitForConfirmation(client, signedDelegatedTxn.txID, 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L72-L92)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/lsig.ts#L72-L92)
     <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Python"
@@ -426,7 +426,7 @@ The following example illustrates signing a transaction with a created logic sig
 	    )
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/lsig.py#L103-L134)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/lsig.py#L103-L134)
     <!-- ===PYSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Java"
@@ -452,7 +452,7 @@ The following example illustrates signing a transaction with a created logic sig
 	PendingTransactionResponse delegatResponse = Utils.waitForConfirmation(algodClient, txid, 4);
 	System.out.printf("Transaction %s confirmed in round %d\n", txid, delegatResponse.confirmedRound);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/LSig.java#L74-L93)
     <!-- ===JAVASDK_LSIG_DELEGATE_FULL=== -->
 
 === "Go"
@@ -488,6 +488,5 @@ The following example illustrates signing a transaction with a created logic sig
 	
 	log.Printf("Delegated Lsig pay confirmed in round: %d", delPayResult.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/lsig.go#L99-L128)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L99-L128)
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->
-

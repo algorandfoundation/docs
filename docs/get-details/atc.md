@@ -16,9 +16,9 @@ To use the Atomic Transaction Composer, first initialize the composer:
 === "JavaScript"
     <!-- ===JSSDK_ATC_CREATE=== -->
 	```javascript
-	const createATC = new algosdk.AtomicTransactionComposer();
+	const atc = new algosdk.AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L127-L128)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L51-L52)
     <!-- ===JSSDK_ATC_CREATE=== -->
 
 === "Python"
@@ -32,7 +32,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	
 	atc = AtomicTransactionComposer()
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L5-L12)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L5-L12)
     <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
@@ -41,7 +41,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	// Create the atc we'll use to compose our transaction group
 	var atc = transaction.AtomicTransactionComposer{}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L38-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L38-L40)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -49,7 +49,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	```java
 	AtomicTransactionComposer atc = new AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
@@ -78,34 +78,24 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	# Pass TransactionWithSigner to ATC
 	atc.add_transaction(tws)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L22-L38)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L22-L38)
     <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 	```javascript
-	const createContractTxn = algosdk.makeApplicationCreateTxnFromObject({
+	// construct a transaction
+	const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
 	  from: sender.addr,
 	  suggestedParams,
-	  onComplete: algosdk.OnApplicationComplete.NoOpOC,
-	  approvalProgram: compiledContractApprovalProgram,
-	  clearProgram: compiledClearProgram,
-	  numGlobalByteSlices: 0,
-	  numGlobalInts: 0,
-	  numLocalByteSlices: 0,
-	  numLocalInts: 0,
+	  to: sender.addr,
+	  amount: 1000,
 	});
 	
-	createATC.addTransaction({ txn: createContractTxn, signer: sender.signer });
-	
-	const createContractResult = await createATC.execute(client, 3);
-	
-	const txInfo = await client
-	  .pendingTransactionInformation(createContractResult.txIDs[0])
-	  .do();
-	const contractAppID = txInfo['application-index'];
+	// add the transaction to the ATC with a signer
+	atc.addTransaction({ txn: paymentTxn, signer: sender.signer });
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L131-L151)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L62-L72)
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
@@ -126,7 +116,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
 	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L43-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L43-L57)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -143,7 +133,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	// Pass TransactionWithSigner to atc
 	atc.addTransaction(tws);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
@@ -164,7 +154,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	    js = f.read()
 	contract = abi.Contract.from_json(js)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L41-L44)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L41-L44)
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 	```python
@@ -195,28 +185,34 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	    method_args=[10000, txn, 1000],
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/atc.py#L51-L77)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L51-L77)
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
+    <!-- ===PYSDK_ATC_RESULTS=== -->
+	```python
+	# Other options:
+	# txngroup = atc.build_group()
+	# txids = atc.submit(client)
+	result = atc.execute(algod_client, 4)
+	for res in result.abi_results:
+	    print(res.return_value)
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L81-L87)
+    <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
 	```javascript
 	const abi = JSON.parse(
-	  fs.readFileSync(
-	    path.join(__dirname, '/contracts/beaker_add_artifacts/contract.json'),
-	    'utf8'
-	  )
+	  fs.readFileSync(path.join(__dirname, '/calculator/contract.json'), 'utf8')
 	);
 	const contract = new algosdk.ABIContract(abi);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L108-L115)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L55-L59)
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
 	```javascript
-	const methodATC = new algosdk.AtomicTransactionComposer();
-	
-	methodATC.addMethodCall({
-	  appID: contractAppID,
+	atc.addMethodCall({
+	  appID: appIndex,
 	  method: contract.getMethodByName('add'),
 	  methodArgs: [1, 2],
 	  sender: sender.addr,
@@ -224,24 +220,76 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	  suggestedParams,
 	});
 	
-	const methodResult = await methodATC.execute(client, 3);
-	console.log('Result:', methodResult.methodResults[0].returnValue);
+	const otherPayTxn: algosdk.TransactionWithSigner = {
+	  txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+	    from: sender.addr,
+	    suggestedParams,
+	    to: sender.addr,
+	    amount: 1000,
+	  }),
+	  signer: sender.signer,
+	};
+	
+	atc.addMethodCall({
+	  appID: appIndex,
+	  method: contract.getMethodByName('txntest'),
+	  methodArgs: [10000, otherPayTxn, 1000],
+	  sender: sender.addr,
+	  signer: sender.signer,
+	  suggestedParams,
+	});
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L75-L102)
+    <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JSSDK_ATC_RESULTS=== -->
-    ```js
-    // Other options:
-    // const txgroup = atc.buildGroup()
-    // const txids = atc.submit(client)
-
-    const result = await atc.execute(client, 2)
-    for(const idx in result.methodResults){
-        console.log(result.methodResults[idx])
-    }
-    ```
+	```javascript
+	const result = await atc.execute(client, 4);
+	for (const mr of result.methodResults) {
+	  console.log(`${mr.returnValue}`);
+	}
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L105-L109)
     <!-- ===JSSDK_ATC_RESULTS=== -->
 
 === "Go"
+    <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
+	```go
+	b, err := ioutil.ReadFile("calculator/contract.json")
+	if err != nil {
+		log.Fatalf("failed to read contract file: %s", err)
+	}
+	
+	contract := &abi.Contract{}
+	if err := json.Unmarshal(b, contract); err != nil {
+		log.Fatalf("failed to unmarshal contract: %s", err)
+	}
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L26-L35)
+    <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
+	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
+	```go
+	// Grab the method from out contract object
+	addMethod, err := contract.GetMethodByName("add")
+	if err != nil {
+		log.Fatalf("failed to get add method: %s", err)
+	}
+	
+	// Set up method call params
+	mcp := transaction.AddMethodCallParams{
+		AppID:           appID,
+		Sender:          acct1.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+		Method:          addMethod,
+		MethodArgs:      []interface{}{1, 1},
+	}
+	if err := atc.AddMethodCall(mcp); err != nil {
+		log.Fatalf("failed to add method call: %s", err)
+	}
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L60-L79)
+	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===GOSDK_ATC_RESULTS=== -->
 	```go
 	result, err := atc.Execute(algodClient, context.Background(), 4)
@@ -253,10 +301,37 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/atc.go#L82-L90)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L82-L90)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"
+    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== -->
+	```java
+	// Read the json from disk
+	String jsonContract = Files.readString(Paths.get("calculator/contract.json"));
+	// Create Contract from Json
+	Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
+    <!-- ===JAVASDK_ATC_CONTRACT_INIT=== -->
+	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
+	```java
+	// create methodCallParams by builder (or create by constructor) for add method
+	List<Object> methodArgs = new ArrayList<Object>();
+	methodArgs.add(1);
+	methodArgs.add(1);
+	
+	MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
+	
+	MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
+	                .sender(acct.getAddress())
+	                .method(contract.getMethodByName("add")).methodArguments(methodArgs)
+	                .onComplete(Transaction.OnCompletion.NoOpOC).suggestedParams(sp).build();
+	
+	atc.addMethodCall(mcp);
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
+	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JAVASDK_ATC_RESULTS=== -->
 	```java
 	ExecuteResult res = atc.execute(algodClient, 2);
@@ -266,5 +341,5 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	                        methodResult.value);
 	});
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
     <!-- ===JAVASDK_ATC_RESULTS=== -->

@@ -84,7 +84,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	with open("dryrun.msgp", "wb") as f:
 	    f.write(base64.b64decode(encoding.msgpack_encode(drr)))
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L22-L33)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/debug.py#L22-L33)
     <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "JavaScript"
@@ -112,7 +112,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	
 	console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L73-L94)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L2-L23)
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"
@@ -153,7 +153,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	
 	os.WriteFile("dryrun.msgp", msgpack.Encode(drr), 0666)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L26-L60)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/debug.go#L26-L60)
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Java"
@@ -184,7 +184,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	outfile.write(Encoder.encodeToMsgPack(drr));
 	outfile.close();
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
@@ -284,7 +284,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 	    if txn.app_call_rejected():
 	        print(txn.app_trace())
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/debug.py#L36-L46)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/debug.py#L36-L46)
     <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "JavaScript"
@@ -299,7 +299,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 	
 	console.log('Dryrun Response:', dryrunResponse);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L97-L105)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L26-L34)
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"
@@ -322,7 +322,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 		log.Printf("%+v", txn.AppCallTrace)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/debug.go#L63-L79)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/debug.go#L63-L79)
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Java"
@@ -334,7 +334,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 	System.out.println(dryrunTxnResult.appCallMessages);
 	System.out.println(Utils.appTrace(dryrunTxnResult));
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 

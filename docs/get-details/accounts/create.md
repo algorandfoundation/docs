@@ -65,7 +65,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	
 	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L8-L13)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/kmd.ts#L8-L13)
 	<!-- ===JSSDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===JSSDK_KMD_CREATE_WALLET=== -->
 	```javascript
@@ -84,7 +84,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	const walletID = wallet.wallet.id;
 	console.log('Created wallet:', walletID);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L16-L30)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/kmd.ts#L16-L30)
 	<!-- ===JSSDK_KMD_CREATE_WALLET=== -->
 	<!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
 	```javascript
@@ -97,7 +97,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	const { address } = await kmdclient.generateKey(wallethandle);
 	console.log('Created new account:', address);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L33-L41)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/kmd.ts#L33-L41)
 	<!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Python"
@@ -108,7 +108,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	
 	kmd_client = kmd.KMDClient(kmd_token=kmd_token, kmd_address=kmd_address)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L4-L8)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L4-L8)
 	<!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 	```python
@@ -121,7 +121,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	backup = wlt.get_mnemonic()
 	print(f"mnemonic for master derivation key: {backup}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L26-L34)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L26-L34)
 	<!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 	<!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 	```python
@@ -129,14 +129,14 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	address = wlt.generate_key()
 	print(f"New account: {address}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L37-L40)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L37-L40)
 	<!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Java"
 	<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 	```java
 	String kmdHost = "http://localhost:4002";
-	String kmdToken =  "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	String kmdToken =  "a".repeat(64);
 	
 	KmdClient kmdClient = new KmdClient();
 	kmdClient.setBasePath(kmdHost);
@@ -144,7 +144,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	
 	KmdApi kmd = new KmdApi(kmdClient);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L26-L34)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L26-L34)
 	<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 	```java
@@ -158,7 +158,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	APIV1Wallet wallet = result.getWallet();
 	System.out.printf("Wallet name: %s\n", wallet.getName());
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L41-L50)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L41-L50)
 	<!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 	<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 	```java
@@ -169,7 +169,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	String addr = generatedKey.getAddress();
 	System.out.printf("New account: %s\n", addr);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L77-L83)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L77-L83)
 	<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Go"
@@ -183,7 +183,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 		kmdToken,
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L22-L29)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L22-L29)
 	<!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 	```go
@@ -203,7 +203,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	exampleWalletID = createResponse.Wallet.ID
 	fmt.Printf("Created wallet '%s' with ID: %s\n", createResponse.Wallet.Name, exampleWalletID)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L37-L52)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L37-L52)
 	<!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 	<!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 	```go
@@ -223,7 +223,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	accountAddress := genResponse.Address
 	fmt.Printf("New Account: %s\n", accountAddress)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L55-L70)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L55-L70)
 	<!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "goal"
@@ -276,7 +276,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	  .address;
 	console.log('Recovered account: ', recoveredAddr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L60-L81)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/kmd.ts#L60-L81)
 	<!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
 
 === "Python"
@@ -297,7 +297,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	rec_addr = wlt.generate_key()
 	print("Recovered account:", rec_addr)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L44-L58)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L44-L58)
 	<!-- ===PYSDK_KMD_RECOVER_WALLET=== -->
 
 === "Java"
@@ -315,7 +315,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	APIV1Wallet recoveredWallet = recoverResponse.getWallet();
 	System.out.printf("Wallet name: %s\n", recoveredWallet.getName());
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L63-L74)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L63-L74)
 	<!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 
 === "Go"
@@ -367,7 +367,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	}
 	fmt.Printf("Recovered address %s\n", genResponse.Address)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L115-L160)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L115-L160)
 	<!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 
 === "goal"
@@ -396,7 +396,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	const accountMnemonic = algosdk.secretKeyToMnemonic(accountKey.private_key);
 	console.log('Account Mnemonic: ', accountMnemonic);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L44-L47)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/kmd.ts#L44-L47)
 	<!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Python"
@@ -414,7 +414,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	mn = mnemonic.from_private_key(accountkey)
 	print(f"Account mnemonic: {mn}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L61-L72)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L61-L72)
 	<!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Java"
@@ -429,7 +429,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	String mn = Mnemonic.fromKey(Arrays.copyOfRange(exportedKey, 0, 32));
 	System.out.printf("Exported mnemonic: %s\n", mn);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L86-L94)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L86-L94)
 	<!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Go"
@@ -450,7 +450,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	}
 	fmt.Printf("Account Mnemonic: %v ", mn)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L73-L87)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L73-L87)
 	<!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 
 ### Import an account
@@ -470,7 +470,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	);
 	console.log('Account successfully imported: ', importedAccount);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L50-L57)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/kmd.ts#L50-L57)
 	<!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Python"
@@ -488,7 +488,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	importedaccount = kmd_client.import_key(wallethandle, new_private_key)
 	print("Account successfully imported: ", importedaccount)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/kmd.py#L75-L86)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L75-L86)
 	<!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Java"
@@ -498,7 +498,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	String recoveredWalletHandleToken = getHandle(kmd, recoveredWallet, password);
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L95-L98)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L95-L98)
 	<!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Go"
@@ -518,7 +518,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	)
 	fmt.Println("Account Successfully Imported: ", importedAccount.Address)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L90-L103)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L90-L103)
 	<!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 
 # Standalone 
@@ -553,7 +553,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	console.log(`My address: ${generatedAccount.addr}`);
 	console.log(`My passphrase: ${passphrase}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L75-L79)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L75-L79)
 	<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 === "Python"
@@ -564,7 +564,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	print(f"private key: {private_key}")
 	print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L5-L9)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L5-L9)
 	<!-- ===PYSDK_ACCOUNT_GENERATE=== -->
 
 === "Java"
@@ -574,7 +574,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	System.out.println("Address: " + acct.getAddress());
 	System.out.println("Passphrase: " + acct.toMnemonic());
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L73-L76)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L76-L79)
 	<!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
 === "Go"
@@ -590,7 +590,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	log.Printf("Address: %s\n", account.Address)
 	log.Printf("Mnemonic: %s\n", mn)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L15-L24)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L15-L24)
 	<!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 
@@ -650,7 +650,7 @@ The following code shows how to generate a multisignature account composed of th
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L36)
 	<!-- ===JSSDK_MULTISIG_CREATE=== -->
 
 
@@ -667,7 +667,7 @@ The following code shows how to generate a multisignature account composed of th
 	)
 	print("Multisig Address: ", msig.address())
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L25-L34)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L25-L34)
 	<!-- ===PYSDK_MULTISIG_CREATE=== -->
 
 === "Java"
@@ -685,7 +685,7 @@ The following code shows how to generate a multisignature account composed of th
 	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
 	System.out.printf("msig address: %s\n", msig.toAddress().toString());
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
 	<!-- ===JAVASDK_MULTISIG_CREATE=== -->
 
 === "Go"
@@ -710,7 +710,7 @@ The following code shows how to generate a multisignature account composed of th
 	// Print multisig account
 	fmt.Printf("Multisig address : %s \n", fromAddr)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/kmd.go#L175-L193)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L175-L193)
 	<!-- ===GOSDK_MULTISIG_CREATE=== -->
 
 === "goal"
@@ -726,4 +726,3 @@ The following code shows how to generate a multisignature account composed of th
 	<!-- ===GOAL_MULTISIG_CREATE=== -->
 
 Multisignature accounts may also be referred to as multisig accounts and a multisig account composed of 3 addresses with a threshold of 2 is often referred to as a 2 out of 3 (i.e. 2/3) multisig account.
-

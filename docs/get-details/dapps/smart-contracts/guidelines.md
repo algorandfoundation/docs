@@ -49,7 +49,7 @@ There are two options:
 	
 	print(constants.MIN_TXN_FEE)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L82-L85)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L82-L85)
     <!-- ===PYSDK_CONST_MIN_FEE=== -->
 
 === "JavaScript"
@@ -57,7 +57,7 @@ There are two options:
 	```javascript
 	const minFee = algosdk.ALGORAND_MIN_TX_FEE;
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L53-L54)
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"
@@ -65,7 +65,7 @@ There are two options:
 	```java
 	System.out.printf("Min fee from const: %d\n", Account.MIN_TX_FEE_UALGOS);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L67-L68)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L70-L71)
     <!-- ===JAVASDK_CONST_MIN_FEE=== -->
     
 === "Go"
@@ -73,7 +73,7 @@ There are two options:
 	```go
 	log.Printf("Min fee const: %d", transaction.MinTxnFee)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L33-L34)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L33-L34)
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
     
 * using an algod API:
@@ -84,14 +84,15 @@ There are two options:
 	suggested_params = algod_client.suggested_params()
 	print(suggested_params.min_fee)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L77-L79)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L77-L79)
     <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_SP_MIN_FEE=== -->
-    ```js
-    // Not supported because getTransactionParams erases the information
-    ```
+	```javascript
+	// Not supported because getTransactionParams erases the information
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L63-L64)
     <!-- ===JSSDK_SP_MIN_FEE=== -->
 
 === "Java"
@@ -101,7 +102,7 @@ There are two options:
 	TransactionParametersResponse sp = tpr.body();
 	System.out.printf("Min fee from suggested params: %d\n", sp.minFee);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L50-L53)
     <!-- ===JAVASDK_SP_MIN_FEE=== -->
     
 === "Go"
@@ -112,7 +113,7 @@ There are two options:
 		log.Printf("failed to %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L26-L30)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L26-L30)
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures

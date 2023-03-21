@@ -56,21 +56,19 @@ An `algod` client connection is also required. The following connects using Sand
 	    "", algod_address, headers={"X-API-Key": algod_token}
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/overview.py#L10-L21)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L10-L21)
     <!-- ===PYSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 	```javascript
-	export function getLocalAlgodClient() {
-	  const algodToken = 'a'.repeat(64);
-	  const algodServer = 'http://localhost';
-	  const algodPort = 4001;
+	const algodToken = 'a'.repeat(64);
+	const algodServer = 'http://localhost';
+	const algodPort = 4001;
 	
-	  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
-	}
+	const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L27-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L10-L15)
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"
@@ -78,14 +76,14 @@ An `algod` client connection is also required. The following connects using Sand
 	```java
 	String algodHost = "http://localhost";
 	int algodPort = 4001;
-	String algodToken = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	String algodToken = "a".repeat(64);
 	AlgodClient algodClient = new AlgodClient(algodHost, algodPort, algodToken);
 	
 	// OR if the API provider requires a specific header key for the token
 	String tokenHeader = "X-API-Key";
 	AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken, tokenHeader);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L91-L99)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L94-L102)
     <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Go"
@@ -110,7 +108,7 @@ An `algod` client connection is also required. The following connects using Sand
 		[]*common.Header{&algodHeader},
 	)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/overview.go#L47-L65)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L47-L65)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -133,7 +131,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	local_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 	global_schema = transaction.StateSchema(num_uints=1, num_byte_slices=1)
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L11-L15)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L11-L15)
     <!-- ===PYSDK_APP_SCHEMA=== -->
 
 === "JavaScript"
@@ -145,7 +143,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	const numLocalByteSlices = 0;
 	const numLocalInts = 1;
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L33-L38)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L47-L52)
     <!-- ===JSSDK_APP_SCHEMA=== -->
 
 === "Java"
@@ -158,7 +156,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	StateSchema localSchema = new StateSchema(localInts, localBytes);
 	StateSchema globalSchema = new StateSchema(globalInts, globalBytes);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L40-L46)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L40-L46)
     <!-- ===JAVASDK_APP_SCHEMA=== -->
 
 === "Go"
@@ -176,7 +174,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	globalSchema := types.StateSchema{NumUint: globalInts, NumByteSlice: globalBytes}
 	localSchema := types.StateSchema{NumUint: localInts, NumByteSlice: localBytes}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L54-L65)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L54-L65)
     <!-- ===GOSDK_APP_SCHEMA=== -->
 
 !!! Info
@@ -201,7 +199,7 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 	with open("application/clear.teal", "r") as f:
 	    clear_program = f.read()
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L18-L24)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L18-L24)
     <!-- ===PYSDK_APP_SOURCE=== -->
 
 === "JavaScript"
@@ -209,19 +207,15 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 	```javascript
 	// define TEAL source from string or from a file
 	const approvalProgram = fs.readFileSync(
-	  path.join(__dirname, '/contracts/app_approval.teal'),
+	  path.join(__dirname, '/application/approval.teal'),
 	  'utf8'
 	);
-	const clearProgram = '#pragma version 8\nint 1\nreturn';
-	
-	// compile with helper function
-	const compiledApprovalProgram = await compileProgram(
-	  algodClient,
-	  approvalProgram
+	const clearProgram = fs.readFileSync(
+	  path.join(__dirname, '/application/clear.teal'),
+	  'utf8'
 	);
-	const compiledClearProgram = await compileProgram(algodClient, clearProgram);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L17-L30)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L17-L26)
     <!-- ===JSSDK_APP_SOURCE=== -->
 
 === "Java"
@@ -231,7 +225,7 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 	String approvalSource = Files.readString(Paths.get("application/approval.teal"));
 	String clearSource = Files.readString(Paths.get("application/clear.teal"));
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L49-L52)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L49-L52)
     <!-- ===JAVASDK_APP_SOURCE=== -->
 
 === "Go"
@@ -246,7 +240,7 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 		log.Fatalf("failed to read clear program: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L68-L76)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L68-L76)
     <!-- ===GOSDK_APP_SOURCE=== -->
 
 # Application methods
@@ -274,7 +268,7 @@ Use the creator_mnemonic to define sender:
 	addr = account.address_from_private_key(pk)
 	print(f"Address: {addr}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L12-L17)
     <!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
@@ -286,7 +280,7 @@ Use the creator_mnemonic to define sender:
 	);
 	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L13-L18)
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -299,7 +293,7 @@ Use the creator_mnemonic to define sender:
 	// Or just init the account directly from the mnemonic
 	Account acct = new Account(mn);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
@@ -317,7 +311,7 @@ Use the creator_mnemonic to define sender:
 	
 	log.Printf("%+v", recovered)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L27-L38)
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Compile the programs using the `compile` endpoint:
@@ -333,24 +327,29 @@ Compile the programs using the `compile` endpoint:
 	clear_result = algod_client.compile(clear_program)
 	clear_binary = base64.b64decode(clear_result["result"])
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L29-L36)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L29-L36)
     <!-- ===PYSDK_APP_COMPILE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_COMPILE=== -->
 	```javascript
-	export async function compileProgram(
-	  client: algosdk.Algodv2,
-	  programSource: string
-	) {
-	  const compileResponse = await client.compile(Buffer.from(programSource)).do();
-	  const compiledBytes = new Uint8Array(
-	    Buffer.from(compileResponse.result, 'base64')
-	  );
-	  return compiledBytes;
-	}
+	const approvalCompileResp = await algodClient
+	  .compile(Buffer.from(approvalProgram))
+	  .do();
+	
+	const compiledApprovalProgram = new Uint8Array(
+	  Buffer.from(approvalCompileResp.result, 'base64')
+	);
+	
+	const clearCompileResp = await algodClient
+	  .compile(Buffer.from(clearProgram))
+	  .do();
+	
+	const compiledClearProgram = new Uint8Array(
+	  Buffer.from(clearCompileResp.result, 'base64')
+	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L4-L14)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L29-L44)
     <!-- ===JSSDK_APP_COMPILE=== -->
 
 === "Java"
@@ -364,7 +363,7 @@ Compile the programs using the `compile` endpoint:
 	TEALProgram approvalProg = new TEALProgram(approvalResponse.result);
 	TEALProgram clearProg = new TEALProgram(clearResponse.result);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L55-L62)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L55-L62)
     <!-- ===JAVASDK_APP_COMPILE=== -->
 
 === "Go"
@@ -390,7 +389,7 @@ Compile the programs using the `compile` endpoint:
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L79-L98)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L79-L98)
     <!-- ===GOSDK_APP_COMPILE=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation
@@ -416,7 +415,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	app_id = result["application-index"]
 	print(f"Created app with id: {app_id}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L39-L56)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L39-L56)
     <!-- ===PYSDK_APP_CREATE=== -->
 
 === "JavaScript"
@@ -434,6 +433,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  onComplete: algosdk.OnApplicationComplete.NoOpOC,
 	});
 	
+	// Sign and send
 	await algodClient
 	  .sendRawTransaction(appCreateTxn.signTxn(creator.privateKey))
 	  .do();
@@ -442,10 +442,11 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  appCreateTxn.txID().toString(),
 	  3
 	);
-	const createdApp = result['application-index'];
-	console.log(`Created app with index: ${createdApp}`);
+	// Grab app id from confirmed transaction result
+	const appId = result['application-index'];
+	console.log(`Created app with index: ${appId}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L41-L63)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L55-L79)
     <!-- ===JSSDK_APP_CREATE=== -->
 
 === "Java"
@@ -471,7 +472,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	Long appId = result.applicationIndex;
 	System.out.printf("Created application with id: %d\n", appId);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L84)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L84)
     <!-- ===JAVASDK_APP_CREATE=== -->
 
 === "Go"
@@ -509,7 +510,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	appID := confirmedTxn.ApplicationIndex
 	log.Printf("Created app with id: %d", appID)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L101-L132)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L101-L132)
     <!-- ===GOSDK_APP_CREATE=== -->
 
 
@@ -535,7 +536,7 @@ Use the user_mnemonic to define sender:
 	addr = account.address_from_private_key(pk)
 	print(f"Address: {addr}")
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/account.py#L12-L17)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L12-L17)
 	<!-- ===PYSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "JavaScript"
@@ -547,7 +548,7 @@ Use the user_mnemonic to define sender:
 	);
 	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L13-L18)
 	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -560,7 +561,7 @@ Use the user_mnemonic to define sender:
 	// Or just init the account directly from the mnemonic
 	Account acct = new Account(mn);
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
 	<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
@@ -578,7 +579,7 @@ Use the user_mnemonic to define sender:
 	
 	log.Printf("%+v", recovered)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/account.go#L27-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L27-L38)
 	<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:
@@ -592,7 +593,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	assert optin_result["confirmed-round"] > 0
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L59-L64)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L59-L64)
     <!-- ===PYSDK_APP_OPTIN=== -->
 
 === "JavaScript"
@@ -600,7 +601,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	```javascript
 	const appOptInTxn = algosdk.makeApplicationOptInTxnFromObject({
 	  from: caller.addr,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  suggestedParams,
 	});
 	
@@ -613,7 +614,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L67-L81)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L84-L98)
     <!-- ===JSSDK_APP_OPTIN=== -->
 
 === "Java"
@@ -632,7 +633,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient, optInResponse.body().txId, 4);
 	assert optInResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L87-L99)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L87-L99)
     <!-- ===JAVASDK_APP_OPTIN=== -->
 
 === "Go"
@@ -672,7 +673,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	
 	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L138-L171)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L138-L171)
     <!-- ===GOSDK_APP_OPTIN=== -->
 
 
@@ -693,7 +694,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	noop_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	assert noop_result["confirmed-round"] > 0
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L67-L72)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L67-L72)
     <!-- ===PYSDK_APP_NOOP=== -->
 
 === "JavaScript"
@@ -701,7 +702,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	```javascript
 	const appNoOpTxn = algosdk.makeApplicationNoOpTxnFromObject({
 	  from: caller.addr,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  suggestedParams,
 	});
 	
@@ -714,7 +715,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L84-L98)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L101-L115)
     <!-- ===JSSDK_APP_NOOP=== -->
 
 === "Java"
@@ -733,7 +734,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId, 4);
 	assert noopResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L102-L114)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L102-L114)
     <!-- ===JAVASDK_APP_NOOP=== -->
 
 === "Go"
@@ -782,7 +783,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	
 	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L176-L218)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L176-L218)
     <!-- ===GOSDK_APP_NOOP=== -->
 
 ## Read state
@@ -796,13 +797,13 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	# base64 encoded keys and values
 	print(acct_info["app-local-state"]["key-value"])
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L75-L78)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L75-L78)
     <!-- ===PYSDK_APP_READ_STATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_READ_STATE=== -->
 	```javascript
-	const appInfo = await algodClient.getApplicationByID(createdApp).do();
+	const appInfo = await algodClient.getApplicationByID(appId).do();
 	const globalState = appInfo.params['global-state'][0];
 	console.log(`Raw global state - ${JSON.stringify(globalState)}`);
 	
@@ -816,7 +817,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	console.log(`Decoded global state - ${globalKey}: ${globalValue}`);
 	
 	const accountAppInfo = await algodClient
-	  .accountApplicationInformation(caller.addr, createdApp)
+	  .accountApplicationInformation(caller.addr, appId)
 	  .do();
 	
 	const localState = accountAppInfo['app-local-state']['key-value'][0];
@@ -829,7 +830,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	
 	console.log(`Decoded local state - ${localKey}: ${localValue}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L118-L144)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L154-L180)
     <!-- ===JSSDK_APP_READ_STATE=== -->
 
 === "Java"
@@ -837,7 +838,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	```java
 	
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L117-L118)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L117-L118)
     <!-- ===JAVASDK_APP_READ_STATE=== -->
 
 === "Go"
@@ -859,7 +860,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	}
 	log.Printf("app info: %+v", acctInfo)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L27-L42)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L27-L42)
     <!-- ===GOSDK_APP_READ_STATE=== -->
 
 ## Update
@@ -902,14 +903,14 @@ Construct the update transaction and await the response:
 	update_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	assert update_result["confirmed-round"] > 0
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L81-L102)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L81-L102)
     <!-- ===PYSDK_APP_UPDATE=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_UPDATE=== -->
 	```javascript
 	const newProgram = fs.readFileSync(
-	  path.join(__dirname, '/contracts/app_updated_approval.teal'),
+	  path.join(__dirname, '/application/approval_refactored.teal'),
 	  'utf8'
 	);
 	const compiledNewProgram = await compileProgram(algodClient, newProgram);
@@ -917,7 +918,7 @@ Construct the update transaction and await the response:
 	const appUpdateTxn = algosdk.makeApplicationUpdateTxnFromObject({
 	  from: creator.addr,
 	  suggestedParams,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  // updates must define both approval and clear programs, even if unchanged
 	  approvalProgram: compiledNewProgram,
 	  clearProgram: compiledClearProgram,
@@ -932,7 +933,7 @@ Construct the update transaction and await the response:
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L164-L187)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L200-L223)
     <!-- ===JSSDK_APP_UPDATE=== -->
 
 === "Java"
@@ -958,7 +959,7 @@ Construct the update transaction and await the response:
 	PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient, updateResponse.body().txId, 4);
 	assert updateResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L139)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L139)
     <!-- ===JAVASDK_APP_UPDATE=== -->
 
 === "Go"
@@ -1004,7 +1005,7 @@ Construct the update transaction and await the response:
 	
 	log.Printf("Update Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L226-L265)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L226-L265)
     <!-- ===GOSDK_APP_UPDATE=== -->
 
 ## Call with arguments
@@ -1030,36 +1031,30 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	if "local-state-delta" in call_result:
 	    print("Local State updated :\n", call_result["local-state-delta"])
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L105-L120)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L105-L120)
     <!-- ===PYSDK_APP_CALL=== -->
 
 === "JavaScript"
     <!-- ===JSSDK_APP_CALL=== -->
 	```javascript
+	const now = new Date().toString();
 	const simpleAddTxn = algosdk.makeApplicationNoOpTxnFromObject({
-	  from: sender.addr,
+	  from: caller.addr,
 	  suggestedParams,
-	  appIndex,
-	  appArgs: [
-	    new Uint8Array(Buffer.from('add', 'utf8')),
-	    algosdk.encodeUint64(1),
-	    algosdk.encodeUint64(2),
-	  ],
+	  appIndex: appId,
+	  appArgs: [new Uint8Array(Buffer.from(now))],
 	});
 	
-	await client.sendRawTransaction(simpleAddTxn.signTxn(sender.privateKey)).do();
-	const simpleAddResult = await algosdk.waitForConfirmation(
-	  client,
+	await algodClient
+	  .sendRawTransaction(simpleAddTxn.signTxn(creator.privateKey))
+	  .do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
 	  simpleAddTxn.txID().toString(),
 	  3
 	);
-	
-	console.log(
-	  'Result:',
-	  algosdk.decodeUint64(simpleAddResult.logs[0], 'bigint')
-	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L48-L70)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L135-L151)
     <!-- ===JSSDK_APP_CALL=== -->
 
 === "Java"
@@ -1094,7 +1089,7 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	    System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
 	}
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L142-L170)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L142-L170)
     <!-- ===JAVASDK_APP_CALL=== -->
 
 === "Go"
@@ -1143,7 +1138,7 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	
 	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L358-L400)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L358-L400)
     <!-- ===GOSDK_APP_CALL=== -->
 
 ## Close out
@@ -1163,7 +1158,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	assert optin_result["confirmed-round"] > 0
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L123-L128)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L123-L128)
     <!-- ===PYSDK_APP_CLOSEOUT=== -->
 
 === "JavaScript"
@@ -1171,7 +1166,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	```javascript
 	const appCloseOutTxn = algosdk.makeApplicationCloseOutTxnFromObject({
 	  from: caller.addr,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	  suggestedParams,
 	});
 	
@@ -1184,7 +1179,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L147-L161)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L183-L197)
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
 
 === "Java"
@@ -1204,7 +1199,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	        4);
 	assert closeOutResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L173-L186)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L173-L186)
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 
 === "Go"
@@ -1250,7 +1245,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	
 	log.Printf("Closeout Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L270-L309)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L270-L309)
     <!-- ===GOSDK_APP_CLOSEOUT=== -->
 
 ## Delete
@@ -1266,7 +1261,7 @@ The approval program defines the creator as the only account able to [delete the
 	optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	assert optin_result["confirmed-round"] > 0
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L131-L136)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L131-L136)
     <!-- ===PYSDK_APP_DELETE=== -->
 
 === "JavaScript"
@@ -1275,7 +1270,7 @@ The approval program defines the creator as the only account able to [delete the
 	const appDeleteTxn = algosdk.makeApplicationDeleteTxnFromObject({
 	  from: creator.addr,
 	  suggestedParams,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	});
 	
 	await algodClient
@@ -1287,7 +1282,7 @@ The approval program defines the creator as the only account able to [delete the
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L207-L221)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L243-L257)
     <!-- ===JSSDK_APP_DELETE=== -->
 
 === "Java"
@@ -1305,7 +1300,7 @@ The approval program defines the creator as the only account able to [delete the
 	PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient, deleteResponse.body().txId, 4);
 	assert deleteResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L189-L200)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L189-L200)
     <!-- ===JAVASDK_APP_DELETE=== -->
 
 === "Go"
@@ -1351,7 +1346,7 @@ The approval program defines the creator as the only account able to [delete the
 	
 	log.Printf("Delete Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L405-L444)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L405-L444)
     <!-- ===GOSDK_APP_DELETE=== -->
 
 ## Clear state
@@ -1364,7 +1359,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	clear_txn = transaction.ApplicationClearStateTxn(user.address, sp, app_id)
 	# .. sign, send, wait
 	```
-	[Snippet Source](https://github.com/barnjamin/py-algorand-sdk/blob/doc-examples/_examples/apps.py#L139-L141)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/apps.py#L139-L141)
     <!-- ===PYSDK_APP_CLEAR=== -->
 
 === "JavaScript"
@@ -1373,7 +1368,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	const appClearTxn = algosdk.makeApplicationClearStateTxnFromObject({
 	  from: anotherCaller.addr,
 	  suggestedParams,
-	  appIndex: createdApp,
+	  appIndex: appId,
 	});
 	
 	await algodClient
@@ -1385,7 +1380,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L190-L204)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L226-L240)
     <!-- ===JSSDK_APP_CLEAR=== -->
 
 === "Java"
@@ -1400,7 +1395,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	SignedTransaction signedClear = user.signTransaction(clearTxn);
 	// ... sign, send, wait
 	```
-	[Snippet Source](https://github.com/barnjamin/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L203-L211)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L203-L211)
     <!-- ===JAVASDK_APP_CLEAR=== -->
 
 === "Go"
@@ -1446,7 +1441,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	
 	log.Printf("ClearState Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/barnjamin/go-algorand-sdk/blob/examples/_examples/apps.go#L314-L353)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L314-L353)
     <!-- ===GOSDK_APP_CLEAR=== -->
 
 # Appendix
