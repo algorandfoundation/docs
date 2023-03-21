@@ -456,17 +456,8 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	# Wait for the transaction to be confirmed
 	results = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"Result confirmed in round: {results['confirmed-round']}")
-	
-	acct_info = algod_client.account_info(acct2.address)
-	matching_asset = [
-	    asset
-	    for asset in acct_info["assets"]
-	    if asset["asset-id"] == created_asset
-	].pop()
-	assert matching_asset["amount"] == 0
-	assert matching_asset["is-frozen"] is False
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L79-L101)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L79-L92)
     <!-- ===PYSDK_ASSET_OPTIN=== -->
 
 === "Java"
@@ -575,16 +566,8 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	
 	results = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"Result confirmed in round: {results['confirmed-round']}")
-	
-	acct_info = algod_client.account_info(acct2.address)
-	matching_asset = [
-	    asset
-	    for asset in acct_info["assets"]
-	    if asset["asset-id"] == created_asset
-	].pop()
-	assert matching_asset["amount"] == 1
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L105-L128)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L105-L120)
     <!-- ===PYSDK_ASSET_XFER=== -->
 
 === "Java"
@@ -706,16 +689,8 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	
 	results = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"Result confirmed in round: {results['confirmed-round']}")
-	
-	acct_info = algod_client.account_info(acct2.address)
-	matching_asset = [
-	    asset
-	    for asset in acct_info["assets"]
-	    if asset["asset-id"] == created_asset
-	].pop()
-	assert matching_asset["is-frozen"] is True
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L131-L154)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L131-L146)
     <!-- ===PYSDK_ASSET_FREEZE=== -->
 
 === "Java"
@@ -841,17 +816,8 @@ Revoking an asset for an account removes a specific number of the asset from the
 	
 	results = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"Result confirmed in round: {results['confirmed-round']}")
-	
-	acct_info = algod_client.account_info(acct2.address)
-	matching_asset = [
-	    asset
-	    for asset in acct_info["assets"]
-	    if asset["asset-id"] == created_asset
-	].pop()
-	assert matching_asset["amount"] == 0
-	assert matching_asset["is-frozen"] is True
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L157-L182)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L157-L173)
     <!-- ===PYSDK_ASSET_CLAWBACK=== -->
 
 === "Java"

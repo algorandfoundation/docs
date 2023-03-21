@@ -351,32 +351,3 @@ Create a payment transaction from one account to another using suggested paramet
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
-
-
-### Blocks
-
-One type that commonly needs to be decoded are the blocks themselves. Since some fields are raw byte arrays (like state deltas) the msgpack format should be used.
-
-=== "Python"
-	<!-- ===PYSDK_CODEC_BLOCK=== -->
-	```python
-	
-	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L65-L66)
-	<!-- ===PYSDK_CODEC_BLOCK=== -->
-
-=== "JavaScript"
-	<!-- ===JSSDK_CODEC_BLOCK=== -->
-	<!-- ===JSSDK_CODEC_BLOCK=== -->
-
-=== "Go"
-	<!-- ===GOSDK_CODEC_BLOCK=== -->
-	```go
-	
-	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L86-L87)
-	<!-- ===GOSDK_CODEC_BLOCK=== -->
-
-=== "Java"
-	<!-- ===JAVASDK_CODEC_BLOCK=== -->
-	<!-- ===JAVASDK_CODEC_BLOCK=== -->

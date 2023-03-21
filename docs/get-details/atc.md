@@ -24,15 +24,9 @@ To use the Atomic Transaction Composer, first initialize the composer:
 === "Python"
     <!-- ===PYSDK_ATC_CREATE=== -->
 	```python
-	from algosdk.atomic_transaction_composer import (
-	    AtomicTransactionComposer,
-	    AccountTransactionSigner,
-	    TransactionWithSigner,
-	)
-	
 	atc = AtomicTransactionComposer()
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L5-L12)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L11-L12)
     <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"

@@ -90,10 +90,12 @@ This file may be msgpack or json and can be created using goal or the SDKs
 === "JavaScript"
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 	```javascript
+	const suggestedParams = await algodClient.getTransactionParams().do();
+	
 	const addTxnForDr = algosdk.makeApplicationNoOpTxnFromObject({
 	  from: sender.addr,
 	  suggestedParams,
-	  appIndex,
+	  appIndex: 123,
 	  appArgs: [
 	    new Uint8Array(Buffer.from('add', 'utf8')),
 	    algosdk.encodeUint64(1),
@@ -106,13 +108,13 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	);
 	
 	const dryrunForLogging = await algosdk.createDryrun({
-	  client,
+	  client: algodClient,
 	  txns: [signedDrTxn],
 	});
 	
 	console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L2-L23)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L10-L33)
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"
@@ -291,15 +293,15 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 	```javascript
 	const dryrunForResponse = await algosdk.createDryrun({
-	  client,
+	  client: algodClient,
 	  txns: [signedDrTxn],
 	});
 	
-	const dryrunResponse = await client.dryrun(dryrunForResponse).do();
+	const dryrunResponse = await algodClient.dryrun(dryrunForResponse).do();
 	
 	console.log('Dryrun Response:', dryrunResponse);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L26-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L36-L44)
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"
