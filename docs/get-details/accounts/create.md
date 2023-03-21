@@ -169,7 +169,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	String addr = generatedKey.getAddress();
 	System.out.printf("New account: %s\n", addr);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L77-L83)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L75-L81)
 	<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Go"
@@ -315,7 +315,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	APIV1Wallet recoveredWallet = recoverResponse.getWallet();
 	System.out.printf("Wallet name: %s\n", recoveredWallet.getName());
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L63-L74)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L61-L72)
 	<!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 
 === "Go"
@@ -429,7 +429,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	String mn = Mnemonic.fromKey(Arrays.copyOfRange(exportedKey, 0, 32));
 	System.out.printf("Exported mnemonic: %s\n", mn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L86-L94)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L84-L92)
 	<!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Go"
@@ -498,7 +498,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	String recoveredWalletHandleToken = getHandle(kmd, recoveredWallet, password);
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L95-L98)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L93-L96)
 	<!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Go"

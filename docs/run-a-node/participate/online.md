@@ -28,19 +28,19 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 	const onlineKeyreg = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject(
 	  {
 	    from: 'EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4',
-	    voteKey: voteKey,
-	    selectionKey: selectionKey,
+	    voteKey,
+	    selectionKey,
 	    voteFirst: params.firstRound,
 	    voteLast: params.firstRound + numRounds,
 	    voteKeyDilution: keyDilution,
+	    stateProofKey: voteKey,
 	    suggestedParams: params,
-	    nonParticipation: false,
 	  }
 	);
 	
 	console.log(onlineKeyreg.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L8-L32)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L7-L31)
     <!-- ===JSSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Python"

@@ -45,7 +45,7 @@ Create an offline key registration transaction for the address: `EW64GC6F24M7NDS
 	);
 	console.log(offlineKeyReg.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L35-L46)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L34-L45)
     <!-- ===JSSDK_TRANSACTION_KEYREG_OFFLINE_CREATE=== -->
 
 === "Go"

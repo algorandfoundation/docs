@@ -43,6 +43,7 @@ A set of arrays can be passed with any application transaction, which instructs 
 The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a 2KB total size limit. See [Passing Arguments To Smart Contracts](#passing-arguments-to-smart-contracts) for more details on arguments.
 
 The other arrays are used to load data from the blockchain:
+
 * The application array is used to pass other smart contract IDs that can be used to read state for those specific contracts. 
 * The assets array is used to pass a list of asset IDs that can be used to retrieve configuration and asset balance information. 
 * The accounts array allows additional accounts to be passed to the contract for balance information and local state. Note that to access an account's asset balance, both the account and the asset ID must be specified in their respective arrays. Similarly, to access an account's local state for a specific application, both the account and the smart contract ID must be specified in their respective arrays.

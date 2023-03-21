@@ -147,7 +147,6 @@ The result of this step is what ultimately guarantees that a particular transact
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 	```python
-	
 	# Assign group id to the transactions (order matters!)
 	txn_1, txn_2 = transaction.assign_group_id([txn_1, txn_2])
 	
@@ -157,9 +156,8 @@ The result of this step is what ultimately guarantees that a particular transact
 	gid = transaction.calculate_group_id([txn_1, txn_2])
 	txn_1.group = gid
 	txn_2.group = gid
-	
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L25-L36)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L25-L34)
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
@@ -228,21 +226,21 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 	```python
-	
 	# sign transactions
 	stxn_1 = txn_1.sign(sk1)
 	stxn_2 = txn_2.sign(sk2)
-	
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L39-L44)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L37-L40)
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 	```java
-	
+	// sign transactions
+	SignedTransaction signedPtxn1 = acct1.signTransaction(ptxn1);
+	SignedTransaction signedPtxn2 = acct2.signTransaction(ptxn2);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L48-L49)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L50-L53)
     <!-- ===JAVASDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Go"
@@ -290,12 +288,10 @@ All authorized transactions are now assembled into an array, maintaining the ori
 === "Python"
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 	```python
-	
 	# combine the signed transactions into a single list
 	signed_group = [stxn_1, stxn_2]
-	
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L47-L51)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L43-L45)
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
@@ -350,9 +346,8 @@ The transaction group is now broadcast to the network.
 	    algod_client, tx_id, 4
 	)
 	print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
-	
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L54-L64)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L48-L57)
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"
