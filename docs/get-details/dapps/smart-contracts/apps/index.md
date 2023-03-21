@@ -114,18 +114,19 @@ To fund this account, any other account in the Algorand network can send algos t
 	<!-- ===TEAL_ITXN_PAYMENT=== -->
 	```teal
 	itxn_begin
-
+	
 	int pay
 	itxn_field TypeEnum
-
+	
 	int 1000000
 	itxn_field Amount
-
+	
 	txn Sender
 	itxn_field Receiver
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_payment/approval.teal#L6-L18)
 	<!-- ===TEAL_ITXN_PAYMENT=== -->
 
  Fees for these transactions are paid by the smart contract and are set automatically to the minimum transaction fee. Inner transaction fees are eligible for [fee pooling](https://developer.algorand.org/docs/get-details/transactions/#pooled-transaction-fees) similar to any other transaction. This allows either the application call or any other transaction in a group of transactions to pay the fee for inner transactions. Inner transactions are evaluated during AVM execution, allowing changes to be visible within the contract. For example, if the ‘balance’ opcode is used before and after a ‘pay’ transaction is submitted, the balance change would be visible to the executing contract.
@@ -165,22 +166,23 @@ If a smart contract wishes to transfer an asset it holds or needs to opt into an
 	<!-- ===TEAL_ITXN_ASSET_TRANSFER=== -->
 	```teal
 	itxn_begin
-
+	
 	int axfer
 	itxn_field TypeEnum
-
+	
 	txn Assets 0
 	itxn_field XferAsset
-
+	
 	txn Accounts 1
 	itxn_field AssetReceiver
-
+	
 	txn ApplicationArgs 3
 	btoi
 	itxn_field AssetAmount
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_asset_management/approval.teal#L293-L309)
 	<!-- ===TEAL_ITXN_ASSET_TRANSFER=== -->
 
 Note that the asset must be in the assets array. If the smart contract is opting into an asset, the contract would send 0 units of the asset to itself. In this case, the receiver could be set to the `global CurrentApplicationAddress`. 
@@ -211,16 +213,16 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
 	<!-- ===TEAL_ITXN_ASSET_FREEZE=== -->
 	```teal
 	itxn_begin
-
+	
 	int afrz
 	itxn_field TypeEnum
-
+	
 	txn Assets 0
 	itxn_field FreezeAsset
-
+	
 	txn Accounts 1
 	itxn_field FreezeAssetAccount
-
+	
 	// Flip the current account frozen state
 	txn Accounts 1
 	txn Assets 0
@@ -228,9 +230,10 @@ A smart contract can freeze any asset, where the smart contract is the freeze ad
 	assert
 	!
 	itxn_field FreezeAssetFrozen
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_asset_management/approval.teal#L158-L178)
 	<!-- ===TEAL_ITXN_ASSET_FREEZE=== -->
 
 ## Asset revoke
@@ -261,13 +264,13 @@ A smart contract can revoke or clawback any asset where the smart contract addre
 	<!-- ===TEAL_ITXN_ASSET_REVOKE=== -->
 	```teal
 	itxn_begin
-
+	
 	int axfer
 	itxn_field TypeEnum
-
+	
 	txn Assets 0
 	itxn_field XferAsset
-
+	
 	// Any amount lower or equal to their holding can be revoked
 	// Here we use the accounts entire asset balance
 	txn Accounts 1
@@ -275,15 +278,16 @@ A smart contract can revoke or clawback any asset where the smart contract addre
 	asset_holding_get AssetBalance
 	assert
 	itxn_field AssetAmount
-
+	
 	txn Accounts 1
 	itxn_field AssetSender
-
+	
 	global CurrentApplicationAddress
 	itxn_field AssetReceiver
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_asset_management/approval.teal#L195-L218)
 	<!-- ===TEAL_ITXN_ASSET_REVOKE=== -->
 
 ## Asset create
@@ -318,31 +322,32 @@ Assets can also be created by a smart contract. To create an asset with an inner
 	<!-- ===TEAL_ITXN_ASSET_CREATE=== -->
 	```teal
 	itxn_begin
-
+	
 	int acfg
 	itxn_field TypeEnum
-
+	
 	byte "Demo Asset"
 	itxn_field ConfigAssetName
-
+	
 	byte "DA"
 	itxn_field ConfigAssetUnitName
-
+	
 	int 100
 	itxn_field ConfigAssetTotal
-
+	
 	int 2
 	itxn_field ConfigAssetDecimals
-
+	
 	global CurrentApplicationAddress
 	dupn 3
 	itxn_field ConfigAssetManager
 	itxn_field ConfigAssetReserve
 	itxn_field ConfigAssetFreeze
 	itxn_field ConfigAssetClawback
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_asset_management/approval.teal#L79-L104)
 	<!-- ===TEAL_ITXN_ASSET_CREATE=== -->
 
 In this example, a simple asset is created. Using the `itxn CreatedAssetID` opcode after the transaction is submitted allows the contract to get the asset id of the newly created asset.
@@ -375,22 +380,23 @@ As with all assets, the mutable addresses can be changed using contract code sim
 	<!-- ===TEAL_ITXN_ASSET_CONFIG=== -->
 	```teal
 	itxn_begin
-
+	
 	int acfg
 	itxn_field TypeEnum
-
+	
 	txn Assets 0
 	itxn_field ConfigAsset
-
+	
 	global CurrentApplicationAddress
 	dupn 3
 	itxn_field ConfigAssetManager
 	itxn_field ConfigAssetReserve
 	itxn_field ConfigAssetFreeze
 	itxn_field ConfigAssetClawback
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_asset_management/approval.teal#L125-L141)
 	<!-- ===TEAL_ITXN_ASSET_CONFIG=== -->
 
 !!!Warning
@@ -420,15 +426,16 @@ Assets managed by the contract can also be deleted. This can be done with the fo
 	<!-- ===TEAL_ITXN_ASSET_DESTROY=== -->
 	```teal
 	itxn_begin
-
+	
 	int acfg
 	itxn_field TypeEnum
-
+	
 	txn Assets 0
 	itxn_field ConfigAsset
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_asset_management/approval.teal#L235-L244)
 	<!-- ===TEAL_ITXN_ASSET_DESTROY=== -->
 
 ## Grouped inner transaction
@@ -471,34 +478,35 @@ A smart contract can make inner transactions consisting of grouped transactions.
 	<!-- ===TEAL_GROUPED_ITXN=== -->
 	```teal
 	itxn_begin
-
+	
 	int pay
 	itxn_field TypeEnum
-
+	
 	int 1000000
 	itxn_field Amount
-
+	
 	int 123
 	app_params_get AppAddress
 	assert
 	itxn_field Receiver
-
+	
 	itxn_next
-
+	
 	int appl
 	itxn_field TypeEnum
-
+	
 	int 123
 	itxn_field ApplicationID
-
+	
 	int NoOp
 	itxn_field OnCompletion
-
+	
 	byte "buy"
 	itxn_field ApplicationArgs
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_groups/approval.teal#L3-L31)
 	<!-- ===TEAL_GROUPED_ITXN=== -->
 
 All inner transactions will be stored as inner transactions within the outer application transaction. These can be accessed by getting the transaction id as normal and looking for the `inner-txns` header in the transaction response.
@@ -537,18 +545,19 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
 	<!-- ===TEAL_ITXN_C2C=== -->
 	```teal
 	itxn_begin
-
+	
 	int appl
 	itxn_field TypeEnum
-
+	
 	txn Applications 1
 	itxn_field ApplicationID
-
+	
 	int NoOp
 	itxn_field OnCompletion
-
+	
 	itxn_submit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/itxn_c2c/approval.teal#L8-L20)
 	<!-- ===TEAL_ITXN_C2C=== -->
 
 ## Composability
@@ -655,6 +664,7 @@ To write to either local or global state, the opcodes `app_global_put` and `app_
 	int 42
 	app_global_put
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L8-L11)
 	<!-- ===TEAL_WRITE_GLOBAL_STATE=== -->
 
 To store a value in local storage, the following contract code can be used.
@@ -676,6 +686,7 @@ To store a value in local storage, the following contract code can be used.
 	int 1337
 	app_local_put
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L14-L18)
 	<!-- ===TEAL_WRITE_SENDER_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. See [Smart contract arrays](#smart-contract-arrays) for more details.
@@ -698,6 +709,7 @@ In this example, the `int 0` represents the sender of the transaction. This is a
 	int 200
 	app_local_put
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L21-L25)
 	<!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
 
 Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call. See [Smart contract arrays](#smart-contract-arrays) for more details.
@@ -721,10 +733,11 @@ TEAL provides calls to read global and local state values for the current smart 
 === "TEAL"
 	<!-- ===TEAL_READ_GLOBAL_STATE=== -->
 	```teal
-
+	
 	// READING STATE
-
+	
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L26-L29)
 	<!-- ===TEAL_READ_GLOBAL_STATE=== -->
 
 
@@ -746,6 +759,7 @@ The following contract code reads the local state of the sender account.
 	byte "OwnLocalState"
 	app_local_get
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L36-L39)
 	<!-- ===TEAL_READ_LOCAL_STATE=== -->
 
 In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. The address can be specified instead of the index as long as the account is in the accounts array. See [Smart contract arrays](#smart-contract-arrays) for more details.
@@ -771,6 +785,7 @@ The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 
 	byte "OwnLocalState"
 	app_local_get_ex
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L45-L49)
 	<!-- ===TEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 
 !!! note
@@ -809,10 +824,11 @@ The `int 0` is the index into the accounts array. The actual address could also 
 	app_local_get_ex
 	bz new_deposit
 	// Account has deposited before
-
+	
 	new_deposit:
 	// Account is making their first deposit
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L54-L63)
 	<!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
 
 The `app_global_get_ex` is used to read not only the global state of the current contract but any contract that is in the applications array. To access these foreign apps, they must be passed in with the application call. See [Smart contract arrays](#smart-contract-arrays) for more details. 
@@ -848,6 +864,7 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 	byte "GlobalKey"
 	app_global_get_ex
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L67-L70)
 	<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
 
 The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise, `int 2` would represent the second passed in foreign application. The actual contract IDs can also be specified as long as the contract is in the contracts array. See [Smart contract arrays](#smart-contract-arrays) for more details. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
@@ -1025,6 +1042,7 @@ The `box_create` opcode takes two parameters, the name and the size in bytes for
 	byte "My data values"
 	box_put
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L6-L15)
 	<!-- ===TEAL_BOX_CREATE=== -->
 
 === "PyTeal"
@@ -1057,6 +1075,7 @@ The AVM provides two opcodes, `box_put` and `box_replace`,  to write data to a b
 	byte "best"
 	box_replace
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L18-L22)
 	<!-- ===TEAL_BOX_WRITE=== -->
 
 === "PyTeal"
@@ -1088,6 +1107,7 @@ The AVM provides two opcodes for reading the contents of a box, `box_get` and `b
 	assert //verify that the read occurred and we have a value
 	//box contents at the top of the stack
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L25-L29)
 	<!-- ===TEAL_BOX_GET=== -->
 
 === "PyTeal"
@@ -1112,16 +1132,17 @@ The `box_extract` opcode requires three parameters: the box key name, the starti
 	byte "BoxA"
 	byte "this is a test of a very very very very long string"
 	box_put
-
+	
 	byte "BoxA"
 	int 5
 	int 9
 	box_extract
-
+	
 	byte "is a test"
 	==
 	assert
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L32-L44)
 	<!-- ===TEAL_BOX_EXTRACT=== -->
 
 === "PyTeal"
@@ -1147,15 +1168,16 @@ The AVM offers the `box_len` opcode to retrieve the length of a box. This opcode
 	byte "BoxA"
 	byte "this is a test of a very very very very long string"
 	box_put
-
+	
 	byte "BoxA"
 	box_len
 	assert
-
+	
 	int 51
 	==
 	assert
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L47-L58)
 	<!-- ===TEAL_BOX_LEN=== -->
 
 === "PyTeal"
@@ -1184,11 +1206,12 @@ The AVM offers the `box_del` opcode to delete a box. This opcode takes the box k
 	byte "BoxA"
 	byte "this is a test of a very very very very long string"
 	box_put
-
+	
 	byte "BoxA"
 	box_del
 	bnz existed
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L61-L68)
 	<!-- ===TEAL_BOX_DELETE=== -->
 
 === "PyTeal"
@@ -1288,6 +1311,7 @@ The `ApplicationCall` transaction types defined in [The Lifecycle of a Smart Con
 	int NoOp // OptIn, CloseOut, UpdateApplication, or DeleteApplication
 	==
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/oncomplete/approval.teal#L3-L6)
 	<!-- ===TEAL_TXN_ONCOMPLETE=== -->
 
 
@@ -1322,6 +1346,7 @@ These parameters are loaded into the arguments array. TEAL opcodes are available
 	byte "claim"
 	==
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appargs/approval.teal#L16-L19)
 	<!-- ===TEAL_TXN_APP_ARGS=== -->
 
 This call gets the second passed in argument and compares it to the string "claim".
@@ -1345,6 +1370,7 @@ A global variable is also available to check the size of the transaction argumen
 	int 4
 	==
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appargs/approval.teal#L3-L6)
 	<!-- ===TEAL_TXN_NUM_APP_ARGS=== -->
 
 The above contract code will push a 0 on the top of the stack if the number of parameters in this specific transaction is anything other than 4, else it will push a 1 on the top of the stack. Internally all transaction parameters are stored as byte slices (byte-array value). Integers can be converted using the `btoi` opcode.
@@ -1364,6 +1390,7 @@ The above contract code will push a 0 on the top of the stack if the number of p
 	txna ApplicationArgs 0
 	btoi
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appargs/approval.teal#L10-L12)
 	<!-- ===TEAL_TXN_APP_ARG_TO_INT=== -->
 
 
@@ -1418,14 +1445,15 @@ When this transaction is submitted, the `ApprovalProgram` of the smart contract 
 	int OptIn
 	==
 	bz not_optin
-
+	
 	// Allow OptIn
 	int 1
 	return
-
+	
 	not_optin:
 	// additional checks...
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/opting_in/approval.teal#L13-L24)
 	<!-- ===TEAL_APPL_OPTIN=== -->
 
 Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted into the contract.
@@ -1446,6 +1474,7 @@ Other contracts may have much more complex opt in logic. TEAL also provides an o
 	txn ApplicationID
 	app_opted_in
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/opting_in/approval.teal#L6-L9)
 	<!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
 
 In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array. See [Smart contract arrays](#smart-contract-arrays) for more details.
@@ -1487,10 +1516,11 @@ The call must specify the intended contract using the `--app-id` option. Additio
 	==
 	bz not_myparam
 	// handle my_param
-
+	
 	not_myparam:
 	// handle not_myparam
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/calling/approval.teal#L6-L14)
 	<!-- ===TEAL_APPL_CALL=== -->
 
 # Update smart contract
@@ -1526,15 +1556,16 @@ As stated earlier, anyone can update the program. If this is not desired and you
 	txna ApplicationArgs 0
 	==
 	bz not_update
-
+	
 	// Only Creator may update
 	global CreatorAddress
 	txn Sender
 	==
 	return
-
+	
 	not_update:
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/calling/approval.teal#L17-L29)
 	<!-- ===TEAL_APPL_UPDATE=== -->
 
 Or alternatively, the contract code can always return a 0 when an `UpdateApplication` application call is made to prevent anyone from ever updating the application code.
@@ -1560,13 +1591,14 @@ Or alternatively, the contract code can always return a 0 when an `UpdateApplica
 	int UpdateApplication
 	==
 	bz not_update
-
+	
 	// Reject Update
 	int 0
 	return
-
+	
 	not_update:
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/calling/approval.teal#L32-L42)
 	<!-- ===TEAL_APPL_UPDATE_REJECT=== -->
 
 # Delete smart contract
@@ -1601,6 +1633,7 @@ Smart contracts have access to many global variables. These variables are set fo
 	app_global_get
 	>=
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/global.teal#L3-L7)
 	<!-- ===TEAL_GLOBAL_LATEST_TIMESTAMP=== -->
 
 # Atomic transfers and transaction properties
@@ -1621,6 +1654,7 @@ The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transa
 	```teal
 	txn Amount
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/global.teal#L13-L14)
 	<!-- ===TEAL_TXN_AMOUNT=== -->
 
 In many common patterns, the smart contract will be combined with other Algorand technologies such as assets, atomic transfers, or smart signatures to build a complete application. In the case of atomic transfers, more than one transaction’s properties can be checked within the smart contract. The number of transactions can be checked using the `GroupSize` global property. If the value is greater than 1, then the call to the smart contract is grouped with more than one transaction.
@@ -1641,6 +1675,7 @@ In many common patterns, the smart contract will be combined with other Algorand
 	int 2
 	==
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/global.teal#L18-L21)
 	<!-- ===TEAL_TXN_GROUP_SIZE=== -->
 
 The above contract code will be true if there are two transactions submitted at once using an atomic transfer. To access the properties of a specific transaction in the atomic group use the `gtxn` opcode.
@@ -1661,6 +1696,7 @@ The above contract code will be true if there are two transactions submitted at 
 	int pay
 	==
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/global.teal#L25-L28)
 	<!-- ===TEAL_GTXN_TYPE_ENUM=== -->
 
 In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
@@ -1684,6 +1720,7 @@ If any transaction in a group of transactions is a call to a smart contract, the
 	-
 	gtxnsa ApplicationArgs 0
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/global.teal#L32-L36)
 	<!-- ===TEAL_GTXN_APP_ARGS=== -->
 
 # Using assets in smart contracts
@@ -1708,14 +1745,15 @@ Smart contract applications can work in conjunction with assets. In addition to 
 	int 2
 	asset_holding_get AssetBalance
 	bnz has_balance
-
+	
 	// Reject transaction if no asset balance
-	int 0 
+	int 0
 	return
-
+	
 	has_balance:
 	//balance value is now on top of the stack
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appl_asset/approval.teal#L3-L14)
 	<!-- ===TEAL_APPL_ASSET_BALANCE=== -->
 
 This opcode takes two parameters. The first parameter represents an index into the accounts array, where `int 0` is the sender of the transaction’s address. If additional accounts are passed in then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. See [Smart contract arrays](#smart-contract-arrays) for more details. 
@@ -1739,6 +1777,7 @@ It is also possible to get an Asset’s configuration information within a smart
 	int 0
 	asset_params_get AssetTotal
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appl_asset/approval.teal#L18-L20)
 	<!-- ===TEAL_APPL_ASSET_PARAM=== -->
 
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
@@ -1757,6 +1796,7 @@ The ID retrieval operation can be performed by using one of two opcodes (`gaid` 
 	int 1
 	gaids
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appl_asset/approval.teal#L25-L30)
 	<!-- ===TEAL_APPL_CREATED_ASSET_ID=== -->
 
 # Sharing data between contracts
@@ -1774,6 +1814,7 @@ Store an integer in scratch space in the first transaction.
 	int 777
 	store 10
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/scratch_t1.teal#L3-L5)
 	<!-- ===TEAL_APPL_GLOAD_T1=== -->
 
 In the second transaction read the stored value.
@@ -1781,11 +1822,12 @@ In the second transaction read the stored value.
 === "TEAL"
 	<!-- ===TEAL_APPL_GLOAD_T2=== -->
 	```teal
-	// read the first 
+	// read the first
 	// transaction's 10th
 	// slot of scratch space
 	gload 0 10
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/scratch_t2.teal#L3-L7)
 	<!-- ===TEAL_APPL_GLOAD_T2=== -->
 
 # Reading a smart contracts state
@@ -1865,60 +1907,61 @@ As a way of getting started writing smart contracts, the following boilerplate t
 	<!-- ===TEAL_BOILERPLATE=== -->
 	```teal
 	#pragma version 8
-
+	
 	// Handle each possible OnCompletion type. We don't have to worry about
 	// handling ClearState, because the ClearStateProgram will execute in that
 	// case, not the ApprovalProgram.
-
+	
 	txn OnCompletion
 	int NoOp
 	==
 	bnz handle_noop
-
+	
 	txn OnCompletion
 	int OptIn
 	==
 	bnz handle_optin
-
+	
 	txn OnCompletion
 	int CloseOut
 	==
 	bnz handle_closeout
-
+	
 	txn OnCompletion
 	int UpdateApplication
 	==
 	bnz handle_updateapp
-
+	
 	txn OnCompletion
 	int DeleteApplication
 	==
 	bnz handle_deleteapp
-
+	
 	// Unexpected OnCompletion value. Should be unreachable.
 	err
-
+	
 	handle_noop:
 	// Handle NoOp
 	int 1
 	return
-
+	
 	handle_optin:
 	// Handle OptIn
 	int 1
 	return
-
+	
 	handle_closeout:
 	// Handle CloseOut
 	int 1
 	return
-
+	
 	// By default, disallow updating or deleting the app. Add custom authorization
 	// logic below to allow updating or deletion in certain circumstances.
 	handle_updateapp:
 	handle_deleteapp:
 	err
 	```
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/boilerplate.teal#L1-L55)
 	<!-- ===TEAL_BOILERPLATE=== -->
 
 # Minimum balance requirement for a smart contract
