@@ -11,11 +11,11 @@ Rekeying is a powerful protocol feature which enables an Algorand account holder
     Using the `--close-to` parameter on any transaction from a _rekeyed account_ will remove the **auth-addr** field, thus reverting signing authority to the original address. The `--close-to` parameter should be used with caution by keyholder(s) of **auth-addr** as the effects remove their authority to access this account thereafter.
 
 !!! warning
-	Rekeying an account affects the authorizing address for that account only. Note that an Account is distinct from an address so there are several important points that may not be obvious:
+	Rekeying an account affects the **authorizing address** for that account only. Note that an Account is distinct from an address so there are several important points that may not be obvious:
 
 	**1)** If an account is closed (balance to 0) the rekey setting is lost (see previous warning).
 
-  	**2)** Rekeys are not recursively resolved, that is A rekeyed to B and B rekeyed to C means only that A will have its txns authroized by B not C.
+  	**2)** Rekeys are not recursively resolved, that is, if A is rekeyed to B and B rekeyed to C, A will have it's transactions authorized by B not C.
 	
   	**3)** Rekeying members of a Multisig has no effect on the Multisig authorization since it's composed of Addresses not accounts. If necessary the Multisig account would need to be rekeyed itself.
 	
