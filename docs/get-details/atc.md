@@ -18,7 +18,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	```javascript
 	const createATC = new algosdk.AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L127-L128)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L127-L128)
     <!-- ===JSSDK_ATC_CREATE=== -->
 
 === "Python"
@@ -105,7 +105,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	  .do();
 	const contractAppID = txInfo['application-index'];
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L131-L151)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L131-L151)
     <!-- ===JSSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Go"
@@ -220,7 +220,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	);
 	const contract = new algosdk.ABIContract(abi);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L108-L115)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L108-L115)
     <!-- ===JSSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
 	```javascript
@@ -238,7 +238,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	const methodResult = await methodATC.execute(client, 3);
 	console.log('Result:', methodResult.methodResults[0].returnValue);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L154-L167)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L154-L167)
     <!-- ===JSSDK_ATC_RESULTS=== -->
     ```js
     // Other options:

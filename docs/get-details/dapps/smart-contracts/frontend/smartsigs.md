@@ -53,7 +53,7 @@ int 1
 	console.log('B64: ', result.result);
 	const b64program = result.result;
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L15-L22)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/lsig.ts#L15-L22)
     <!-- ===JSSDK_LSIG_COMPILE=== -->
 
 === "Python"
@@ -124,7 +124,7 @@ The response result from the TEAL `compile` command above is used to create the 
 	  new Uint8Array(Buffer.from(b64program, 'base64'))
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L25-L28)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/lsig.ts#L25-L28)
     <!-- ===JSSDK_LSIG_INIT=== -->
 
 === "Python"
@@ -169,7 +169,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 	  args
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L31-L36)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/lsig.ts#L31-L36)
     <!-- ===JSSDK_LSIG_PASS_ARGS=== -->
 
 === "Python"
@@ -250,7 +250,7 @@ The following example illustrates compiling a TEAL program and signing a transac
 	await client.sendRawTransaction(signedSmartSigTxn.blob).do();
 	await algosdk.waitForConfirmation(client, signedSmartSigTxn.txID, 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L55-L69)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/lsig.ts#L55-L69)
     <!-- ===JSSDK_LSIG_SIGN_FULL=== -->
 
 === "Python"
@@ -388,7 +388,7 @@ The following example illustrates signing a transaction with a created logic sig
 	await client.sendRawTransaction(signedDelegatedTxn.blob).do();
 	await algosdk.waitForConfirmation(client, signedDelegatedTxn.txID, 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/lsig.ts#L72-L92)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/lsig.ts#L72-L92)
     <!-- ===JSSDK_LSIG_DELEGATE_FULL=== -->
 
 === "Python"

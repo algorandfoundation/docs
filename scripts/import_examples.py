@@ -75,8 +75,8 @@ SDKExamples = dict[str, Example]
 
 sources: list[ExampleSource] = [
     ExampleSource(
-        github_url="https://github.com/barnjamin/py-algorand-sdk",
-        git_branch="doc-examples",
+        github_url="https://github.com/algorand/py-algorand-sdk",
+        git_branch="master",
         local_dir="../../py-algorand-sdk",
         example_dir="_examples",
         language_name="python",
@@ -85,9 +85,9 @@ sources: list[ExampleSource] = [
         file_extension=".py",
     ),
     ExampleSource(
-        github_url="https://github.com/joe-p/js-algorand-sdk",
-        git_branch="doc-examples",
-        local_dir="../../joes-js-algorand-sdk",
+        github_url="https://github.com/algorand/js-algorand-sdk",
+        git_branch="develop",
+        local_dir="../../js-algorand-sdk",
         example_dir="examples",
         language_name="javascript",
         src_comment_flag="// example: ",
@@ -95,8 +95,8 @@ sources: list[ExampleSource] = [
         file_extension=".ts",
     ),
     ExampleSource(
-        github_url="https://github.com/barnjamin/go-algorand-sdk",
-        git_branch="examples",
+        github_url="https://github.com/algorand/go-algorand-sdk",
+        git_branch="develop",
         local_dir="../../go/src/github.com/algorand/go-algorand-sdk",
         example_dir="_examples",
         language_name="go",
@@ -105,8 +105,8 @@ sources: list[ExampleSource] = [
         file_extension=".go",
     ),
     ExampleSource(
-        github_url="https://github.com/barnjamin/java-algorand-sdk",
-        git_branch="examples",
+        github_url="https://github.com/algorand/java-algorand-sdk",
+        git_branch="develop",
         local_dir="../../java-algorand-sdk",
         example_dir="examples",
         language_name="java",

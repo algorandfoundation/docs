@@ -112,7 +112,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	
 	console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L73-L94)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L73-L94)
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"
@@ -299,7 +299,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 	
 	console.log('Dryrun Response:', dryrunResponse);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L97-L105)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L97-L105)
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"

@@ -24,7 +24,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	  return new algosdk.Indexer(indexerToken, indexerServer, indexerPort);
 	}
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L17-L24)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/utils.ts#L17-L24)
     <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Python"
@@ -102,7 +102,7 @@ As an example, to get the details of a specific asset the indexer provides the `
 	const indexerAssetInfo = await indexer.lookupAssetByID(assetIndex).do();
 	console.log('Indexer Asset Info:', indexerAssetInfo);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/asa.ts#L67-L70)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/asa.ts#L67-L70)
     <!-- ===JSSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Python"
@@ -170,7 +170,7 @@ Searching is similar to lookup with the ability to return multiple or filtered r
 	  .do();
 	console.log(transactionInfo.transactions.map((t) => t.id));
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L14-L20)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/indexer.ts#L14-L20)
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Python"
@@ -259,7 +259,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	    console.log(`Transaction IDs: ${response.transactions.map((t) => t.id)}`);
 	}
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L23-L40)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/indexer.ts#L23-L40)
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Python"
@@ -420,7 +420,7 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 	  )}`
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/indexer.ts#L62-L73)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/indexer.ts#L62-L73)
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Python"

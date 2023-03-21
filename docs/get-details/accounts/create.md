@@ -65,7 +65,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	
 	const kmdclient = new algosdk.Kmd(kmdtoken, kmdserver, kmdport);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L8-L13)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/kmd.ts#L8-L13)
 	<!-- ===JSSDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===JSSDK_KMD_CREATE_WALLET=== -->
 	```javascript
@@ -84,7 +84,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	const walletID = wallet.wallet.id;
 	console.log('Created wallet:', walletID);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L16-L30)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/kmd.ts#L16-L30)
 	<!-- ===JSSDK_KMD_CREATE_WALLET=== -->
 	<!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
 	```javascript
@@ -97,7 +97,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	const { address } = await kmdclient.generateKey(wallethandle);
 	console.log('Created new account:', address);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L33-L41)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/kmd.ts#L33-L41)
 	<!-- ===JSSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Python"
@@ -276,7 +276,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	  .address;
 	console.log('Recovered account: ', recoveredAddr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L60-L81)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/kmd.ts#L60-L81)
 	<!-- ===JSSDK_KMD_RECOVER_WALLET=== -->
 
 === "Python"
@@ -396,7 +396,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	const accountMnemonic = algosdk.secretKeyToMnemonic(accountKey.private_key);
 	console.log('Account Mnemonic: ', accountMnemonic);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L44-L47)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/kmd.ts#L44-L47)
 	<!-- ===JSSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Python"
@@ -470,7 +470,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	);
 	console.log('Account successfully imported: ', importedAccount);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/kmd.ts#L50-L57)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/kmd.ts#L50-L57)
 	<!-- ===JSSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Python"
@@ -553,7 +553,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	console.log(`My address: ${generatedAccount.addr}`);
 	console.log(`My passphrase: ${passphrase}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L75-L79)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L75-L79)
 	<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 === "Python"
@@ -650,7 +650,7 @@ The following code shows how to generate a multisignature account composed of th
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L23-L36)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L23-L36)
 	<!-- ===JSSDK_MULTISIG_CREATE=== -->
 
 

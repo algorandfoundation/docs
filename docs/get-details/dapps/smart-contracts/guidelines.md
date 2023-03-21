@@ -57,7 +57,7 @@ There are two options:
 	```javascript
 	const minFee = algosdk.ALGORAND_MIN_TX_FEE;
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L54-L55)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L54-L55)
     <!-- ===JSSDK_CONST_MIN_FEE=== -->
 
 === "Java"

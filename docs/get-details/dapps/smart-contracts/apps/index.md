@@ -951,7 +951,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	  .do();
 	console.log('Name:', Buffer.from(boxVal.value).toString());
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L170-L203)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L170-L203)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"

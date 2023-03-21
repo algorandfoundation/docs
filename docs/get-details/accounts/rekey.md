@@ -445,7 +445,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L82-L158)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L82-L158)
 	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 
 

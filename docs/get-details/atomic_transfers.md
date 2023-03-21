@@ -66,7 +66,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 	  suggestedParams,
 	});
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L12-L31)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L12-L31)
     <!-- ===JSSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Python"
@@ -145,7 +145,7 @@ The result of this step is what ultimately guarantees that a particular transact
 	// assignGroupID returns the same txns with the group ID set
 	const txnGroup = algosdk.assignGroupID(txnArray);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L34-L37)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L34-L37)
     <!-- ===JSSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Python"
@@ -226,7 +226,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 	const alicesSignedTxn = txnGroup[0].signTxn(alice.privateKey);
 	const bobsSignedTxn = txnGroup[1].signTxn(bob.privateKey);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L40-L42)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L40-L42)
     <!-- ===JSSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Python"
@@ -288,7 +288,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	```javascript
 	const signedTxns = [alicesSignedTxn, bobsSignedTxn];
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L45-L46)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L45-L46)
     <!-- ===JSSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Python"
@@ -339,7 +339,7 @@ The transaction group is now broadcast to the network.
 	await client.sendRawTransaction(signedTxns).do();
 	await algosdk.waitForConfirmation(client, alicesTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atomics.ts#L49-L51)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atomics.ts#L49-L51)
     <!-- ===JSSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Python"

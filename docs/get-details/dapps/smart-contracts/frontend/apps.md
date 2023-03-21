@@ -70,7 +70,7 @@ An `algod` client connection is also required. The following connects using Sand
 	  return new algosdk.Algodv2(algodToken, algodServer, algodPort);
 	}
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L27-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/utils.ts#L27-L34)
     <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
 
 === "Java"
@@ -145,7 +145,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	const numLocalByteSlices = 0;
 	const numLocalInts = 1;
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L33-L38)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L33-L38)
     <!-- ===JSSDK_APP_SCHEMA=== -->
 
 === "Java"
@@ -221,7 +221,7 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 	);
 	const compiledClearProgram = await compileProgram(algodClient, clearProgram);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L17-L30)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L17-L30)
     <!-- ===JSSDK_APP_SOURCE=== -->
 
 === "Java"
@@ -286,7 +286,7 @@ Use the creator_mnemonic to define sender:
 	);
 	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L13-L18)
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -350,7 +350,7 @@ Compile the programs using the `compile` endpoint:
 	  return compiledBytes;
 	}
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/utils.ts#L4-L14)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/utils.ts#L4-L14)
     <!-- ===JSSDK_APP_COMPILE=== -->
 
 === "Java"
@@ -445,7 +445,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	const createdApp = result['application-index'];
 	console.log(`Created app with index: ${createdApp}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L41-L63)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L41-L63)
     <!-- ===JSSDK_APP_CREATE=== -->
 
 === "Java"
@@ -547,7 +547,7 @@ Use the user_mnemonic to define sender:
 	);
 	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/accounts.ts#L13-L18)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/accounts.ts#L13-L18)
 	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -613,7 +613,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L67-L81)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L67-L81)
     <!-- ===JSSDK_APP_OPTIN=== -->
 
 === "Java"
@@ -714,7 +714,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L84-L98)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L84-L98)
     <!-- ===JSSDK_APP_NOOP=== -->
 
 === "Java"
@@ -829,7 +829,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	
 	console.log(`Decoded local state - ${localKey}: ${localValue}`);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L118-L144)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L118-L144)
     <!-- ===JSSDK_APP_READ_STATE=== -->
 
 === "Java"
@@ -932,7 +932,7 @@ Construct the update transaction and await the response:
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L164-L187)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L164-L187)
     <!-- ===JSSDK_APP_UPDATE=== -->
 
 === "Java"
@@ -1059,7 +1059,7 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	  algosdk.decodeUint64(simpleAddResult.logs[0], 'bigint')
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/atc.ts#L48-L70)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/atc.ts#L48-L70)
     <!-- ===JSSDK_APP_CALL=== -->
 
 === "Java"
@@ -1184,7 +1184,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L147-L161)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L147-L161)
     <!-- ===JSSDK_APP_CLOSEOUT=== -->
 
 === "Java"
@@ -1287,7 +1287,7 @@ The approval program defines the creator as the only account able to [delete the
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L207-L221)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L207-L221)
     <!-- ===JSSDK_APP_DELETE=== -->
 
 === "Java"
@@ -1385,7 +1385,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/app.ts#L190-L204)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/app.ts#L190-L204)
     <!-- ===JSSDK_APP_CLEAR=== -->
 
 === "Java"

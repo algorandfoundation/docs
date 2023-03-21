@@ -52,7 +52,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	const addr = algosdk.encodeAddress(pk.publicKey);
 	console.log(address, addr);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L16-L20)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/encoding.ts#L16-L20)
 	<!-- ===JSSDK_CODEC_ADDRESS=== -->
 
 === "Python"
@@ -105,7 +105,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	const b64Decoded = Buffer.from(b64Encoded, 'base64').toString();
 	console.log(b64Encoded, b64Decoded);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L23-L26)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/encoding.ts#L23-L26)
 	<!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
@@ -156,7 +156,7 @@ Given an integer `1337`, you may encode it as:
 	const mixedDecoded = algosdk.decodeUint64(encoded, 'bigint');
 	console.log(int, encoded, safeDecoded, mixedDecoded);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L29-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/encoding.ts#L29-L34)
 	<!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
@@ -231,7 +231,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L37-L50)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/encoding.ts#L37-L50)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
@@ -242,7 +242,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/joe-p/js-algorand-sdk/blob/doc-examples/examples/encoding.ts#L53-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/develop/examples/encoding.ts#L53-L59)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
