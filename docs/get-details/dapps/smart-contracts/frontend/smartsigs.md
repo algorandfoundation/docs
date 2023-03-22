@@ -99,7 +99,7 @@ int 1
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L23-L37)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig/main.go#L24-L38)
     <!-- ===GOSDK_LSIG_COMPILE=== -->
 
 Once a TEAL program is compiled, the bytes of the program can be used as a parameter to the LogicSigAccount method. Most of the SDKs support the bytes encoded in base64 or hexadecimal format.
@@ -151,7 +151,7 @@ The response result from the TEAL `compile` command above is used to create the 
 		Lsig: types.LogicSig{Logic: lsigBinary, Args: nil},
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L40-L43)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig/main.go#L41-L44)
     <!-- ===GOSDK_LSIG_INIT=== -->
 
 # Passing parameters using the SDKs
@@ -208,7 +208,7 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 		Lsig: types.LogicSig{Logic: lsigBinary, Args: [][]byte{encodedArg}},
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L47-L53)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig/main.go#L48-L54)
     <!-- ===GOSDK_LSIG_PASS_ARGS=== -->
 
 
@@ -341,7 +341,7 @@ The following example illustrates compiling a TEAL program and signing a transac
 	}
 	log.Printf("Lsig pay confirmed in round: %d", payResult.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L69-L96)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig/main.go#L70-L97)
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 
 # Account delegation SDK usage
@@ -488,5 +488,5 @@ The following example illustrates signing a transaction with a created logic sig
 	
 	log.Printf("Delegated Lsig pay confirmed in round: %d", delPayResult.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig.go#L99-L128)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/lsig/main.go#L100-L129)
     <!-- ===GOSDK_LSIG_DELEGATE_FULL=== -->

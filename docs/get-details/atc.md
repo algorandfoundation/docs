@@ -35,7 +35,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	// Create the atc we'll use to compose our transaction group
 	var atc = transaction.AtomicTransactionComposer{}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L38-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L39-L41)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -110,7 +110,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
 	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L43-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L44-L58)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -243,7 +243,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to unmarshal contract: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L26-L35)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L27-L36)
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
 	```go
@@ -267,7 +267,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to add method call: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L60-L79)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L61-L80)
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===GOSDK_ATC_RESULTS=== -->
 	```go
@@ -280,7 +280,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L82-L90)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L83-L91)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"

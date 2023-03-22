@@ -157,7 +157,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	
 	os.WriteFile("dryrun.msgp", msgpack.Encode(drr), 0666)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/debug.go#L26-L60)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/debug/main.go#L27-L61)
     <!-- ===GOSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Java"
@@ -326,7 +326,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 		log.Printf("%+v", txn.AppCallTrace)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/debug.go#L63-L79)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/debug/main.go#L64-L80)
     <!-- ===GOSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Java"

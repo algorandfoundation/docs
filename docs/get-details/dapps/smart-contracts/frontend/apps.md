@@ -108,7 +108,7 @@ An `algod` client connection is also required. The following connects using Sand
 		[]*common.Header{&algodHeader},
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L88-L106)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L18-L36)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
@@ -174,7 +174,7 @@ The example application defined below may hold up to one each of `bytes` and `in
 	globalSchema := types.StateSchema{NumUint: globalInts, NumByteSlice: globalBytes}
 	localSchema := types.StateSchema{NumUint: localInts, NumByteSlice: localBytes}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L54-L65)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L55-L66)
     <!-- ===GOSDK_APP_SCHEMA=== -->
 
 !!! Info
@@ -240,7 +240,7 @@ This is the most basic [clear program](../apps/index.md#the-lifecycle-of-a-smart
 		log.Fatalf("failed to read clear program: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L68-L76)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L69-L77)
     <!-- ===GOSDK_APP_SOURCE=== -->
 
 # Application methods
@@ -311,7 +311,7 @@ Use the creator_mnemonic to define sender:
 	
 	log.Printf("%+v", recovered)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L27-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account/main.go#L28-L39)
     <!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Compile the programs using the `compile` endpoint:
@@ -389,7 +389,7 @@ Compile the programs using the `compile` endpoint:
 		log.Fatalf("failed to decode compiled program: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L79-L98)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L80-L99)
     <!-- ===GOSDK_APP_COMPILE=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation
@@ -510,7 +510,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	appID := confirmedTxn.ApplicationIndex
 	log.Printf("Created app with id: %d", appID)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L101-L132)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L102-L133)
     <!-- ===GOSDK_APP_CREATE=== -->
 
 
@@ -579,7 +579,7 @@ Use the user_mnemonic to define sender:
 	
 	log.Printf("%+v", recovered)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L27-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account/main.go#L28-L39)
 	<!-- ===GOSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 Construct the transaction with defined values then sign, send, and await confirmation:
@@ -673,7 +673,7 @@ Construct the transaction with defined values then sign, send, and await confirm
 	
 	log.Printf("OptIn Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L138-L171)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L139-L172)
     <!-- ===GOSDK_APP_OPTIN=== -->
 
 
@@ -783,7 +783,7 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
 	
 	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L176-L218)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L177-L219)
     <!-- ===GOSDK_APP_NOOP=== -->
 
 ## Read state
@@ -860,7 +860,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	}
 	log.Printf("app info: %+v", acctInfo)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L27-L42)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L28-L43)
     <!-- ===GOSDK_APP_READ_STATE=== -->
 
 ## Update
@@ -1005,7 +1005,7 @@ Construct the update transaction and await the response:
 	
 	log.Printf("Update Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L226-L265)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L227-L266)
     <!-- ===GOSDK_APP_UPDATE=== -->
 
 ## Call with arguments
@@ -1138,7 +1138,7 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	
 	log.Printf("NoOp Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L358-L400)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L359-L401)
     <!-- ===GOSDK_APP_CALL=== -->
 
 ## Close out
@@ -1245,7 +1245,7 @@ The user may discontinue use of the application by sending a [close out](../apps
 	
 	log.Printf("Closeout Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L270-L309)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L271-L310)
     <!-- ===GOSDK_APP_CLOSEOUT=== -->
 
 ## Delete
@@ -1346,7 +1346,7 @@ The approval program defines the creator as the only account able to [delete the
 	
 	log.Printf("Delete Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L405-L444)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L406-L445)
     <!-- ===GOSDK_APP_DELETE=== -->
 
 ## Clear state
@@ -1441,7 +1441,7 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
 	
 	log.Printf("ClearState Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps.go#L314-L353)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/apps/main.go#L315-L354)
     <!-- ===GOSDK_APP_CLEAR=== -->
 
 # Appendix

@@ -975,7 +975,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	}
 	// ...
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L93-L109)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L94-L110)
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 
 === "Java"

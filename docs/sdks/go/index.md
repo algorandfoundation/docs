@@ -42,17 +42,17 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 ```go
-account := crypto.GenerateAccount()
-mn, err := mnemonic.FromPrivateKey(account.PrivateKey)
+newAccount := crypto.GenerateAccount()
+passphrase, err := mnemonic.FromPrivateKey(newAccount.PrivateKey)
 
 if err != nil {
-	log.Fatalf("failed to generate account: %s", err)
+	fmt.Printf("Error creating transaction: %s\n", err)
+} else {
+	fmt.Printf("My address: %s\n", newAccount.Address)
+	fmt.Printf("My passphrase: %s\n", passphrase)
 }
-
-log.Printf("Address: %s\n", account.Address)
-log.Printf("Mnemonic: %s\n", mn)
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L15-L24)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L163-L172)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 !!! Note 
@@ -98,7 +98,7 @@ algodClientWithHeaders, _ := algod.MakeClientWithHeaders(
 	[]*common.Header{&algodHeader},
 )
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L88-L106)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L18-L36)
 <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
@@ -117,7 +117,7 @@ if err != nil {
 }
 log.Printf("Account balance: %d microAlgos", acctInfo.Amount)
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L24-L29)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L48-L53)
  <!-- ===GOSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 
@@ -136,7 +136,7 @@ if err != nil {
 	log.Fatalf("failed creating transaction: %s", err)
 }
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L32-L41)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L56-L65)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_CREATE=== -->
 
 !!! Info
@@ -154,7 +154,7 @@ if err != nil {
 	return
 }
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L44-L49)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L68-L73)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
@@ -178,7 +178,7 @@ if err != nil {
 }
 fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L52-L63)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L76-L87)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 # Viewing the Transaction

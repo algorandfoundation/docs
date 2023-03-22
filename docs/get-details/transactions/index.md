@@ -710,7 +710,7 @@ An example of setting a pooled fee on a group of two transactions:
 	sp.FlatFee = true
 	// ...
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L78-L83)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L102-L107)
   	<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Java"

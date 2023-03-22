@@ -112,7 +112,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 		log.Fatalf("failed creating transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L23-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L24-L39)
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "goal"
@@ -175,11 +175,11 @@ The result of this step is what ultimately guarantees that a particular transact
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 	```go
 	// compute group id and put it into each transaction
-	gid, err := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
+	gid, _ := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
 	tx1.Group = gid
 	tx2.Group = gid
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L41-L45)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L42-L46)
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
@@ -252,7 +252,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 		fmt.Printf("Failed to sign transaction: %s\n", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L48-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L49-L58)
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "goal"
@@ -307,7 +307,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	signedGroup = append(signedGroup, stx2...)
 	
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L60-L64)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L61-L65)
     <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "goal"
@@ -379,7 +379,7 @@ The transaction group is now broadcast to the network.
 	}
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L67-L78)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L68-L79)
     <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
 
 === "goal"
