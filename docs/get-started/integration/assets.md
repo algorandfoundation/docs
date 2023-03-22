@@ -73,16 +73,16 @@ Any account can receive Algos, but a potential recipient of a specific ASA must 
 
 # Closing accounts
 
-[In the Algo `"pay"` transaction](../../../get-details/transactions/#close-an-account){: target="_blank"}, you can close-out an account by specifying an address in the optional `CloseRemainderTo` (`"close"`) field. The result of this action is that the remaining account balance will be sent to the specified address and the `"snd"` address will be effectively removed from the ledger.
+[In the Algo `"pay"` transaction](/docs/get-details/transactions/#close-an-account){: target="_blank"}, you can close-out an account by specifying an address in the optional `CloseRemainderTo` (`"close"`) field. The result of this action is that the remaining account balance will be sent to the specified address and the `"snd"` address will be effectively removed from the ledger.
 
 An account must opt-out of all asset holdings _before_ closing out its Algo balance.
 
 
 # Where to find account balances
 
-Algo and ASA balances are both located in an [account's balance record](https://developer.algorand.org/docs/reference/rest-apis/algod/v2/#account){: target="_blank"}.
+Algo and ASA balances are both located in an [account's balance record](/docs/rest-apis/algod#account){: target="_blank"}.
 
-[`GET /v2/accounts/{address}`](../../../rest-apis/algod/v2/#get-v2accountsaddress){: target="_blank"}
+[`GET /v2/accounts/{address}`](/docs/rest-apis/algod#get-v2accountsaddress){: target="_blank"}
 
 The Algo balance can be found at the top level under `"amount"`, while multiple ASA balances are contained in an array under `"assets"`.
 
@@ -94,7 +94,7 @@ The Algo balance can be found at the top level under `"amount"`, while multiple 
 If you are doing your own accounting of transactions and updates to balances, be aware that there are a couple of ways that balances can be updated outside of so-called “normal" transactions.
 
 ## Inner transactions
-Transactions can be sent from smart contracts and these are called [inner transactions](../../../get-details/dapps/avm/teal/specification/#inner-transactions){: target="_blank"}. These transactions can be found in the [`inner-txns`](../../../rest-apis/algod/v2/#pendingtransactionresponse){: target="_blank"} field of the application call transaction that triggered them. See sample output from `algod` and `indexer` APIs. 
+Transactions can be sent from smart contracts and these are called [inner transactions](/docs/get-details/dapps/avm/teal/specification/#inner-transactions){: target="_blank"}. These transactions can be found in the [`inner-txns`](../../../rest-apis/algod#pendingtransactionresponse){: target="_blank"} field of the application call transaction that triggered them. See sample output from `algod` and `indexer` APIs. 
 
 === "algod"
 

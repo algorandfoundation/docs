@@ -8,7 +8,7 @@ How large can my approval program be?
 How many arguments can I pass? 
 What is the Minimum Balance Requirement increase for an asset opt-in?  
 
-The limits applied at the protocol level are documented [here](./parameter_tables.md).
+The limits applied at the protocol level are documented [here](/docs/get-details/parameter_tables.md).
 
 
 # Address Encoding/Decoding 
@@ -25,8 +25,8 @@ All SDKs have a similarly named method.
 
 !! Note that smart contracts operate _only_ on the 32 byte version, so any interaction where an address is used should be translated prior to passing it to the smart contract. This is handled for you automatically in some cases (e.g. sender on a transaction)
 
-[Address Details](./accounts/#keys-and-addresses)
-[Encoding Details](./encoding/#address)
+[Address Details](/docs/get-details/accounts/index.md#keys-and-addresses)
+[Encoding Details](/docs/get-details/encoding.md#address-encoding)
 
 # Application State Encoding/Decoding 
 
@@ -118,7 +118,7 @@ Common reasons include:
 
 How can I debug this logic error?
 
-Generally Logic errors can be debugged using [Dryrun, Tealdbg, or Simulate](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/debugging).
+Generally Logic errors can be debugged using [Dryrun, Tealdbg, or Simulate](/docs/get-details/dapps/smart-contracts/debugging).
 
 For some common errors, find an explanation below:  
 
@@ -129,7 +129,7 @@ For some common errors, find an explanation below:
 
 - `logic eval error: assert failed pc=XXX`
 
-    An `assert` was invoked on something that evaluated to 0. The `pc` will provide a pointer to where in the program the `assert` failed. To find where in the TEAL source program this corresponds to, compile the source TEAL with [`source_map`](https://developer.algorand.org/docs/rest-apis/algod/v2/#post-v2tealcompile) enabled and use the result to find the line in the source program. 
+    An `assert` was invoked on something that evaluated to 0. The `pc` will provide a pointer to where in the program the `assert` failed. To find where in the TEAL source program this corresponds to, compile the source TEAL with [`source_map`](/docs/rest-apis/algod#post-v2tealcompile) enabled and use the result to find the line in the source program. 
 
 - `logic eval error: program logs too large.`
 

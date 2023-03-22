@@ -2,7 +2,7 @@ title: Node Troubleshooting
 
 # Do you want to run a node yourself?
 
-If you are a developer, running a private network using [sandbox](../../../get-details/devenv/sandbox) is simpler and provide more flexibility.
+If you are a developer, running a private network using [sandbox](/docs/get-started/devenv/sandbox) is simpler and provide more flexibility.
 
 Running a production node for MainNet is very beneficial for decentralization.
 However, as any unmanaged system (and any blockchain node/indexer), to achieve high SLA, running a production node has many requirements: appropriate redundancy (some upgrades create downtime on nodes), 24/7 monitoring, regular maintenance, use of a staging environment for testing updates, ...
@@ -50,7 +50,7 @@ If you see:
 One of the most common issues are that the node is on the wrong network, has the wrong algod version, or is not fully synced.
 
 * **Check that the node is synced/caught up** following [Catchup and Status](../../operations/catchup). See below if the node is not syncing.
-* **Check that the node is on the right network**: when running `goal node status`, `Genesis ID` must be `mainnet-v1.0` for MainNet, `testnet-v1.0` for TestNet, `betanet-v1.0` for BetaNet. See [Switch Networks](../../operations/switch_network) to solve this issue.
+* **Check that the node is on the right network**: when running `goal node status`, `Genesis ID` must be `mainnet-v1.0` for MainNet, `testnet-v1.0` for TestNet, `betanet-v1.0` for BetaNet. See [Switch Networks](/docs/run-a-node/operations/switch_network) to solve this issue.
 * **Check that the version** reported of `algod -v` and `goal version -v` are the latest stable release (if using MainNet or TestNet) or the latest beta release (if using BetaNet). See the [official repo](https://github.com/algorand/go-algorand/releases) for the list of all releases. Beta releases are clearly marked as such.
 
 You can easily check all of the above using [dAppFlow node status](https://app.dappflow.org/node-status) webapp.
