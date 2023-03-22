@@ -87,7 +87,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	Address addrAgain = new Address(addr.getBytes());
 	assert addrAgain.equals(addr);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L25-L31)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L26-L32)
 	<!-- ===JAVASDK_CODEC_ADDRESS=== -->
 
 ### Byte Arrays
@@ -136,7 +136,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	String reEncodedStr = Encoder.encodeToBase64(decodedBytes);
 	assert encodedStr.equals(reEncodedStr);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L34-L38)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L35-L39)
 	<!-- ===JAVASDK_CODEC_BASE64=== -->
 
 ### Integers
@@ -191,7 +191,7 @@ Given an integer `1337`, you may encode it as:
 	BigInteger decodedVal = Encoder.decodeUint64(encodedVal);
 	assert val.equals(decodedVal);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L41-L45)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L42-L46)
 	<!-- ===JAVASDK_CODEC_UINT64=== -->
 
 
@@ -337,7 +337,7 @@ Create a payment transaction from one account to another using suggested paramet
 	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
 	assert decodedTxn.equals(ptxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L59)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 	```java
@@ -348,7 +348,7 @@ Create a payment transaction from one account to another using suggested paramet
 	        SignedTransaction.class);
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L62-L68)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 # ABI Encoding
@@ -435,4 +435,23 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 
 === "Java"
 	<!-- ===JAVASDK_CODEC_ABI=== -->
+	```java
+	ABIType tupleCodec = ABIType.valueOf("(string,string)");
+	Object[] tupleData = new Object[] { "hello", "world" };
+	byte[] tupleEncoded = tupleCodec.encode(tupleData);
+	System.out.printf("Encoded: '%s'\n", Hex.encodeHexString(tupleEncoded));
+	Object tupleDecoded = tupleCodec.decode(tupleEncoded);
+	// prints [hello, world]
+	System.out.printf("Decoded: %s\n", Arrays.toString((Object[]) tupleDecoded));
+	
+	ABIType arrCodec = ABIType.valueOf("uint64[]");
+	Object[] arrData = new Object[] { 1, 2, 3, 4, 5 };
+	byte[] arrEncoded = arrCodec.encode(arrData);
+	System.out.printf("Encoded: '%s'\n", Hex.encodeHexString(arrEncoded));
+	
+	Object arrDecoded = arrCodec.decode(arrEncoded);
+	// prints [1, 2, 3, 4, 5]
+	System.out.printf("Decoded: %s\n", Arrays.toString((Object[]) arrDecoded));
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L71-L87)
 	<!-- ===JAVASDK_CODEC_ABI=== -->

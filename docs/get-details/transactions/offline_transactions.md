@@ -65,7 +65,7 @@ Unsigned transactions require the transaction object to be created before writin
 	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
 	assert decodedTxn.equals(ptxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L59)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
@@ -145,7 +145,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	        SignedTransaction.class);
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L62-L68)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"

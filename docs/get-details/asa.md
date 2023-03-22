@@ -191,7 +191,7 @@ Create assets using either the SDKs or `goal`. When using the SDKs supply all cr
 	System.out.printf("Created asset with id: %d\n", asaId);
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L48-L78)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L49-L79)
     <!-- ===JAVASDK_ASSET_CREATE=== -->
 
 === "Go"
@@ -352,7 +352,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L84-L97)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L85-L98)
     <!-- ===JAVASDK_ASSET_CONFIG=== -->
 
 === "Go"
@@ -474,7 +474,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L104-L113)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L105-L114)
     <!-- ===JAVASDK_ASSET_OPTIN=== -->
 
 === "Go"
@@ -586,7 +586,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L121-L132)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L122-L133)
     <!-- ===JAVASDK_ASSET_XFER=== -->
 
 === "Go"
@@ -710,7 +710,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L140-L152)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L141-L153)
     <!-- ===JAVASDK_ASSET_FREEZE=== -->
 
 === "Go"
@@ -838,7 +838,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L160-L173)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L179-L192)
     <!-- ===JAVASDK_ASSET_CLAWBACK=== -->
 
 === "Go"
@@ -990,6 +990,19 @@ An account can opt out of an asset at any time. This means that the account will
 
 === "Java"
 <!-- ===JAVASDK_ASSET_OPT_OUT=== -->
+	```java
+	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
+	TransactionParametersResponse sp = rsp.body();
+	// Opt out of the asset by setting the assetCloseTo parameter
+	Transaction optOutTxn = Transaction.AssetTransferTransactionBuilder().suggestedParams(sp)
+	        .sender(sender.getAddress())
+	        .assetReceiver(creator.getAddress())
+	        .assetCloseTo(creator.getAddress())
+	        .assetIndex(asaId)
+	        .assetAmount(0)
+	        .build();
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L161-L171)
 <!-- ===JAVASDK_ASSET_OPT_OUT=== -->
 
 
@@ -1062,7 +1075,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	        .build();
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L180-L193)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L199-L212)
     <!-- ===JAVASDK_ASSET_DELETE=== -->
 
 === "Go"
@@ -1154,7 +1167,7 @@ Retrieve an asset's configuration information from the network using the SDKs or
 	Asset assetInfo = assetResp.body();
 	System.out.printf("Asset Name: %s\n", assetInfo.params.name);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L39-L43)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L40-L44)
     <!-- ===JAVASDK_ASSET_INFO=== -->
 
 === "Go"
