@@ -68,14 +68,12 @@ The example below illustrates creating, grouping, and signing transactions atomi
 === "Python"
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 	```python
-	
 	# payment from account 1 to account 2
 	txn_1 = transaction.PaymentTxn(addr1, suggested_params, addr2, 100000)
 	# payment from account 2 to account 1
 	txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
-	
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L16-L22)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L16-L20)
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Java"
@@ -114,7 +112,7 @@ The example below illustrates creating, grouping, and signing transactions atomi
 		log.Fatalf("failed creating transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L23-L38)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L24-L39)
     <!-- ===GOSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "goal"
@@ -148,16 +146,14 @@ The result of this step is what ultimately guarantees that a particular transact
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 	```python
 	# Assign group id to the transactions (order matters!)
-	txn_1, txn_2 = transaction.assign_group_id([txn_1, txn_2])
-	
+	transaction.assign_group_id([txn_1, txn_2])
 	# Or, equivalently
-	
 	# get group id and assign it to transactions
-	gid = transaction.calculate_group_id([txn_1, txn_2])
-	txn_1.group = gid
-	txn_2.group = gid
+	# gid = transaction.calculate_group_id([txn_1, txn_2])
+	# txn_1.group = gid
+	# txn_2.group = gid
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L25-L34)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L24-L31)
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
@@ -179,11 +175,11 @@ The result of this step is what ultimately guarantees that a particular transact
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 	```go
 	// compute group id and put it into each transaction
-	gid, err := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
+	gid, _ := crypto.ComputeGroupID([]types.Transaction{tx1, tx2})
 	tx1.Group = gid
 	tx2.Group = gid
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L41-L45)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L42-L46)
     <!-- ===GOSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "goal"
@@ -230,7 +226,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 	stxn_1 = txn_1.sign(sk1)
 	stxn_2 = txn_2.sign(sk2)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L37-L40)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L34-L37)
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
@@ -256,7 +252,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 		fmt.Printf("Failed to sign transaction: %s\n", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L48-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L49-L58)
     <!-- ===GOSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "goal"
@@ -291,7 +287,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	# combine the signed transactions into a single list
 	signed_group = [stxn_1, stxn_2]
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L43-L45)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L40-L42)
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
@@ -311,7 +307,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	signedGroup = append(signedGroup, stx2...)
 	
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L60-L64)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L61-L65)
     <!-- ===GOSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "goal"
@@ -347,7 +343,7 @@ The transaction group is now broadcast to the network.
 	)
 	print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L48-L57)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L45-L54)
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"
@@ -383,7 +379,7 @@ The transaction group is now broadcast to the network.
 	}
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transfer.go#L67-L78)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atomic_transactions/main.go#L68-L79)
     <!-- ===GOSDK_ATOMIC_GROUP_SEND=== -->
 
 === "goal"

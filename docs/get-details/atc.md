@@ -26,7 +26,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	```python
 	atc = AtomicTransactionComposer()
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L11-L12)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L12-L13)
     <!-- ===PYSDK_ATC_CREATE=== -->
 
 === "Go"
@@ -35,7 +35,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	// Create the atc we'll use to compose our transaction group
 	var atc = transaction.AtomicTransactionComposer{}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L38-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L39-L41)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -72,7 +72,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	# Pass TransactionWithSigner to ATC
 	atc.add_transaction(tws)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L22-L38)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L21-L37)
     <!-- ===PYSDK_ATC_ADD_TRANSACTION=== -->
 
 === "JavaScript"
@@ -110,7 +110,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
 	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L43-L57)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L44-L58)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -144,11 +144,11 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 === "Python"
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
 	```python
-	with open("path/to/contract.json") as f:
+	with open("calculator/contract.json") as f:
 	    js = f.read()
 	contract = abi.Contract.from_json(js)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L41-L44)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L43-L46)
     <!-- ===PYSDK_ATC_CONTRACT_INIT=== -->
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
 	```python
@@ -163,23 +163,8 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	    signer,
 	    method_args=[1, 1],
 	)
-	
-	# This method requires a `transaction` as its second argument.
-	# Construct the transaction and pass it in as an argument.
-	# The ATC will handle adding it to the group transaction and
-	# setting the reference in the application arguments.
-	ptxn = transaction.PaymentTxn(addr, sp, addr, 10000)
-	txn = TransactionWithSigner(ptxn, signer)
-	atc.add_method_call(
-	    app_id,
-	    contract.get_method_by_name("txntest"),
-	    addr,
-	    sp,
-	    signer,
-	    method_args=[10000, txn, 1000],
-	)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L51-L77)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L49-L60)
     <!-- ===PYSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===PYSDK_ATC_RESULTS=== -->
 	```python
@@ -190,7 +175,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	for res in result.abi_results:
 	    print(res.return_value)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L81-L87)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L64-L70)
     <!-- ===PYSDK_ATC_RESULTS=== -->
 
 === "JavaScript"
@@ -258,7 +243,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to unmarshal contract: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L26-L35)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L27-L36)
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
 	```go
@@ -282,7 +267,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to add method call: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L60-L79)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L61-L80)
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===GOSDK_ATC_RESULTS=== -->
 	```go
@@ -295,7 +280,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc.go#L82-L90)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L83-L91)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"

@@ -39,7 +39,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	    indexer_token=indexer_token, indexer_address=indexer_host
 	)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L5-L11)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L7-L13)
     <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
 
 === "Java"
@@ -59,7 +59,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	// Create a new indexer client, configured to connect to out local sandbox
 	var indexerAddress = "http://localhost:8980"
 	var indexerToken = strings.Repeat("a", 64)
-	indexerClient, err := indexer.MakeClient(
+	indexerClient, _ := indexer.MakeClient(
 		indexerAddress,
 		indexerToken,
 	)
@@ -75,7 +75,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 		[]*common.Header{&indexerHeader},
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer.go#L14-L32)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L14-L32)
 	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
 
 !!! info 
@@ -111,12 +111,11 @@ As an example, to get the details of a specific asset the indexer provides the `
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
 	```python
 	# lookup a single asset
-	asset_id = 2044572
 	# by passing include_all, we specify that we want to see deleted assets as well
 	response = myindexer.asset_info(asset_id, include_all=True)
 	print(f"Asset Info: {json.dumps(response, indent=2,)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L14-L19)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L49-L53)
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Java"
@@ -138,16 +137,16 @@ As an example, to get the details of a specific asset the indexer provides the `
 	var minBalance uint64 = 50
 	
 	// Lookup accounts with minimum balance of asset
-	assetResult, err := indexerClient.
+	assetResult, _ := indexerClient.
 		LookupAssetBalances(assetId).
 		CurrencyGreaterThan(minBalance).
 		Do(context.Background())
 	
 	// Print the results
-	assetJson, err := json.MarshalIndent(assetResult, "", "\t")
+	assetJson, _ := json.MarshalIndent(assetResult, "", "\t")
 	fmt.Printf(string(assetJson) + "\n")
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer.go#L51-L64)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L51-L64)
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "cURL"
@@ -183,7 +182,7 @@ Searching is similar to lookup with the ability to return multiple or filtered r
 	)
 	print(f"Transaction results: {json.dumps(response, indent=2)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L22-L26)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L56-L60)
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Java"
@@ -204,16 +203,16 @@ Searching is similar to lookup with the ability to return multiple or filtered r
 	var transactionMinAmount uint64 = 10
 	
 	// Query
-	transactionResult, err := indexerClient.
+	transactionResult, _ := indexerClient.
 		SearchForTransactions().
 		CurrencyGreaterThan(transactionMinAmount).
 		Do(context.Background())
 	
 	// Print results
-	transactionJson, err := json.MarshalIndent(transactionResult, "", "\t")
+	transactionJson, _ := json.MarshalIndent(transactionResult, "", "\t")
 	fmt.Printf(string(transactionJson) + "\n")
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer.go#L69-L81)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L69-L81)
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "cURL"
@@ -276,7 +275,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	# no more transactions in the response
 	while has_results:
 	    response = myindexer.search_transactions(
-	        min_amount=10, min_round=1000, max_round=1500
+	        min_amount=10, min_round=1000, max_round=1500, next_page=nexttoken
 	    )
 	
 	    has_results = len(response["transactions"]) > 0
@@ -287,7 +286,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	
 	    page += 1
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L29-L48)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L63-L82)
     <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Java"
@@ -349,7 +348,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 		}
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer.go#L84-L118)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L84-L118)
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "cURL"
@@ -432,7 +431,7 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 	response = myindexer.search_transactions(note_prefix=note_prefix)
 	print(f"result: {json.dumps(response, indent=2)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L51-L54)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L85-L88)
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Java"
@@ -452,16 +451,16 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 	var notePrefix = "showing prefix"
 	
 	// Query
-	prefixResult, err := indexerClient.
+	prefixResult, _ := indexerClient.
 		SearchForTransactions().
 		NotePrefix([]byte(notePrefix)).
 		Do(context.Background())
 	
 	// Print results
-	prefixJson, err := json.MarshalIndent(prefixResult, "", "\t")
+	prefixJson, _ := json.MarshalIndent(prefixResult, "", "\t")
 	fmt.Printf(string(prefixJson) + "\n")
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer.go#L121-L133)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L121-L133)
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "cURL"

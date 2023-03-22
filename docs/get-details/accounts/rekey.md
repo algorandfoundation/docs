@@ -512,5 +512,5 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	
 	fmt.Printf("Confirmed Transaction: %s in Round %d\n", txID, result.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L48-L81)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account/main.go#L49-L82)
 	<!-- ===GOSDK_ACCOUNT_REKEY=== -->
