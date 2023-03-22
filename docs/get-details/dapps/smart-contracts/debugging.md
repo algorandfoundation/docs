@@ -75,7 +75,9 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	sp = algod_client.suggested_params()
 	
 	atc = atomic_transaction_composer.AtomicTransactionComposer()
-	atc.add_method_call(app_id, my_method, acct1.address, sp, acct1.signer)
+	atc.add_method_call(
+	    app_id, my_method, acct1.address, sp, acct1.signer, method_args=[1, 2]
+	)
 	txns = atc.gather_signatures()
 	
 	drr = transaction.create_dryrun(algod_client, txns)
@@ -84,7 +86,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	with open("dryrun.msgp", "wb") as f:
 	    f.write(base64.b64decode(encoding.msgpack_encode(drr)))
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/debug.py#L22-L33)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/debug.py#L31-L44)
     <!-- ===PYSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "JavaScript"
@@ -286,7 +288,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 	    if txn.app_call_rejected():
 	        print(txn.app_trace())
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/debug.py#L36-L46)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/debug.py#L48-L58)
     <!-- ===PYSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "JavaScript"

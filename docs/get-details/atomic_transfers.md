@@ -68,14 +68,12 @@ The example below illustrates creating, grouping, and signing transactions atomi
 === "Python"
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 	```python
-	
 	# payment from account 1 to account 2
 	txn_1 = transaction.PaymentTxn(addr1, suggested_params, addr2, 100000)
 	# payment from account 2 to account 1
 	txn_2 = transaction.PaymentTxn(addr2, suggested_params, addr1, 200000)
-	
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L16-L22)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L16-L20)
     <!-- ===PYSDK_ATOMIC_CREATE_TXNS=== -->
 
 === "Java"
@@ -148,16 +146,14 @@ The result of this step is what ultimately guarantees that a particular transact
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 	```python
 	# Assign group id to the transactions (order matters!)
-	txn_1, txn_2 = transaction.assign_group_id([txn_1, txn_2])
-	
+	transaction.assign_group_id([txn_1, txn_2])
 	# Or, equivalently
-	
 	# get group id and assign it to transactions
-	gid = transaction.calculate_group_id([txn_1, txn_2])
-	txn_1.group = gid
-	txn_2.group = gid
+	# gid = transaction.calculate_group_id([txn_1, txn_2])
+	# txn_1.group = gid
+	# txn_2.group = gid
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L25-L34)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L24-L31)
     <!-- ===PYSDK_ATOMIC_GROUP_TXNS=== --->
 
 === "Java"
@@ -230,7 +226,7 @@ With a group ID assigned, each transaction sender must authorize their respectiv
 	stxn_1 = txn_1.sign(sk1)
 	stxn_2 = txn_2.sign(sk2)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L37-L40)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L34-L37)
     <!-- ===PYSDK_ATOMIC_GROUP_SIGN=== -->
 
 === "Java"
@@ -291,7 +287,7 @@ All authorized transactions are now assembled into an array, maintaining the ori
 	# combine the signed transactions into a single list
 	signed_group = [stxn_1, stxn_2]
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L43-L45)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L40-L42)
     <!-- ===PYSDK_ATOMIC_GROUP_ASSEMBLE=== -->
 
 === "Java"
@@ -347,7 +343,7 @@ The transaction group is now broadcast to the network.
 	)
 	print(f"txID: {tx_id} confirmed in round: {result.get('confirmed-round', 0)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L48-L57)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atomic_transfers.py#L45-L54)
     <!-- ===PYSDK_ATOMIC_GROUP_SEND=== -->
 
 === "Java"

@@ -925,11 +925,10 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	    addr,
 	    sp,
 	    signer,
-	    method_args=[1, 5],
 	    boxes=[[app_id, b"key"]],
 	)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L92-L102)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L77-L86)
     <!-- ===PYSDK_ATC_BOX_REF=== -->
 
 === "JavaScript"
