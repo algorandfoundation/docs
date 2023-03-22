@@ -10,7 +10,7 @@ If you cannot wait for catchup, there are multiple options:
 * [Sandbox](../../../get-started-devenv/sandbox) allows quick setup of private network and public networks. For public networks, the node will be non-archival and use fast catchup. Sandbox should only be used for development purposes.
 * [Fast Catchup](../../setup/install#sync-node-network-using-fast-catchup) can be used to quickly sync a **non-archival** node, but requires trust in the entity providing the catchpoint.
 * Third-party snapshots such [AlgoNode.io snapshots](https://algonode.io/extras/) may be used for **archival** nodes, but requires trust in the third party. Algorand denies any responsibility if any such snapshot is used.
-* Use of a [third-party API service](.../../../get-started-devenv/index) service.
+* Use of a [third-party API service](/docs/get-started/devenv/) service.
 
 !!! info    
     If a node is stopped it will stop processing blocks. Once the node is restarted, it will start processing blocks where it left off.
