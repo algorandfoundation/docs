@@ -40,6 +40,8 @@ goal network create [flags]
 
   -K, --noimportkeys      Do not import root keys when creating the network (by default will import)
 
+  -s, --start             Automatically start the network after creating it.
+
   -t, --template string   Specify the path to the template file for the network
 
 ```

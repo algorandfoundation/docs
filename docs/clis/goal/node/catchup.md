@@ -12,7 +12,9 @@ Catchup the Algorand node to a specific catchpoint
 
 
 
-Catchup allows making large jumps over round ranges without the need to incrementally validate each individual round. If no catchpoint is provided, this command attempts to lookup the latest catchpoint from algorand-catchpoints.s3.us-east-2.amazonaws.com.
+Catchup allows making large jumps over round ranges without the need to incrementally validate each individual round. Using external catchpoints is not a secure practice and should not be done for consensus participating nodes.
+
+If no catchpoint is provided, this command attempts to lookup the latest catchpoint from algorand-catchpoints.s3.us-east-2.amazonaws.com.
 
 
 
@@ -45,6 +47,8 @@ goal node catchup --abort					Abort the current catchup
 ```
 
   -x, --abort   Aborts the current catchup process
+
+      --force   Forces fast catchup with implicit catchpoint to start without a consent prompt
 
   -h, --help    help for catchup
 

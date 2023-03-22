@@ -183,7 +183,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 		kmdToken,
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L22-L29)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L22-L29)
 	<!-- ===GOSDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 	```go
@@ -203,7 +203,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	exampleWalletID = createResponse.Wallet.ID
 	fmt.Printf("Created wallet '%s' with ID: %s\n", createResponse.Wallet.Name, exampleWalletID)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L37-L52)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L37-L52)
 	<!-- ===GOSDK_KMD_CREATE_WALLET=== -->
 	<!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 	```go
@@ -223,7 +223,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	accountAddress := genResponse.Address
 	fmt.Printf("New Account: %s\n", accountAddress)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L55-L70)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L55-L70)
 	<!-- ===GOSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "goal"
@@ -367,7 +367,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	}
 	fmt.Printf("Recovered address %s\n", genResponse.Address)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L115-L160)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L115-L160)
 	<!-- ===GOSDK_KMD_RECOVER_WALLET=== -->
 
 === "goal"
@@ -436,7 +436,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	<!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 	```go
 	// Extract the account sk
-	accountKeyResponse, err := kmdClient.ExportKey(
+	accountKeyResponse, _ := kmdClient.ExportKey(
 		exampleWalletHandleToken,
 		"password",
 		accountAddress,
@@ -450,7 +450,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	}
 	fmt.Printf("Account Mnemonic: %v ", mn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L73-L87)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L73-L87)
 	<!-- ===GOSDK_KMD_EXPORT_ACCOUNT=== -->
 
 ### Import an account
@@ -512,13 +512,13 @@ Use these methods to import a 25-word account-level mnemonic.
 		return
 	}
 	fmt.Printf("Account Mnemonic: %s\n", mn)
-	importedAccount, err := kmdClient.ImportKey(
+	importedAccount, _ := kmdClient.ImportKey(
 		exampleWalletHandleToken,
 		account.PrivateKey,
 	)
 	fmt.Println("Account Successfully Imported: ", importedAccount.Address)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L90-L103)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L90-L103)
 	<!-- ===GOSDK_KMD_IMPORT_ACCOUNT=== -->
 
 # Standalone 
@@ -580,17 +580,17 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 === "Go"
 	<!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 	```go
-	account := crypto.GenerateAccount()
-	mn, err := mnemonic.FromPrivateKey(account.PrivateKey)
+	newAccount := crypto.GenerateAccount()
+	passphrase, err := mnemonic.FromPrivateKey(newAccount.PrivateKey)
 	
 	if err != nil {
-		log.Fatalf("failed to generate account: %s", err)
+		fmt.Printf("Error creating transaction: %s\n", err)
+	} else {
+		fmt.Printf("My address: %s\n", newAccount.Address)
+		fmt.Printf("My passphrase: %s\n", passphrase)
 	}
-	
-	log.Printf("Address: %s\n", account.Address)
-	log.Printf("Mnemonic: %s\n", mn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account.go#L15-L24)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L163-L172)
 	<!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 
@@ -711,7 +711,7 @@ The following code shows how to generate a multisignature account composed of th
 	// Print multisig account
 	fmt.Printf("Multisig address : %s \n", fromAddr)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd.go#L175-L193)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L175-L193)
 	<!-- ===GOSDK_MULTISIG_CREATE=== -->
 
 === "goal"

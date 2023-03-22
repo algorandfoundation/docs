@@ -122,7 +122,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 		nonpart,
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/participation.go#L40-L60)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/participation/main.go#L40-L60)
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"
