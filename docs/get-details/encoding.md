@@ -351,3 +351,49 @@ Create a payment transaction from one account to another using suggested paramet
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
+# ABI Encoding
+
+All the SDKs support encoding and decoding of ABI values. The encoding is done using the [Algorand ABI specification](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/ABI/). 
+
+
+=== "JavaScript"
+	<!-- ===JSSDK_CODEC_ABI==== -->
+	<!-- ===JSSDK_CODEC_ABI==== -->
+
+=== "Python"
+	<!-- ===PYSDK_CODEC_ABI==== -->
+	```python
+	from algosdk import abi
+	
+	# generate a codec from the string representation of the ABI type
+	# in this case, a tuple of two strings
+	codec = abi.ABIType.from_string("(string,string)")
+	
+	# encode the value to its ABI encoding with the codec
+	to_encode = ["hello", "world"]
+	encoded = codec.encode(to_encode)
+	print(encoded.hex())
+	
+	# decode the value from its ABI encoding with the codec
+	decoded = codec.decode(encoded)
+	print(decoded)  # prints ["hello", "world"]
+	
+	# generate a codec for a uint64 array
+	uint_array_codec = abi.ABIType.from_string("uint64[]")
+	uint_array = [1, 2, 3, 4, 5]
+	encoded_array = uint_array_codec.encode(uint_array)
+	print(encoded_array.hex())
+	
+	decoded_array = uint_array_codec.decode(encoded_array)
+	print(decoded_array)  # prints [1, 2, 3, 4, 5]
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L65-L88)
+	<!-- ===PYSDK_CODEC_ABI=== -->
+
+=== "Go"
+	<!-- ===GOSDK_CODEC_ABI=== -->
+	<!-- ===GOSDK_CODEC_ABI=== -->
+
+=== "Java"
+	<!-- ===JAVASDK_CODEC_ABI=== -->
+	<!-- ===JAVASDK_CODEC_ABI=== -->

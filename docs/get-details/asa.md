@@ -2,7 +2,7 @@ title: Algorand Standard Assets (ASAs)
 
 The Algorand protocol supports the creation of on-chain assets that benefit from the same security, compatibility, speed and ease of use as the Algo. The official name for assets on Algorand is **Algorand Standard Assets (ASA)**.
 
-With Algorand Standard Assets you can represent stablecoins, loyalty points, system credits, and in-game points, just to name a few examples. You can also represent single, unique assets like a deed for a house, collectable items, unique parts on a supply chain, etc. There is also optional functionality to place transfer restrictions on an asset that help support securities, compliance, and certification use cases.
+With Algorand Standard Assets you can represent stablecoins, loyalty points, system credits, and in-game points, just to name a few examples. You can also represent single, unique assets like a deed for a house, collectable items, unique parts on a supply chain, etc. There is also ABI_CODEC functionality to place transfer restrictions on an asset that help support securities, compliance, and certification use cases.
 
 
 
@@ -893,6 +893,49 @@ Revoking an asset for an account removes a specific number of the asset from the
 
 - [Anatomy of an Asset Clawback Transaction](../transactions#revoke-an-asset)
 
+## Opting Out of an Asset
+
+**Authorized by**: The account opting out 
+
+An account can opt out of an asset at any time. This means that the account will no longer hold the asset, and the account will no longer be able to receive the asset. The account also recovers the Minimum Balance Requirement for the asset (0.1A).
+
+=== "JavaScript"
+<!-- ===JSSDK_ASSET_OPT_OUT=== -->
+<!-- ===JSSDK_ASSET_OPT_OUT=== -->
+
+=== "Python"
+<!-- ===PYSDK_ASSET_OPT_OUT=== -->
+	```python
+	sp = algod_client.suggested_params()
+	opt_out_txn = transaction.AssetTransferTxn(
+	    sender=acct2.address,
+	    sp=sp,
+	    index=created_asset,
+	    receiver=acct1.address,
+	    # an opt out transaction sets its close_asset_to parameter
+	    # it is always possible to close an asset to the creator
+	    close_assets_to=acct1.address,
+	    amt=0,
+	)
+	signed_opt_out = opt_out_txn.sign(acct2.private_key)
+	txid = algod_client.send_transaction(signed_opt_out)
+	print(f"Sent opt out transaction with txid: {txid}")
+	
+	results = transaction.wait_for_confirmation(algod_client, txid, 4)
+	print(f"Result confirmed in round: {results['confirmed-round']}")
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L185-L202)
+<!-- ===PYSDK_ASSET_OPT_OUT=== -->
+
+=== "Go"
+<!-- ===GOSDK_ASSET_OPT_OUT=== -->
+<!-- ===GOSDK_ASSET_OPT_OUT=== -->
+
+=== "Java"
+<!-- ===JAVASDK_ASSET_OPT_OUT=== -->
+<!-- ===JAVASDK_ASSET_OPT_OUT=== -->
+
+
 ## Destroying an asset
 
 **Authorized by**: [Asset Manager](../transactions/transactions#manageraddr)
@@ -942,7 +985,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	except Exception as e:
 	    print("Expected Error:", e)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L185-L204)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L206-L225)
     <!-- ===PYSDK_ASSET_DELETE=== -->
 
 === "Java"
