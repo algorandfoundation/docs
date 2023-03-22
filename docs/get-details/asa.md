@@ -901,7 +901,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 An account can opt out of an asset at any time. This means that the account will no longer hold the asset, and the account will no longer be able to receive the asset. The account also recovers the Minimum Balance Requirement for the asset (0.1A).
 
 === "JavaScript"
-<!-- ===JSSDK_ASSET_OPT_OUT=== -->
+	<!-- ===JSSDK_ASSET_OPT_OUT=== -->
 	```javascript
 	
 	// opt-out is an amount transfer with the `closeRemainderTo` field set to
@@ -925,10 +925,10 @@ An account can opt out of an asset at any time. This means that the account will
 	);
 	```
 	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L158-L178)
-<!-- ===JSSDK_ASSET_OPT_OUT=== -->
+	<!-- ===JSSDK_ASSET_OPT_OUT=== -->
 
 === "Python"
-<!-- ===PYSDK_ASSET_OPT_OUT=== -->
+	<!-- ===PYSDK_ASSET_OPT_OUT=== -->
 	```python
 	sp = algod_client.suggested_params()
 	opt_out_txn = transaction.AssetTransferTxn(
@@ -949,10 +949,10 @@ An account can opt out of an asset at any time. This means that the account will
 	print(f"Result confirmed in round: {results['confirmed-round']}")
 	```
 	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/asa.py#L185-L202)
-<!-- ===PYSDK_ASSET_OPT_OUT=== -->
+	<!-- ===PYSDK_ASSET_OPT_OUT=== -->
 
 === "Go"
-<!-- ===GOSDK_ASSET_OPT_OUT=== -->
+	<!-- ===GOSDK_ASSET_OPT_OUT=== -->
 	```go
 	userAddr := user.Address.String()
 	
@@ -986,10 +986,10 @@ An account can opt out of an asset at any time. This means that the account will
 	log.Printf("OptOut Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
 	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa/main.go#L184-L214)
-<!-- ===GOSDK_ASSET_OPT_OUT=== -->
+	<!-- ===GOSDK_ASSET_OPT_OUT=== -->
 
 === "Java"
-<!-- ===JAVASDK_ASSET_OPT_OUT=== -->
+	<!-- ===JAVASDK_ASSET_OPT_OUT=== -->
 	```java
 	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
 	TransactionParametersResponse sp = rsp.body();
@@ -1003,7 +1003,7 @@ An account can opt out of an asset at any time. This means that the account will
 	        .build();
 	```
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ASAExamples.java#L159-L169)
-<!-- ===JAVASDK_ASSET_OPT_OUT=== -->
+	<!-- ===JAVASDK_ASSET_OPT_OUT=== -->
 
 
 ## Destroying an asset
