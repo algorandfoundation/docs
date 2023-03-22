@@ -73,7 +73,7 @@ There are two options:
 	```go
 	log.Printf("Min fee const: %d", transaction.MinTxnFee)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L33-L34)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L74-L75)
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
     
 * using an algod API:
@@ -108,12 +108,13 @@ There are two options:
 === "Go"
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 	```go
-	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	suggestedParams, err := algodClient.SuggestedParams().Do(context.Background())
 	if err != nil {
-		log.Printf("failed to %s", err)
+		log.Fatalf("failed to %s", err)
 	}
+	log.Printf("Min fee from suggested params: %d", suggestedParams.MinFee)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L26-L30)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L66-L71)
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures

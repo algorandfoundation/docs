@@ -52,7 +52,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	const addr = algosdk.encodeAddress(pk.publicKey);
 	console.log(address, addr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L16-L20)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L16-L20)
 	<!-- ===JSSDK_CODEC_ADDRESS=== -->
 
 === "Python"
@@ -74,7 +74,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	pk, _ := types.DecodeAddress(address)
 	addr := pk.String()
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L62-L65)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L63-L66)
 	<!-- ===GOSDK_CODEC_ADDRESS=== -->
 
 === "Java"
@@ -87,7 +87,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	Address addrAgain = new Address(addr.getBytes());
 	assert addrAgain.equals(addr);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L25-L31)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L26-L32)
 	<!-- ===JAVASDK_CODEC_ADDRESS=== -->
 
 ### Byte Arrays
@@ -105,7 +105,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	const b64Decoded = Buffer.from(b64Encoded, 'base64').toString();
 	console.log(b64Encoded, b64Decoded);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L23-L26)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L23-L26)
 	<!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
@@ -125,7 +125,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	decoded, _ := base64.StdEncoding.DecodeString(encoded)
 	reencoded := base64.StdEncoding.EncodeToString(decoded)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L69-L72)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L70-L73)
 	<!-- ===GOSDK_CODEC_BASE64=== -->
 
 === "Java"
@@ -136,7 +136,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	String reEncodedStr = Encoder.encodeToBase64(decodedBytes);
 	assert encodedStr.equals(reEncodedStr);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L34-L38)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L35-L39)
 	<!-- ===JAVASDK_CODEC_BASE64=== -->
 
 ### Integers
@@ -156,7 +156,7 @@ Given an integer `1337`, you may encode it as:
 	const mixedDecoded = algosdk.decodeUint64(encoded, 'bigint');
 	console.log(int, encoded, safeDecoded, mixedDecoded);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L29-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L29-L34)
 	<!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
@@ -180,7 +180,7 @@ Given an integer `1337`, you may encode it as:
 	decodedInt := binary.BigEndian.Uint64(encodedInt)
 	// decodedInt == val
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L76-L82)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L77-L83)
 	<!-- ===GOSDK_CODEC_UINT64=== -->
 
 === "Java"
@@ -191,7 +191,7 @@ Given an integer `1337`, you may encode it as:
 	BigInteger decodedVal = Encoder.decodeUint64(encodedVal);
 	assert val.equals(decodedVal);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L41-L45)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L42-L46)
 	<!-- ===JAVASDK_CODEC_UINT64=== -->
 
 
@@ -231,7 +231,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L37-L50)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L50)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
@@ -242,7 +242,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L53-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L53-L59)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
@@ -299,7 +299,7 @@ Create a payment transaction from one account to another using suggested paramet
 	msgpack.Decode(encodedTxn, &recoveredPayTxn)
 	log.Printf("%+v", recoveredPayTxn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L25-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L26-L41)
 	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```go
@@ -320,7 +320,7 @@ Create a payment transaction from one account to another using suggested paramet
 		log.Fatalf("failed to decode signed transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L43-L59)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L44-L60)
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
@@ -337,7 +337,7 @@ Create a payment transaction from one account to another using suggested paramet
 	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
 	assert decodedTxn.equals(ptxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L59)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 	```java
@@ -348,6 +348,110 @@ Create a payment transaction from one account to another using suggested paramet
 	        SignedTransaction.class);
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L62-L68)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
+# ABI Encoding
+
+All the SDKs support encoding and decoding of ABI values. The encoding is done using the [Algorand ABI specification](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/ABI/). 
+
+
+=== "JavaScript"
+	<!-- ===JSSDK_CODEC_ABI==== -->
+	```javascript
+	const stringTupleCodec = algosdk.ABIType.from('(string,string)');
+	
+	const stringTupleData = ['hello', 'world'];
+	const encodedTuple = stringTupleCodec.encode(stringTupleData);
+	console.log(Buffer.from(encodedTuple).toString('hex'));
+	
+	const decodedTuple = stringTupleCodec.decode(encodedTuple);
+	console.log(decodedTuple); // ['hello', 'world']
+	
+	const uintArrayCodec = algosdk.ABIType.from('uint64[]');
+	
+	const uintArrayData = [1, 2, 3, 4, 5];
+	const encodedArray = uintArrayCodec.encode(uintArrayData);
+	console.log(Buffer.from(encodedArray).toString('hex'));
+	
+	const decodeArray = uintArrayCodec.decode(encodedArray);
+	console.log(decodeArray); // [1, 2, 3, 4, 5]
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L62-L79)
+	<!-- ===JSSDK_CODEC_ABI==== -->
+
+=== "Python"
+	<!-- ===PYSDK_CODEC_ABI==== -->
+	```python
+	from algosdk import abi
+	
+	# generate a codec from the string representation of the ABI type
+	# in this case, a tuple of two strings
+	codec = abi.ABIType.from_string("(string,string)")
+	
+	# encode the value to its ABI encoding with the codec
+	to_encode = ["hello", "world"]
+	encoded = codec.encode(to_encode)
+	print(encoded.hex())
+	
+	# decode the value from its ABI encoding with the codec
+	decoded = codec.decode(encoded)
+	print(decoded)  # prints ["hello", "world"]
+	
+	# generate a codec for a uint64 array
+	uint_array_codec = abi.ABIType.from_string("uint64[]")
+	uint_array = [1, 2, 3, 4, 5]
+	encoded_array = uint_array_codec.encode(uint_array)
+	print(encoded_array.hex())
+	
+	decoded_array = uint_array_codec.decode(encoded_array)
+	print(decoded_array)  # prints [1, 2, 3, 4, 5]
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L65-L88)
+	<!-- ===PYSDK_CODEC_ABI=== -->
+
+=== "Go"
+	<!-- ===GOSDK_CODEC_ABI=== -->
+	```go
+	tupleCodec, _ := abi.TypeOf("(string,string)")
+	
+	tupleVal := []string{"hello", "world"}
+	encodedTuple, _ := tupleCodec.Encode(tupleVal)
+	log.Printf("%x", encodedTuple)
+	
+	decodedTuple, _ := tupleCodec.Decode(encodedTuple)
+	log.Printf("%v", decodedTuple) // [hello world]
+	
+	arrCodec, _ := abi.TypeOf("uint64[]")
+	arrVal := []uint64{1, 2, 3, 4, 5}
+	encodedArr, _ := arrCodec.Encode(arrVal)
+	log.Printf("%x", encodedArr)
+	
+	decodedArr, _ := arrCodec.Decode(encodedArr)
+	log.Printf("%v", decodedArr) // [1 2 3 4 5]
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L87-L103)
+	<!-- ===GOSDK_CODEC_ABI=== -->
+
+=== "Java"
+	<!-- ===JAVASDK_CODEC_ABI=== -->
+	```java
+	ABIType tupleCodec = ABIType.valueOf("(string,string)");
+	Object[] tupleData = new Object[] { "hello", "world" };
+	byte[] tupleEncoded = tupleCodec.encode(tupleData);
+	System.out.printf("Encoded: '%s'\n", Hex.encodeHexString(tupleEncoded));
+	Object tupleDecoded = tupleCodec.decode(tupleEncoded);
+	// prints [hello, world]
+	System.out.printf("Decoded: %s\n", Arrays.toString((Object[]) tupleDecoded));
+	
+	ABIType arrCodec = ABIType.valueOf("uint64[]");
+	Object[] arrData = new Object[] { 1, 2, 3, 4, 5 };
+	byte[] arrEncoded = arrCodec.encode(arrData);
+	System.out.printf("Encoded: '%s'\n", Hex.encodeHexString(arrEncoded));
+	
+	Object arrDecoded = arrCodec.decode(arrEncoded);
+	// prints [1, 2, 3, 4, 5]
+	System.out.printf("Decoded: %s\n", Arrays.toString((Object[]) arrDecoded));
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L71-L87)
+	<!-- ===JAVASDK_CODEC_ABI=== -->
