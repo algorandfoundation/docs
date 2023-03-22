@@ -289,6 +289,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	  manager: manager.addr,
 	  freeze: manager.addr,
 	  clawback: manager.addr,
+	  reserve: undefined,
 	  suggestedParams,
 	  assetIndex,
 	  // don't throw error if freeze, clawback, or manager are empty
@@ -304,7 +305,7 @@ After an asset has been created only the manager, reserve, freeze and clawback a
 	);
 	console.log(`Result confirmed in round: ${configResult['confirmed-round']}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L60-L81)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L60-L82)
     <!-- ===JSSDK_ASSET_CONFIG=== -->
 
 === "Python"
@@ -437,7 +438,7 @@ Before an account can receive a specific asset it must opt-in to receive it. An 
 	await algodClient.sendRawTransaction(signedOptInTxn).do();
 	await algosdk.waitForConfirmation(algodClient, optInTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L85-L98)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L86-L99)
     <!-- ===JSSDK_ASSET_OPTIN=== -->
 
 === "Python"
@@ -545,7 +546,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	await algodClient.sendRawTransaction(signedXferTxn).do();
 	await algosdk.waitForConfirmation(algodClient, xferTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L101-L112)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L102-L113)
     <!-- ===JSSDK_ASSET_XFER=== -->
 
 === "Python"
@@ -668,7 +669,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L115-L132)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L116-L133)
     <!-- ===JSSDK_ASSET_FREEZE=== -->
 
 === "Python"
@@ -794,7 +795,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L135-L154)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L136-L155)
     <!-- ===JSSDK_ASSET_CLAWBACK=== -->
 
 === "Python"
@@ -901,6 +902,29 @@ An account can opt out of an asset at any time. This means that the account will
 
 === "JavaScript"
 <!-- ===JSSDK_ASSET_OPT_OUT=== -->
+	```javascript
+	
+	// opt-out is an amount transfer with the `closeRemainderTo` field set to
+	// any account that can receive the asset.
+	// note that closing to the asset creator will always succeed
+	const optOutTxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+	  from: receiver.addr,
+	  to: creator.addr,
+	  closeRemainderTo: creator.addr,
+	  suggestedParams,
+	  assetIndex,
+	  amount: 0,
+	});
+	
+	const signedOptOutTxn = optOutTxn.signTxn(receiver.privateKey);
+	await algodClient.sendRawTransaction(signedOptOutTxn).do();
+	await algosdk.waitForConfirmation(
+	  algodClient,
+	  optOutTxn.txID().toString(),
+	  3
+	);
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L158-L178)
 <!-- ===JSSDK_ASSET_OPT_OUT=== -->
 
 === "Python"
@@ -959,7 +983,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	  3
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L157-L170)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/asa.ts#L181-L194)
     <!-- ===JSSDK_ASSET_DELETE=== -->
 
 === "Python"

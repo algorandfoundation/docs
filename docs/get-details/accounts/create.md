@@ -553,7 +553,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	console.log(`My address: ${generatedAccount.addr}`);
 	console.log(`My passphrase: ${passphrase}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L75-L79)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L76-L80)
 	<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 === "Python"
@@ -639,6 +639,7 @@ The following code shows how to generate a multisignature account composed of th
 	const signerAccounts: algosdk.Account[] = [];
 	signerAccounts.push(algosdk.generateAccount());
 	signerAccounts.push(algosdk.generateAccount());
+	signerAccounts.push(algosdk.generateAccount());
 	
 	// multiSigParams is used when creating the address and when signing transactions
 	const multiSigParams = {
@@ -650,7 +651,7 @@ The following code shows how to generate a multisignature account composed of th
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L36)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L37)
 	<!-- ===JSSDK_MULTISIG_CREATE=== -->
 
 

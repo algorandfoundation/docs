@@ -61,7 +61,7 @@ const passphrase = algosdk.secretKeyToMnemonic(generatedAccount.sk);
 console.log(`My address: ${generatedAccount.addr}`);
 console.log(`My passphrase: ${passphrase}`);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L75-L79)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L76-L80)
 <!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 
