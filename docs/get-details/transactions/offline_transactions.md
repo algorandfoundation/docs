@@ -29,7 +29,7 @@ Unsigned transactions require the transaction object to be created before writin
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L37-L50)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L50)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
@@ -65,7 +65,7 @@ Unsigned transactions require the transaction object to be created before writin
 	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
 	assert decodedTxn.equals(ptxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L48-L58)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L59)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
@@ -87,7 +87,7 @@ Unsigned transactions require the transaction object to be created before writin
 	msgpack.Decode(encodedTxn, &recoveredPayTxn)
 	log.Printf("%+v", recoveredPayTxn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L25-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L26-L41)
 	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
@@ -114,7 +114,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/encoding.ts#L53-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L53-L59)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
@@ -145,7 +145,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	        SignedTransaction.class);
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L62-L68)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
@@ -168,7 +168,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 		log.Fatalf("failed to decode signed transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L43-L59)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L44-L60)
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"

@@ -108,7 +108,7 @@ An `algod` client connection is also required. The following connects using Sand
 		[]*common.Header{&algodHeader},
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L47-L65)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L88-L106)
     <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info

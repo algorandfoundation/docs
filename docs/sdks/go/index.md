@@ -98,7 +98,7 @@ algodClientWithHeaders, _ := algod.MakeClientWithHeaders(
 	[]*common.Header{&algodHeader},
 )
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L47-L65)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L88-L106)
 <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
@@ -110,20 +110,14 @@ algodClientWithHeaders, _ := algod.MakeClientWithHeaders(
 Before moving on to the next step, make sure your account has been funded.
  
  <!-- ===GOSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
-```go  linenums="50"
-//Check account balance
-fmt.Printf("My address: %s\n", myAddress)
-
-accountInfo, err := algodClient.AccountInformation(myAddress).Do(context.Background())
+```go
+acctInfo, err := algodClient.AccountInformation(acct.Address.String()).Do(context.Background())
 if err != nil {
-    fmt.Printf("Error getting account info: %s\n", err)
-    return
+	log.Fatalf("failed to fetch account info: %s", err)
 }
-
-fmt.Printf("Account balance: %d microAlgos\n", accountInfo.Amount)
-fmt.Println("--> Ensure balance greater than 0, press ENTER key to continue...")
-fmt.Scanln()
+log.Printf("Account balance: %d microAlgos", acctInfo.Amount)
 ```
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L24-L29)
  <!-- ===GOSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 
@@ -131,31 +125,18 @@ fmt.Scanln()
 Communication with the Algorand network is performed using transactions. Create a payment transaction sending 1 ALGO from your account to the TestNet faucet address:
 
 <!-- ===GOSDK_TRANSACTION_PAYMENT_CREATE=== -->
-
-```go linenums="62"
-// Construct the transaction
-txParams, err := algodClient.SuggestedParams().Do(context.Background())
+```go
+sp, err := algodClient.SuggestedParams().Do(context.Background())
 if err != nil {
-    fmt.Printf("Error getting suggested tx params: %s\n", err)
-    return
+	log.Fatalf("failed to get suggested params: %s", err)
 }
-fromAddr := myAddress
-toAddr := "GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A"
-
-
-var amount uint64 = 1000000
-var minFee uint64 = transaction.MinTxnFee 
-note := []byte("Hello World")
-genID := txParams.GenesisID
-genHash := txParams.GenesisHash
-firstValidRound := uint64(txParams.FirstRoundValid)
-lastValidRound := uint64(txParams.LastRoundValid)
-txn, err := transaction.MakePaymentTxnWithFlatFee(fromAddr, toAddr, minFee, amount, firstValidRound, lastValidRound, note, "", genID, genHash)
+// payment from account to itself
+ptxn, err := transaction.MakePaymentTxn(acct.Address.String(), acct.Address.String(), 100000, nil, "", sp)
 if err != nil {
-    fmt.Printf("Error creating transaction: %s\n", err)
-    return
+	log.Fatalf("failed creating transaction: %s", err)
 }
 ```
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L32-L41)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_CREATE=== -->
 
 !!! Info
@@ -166,15 +147,14 @@ if err != nil {
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SIGN=== -->
-```go linenums="83"
-// Sign the transaction
-txID, signedTxn, err := crypto.SignTransaction(account.PrivateKey, txn)
+```go
+_, sptxn, err := crypto.SignTransaction(acct.PrivateKey, ptxn)
 if err != nil {
-    fmt.Printf("Failed to sign transaction: %s\n", err)
-    return
+	fmt.Printf("Failed to sign transaction: %s\n", err)
+	return
 }
-fmt.Printf("Signed txid: %s\n", txID)
 ```
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L44-L49)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
@@ -185,22 +165,20 @@ fmt.Printf("Signed txid: %s\n", txID)
 The signed transaction can now be broadcast to the network for validation and inclusion in a future block. The `waitForConfirmation` SDK method polls the `algod` node for the transaction ID to ensure it succeeded.
 
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
-```go linenums="91"
-// Submit the transaction
-sendResponse, err := algodClient.SendRawTransaction(signedTxn).Do(context.Background())
+```go
+pendingTxID, err := algodClient.SendRawTransaction(sptxn).Do(context.Background())
 if err != nil {
-    fmt.Printf("failed to send transaction: %s\n", err)
-    return
+	fmt.Printf("failed to send transaction: %s\n", err)
+	return
 }
-fmt.Printf("Submitted transaction %s\n", sendResponse)
-
-// Wait for confirmation
-confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txID, 4, context.Background())
+confirmedTxn, err := transaction.WaitForConfirmation(algodClient, pendingTxID, 4, context.Background())
 if err != nil {
-    fmt.Printf("Error waiting for confirmation on txID: %s\n", txID)
-    return
+	fmt.Printf("Error waiting for confirmation on txID: %s\n", pendingTxID)
+	return
 }
+fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 ```
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview.go#L52-L63)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 # Viewing the Transaction
