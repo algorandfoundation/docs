@@ -8,7 +8,7 @@ How large can my approval program be?
 How many arguments can I pass? 
 What is the Minimum Balance Requirement increase for an asset opt-in?  
 
-The limits applied at the protocol level are documented [here](/docs/get-details/parameter_tables.md).
+The limits applied at the protocol level are documented [here](/docs/get-details/parameter_tables).
 
 
 # Address Encoding/Decoding 
@@ -25,8 +25,8 @@ All SDKs have a similarly named method.
 
 !! Note that smart contracts operate _only_ on the 32 byte version, so any interaction where an address is used should be translated prior to passing it to the smart contract. This is handled for you automatically in some cases (e.g. sender on a transaction)
 
-[Address Details](/docs/get-details/accounts/index.md#keys-and-addresses)
-[Encoding Details](/docs/get-details/encoding.md#address-encoding)
+[Address Details](/docs/get-details/accounts/#keys-and-addresses)
+[Encoding Details](/docs/get-details/encoding/#address-encoding)
 
 # Application State Encoding/Decoding 
 
