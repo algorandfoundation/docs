@@ -74,7 +74,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	pk, _ := types.DecodeAddress(address)
 	addr := pk.String()
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L62-L65)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L63-L66)
 	<!-- ===GOSDK_CODEC_ADDRESS=== -->
 
 === "Java"
@@ -125,7 +125,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	decoded, _ := base64.StdEncoding.DecodeString(encoded)
 	reencoded := base64.StdEncoding.EncodeToString(decoded)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L69-L72)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L70-L73)
 	<!-- ===GOSDK_CODEC_BASE64=== -->
 
 === "Java"
@@ -180,7 +180,7 @@ Given an integer `1337`, you may encode it as:
 	decodedInt := binary.BigEndian.Uint64(encodedInt)
 	// decodedInt == val
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L76-L82)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L77-L83)
 	<!-- ===GOSDK_CODEC_UINT64=== -->
 
 === "Java"
@@ -299,7 +299,7 @@ Create a payment transaction from one account to another using suggested paramet
 	msgpack.Decode(encodedTxn, &recoveredPayTxn)
 	log.Printf("%+v", recoveredPayTxn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L25-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L26-L41)
 	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```go
@@ -320,7 +320,7 @@ Create a payment transaction from one account to another using suggested paramet
 		log.Fatalf("failed to decode signed transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L43-L59)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L44-L60)
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
@@ -412,6 +412,25 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 
 === "Go"
 	<!-- ===GOSDK_CODEC_ABI=== -->
+	```go
+	tupleCodec, _ := abi.TypeOf("(string,string)")
+	
+	tupleVal := []string{"hello", "world"}
+	encodedTuple, _ := tupleCodec.Encode(tupleVal)
+	log.Printf("%x", encodedTuple)
+	
+	decodedTuple, _ := tupleCodec.Decode(encodedTuple)
+	log.Printf("%v", decodedTuple) // [hello world]
+	
+	arrCodec, _ := abi.TypeOf("uint64[]")
+	arrVal := []uint64{1, 2, 3, 4, 5}
+	encodedArr, _ := arrCodec.Encode(arrVal)
+	log.Printf("%x", encodedArr)
+	
+	decodedArr, _ := arrCodec.Decode(encodedArr)
+	log.Printf("%v", decodedArr) // [1 2 3 4 5]
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L87-L103)
 	<!-- ===GOSDK_CODEC_ABI=== -->
 
 === "Java"

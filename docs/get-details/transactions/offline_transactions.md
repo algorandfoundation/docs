@@ -87,7 +87,7 @@ Unsigned transactions require the transaction object to be created before writin
 	msgpack.Decode(encodedTxn, &recoveredPayTxn)
 	log.Printf("%+v", recoveredPayTxn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L25-L40)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L26-L41)
 	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
@@ -168,7 +168,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 		log.Fatalf("failed to decode signed transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L43-L59)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec.go#L44-L60)
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"

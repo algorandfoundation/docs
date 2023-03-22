@@ -626,7 +626,7 @@ Assets can be transferred between accounts that have opted-in to receiving the a
 	
 	log.Printf("Asset Transfer Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L183-L216)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L218-L251)
     <!-- ===GOSDK_ASSET_XFER=== -->
 
 === "goal"
@@ -752,7 +752,7 @@ Freezing or unfreezing an asset for an account requires a transaction that is si
 	
 	log.Printf("Freeze Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L221-L256)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L256-L291)
     <!-- ===GOSDK_ASSET_FREEZE=== -->
 
 === "goal"
@@ -880,7 +880,7 @@ Revoking an asset for an account removes a specific number of the asset from the
 	
 	log.Printf("Clawback Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L261-L296)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L296-L331)
     <!-- ===GOSDK_ASSET_CLAWBACK=== -->
 
 === "goal"
@@ -953,6 +953,39 @@ An account can opt out of an asset at any time. This means that the account will
 
 === "Go"
 <!-- ===GOSDK_ASSET_OPT_OUT=== -->
+	```go
+	userAddr := user.Address.String()
+	
+	sp, err := algodClient.SuggestedParams().Do(context.Background())
+	if err != nil {
+		log.Fatalf("error getting suggested tx params: %s", err)
+	}
+	
+	txn, err := transaction.MakeAssetTransferTxn(userAddr, creator.Address.String(), 0, nil, sp, creator.Address.String(), assetID)
+	if err != nil {
+		log.Fatalf("failed to make txn: %s", err)
+	}
+	// sign the transaction
+	txid, stx, err := crypto.SignTransaction(user.PrivateKey, txn)
+	if err != nil {
+		log.Fatalf("failed to sign transaction: %s", err)
+	}
+	
+	// Broadcast the transaction to the network
+	_, err = algodClient.SendRawTransaction(stx).Do(context.Background())
+	if err != nil {
+		log.Fatalf("failed to send transaction: %s", err)
+	}
+	
+	// Wait for confirmation
+	confirmedTxn, err := transaction.WaitForConfirmation(algodClient, txid, 4, context.Background())
+	if err != nil {
+		log.Fatalf("error waiting for confirmation:  %s", err)
+	}
+	
+	log.Printf("OptOut Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L183-L213)
 <!-- ===GOSDK_ASSET_OPT_OUT=== -->
 
 === "Java"
@@ -1070,7 +1103,7 @@ Created assets can be destroyed only by the asset manager account. All of the as
 	
 	log.Printf("Destroy Transaction: %s confirmed in Round %d\n", txid, confirmedTxn.ConfirmedRound)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L301-L335)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/asa.go#L336-L370)
     <!-- ===GOSDK_ASSET_DELETE=== -->
 
 === "goal"

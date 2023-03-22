@@ -12,25 +12,27 @@
     └── tealdbg
 
 # Reference
-    ├── accounts.md - collapse create/index/rekey to single page
+    ├── accounts
+    │   ├── create.md
+    │   ├── index.md
+    │   └── rekey.md
     ├── assets.md
     ├── atomic-transfers
     │   ├── with_atc.md
     │   └── wthout_atc.md
+    ├── indexer.md - bit torn on this, we dont have a page for the other services like algod/kmd 
     ├── conduit
-    │   ├── exporters.md - Collapse to single pages for each
-    │   ├── importers.md
-    │   └── processors.md
+    | ...
     ├── smart-contracts 
-    │   ├── avm - moved `teal` up 1 directory, some of these pages could probably be combined
+    │   ├── avm -
     │   │   ├── index.md
     │   │   ├── guidelines.md
     │   │   ├── teal.md 
     │   │   ├── opcodes.md
     │   │   └── specification.md
-    │   ├── pyteal.md   - single page, prefer to link to specific docs/videos/whatever
-    │   ├── beaker.md   - single page, prefer to link to specific docs/videos/whatever
-    │   ├── algokit.md  - single page, prefer to link to specific docs/videos/whatever
+    │   ├── pyteal.md   - minimal
+    │   ├── beaker.md   - minimal
+    │   ├── algokit.md  - minimal
     │   ├── abi.md 
     │   ├── applications 
     │   │   ├── lifecycle.md - move frontend/apps.md to here
@@ -42,11 +44,10 @@
     │   ├── index.md
     │   └── smartsigs
     │       ├── index.md - combine modes.md and index.md 
-    │       └── walkthrough.md - move frontend/smartsigs.md to here
-    ├── encoding.md
-    ├── index.md
-    ├── indexer.md - bit torn on this, we dont have a page for the other services like algod/kmd 
+    │       └── usage.md - move frontend/smartsigs.md to here
+    ├── encoding.md - codec
     ├── parameter_tables.md
+    ├── index.md
     ├── stateproofs
     │   ├── index.md
     │   └── light_client.md
@@ -62,6 +63,10 @@
         ├── payment_prompts.md
         └── walletconnect-schema.md
 
+# Get Started
+    get started page, single file
+    describes dev env setup links chris' video
+    ...
 
 # Overview 
     ├── basics
