@@ -3,7 +3,7 @@ title: Beaker
 
 Beaker is a framework for building Smart Contracts using PyTeal. 
 
-This page shows some high level details but for more see [Beaker's documentation](https://beaker.algo.xyz)
+This page  shows some high level details but for more see [Beaker's documentation](https://beaker.algo.xyz)
 
 
 # High Level Overview 
