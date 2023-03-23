@@ -41,3 +41,13 @@ Run:
 ```
 ./config_json_gen -path ~/algorand/go-algorand/ > config.md
 ```
+
+
+# Import examples
+
+Used to import named examples from the SDK repositories into the docs. The script will clone the SDK repositories if they are not already present. The script will also update the SDK repositories if they are already present.
+
+The following will import only the `PYSDK` examples:
+```sh
+python import_examples.py --src PYSDK
+```
