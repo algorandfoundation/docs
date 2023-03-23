@@ -83,12 +83,12 @@ The example below illustrates creating, grouping, and signing transactions atomi
 	
 	// payment from account 1 to account 2
 	Transaction ptxn1 = Transaction.PaymentTransactionBuilder().sender(acct1.getAddress())
-	        .amount(1000000).receiver(acct2.getAddress()).suggestedParams(rsp.body()).build();
+	                .amount(1000000).receiver(acct2.getAddress()).suggestedParams(rsp.body()).build();
 	// txn_1 = transaction.PaymentTxn(addr1, suggested_params, addr2, 100000)
 	
 	// payment from account 2 to account 1
 	Transaction ptxn2 = Transaction.PaymentTransactionBuilder().sender(acct2.getAddress())
-	        .amount(2000000).receiver(acct1.getAddress()).suggestedParams(rsp.body()).build();
+	                .amount(2000000).receiver(acct1.getAddress()).suggestedParams(rsp.body()).build();
 	```
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AtomicTransfers.java#L26-L36)
     <!-- ===JAVASDK_ATOMIC_CREATE_TXNS=== -->
@@ -351,7 +351,7 @@ The transaction group is now broadcast to the network.
 	```java
 	// Only the first transaction id is returned
 	Response<PostTransactionsResponse> txResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(stxns)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(stxns)).execute();
 	String txid = txResponse.body().txId;
 	
 	// Wait for the transaction id to be confirmed

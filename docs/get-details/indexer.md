@@ -14,7 +14,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 # SDK client instantiations
 
 === "JavaScript"
-    <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JSSDK_INDEXER_CREATE_CLIENT=== -->
 	```javascript
 	const indexerToken = '';
 	const indexerServer = 'http://localhost';
@@ -27,10 +27,10 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	);
 	```
 	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L16-L25)
-    <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JSSDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Python"
-    <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===PYSDK_INDEXER_CREATE_CLIENT=== -->
 	```python
 	# instantiate indexer client
 	indexer_host = "http://localhost:8980"
@@ -40,10 +40,10 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	)
 	```
 	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L7-L13)
-    <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===PYSDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Java"
-    <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JAVASDK_INDEXER_CREATE_CLIENT=== -->
 	```java
 	String indexerHost = "http://localhost";
 	int indexerPort = 8980;
@@ -51,10 +51,10 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
 	```
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)
-    <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JAVASDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Go"
-	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_INDEXER_CREATE_CLIENT=== -->
 	```go
 	// Create a new indexer client, configured to connect to out local sandbox
 	var indexerAddress = "http://localhost:8980"
@@ -76,7 +76,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	)
 	```
 	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L14-L32)
-	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_INDEXER_CREATE_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
@@ -295,15 +295,15 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	String nextToken = "";
 	boolean hasResults = true;
 	// Start with empty nextToken and while there are
-	// results in the transaction results, query again with the next page 
-	while(hasResults){
+	// results in the transaction results, query again with the next page
+	while (hasResults) {
 	    Response<TransactionsResponse> searchResults = indexerClient.searchForTransactions().minRound(1000l)
 	            .maxRound(1500l).currencyGreaterThan(10l).next(nextToken).execute();
 	    TransactionsResponse txnRes = searchResults.body();
 	    //
 	    // ... do something with transaction results
 	    //
-	    hasResults = txnRes.transactions.size()>0;
+	    hasResults = txnRes.transactions.size() > 0;
 	    nextToken = txnRes.nextToken;
 	}
 	```
@@ -438,10 +438,11 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 	```java
 	byte[] prefix = new String("showing prefix").getBytes();
-	Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix).execute();
+	Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix)
+	        .execute();
 	// ...
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L53)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L54)
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Go"

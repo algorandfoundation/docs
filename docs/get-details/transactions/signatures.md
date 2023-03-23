@@ -221,7 +221,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
 	System.out.printf("msig address: %s\n", msig.toAddress().toString());
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L77-L88)
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 	```java

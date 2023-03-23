@@ -472,7 +472,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	                .rawtxn(Encoder.encodeToMsgPack(signedRekeyBack)).execute();
 	ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L96-L115)
 	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
 === "Go"

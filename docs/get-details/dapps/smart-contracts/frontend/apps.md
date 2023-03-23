@@ -293,7 +293,7 @@ Use the creator_mnemonic to define sender:
 	// Or just init the account directly from the mnemonic
 	Account acct = new Account(mn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L64-L70)
     <!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
@@ -356,9 +356,9 @@ Compile the programs using the `compile` endpoint:
     <!-- ===JAVASDK_APP_COMPILE=== -->
 	```java
 	CompileResponse approvalResponse = algodClient.TealCompile().source(approvalSource.getBytes()).execute()
-	        .body();
+	                .body();
 	CompileResponse clearResponse = algodClient.TealCompile().source(clearSource.getBytes()).execute()
-	        .body();
+	                .body();
 	
 	TEALProgram approvalProg = new TEALProgram(approvalResponse.result);
 	TEALProgram clearProg = new TEALProgram(clearResponse.result);
@@ -456,23 +456,24 @@ Construct the transaction with defined values then sign, send, and await confirm
 	TransactionParametersResponse sp = rsp.body();
 	
 	Transaction appCreate = ApplicationCreateTransactionBuilder.Builder()
-	        .sender(creator.getAddress())
-	        .suggestedParams(sp)
-	        .approvalProgram(approvalProg)
-	        .clearStateProgram(clearProg)
-	        .localStateSchema(localSchema)
-	        .globalStateSchema(globalSchema)
-	        .build();
+	                .sender(creator.getAddress())
+	                .suggestedParams(sp)
+	                .approvalProgram(approvalProg)
+	                .clearStateProgram(clearProg)
+	                .localStateSchema(localSchema)
+	                .globalStateSchema(globalSchema)
+	                .build();
 	
 	SignedTransaction signedAppCreate = creator.signTransaction(appCreate);
 	Response<PostTransactionsResponse> createResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedAppCreate)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(signedAppCreate)).execute();
 	
-	PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, createResponse.body().txId, 4);
+	PendingTransactionResponse result = Utils.waitForConfirmation(algodClient, createResponse.body().txId,
+	                4);
 	Long appId = result.applicationIndex;
 	System.out.printf("Created application with id: %d\n", appId);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L84)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L65-L85)
     <!-- ===JAVASDK_APP_CREATE=== -->
 
 === "Go"
@@ -561,7 +562,7 @@ Use the user_mnemonic to define sender:
 	// Or just init the account directly from the mnemonic
 	Account acct = new Account(mn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L63-L69)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L64-L70)
 	<!-- ===JAVASDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Go"
@@ -621,19 +622,20 @@ Construct the transaction with defined values then sign, send, and await confirm
     <!-- ===JAVASDK_APP_OPTIN=== -->
 	```java
 	Transaction optInTxn = ApplicationOptInTransactionBuilder.Builder()
-	        .sender(user.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .build();
+	                .sender(user.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .build();
 	
 	SignedTransaction signedOptIn = user.signTransaction(optInTxn);
 	Response<PostTransactionsResponse> optInResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedOptIn)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(signedOptIn)).execute();
 	
-	PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient, optInResponse.body().txId, 4);
+	PendingTransactionResponse optInResult = Utils.waitForConfirmation(algodClient,
+	                optInResponse.body().txId, 4);
 	assert optInResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L87-L99)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L88-L101)
     <!-- ===JAVASDK_APP_OPTIN=== -->
 
 === "Go"
@@ -722,19 +724,20 @@ The user may now [call](../apps/index.md#call-the-stateful-smart-contract) the a
     <!-- ===JAVASDK_APP_NOOP=== -->
 	```java
 	Transaction noopTxn = ApplicationCallTransactionBuilder.Builder()
-	        .sender(user.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .build();
+	                .sender(user.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .build();
 	
 	SignedTransaction signedNoop = user.signTransaction(noopTxn);
 	Response<PostTransactionsResponse> noopResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedNoop)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(signedNoop)).execute();
 	
-	PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId, 4);
+	PendingTransactionResponse noopResult = Utils.waitForConfirmation(algodClient, noopResponse.body().txId,
+	                4);
 	assert noopResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L102-L114)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L104-L117)
     <!-- ===JAVASDK_APP_NOOP=== -->
 
 === "Go"
@@ -838,7 +841,7 @@ Anyone may read the [global state](../apps/index.md#reading-global-state-from-ot
 	```java
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L117-L118)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L121)
     <!-- ===JAVASDK_APP_READ_STATE=== -->
 
 === "Go"
@@ -940,26 +943,28 @@ Construct the update transaction and await the response:
     <!-- ===JAVASDK_APP_UPDATE=== -->
 	```java
 	String approvalSourceUpdated = Files.readString(Paths.get("application/approval_refactored.teal"));
-	CompileResponse approvalUpdatedResponse = algodClient.TealCompile().source(approvalSourceUpdated.getBytes())
-	        .execute()
-	        .body();
+	CompileResponse approvalUpdatedResponse = algodClient.TealCompile()
+	                .source(approvalSourceUpdated.getBytes())
+	                .execute()
+	                .body();
 	TEALProgram approvalProgUpdated = new TEALProgram(approvalUpdatedResponse.result);
 	
 	Transaction appUpdate = ApplicationUpdateTransactionBuilder.Builder()
-	        .sender(creator.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .approvalProgram(approvalProgUpdated)
-	        .clearStateProgram(clearProg)
-	        .build();
+	                .sender(creator.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .approvalProgram(approvalProgUpdated)
+	                .clearStateProgram(clearProg)
+	                .build();
 	
 	SignedTransaction signedAppUpdate = creator.signTransaction(appUpdate);
 	Response<PostTransactionsResponse> updateResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedAppUpdate)).execute();
-	PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient, updateResponse.body().txId, 4);
+	                .rawtxn(Encoder.encodeToMsgPack(signedAppUpdate)).execute();
+	PendingTransactionResponse updateResult = Utils.waitForConfirmation(algodClient,
+	                updateResponse.body().txId, 4);
 	assert updateResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L120-L139)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L123-L144)
     <!-- ===JAVASDK_APP_UPDATE=== -->
 
 === "Go"
@@ -1068,28 +1073,29 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	
 	// create unsigned transaction
 	Transaction callTransaction = ApplicationCallTransactionBuilder.Builder()
-	        .sender(user.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .args(appArgs)
-	        .build();
+	                .sender(user.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .args(appArgs)
+	                .build();
 	
 	SignedTransaction signedCallTransaction = user.signTransaction(callTransaction);
 	Response<PostTransactionsResponse> callResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedCallTransaction)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(signedCallTransaction)).execute();
 	
-	PendingTransactionResponse callResult = Utils.waitForConfirmation(algodClient, callResponse.body().txId, 4);
+	PendingTransactionResponse callResult = Utils.waitForConfirmation(algodClient, callResponse.body().txId,
+	                4);
 	assert callResult.confirmedRound > 0;
 	// display results
 	if (callResult.globalStateDelta != null) {
-	    System.out.printf("\tGlobal state: %s\n", callResult.globalStateDelta);
+	        System.out.printf("\tGlobal state: %s\n", callResult.globalStateDelta);
 	}
 	
 	if (callResult.localStateDelta != null) {
-	    System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
+	        System.out.printf("\tLocal state: %s\n", callResult.localStateDelta);
 	}
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L142-L170)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L147-L176)
     <!-- ===JAVASDK_APP_CALL=== -->
 
 === "Go"
@@ -1186,20 +1192,21 @@ The user may discontinue use of the application by sending a [close out](../apps
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 	```java
 	Transaction closeOutTxn = ApplicationCloseTransactionBuilder.Builder()
-	        .sender(user.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .build();
+	                .sender(user.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .build();
 	
 	SignedTransaction signedCloseOut = user.signTransaction(closeOutTxn);
 	Response<PostTransactionsResponse> closeOutResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedCloseOut)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(signedCloseOut)).execute();
 	
-	PendingTransactionResponse closeOutResult = Utils.waitForConfirmation(algodClient, closeOutResponse.body().txId,
-	        4);
+	PendingTransactionResponse closeOutResult = Utils.waitForConfirmation(algodClient,
+	                closeOutResponse.body().txId,
+	                4);
 	assert closeOutResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L173-L186)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L179-L193)
     <!-- ===JAVASDK_APP_CLOSEOUT=== -->
 
 === "Go"
@@ -1289,18 +1296,19 @@ The approval program defines the creator as the only account able to [delete the
     <!-- ===JAVASDK_APP_DELETE=== -->
 	```java
 	Transaction appDelete = ApplicationDeleteTransactionBuilder.Builder()
-	        .sender(creator.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .build();
+	                .sender(creator.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .build();
 	
 	SignedTransaction signedAppDelete = creator.signTransaction(appDelete);
 	Response<PostTransactionsResponse> deleteResponse = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(signedAppDelete)).execute();
-	PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient, deleteResponse.body().txId, 4);
+	                .rawtxn(Encoder.encodeToMsgPack(signedAppDelete)).execute();
+	PendingTransactionResponse deleteResult = Utils.waitForConfirmation(algodClient,
+	                deleteResponse.body().txId, 4);
 	assert deleteResult.confirmedRound > 0;
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L189-L200)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L196-L208)
     <!-- ===JAVASDK_APP_DELETE=== -->
 
 === "Go"
@@ -1387,15 +1395,15 @@ The user may [clear the local state](../apps/index.md#the-lifecycle-of-a-smart-c
     <!-- ===JAVASDK_APP_CLEAR=== -->
 	```java
 	Transaction clearTxn = ApplicationClearTransactionBuilder.Builder()
-	        .sender(user.getAddress())
-	        .suggestedParams(sp)
-	        .applicationId(appId)
-	        .build();
+	                .sender(user.getAddress())
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .build();
 	
 	SignedTransaction signedClear = user.signTransaction(clearTxn);
 	// ... sign, send, wait
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L203-L211)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AppExamples.java#L211-L219)
     <!-- ===JAVASDK_APP_CLEAR=== -->
 
 === "Go"
