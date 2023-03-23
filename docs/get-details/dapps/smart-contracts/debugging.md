@@ -174,12 +174,12 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	
 	MethodCallTransactionBuilder<?> mctb = MethodCallTransactionBuilder.Builder();
 	MethodCallParams mcp = mctb.applicationId(appId).signer(acct.getTransactionSigner())
-	                .suggestedParams(sp)
-	                .sender(acct.getAddress())
-	                .method(contract.getMethodByName("add"))
-	                .methodArguments(methodArgs)
-	                .onComplete(Transaction.OnCompletion.NoOpOC)
-	                .build();
+	        .suggestedParams(sp)
+	        .sender(acct.getAddress())
+	        .method(contract.getMethodByName("add"))
+	        .methodArguments(methodArgs)
+	        .onComplete(Transaction.OnCompletion.NoOpOC)
+	        .build();
 	atc.addMethodCall(mcp);
 	
 	DryrunRequest drr = Utils.createDryrun(algodClient, atc.gatherSignatures(), "", 0L, 0L);
@@ -188,7 +188,7 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	outfile.write(Encoder.encodeToMsgPack(drr));
 	outfile.close();
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L37-L61)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L36-L60)
     <!-- ===JAVASDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "goal"
@@ -338,7 +338,7 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 	System.out.println(dryrunTxnResult.appCallMessages);
 	System.out.println(Utils.appTrace(dryrunTxnResult));
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L64-L69)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Debug.java#L63-L68)
     <!-- ===JAVASDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 

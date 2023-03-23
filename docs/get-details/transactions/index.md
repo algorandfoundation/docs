@@ -724,7 +724,7 @@ An example of setting a pooled fee on a group of two transactions:
 	        // since suggestedParams sets a fee, we have to `null` it out
 	        // or trying to set flatFee will fail with both set
 	        .fee(nullFee)
-	        // override the fee given by suggested params to set a flat 
+	        // override the fee given by suggested params to set a flat
 	        // fee of 2x minfee to cover another transaction in the same group
 	        .flatFee(2 * suggestedParams.body().minFee).build();
 	```

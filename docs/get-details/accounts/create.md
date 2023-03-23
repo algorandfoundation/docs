@@ -136,7 +136,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 	```java
 	String kmdHost = "http://localhost:4002";
-	String kmdToken =  "a".repeat(64);
+	String kmdToken = "a".repeat(64);
 	
 	KmdClient kmdClient = new KmdClient();
 	kmdClient.setBasePath(kmdHost);
@@ -148,7 +148,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	<!-- ===JAVASDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 	```java
-	// create a new CreateWalletRequest and set parameters 
+	// create a new CreateWalletRequest and set parameters
 	CreateWalletRequest cwr = new CreateWalletRequest();
 	cwr.setWalletName(walletName);
 	cwr.setWalletPassword(password);
@@ -158,7 +158,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	APIV1Wallet wallet = result.getWallet();
 	System.out.printf("Wallet name: %s\n", wallet.getName());
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L41-L50)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L40-L49)
 	<!-- ===JAVASDK_KMD_CREATE_WALLET=== -->
 	<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 	```java
@@ -169,7 +169,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	String addr = generatedKey.getAddress();
 	System.out.printf("New account: %s\n", addr);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L75-L81)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L74-L80)
 	<!-- ===JAVASDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Go"
@@ -303,9 +303,9 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 === "Java"
 	<!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 	```java
-	// create a new CreateWalletRequest and set parameters 
+	// create a new CreateWalletRequest and set parameters
 	CreateWalletRequest recoverRequest = new CreateWalletRequest();
-	recoverRequest.setWalletName("Recovered:"+walletName);
+	recoverRequest.setWalletName("Recovered:" + walletName);
 	recoverRequest.setWalletPassword(password);
 	recoverRequest.setWalletDriverName("sqlite");
 	// Pass the specific derivation key we want to use
@@ -315,7 +315,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	APIV1Wallet recoveredWallet = recoverResponse.getWallet();
 	System.out.printf("Wallet name: %s\n", recoveredWallet.getName());
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L61-L72)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L60-L71)
 	<!-- ===JAVASDK_KMD_RECOVER_WALLET=== -->
 
 === "Go"
@@ -429,7 +429,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	String mn = Mnemonic.fromKey(Arrays.copyOfRange(exportedKey, 0, 32));
 	System.out.printf("Exported mnemonic: %s\n", mn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L84-L92)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L83-L91)
 	<!-- ===JAVASDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Go"
@@ -498,7 +498,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	String recoveredWalletHandleToken = getHandle(kmd, recoveredWallet, password);
 	
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L93-L96)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/KMDExamples.java#L92-L95)
 	<!-- ===JAVASDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Go"
@@ -686,7 +686,7 @@ The following code shows how to generate a multisignature account composed of th
 	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
 	System.out.printf("msig address: %s\n", msig.toAddress().toString());
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L77-L88)
 	<!-- ===JAVASDK_MULTISIG_CREATE=== -->
 
 === "Go"
