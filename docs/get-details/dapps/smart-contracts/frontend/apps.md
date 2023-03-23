@@ -139,8 +139,8 @@ The example application defined below may hold up to one each of `bytes` and `in
 	```javascript
 	// define uint64s and byteslices stored in global/local storage
 	const numGlobalByteSlices = 1;
-	const numGlobalInts = 0;
-	const numLocalByteSlices = 0;
+	const numGlobalInts = 1;
+	const numLocalByteSlices = 1;
 	const numLocalInts = 1;
 	```
 	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/app.ts#L47-L52)
@@ -274,13 +274,14 @@ Use the creator_mnemonic to define sender:
 === "JavaScript"
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```javascript
-	// restore 25-word mnemonic from environment variable
-	const mnemonicAccount = algosdk.mnemonicToSecretKey(
-	  process.env.SAMPLE_MNEMONIC!
-	);
-	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
+	// restore 25-word mnemonic from a string
+	// Note the mnemonic should _never_ appear in your source code
+	const mnemonic =
+	  'creek phrase island true then hope employ veteran rapid hurdle above liberty tissue connect alcohol timber idle ten frog bulb embody crunch taxi abstract month';
+	const recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic);
+	console.log('Recovered mnemonic account: ', recoveredAccount.addr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L13-L18)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L16-L22)
     <!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -543,13 +544,14 @@ Use the user_mnemonic to define sender:
 === "JavaScript"
 	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 	```javascript
-	// restore 25-word mnemonic from environment variable
-	const mnemonicAccount = algosdk.mnemonicToSecretKey(
-	  process.env.SAMPLE_MNEMONIC!
-	);
-	console.log('Recovered mnemonic account: ', mnemonicAccount.addr);
+	// restore 25-word mnemonic from a string
+	// Note the mnemonic should _never_ appear in your source code
+	const mnemonic =
+	  'creek phrase island true then hope employ veteran rapid hurdle above liberty tissue connect alcohol timber idle ten frog bulb embody crunch taxi abstract month';
+	const recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic);
+	console.log('Recovered mnemonic account: ', recoveredAccount.addr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L13-L18)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L16-L22)
 	<!-- ===JSSDK_ACCOUNT_RECOVER_MNEMONIC=== -->
 
 === "Java"
@@ -1051,7 +1053,7 @@ A program may [process arguments passed](../apps/index.md##passing-arguments-to-
 	});
 	
 	await algodClient
-	  .sendRawTransaction(simpleAddTxn.signTxn(creator.privateKey))
+	  .sendRawTransaction(simpleAddTxn.signTxn(caller.privateKey))
 	  .do();
 	await algosdk.waitForConfirmation(
 	  algodClient,

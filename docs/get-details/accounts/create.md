@@ -553,7 +553,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	console.log(`My address: ${generatedAccount.addr}`);
 	console.log(`My passphrase: ${passphrase}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L76-L80)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L80-L84)
 	<!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 === "Python"
@@ -651,7 +651,7 @@ The following code shows how to generate a multisignature account composed of th
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L37)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L27-L41)
 	<!-- ===JSSDK_MULTISIG_CREATE=== -->
 
 

@@ -26,7 +26,7 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	  indexerPort
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L16-L25)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L18-L27)
     <!-- ===JSSDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Python"

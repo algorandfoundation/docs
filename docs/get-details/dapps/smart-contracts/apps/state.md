@@ -363,12 +363,11 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 	```javascript
 	const boxATC = new algosdk.AtomicTransactionComposer();
-	
 	const boxKey = new Uint8Array(Buffer.from('key'));
 	boxATC.addMethodCall({
 	  appID: appIndex,
 	  method: boxAccessorMethod,
-	  methodArgs: [1, 5],
+	  methodArgs: [],
 	  boxes: [
 	    {
 	      appIndex: 0,
@@ -380,7 +379,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	  suggestedParams,
 	});
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L119-L136)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L100-L116)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"

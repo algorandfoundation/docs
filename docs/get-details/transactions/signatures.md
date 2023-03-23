@@ -143,7 +143,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L37)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L27-L41)
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 	```javascript
@@ -171,7 +171,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	await client.sendRawTransaction(msigWithSecondSig).do();
 	await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L50-L73)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L54-L77)
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 
 === "Python"

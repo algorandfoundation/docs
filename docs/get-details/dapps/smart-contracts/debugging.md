@@ -94,29 +94,28 @@ This file may be msgpack or json and can be created using goal or the SDKs
 	```javascript
 	const suggestedParams = await algodClient.getTransactionParams().do();
 	
-	const addTxnForDr = algosdk.makeApplicationNoOpTxnFromObject({
-	  from: sender.addr,
+	const atc = new algosdk.AtomicTransactionComposer();
+	atc.addMethodCall({
+	  appID: appId,
+	  method: contract.getMethodByName('sub'),
+	  methodArgs: [1, 2],
+	  sender: sender.addr,
+	  signer: sender.signer,
 	  suggestedParams,
-	  appIndex: 123,
-	  appArgs: [
-	    new Uint8Array(Buffer.from('add', 'utf8')),
-	    algosdk.encodeUint64(1),
-	    algosdk.encodeUint64(2),
-	  ],
 	});
 	
-	const signedDrTxn = algosdk.decodeSignedTransaction(
-	  addTxnForDr.signTxn(sender.privateKey)
+	const signedTxns = (await atc.gatherSignatures()).map((stxn) =>
+	  algosdk.decodeSignedTransaction(stxn)
 	);
 	
-	const dryrunForLogging = await algosdk.createDryrun({
+	const dryrunRequest = await algosdk.createDryrun({
 	  client: algodClient,
-	  txns: [signedDrTxn],
+	  txns: signedTxns,
 	});
 	
-	console.log('Dryrun:', dryrunForLogging.get_obj_for_encoding());
+	console.log('Dryrun:', dryrunRequest.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L10-L33)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L24-L46)
     <!-- ===JSSDK_DEBUG_DRYRUN_DUMP=== -->
 
 === "Go"
@@ -294,16 +293,13 @@ The payload for [creating a dryrun request](#creating-a-dryrun-dump-file) has th
 === "JavaScript"
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 	```javascript
-	const dryrunForResponse = await algosdk.createDryrun({
-	  client: algodClient,
-	  txns: [signedDrTxn],
+	const dryrunResponse = await algodClient.dryrun(dryrunRequest).do();
+	dryrunResponse.txns.forEach((txn) => {
+	  console.log('Txn:', txn.txn);
+	  console.log('Txn Results:', txn.txnresults);
 	});
-	
-	const dryrunResponse = await algodClient.dryrun(dryrunForResponse).do();
-	
-	console.log('Dryrun Response:', dryrunResponse);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L36-L44)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/debug.ts#L49-L54)
     <!-- ===JSSDK_DEBUG_DRYRUN_SUBMIT=== -->
 
 === "Go"
