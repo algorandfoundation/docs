@@ -490,10 +490,9 @@ The AVM provides two opcodes, `box_put` and `box_replace`,  to write data to a b
 	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/boxes/approval.teal#L18-L22)
 	<!-- ===TEAL_BOX_WRITE=== -->
 
-=== "PyTeal"
+=== "Beaker"
 	<!-- ===BEAKER_BOX_WRITE=== -->
     ```py
-    #Beaker Framework
         @external
         def replace_string(self, ky: abi.String, start: abi.Uint64, replacement: abi.String, *, output: abi.String):
             return Seq(
