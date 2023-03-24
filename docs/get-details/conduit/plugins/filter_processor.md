@@ -1,7 +1,8 @@
 # Filter Processor
 
 This is used to filter transactions to include only the ones that you want. This may be useful for some deployments
-which only require specific applications or accounts.
+which only require specific applications or accounts. Using the default configuration, results for a matched transaction
+would also include its transaction group and search is disable for inner transactions. 
 
 ## any / all
 One or more top-level operations should be provided.
@@ -47,7 +48,7 @@ The input to the expression. A number or string depending on the expression type
 processors:
   - name: filter_processor
     config:
-      - filters:
+      filters:
           - any
               - tag:
                 expression-type:

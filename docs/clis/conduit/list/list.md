@@ -4,7 +4,29 @@ title: conduit list
 
 
 
-lists all plugins available to conduit
+List all available Conduit plugins
+
+
+
+### Synopsis
+
+
+
+List all available Conduit plugins by type and a short description.
+
+
+
+Use this utility to explore the plugins. Drill into each plugin to get a
+
+sample configuration.
+
+
+
+Example:
+
+  conduit list importers algod
+
+  conduit list processors filter_processor
 
 
 
@@ -32,10 +54,10 @@ conduit list [flags]
 
 
 
-* [conduit](../../../conduit/conduit/)	 - run the conduit framework
-* [conduit list exporters](../exporters/)	 - usage detail for exporter plugins
-* [conduit list importers](../importers/)	 - usage detail for importer plugins
-* [conduit list processors](../processors/)	 - usage detail for processor plugins
+* [conduit](../../../conduit/conduit/)	 - Run the Conduit framework.
+* [conduit list exporters](../exporters/)	 - Usage details for exporter plugins.
+* [conduit list importers](../importers/)	 - Usage details for importer plugins.
+* [conduit list processors](../processors/)	 - Usage details for processor plugins.
 
 
 
