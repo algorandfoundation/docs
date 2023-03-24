@@ -2,8 +2,9 @@ title: Where do I start?
 
 # Continue getting started
 
-The rest of this getting started guide is organized into three main sections that can be viewed on their own or as part of this sequence. In order, they are:
+## Setup your development Environment
 
+**Jason TODO:**
 
 ## Smart contracts & dApps
 
