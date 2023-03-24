@@ -1,4 +1,4 @@
-title: v2
+title: algod
 ---
 
 <a name="paths"></a>
