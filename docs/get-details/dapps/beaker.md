@@ -64,7 +64,7 @@ Adding handlers using a blueprint allows code re-use and makes it easier to add 
 <!-- ===BEAKER_HANDLERS_BLUEPRINT=== -->
 ```python
 # passing the app to this method will register the handlers on the app
-def calculator_blueprint(app: Application) -> Application:
+def calculator_blueprint(app: Application) -> None:
     @app.external
     def add(a: pt.abi.Uint64, b: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr:
         return output.set(a.get() + b.get())
@@ -81,8 +81,6 @@ def calculator_blueprint(app: Application) -> Application:
     def mul(a: pt.abi.Uint64, b: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr:
         return output.set(a.get() * b.get())
 
-    return app
-
 
 calculator_app = Application("CalculatorApp", descr="This is a calculator app")
 calculator_app.apply(calculator_blueprint)
@@ -90,7 +88,7 @@ calculator_app.apply(calculator_blueprint)
 calculator_app_spec = calculator_app.build()
 print(calculator_app_spec.to_json())
 ```
-[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_handlers.py#L25-L51)
+[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_handlers.py#L25-L49)
 <!-- ===BEAKER_HANDLERS_BLUEPRINT=== -->
 
 # Add State 
@@ -100,6 +98,7 @@ Lets go back and add some state to our application
 <!-- ===BEAKER_STATE_GLOBAL=== -->
 ```python
 import pyteal as pt
+
 from beaker import Application, GlobalStateValue
 
 
@@ -128,12 +127,13 @@ def decrement() -> pt.Expr:
 app_spec = app.build()
 print(app_spec.global_state_schema.dictify())
 ```
-[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L3-L31)
+[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L1-L30)
 <!-- ===BEAKER_STATE_GLOBAL=== -->
 
 <!-- ===BEAKER_STATE_LOCAL=== -->
 ```python
 import pyteal as pt
+
 from beaker import Application, LocalStateValue
 
 
@@ -162,12 +162,13 @@ def user_decrement() -> pt.Expr:
 local_app_spec = local_app.build()
 print(local_app_spec.local_state_schema.dictify())
 ```
-[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L34-L62)
+[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L33-L62)
 <!-- ===BEAKER_STATE_LOCAL=== -->
 
 <!-- ===BEAKER_STATE_MAPPING=== -->
 ```python
 import pyteal as pt
+
 from beaker.lib.storage import BoxMapping
 
 
@@ -187,12 +188,13 @@ def store_user_value(value: pt.abi.Uint64) -> pt.Expr:
 
 
 ```
-[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L65-L84)
+[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L65-L85)
 <!-- ===BEAKER_STATE_MAPPING=== -->
 
 <!-- ===BEAKER_STATE_LIST=== -->
 ```python
 import pyteal as pt
+
 from beaker.lib.storage import BoxList
 
 
@@ -210,7 +212,7 @@ def store_user(user: pt.abi.Address, index: pt.abi.Uint64) -> pt.Expr:
 
 
 ```
-[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L88-L105)
+[Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L89-L107)
 <!-- ===BEAKER_STATE_LIST=== -->
 
 # Interacting with the Application
@@ -219,7 +221,7 @@ We can interact with our application using the Beaker provided ApplicationClient
 
 <!-- ===BEAKER_APP_CLIENT_INIT=== -->
 ```python
-from beaker import sandbox, client
+from beaker import client, sandbox
 
 # grab funded accounts from the sandbox KMD
 accts = sandbox.get_accounts()
