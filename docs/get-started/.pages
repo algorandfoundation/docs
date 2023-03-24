@@ -4,5 +4,3 @@ arrange:
     - basics
     - devenv
     - dapps
-    - tokenization
-    - integration
