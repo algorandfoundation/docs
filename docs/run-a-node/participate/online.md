@@ -18,29 +18,39 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 	// get suggested parameters
 	const params = await algodClient.getTransactionParams().do();
 	
-	const voteKey = 'eXq34wzh2UIxCZaI1leALKyAvSz/+XOe0wqdHagM+bw=';
-	const selectionKey = 'X84ReKTmp+yfgmMCbbokVqeFFFrKQeFZKEXG89SXwm4=';
+	// Parent addr
+	const addr = 'MWAPNXBDFFD2V5KWXAHWKBO7FO4JN36VR4CIBDKDDE7WAUAGZIXM3QPJW4';
+	// VRF public key
+	const selectionKey = 'LrpLhvzr+QpN/bivh6IPpOaKGbGzTTB5lJtVfixmmgk=';
+	// Voting pub key
+	const voteKey = 'G/lqTV6MKspW6J8wH2d8ZliZ5XZVZsruqSBJMwLwlmo=';
+	// State proof key
+	const stateProofKey =
+	  'RpUpNWfZMjZ1zOOjv3MF2tjO714jsBt0GKnNsw0ihJ4HSZwci+d9zvUi3i67LwFUJgjQ5Dz4zZgHgGduElnmSA==';
 	
-	const numRounds = 1e5; // sets up keys for 100000 rounds
-	const keyDilution = numRounds ** 0.5; // dilution default is sqrt num rounds
+	// sets up keys for 100000 rounds
+	const numRounds = 1e5;
+	
+	// dilution default is sqrt num rounds
+	const keyDilution = numRounds ** 0.5;
 	
 	// create transaction
 	const onlineKeyreg = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject(
 	  {
-	    from: 'EW64GC6F24M7NDSC5R3ES4YUVE3ZXXNMARJHDCCCLIHZU6TBEOC7XRSBG4',
+	    from: addr,
 	    voteKey,
 	    selectionKey,
+	    stateProofKey,
 	    voteFirst: params.firstRound,
 	    voteLast: params.firstRound + numRounds,
 	    voteKeyDilution: keyDilution,
-	    stateProofKey: voteKey,
 	    suggestedParams: params,
 	  }
 	);
 	
 	console.log(onlineKeyreg.get_obj_for_encoding());
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L7-L31)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/participation.ts#L7-L41)
     <!-- ===JSSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "Python"
@@ -122,7 +132,7 @@ Create a key registration transaction for the address: `EW64GC6F24M7NDSC5R3ES4YU
 		nonpart,
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/participation/main.go#L40-L60)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/participation/main.go#L27-L47)
     <!-- ===GOSDK_TRANSACTION_KEYREG_ONLINE_CREATE=== -->
 
 === "goal"

@@ -198,27 +198,8 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	  signer: sender.signer,
 	  suggestedParams,
 	});
-	
-	const otherPayTxn: algosdk.TransactionWithSigner = {
-	  txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-	    from: sender.addr,
-	    suggestedParams,
-	    to: sender.addr,
-	    amount: 1000,
-	  }),
-	  signer: sender.signer,
-	};
-	
-	atc.addMethodCall({
-	  appID: appIndex,
-	  method: contract.getMethodByName('txntest'),
-	  methodArgs: [10000, otherPayTxn, 1000],
-	  sender: sender.addr,
-	  signer: sender.signer,
-	  suggestedParams,
-	});
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L75-L102)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L75-L83)
     <!-- ===JSSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JSSDK_ATC_RESULTS=== -->
 	```javascript
@@ -227,7 +208,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	  console.log(`${mr.returnValue}`);
 	}
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L105-L109)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L86-L90)
     <!-- ===JSSDK_ATC_RESULTS=== -->
 
 === "Go"
