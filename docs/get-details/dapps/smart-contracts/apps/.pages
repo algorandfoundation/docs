@@ -2,3 +2,7 @@ title: Smart contracts
 
 arrange:
   - index.md
+  - create.md
+  - txs.md
+  - state.md
+  - innertx.md

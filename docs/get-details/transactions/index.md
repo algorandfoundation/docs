@@ -698,7 +698,7 @@ An example of setting a pooled fee on a group of two transactions:
 	# treated as fee-per-byte of the encoded transaction
 	suggested_params.flat_fee = True
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L68-L73)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L69-L74)
 	<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Go"
@@ -710,7 +710,7 @@ An example of setting a pooled fee on a group of two transactions:
 	sp.FlatFee = true
 	// ...
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L102-L107)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L105-L110)
   	<!-- ===GOSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Java"
@@ -724,7 +724,7 @@ An example of setting a pooled fee on a group of two transactions:
 	        // since suggestedParams sets a fee, we have to `null` it out
 	        // or trying to set flatFee will fail with both set
 	        .fee(nullFee)
-	        // override the fee given by suggested params to set a flat 
+	        // override the fee given by suggested params to set a flat
 	        // fee of 2x minfee to cover another transaction in the same group
 	        .flatFee(2 * suggestedParams.body().minFee).build();
 	```

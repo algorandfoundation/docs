@@ -49,7 +49,7 @@ There are two options:
 	
 	print(constants.MIN_TXN_FEE)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L82-L85)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L83-L86)
     <!-- ===PYSDK_CONST_MIN_FEE=== -->
 
 === "JavaScript"
@@ -73,7 +73,7 @@ There are two options:
 	```go
 	log.Printf("Min fee const: %d", transaction.MinTxnFee)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L98-L99)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L101-L102)
     <!-- ===GOSDK_CONST_MIN_FEE=== -->
     
 * using an algod API:
@@ -84,7 +84,7 @@ There are two options:
 	suggested_params = algod_client.suggested_params()
 	print(suggested_params.min_fee)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L77-L79)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/overview.py#L78-L80)
     <!-- ===PYSDK_SP_MIN_FEE=== -->
 
 === "JavaScript"
@@ -114,7 +114,7 @@ There are two options:
 	}
 	log.Printf("Min fee from suggested params: %d", suggestedParams.MinFee)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L90-L95)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L93-L98)
     <!-- ===GOSDK_SP_MIN_FEE=== -->
 
 ### DO bound fees for smart signatures

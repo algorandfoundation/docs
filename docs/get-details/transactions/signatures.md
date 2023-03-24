@@ -143,7 +143,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	
 	console.log('Created MultiSig Address: ', multisigAddr);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L23-L37)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L27-L41)
     <!-- ===JSSDK_MULTISIG_CREATE=== -->
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 	```javascript
@@ -171,7 +171,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	await client.sendRawTransaction(msigWithSecondSig).do();
 	await algosdk.waitForConfirmation(client, msigTxn.txID().toString(), 3);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L50-L73)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L54-L77)
     <!-- ===JSSDK_MULTISIG_SIGN=== -->
 
 === "Python"
@@ -221,7 +221,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	MultisigAddress msig = new MultisigAddress(version, threshold, accts);
 	System.out.printf("msig address: %s\n", msig.toAddress().toString());
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L76-L87)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L77-L88)
     <!-- ===JAVASDK_MULTISIG_CREATE=== -->
     <!-- ===JAVASDK_MULTISIG_SIGN=== -->
 	```java
@@ -264,7 +264,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	// Print multisig account
 	fmt.Printf("Multisig address : %s \n", fromAddr)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L175-L193)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L178-L196)
     <!-- ===GOSDK_MULTISIG_CREATE=== -->
     <!-- ===GOSDK_MULTISIG_SIGN=== -->
     ```go

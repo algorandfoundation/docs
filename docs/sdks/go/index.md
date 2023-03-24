@@ -52,7 +52,7 @@ if err != nil {
 	fmt.Printf("My passphrase: %s\n", passphrase)
 }
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L163-L172)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L166-L175)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 !!! Note 
@@ -117,7 +117,7 @@ if err != nil {
 }
 log.Printf("Account balance: %d microAlgos", acctInfo.Amount)
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L48-L53)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L51-L56)
  <!-- ===GOSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 
@@ -136,7 +136,7 @@ if err != nil {
 	log.Fatalf("failed creating transaction: %s", err)
 }
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L56-L65)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L59-L68)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_CREATE=== -->
 
 !!! Info
@@ -154,7 +154,7 @@ if err != nil {
 	return
 }
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L68-L73)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L71-L76)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
@@ -178,7 +178,7 @@ if err != nil {
 }
 fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.ConfirmedRound)
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L76-L87)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/overview/main.go#L79-L90)
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 # Viewing the Transaction

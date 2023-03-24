@@ -368,84 +368,24 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 === "JavaScript"
 	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 	```javascript
-	// create and fund a new account that we will eventually rekey
-	const originalAccount = algosdk.generateAccount();
-	const fundOriginalAccount = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
-	  {
-	    from: funder.addr,
-	    to: originalAccount.addr,
-	    amount: 1_000_000,
-	    suggestedParams,
-	  }
-	);
-	
-	await client
-	  .sendRawTransaction(fundOriginalAccount.signTxn(funder.privateKey))
-	  .do();
-	await algosdk.waitForConfirmation(
-	  client,
-	  fundOriginalAccount.txID().toString(),
-	  3
-	);
-	
-	// authAddr is undefined by default
-	const originalAccountInfo = await client
-	  .accountInformation(originalAccount.addr)
-	  .do();
-	console.log(
-	  'Account Info: ',
-	  originalAccountInfo,
-	  'Auth Addr: ',
-	  originalAccountInfo['auth-addr']
-	);
-	
-	// create a new account that will be the new auth addr
-	const newSigner = algosdk.generateAccount();
-	console.log('New Signer Address: ', newSigner.addr);
-	
 	// rekey the original account to the new signer via a payment transaction
+	// Note any transaction type can be used to rekey an account
 	const rekeyTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-	  from: originalAccount.addr,
-	  to: originalAccount.addr,
+	  from: acct1.addr,
+	  to: acct1.addr,
 	  amount: 0,
 	  suggestedParams,
-	  rekeyTo: newSigner.addr, // set the rekeyTo field to the new signer
+	  rekeyTo: acct2.addr, // set the rekeyTo field to the new signer
 	});
 	
-	await client.sendRawTransaction(rekeyTxn.signTxn(originalAccount.sk)).do();
+	await client.sendRawTransaction(rekeyTxn.signTxn(acct1.privateKey)).do();
 	await algosdk.waitForConfirmation(client, rekeyTxn.txID().toString(), 3);
 	
-	const originalAccountInfoAfterRekey = await client
-	  .accountInformation(originalAccount.addr)
-	  .do();
-	console.log(
-	  'Account Info: ',
-	  originalAccountInfoAfterRekey,
-	  'Auth Addr: ',
-	  originalAccountInfoAfterRekey['auth-addr']
-	);
+	const acctInfo = await client.accountInformation(acct1.addr).do();
 	
-	// form new transaction from rekeyed account
-	const txnWithNewSignerSig = algosdk.makePaymentTxnWithSuggestedParamsFromObject(
-	  {
-	    from: originalAccount.addr,
-	    to: funder.addr,
-	    amount: 100,
-	    suggestedParams,
-	  }
-	);
-	
-	// the transaction is from originalAccount, but signed with newSigner private key
-	const signedTxn = txnWithNewSignerSig.signTxn(newSigner.sk);
-	
-	await client.sendRawTransaction(signedTxn).do();
-	await algosdk.waitForConfirmation(
-	  client,
-	  txnWithNewSignerSig.txID().toString(),
-	  3
-	);
+	console.log(`Account Info: ${acctInfo} Auth Addr: ${acctInfo['auth-addr']}`);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L83-L159)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L87-L103)
 	<!-- ===JSSDK_ACCOUNT_REKEY=== -->
 
 
@@ -472,7 +412,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	                .rawtxn(Encoder.encodeToMsgPack(signedRekeyBack)).execute();
 	ExampleUtils.printTxnResults(algodClient, rekeyBackResponse.body(), "rekey back");
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L95-L114)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/AccountExamples.java#L96-L115)
 	<!-- ===JAVASDK_ACCOUNT_REKEY=== -->
 
 === "Go"

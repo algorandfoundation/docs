@@ -14,9 +14,9 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 # SDK client instantiations
 
 === "JavaScript"
-    <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JSSDK_INDEXER_CREATE_CLIENT=== -->
 	```javascript
-	const indexerToken = '';
+	const indexerToken = 'a'.repeat(64);
 	const indexerServer = 'http://localhost';
 	const indexerPort = 8980;
 	
@@ -26,24 +26,24 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	  indexerPort
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/utils.ts#L16-L25)
-    <!-- ===JSSDK_CREATE_INDEXER_CLIENT=== -->
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L15-L24)
+    <!-- ===JSSDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Python"
-    <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===PYSDK_INDEXER_CREATE_CLIENT=== -->
 	```python
 	# instantiate indexer client
 	indexer_host = "http://localhost:8980"
 	indexer_token = "a" * 64
-	myindexer = indexer.IndexerClient(
+	indexer_client = indexer.IndexerClient(
 	    indexer_token=indexer_token, indexer_address=indexer_host
 	)
 	```
 	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L7-L13)
-    <!-- ===PYSDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===PYSDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Java"
-    <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JAVASDK_INDEXER_CREATE_CLIENT=== -->
 	```java
 	String indexerHost = "http://localhost";
 	int indexerPort = 8980;
@@ -51,10 +51,10 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 	IndexerClient indexerClient = new IndexerClient(indexerHost, indexerPort, indexerToken);
 	```
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L12-L16)
-    <!-- ===JAVASDK_CREATE_INDEXER_CLIENT=== -->
+    <!-- ===JAVASDK_INDEXER_CREATE_CLIENT=== -->
 
 === "Go"
-	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	<!-- ===GOSDK_INDEXER_CREATE_CLIENT=== -->
 	```go
 	// Create a new indexer client, configured to connect to out local sandbox
 	var indexerAddress = "http://localhost:8980"
@@ -75,8 +75,8 @@ See the full description of endpoints available in the [indexer docs](../rest-ap
 		[]*common.Header{&indexerHeader},
 	)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L14-L32)
-	<!-- ===GOSDK_CREATE_INDEXER_CLIENT=== -->
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L15-L33)
+	<!-- ===GOSDK_INDEXER_CREATE_CLIENT=== -->
 
 !!! info 
     When using cURL be aware that the parameters may need to be URL encoded. The SDKs handle the encoding of parameter data. 
@@ -112,10 +112,10 @@ As an example, to get the details of a specific asset the indexer provides the `
 	```python
 	# lookup a single asset
 	# by passing include_all, we specify that we want to see deleted assets as well
-	response = myindexer.asset_info(asset_id, include_all=True)
+	response = indexer_client.asset_info(asset_id, include_all=True)
 	print(f"Asset Info: {json.dumps(response, indent=2,)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L49-L53)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L50-L54)
     <!-- ===PYSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "Java"
@@ -146,7 +146,7 @@ As an example, to get the details of a specific asset the indexer provides the `
 	assetJson, _ := json.MarshalIndent(assetResult, "", "\t")
 	fmt.Printf(string(assetJson) + "\n")
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L51-L64)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L55-L68)
     <!-- ===GOSDK_INDEXER_LOOKUP_ASSET=== -->
 
 === "cURL"
@@ -164,25 +164,24 @@ Searching is similar to lookup with the ability to return multiple or filtered r
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```javascript
-	const indexerClient = getLocalIndexerClient();
 	const transactionInfo = await indexerClient
 	  .searchForTransactions()
 	  .currencyGreaterThan(100)
 	  .do();
 	console.log(transactionInfo.transactions.map((t) => t.id));
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L14-L20)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L33-L38)
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Python"
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 	```python
-	response = myindexer.search_transactions(
+	response = indexer_client.search_transactions(
 	    min_amount=10, min_round=1000, max_round=1500
 	)
 	print(f"Transaction results: {json.dumps(response, indent=2)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L56-L60)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L57-L61)
     <!-- ===PYSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "Java"
@@ -212,7 +211,7 @@ Searching is similar to lookup with the ability to return multiple or filtered r
 	transactionJson, _ := json.MarshalIndent(transactionResult, "", "\t")
 	fmt.Printf(string(transactionJson) + "\n")
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L69-L81)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L73-L85)
     <!-- ===GOSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
 
 === "cURL"
@@ -260,7 +259,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	    console.log(`Transaction IDs: ${response.transactions.map((t) => t.id)}`);
 	}
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L23-L40)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L41-L58)
     <!-- ===JSSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Python"
@@ -274,7 +273,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	# loop using next_page to paginate until there are
 	# no more transactions in the response
 	while has_results:
-	    response = myindexer.search_transactions(
+	    response = indexer_client.search_transactions(
 	        min_amount=10, min_round=1000, max_round=1500, next_page=nexttoken
 	    )
 	
@@ -286,7 +285,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	
 	    page += 1
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L63-L82)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L64-L83)
     <!-- ===PYSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "Java"
@@ -295,15 +294,15 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 	String nextToken = "";
 	boolean hasResults = true;
 	// Start with empty nextToken and while there are
-	// results in the transaction results, query again with the next page 
-	while(hasResults){
+	// results in the transaction results, query again with the next page
+	while (hasResults) {
 	    Response<TransactionsResponse> searchResults = indexerClient.searchForTransactions().minRound(1000l)
 	            .maxRound(1500l).currencyGreaterThan(10l).next(nextToken).execute();
 	    TransactionsResponse txnRes = searchResults.body();
 	    //
 	    // ... do something with transaction results
 	    //
-	    hasResults = txnRes.transactions.size()>0;
+	    hasResults = txnRes.transactions.size() > 0;
 	    nextToken = txnRes.nextToken;
 	}
 	```
@@ -348,7 +347,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
 		}
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L84-L118)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L88-L122)
     <!-- ===GOSDK_INDEXER_PAGINATE_RESULTS=== -->
 
 === "cURL"
@@ -421,27 +420,28 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 	  )}`
 	);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L62-L73)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/indexer.ts#L80-L91)
     <!-- ===JSSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Python"
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 	```python
 	note_prefix = "showing prefix".encode()
-	response = myindexer.search_transactions(note_prefix=note_prefix)
+	response = indexer_client.search_transactions(note_prefix=note_prefix)
 	print(f"result: {json.dumps(response, indent=2)}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L85-L88)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/indexer.py#L86-L89)
     <!-- ===PYSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Java"
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 	```java
 	byte[] prefix = new String("showing prefix").getBytes();
-	Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix).execute();
+	Response<TransactionsResponse> prefixResults = indexerClient.searchForTransactions().notePrefix(prefix)
+	        .execute();
 	// ...
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L53)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/IndexerExamples.java#L50-L54)
     <!-- ===JAVASDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "Go"
@@ -460,7 +460,7 @@ This will return an encoded value of `c2hvd2luZyBwcmVmaXg=`.  This value can the
 	prefixJson, _ := json.MarshalIndent(prefixResult, "", "\t")
 	fmt.Printf(string(prefixJson) + "\n")
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L121-L133)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/indexer/main.go#L125-L137)
     <!-- ===GOSDK_INDEXER_PREFIX_SEARCH=== -->
 
 === "cURL"

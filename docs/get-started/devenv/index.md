@@ -26,4 +26,4 @@ If you only want to try out Algorand code snippets, you can get started quickly 
 However, to continue learning about Algorand and its smart signatures/smart contracts, [installing the Algorand sandbox](sandbox.md) is recommended. Also, in local private networks, the sandbox comes with the [indexer software](https://developer.algorand.org/docs/rest-apis/indexer/#create-publication-overlay), which runs locally so you can quickly lookup applications, assets, transactions, and accounts.
 
 !!! info
-    Even if you do not want to run your own node, it is recommended to [install the Algorand software](../../run-a-node/setup/install.md), as it provides useful command line tools such as [`goal`](../../../clis/goal/goal), [`algokey`](../../../clis/algokey/algokey), and  `msgpacktool`.
+    Even if you do not want to run your own node, it is recommended to [install the Algorand software](/docs/run-a-node/setup/install), as it provides useful command line tools such as [`goal`](/docs/clis/goal/goal), [`algokey`](/docs/clis/algokey/algokey), and  `msgpacktool`.

@@ -61,7 +61,7 @@ const passphrase = algosdk.secretKeyToMnemonic(generatedAccount.sk);
 console.log(`My address: ${generatedAccount.addr}`);
 console.log(`My passphrase: ${passphrase}`);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L76-L80)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L80-L84)
 <!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 
 
@@ -95,7 +95,7 @@ const algodPort = 4001;
 
 const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L10-L15)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L7-L12)
 <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
@@ -109,7 +109,7 @@ Before moving on to the next step, make sure your account has been funded by the
 const acctInfo = await algodClient.accountInformation(acct.addr).do();
 console.log(`Account balance: ${acctInfo.amount} microAlgos`);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L40-L42)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L46-L48)
 <!-- ===JSSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
  
@@ -127,7 +127,7 @@ const ptxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
   note: new Uint8Array(Buffer.from('hello world')),
 });
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L18-L26)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L23-L31)
 <!-- ===JSSDK_TRANSACTION_PAYMENT_CREATE=== -->
 
 ​
@@ -141,7 +141,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ```javascript
 const signedTxn = ptxn.signTxn(acct.privateKey);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L29-L30)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L34-L35)
 <!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
@@ -155,12 +155,13 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
  
  <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 ```javascript
-const { txID } = await algodClient.sendRawTransaction(signedTxn).do();
-const result = await algosdk.waitForConfirmation(algodClient, txID, 4);
-console.log(`Transaction Information: ${result}`);
-console.log(`Decoded Node: ${Buffer.from(result.note, 'base64')}`);
+const { txId } = await algodClient.sendRawTransaction(signedTxn).do();
+const result = await algosdk.waitForConfirmation(algodClient, txId, 4);
+console.log(result);
+console.log(`Transaction Information: ${result.txn}`);
+console.log(`Decoded Note: ${Buffer.from(result.txn.txn.note).toString()}`);
 ```
-[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L33-L37)
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L38-L43)
  <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 ​

@@ -292,16 +292,16 @@ The following example illustrates compiling a TEAL program and signing a transac
 	TransactionParametersResponse params = algodClient.TransactionParams().execute().body();
 	// create a transaction
 	Transaction txn = Transaction.PaymentTransactionBuilder()
-	        .sender(lsig.getAddress())
-	        .amount(100000)
-	        .receiver(seedAcct.getAddress())
-	        .suggestedParams(params)
-	        .build();
+	                .sender(lsig.getAddress())
+	                .amount(100000)
+	                .receiver(seedAcct.getAddress())
+	                .suggestedParams(params)
+	                .build();
 	// create the LogicSigTransaction with contract account LogicSigAccount
 	SignedTransaction stx = Account.signLogicsigTransaction(lsig.lsig, txn);
 	// send raw LogicSigTransaction to network
 	Response<PostTransactionsResponse> submitResult = algodClient.RawTransaction()
-	        .rawtxn(Encoder.encodeToMsgPack(stx)).execute();
+	                .rawtxn(Encoder.encodeToMsgPack(stx)).execute();
 	String txid = submitResult.body().txId;
 	// Wait for transaction confirmation
 	PendingTransactionResponse pTrx = Utils.waitForConfirmation(algodClient, txid, 4);
@@ -438,11 +438,11 @@ The following example illustrates signing a transaction with a created logic sig
 	params = algodClient.TransactionParams().execute().body();
 	// create a transaction where the sender is the signer of the lsig
 	txn = Transaction.PaymentTransactionBuilder()
-	        .sender(seedAcct.getAddress())
-	        .amount(100000)
-	        .receiver(delegateLsig.toAddress())
-	        .suggestedParams(params)
-	        .build();
+	                .sender(seedAcct.getAddress())
+	                .amount(100000)
+	                .receiver(delegateLsig.toAddress())
+	                .suggestedParams(params)
+	                .build();
 	// Sign the transaction with the delegate lsig
 	stx = Account.signLogicsigTransaction(delegateLsig, txn);
 	// send raw LogicSigTransaction to network
