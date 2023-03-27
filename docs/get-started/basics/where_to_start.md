@@ -4,14 +4,16 @@ title: Where do I start?
 
 If you are interested in building an application([dApp](whats_a_dapp.md)) on Algorand, checkout [Algokit](../algokit.md), which is a tool for quickly building, testing, and deploying Algorand smart contracts. 
 
-> [Tell me more about Algorand smart contracts!](/docs/get-details/dapps/smart-contracts/)
+> [Tell me more about Algorand smart contracts!](../../get-details/dapps/smart-contracts/index.md)
 
 
 # Tokenization
 
 This section will walk you through the basics of tokenizing assets on Algorand. We’ll start with showing you how Alice and Bob tokenize their NFT, and then walk through creating fungible tokens. You don’t need to write smart contract code to tokenize assets on Algorand. Assets are a layer-1 primitive, built right into the protocol itself.
 
-> [I want to learn how to mint NFTs or Tokens.](/docs/get-details/asa.md){: target="_blank}
+> [I want to learn how to mint NFTs.](../../tokenization/nft/){: target="_blank}
+
+> [I want to learn how to create fungible tokens.](../../tokenization/ft){: target="_blank}
 
 -----
 
@@ -28,14 +30,6 @@ If you are looking for detailed feature explanations and reference documentation
 Here you can find code tutorials and prototypes from the Algorand developer community. This is also where big features will be announced. 
 
 > [See the latest articles and code from Algorand and the community.](../../../../blog/){: target="_blank}
-
------
-
-# Ecosystem Tools & Projects
-
-Want to know what IDEs are available for building dApps or which wallets you can integrate with your dApp? These sorts of developer tools and projects can be found on the Ecosystem Tools & Projects page.
-
-> [Browse tools, projects, dApps.](../../../../ecosystem-projects/){: target="_blank}
 
 -----
 

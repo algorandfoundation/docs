@@ -2,4 +2,5 @@ title: Get started
 
 arrange:
     - basics
+    - tokenization
     - algokit.md

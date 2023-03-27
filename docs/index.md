@@ -53,12 +53,12 @@ title: Algorand Developer Docs
         </a>
     </li>
     <li class="docs-homepage__card-list-item">
-        <a class="docs-homepage__card" href="./get-details/dapps/pyteal/">
+        <a class="docs-homepage__card" href="./get-started/algokit/">
             <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
                 <span class="payment-with-algos-icon"></span>
             </div>
-            <p class="docs-homepage__card__title text-gray--main typography--large-button">PyTeal</p>
-            <p class="typography--regular-body docs-homepage__card__description">Write smart contracts with Python</p>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">AlgoKit</p>
+            <p class="typography--regular-body docs-homepage__card__description">Write smart contracts using AlgoKit</p>
         </a>
     </li>
     <li class="docs-homepage__card-list-item">
