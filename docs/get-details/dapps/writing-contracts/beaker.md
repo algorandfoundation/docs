@@ -63,7 +63,10 @@ Method handlers can be added to provide functionality within the smart contract.
 
 ## external
 
-To proive a mehtod that can be used by a calling application transaction, Beaker provides the `external` decorator. This informs the framework to expose this function publicy to the chain. The actual method is then defined with the proper method signature. This starts with the input agruments, an `*` which acts as a separator, and then the methods output types. These values should be defined as ABI data types using PyTeals ABI package. Arguments and return types are also optional.
+To provide a method that can be invoked by an application call transaction, Beaker provides the `external` decorator. This instructs the framework to expose the method publicy for incoming transactions. The method is then defined with its required [method signature](/docs/get-details/dapps/smart-contracts/ABI/#methods), where the parameter types in the method signature describe the input types and output type.  These types of the arguments must be valid ABI data types, using [PyTeal's ABI](https://pyteal.readthedocs.io/en/stable/abi.html) package. Arguments and output types are optional, omitting any arguments is perfectly valid.
+
+!!! note:
+    Note that input types come first, and if a value is returned it should be denoted in the method signature at the end using the notation `*, output: abi.ValidABIType`, which provides a variable to write the output into.
 
 
 <!-- ===BEAKER_HANDLERS_DIRECT=== -->
@@ -81,14 +84,19 @@ def add(a: pt.abi.Uint64, b: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_handlers.py#L13-L22)
 <!-- ===BEAKER_HANDLERS_DIRECT=== -->
 
-In the example above the add method is defined to take two `Uint64` arguments and return a `Uint64`.
+In the example above the add method is defined to take two `Uint64` arguments (`a`, `b`) and return a `Uint64` (`output`).
+
+The full method signature for the above is `add(uint64,uint64)uint64`.
 
 ## Blueprints
-Beaker provides blueprints to allow definining a set of method hanlders that an application can inherit. Adding handlers using a blueprint allows code re-use and makes it easier to add behaviors especially for applications that wish to adhere to some ARC standard. Blueprints can be defined using a standard pyton method definition.
 
-The code below defines a calculator blueprint that defines method handlers for the various mathematical functions a calaculator. The blueprint must take an `Application` argument and return an `Application`. This method can then define method handlers using the `external` decorator.
+Beaker allows for a pattern called `blueprints` apply a set of method handlers to an Application. Adding handlers using a blueprint allows for code re-use and makes it easier to add behaviors, especially for applications that wish to adhere to some ARC standard. 
 
-An instaniated `Application` can then apply this blueprint using the `apply` method passing blueprint method as an argument.
+Blueprints can be defined using a standard python method definition that accepts an Application as an argument and applies the handlers.
+
+The code below defines a calculator blueprint that applies method handlers for a set of functions to implement a simple calculator. The blueprint must take an `Application` argument and optionally other arguments to modify the behavior of the blueprint
+
+An instantiated `Application` can apply this blueprint using the `.apply` method passing blueprint method as an argument. If other arguments in the blueprint method are defined, they can be passed with standard python kwarg format (ie `.apply(bp, arg1="hello"))
 
 <!-- ===BEAKER_HANDLERS_BLUEPRINT=== -->
 ```python
@@ -122,18 +130,20 @@ print(calculator_app_spec.to_json())
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_handlers.py#L25-L51)
 <!-- ===BEAKER_HANDLERS_BLUEPRINT=== -->
 
-An application that has a blueprint applied can also implement additional handlers or apply additional blueprints. Identical method signatures are not allowed. This can be overriden by adding the override attribute to the decorator, `external(override=True)`.  
+An application that has a blueprint applied can also implement additional handlers or apply additional blueprints. Identical method signatures are not allowed. However, if necessary, an identical method signature still be registered by adding the override attribute to the decorator, `external(override=True)`.  
 
 # Add State 
 
-Beaker's `GlobalStateValue` class can be used to define and alter a contract's global state values. Global state values are defined by pasing the `TealType` and a description the `GlobalStateValue` constructor. 
+An Application can define the state it uses to store data. This is done by defining a class that contains some number of `StateValue` objects as attributes and passing an instance of that class to the Application constructor. 
 
+Beaker's `GlobalStateValue` class can be used to define and alter a contract's global state values. Global state values are defined by passing the `TealType` and a description the `GlobalStateValue` constructor. 
 
 !!! note
-    `TealType` is specific to the AVM and only `bytes`, `unit64`, `none` and `anytype` are acceptable values.
+    `TealType` is specific to the AVM and only `bytes`, `unit64` are acceptable values for state.
 
 
-The code below illustrates creating global integer counter that is stored in state. First a `CounterState` class is created with an instance of a  `GlobalStateValue`. This class is then instantiated in the `Application` constructor. Two method handlers are also added to increment and decrement the counter.    
+The code below illustrates creating global integer counter that is stored in state. First, a `CounterState` class is created with an instance of a `GlobalStateValue` as an attribute. This class is then instantiated and passed in the `Application` constructor. Two method handlers are also added to the app to increment and decrement the counter.    
+
 
 <!-- ===BEAKER_STATE_GLOBAL=== -->
 ```python
@@ -169,7 +179,7 @@ print(app_spec.global_state_schema.dictify())
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L3-L31)
 <!-- ===BEAKER_STATE_GLOBAL=== -->
 
-Similarly `LocalStateValue` can be used to alter and store local state values. The code below is identical to the previous example, except the counter is stored locally.
+Similarly, a `LocalStateValue` can be used to alter and store local state values. The code below is identical to the previous example, except the counter is stored locally.
 
 <!-- ===BEAKER_STATE_LOCAL=== -->
 ```python
@@ -207,8 +217,9 @@ print(local_app_spec.local_state_schema.dictify())
 
 Beaker provides the `BoxMapping` and `BoxList` classes to work in conjunction with existing PyTeal [box functionality](./smart-contracts/apps/state.md#box-storage).
 
-In the example below a `BoxMapping` instance is defined in the `MappingState` class. Each entry in the map has an `Address` and a `Uint64` value. The first value corresponds to a box name and the second is the contents of the box. This state is passed to the `Application` constructor.
-The method handler then defines a method to set an integer for the specific application caller's address. Beaker, using the `BoxMapping` class creates a box named as the senders address and writes the integer value that was passed.
+In the example below a `BoxMapping` instance is defined in the `MappingState` class. Each entry in the map is keyed using the type of `Address` and stores a `Uint64` value. 
+
+The method handler we define allows us to set an integer for the specific application caller's address. 
 
 
 <!-- ===BEAKER_STATE_MAPPING=== -->
@@ -236,7 +247,7 @@ def store_user_value(value: pt.abi.Uint64) -> pt.Expr:
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L65-L84)
 <!-- ===BEAKER_STATE_MAPPING=== -->
 
-The `BoxList` class can be used to store a static list of specific ABI types. The example below creates a box named users that stores a list of five addresses. The `store_user` method is passed an address and and index. The passed in address is then stored in the `BoxList` at the specified index.
+The `BoxList` class can be used to store a list of specific _static_ ABI types. The example below creates a box named `users` that stores a list of five addresses. The `store_user` method is passed an address and an index. The passed-in address is then stored in the `BoxList` at the specified index.
 
 <!-- ===BEAKER_STATE_LIST=== -->
 ```python
@@ -263,8 +274,8 @@ def store_user(user: pt.abi.Address, index: pt.abi.Uint64) -> pt.Expr:
 
 # Interacting with the Application
 
-The contract can deployed and tested using Beaker's sandbox module and the `ApplicationClient` class.
-The code below first retrieves the accounts from the currently running sandbox instance. The algod client is also retrieved. A `ApplicationClient` (app_client) is then instantiated with the specific algod client, the `Application` class that is going to be used, and the first sandbox account (sandbox default starts with a couple of predefined accounts) which will be used to sign transactions.
+The contract can be deployed and tested using Beaker's sandbox module and the `ApplicationClient` class.
+The code below first retrieves the accounts from the currently running sandbox instance. A `ApplicationClient` (app_client) is then instantiated with an algod client, the `Application` class that is going to be used, and the first sandbox account (sandbox default starts with a couple of predefined accounts) which will be used to sign transactions.
 
 <!-- ===BEAKER_APP_CLIENT_INIT=== -->
 ```python
