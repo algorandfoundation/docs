@@ -2,16 +2,16 @@ title: Beaker
 
 Beaker is a framework for building Smart Contracts using PyTeal. Beaker is designed to simplify writing, testing and deploying Algorand smart contracts. The Beaker source code available on [github](https://github.com/algorand-devrel/beaker). 
 
-This pages provides a overview of the features available in Beaker. For complete details see the [Beaker's documentation](https://beaker.algo.xyz). 
+This page provides an overview of the features available in Beaker. For complete details see the [Beaker's documentation](https://beaker.algo.xyz). 
 
 # High Level Overview 
-Beaker provides several packages that extend PyTeal and provide convience functionality for testing and deploying smart contracts. 
+Beaker provides several packages that extend PyTeal and provide convenience functionality for testing and deploying smart contracts. 
 
 The  `Application` class is Beaker's primary class. It is used to create [ABI](./smart-contracts/ABI/index.md) compliant Algorand smart contracts. Beaker also provides decorators to route specific [application transactions](./smart-contracts/apps/index.md) to the proper functionality within a smart contract. Beaker facilitates management of [local](./smart-contracts/apps/state.md#local-storage) and [global](./smart-contracts/apps/state.md#global-storage) state, and [box storage](./smart-contracts/apps/state.md#box-storage). 
 
 The `ApplicationSpecification` class is used to generate a JSON manifest that describes the contract methods, source, and state schema used. This manifest can be used by other modules and utilities to deploy the smart contract. 
 
-The `ApplicationClient` class can be used to connect to an Algorand node and interact with a specfic `Application`.
+The `ApplicationClient` class can be used to connect to an Algorand node and interact with a specific `Application`.
 
 Beaker's sandbox module can be used to quickly connect to the default docker sandbox installation to deploy and call a contract.  
 
@@ -33,7 +33,7 @@ Either of these methods will also install PyTeal in addition to Beaker.
 
 # Initialize Application
 
-To create an application simply initialize a new Beaker Application object, supplying the name and descripiton.
+To create an application simply initialize a new Beaker Application object, supplying the name and description.
 
 <!-- ===BEAKER_INIT_APP=== -->
 ```python
@@ -63,11 +63,10 @@ Method handlers can be added to provide functionality within the smart contract.
 
 ## external
 
-To provide a method that can be invoked by an application call transaction, Beaker provides the `external` decorator. This instructs the framework to expose the method publicy for incoming transactions. The method is then defined with its required [method signature](/docs/get-details/dapps/smart-contracts/ABI/#methods), where the parameter types in the method signature describe the input types and output type.  These types of the arguments must be valid ABI data types, using [PyTeal's ABI](https://pyteal.readthedocs.io/en/stable/abi.html) package. Arguments and output types are optional, omitting any arguments is perfectly valid.
+To provide a method that can be invoked by an application call transaction, Beaker provides the `external` decorator. This instructs the framework to expose the method publicly for incoming transactions. The method is then defined with its required [method signature](/docs/get-details/dapps/smart-contracts/ABI/#methods), where the parameter types in the method signature describe the input types and output type.  These types of the arguments must be valid ABI data types, using [PyTeal's ABI](https://pyteal.readthedocs.io/en/stable/abi.html) package. Arguments and output types are optional, omitting any arguments is perfectly valid.
 
-!!! note:
+!!! note
     Note that input types come first, and if a value is returned it should be denoted in the method signature at the end using the notation `*, output: abi.ValidABIType`, which provides a variable to write the output into.
-
 
 <!-- ===BEAKER_HANDLERS_DIRECT=== -->
 ```python
@@ -86,7 +85,11 @@ def add(a: pt.abi.Uint64, b: pt.abi.Uint64, *, output: pt.abi.Uint64) -> pt.Expr
 
 In the example above the add method is defined to take two `Uint64` arguments (`a`, `b`) and return a `Uint64` (`output`).
 
-The full method signature for the above is `add(uint64,uint64)uint64`.
+The full method signature for the above is `add(uint64,uint64)uint64` and will, by default, field only application call transactions with an `OnComplete` of `NoOp`.
+
+## On Complete handlers
+
+There are other decorators that can be used to modify the behavior of the method handler including `create`, `optin`, `closeout`, `clear`, `update`, and `delete`. These decorators can be used to register handlers for specific `OnComplete` values. See the [full docs](https://beaker.algo.xyz) for more details.
 
 ## Blueprints
 
@@ -96,7 +99,7 @@ Blueprints can be defined using a standard python method definition that accepts
 
 The code below defines a calculator blueprint that applies method handlers for a set of functions to implement a simple calculator. The blueprint must take an `Application` argument and optionally other arguments to modify the behavior of the blueprint
 
-An instantiated `Application` can apply this blueprint using the `.apply` method passing blueprint method as an argument. If other arguments in the blueprint method are defined, they can be passed with standard python kwarg format (ie `.apply(bp, arg1="hello"))
+An instantiated `Application` can apply this blueprint using the `.apply` method passing blueprint method as an argument. If other arguments in the blueprint method are defined, they can be passed with standard python kwarg format (i.e. `.apply(bp, arg1="hello")`)
 
 <!-- ===BEAKER_HANDLERS_BLUEPRINT=== -->
 ```python
@@ -295,7 +298,7 @@ app_client = client.ApplicationClient(
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_client.py#L3-L15)
 <!-- ===BEAKER_APP_CLIENT_INIT=== -->
 
-The instance of `AppliationClient` can deploy the calculator app now using the the `create` method.
+The instance of `AppliationClient` can deploy the calculator app now using the `create` method.
 
 <!-- ===BEAKER_APP_CLIENT_DEPLOY=== -->
 ```python
@@ -305,7 +308,7 @@ print(f"Created app with id: {app_id} and address: {app_addr} in tx: {txid}")
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_client.py#L19-L21)
 <!-- ===BEAKER_APP_CLIENT_DEPLOY=== -->
 
-The contract can then be used to call the contract. In this example the contracts `add` method is called and two integers are passed as method arguments. Finally, the return value is printed.
+The contract can then be used to call the contract. In this example the contracts `add` method is called, and two integers are passed as method arguments. Finally, the return value is printed.
 
 <!-- ===BEAKER_APP_CLIENT_CALL=== -->
 ```python
