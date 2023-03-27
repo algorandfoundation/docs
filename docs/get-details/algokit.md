@@ -21,14 +21,14 @@ Will download the required docker containers and spin up a network listening on 
 
 ## Templates
 
-The AlgoKit `init` sub-command allows a developer to instantly initialize a new project from a template. A default set of templates is provided by the AlgoKit CLI tool but any template can be used by passing the `--template-url` flag.  
+The AlgoKit `init` sub-command allows a developer to instantly initialize a new project from a template. A default set of templates is provided by the AlgoKit CLI tool, but any template can be used by passing the `--template-url` flag.  
 
 Simply running 
 ```sh
 $ algokit init 
 ```
 
-Will take the developer through a set of prompts to initialize a new project. The developer can choose from a set of templates and the CLI tool will download the template and initialize a the project in a new directory.
+Will take the developer through a set of prompts to initialize a new project. The developer can choose from a set of templates and the CLI tool will download the template and initialize the project in a new directory.
 
 # Utilities
 
