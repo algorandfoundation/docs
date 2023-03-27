@@ -1,12 +1,13 @@
 title: Where do I start?
 
-## Smart contracts & dApps
+# Smart contracts & dApps
 
-If you are interested in building an application on Algorand! 
+If you are interested in building an application([dApp](whats_a_dapp.md)) on Algorand, checkout [Algokit](../algokit.md), which is a tool for quickly building, testing, and deploying Algorand smart contracts. 
 
-> [Teach me how to build a dApp!](/docs/get-details/dapps/smart-contracts/)
+> [Tell me more about Algorand smart contracts!](/docs/get-details/dapps/smart-contracts/)
 
-## Tokenization
+
+# Tokenization
 
 This section will walk you through the basics of tokenizing assets on Algorand. We’ll start with showing you how Alice and Bob tokenize their NFT, and then walk through creating fungible tokens. You don’t need to write smart contract code to tokenize assets on Algorand. Assets are a layer-1 primitive, built right into the protocol itself.
 
