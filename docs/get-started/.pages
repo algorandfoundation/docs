@@ -1,7 +1,7 @@
 title: Get started
 
 arrange:
-    - what_is_blockchain.md 
-    - why_algorand.md
-    - where_to_start.md 
+    - basics
+    - whats_a_dapp.md 
     - tokenization
+    - algokit.md
