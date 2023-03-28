@@ -1,7 +1,7 @@
 title: Atomic Transaction Composer
 
 
-Constructing [atomic transactions](../get-details/atomic_transfers.md) requires building up the set of transactions, assigning a group id, and then signing the transactions. While this is not a difficult thing to do on its own, it can be made more difficult if one of the transactions is an Application Call to an [ABI](../get-details/dapps/smart-contracts/ABI/index.md) compliant application. This is because the arguments passed to the application call must be properly encoded and may include transactions or accounts that are part of the application call or group. 
+Constructing [atomic transactions](../get-details/atomic_transfers.md) requires building up the set of transactions, assigning a group id, and then signing the transactions. While this is not a difficult thing to do on its own, it can be made more difficult if one of the transactions is an Application Call to an [ABI](/docs/get-details/dapps/smart-contracts/ABI/) compliant application. This is because the arguments passed to the application call must be properly encoded and may include transactions or accounts that are part of the application call or group. 
 
 The Atomic Transaction Composer is a convenient way to build out an atomic group of transactions that handles encoding and decoding of ABI arguments and return values. 
 
@@ -135,9 +135,9 @@ The call to add a transaction may be performed multiple times, each time adding 
 
 ## Calling ABI Methods
 
-When calling an [ABI](../get-details/dapps/smart-contracts/ABI/index.md) compliant application, the Atomic Transaction Composer will handle encoding and decoding of the arguments passed and the return value.  It will also make sure that any [reference types](../get-details/dapps/smart-contracts/ABI/index.md#reference-types) are packed into the transaction group appropriately.  Additionally, since it knows the method signature and types required, it will do some type checking to make sure the arguments passed are valid for the method call. 
+When calling an [ABI](/docs/get-details/dapps/smart-contracts/ABI/) compliant application, the Atomic Transaction Composer will handle encoding and decoding of the arguments passed and the return value.  It will also make sure that any [reference types](/docs/get-details/dapps/smart-contracts/ABI/#reference-types) are packed into the transaction group appropriately.  Additionally, since it knows the method signature and types required, it will do some type checking to make sure the arguments passed are valid for the method call. 
 
-In order to call the methods, a Contract or Interface is constructed. Typically this will be done using a [json file](../get-details/dapps/smart-contracts/ABI/index.md#api) that describes the api for the application.   
+In order to call the methods, a Contract or Interface is constructed. Typically this will be done using a [json file](/docs/get-details/dapps/smart-contracts/ABI/#api) that describes the api for the application.   
 
 Once the Contract object is constructed, it can be used to look up and pass method objects into the Atomic Transaction Composers `add_method_call`
 

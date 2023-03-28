@@ -1,13 +1,13 @@
 title: Interact with smart signatures
 
-This guide covers using smart signatures with the Algorand SDKs. Smart signatures are also referred to as stateless smart contracts. Smart signatures can be used to create contract accounts or to handle account delegation which is described in the [Modes](../smartsigs/modes.md) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
+This guide covers using smart signatures with the Algorand SDKs. Smart signatures are also referred to as stateless smart contracts. Smart signatures can be used to create contract accounts or to handle account delegation which is described in the [Modes](/docs/get-details/smart-contracts/smartsigs/modes.md) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](/docs/get-details/dapps/avm/teal/) or with Python using the [PyTeal](/docs/get-details/dapps/writing-contracts/pyteal) library.
 
 
 # Compiling TEAL program from SDKs
 Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section use a simple contract which contains one line of TEAL code, `int 1` . This will always return an approval for the transaction. So, any transactions that use this TEAL file will succeed. Never use this TEAL in a production application as it approves all transactions. 
 
 
-To use the SDK compile command, the [config settings](../../../../run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](../../../../run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
+To use the SDK compile command, the [config settings](/docs/run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](/docs/run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
 
 ```
 $ goal node stop -d data

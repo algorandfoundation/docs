@@ -14,7 +14,7 @@ This guide explains how to install the Algorand Node software on Linux distribut
     Windows users may choose to use [Rand Labs](https://github.com/randlabs/algorand-windows-node/) installation binaries.
 
 !!! tip
-    If you are a developer and want to use a private network, [sandbox](../../get-started/devenv/sandbox.md) is often simpler than installing a node manually. However, it is still recommended to install the Algorand software without running a node, to get access to the developer tools such as `msgpacktool` and `algokey`.
+    If you are a developer and want to use a private network, [AlgoKit](/docs/get-started/algokit) is often simpler than installing a node manually. However, it is still recommended to install the Algorand software without running a node, to get access to the developer tools such as `msgpacktool` and `algokey`.
 
 ### Hardware requirements
 

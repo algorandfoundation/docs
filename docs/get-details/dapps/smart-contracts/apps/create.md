@@ -177,7 +177,7 @@ $ goal app call --app-id 1 --app-arg "str:myparam"  --from [ADDRESS]
 ```
 
 !!!note
-    See [Call(NoOp)](../frontend/apps.md#call-noop) for details on using the SDKs to call a smart contract. If using [ABI](../ABI/index.md) compliant contracts, use the [AtomicTransactionComposer](../../../../atc) to interact with the smart contract.
+    See [Call(NoOp)](../frontend/apps.md#call-noop) for details on using the SDKs to call a smart contract. If using [ABI](/docs/get-details/dapps/smart-contracts/ABI/) compliant contracts, use the [AtomicTransactionComposer](../../../../atc) to interact with the smart contract.
 
 
 The call must specify the intended contract using the `--app-id` option. Additionally, the `--from` option specifies the sender’s address. 

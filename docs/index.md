@@ -80,7 +80,7 @@ title: Algorand Developer Docs
         </a>
     </li>
     <li class="docs-homepage__card-list-item">
-        <a class="docs-homepage__card" href="./get-details/asa/">
+        <a class="docs-homepage__card" href="./get-details/asa">
             <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
                 <span class="payment-with-algos-icon"></span>
             </div>

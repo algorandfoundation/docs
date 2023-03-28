@@ -504,7 +504,7 @@ A smart contract can call other smart contracts using any of the `OnComplete` ty
 
 When writing smart contracts that call other applications or expect to be called via Inner Transactions, an important consideration is composability.
 
-With the finalization of the [ABI](../ABI/index.md) an API may be defined for an application. This allows contracts to be written to take advantage of the ABI to provide structured calls to other applications. 
+With the finalization of the [ABI](/docs/get-details/dapps/smart-contracts/ABI/) an API may be defined for an application. This allows contracts to be written to take advantage of the ABI to provide structured calls to other applications. 
 
 Additionally, when validating transactions, using relative position of transactions instead of absolute position will help to allow behavior to be composed. 
 

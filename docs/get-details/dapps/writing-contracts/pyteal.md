@@ -1,14 +1,12 @@
 title: PyTeal
 
-[PyTeal](https://github.com/algorand/pyteal) is a python library for generating [TEAL](../avm/teal/index.md) programs that provides a convenient and familiar syntax. 
-
-To quickly get PyTeal installed and running, see the [Getting started tutorial](../../../get-started/dapps/pyteal.md) for PyTeal.
+[PyTeal](https://github.com/algorand/pyteal) is a python library for generating [TEAL](/docs/get-details/dapps/avm/teal/) programs that provides a convenient and familiar syntax. 
 
 Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/).
 
 # PyTeal overview
 
-This section assumes the reader is familiar with [Smart Contracts](../smart-contracts/index.md#smart-contracts) and [Smart Signatures](../smart-contracts/index.md#smart-signatures).
+This section assumes the reader is familiar with [Smart Contracts](/docs/get-details/dapps/smart-contracts/#smart-contracts) and [Smart Signatures](/docs/get-details/dapps/smart-contracts/#smart-signatures).
 
 When building a dApp that makes use of smart contracts or smart signatures (smartsigs), PyTeal makes implementation of more complex logic much simpler than writing the TEAL manually. 
 
@@ -16,7 +14,7 @@ Generally, developers install PyTeal, write the contract in Python using their p
 
 For most applications, these contracts will only be a portion of the dApp’s architecture. Typically, developers will build functionality in the dApp that resides on the blockchain and some front end to interact with the smart contracts. 
 
-The PyTeal contracts can be pre-compiled into TEAL and used directly or the logic to generate TEAL dynamically may be integrated into the dApp front end workflow. For example, a front end may provide something like an exchange that allows limit orders to be created based on a template and then deployed once a user opens an order. In this case, the complete limit order may be implemented as part of a smart contract that is deployed when the order is opened by the dApp. For more information on deployment models see [What is a dApp](../../../get-started/dapps/index.md) in the developer documentation.
+The PyTeal contracts can be pre-compiled into TEAL and used directly or the logic to generate TEAL dynamically may be integrated into the dApp front end workflow. For example, a front end may provide something like an exchange that allows limit orders to be created based on a template and then deployed once a user opens an order. In this case, the complete limit order may be implemented as part of a smart contract that is deployed when the order is opened by the dApp. 
 
 # Building PyTeal smart contracts
 
@@ -271,7 +269,7 @@ The last bit to add is the `router.compile_program` which compiles the PyTeal in
 
 ### ABI specification
 
-The contract as json can be be shared with callers and loaded into the SDKs, see the [abi](../smart-contracts/ABI/index.md) page for more. 
+The contract as json can be be shared with callers and loaded into the SDKs, see the [abi](/docs/get-details/dapps/smart-contracts/ABI/) page for more. 
 
 It will look line this:
 ```json
