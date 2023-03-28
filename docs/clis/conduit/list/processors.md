@@ -4,7 +4,15 @@ title: conduit list processors
 
 
 
-usage detail for processor plugins
+Usage details for processor plugins.
+
+
+
+### Synopsis
+
+
+
+Usage details for processor plugins. Pass in a specific plugin as a positional argument for a sample configuration file.
 
 
 
@@ -32,7 +40,7 @@ conduit list processors [flags]
 
 
 
-* [conduit list](../../list/list/)	 - lists all plugins available to conduit
+* [conduit list](../../list/list/)	 - List all available Conduit plugins
 
 
 
