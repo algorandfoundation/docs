@@ -2,7 +2,11 @@ title: Your First Transaction
 
 This section is a quick start guide for interacting with the Algorand network using JavaScript. This guide will help to install the ***[Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}***, which provides a node for testing and development. This guide will also help to install the JavaScript SDK, create an account and submit your first transaction using different JavaScript Runtimes.
 ​
-# Sandbox Install
+# Install Sandbox
+
+!!! info
+    This step is only required if you are not using AlgoKit. If you are using AlgoKit, you can spin up a sandbox using the LocalNet, see [AlgoKit getting started guide](/docs/get-started/algokit/#start-a-localnet) for more information. 
+
 !!! Prerequisites
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
     - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)) 
