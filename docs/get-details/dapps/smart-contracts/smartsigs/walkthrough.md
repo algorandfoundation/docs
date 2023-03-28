@@ -2,7 +2,7 @@ title: CLI smart signatures
 
 This guide covers working with the `goal` command-line tool with smart signatures.
 
-TEAL programs can be written with any editor and are compiled using the `goal` command-line tool. They can also be built using python with the [PyTeal Library](../../pyteal/index.md). The command-line tool provides the ability to use these compiled programs within transactions. 
+TEAL programs can be written with any editor and are compiled using the `goal` command-line tool. They can also be built using python with the [PyTeal Library](/docs/get-details/dapps/writing-contracts/pyteal). The command-line tool provides the ability to use these compiled programs within transactions. 
 
 # Simple TEAL example
 The simplest program you can write in TEAL is probably the following:

@@ -26,7 +26,4 @@ In summary, you go from trusting an entity and _hoping_ that they will do what t
 An important sidebar here is that it is critical for smart contract code to be reviewed and audited for security flaws. Badly written code that does not account for all potential attack vectors of course will not secure anything. 
 
 # What language can I use to write smart contracts?
-On Algorand, you can write smart contracts in Python with the PyTeal library. To get started building a dApp, checkout the [Algokit getting started](../algokit.md) guide.
-
-
- 
+On Algorand, you can write smart contracts in Python with the PyTeal library. To get started building a dApp, checkout the [Algokit getting started](/docs/get-started/algokit) guide.
