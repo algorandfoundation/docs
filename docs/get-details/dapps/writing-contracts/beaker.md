@@ -7,7 +7,7 @@ This page provides an overview of the features available in Beaker. For complete
 # High Level Overview 
 Beaker provides several packages that extend PyTeal and provide convenience functionality for testing and deploying smart contracts. 
 
-The  `Application` class is Beaker's primary class. It is used to create [ABI](/docs/get-details/smart-contracts/ABI/) compliant Algorand smart contracts. Beaker also provides decorators to route specific [application transactions](/docs/get-details/smart-contracts/apps/) to the proper functionality within a smart contract. Beaker facilitates management of [local](/docs/get-details/smart-contracts/apps/state/#local-storage) and [global](/docs/get-details/smart-contracts/apps/state/#global-storage) state, and [box storage](/docs/get-details/smart-contracts/apps/state/#box-storage). 
+The  `Application` class is Beaker's primary class. It is used to create [ABI](/docs/get-details/dapps/smart-contracts/ABI/) compliant Algorand smart contracts. Beaker also provides decorators to route specific [application transactions](/docs/get-details/dapps/smart-contracts/apps/) to the proper functionality within a smart contract. Beaker facilitates management of [local](/docs/get-details/dapps/smart-contracts/apps/state#local-storage) and [global](/docs/get-details/dapps/smart-contracts/apps/state#global-storage) state, and [box storage](/docs/get-details/dapps/smart-contracts/apps/state#box-storage). 
 
 The `ApplicationSpecification` class is used to generate a JSON manifest that describes the contract methods, source, and state schema used. This manifest can be used by other modules and utilities to deploy the smart contract. 
 
@@ -218,7 +218,7 @@ print(local_app_spec.local_state_schema.dictify())
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L34-L62)
 <!-- ===BEAKER_STATE_LOCAL=== -->
 
-Beaker provides the `BoxMapping` and `BoxList` classes to work in conjunction with existing PyTeal [box functionality](/docs/get-details/dapps/smart-contracts/apps/state/#box-storage).
+Beaker provides the `BoxMapping` and `BoxList` classes to work in conjunction with existing PyTeal [box functionality](/docs/get-details/dapps/smart-contracts/apps/state#box-storage).
 
 In the example below a `BoxMapping` instance is defined in the `MappingState` class. Each entry in the map is keyed using the type of `Address` and stores a `Uint64` value. 
 

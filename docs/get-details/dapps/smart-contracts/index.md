@@ -28,8 +28,8 @@ Smart signatures can be used in two different modes. When compiled smart signatu
 
 Once a transaction that is signed with a smart signature, is submitted it is evaluated by an Algorand node using the Algorand Virtual Machine. These contracts only have access to a few global variables, some temporary scratch space, and the properties of the transaction(s) they are submitted with. 
 
-For more information on smart signatures, see the [smart signature documentation](./smartsigs). For more information on building contracts in PyTeal see the [build with Python documentation](../pyteal).
-For more information on using smart signatures with the SDKs see the [Interacting with smart signature documentation](./frontend/smartsigs.md).
+For more information on smart signatures, see the [smart signature documentation](./smartsigs). For more information on building contracts in PyTeal see the [build with Python documentation](/docs/get-details/dapps/writing-contracts/pyteal).
+For more information on using smart signatures with the SDKs see the [Interacting with smart signature documentation](./frontend/smartsigs).
 For more information on debugging a smart contract, see the [debugging](./debugging.md) page.
 
 

@@ -9,7 +9,7 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 - [Assets](asa) - A guide about assets and how they are implemented on Algorand at layer-1.
 
-- [Smart Contracts](dapps) - A detailed guide for writing and interacting with Smart Contracts. 
+- [Smart Contracts](dapps/) - A detailed guide for writing and interacting with Smart Contracts. 
 
 - [Transactions](transactions) - A look at the underlying structure of the different types of transactions.
 
@@ -19,7 +19,7 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 - [Indexer](indexer.md) - A guide to using the Algorand Indexer.
 
-- [Conduit](conduit) - A guide to using the Algorand Conduit Service to gather and filter transaction data.
+- [Conduit](conduit/GettingStarted) - A guide to using the Algorand Conduit Service to gather and filter transaction data.
 
 - [Protocol Parameters](parameter_tables.md) - A table containing all Algorand blockchain parameters.
 

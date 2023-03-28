@@ -182,6 +182,6 @@ You have now successfully deployed and executed a smart contract method call usi
 # Next steps
 
 - To learn more about AlgoKit and what you can do with it, check out the [AlgoKit documentation](/docs/get-details/algokit).
-- To learn more about Beaker, take a look at the [Beaker documentation](/docs/get-details/dapps/writing-contracts/beakerd).
+- To learn more about Beaker, take a look at the [Beaker documentation](/docs/get-details/dapps/writing-contracts/beaker).
 - To get detailed AlgoKit documentation, see the [AlgoKit repository](https://github.com/algorandfoundation/algokit-cli).
-- More information on Algorand smart contracts is also availble in the [smart contract documentation](/docs/get-details/dapps/smart-contracts/apps/index).
+- More information on Algorand smart contracts is also availble in the [smart contract documentation](/docs/get-details/dapps/smart-contracts/apps/).
