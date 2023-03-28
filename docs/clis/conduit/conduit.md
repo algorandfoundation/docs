@@ -4,7 +4,7 @@ title: conduit
 
 
 
-run the conduit framework
+Run the Conduit framework.
 
 
 
@@ -12,7 +12,25 @@ run the conduit framework
 
 
 
-run the conduit framework
+Conduit is a framework for ingesting blocks from the Algorand blockchain
+
+into external applications. It is designed as a modular plugin system that
+
+allows users to configure their own data pipelines.
+
+
+
+You must provide a data directory containing a file named conduit.yml. The
+
+file configures pipeline and all enabled plugins.
+
+
+
+See other subcommands for further built in utilities and information.
+
+
+
+Detailed documentation is online: https://github.com/algorand/conduit
 
 
 
@@ -30,13 +48,13 @@ conduit [flags]
 
 ```
 
-  -d, --data-dir string            set the data directory for the conduit binary
+  -d, --data-dir string            Set the Conduit data directory. If not set the CONDUIT_DATA_DIR environment variable is used.
 
   -h, --help                       help for conduit
 
-  -r, --next-round-override uint   set the starting round. Overrides next-round in metadata.json
+  -r, --next-round-override uint   Set the starting round. Overrides next-round in metadata.json. Some exporters do not support overriding the starting round.
 
-  -v, --version                    print the conduit version
+  -v, --version                    Print the Conduit version.
 
 ```
 
@@ -46,8 +64,8 @@ conduit [flags]
 
 
 
-* [conduit init](../init/)	 - initializes a sample data directory
-* [conduit list](../list/list/)	 - lists all plugins available to conduit
+* [conduit init](../init/)	 - initializes a Conduit data directory
+* [conduit list](../list/list/)	 - List all available Conduit plugins
 
 
 

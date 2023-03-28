@@ -4,7 +4,15 @@ title: conduit list exporters
 
 
 
-usage detail for exporter plugins
+Usage details for exporter plugins.
+
+
+
+### Synopsis
+
+
+
+Usage details for exporter plugins. Pass in a specific plugin as a positional argument for a sample configuration file.
 
 
 
@@ -32,7 +40,7 @@ conduit list exporters [flags]
 
 
 
-* [conduit list](../../list/list/)	 - lists all plugins available to conduit
+* [conduit list](../../list/list/)	 - List all available Conduit plugins
 
 
 
