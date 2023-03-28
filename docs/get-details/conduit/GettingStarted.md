@@ -5,7 +5,7 @@
 
 ### Install from Source
 
-1. Checkout the repo, or download the source, `git clone https://github.com/algorand/indexer.git && cd indexer`
+1. Checkout the repo, or download the source, `git clone https://github.com/algorand/conduit.git && cd conduit`
 2. Run `make conduit`.
 3. The binary is created at `cmd/conduit/conduit`.
 

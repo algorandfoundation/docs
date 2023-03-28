@@ -4,7 +4,15 @@ title: conduit list importers
 
 
 
-usage detail for importer plugins
+Usage details for importer plugins.
+
+
+
+### Synopsis
+
+
+
+Usage details for importer plugins. Pass in a specific plugin as a positional argument for a sample configuration file.
 
 
 
@@ -32,7 +40,7 @@ conduit list importers [flags]
 
 
 
-* [conduit list](../../list/list/)	 - lists all plugins available to conduit
+* [conduit list](../../list/list/)	 - List all available Conduit plugins
 
 
 
