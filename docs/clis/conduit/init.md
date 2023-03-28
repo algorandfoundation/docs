@@ -4,7 +4,7 @@ title: conduit init
 
 
 
-initializes a sample data directory
+initializes a Conduit data directory
 
 
 
@@ -12,7 +12,23 @@ initializes a sample data directory
 
 
 
-initializes a Conduit data directory and conduit.yml file configured with the file_writer plugin. The config file needs to be modified slightly to include an algod address and token. Once ready, launch conduit with './conduit -d /path/to/data'.
+Initializes a Conduit data directory and conduit.yml file. By default
+
+the config file uses an algod importer in follower mode and a block
+
+file writer exporter. The plugin templates can be changed using the
+
+different options.
+
+
+
+Once initialized the conduit.yml file needs to be modified. Refer to the file
+
+comments for details.
+
+
+
+Once configured, launch conduit with './conduit -d /path/to/data'.
 
 
 
@@ -24,15 +40,33 @@ conduit init [flags]
 
 
 
+### Examples
+
+
+
+```
+
+conduit init  -d /path/to/data -i importer -p processor1,processor2 -e exporter
+
+```
+
+
+
 ### Options
 
 
 
 ```
 
-  -d, --data string   Full path to new data directory. If not set, a directory named 'data' will be created in the current directory.
+  -d, --data string          Full path to new data directory. If not set, a directory named 'data' will be created in the current directory.
 
-  -h, --help          help for init
+  -e, --exporter string      data exporter name.
+
+  -h, --help                 help for init
+
+  -i, --importer string      data importer name.
+
+  -p, --processors strings   comma-separated list of processors.
 
 ```
 
@@ -42,7 +76,7 @@ conduit init [flags]
 
 
 
-* [conduit](../../conduit/conduit/)	 - run the conduit framework
+* [conduit](../../conduit/conduit/)	 - Run the Conduit framework.
 
 
 

@@ -22,9 +22,7 @@ The sub-expression consists of 3 components.
 #### `tag`
 The tag identifies the field to attempt to match. The fields derive their tags according to the
 [official reference docs](https://developer.algorand.org/docs/get-details/transactions/transactions/).
-You can also attempt to match against the `ApplyData`, although this is not officially supported or documented.
-Users interested in this will need to consult the official
-[go-algorand](https://github.com/algorand/go-algorand/blob/master/data/transactions/transaction.go#L104) repository to match tags.
+You can also attempt to match against the `ApplyData`. A complete list of supported tags can be found [here](Filter_tags.md).
 
 
 For now, we programmatically generate these fields into a map located in the
@@ -64,7 +62,7 @@ expression as a regex.
 
 Find transactions w/ fee greater than 1000 microalgos
 ```yaml
-- filters:
+filters:
   - any:
     - tag: "txn.fee"
       expression-type: "greater-than"
@@ -73,7 +71,7 @@ Find transactions w/ fee greater than 1000 microalgos
 
 Find state proof transactions
 ```yaml
-- filters:
+filters:
   - any:
     - tag: "txn.type"
       expression-type: "exact"
@@ -82,7 +80,7 @@ Find state proof transactions
 
 Find transactions calling app, "MYAPPID"
 ```yaml
-- filters:
+filters:
   - all:
     - tag: "txn.type"
       expression-type: "exact"
@@ -90,4 +88,24 @@ Find transactions calling app, "MYAPPID"
     - tag: "txn.apid"
       expression-type: "exact"
       expression: "MYAPPID"
+```
+
+Find transactions, including inner transactions, sent by "FOO". 
+```yaml
+search-inner: true
+filters:
+  - all:
+    - tag: "txn.snd"
+      expression-type: "exact"
+      expression: "FOO"
+```
+
+Find transactions calling app, exclude grouped transactions
+```yaml
+omit-group-transactions: true
+filters:
+  - all:
+    - tag: "txn.type"
+      expression-type: "exact"
+      expression: "appl"
 ```
