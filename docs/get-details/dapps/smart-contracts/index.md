@@ -17,7 +17,7 @@ Smart contracts are contracts that, once deployed, are remotely callable from an
 
 To provide a standard method for exposing an API and encoding/decoding data types from application call transactions, the [ABI](/docs/get-details/dapps/smart-contracts/ABI/) should be used. 
 
-For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](../pyteal).
+For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](/docs/get-details/dapps/writing-contracts/pyteal).
 For more information on using smart contracts with the SDKs see the [Interacting with smart contracts documentation](./frontend/smartsigs.md).
 For more information on debugging a smart contract, see the [debugging](./debugging.md) page.
 

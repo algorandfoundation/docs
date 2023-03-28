@@ -9,7 +9,7 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 - [Assets](asa) - A guide about assets and how they are implemented on Algorand at layer-1.
 
-- [Smart Contracts](dapps/) - A detailed guide for writing and interacting with Smart Contracts. 
+- [Smart Contracts](dapps/smart-contracts/) - A detailed guide for writing and interacting with Smart Contracts. 
 
 - [Transactions](transactions) - A look at the underlying structure of the different types of transactions.
 
