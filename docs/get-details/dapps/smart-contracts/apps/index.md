@@ -37,7 +37,7 @@ Calls to smart contracts are implemented using `ApplicationCall` transactions. T
 
 The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. In the following sections, details on the individual capabilities of a smart contract will be explained.
 
-<center>![Smart Contract](../../../../imgs/stateful-1.png)</center>
+<center>![Smart Contract](/docs/imgs/stateful-1.png)</center>
 <center>*Application Transaction Types*</center>
 
 # Reference arrays
@@ -62,7 +62,7 @@ TODO: adding to these arrays with ATC. Also do we want goal as one of the tabs. 
 
 Boxes function similar to the other arrays but differ is significant ways which are explained in detail in the [Boxes section of the documentation](state.md#box-details).
 
-<center>![Smart Contract](../../../../imgs/stateful-2.png)</center>
+<center>![Smart Contract](/docs/imgs/stateful-2.png)</center>
 <center>*Reference Arrays*</center>
 
 
