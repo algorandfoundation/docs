@@ -1,10 +1,10 @@
 title: AlgoKit quick start
 
-AlgoKit is the primary tool used by the Algorand community to develop smart contracts on the Algorand blockchain. It provides the capabilities to develop, test and deploy Algorand smart contracts within minutes! This guide is intended to help you setup AlgoKit and to start developing your application.
+AlgoKit is the primary tool used by the Algorand community to develop smart contracts on the Algorand blockchain. It provides the capabilities to develop, test and deploy Algorand smart contracts within minutes! This guide is intended to help you set up AlgoKit and start developing your application.
 
 # Quick start videos
 
-If you prefer videos, take a look at this 10 minute guide to getting started.
+If you prefer videos, take a look at this 10-minute guide to getting started.
 
 <center>
 [![Learn How to Build on Algorand in 10 Minutes](/docs/imgs/algokit-intro-video-thumbnail.jpg)](https://www.youtube.com/embed/dow6U8DxOGc)
@@ -13,9 +13,9 @@ If you prefer videos, take a look at this 10 minute guide to getting started.
 Detailed video guides for both [Windows](https://www.youtube.com/embed/22RvINnZsRo) and [Mac](https://www.youtube.com/embed/zsurtpCGmgE) are also available.
 
 # Prequisites
-This guide presents installing AlgoKit using an OS agnostic procedure. For OS specific instructions take a look that the [AlgoKit install](https://github.com/algorandfoundation/algokit-cli/blob/main/README.md#install) guide.
+This guide presents installing AlgoKit using an OS agnostic procedure. For OS-specific instructions take a look at the [AlgoKit install](https://github.com/algorandfoundation/algokit-cli/blob/main/README.md#install) guide.
 
-Using this procedure requires the the following components be installed already
+Using this procedure requires the the following components to be installed already
 
 * [Python 3.10](https://www.python.org/downloads/) or higher
 * [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
@@ -56,7 +56,7 @@ AlgoKit supports using a [local version of the Algorand blockchain](https://gith
 algokit localnet start
 ```
 
-This should start an instance of the LocalNet within docker. If you open the Docker Desktop application you should something similar to the following:
+This should start an instance of the LocalNet within docker. If you open the Docker Desktop application you should see something similar to the following:
 
 <center>
 ![Docker Desktop LocalNet Instance](/docs/imgs/localnet.png){: style="width:700px" align=center }
@@ -70,7 +70,7 @@ Now that AlgoKit is installed, you can rapidly create a new project to get start
 algokit init
 ```
 
-This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For now, use the arrow keys to select the `playground` template, which is a lightweight starting point for learning and experimentation.
+This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout [AlgoKit detailed documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/init.md). For now, use the arrow keys to select the `playground` template, which is a lightweight starting point for learning and experimentation.
 
 Next, you will be prompted for the name of your project. Finally, select the default value for the rest of the prompts (enter).
 
@@ -132,7 +132,8 @@ By default it will open Dappflow to point to LocalNet (It will be displayed as `
 
 This command will launch your default web browser and load the Dappflow web application.
 
-**Note:** If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
+!!! info
+   If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
 
 <center>
 ![AlgoKit Dappflow](/docs/imgs/dappflow1.png){: style="width:700px" align=center }
@@ -164,7 +165,7 @@ To deploy this application again, select the `Create app` button followed by the
 ![AlgoKit Dappflow](/docs/imgs/dappflow4.png){: style="width:700px" align=center }
 </center>
 
-Click on the Execute button and a popup will be displayed allowing you to enter the parameter that we defined in the `HelloWorldApp` smart contract.
+Click on the Execute button and a popup will be displayed allowing you to enter the parameter that is defined in the `HelloWorldApp` smart contract.
 
 <center>
 ![AlgoKit Dappflow](/docs/imgs/dappflow5.png){: style="width:700px" align=center }
@@ -180,7 +181,7 @@ You have now successfully deployed and executed a smart contract method call usi
 
 # Next steps
 
-- To learn more about AlgoKit and what you can do with it, checkout the [AlgoKit documentation](/docs/get-details/algokit).
+- To learn more about AlgoKit and what you can do with it, check out the [AlgoKit documentation](/docs/get-details/algokit).
 - To learn more about Beaker, take a look at the [Beaker documentation](/docs/get-details/dapps/writing-contracts/beakerd).
-- To get detailed AlgoKit documenation, see the [AlgoKit repository](https://github.com/algorandfoundation/algokit-cli).
+- To get detailed AlgoKit documentation, see the [AlgoKit repository](https://github.com/algorandfoundation/algokit-cli).
 - More information on Algorand smart contracts is also availble in the [smart contract documentation](/docs/get-details/dapps/smart-contracts/apps/index).

@@ -58,16 +58,16 @@ title: Algorand Developer Docs
                 <span class="payment-with-algos-icon"></span>
             </div>
             <p class="docs-homepage__card__title text-gray--main typography--large-button">AlgoKit</p>
-            <p class="typography--regular-body docs-homepage__card__description">Write smart contracts using AlgoKit</p>
+            <p class="typography--regular-body docs-homepage__card__description">Spin up a dev environment and start writing contracts quickly </p>
         </a>
     </li>
     <li class="docs-homepage__card-list-item">
-        <a class="docs-homepage__card" href="./get-details/walletconnect/">
+        <a class="docs-homepage__card" href="./get-details/dapps/writing-contracts/beaker/">
             <div class="docs-homepage__card__icon-container docs-homepage__card__icon-container--turquoise">
                 <span class="payment-with-algos-icon"></span>
             </div>
-            <p class="docs-homepage__card__title text-gray--main typography--large-button">WalletConnect</p>
-            <p class="typography--regular-body docs-homepage__card__description">Integrate mobile wallets with dApps</p>
+            <p class="docs-homepage__card__title text-gray--main typography--large-button">Beaker</p>
+            <p class="typography--regular-body docs-homepage__card__description">Write smart contracts with the Beaker framework</p>
         </a>
     </li>
         <li class="docs-homepage__card-list-item">
