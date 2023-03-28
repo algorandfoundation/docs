@@ -15,7 +15,7 @@ Smart contracts are contracts that, once deployed, are remotely callable from an
 - Applications can [execute transactions](./apps/#inner-transactions) as part of the execution of the logic. One type of transaction they can perform, as of AVM 1.1, is an Application Call transaction which allows one application to call another.  This ability to call other applications enables composability between applications. 
 - Applications have an associated [Application Account](./apps/#using-a-smart-contract-as-an-escrow) that can hold Algos or ASAs balances and can be used as on-chain escrow accounts. 
 
-To provide a standard method for exposing an API and encoding/decoding data types from application call transactions, the [ABI](ABI/index.md) should be used. 
+To provide a standard method for exposing an API and encoding/decoding data types from application call transactions, the [ABI](/docs/get-details/dapps/smart-contracts/ABI/) should be used. 
 
 For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](../pyteal).
 For more information on using smart contracts with the SDKs see the [Interacting with smart contracts documentation](./frontend/smartsigs.md).
