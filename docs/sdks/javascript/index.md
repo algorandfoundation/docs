@@ -7,7 +7,7 @@ This section is a quick start guide for interacting with the Algorand network us
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
     - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)) 
  
-Algorand provides a Docker instance for setting up a node or private network, which can be used to get started developing. You can find more information about setting up a development environment in [this section](https://developer.algorand.org/docs/get-started/devenv/). To install and use this instance, follow these instructions.
+Algorand provides a Docker instance for setting up a node or private network, which can be used to get started developing. You can find more information about setting up a development environment in [this section](/docs/get-started/algokit). To install and use this instance, follow these instructions.
 ​
 ```bash
 git clone https://github.com/algorand/sandbox.git

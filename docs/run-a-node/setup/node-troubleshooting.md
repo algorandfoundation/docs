@@ -2,7 +2,7 @@ title: Node Troubleshooting
 
 # Do you want to run a node yourself?
 
-If you are a developer, running a private network using [sandbox](/docs/get-started/devenv/sandbox) is simpler and provide more flexibility.
+If you are a developer, running a private network using [AlgoKit](/docs/get-started/algokit) is simpler and provide more flexibility.
 
 Running a production node for MainNet is very beneficial for decentralization.
 However, as any unmanaged system (and any blockchain node/indexer), to achieve high SLA, running a production node has many requirements: appropriate redundancy (some upgrades create downtime on nodes), 24/7 monitoring, regular maintenance, use of a staging environment for testing updates, ...
