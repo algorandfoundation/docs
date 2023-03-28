@@ -133,7 +133,7 @@ By default it will open Dappflow to point to LocalNet (It will be displayed as `
 This command will launch your default web browser and load the Dappflow web application.
 
 !!! info
-   If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
+        If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
 
 <center>
 ![AlgoKit Dappflow](/docs/imgs/dappflow1.png){: style="width:700px" align=center }
