@@ -179,6 +179,20 @@ Enter a string in the parameter and click on `Execute`. You should get get a con
 
 You have now successfully deployed and executed a smart contract method call using Dappflow!
 
+# Updating AlgoKit
+
+AlgoKit can be updated using the following command if you installed with pipx:
+
+```shell
+pipx upgrade algokit
+```
+
+If you used Brew to install AlgoKit, it can be updated using:
+
+```shell
+brew upgrade algokit
+```
+
 # Next steps
 
 - To learn more about AlgoKit and what you can do with it, check out the [AlgoKit documentation](/docs/get-details/algokit).
