@@ -1,4 +1,10 @@
 site_name: Algorand Developer Docs
+repo_name: algorand/docs
+repo_url: https://github.com/algorand/docs
+edit_uri: edit/staging/docs/
+# make it serve with the path starting `docs/`
+# so it matches staging/main
+site_url: http://127.0.0.1:8000/docs/
 
 theme:
   name: material
@@ -41,6 +47,3 @@ plugins:
   - search
   - awesome-pages
 
-repo_name: algorand/docs
-repo_url: https://github.com/algorand/docs
-edit_uri: edit/staging/docs/
