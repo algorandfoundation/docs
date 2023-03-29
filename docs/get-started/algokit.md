@@ -20,7 +20,7 @@ Using this procedure requires the the following components to be installed alrea
 * [Python 3.10](https://www.python.org/downloads/) or higher
 * [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
 * [Git](https://github.com/git-guides/install-git#install-git)
-* [Docker](https://docs.docker.com/desktop/install/mac-install/)
+* [Docker](https://docs.docker.com/get-docker/)
 * [VSCode](https://code.visualstudio.com/download)
 
 # Install AlgoKit
@@ -50,6 +50,10 @@ algokit, version 0.5.0
 ```
 
 # Start a LocalNet
+
+!!! note:
+        Make sure Docker is running before starting a LocalNet instance. 
+
 AlgoKit supports using a [local version of the Algorand blockchain](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/localnet.md). To start an instance of this LocalNet run the following command from the terminal:
 
 ```shell
