@@ -7,10 +7,10 @@ AlgoKit is the primary tool used by the Algorand community to develop smart cont
 If you prefer videos, take a look at this 10-minute guide to getting started.
 
 <center>
-[![Learn How to Build on Algorand in 10 Minutes](/docs/imgs/algokit-intro-video-thumbnail.jpg)](https://www.youtube.com/embed/dow6U8DxOGc)
+[![Learn How to Build on Algorand in 10 Minutes](/docs/imgs/algokit-intro-video-thumbnail.jpg)](https://www.youtube.com/v/dow6U8DxOGc)
 </center>
 
-Detailed video guides for both [Windows](https://www.youtube.com/embed/22RvINnZsRo) and [Mac](https://www.youtube.com/embed/zsurtpCGmgE) are also available.
+Detailed video guides for both [Windows](https://www.youtube.com/v/22RvINnZsRo) and [Mac](https://www.youtube.com/v/zsurtpCGmgE) are also available.
 
 # Prequisites
 This guide presents installing AlgoKit using an OS agnostic procedure. For OS-specific instructions take a look at the [AlgoKit install](https://github.com/algorandfoundation/algokit-cli/blob/main/README.md#install) guide.
