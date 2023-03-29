@@ -15,9 +15,9 @@ Smart contracts are contracts that, once deployed, are remotely callable from an
 - Applications can [execute transactions](./apps/#inner-transactions) as part of the execution of the logic. One type of transaction they can perform, as of AVM 1.1, is an Application Call transaction which allows one application to call another.  This ability to call other applications enables composability between applications. 
 - Applications have an associated [Application Account](./apps/#using-a-smart-contract-as-an-escrow) that can hold Algos or ASAs balances and can be used as on-chain escrow accounts. 
 
-To provide a standard method for exposing an API and encoding/decoding data types from application call transactions, the [ABI](ABI/index.md) should be used. 
+To provide a standard method for exposing an API and encoding/decoding data types from application call transactions, the [ABI](/docs/get-details/dapps/smart-contracts/ABI/) should be used. 
 
-For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](../pyteal).
+For more information on smart contracts, see the [smart contract documentation](./apps). For more information on building smart contracts in PyTeal see the [build with python documentation](/docs/get-details/dapps/writing-contracts/pyteal).
 For more information on using smart contracts with the SDKs see the [Interacting with smart contracts documentation](./frontend/smartsigs.md).
 For more information on debugging a smart contract, see the [debugging](./debugging.md) page.
 
@@ -28,8 +28,8 @@ Smart signatures can be used in two different modes. When compiled smart signatu
 
 Once a transaction that is signed with a smart signature, is submitted it is evaluated by an Algorand node using the Algorand Virtual Machine. These contracts only have access to a few global variables, some temporary scratch space, and the properties of the transaction(s) they are submitted with. 
 
-For more information on smart signatures, see the [smart signature documentation](./smartsigs). For more information on building contracts in PyTeal see the [build with Python documentation](../pyteal).
-For more information on using smart signatures with the SDKs see the [Interacting with smart signature documentation](./frontend/smartsigs.md).
+For more information on smart signatures, see the [smart signature documentation](./smartsigs). For more information on building contracts in PyTeal see the [build with Python documentation](/docs/get-details/dapps/writing-contracts/pyteal).
+For more information on using smart signatures with the SDKs see the [Interacting with smart signature documentation](./frontend/smartsigs).
 For more information on debugging a smart contract, see the [debugging](./debugging.md) page.
 
 

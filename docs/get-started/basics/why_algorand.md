@@ -94,13 +94,11 @@ In proof-of-work blockchains, since forking is a possibility, transactions can�
 As we mentioned earlier, Algorand does not have forking so transactions are final as soon as they are confirmed in a block. A throughput of 6,000 TPS then actually means 6,000 _finalized_ transactions per second.
 
 # Core features
-Algorand makes it easy to tokenize, transfer, and program conditions on any instrument of value. Create fungible tokens, NFTs, and security tokens with a single transaction (no smart contract code required). Or program sophisticated decentralized applications (dApps) with Algorand smart contracts.
+Algorand makes it easy to tokenize, transfer, and program conditions on any instrument of value. Create fungible and nonfungible tokens with a single transaction (no smart contract code required). Or program sophisticated decentralized applications (dApps) with Algorand smart contracts.
 
 # Developer tools
 Developers can write smart contracts in Python and can use one of four SDKs (Python, JavaScript, Golang, Java) to connect to on-chain assets or applications.
 
-Algorand has a growing ecosystem of developer tools like IDEs, tools for monitoring, etc.
-> [Explore developer tools from the community](../../../../ecosystem-projects/){: target="_blank" }
 
 # The team & ecosystem
 The Algorand protocol is completely open source, so why can’t anyone just go create a copy and create another Algorand-like blockchain? Well they absolutely can, but then they’ll have to convince everyone why the new one is better. As we’ve seen, the technology is a critical component to a blockchain, but so is the ecosystem built around it. 
@@ -112,9 +110,4 @@ The Algorand Foundation, a non-profit organization that launched the Algorand Ma
 
 > Visit the [Algorand Foundation website](https://algorand.foundation/governance){: target="_blank" } for more information.
 
-# Alice and Bob choose Algorand
-Algorand checks all the boxes to ensure efficiency, transparency/trust, and low costs.
 
-<center>
-![Proof-of-work](../../imgs/basics-alicebob-2.png){: width='500px' }
-</center>

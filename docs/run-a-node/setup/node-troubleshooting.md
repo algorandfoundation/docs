@@ -2,7 +2,7 @@ title: Node Troubleshooting
 
 # Do you want to run a node yourself?
 
-If you are a developer, running a private network using [sandbox](/docs/get-started/devenv/sandbox) is simpler and provide more flexibility.
+If you are a developer, running a private network using [AlgoKit](/docs/get-started/algokit) is simpler and provide more flexibility.
 
 Running a production node for MainNet is very beneficial for decentralization.
 However, as any unmanaged system (and any blockchain node/indexer), to achieve high SLA, running a production node has many requirements: appropriate redundancy (some upgrades create downtime on nodes), 24/7 monitoring, regular maintenance, use of a staging environment for testing updates, ...
@@ -41,7 +41,7 @@ If you see:
 
 * `Data directory not specified.  Please use -d or set $ALGORAND_DATA in your environment. Exiting.`: `$ALGORAND_DATA` is not properly set up.
 * `command not found: goal`: `$PATH` is not properly set up.
-* `Cannot contact Algorand node: open ...: no such file or directory`: the node is not started. Starting a node is done differently depending on the installation method. See sections "Start the node" from [Install a Node](../install).
+* `Cannot contact Algorand node: open ...: no such file or directory`: the node is not started. Starting a node is done differently depending on the installation method. See sections "Start the node" from [Install a Node](/docs/run-a-node/setup/install).
     
 # Common Issues for algod
 
@@ -49,7 +49,7 @@ If you see:
 
 One of the most common issues are that the node is on the wrong network, has the wrong algod version, or is not fully synced.
 
-* **Check that the node is synced/caught up** following [Catchup and Status](../../operations/catchup). See below if the node is not syncing.
+* **Check that the node is synced/caught up** following [Catchup and Status](/docs/run-a-node/operations/catchup). See below if the node is not syncing.
 * **Check that the node is on the right network**: when running `goal node status`, `Genesis ID` must be `mainnet-v1.0` for MainNet, `testnet-v1.0` for TestNet, `betanet-v1.0` for BetaNet. See [Switch Networks](/docs/run-a-node/operations/switch_networks) to solve this issue.
 * **Check that the version** reported of `algod -v` and `goal version -v` are the latest stable release (if using MainNet or TestNet) or the latest beta release (if using BetaNet). See the [official repo](https://github.com/algorand/go-algorand/releases) for the list of all releases. Beta releases are clearly marked as such.
 
@@ -97,8 +97,8 @@ at least one of them must return a list of relays without any error nor warning.
 
 Here are other less common reasons for a node not being able to catch up at all.
 
-* Check the presence of the right `genesis.json` file in `$ALGORAND_DATA`. See the documentation on how to [switch networks](../../operations/switch_networks/).
-* If using BetaNet, check that `$ALGORAND_DATA/config.json` contains the right `DNSBootstrapID`. See the [configuration for BetaNet](../../operations/switch_networks/#dns-configuration-for-betanet).
+* Check the presence of the right `genesis.json` file in `$ALGORAND_DATA`. See the documentation on how to [switch networks](/docs/run-a-node/operations/switch_networks/).
+* If using BetaNet, check that `$ALGORAND_DATA/config.json` contains the right `DNSBootstrapID`. See the [configuration for BetaNet](/docs/run-a-node/operations/switch_networks/#dns-configuration-for-betanet).
 
 ## My node is syncing/catching up very slowly (without fast catchup)
 
@@ -106,11 +106,11 @@ Syncing without fast catchup is expecting to take a 2 to 4 weeks in November 202
 In addition, syncing will slow down as rounds increases, as newer blocks usually contain many more transactions than older blocks.
 
 !!! tip
-    Remember that non-archival node can be synced faster using [fast catchup](../../setup/install#sync-node-network-using-fast-catchup). Archival nodes cannot use fast catchup but algonode.io, a third-party service, provides [snapshots of archival nodes](https://algonode.io/extras/). This tip is NOT an endorsement of these snapshots and using these snapshots require careful weighting of associated risks: `algod` cannot verify that these snapshots are valid. In particular, `algod` cannot verify that these snapshots do not contain invalid data that would allow for double spending.
+    Remember that non-archival node can be synced faster using [fast catchup](/docs/run-a-node/setup/install#sync-node-network-using-fast-catchup). Archival nodes cannot use fast catchup but algonode.io, a third-party service, provides [snapshots of archival nodes](https://algonode.io/extras/). This tip is NOT an endorsement of these snapshots and using these snapshots require careful weighting of associated risks: `algod` cannot verify that these snapshots are valid. In particular, `algod` cannot verify that these snapshots do not contain invalid data that would allow for double spending.
 
 If it looks like your node will take much longer than 4 weeks for syncing, then:
 
-1. Check that your node has the right [hardware requirements](../../setup/install/#hardware-requirements). In particular, if your node has less than 4GB (or ideally 8GB) of RAM and/or an HDD/slow-SATA-SSD/SD, then you will not be able to catch up on MainNet.
+1. Check that your node has the right [hardware requirements](/docs/run-a-node/setup/install/#hardware-requirements). In particular, if your node has less than 4GB (or ideally 8GB) of RAM and/or an HDD/slow-SATA-SSD/SD, then you will not be able to catch up on MainNet.
 2. Check that your node is not overused:
     1. Check RAM and CPU use using `top` or `htop`
     2. Check free disk using `df -h`
@@ -143,7 +143,7 @@ If it looks like your node will take much longer than 4 weeks for syncing, then:
 
 ## My node is not syncing/catching up with fast catchup
 
-See [troubleshooting for fast catchup](../../setup/install#troubleshooting-for-fast-catchup).
+See [troubleshooting for fast catchup](/docs/run-a-node/setup/install#troubleshooting-for-fast-catchup).
 
 ## Other issues
 
@@ -153,8 +153,8 @@ If sending a transaction results in an `overspend` error (i.e., the word `oversp
 1. Check that the account has enough Algos on a [block explorer](https://developer.algorand.org/ecosystem-projects/?tags=block-explorers).
 2. Check that your node is [synced and on the right network](#Most-common-issues-wrong-version-wrong-network-not-caught-up).
 3. Do not forget to take into account:
-    1. The [minimum balance requirement](../../../get-started/integration/assets/#transactions-and-minimum-balances) of 0.1 Algo for a basic account (more if ASA or applications are created or used).
-    2. The [fee](../../../get-details/transactions/#fees) paid by the sender of the transaction.
+    1. The [minimum balance requirement](/docs/get-details/parameter_tables/#minimum-balance) of 0.1 Algo for a basic account (more if ASA or applications are created or used).
+    2. The [fee](/docs/get-details/transactions/#fees) paid by the sender of the transaction.
 
 
 ## None of the above works

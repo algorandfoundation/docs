@@ -1,13 +1,13 @@
 title: Interact with smart signatures
 
-This guide covers using smart signatures with the Algorand SDKs. Smart signatures are also referred to as stateless smart contracts. Smart signatures can be used to create contract accounts or to handle account delegation which is described in the [Modes](../smartsigs/modes.md) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](../../avm/teal/index.md) or with Python using the [PyTeal](../../pyteal/index.md) library.
+This guide covers using smart signatures with the Algorand SDKs. Smart signatures are also referred to as stateless smart contracts. Smart signatures can be used to create contract accounts or to handle account delegation which is described in the [Modes](/docs/get-details/dapps/smart-contracts/smartsigs/modes) documentation. In either case, the contracts are written in [Transaction Execution Approval Language (TEAL)](/docs/get-details/dapps/avm/teal/) or with Python using the [PyTeal](/docs/get-details/dapps/writing-contracts/pyteal) library.
 
 
 # Compiling TEAL program from SDKs
 Before a TEAL program can be used, it must be compiled. SDKs provide this capability. The examples in this section use a simple contract which contains one line of TEAL code, `int 1` . This will always return an approval for the transaction. So, any transactions that use this TEAL file will succeed. Never use this TEAL in a production application as it approves all transactions. 
 
 
-To use the SDK compile command, the [config settings](../../../../run-a-node/reference/config.md) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](../../../../run-a-node/setup/install.md), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
+To use the SDK compile command, the [config settings](/docs/run-a-node/reference/config) may need to be modified to set a value for `EnableDeveloperAPI`, which should be set to `true`. The default is false. If using the sandbox, the following modification is already made. If [running your own node](/docs/run-a-node/setup/install), you may see an error similar to "compile was not enabled in the configuration file by setting the EnableDeveloperAPI to true". Make the following modification to the `config.json` file located in the node’s data directory. First, if there is not a `config.json`, make a copy of the `config.json.example` file.
 
 ```
 $ goal node stop -d data
@@ -213,9 +213,9 @@ The SDKs require that parameters to a smart signature TEAL program be in byte ar
 
 
 # Contract account SDK usage
-Smart signatures can be used as contract accounts and allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. In most cases, it is preferrable to use [smart contract](../apps/index.md) escrow accounts over smart signatures as smart signatures require the logic to be supplied for every transaction.
+Smart signatures can be used as contract accounts and allow TEAL logic to determine when outgoing account transactions are approved. The compiled TEAL program produces an Algorand Address, which is funded with Algos or Algorand Assets. As the receiver of a transaction, these accounts function as any other account. When the account is specified as the sender in a transaction, the TEAL logic is evaluated and determines if the transaction is approved. The [ASC1 Usage Modes](/docs/get-details/dapps/smart-contracts/smartsigs/modes) documentation explains ASC1 modes in more detail. In most cases, it is preferrable to use [smart contract](/docs/get-details/dapps/smart-contracts/apps/) escrow accounts over smart signatures as smart signatures require the logic to be supplied for every transaction.
 
-Smart signature contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand transactions. The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a [logic signature](../smartsigs/modes.md#logic-signatures). 
+Smart signature contract account transactions where the sender is set to the contract account, function much in the same way as normal Algorand transactions. The major difference is that instead of the transaction being signed with a private key, the transaction is signed with a [logic signature](/docs/get-details/dapps/smart-contracts/smartsigs/modes#logic-signatures). 
 
 Contract Accounts are created by compiling the TEAL logic within the smart signature. Once the contract account is created, it can be used as any other address. To send tokens or assets from the account the transaction must be signed by a Logic Signature. From an SDK standpoint, the following process should be used.
 
@@ -345,9 +345,9 @@ The following example illustrates compiling a TEAL program and signing a transac
     <!-- ===GOSDK_LSIG_SIGN_FULL=== -->
 
 # Account delegation SDK usage
-Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](../smartsigs/modes.md) documentation explains ASC1 modes in more detail. 
+Smart signatures allow TEAL logic to be used to delegate signature authority. This allows specific accounts or multi-signature accounts to sign logic that allows transactions from the account to be approved based on the TEAL logic. The [ASC1 Usage Modes](/docs/get-details/dapps/smart-contracts/smartsigs/modes) documentation explains ASC1 modes in more detail. 
 
-Delegated transactions are special transactions where the `sender` signs the logic and the transaction is then signed with the [logic signature](../smartsigs/modes.md#logic-signature). In all other aspects, the transaction functions as any other transaction. 
+Delegated transactions are special transactions where the `sender` signs the logic and the transaction is then signed with the [logic signature](/docs/get-details/dapps/smart-contracts/smartsigs/modes#logic-signature). In all other aspects, the transaction functions as any other transaction. 
 
 Delegated Logic Signatures require that the logic signature be signed from a specific account or a multi-signature account. The TEAL program is first loaded, then a Logic Signature is created and then the Logic Signature is signed by a specific account or multi-signature account. The transaction is created as normal. The transaction is then signed with the Logic Signature. From an SDK standpoint, the following process should be used.
 

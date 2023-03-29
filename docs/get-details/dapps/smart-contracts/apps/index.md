@@ -4,7 +4,7 @@ title: Overview
 
 Algorand smart contracts are pieces of logic that reside on the Algorand blockchain and are remotely callable. These contracts are primarily responsible for implementing the logic associated with a distributed application. Smart contracts are referred to as stateful smart contracts or applications in the Algorand documentation. Smart contracts can generate asset and payment transactions allowing them to function as Escrow accounts on the Algorand blockchain. Smart contracts can also store values on the blockchain. This storage can be global, local, or box storage. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. Box storage is also global and allows contracts to use larger segments of storage. Like smart signatures, smart contracts are written in Python using PyTeal or TEAL and can be deployed to the blockchain using either the `goal` command-line tool or the SDKs. The recommended approach for writing smart contracts is to use the Python SDK with the PyTeal library.  
 
-See the [*PyTeal Documentation*](../../pyteal/index.md) for information on building smart contracts in Python.
+See the [*PyTeal Documentation*](/docs/get-details/dapps/writing-contracts/pyteal) for information on building smart contracts in Python.
 
 See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../../avm/teal/opcodes.md) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../../avm/teal/index.md).
 
@@ -37,7 +37,7 @@ Calls to smart contracts are implemented using `ApplicationCall` transactions. T
 
 The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalProgram` handles all other `ApplicationCall` transactions. These transaction types can be created with either `goal` or the SDKs. In the following sections, details on the individual capabilities of a smart contract will be explained.
 
-<center>![Smart Contract](../../../../imgs/stateful-1.png)</center>
+<center>![Smart Contract](/docs/imgs/stateful-1.png)</center>
 <center>*Application Transaction Types*</center>
 
 # Reference arrays
@@ -62,7 +62,7 @@ TODO: adding to these arrays with ATC. Also do we want goal as one of the tabs. 
 
 Boxes function similar to the other arrays but differ is significant ways which are explained in detail in the [Boxes section of the documentation](state.md#box-details).
 
-<center>![Smart Contract](../../../../imgs/stateful-2.png)</center>
+<center>![Smart Contract](/docs/imgs/stateful-2.png)</center>
 <center>*Reference Arrays*</center>
 
 

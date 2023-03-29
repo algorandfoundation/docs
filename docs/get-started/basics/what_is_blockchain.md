@@ -67,23 +67,3 @@ If the answer to the second question is “yes” to any or all of the propertie
 
 For example, sending a payment across borders through a bank often takes days and is expensive since there are many intermediaries who are involved to ensure that the value is transferred securely. High **costs** and overall poor **efficiency** are the characteristics that stand out in this scenario and that blockchain could improve. That’s not to say that the other characteristics aren’t important. For example, we don’t want lower costs at the expense of security, but if security mattered alone we might say that the current process is good enough (assuming you trust the bank who is making the transfer). In this scenario, blockchain improves deficiencies in the system without making a tradeoff elsewhere.
 
-# Alice and Bob's auction
-
-Meet Alice and Bob. Alice is a talented artist, looking to grow her fanbase and her value as an artist. Bob is a developer and Alice’s good friend. He wants to help her out. 
-
-<center>
-![Meet Alice and Bob](../../imgs/basics-alicebob-1.png){: width='500px' }
-</center>
-
-Alice usually sells her artwork through personal connections and sometimes by advertising on social media. One of her digital art pieces sells for $100, on average, using her current sale techniques. She thinks she could make a lot more if she were able to scale and reach a wider audience. Alice considers the important properties for her use case:
-
-1. **Efficiency** - Alice spends lots of time trying to find a buyer and ultimately doesn’t reach a wide enough audience.
-2. **Trust/Transparency** - Alice wants to reach a wider audience, but she is still building her reputation and needs a way for both herself and potential buyers to know that they aren’t getting scammed.
-3. **Cost** - The best option for scaling now is to use an e-commerce site, but she knows she’ll have to give up a good chunk of what she makes on fees (minimum 5% and up to 15-20%). 
-
-We named 4 properties of blockchain that could help Alice and her use case. Alice and Bob brainstorm together considering Alice’s main goals and the properties she wants to optimize for. They come up with the following idea:
-
-They plan to tokenize Alice’s artwork as an NFT on the blockchain. This gives them an entry point into the blockchain ecosystem and the ability to program what they want to do next. Then, they will build an auction dApp on the blockchain that will allow Alice to sell her artwork for a price set by the market. The auction will be programmed on the blockchain for everyone to see and independently verify. Alice can guarantee to her buyers that they will not be scammed and vice versa without needing to be personally acquainted (trust/transparency). Since they are removing the need for a third-party to guarantee trade, they can substantially cut down fees and Alice can make more money (low cost). Alice can focus on advertising her work to as broad of an audience as she wants through her social media accounts or elsewhere without needing to meet individually and build trust with potential buyers (efficiency).
-
-Now that we know the basics of blockchain. Let’s learn more about the Algorand blockchain.
-

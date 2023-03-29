@@ -4,6 +4,9 @@ This section is a quick start guide for interacting with the Algorand network us
 
 # Install Sandbox
 
+!!! info
+    This step is only required if you are not using AlgoKit. If you are using AlgoKit, you can spin up a sandbox using the LocalNet, see [AlgoKit getting started guide](/docs/get-started/algokit/#start-a-localnet) for more information. 
+
 !!! Prerequisites
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/){target=_blank})
     - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){target=_blank}) 
