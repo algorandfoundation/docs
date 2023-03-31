@@ -22,14 +22,15 @@ Unsigned transactions require the transaction object to be created before writin
 	  suggestedParams,
 	});
 	
-	const txnBytes = txn.toByte();
+	const txnBytes = algosdk.encodeUnsignedTransaction(txn);
 	const txnB64 = Buffer.from(txnBytes).toString('base64');
+	// ...
 	const restoredTxn = algosdk.decodeUnsignedTransaction(
 	  Buffer.from(txnB64, 'base64')
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L50)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L51)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
@@ -114,7 +115,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L53-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L54-L60)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
