@@ -224,14 +224,15 @@ Create a payment transaction from one account to another using suggested paramet
 	  suggestedParams,
 	});
 	
-	const txnBytes = txn.toByte();
+	const txnBytes = algosdk.encodeUnsignedTransaction(txn);
 	const txnB64 = Buffer.from(txnBytes).toString('base64');
+	// ...
 	const restoredTxn = algosdk.decodeUnsignedTransaction(
 	  Buffer.from(txnB64, 'base64')
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L50)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L51)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
@@ -242,7 +243,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L53-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L54-L60)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
@@ -377,7 +378,7 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 	const decodeArray = uintArrayCodec.decode(encodedArray);
 	console.log(decodeArray); // [1, 2, 3, 4, 5]
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L62-L79)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L63-L80)
 	<!-- ===JSSDK_CODEC_ABI==== -->
 
 === "Python"
