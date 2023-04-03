@@ -58,8 +58,6 @@ The accounts and applications arrays contain the transaction sender and current 
 
 The following examples illustrate populating these arrays before calling a smart contract when using the Atomic Transaction Composer(ATC).
 
-TODO: adding to these arrays with ATC. Also do we want goal as one of the tabs. We have examples of adding boxes in the box details section of this document. We may want to put this in frontend page but if we do we should link here.
-
 Boxes function similar to the other arrays but differ is significant ways which are explained in detail in the [Boxes section of the documentation](state.md#box-details).
 
 <center>![Smart Contract](/docs/imgs/stateful-2.png)</center>
