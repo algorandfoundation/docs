@@ -7,7 +7,7 @@ AlgoKit is the primary tool used by the Algorand community to develop smart cont
 If you prefer videos, take a look at this 10-minute guide to getting started.
 
 <center>
-[![Learn How to Build on Algorand in 10 Minutes](/docs/imgs/algokit-intro-video-thumbnail.jpg)](https://www.youtube.com/v/dow6U8DxOGc)
+[![Learn How to Build on Algorand in 10 Minutes](/docs/imgs/algokit-intro-video-thumbnail.jpg)](https://www.youtube.com/v/MzBRef_Res8)
 </center>
 
 Detailed video guides for both [Windows](https://www.youtube.com/v/22RvINnZsRo) and [Mac](https://www.youtube.com/v/zsurtpCGmgE) are also available.
