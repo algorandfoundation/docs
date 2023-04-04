@@ -93,7 +93,7 @@ const algodClient = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 <!-- ===JSSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
-    The example code connects to the sandbox Algod client. If you want to connect to a other clients, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2).
+    The example code connects to the sandbox Algod client. If you want to connect to a public API client, change the host, port, and token parameters to match the API service. See some service available [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
 
 !!! Info
     If you are connecting to the Testnet, a dispenser is available [here](https://dispenser.testnet.aws.algodev.network/){target=_blank}
@@ -161,6 +161,8 @@ console.log(`Decoded Note: ${Buffer.from(result.txn.txn.note).toString()}`);
  <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 ​
-x
 # View the Transaction
-To view the transaction, open [AlgoExplorer](https://testnet.algoexplorer.io/){target=_blank} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){target=_blank} and paste the transaction ID into the search bar.  
+
+To view the transaction we submitted to the sandbox Algod, open [DappFlow](https://app.dappflow.org/explorer/home){target=_blank} and choose `Sandbox` configuration option, then search for the transaction ID. 
+
+To view a transaction submitted to public network like testnet, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.

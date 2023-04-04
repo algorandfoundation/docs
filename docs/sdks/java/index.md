@@ -88,7 +88,7 @@ AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken,
 <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
 !!! Info
-    The example code connects to the sandbox Algod client. If you want to connect to a other clients, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2).
+    The example code connects to the sandbox Algod client. If you want to connect to a public API client, change the host, port, and token parameters to match the API service. See some service available [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
 
 !!! Info
     If you are connecting to the Testnet, a dispenser is available [here](https://dispenser.testnet.aws.algodev.network/){target=_blank}
@@ -106,12 +106,6 @@ System.out.printf("Current balance: %d", acctInfo.amount);
 ```
 [Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L84-L89)
 <!-- ===JAVASDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
-
-
-
-# Build First Transaction
-Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code, which also includes some utility functions, `connectToNetwork` ,  and `PrintBalance`. Add this code to the GettingStarted class above.
-
 
 
 # Build First Transaction
