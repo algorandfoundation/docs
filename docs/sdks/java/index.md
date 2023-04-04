@@ -1,6 +1,6 @@
 title: Your First Transaction
 
-This section is a quick start guide for interacting with Algorand network using Java. This guide will help to install **_sandbox_**, which provides a node for testing and development. This guide will also help to install the Java SDK, create an account and submit your first transaction.
+This section is a quick start guide for interacting with Algorand network using Java. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the Java SDK, create an account and submit your first transaction.
 
 # Install Sandbox
 
@@ -16,22 +16,19 @@ Algorand provides a docker instance for setting up a node, which can be used to 
 ```bash
 git clone https://github.com/algorand/sandbox.git
 cd sandbox
-./sandbox up testnet
+./sandbox up dev 
 ```
 
+This will install and start private network. To read more about Algorand networks see [Algorand Networks](../../get-details/algorand-networks/index.md){target=_blank}. 
 
-[More Information](https://developer.algorand.org/articles/introducing-sandbox-20/){:target="_blank"}
+[More Information about the sandbox](https://developer.algorand.org/articles/introducing-sandbox-20/) and [how to use](https://developer.algorand.org/tutorials/exploring-the-algorand-sandbox/) it.
 
-This will install a Sandbox node connected to the Algorand TestNet. To read more about Algorand networks see [Algorand Networks](../../get-details/algorand-networks/){:target="_blank"}.
 
-!!! Warning
-    The sandbox installation may take a few minutes to startup in order to catch up to the current block round. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](../../run-a-node/setup/install/#sync-node-network-using-fast-catchup){:target="_blank"}
-.
+# Install Java SDK 
+Algorand provides an [SDK for Java](https://github.com/algorand/java-algorand-sdk). The instructions for installing the SDK are as follows. The Java SDK is available in the MVN repository and can be used in your Maven project by including the following dependency.
 
-# Install SDK For Runtime
-Algorand provides an SDK for Java. The instructions for installing the SDK are as follows. The Java SDK is available in the MVN repository and can be used in your Maven project by including the following dependency.
-
-Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}.
+!!! Prerequisites
+    Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}.
 
 ```java
 <dependency>
@@ -41,16 +38,13 @@ Requirements: Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for
 </dependency>
 ```
 
+The [GitHub repository](https://github.com/algorand/js-algorand-sdk){target=_blank} contains additional documentation and examples.
 
-[`More Information`](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}
-
-The GitHub repository contains additional documentation and examples.
-
-See the [Java SDK reference documentation](https://algorand.github.io/java-algorand-sdk/){:target="_blank"} for more information on packages and methods.
+See the Java SDK [reference documentation](https://algorand.github.io/java-algorand-sdk/){:target="_blank"} for more information on packages and methods.
 
 The SDK is installed and can now interact with the Sandbox created earlier.
 
-# Create an Account on Algorand
+# Create an Account
 In order to interact with the Algorand blockchain, you must have a funded account. To quickly create a test account use the following code.
 
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
@@ -68,7 +62,7 @@ System.out.println("Passphrase: " + acct.toMnemonic());
     Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](../../../../ecosystem-projects/#wallets){:target="_blank"}. For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/){:target="_blank"}, click [here](https://github.com/algorand/algorand-wallet){:target="_blank"}.
 
 # Fund the Account
-The code above prompts to fund the newly created account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/){:target="_blank"}.
+Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. In this example, we'll be using prefunded accounts available in the Sandbox. To fund an account on Testnet account use the [Algorand faucet](https://dispenser.testnet.aws.algodev.network/){target=_blank}. 
 
 
 !!! Info
@@ -76,11 +70,8 @@ The code above prompts to fund the newly created account. Before sending transac
 
 
 # Connect Your Client
-Client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value and the `algodHost` corresponds to `http://localhost:4001`.
+An Algod client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value and the `algodAddress` corresponds to `http://localhost:4001`.
 
-
-# Build First Transaction
-Communication with the Algorand network is performed using transactions. To create a payment transaction use the following code, which also includes some utility functions, `connectToNetwork` ,  and `PrintBalance`. Add this code to the GettingStarted class above.
 
 <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 ```java
@@ -96,9 +87,11 @@ AlgodClient otherAlgodClient = new AlgodClient(algodHost, algodPort, algodToken,
 [Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L94-L102)
 <!-- ===JAVASDK_ALGOD_CREATE_CLIENT=== -->
 
+!!! Info
+    The example code connects to the sandbox Algod client. If you want to connect to a public API client, change the host, port, and token parameters to match the API service. See some service available [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
 
 !!! Info
-    Algorand supports many transaction types. To see what types are supported see [Transactions](../../get-details/transactions/){: target="_blank"}.
+    If you are connecting to the Testnet, a dispenser is available [here](https://dispenser.testnet.aws.algodev.network/){target=_blank}
 
 # Check Your Balance
 Before moving on to the next step, make sure your account has been funded by the faucet.
@@ -164,19 +157,8 @@ System.out.printf("Transaction %s confirmed in round %d\n", txid, result.confirm
 [Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L39-L47)
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 
-[`Run Code`](https://replit.com/@Algorand/GettingStarted-with-Java#GettingStarted.java){:target="_blank"}
-
-
-# Complete Example
-The complete example below illustrates how to quickly submit your first transaction.
-​
-# TODO::
-[...](https://github.com/algorand/java-algorand-sdk/blob/master/examples/src/main/java/com/algorand/examples/Example.java)
-
-!!! Warning 
-    In order for this transaction to be successful, the account must be funded. 
-
 # Viewing the Transaction
-To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
 
-  
+To view the transaction we submitted to the sandbox Algod, open [DappFlow](https://app.dappflow.org/explorer/home){target=_blank} and choose `Sandbox` configuration option, then search for the transaction ID. 
+
+To view a transaction submitted to public network like testnet, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.

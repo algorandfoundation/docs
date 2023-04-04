@@ -1,29 +1,29 @@
 title: Your First Transaction
 
-This section is a quick start guide for sending your first transaction on the Algorand TestNet network using the Go programming language. This guide installs the Go SDK, creates an account and submits a payment transaction. This guide also installs Algorand Sandbox, which provides required infrastructure for development and testing. 
+This section is a quick start guide for interacting with the Algorand network using Python. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the Python SDK, create an account and submit your first transaction on Algorand.  
  
 # Install Sandbox
 
 !!! info
     This step is only required if you are not using AlgoKit. If you are using AlgoKit, you can spin up a sandbox using the LocalNet, see [AlgoKit getting started guide](/docs/get-started/algokit/#start-a-localnet) for more information. 
 	
-Algorand Sandbox is developer-focused tool for quickly spinning up the Algorand infrastructure portion of your development environment. It uses Docker to provide an `algod` instance for connecting to the network of your choosing and an `indexer` instance for querying blockchain data. APIs are exposed by both instances for client access provided within the SDK. Read more about [Algorand networks](../../get-details/algorand-networks/index.md), their capabilities and intended use.
-
 !!! Prerequisites
     - Docker Compose ([install guide](https://docs.docker.com/compose/install/))
     - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
 
-From a terminal window, install Algorand Sandbox connected to TestNet:
+Algorand provides a docker instance for setting up a node, which can be used to get started developing quickly. To install and use this instance, follow these instructions.
 
 ```bash
 git clone https://github.com/algorand/sandbox.git
 cd sandbox
-./sandbox up testnet
+./sandbox up dev 
 ```
 
-!!! Warning
-    The Algorand Sandbox installation may take a few minutes to complete in order to catch up to the current round on TestNet. To learn more about fast catchup, see [Sync Node Network using Fast Catchup](https://developer.algorand.org/docs/run-a-node/setup/install/#sync-node-network-using-fast-catchup).
+This will install and start private network. To read more about Algorand networks see [Algorand Networks](../../get-details/algorand-networks/index.md){target=_blank}. 
 
+[More Information about the sandbox](https://developer.algorand.org/articles/introducing-sandbox-20/) and [how to use](https://developer.algorand.org/tutorials/exploring-the-algorand-sandbox/) it.
+
+ 
 
 # Install Go SDK
 Algorand provides an SDK for Go. 
@@ -37,12 +37,14 @@ From a terminal window, install the Go SDK:
 go get -u github.com/algorand/go-algorand-sdk/v2
 ```
 
-- [SDK repository](https://github.com/algorand/go-algorand-sdk)
- 
+The [GitHub repository](https://github.com/algorand/go-algorand-sdk){target=_blank} contains additional documentation and examples.
+
+See the JavaScript SDK [reference documentation](https://pkg.go.dev/github.com/algorand/go-algorand-sdk/v2){target=_blank} for more information on methods.  
+
 The SDK is installed and can now interact with the running Algorand Sandbox environment, as configured above.
 
-# Create account
-In order to interact with the Algorand blockchain, you must have a funded account on the network. To quickly create an account on Algorand TestNet create a new file **yourFirstTransaction.go** and insert the following code:
+# Create an account
+In order to interact with the Algorand blockchain, you must have a funded account on the network. To quickly create a test account use the following code.
 
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 ```go
@@ -59,26 +61,21 @@ if err != nil {
 [Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L166-L175)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
-!!! Note 
-    Lines 17 and 35 contain TODO: comments about inserting additional code. As you proceed with this guide, ensure the line numbers remain in sync.
-
-!!! Tip
-    Make sure to save the generated address and passphrase in a secure location, as they will be used later on.
+[`More Information`](../../get-details/accounts/create.md#standalone){target=_blank}  
 
 !!! Warning 
     Never share your mnemonic passphrase or private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](https://developer.algorand.org/docs/community/#wallets). For the open source [Algorand Wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/), click [here](https://github.com/algorand/algorand-wallet).
 
-- [More Information](https://developer.algorand.org/docs/features/accounts/create/#standalone)
  
-# Fund account
-The code below prompts to fund the newly generated account. Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. To fund the account use the [Algorand TestNet faucet](https://dispenser.testnet.aws.algodev.network/). 
+# Fund the account
+Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. In this example, we'll be using prefunded accounts available in the Sandbox. To fund an account on Testnet account use the [Algorand faucet](https://dispenser.testnet.aws.algodev.network/){target=_blank}. 
 
 !!! Info
     All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimum balance see [Account Overview](https://developer.algorand.org/docs/features/accounts/#minimum-balance)
 
 
-# Instantiate client
-You must instantiate a client prior to making calls to the API endpoints. The Go SDK implements the client natively using the following code:
+# Connect Your Client
+An Algod client must be instantiated prior to making calls to the API endpoints. You must provide values for `<algod-address>` and `<algod-token>`. The CLI tools implement the client natively. By default, the `algodToken` for each [sandbox](https://github.com/algorand/sandbox) is set to its `aaa...` value and the `algodAddress` corresponds to `http://localhost:4001`.
 
 
 <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
@@ -106,11 +103,12 @@ algodClientWithHeaders, _ := algod.MakeClientWithHeaders(
 <!-- ===GOSDK_ALGOD_CREATE_CLIENT=== -->
  
 !!! Info
-    This guide provides values for `algodAddress` and `algodToken` as specified by Algorand Sandbox. If you want to connect to a third-party service provider, see [Purestake](https://developer.purestake.io/code-samples) or [AlgoExplorer Developer API](https://algoexplorer.io/api-dev/v2) and adjust these values accordingly.
- 
+    The example code connects to the sandbox Algod client. If you want to connect to a public API client, change the host, port, and token parameters to match the API service. See some service available [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
 
-# Check account balance
+!!! Info
+    If you are connecting to the Testnet, a dispenser is available [here](https://dispenser.testnet.aws.algodev.network/){target=_blank}
 
+# Check Your Balance
 Before moving on to the next step, make sure your account has been funded.
  
  <!-- ===GOSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
@@ -125,8 +123,8 @@ log.Printf("Account balance: %d microAlgos", acctInfo.Amount)
  <!-- ===GOSDK_ALGOD_FETCH_ACCOUNT_INFO=== -->
 
 
-# Build transaction
-Communication with the Algorand network is performed using transactions. Create a payment transaction sending 1 ALGO from your account to the TestNet faucet address:
+# Build First Transaction
+Transactions are used to interact with the Algorand network. To create a payment transaction use the following code.
 
 <!-- ===GOSDK_TRANSACTION_PAYMENT_CREATE=== -->
 ```go
@@ -147,7 +145,7 @@ if err != nil {
     Algorand supports many transaction types. To see what types are supported see [Transactions](https://developer.algorand.org/docs/features/transactions/).
 
 
-# Sign transaction
+# Sign First transaction
 Before the transaction is considered valid, it must be signed by a private key. Use the following code to sign the transaction.
 
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SIGN=== -->
@@ -186,4 +184,6 @@ fmt.Printf("Confirmed Transaction: %s in Round %d\n", pendingTxID, confirmedTxn.
 <!-- ===GOSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
  
 # Viewing the Transaction
-To view the transaction, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.)
+To view the transaction we submitted to the sandbox Algod, open [DappFlow](https://app.dappflow.org/explorer/home){target=_blank} and choose `Sandbox` configuration option, then search for the transaction ID. 
+
+To view a transaction submitted to public network like testnet, open the [Algorand Blockchain Explorer](https://testnet.algoexplorer.io/){:target="_blank"} or [Goal Seeker](https://goalseeker.purestake.io/algorand/testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
