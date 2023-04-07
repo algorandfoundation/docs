@@ -309,9 +309,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 In order to inspect state for an Account, Asset, Application, or Box, you must pass a reference to the foreign object. This is done by passing a reference to the foreign object in one of the reference arrays. While the ABI takes care of some of this by allowing arguments to be reference types, sometimes you need to pass a reference to an object that is not an argument to the method. 
 
 
-
-
-==== "JavaScript"
+=== "JavaScript"
 	<!-- ===JSSDK_ATC_FOREIGN_REFS=== -->
 	```javascript
 	const foreignRefAtc = new algosdk.AtomicTransactionComposer();
@@ -337,7 +335,7 @@ In order to inspect state for an Account, Asset, Application, or Box, you must p
 	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L120-L139)
 	<!-- ===JSSDK_ATC_FOREIGN_REFS=== -->
 
-==== "Python"
+=== "Python"
 	<!-- ===PYSDK_ATC_FOREIGN_REFS=== -->
 	```python
 	atc = AtomicTransactionComposer()
@@ -356,7 +354,7 @@ In order to inspect state for an Account, Asset, Application, or Box, you must p
 	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L90-L102)
 	<!-- ===PYSDK_ATC_FOREIGN_REFS=== -->
 
-==== "Go"
+=== "Go"
 	<!-- ===GOSDK_ATC_FOREIGN_REFS=== -->
 	```go
 	mcp = transaction.AddMethodCallParams{
@@ -379,7 +377,7 @@ In order to inspect state for an Account, Asset, Application, or Box, you must p
 	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L114-L130)
 	<!-- ===GOSDK_ATC_FOREIGN_REFS=== -->
 
-==== "Java"
+=== "Java"
 	<!-- ===JAVASDK_ATC_FOREIGN_REFS=== -->
 	```java
 	MethodCallTransactionBuilder<?> refBuilder = MethodCallTransactionBuilder.Builder();
