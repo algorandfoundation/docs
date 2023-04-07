@@ -329,7 +329,6 @@ Create a payment transaction from one account to another using suggested paramet
 	```java
 	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
 	TransactionParametersResponse sp = rsp.body();
-	// Wipe the `reserve` address through an AssetConfigTransaction
 	Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
 	        .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
 	
@@ -338,7 +337,7 @@ Create a payment transaction from one account to another using suggested paramet
 	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
 	assert decodedTxn.equals(ptxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L59)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L58)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 	```java
@@ -349,7 +348,7 @@ Create a payment transaction from one account to another using suggested paramet
 	        SignedTransaction.class);
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L62-L68)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 # ABI Encoding
@@ -454,5 +453,5 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 	// prints [1, 2, 3, 4, 5]
 	System.out.printf("Decoded: %s\n", Arrays.toString((Object[]) arrDecoded));
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L71-L87)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L70-L86)
 	<!-- ===JAVASDK_CODEC_ABI=== -->

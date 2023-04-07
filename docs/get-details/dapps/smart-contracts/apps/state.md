@@ -356,7 +356,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	    boxes=[[app_id, b"key"]],
 	)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L77-L86)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/atc.py#L78-L87)
     <!-- ===PYSDK_ATC_BOX_REF=== -->
 
 === "JavaScript"
@@ -379,7 +379,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	  suggestedParams,
 	});
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L100-L116)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atc.ts#L101-L117)
     <!-- ===JSSDK_ATC_BOX_REF=== -->
 
 === "Go"
@@ -402,17 +402,17 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	}
 	// ...
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L94-L110)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L95-L111)
     <!-- ===GOSDK_ATC_BOX_REF=== -->
 
 === "Java"
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 	```java
-	MethodCallTransactionBuilder<?> mct_builder = MethodCallTransactionBuilder.Builder();
+	MethodCallTransactionBuilder<?> mctBuilder = MethodCallTransactionBuilder.Builder();
 	
 	List<AppBoxReference> boxRefs = new ArrayList<>();
 	boxRefs.add(new AppBoxReference(appId.intValue(), "cool-box".getBytes()));
-	MethodCallParams box_ref_mcp = mct_builder
+	MethodCallParams boxRefMcp = mctBuilder
 	                .suggestedParams(sp)
 	                .applicationId(appId)
 	                .sender(acct.getAddress())
@@ -425,7 +425,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	                .boxReferences(boxRefs)
 	                .build();
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L98-L114)
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 
 === "Beaker"

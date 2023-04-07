@@ -108,7 +108,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	
 	kmd_client = kmd.KMDClient(kmd_token=kmd_token, kmd_address=kmd_address)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L4-L8)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L5-L9)
 	<!-- ===PYSDK_KMD_CREATE_CLIENT=== -->
 	<!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 	```python
@@ -121,7 +121,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	backup = wlt.get_mnemonic()
 	print(f"mnemonic for master derivation key: {backup}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L26-L34)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L29-L37)
 	<!-- ===PYSDK_KMD_CREATE_WALLET=== -->
 	<!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 	```python
@@ -129,7 +129,7 @@ Create a new wallet and generate an account. In the SDKs, connect to kmd through
 	address = wlt.generate_key()
 	print(f"New account: {address}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L37-L40)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L40-L43)
 	<!-- ===PYSDK_KMD_CREATE_ACCOUNT=== -->
 
 === "Java"
@@ -297,7 +297,7 @@ To recover a wallet and any previously generated accounts, use the wallet backup
 	rec_addr = wlt.generate_key()
 	print("Recovered account:", rec_addr)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L44-L58)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L47-L61)
 	<!-- ===PYSDK_KMD_RECOVER_WALLET=== -->
 
 === "Java"
@@ -414,7 +414,7 @@ Use this to retrieve the 25-word mnemonic for the account.
 	mn = mnemonic.from_private_key(accountkey)
 	print(f"Account mnemonic: {mn}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L61-L72)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L64-L75)
 	<!-- ===PYSDK_KMD_EXPORT_ACCOUNT=== -->
 
 === "Java"
@@ -488,7 +488,7 @@ Use these methods to import a 25-word account-level mnemonic.
 	importedaccount = kmd_client.import_key(wallethandle, new_private_key)
 	print("Account successfully imported: ", importedaccount)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L75-L86)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/kmd.py#L78-L89)
 	<!-- ===PYSDK_KMD_IMPORT_ACCOUNT=== -->
 
 === "Java"
