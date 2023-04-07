@@ -185,10 +185,60 @@ Sometimes a transaction is signed by a third party, and you want to verify that 
 
 === "JavaScript"
 	<!-- ===JSSDK_OFFLINE_VERIFY_SIG=== -->
+	```javascript
+	const stxn = algosdk.decodeSignedTransaction(rawSignedTxn);
+	if (stxn.sig === undefined) return false;
+	
+	// Get the txn object
+	const txnObj = stxn.txn.get_obj_for_encoding();
+	if (txnObj === undefined) return false;
+	
+	// Encode as msgpack
+	const txnBytes = algosdk.encodeObj(txnObj);
+	// Create byte array with TX prefix
+	const msgBytes = new Uint8Array(txnBytes.length + 2);
+	msgBytes.set(Buffer.from('TX'));
+	msgBytes.set(txnBytes, 2);
+	
+	// Grab the other things we need to verify
+	const pkBytes = stxn.txn.from.publicKey;
+	const sigBytes = new Uint8Array(stxn.sig);
+	
+	// Return the result of the verification
+	const valid = nacl.sign.detached.verify(msgBytes, sigBytes, pkBytes);
+	console.log('Valid? ', valid);
+	```
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/verify_signature.ts#L6-L27)
 	<!-- ===JSSDK_OFFLINE_VERIFY_SIG=== -->
 
 === "Python"
 	<!-- ===PYSDK_OFFLINE_VERIFY_SIG=== -->
+	```python
+	# decode the signed transaction
+	stxn = encoding.msgpack_decode(raw_stxn)
+	if stxn.signature is None or len(stxn.signature) == 0:
+	    return False
+	
+	public_key = stxn.transaction.sender
+	if stxn.authorizing_address is not None:
+	    public_key = stxn.authorizing_address
+	
+	# Create a VerifyKey from nacl using the 32 byte public key
+	verify_key = VerifyKey(encoding.decode_address(public_key))
+	
+	# Generate the message that was signed with TX prefix
+	prefixed_message = b"TX" + base64.b64decode(
+	    encoding.msgpack_encode(stxn.transaction)
+	)
+	
+	try:
+	    # Verify the signature
+	    verify_key.verify(prefixed_message, base64.b64decode(stxn.signature))
+	    return True
+	except BadSignatureError:
+	    return False
+	```
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/verify_signature.py#L9-L32)
 	<!-- ===PYSDK_OFFLINE_VERIFY_SIG=== -->
 
 === "Go"

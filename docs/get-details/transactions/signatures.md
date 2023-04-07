@@ -192,7 +192,11 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 	```python
 	msig_pay = transaction.PaymentTxn(
-	    msig.address(), sp, account_1.address, int(1e5)
+	    msig.address(),
+	    sp,
+	    account_1.address,
+	    0,
+	    close_remainder_to=account_1.address,
 	)
 	msig_txn = transaction.MultisigTransaction(msig_pay, msig)
 	msig_txn.sign(account_2.private_key)
@@ -203,7 +207,7 @@ Extend the example from the [Multisignature Account](../../accounts/create#multi
 	    f"Payment made from msig account confirmed in round {result['confirmed-round']}"
 	)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L46-L57)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L46-L61)
     <!-- ===PYSDK_MULTISIG_SIGN=== -->
 
 === "Java"
