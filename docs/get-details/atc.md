@@ -309,9 +309,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 In order to inspect state for an Account, Asset, Application, or Box, you must pass a reference to the foreign object. This is done by passing a reference to the foreign object in one of the reference arrays. While the ABI takes care of some of this by allowing arguments to be reference types, sometimes you need to pass a reference to an object that is not an argument to the method. 
 
 
-
-
-==== "JavaScript"
+=== "JavaScript"
 	<!-- ===JSSDK_ATC_FOREIGN_REFS=== -->
 	```javascript
 	const foreignRefAtc = new algosdk.AtomicTransactionComposer();
