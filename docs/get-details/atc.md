@@ -43,7 +43,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	```java
 	AtomicTransactionComposer atc = new AtomicTransactionComposer();
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L47-L48)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L49-L50)
     <!-- ===JAVASDK_ATC_CREATE=== -->
 
 ## Add individual transactions
@@ -127,7 +127,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	// Pass TransactionWithSigner to atc
 	atc.addTransaction(tws);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L51-L61)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L53-L63)
     <!-- ===JAVASDK_ATC_ADD_TRANSACTION=== -->
 
 The call to add a transaction may be performed multiple times, each time adding a new transaction to the atomic group. Recall that a maximum of 16 transactions may be included in a single group.
@@ -272,7 +272,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	// Create Contract from Json
 	Contract contract = Encoder.decodeFromJson(jsonContract, Contract.class);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L64-L68)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L66-L70)
     <!-- ===JAVASDK_ATC_CONTRACT_INIT=== -->
 	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
 	```java
@@ -290,7 +290,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	
 	atc.addMethodCall(mcp);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L71-L84)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L73-L86)
 	<!-- ===JAVASDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===JAVASDK_ATC_RESULTS=== -->
 	```java
@@ -301,7 +301,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	                        methodResult.value);
 	});
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L89-L95)
     <!-- ===JAVASDK_ATC_RESULTS=== -->
 
 ## Foreign References
@@ -381,4 +381,34 @@ In order to inspect state for an Account, Asset, Application, or Box, you must p
 
 ==== "Java"
 	<!-- ===JAVASDK_ATC_FOREIGN_REFS=== -->
+	```java
+	MethodCallTransactionBuilder<?> refBuilder = MethodCallTransactionBuilder.Builder();
+	
+	List<AppBoxReference> boxReferences = new ArrayList<>();
+	boxRefs.add(new AppBoxReference(appId.intValue(), "cool-box".getBytes()));
+	
+	List<Address> acctReferences = new ArrayList<>();
+	acctReferences.add(otherAccount.getAddress());
+	
+	List<Long> appReferences = new ArrayList<>();
+	appReferences.add(1337l);
+	
+	List<Long> assetReferences = new ArrayList<>();
+	appReferences.add(42l);
+	
+	MethodCallParams foreignRefMCP = refBuilder
+	                .suggestedParams(sp)
+	                .applicationId(appId)
+	                .sender(acct.getAddress())
+	                .method(contract.getMethodByName("add"))
+	                .methodArguments(methodArgs)
+	                .signer(acct.getTransactionSigner())
+	                .onComplete(Transaction.OnCompletion.NoOpOC)
+	                .accounts(acctReferences)
+	                .foreignApps(appReferences)
+	                .foreignAssets(assetReferences)
+	                .boxReferences(boxReferences)
+	                .build();
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L117-L144)
 	<!-- ===JAVASDK_ATC_FOREIGN_REFS=== -->

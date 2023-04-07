@@ -57,7 +57,6 @@ Unsigned transactions require the transaction object to be created before writin
 	```java
 	Response<TransactionParametersResponse> rsp = algodClient.TransactionParams().execute();
 	TransactionParametersResponse sp = rsp.body();
-	// Wipe the `reserve` address through an AssetConfigTransaction
 	Transaction ptxn = Transaction.PaymentTransactionBuilder().suggestedParams(sp)
 	        .sender(acct.getAddress()).receiver(acct.getAddress()).amount(100).build();
 	
@@ -66,7 +65,7 @@ Unsigned transactions require the transaction object to be created before writin
 	Transaction decodedTxn = Encoder.decodeFromMsgPack(encodedTxn, Transaction.class);
 	assert decodedTxn.equals(ptxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L59)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L49-L58)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Go"
@@ -146,7 +145,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	        SignedTransaction.class);
 	assert decodedSignedTransaction.equals(signedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L62-L68)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/CodecExamples.java#L61-L67)
 	<!-- ===JAVASDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
@@ -263,6 +262,26 @@ Sometimes a transaction is signed by a third party, and you want to verify that 
 
 === "Java"
 	<!-- ===JAVASDK_OFFLINE_VERIFY_SIG=== -->
+	```java
+	// decode the signature
+	SignedTransaction decodedSignedTransaction = Encoder.decodeFromMsgPack(rawSignedTxn,
+	        SignedTransaction.class);
+	Transaction txn = decodedSignedTransaction.tx;
+	
+	// get the bytes that were signed
+	byte[] signedBytes = txn.bytesToSign();
+	// get the pubkey that signed them
+	PublicKey pk = txn.sender.toVerifyKey();
+	
+	// set up the sig checker
+	java.security.Signature sigChecker = java.security.Signature.getInstance("Ed25519");
+	sigChecker.initVerify(pk);
+	sigChecker.update(signedBytes);
+	// verify the signature 
+	boolean valid = sigChecker.verify(decodedSignedTransaction.sig.getBytes());
+	System.out.printf("Valid? %b\n", valid);
+	```
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/VerifySignature.java#L33-L50)
 	<!-- ===JAVASDK_OFFLINE_VERIFY_SIG=== -->
 
     

@@ -408,11 +408,11 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 === "Java"
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 	```java
-	MethodCallTransactionBuilder<?> mct_builder = MethodCallTransactionBuilder.Builder();
+	MethodCallTransactionBuilder<?> mctBuilder = MethodCallTransactionBuilder.Builder();
 	
 	List<AppBoxReference> boxRefs = new ArrayList<>();
 	boxRefs.add(new AppBoxReference(appId.intValue(), "cool-box".getBytes()));
-	MethodCallParams box_ref_mcp = mct_builder
+	MethodCallParams boxRefMcp = mctBuilder
 	                .suggestedParams(sp)
 	                .applicationId(appId)
 	                .sender(acct.getAddress())
@@ -425,7 +425,7 @@ Box refs can be added to the boxes array using `goal` or any of the SDKs.
 	                .boxReferences(boxRefs)
 	                .build();
 	```
-	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L96-L112)
+	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L98-L114)
     <!-- ===JAVASDK_ATC_BOX_REF=== -->
 
 === "Beaker"
