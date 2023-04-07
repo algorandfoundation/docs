@@ -362,7 +362,7 @@ In the following example Account 1 is rekeyed to Account 2. The code then illust
 	result = transaction.wait_for_confirmation(algod_client, txid, 4)
 	print(f"rekey transaction confirmed in round {result['confirmed-round']}")
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L61-L95)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/account.py#L65-L99)
 	<!-- ===PYSDK_ACCOUNT_REKEY=== -->
 
 === "JavaScript"
