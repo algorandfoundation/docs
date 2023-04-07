@@ -179,6 +179,41 @@ Signed Transactions are similar, but require an account to sign the transaction 
     ```
 	<!-- ===GOAL_CODEC_TRANSACTION_SIGNED=== -->
 
+## Signature Verification
+
+Sometimes a transaction is signed by a third party, and you want to verify that the signature is valid. This can be done by decoding the signed transaction into a `SignedTransaction` object using one of the SDKs and then running and ed25519 verify on the signature.
+
+=== "JavaScript"
+	<!-- ===JSSDK_OFFLINE_VERIFY_SIG=== -->
+	<!-- ===JSSDK_OFFLINE_VERIFY_SIG=== -->
+
+=== "Python"
+	<!-- ===PYSDK_OFFLINE_VERIFY_SIG=== -->
+	<!-- ===PYSDK_OFFLINE_VERIFY_SIG=== -->
+
+=== "Go"
+	<!-- ===GOSDK_OFFLINE_VERIFY_SIG=== -->
+	```go
+	signedTxn := types.SignedTxn{}
+	msgpack.Decode(stxn, &signedTxn)
+	
+	from := signedTxn.Txn.Sender[:]
+	
+	encodedTx := msgpack.Encode(signedTxn.Txn)
+	
+	msgParts := [][]byte{txidPrefix, encodedTx}
+	msg := bytes.Join(msgParts, nil)
+	
+	valid := ed25519.Verify(from, msg, signedTxn.Sig[:])
+	
+	log.Printf("Valid? %t", valid)
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/verify_signature/main.go#L31-L44)
+	<!-- ===GOSDK_OFFLINE_VERIFY_SIG=== -->
+
+=== "Java"
+	<!-- ===JAVASDK_OFFLINE_VERIFY_SIG=== -->
+	<!-- ===JAVASDK_OFFLINE_VERIFY_SIG=== -->
 
     
 ??? example "Saving Signed and Unsigned Multisig Transactions to a File using goal"

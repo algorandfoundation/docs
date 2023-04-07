@@ -35,7 +35,7 @@ To use the Atomic Transaction Composer, first initialize the composer:
 	// Create the atc we'll use to compose our transaction group
 	var atc = transaction.AtomicTransactionComposer{}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L39-L41)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L40-L42)
     <!-- ===GOSDK_ATC_CREATE=== -->
 
 === "Java"
@@ -110,7 +110,7 @@ Constructing a Transaction with Signer and adding it to the transaction composer
 	signer := transaction.BasicAccountTransactionSigner{Account: acct1}
 	atc.AddTransaction(transaction.TransactionWithSigner{Txn: txn, Signer: signer})
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L44-L58)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L45-L59)
     <!-- ===GOSDK_ATC_ADD_TRANSACTION=== -->
 
 === "Java"
@@ -224,7 +224,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to unmarshal contract: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L27-L36)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L28-L37)
     <!-- ===GOSDK_ATC_CONTRACT_INIT=== -->
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
 	```go
@@ -248,7 +248,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Fatalf("failed to add method call: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L61-L80)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L62-L81)
 	<!-- ===GOSDK_ATC_ADD_METHOD_CALL=== -->
     <!-- ===GOSDK_ATC_RESULTS=== -->
 	```go
@@ -261,7 +261,7 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 		log.Printf("%s => %v", r.Method.Name, r.ReturnValue)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L83-L91)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L84-L92)
     <!-- ===GOSDK_ATC_RESULTS=== -->
 
 === "Java"
@@ -303,3 +303,45 @@ Once the Contract object is constructed, it can be used to look up and pass meth
 	```
 	[Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/ATC.java#L87-L93)
     <!-- ===JAVASDK_ATC_RESULTS=== -->
+
+## Foreign References
+
+In order to inspect state for an Account, Asset, Application, or Box, you must pass a reference to the foreign object. This is done by passing a reference to the foreign object in one of the reference arrays. While the ABI takes care of some of this by allowing arguments to be reference types, sometimes you need to pass a reference to an object that is not an argument to the method. 
+
+
+
+
+==== "JavaScript"
+	<!-- ===JSSDK_ATC_FOREIGN_REFS=== -->
+	<!-- ===JSSDK_ATC_FOREIGN_REFS=== -->
+
+==== "Python"
+	<!-- ===PYSDK_ATC_FOREIGN_REFS=== -->
+	<!-- ===PYSDK_ATC_FOREIGN_REFS=== -->
+
+==== "Go"
+	<!-- ===GOSDK_ATC_FOREIGN_REFS=== -->
+	```go
+	mcp = transaction.AddMethodCallParams{
+		AppID:           appID,
+		Sender:          acct1.Address,
+		SuggestedParams: sp,
+		OnComplete:      types.NoOpOC,
+		Signer:          signer,
+		Method:          addMethod,
+		MethodArgs:      []interface{}{1, 1},
+		// Pass foreign references to the app
+		ForeignAccounts: []string{acct2.Address.String()},
+		ForeignApps:     []uint64{1337},
+		ForeignAssets:   []uint64{42},
+		BoxReferences: []types.AppBoxReference{
+			{AppID: appID, Name: []byte("coolBoxName")},
+		},
+	}
+	```
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/atc/main.go#L114-L130)
+	<!-- ===GOSDK_ATC_FOREIGN_REFS=== -->
+
+==== "Java"
+	<!-- ===JAVASDK_ATC_FOREIGN_REFS=== -->
+	<!-- ===JAVASDK_ATC_FOREIGN_REFS=== -->
