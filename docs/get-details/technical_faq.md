@@ -124,7 +124,7 @@ For some common errors, find an explanation below:
 
 -  `logic eval error: invalid {Asset|App|Account|Box} reference` 
 
-    This happens when the reference is not passed in the app call transactions in the appropriate reference field. By passing a reference in the transaction, the node is able to quickly load the reference into memory and have it available for the AVM runtime to consult quickly.
+    This happens when the reference is not passed in the app call transactions in the appropriate reference field. By passing a reference in the transaction, the node is able to quickly load the reference into memory and have it available for the AVM runtime to consult quickly. See [Smart Contract Storage Limitations](/docs/get-details/technical_faq/#smart-contract-storage-limitations) for additional information.
 
 
 - `logic eval error: assert failed pc=XXX`
@@ -137,7 +137,7 @@ For some common errors, find an explanation below:
 
 - `logic eval error: write budget (N) exceeded`, `logic eval error: box read budget (N) exceeded`
 
-    Every box reference passed allots another 1k to the read/write budget for the app call. By passing more box refs a larger IO budget is available. The budget is shared across app calls within the same group so a 32k box can be read/written to as long as 32 box references are passed (8 per txn, 4 txns).
+    Every box reference passed allots another 1k to the read/write budget for the app call. By passing more box refs a larger IO budget is available. The budget is shared across app calls within the same group so a 32k box can be read/written to as long as 32 box references are passed (8 per txn, 4 txns). See [Smart Contract Storage Limitations](/docs/get-details/technical_faq/#smart-contract-storage-limitations) for additional information.
 
 - `logic eval error: store TYPE count N exceeds schema TYPE count M`
 
