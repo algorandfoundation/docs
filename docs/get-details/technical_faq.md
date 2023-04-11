@@ -190,7 +190,11 @@ Or find others [here](https://developer.algorand.org/ecosystem-projects/?tags=ap
 
 When storing data on-chain you must give consideration to the different limitations between state and box storage. Be aware the note feild is not an option, as that's transactional data and is not stored directly to the ledger, nor is it accessible to other application calls outside the initial transaction group.
 
+## Global/Local Storage
+
 [Global](/docs/get-details/dapps/smart-contracts/apps/state/#global-storage) and [Local](/docs/get-details/dapps/smart-contracts/apps/state/#local-storage) state storage can store key-value pairs up to a maximum size of 128 bytes, inclusive of the key length. For example if the key if 8 bytes, then a maximum of 120 bytes can be stored in the value. Since each key must be unique, only a single 0 byte length key can be used to store a 128 byte value. Storing larger values requires the data to be split up and stored in multiple key-value pairs within state storage.
+
+## Box Storage
 
 [Box storage](/docs/get-details/dapps/smart-contracts/apps/state/#box-storage) is ideal for storing larger dynamically sized data. Since the minimum balance requirement is proportional to the amount of data you allocate to the box, it's generally more cost efficient, allowing you to allocate exactly the amount you need. Keys must again be unique per application, much like state storage, however the key is not included as part of the box size and instead must be between 1 to 64 bytes. The exact size of the box value can be upto 32KB (32768 bytes), however anything over 1024 bytes is going to require additional box references. This is due to each box reference being given a 1024 bytes of operational budget. For example if you wanted to store 2000 bytes in a box named "data", you'd need to include the "data" box reference two times in your application call transaction.
 
