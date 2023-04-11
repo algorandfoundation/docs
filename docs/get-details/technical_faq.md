@@ -124,7 +124,7 @@ For some common errors, find an explanation below:
 
 -  `logic eval error: invalid {Asset|App|Account|Box} reference` 
 
-    This happens when the reference is not passed in the app call transactions in the appropriate reference field. By passing a reference in the transaction, the node is able to quickly load the reference into memory and have it available for the AVM runtime to consult quickly.
+    This happens when the reference is not passed in the app call transactions in the appropriate reference field. By passing a reference in the transaction, the node is able to quickly load the reference into memory and have it available for the AVM runtime to consult quickly. See [Box Storage Limitations](#box-storage) for additional information.
 
 
 - `logic eval error: assert failed pc=XXX`
@@ -137,11 +137,11 @@ For some common errors, find an explanation below:
 
 - `logic eval error: write budget (N) exceeded`, `logic eval error: box read budget (N) exceeded`
 
-    Every box reference passed allots another 1k to the read/write budget for the app call. By passing more box refs a larger IO budget is available. The budget is shared across app calls within the same group so a 32k box can be read/written to as long as 32 box references are passed (8 per txn, 4 txns).
+    Every box reference passed allots another 1k to the read/write budget for the app call. By passing more box refs a larger IO budget is available. The budget is shared across app calls within the same group so a 32k box can be read/written to as long as 32 box references are passed (8 per txn, 4 txns). See [Box Storage Limitations](#box-storage) for additional information.
 
 - `logic eval error: store TYPE count N exceeds schema TYPE count M`
 
-    Schema needs to be large enough to allow storage requirements. Since the schema immutable after creation, a new application must be created if more storage is required.
+    Schema needs to be large enough to allow storage requirements. Since the schema immutable after creation, a new application must be created if more storage is required. See [Global/Local Storage Limitations](#globallocal-storage) for additional information.
 
 - `logic eval error: err opcode executed.`
 
@@ -186,3 +186,19 @@ Any of these API providers can be used to query Algod or Indexer data.
 
 Or find others [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
 
+# Smart Contract Storage Limitations
+
+When storing data on-chain you must give consideration to the different limitations between state and box storage. Be aware the note feild is not an option, as that's transactional data and is not stored directly to the ledger, nor is it accessible to other application calls outside the initial transaction group.
+
+## Global/Local Storage
+
+[Global](/docs/get-details/dapps/smart-contracts/apps/state/#global-storage) and [Local](/docs/get-details/dapps/smart-contracts/apps/state/#local-storage) state storage can store key-value pairs up to a maximum size of 128 bytes, inclusive of the key length. For example if the key if 8 bytes, then a maximum of 120 bytes can be stored in the value. Since each key must be unique, only a single 0 byte length key can be used to store a 128 byte value. Storing larger values requires the data to be split up and stored in multiple key-value pairs within state storage.
+
+## Box Storage
+
+[Box storage](/docs/get-details/dapps/smart-contracts/apps/state/#box-storage) is ideal for storing larger dynamically sized data. Since the minimum balance requirement is proportional to the amount of data you allocate to the box, it's generally more cost efficient, allowing you to allocate exactly the amount you need. Keys must again be unique per application, much like state storage, however the key is not included as part of the box size and instead must be between 1 to 64 bytes. The exact size of the box value can be upto 32KB (32768 bytes), however anything over 1024 bytes is going to require additional box references. This is due to each box reference being given a 1024 bytes of operational budget. For example if you wanted to store 2000 bytes in a box named "data", you'd need to include the "data" box reference two times in your application call transaction.
+
+
+# Pending Transactions
+
+When you run a non-participation node only transactions submitted to that particular node are seen as pending in the [transaction pool](/docs/rest-apis/algod/#get-v2accountsaddresstransactionspending). If you're interested in receiving all pending transactions within the network you'll need to set `ForceFetchTransactions` to True in the [algod configuration settings](/docs/run-a-node/reference/config/#algod-configuration-settings). Note that this will increase the bandwidth used by the node.
