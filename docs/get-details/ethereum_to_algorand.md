@@ -36,7 +36,7 @@ Concretely:
     Algorand also has a notion of **contract account** which is controlled by a [smart signature](../dapps/smart-contracts/smartsigs/).
     Smart signatures are akin to [account abstraction](https://eips.ethereum.org/EIPS/eip-4337) on Ethereum and are only meant to be used in more advanced scenarios.
 
-Algorand smart contracts are called **applications**. Each application has an associated [**application account**](../dapps/smart-contracts/apps/innertx/) (or several ones if rekeying feature is used) that can receive tokens. The application account's address can be computed from the application ID. See below how to transfer tokens to an application.
+Algorand smart contracts are called **applications**. Each application has an associated [**application account**](../dapps/smart-contracts/apps/innertx/) (or several accounts if the rekeying feature is used) that can send and receive tokens. The application account's address can be computed from the application ID. See below how to transfer tokens to an application.
 
 Like Ethereum smart contract, Algorand applications can make transactions from their application accounts. These transactions are called **inner transactions** on Algorand.
 
