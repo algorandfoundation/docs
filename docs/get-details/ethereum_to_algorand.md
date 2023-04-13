@@ -42,7 +42,7 @@ Like Ethereum smart contracts, Algorand applications can make transactions from 
 
 ## Fungible and Non-Fungible Tokens (FT and NFT)
 
-Ethereum allows creating custom fungible and non-fungible tokens by deploying smart contracts following ERC-20, ERC-721, ERC-1155. Transaction with such tokens is very different from transacting the base cryptocurrency Ether.
+Ethereum allows creating custom fungible and non-fungible tokens by deploying smart contracts following ERC-20, ERC-721, or ERC-1155 standards. Transacting with such tokens is very different from transacting the base cryptocurrency Ether.
 
 On Algorand, such custom tokens are called [Algorand Standard Assets](../asa/) and are backed in the protocol itself. They do not require to write a smart contract and transferring them is similar to transferring the base cryptocurrency with one main difference: [mandatory opt-in](../asa/#receiving-an-asset). Opting in an ASA is one using a 0-ASA transfer from the account opting in to itself. It helps reducing spam. It also has an impact on the [minimum balance](../accounts/#minimum-balance) (see below).
 
