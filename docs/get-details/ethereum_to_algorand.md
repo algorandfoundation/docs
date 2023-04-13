@@ -44,7 +44,7 @@ Like Ethereum smart contracts, Algorand applications can make transactions from 
 
 Ethereum allows creating custom fungible and non-fungible tokens by deploying smart contracts following ERC-20, ERC-721, or ERC-1155 standards. Transacting with such tokens is very different from transacting the base cryptocurrency Ether.
 
-On Algorand, such custom tokens are called [Algorand Standard Assets](../asa/) and are backed in the protocol itself. They do not require to write a smart contract and transferring them is similar to transferring the base cryptocurrency with one main difference: [mandatory opt-in](../asa/#receiving-an-asset). Opting in an ASA is one using a 0-ASA transfer from the account opting in to itself. It helps reducing spam. It also has an impact on the [minimum balance](../accounts/#minimum-balance) (see below).
+On Algorand, such custom tokens are called [Algorand Standard Assets](../asa/) and are backed in the protocol itself. They do not require writing a smart contract and transferring them is similar to transferring the base cryptocurrency with one main difference: [mandatory opt-in](../asa/#receiving-an-asset). Opting in to an ASA is done by making a 0 amount asset transfer of the ASA from the account opting in to itself. This helps reducing spam from unwanted ASAs. It also has an impact on the [minimum balance](../accounts/#minimum-balance) (see below).
 
 Tokens on Ethereum are defined by a contract address (+ an ID for ERC-1155 tokens). On Algorand they are just defined as a 64-bit unsigned integer ID.
 
@@ -64,7 +64,7 @@ This minimum transaction fee is independent of the transaction type: application
 
 In addition to transaction fees, Algorand also has a notion of **minimum balance**. At a high-level, stored data (account balances, application states, ...) on Algorand is always associated to an account. Every time the amount of stored data increases (e.g., opt in to an ASA or application, storage of extra data as boxes in a smart contract, ...), the minimum balance requirement of the associated account increase. 
 
-The minimum balance acts like a deposit to rent space on the blockchain. If the space is liberated (e.g., opt out of the asset), the minimum balance requirement decreases. A basic account has a minimum balance requirement of 0.1 Algo. Opting in an asset for example, increases this requirement by 0.1 Algo.
+The minimum balance acts like a deposit to rent space on the blockchain. If the space is liberated (e.g., opt out of the asset), the minimum balance requirement decreases. A basic account has a minimum balance requirement of 0.1 Algo. Opting in an asset for example, increases this requirement by an additional 0.1 Algo.
 
 !!! info
     Even if users never liberate space and the minimum balance requirement is essentially acting as a fee that users pay, as of March 2023, the resulting costs of transacting on Algorand is still orders of magnitude lower than the costs of transacting on Ethereum.
@@ -97,19 +97,19 @@ is often better replaced by local storage. (With the caveat that local storage c
 
 ### Multisig Accounts
 
-On Ethereum, it is possible to write smart contracts to ensure that fund transfers requires approval/signature by multiple distinct users. On Algorand, multisig accounts are first-class citizens are can be created very easily. See [the multisig account documentation](../accounts/create/#multisignature).
+On Ethereum, it is possible to write smart contracts to ensure that fund transfers requires approval/signatures by multiple distinct users. On Algorand, multisig accounts are first-class citizens and can be created very easily. See [the multisig account documentation](../accounts/create/#multisignature).
 
 ### Atomic Transfer / Group Transaction
 
-Atomic transfers or group transactions allow to group transacitons together so that either all succeed or all fail. This can allow two users to securely exchange assets without risking one user to receive the asset without ever sending back its own assets.
+Atomic transfers or group transactions allow the grouping of multiple transactions together so that they either all succeed or all fail. This can allow two users to securely exchange assets without the risk of one of the users failing to fulfill side of the transaction.
 
-Group transactions are also used a lot by smart contracts. For example, to send tokens to a smart contract, it is usual to group a token transaction to the application account with an application call.
+Group transactions are also used a lot by smart contracts. For example, to send tokens to a smart contract, it is common to group a token transaction to the application account with an application call.
 
 ### Rekeying
 
 Rekeying is a powerful protocol feature which enables an Algorand account holder to maintain a static public address while dynamically rotating the authoritative private spending key(s). See [the rekeying documentation](../accounts/rekey/).
 
-There is no direct equivalent on Ethereum also this can be simulated using smart contract and/or account abstraction.
+There is no direct equivalent on Ethereum although this can be simulated using a smart contract and/or account abstraction.
 
 ## Nonces, Validity Windows, and Leases
 
@@ -117,17 +117,17 @@ Ethereum uses nonces to prevent transaction from being replayed.
 
 Algorand does not have nonces.  Instead, two identical transactions cannot be committed to the blockchain. In addition, transactions have a validity window and optional leases. The [validity window (aka first/last valid rounds)](../transactions/#setting-first-and-last-valid) specifies between which round a transaction can be committed to the blockchain.
 
-If the same transaction needs to be executed twice, some field needs to be changed. One option is to add a random note field or to change slightlyk the validity window.
+If the same transaction needs to be executed twice, some field needs to be changed. One option is to add a random note field or to slightly change the validity window.
 
-[Leases](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design) provide more fine-grained ways of preventing duplicated transactions from happening and are mostly used in conjunction to [smart signatures](../dapps/smart-contracts/smartsigs/) in very advanced scenarios.
+[Leases](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design) provide more fine-grained ways of preventing duplicated transactions from happening and are mostly used in conjunction with [smart signatures](../dapps/smart-contracts/smartsigs/) in very advanced scenarios.
 
-Most dApps developers are unlikely to need to use leases and smart signatures.
+Most dApp developers are unlikely to need to use leases and smart signatures.
 
 ## Re-Entrancy
 
 Algorand is not susceptible to most re-entrancy attacks for multiple reasons:
 
-1. Application calls and transfer transactions are different. When an application transfers tokens to another application account or to a user account, it does not trigger any code execution.
+1. Application calls and payment/asset transfer transactions are different. When an application transfers tokens to another application account or to a user account, it does not trigger any code execution.
 2. An application cannot make (directly or indirectly) an application call to itself.
 
 # Design Patterns
@@ -150,7 +150,7 @@ On Algorand, transferring tokens is similar whether the tokens are the Algo or a
 
 Proxy smart contracts are heavily used on Ethereum as Ethereum smart contracts are not updatable.
 
-On the opposite, Algorand applications can specify arbitrary rules for whether they can be updated or deleted. 
+Whereas on Algorand applications can specify arbitrary rules for whether they can be updated or deleted. 
 
 This is strictly more general and flexible than on Ethereum: Algorand applications can indeed prevent any update and deletion like Ethereum smart contracts.
 
@@ -186,7 +186,7 @@ The factory pattern is possible on Algorand though it is very rare. In general u
 | Ethereum              | Algorand                                                                                                                                              | Notes                                            |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
 | storage               | [global storage, local storage, boxes](../dapps/smart-contracts/apps/state/)                                                                          | See section above about storage                  |
-| memory                | scratchspace ([TEAL](../dapps/avm/teal/#storing-and-loading-from-scratchspace) / [PyTeal](https://pyteal.readthedocs.io/en/stable/scratch.html))      | As for Ethereum, the stack can also be used to store temporary values |
+| memory                | scratchspace ([TEAL](../dapps/avm/teal/#storing-and-loading-from-scratchspace) / [PyTeal](https://pyteal.readthedocs.io/en/stable/scratch.html))      | Much like Ethereum, the stack can also be used to store temporary values |
 | environment variables | [txn](../dapps/avm/teal/opcodes/#txn-f) / [Txn](https://pyteal.readthedocs.io/en/stable/accessing_transaction_field.html#id1)                         | For data about the current transaction           |
 |                       | [gtxn](../dapps/avm/teal/opcodes/#gtxn-t-f) / [Gtxn](https://pyteal.readthedocs.io/en/stable/accessing_transaction_field.html#atomic-transfer-groups) | For data about other transactions in the group   |
 |                       | [global](../dapps/avm/teal/opcodes/#global-f) / [Global](https://pyteal.readthedocs.io/en/stable/accessing_transaction_field.html#global-parameters)  | For other data                                   |
