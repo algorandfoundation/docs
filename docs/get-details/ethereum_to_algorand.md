@@ -24,7 +24,7 @@ Concretely:
     * Example of Algorand address: 
         * User-friendly representation: `QD3BO4RMWXBOZIPHTGGB3RSKSOAKOHM2HGN7QDZXH4ECBGJRIU3AHHC3JU` 
         * Raw address: 32 bytes
-* Ethereum's **contract accounts** correspond to Algorand **application ID**, which are 64-bit integers.
+* Ethereum's **contract accounts** correspond to Algorand **application ID**, which are 64-bit integers. (Algorand applications also have an associated application account/address, see below.)
     * Example of Ethereum contract account: 
         * User-friendly representation: `0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d`
         * Raw: 20 bytes
@@ -62,24 +62,31 @@ This minimum transaction fee is independent of the transaction type: application
 
 ### Minimum Balance
 
-In addition to transaction fees, Algorand also has a notion of **minimum balance**. At a high-level, stored data (account balances, application states, ...) on Algorand is always associated to an account. Every time the amount of stored data increases (e.g., opt in to an ASA or application, storage of extra data as boxes in a smart contract, ...), the minimum balance requirement of the associated account increase. 
+In addition to transaction fees, Algorand also has a notion of **minimum balance**. At a high-level, stored data (account balances, application states, ...) on Algorand is always associated to an account. Every time the amount of stored data increases (e.g., opt in to an ASA or application, storage of extra data as boxes in a smart contract, ...), the minimum balance requirement of the associated account increases. 
 
 The minimum balance acts like a deposit to rent space on the blockchain. If the space is liberated (e.g., opt out of the asset), the minimum balance requirement decreases. A basic account has a minimum balance requirement of 0.1 Algo. Opting in an asset for example, increases this requirement by an additional 0.1 Algo.
+
+In more detail, here are the documentation pages discussing the minimum balance requirements:
+
+* [in general](../accounts/#minimum-balance)
+* [for ASAs](../asa/#assets-overview)
+* [for smart contracts](../dapps/smart-contracts/apps/#minimum-balance-requirement-for-a-smart-contract)
+* [as a summary table](../parameter_tables/)
 
 !!! info
     Even if users never liberate space and the minimum balance requirement is essentially acting as a fee that users pay, as of March 2023, the resulting costs of transacting on Algorand is still orders of magnitude lower than the costs of transacting on Ethereum.
 
 ## Availability of Resources to Smart Contract
 
-Algorand is designed to ensure high TPS and low latency. Every access to the blockchain state is very costly (in time). Therefore, to ensure blockchain state access is not in the critical path of block evaluation and to limit its cost, Algorand applications are restricted in the amount of resources (account balance/state, application state, ...) they can access. Furthermore, these resources need to be specified inside the transaction. This is to allow nodes to pre-fetch these data.
+Algorand is designed to ensure high TPS and low latency. Every access to the blockchain state is very costly (in time). Therefore, to ensure blockchain state access is not in the critical path of block evaluation and to limit its cost, Algorand applications are restricted in the amount of resources (account balance/state, application state, ...) they can access. Furthermore, these resources need to be specified inside the transaction. This is to allow nodes to pre-fetch data.
 
 While this may seem a strong restriction, most smart contracts do not dynamically decide which resources to access depending on the current blockchain state. In other words, it is possible to know in advance which resources will be accessed.
 
-In the near future, the [simulate endpoint](https://medium.com/algorand/try-before-you-buy-on-algorand-5acd1b9617d1) will allow a dApp to easily and dynamically learns the list of resources that need to be added to a transaction.
+In the near future, the [simulate endpoint](https://medium.com/algorand/try-before-you-buy-on-algorand-5acd1b9617d1) will allow a dApp to easily and dynamically learns the [list of resources](../dapps/smart-contracts/apps/#reference-arrays) that need to be added to a transaction.
 
 ## Smart Contract Storage
 
-One important difference between Ethereum and Algorand smart contract is storage.
+One important difference between Ethereum and Algorand smart contracts is storage.
 
 Ethereum smart contract storage is a huge array of 2^256 uint256 elements. The solidity language has higher-level types like dynamic arrays and mappings that are then mapped to this huge storage array (dynamic types use keccak to compute the location of each item).
 
@@ -101,7 +108,7 @@ On Ethereum, it is possible to write smart contracts to ensure that fund transfe
 
 ### Atomic Transfer / Group Transaction
 
-Atomic transfers or group transactions allow the grouping of multiple transactions together so that they either all succeed or all fail. This can allow two users to securely exchange assets without the risk of one of the users failing to fulfill side of the transaction.
+Atomic transfers or group transactions allow the grouping of multiple transactions together so that they either all succeed or all fail. This can allow two users to securely exchange assets without the risk of one of the users failing to fulfill their side of the transaction.
 
 Group transactions are also used a lot by smart contracts. For example, to send tokens to a smart contract, it is common to group a token transaction to the application account with an application call.
 
@@ -115,7 +122,7 @@ There is no direct equivalent on Ethereum although this can be simulated using a
 
 Ethereum uses nonces to prevent transaction from being replayed.
 
-Algorand does not have nonces.  Instead, two identical transactions cannot be committed to the blockchain. In addition, transactions have a validity window and optional leases. The [validity window (aka first/last valid rounds)](../transactions/#setting-first-and-last-valid) specifies between which round a transaction can be committed to the blockchain.
+Algorand does not have nonces.  Instead, two identical transactions cannot be committed to the blockchain. In addition, transactions have a validity window and optional leases. The [validity window (aka first/last valid rounds)](../transactions/#setting-first-and-last-valid) specifies between which rounds a transaction can be committed to the blockchain.
 
 If the same transaction needs to be executed twice, some field needs to be changed. One option is to add a random note field or to slightly change the validity window.
 
@@ -132,7 +139,7 @@ Algorand is not susceptible to most re-entrancy attacks for multiple reasons:
 
 # Design Patterns
 
-In this section, we go over common design patterns over Ethereum and their equivalent solution on Algorand.
+In this section, we go over common design patterns Ethereum uses and their equivalent solutions on Algorand.
 
 ## Transfer Tokens to an Application
 
@@ -150,11 +157,11 @@ On Algorand, transferring tokens is similar whether the tokens are the Algo or a
 
 Proxy smart contracts are heavily used on Ethereum as Ethereum smart contracts are not updatable.
 
-Whereas on Algorand applications can specify arbitrary rules for whether they can be updated or deleted. 
+Whereas on Algorand, applications can specify arbitrary rules for whether they can be updated or deleted. 
 
 This is strictly more general and flexible than on Ethereum: Algorand applications can indeed prevent any update and deletion like Ethereum smart contracts.
 
-The proxy design pattern may still be useful on Algorand if you want to provide the option to the user to decide whether they only ever want to use a non-upgradable smart contracts (calling directly the smart contract) or an upgradable one (calling the proxy). A proxy can also be useful to split smart contracts that are too large.
+The proxy design pattern may still be useful on Algorand if you want to provide the option to the user to decide whether they only ever want to use a non-upgradable smart contracts (calling the smart contract directly) or an upgradable one (calling the proxy). A proxy can also be useful to split smart contracts that are too large.
 
 ## Pull Over Push
 
@@ -213,14 +220,14 @@ The equivalent of ERC on Algorand are [ARC](https://arc.algorand.foundation).
 
 | Ethereum          | Algorand              | Notes                                                               |
 | ----------------- | --------------------- | ------------------------------------------------------------------- |
-| ERC-20            | ASA / ARC-3           | ARC-3 is a convention for the metadata of ASA                       |
-| ERC-781, ERC-1155 | ASA / ARC-3 or ARC-69 | ARC-3 and ARC-69 are two conventions for the metadata of an ASA NFT |
+| ERC-20            | ASA / ARC-3 ( + ARC-19)           | ARC-3 is a convention for the metadata of ASA, ARC-19 can be used when the metadata is updatable                       |
+| ERC-781, ERC-1155 | ASA / ARC-3 (+ ARC-19) or ARC-69 | ARC-3 and ARC-69 are two conventions for the metadata of an ASA NFT, ARC-19 can be used when the metadata is updatable |
 
 # Tools and Services
 
-This is a very non-exhaustive list of tools and services used by Ethereum developers, with some of their equivalent on Algorand (non-exhaustive, in alphabetical order).
+This is a non-exhaustive list of tools and services used by Ethereum developers, with some of their equivalents on Algorand (non-exhaustive, in alphabetical order).
 
-*Disclaimer*: The list below is not an endorsement of any of the tool, service and wallets named or linked. As all the developer documentation, this information is purely for educational purpose. In no event will Algorand or Algorand Foundation be liable to you for any damages of any kind (including, loss of revenue, income or profits, loss of use or data, or damages of any sort) arising out of or in any way connected to this information. You understand that you are fully responsible for the security and the availability of your keys.
+*Disclaimer*: The list below is not an endorsement of any of the tools, services, or wallets named or linked. As in all the developer documentation, this information is purely for educational purpose. In no event will Algorand or Algorand Foundation be liable for any damages of any kind (including, loss of revenue, income or profits, loss of use or data, or damages of any sort) arising out of or in any way connected to this information. You understand that you are fully responsible for the security and the availability of your keys.
 
 |                              | Ethereum               | Algorand                                                                                                                                                                                                   | Notes                                                                                                 |
 | ---------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
