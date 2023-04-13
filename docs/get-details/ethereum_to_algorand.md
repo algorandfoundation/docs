@@ -1,6 +1,6 @@
 title: From Ethereum to Algorand
 
-This guide is meant to Ethereum **developers** who want to switch to Algorand to benefit from its numerous advantages: faster block time (less than 4s), immediate finality (a transaction can never be reverted once in a block), very low fees, and high throughput, while still being highly secure.
+This guide is meant for Ethereum **developers** who want to switch to Algorand to benefit from its numerous advantages: faster block time (less than 4s), immediate finality (a transaction can never be reverted once in a block), very low fees, and high throughput, while still being highly secure.
 
 It is focused on **dApp developers** (as opposed to end users and node runners).
 
