@@ -17,7 +17,7 @@ Both Ethereum and Algorand are account-based blockchains supporting smart contra
 On Ethereum, smart contracts are actually represented by accounts, while on Algorand smart contracts and accounts are two different objects.
 Concretely:
 
-* Ethereum's **Externally-owner accounts (EOA)** correspond to Algorand accounts. They both are represented by an **address**.
+* Ethereum's **Externally-owned accounts (EOA)** correspond to Algorand accounts. They are both represented by an **address**.
     * Example of Ethereum address: 
         * User-friendly representation: `0x65e9980679DE55744f386aa1999307f1687A92f9`
         * Raw address: 20 bytes
