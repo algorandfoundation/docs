@@ -38,7 +38,7 @@ Concretely:
 
 Algorand smart contracts are called **applications**. Each application has an associated [**application account**](../dapps/smart-contracts/apps/innertx/) (or several accounts if the rekeying feature is used) that can send and receive tokens. The application account's address can be computed from the application ID. See below how to transfer tokens to an application.
 
-Like Ethereum smart contract, Algorand applications can make transactions from their application accounts. These transactions are called **inner transactions** on Algorand.
+Like Ethereum smart contracts, Algorand applications can make transactions from their application accounts. These transactions are called **inner transactions** on Algorand.
 
 ## Fungible and Non-Fungible Tokens (FT and NFT)
 
