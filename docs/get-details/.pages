@@ -18,3 +18,5 @@ arrange:
     - algorand_consensus.md
     - technical_faq.md
     - useful_resources.md
+    - conduit
+    - ethereum_to_algorand.md
