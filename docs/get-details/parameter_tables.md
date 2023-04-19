@@ -72,7 +72,7 @@ title: Algorand parameter tables
 |Max number of foreign accounts|4|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|MaxAppTxnAccounts||
 |Max number of foreign ASAs|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|MaxAppTxnForeignAssets||
 |Max number of foreign applications|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|MaxAppTxnForeignApps||
-|Max number of foreign accounts + ASAs + applications|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|zMaxAppTotalTxnReferences||
+|Max number of foreign accounts + ASAs + applications + box storage|8|[reference](./dapps/smart-contracts/apps/index.md#stateful-contract-arrays)|MaxAppTotalTxnReferences||
 |Max number of created applications|Unlimited|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsCreated||
 |Max number of opt-in applications|Unlimited|[reference](./dapps/smart-contracts/apps/index.md#opt-into-the-smart-contract)|MaxAppsOptedIn||
 
