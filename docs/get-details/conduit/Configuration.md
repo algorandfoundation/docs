@@ -47,3 +47,8 @@ exporter:
     name:
     config:
 ```
+
+## Plugin configuration
+
+See [plugin list](plugins/home.md) for details.
+Each plugin is identified by a `name`, and provided the `config` during initialization.
