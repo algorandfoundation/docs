@@ -5,15 +5,17 @@ Conduit provides individual documentation for each plugin in [docs/conduit/plugi
 processor in particular has a complex set of features which empower users to search for data within Transactions.
 This document will go through some of those features in detail, their use cases, and show some examples.
 
-### Logical Operators
+### Filters
 
-The filter processor provides (at this time) two top level logical operators, `any` and `all`. These are used to match
+Filters have two top level logical operators, `any` and `all`. These are used to match
 "sub-expressions" specified in the filters. For any set of expressions, e1, e2, e3, ... `any(e1,e2,e3,...eN)` will return
-`true` if there exists `eX` for `1 >= X <= N` where `eX` evaulates to `true`,
+`true` if there exists `eX` for `1 >= X <= N` where `eX` evaluates to `true`,
 and `all(e1,e2,e3,...eN)` will return true if for every `X` from `1..N`, `eX` evaluates to `true`.
 
 In simpler terms, `any` matches the transaction if at least one sub-expression matches, and `all` matches only if every
 sub-expression matches.
+
+If there are multiple top level filters defined in the configuration, the transaction match is combined with an AND operation. Meaning the transaction must be matched by all defined filters in order to pass through the filter.
 
 ### Sub-Expressions
 So, what defines a sub-expression?

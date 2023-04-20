@@ -71,7 +71,7 @@ config:
 
 Let's start assembling a configuration file which describes our conduit pipeline. For that we'll run 
 ```
-conduit init
+conduit init -d data
 ```
 This will create a configuration directory if we don't provide one to it, and write a skeleton config file
 there which we will use as the starting point for our pipeline. Here is the config file which the `init` subcommand has
