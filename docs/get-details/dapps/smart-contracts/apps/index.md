@@ -64,6 +64,34 @@ Boxes function similar to the other arrays but differ is significant ways which 
 <center>*Reference Arrays*</center>
 
 
+# Application Account
+Since September 2021 all deployed smart contracts are given their own application account with an associated Algorand public address. These accounts are used by issuing [inner transactions](/docs/get-details/dapps/smart-contracts/apps/innertx/) from within the smart contract.
+
+The public address is devised by taking the application ID as an 8-byte big-endian array, prefixing it with `appID`, and then encoding it using the standard encoding method for Algorand addresses. The Algorand SDKs provide helpful utilities to do this for you given just the application ID.
+
+=== "Python"
+```python3
+from algosdk.logic import get_application_address
+
+app_id = 123
+app_addr = get_application_address(app_id)
+
+print(f"Application ID:   {app_id}")
+print(f"Application Addr: {app_addr}")
+```
+
+=== "JavaScript"
+```javascript
+import { getApplicationAddress } from 'algosdk';
+
+const app_id = 123;
+const app_addr = getApplicationAddress(app_id);
+
+console.log("Application ID:      " + app_id);
+console.log("Application Address: " + app_addr);
+```
+
+
 # Minimum balance requirement for a smart contract
 When creating or opting into a smart contract your minimum balance will be raised. The amount at which it is raised will depend on the amount of on-chain storage that is used. This minimum balance requirement is associated with the account that creates or opts into the smart contract.
 
