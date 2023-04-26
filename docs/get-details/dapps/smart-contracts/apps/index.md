@@ -70,7 +70,8 @@ Since September 2021 all deployed smart contracts are given their own applicatio
 The public address is devised by taking the application ID as an 8-byte big-endian array, prefixing it with `appID`, and then encoding it using the standard encoding method for Algorand addresses. The Algorand SDKs provide helpful utilities to do this for you given just the application ID.
 
 === "Python"
-```python3
+<!-- ===PYSDK_APPLICATION_ACCOUNT=== -->
+```python
 from algosdk.logic import get_application_address
 
 app_id = 123
@@ -79,8 +80,10 @@ app_addr = get_application_address(app_id)
 print(f"Application ID:   {app_id}")
 print(f"Application Addr: {app_addr}")
 ```
+<!-- ===PYSDK_APPLICATION_ACCOUNT=== -->
 
 === "JavaScript"
+<!-- ===JSSDK_APPLICATION_ACCOUNT=== -->
 ```javascript
 import { getApplicationAddress } from 'algosdk';
 
@@ -90,6 +93,27 @@ const app_addr = getApplicationAddress(app_id);
 console.log("Application ID:      " + app_id);
 console.log("Application Address: " + app_addr);
 ```
+<!-- ===JSSDK_APPLICATION_ACCOUNT=== -->
+
+=== "Go"
+<!-- ===GOSDK_APPLICATION_ACCOUNT=== -->
+```go
+import (
+  "fmt"
+
+  "github.com/algorand/go-algorand-sdk/crypto"
+  "github.com/algorand/go-algorand-sdk/types"
+)
+
+func main() {
+  var app_id uint64 = 123
+  var app_addr types.Address = crypto.GetApplicationAddress(app_id)
+
+  fmt.Println("Application ID:      ", app_id)
+  fmt.Println("Application Address: ", app_addr)
+}
+```
+<!-- ===GOSDK_APPLICATION_ACCOUNT=== -->
 
 
 # Minimum balance requirement for a smart contract
