@@ -139,7 +139,7 @@ For our use case we'll grab the address of a wallet I've created on testnet, `NV
 
 That should give us exactly what we want, a filter that only allows transaction through for which the receiver is my
 account. However, there is a lot more you can do with the filter processor. To learn more about the possible uses, take
-a look at the individual plugin documentation [here](../plugins/filter_processor.md).
+a look at the filter plugin documentation.
 
 ## Setting up our Exporter
 
@@ -211,4 +211,4 @@ Once we've processed round 26141781, we should see our transaction show up!
 
 There are many other existing plugins and use cases for Conduit! Take a look through the documentation and don't
 hesitate to open an issue if you have a question. If you want to get a deep dive into the different types of filters
-you can construct using the filter processor, take a look at our [filter guide](./FilterDeepDive.md).
+you can construct using the filter processor, take a look at our filter plugin.

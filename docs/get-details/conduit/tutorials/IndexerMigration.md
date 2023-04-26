@@ -235,7 +235,7 @@ Because our Conduit pipeline will use the Follower node's state delta API, we no
 volume. It can be removed.
 
 ### Step 3: Refactor our Indexer Writer to Conduit
-You're free to capture any data you like using Conduit. I'd encourage you to take a look at the [filter processor](./FilterDeepDive.md) and see
+You're free to capture any data you like using Conduit. I'd encourage you to take a look at the `filter processor` and see
 if you can reduce the amount of data you store in your database by removing non-relevant data.
 
 If you would like to maintain parity with the legacy Indexer, which stored all data, you can use the `conduit init` command to create
