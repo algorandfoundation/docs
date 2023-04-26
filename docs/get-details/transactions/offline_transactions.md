@@ -30,7 +30,7 @@ Unsigned transactions require the transaction object to be created before writin
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L51)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L45-L59)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
@@ -49,7 +49,7 @@ Unsigned transactions require the transaction object to be created before writin
 	
 	print(recovered_txn.dictify())
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L31-L43)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L40-L52)
 	<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Java"
@@ -87,7 +87,7 @@ Unsigned transactions require the transaction object to be created before writin
 	msgpack.Decode(encodedTxn, &recoveredPayTxn)
 	log.Printf("%+v", recoveredPayTxn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L27-L42)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L28-L43)
 	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "goal"
@@ -114,7 +114,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L54-L60)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L62-L68)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
@@ -132,7 +132,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	
 	print(recovered_signed_txn.dictify())
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L48-L59)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L57-L68)
 	<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
@@ -168,7 +168,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 		log.Fatalf("failed to decode signed transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L45-L61)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L46-L62)
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "goal"
