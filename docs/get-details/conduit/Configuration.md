@@ -47,3 +47,8 @@ exporter:
     name:
     config:
 ```
+
+## Plugin configuration
+
+Each plugin is identified by a `name`, and provided the `config` during initialization.
+See plugins documentation for details.

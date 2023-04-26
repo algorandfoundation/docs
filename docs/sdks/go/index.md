@@ -48,17 +48,17 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 ```go
-newAccount := crypto.GenerateAccount()
-passphrase, err := mnemonic.FromPrivateKey(newAccount.PrivateKey)
+account := crypto.GenerateAccount()
+mn, err := mnemonic.FromPrivateKey(account.PrivateKey)
 
 if err != nil {
-	fmt.Printf("Error creating transaction: %s\n", err)
-} else {
-	fmt.Printf("My address: %s\n", newAccount.Address)
-	fmt.Printf("My passphrase: %s\n", passphrase)
+	log.Fatalf("failed to generate account: %s", err)
 }
+
+log.Printf("Address: %s\n", account.Address)
+log.Printf("Mnemonic: %s\n", mn)
 ```
-[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/kmd/main.go#L166-L175)
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/account/main.go#L16-L25)
 <!-- ===GOSDK_ACCOUNT_GENERATE=== -->
 
 [`More Information`](../../get-details/accounts/create.md#standalone){target=_blank}  

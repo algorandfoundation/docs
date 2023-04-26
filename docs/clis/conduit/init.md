@@ -12,7 +12,7 @@ initializes a Conduit data directory
 
 
 
-Initializes a Conduit data directory and conduit.yml file. By default
+Initializes a conduit.yml file and writes it to stdout. By default
 
 the config file uses an algod importer in follower mode and a block
 
@@ -25,6 +25,12 @@ different options.
 Once initialized the conduit.yml file needs to be modified. Refer to the file
 
 comments for details.
+
+
+
+If the 'data' option is used, the file will be written to that
+
+directory and additional help is written to stdout.
 
 
 
@@ -58,7 +64,7 @@ conduit init  -d /path/to/data -i importer -p processor1,processor2 -e exporter
 
 ```
 
-  -d, --data string          Full path to new data directory. If not set, a directory named 'data' will be created in the current directory.
+  -d, --data string          Full path to new data directory to initialize. If not set, the conduit configuration YAML is written to stdout.
 
   -e, --exporter string      data exporter name.
 

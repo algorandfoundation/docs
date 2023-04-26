@@ -1,25 +1,25 @@
-## Filtering Transactions in Conduit
+# Transaction Filter Processor
 
-### Intro
-Conduit provides individual documentation for each plugin in [docs/conduit/plugins](./plugins). However, the filter
-processor in particular has a complex set of features which empower users to search for data within Transactions.
-This document will go through some of those features in detail, their use cases, and show some examples.
+This plugin allows you to filter transactions based on their contents. This is useful for filtering out transactions
+to the specific ones required for your application.
 
-### Logical Operators
+## Filters
 
-The filter processor provides (at this time) two top level logical operators, `any` and `all`. These are used to match
+Filters have two top level logical operators, `any` and `all`. These are used to match
 "sub-expressions" specified in the filters. For any set of expressions, e1, e2, e3, ... `any(e1,e2,e3,...eN)` will return
-`true` if there exists `eX` for `1 >= X <= N` where `eX` evaulates to `true`,
+`true` if there exists `eX` for `1 >= X <= N` where `eX` evaluates to `true`,
 and `all(e1,e2,e3,...eN)` will return true if for every `X` from `1..N`, `eX` evaluates to `true`.
 
 In simpler terms, `any` matches the transaction if at least one sub-expression matches, and `all` matches only if every
 sub-expression matches.
 
-### Sub-Expressions
+If there are multiple top level filters defined in the configuration, the transaction match is combined with an AND operation. Meaning the transaction must be matched by all defined filters in order to pass through the filter.
+
+## Sub-Expressions
 So, what defines a sub-expression?
 
-The sub-expression consists of 3 components.  
-#### `tag`
+The sub-expression consists of 3 components.
+### `tag`
 The tag identifies the field to attempt to match. The fields derive their tags according to the
 [official reference docs](https://developer.algorand.org/docs/get-details/transactions/transactions/).
 You can also attempt to match against the `ApplyData`. A complete list of supported tags can be found [here](Filter_tags.md).
@@ -37,9 +37,9 @@ Example:
 - tag: 'txn.amt' # Matches the amount of a payment transaction
 ```
 
-#### `expression-type`
+### `expression-type`
 The expression type is a selection of one of the available methods for evaluating the expression. The current list of
-types is 
+types is
 * `exact`: exact match for string values.
 * `regex`:  applies regex rules to the matching.
 * `less-than` applies numerical less than expression.
@@ -53,12 +53,32 @@ You must use the proper expression type for the field your tag identifies based 
 For example, do not use a numerical expression type on a string field such as address.
 
 
-#### `expression`
+### `expression`
 The expression is the data against which each field will be compared. This must be compatible with the data type of
 the expected field. For string fields you can also use the `regex` expression type to interpret the input of the
-expression as a regex. 
+expression as a regex.
 
-### Examples
+
+## Configuration
+```yml @sample.yaml
+name: filter_processor
+config:
+  # Whether or not the expression searches inner transactions for matches.
+  search-inner: true
+
+  # Whether or not to include the entire transaction group when the filter
+  # conditions are met.
+  omit-group-transactions: true
+
+  # The list of filter expressions to use when matching transactions.
+  filters:
+    - any:
+        - tag: txn.rcv
+          expression-type: exact
+          expression: "ADDRESS"
+```
+
+## Examples
 
 Find transactions w/ fee greater than 1000 microalgos
 ```yaml
@@ -90,7 +110,7 @@ filters:
       expression: "MYAPPID"
 ```
 
-Find transactions, including inner transactions, sent by "FOO". 
+Find transactions, including inner transactions, sent by "FOO".
 ```yaml
 search-inner: true
 filters:

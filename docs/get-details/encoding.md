@@ -64,7 +64,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	
 	assert addr == address
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L7-L12)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L8-L13)
 	<!-- ===PYSDK_CODEC_ADDRESS=== -->
 
 === "Go"
@@ -74,7 +74,7 @@ Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, e
 	pk, _ := types.DecodeAddress(address)
 	addr := pk.String()
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L68-L71)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L69-L72)
 	<!-- ===GOSDK_CODEC_ADDRESS=== -->
 
 === "Java"
@@ -105,7 +105,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	const b64Decoded = Buffer.from(b64Encoded, 'base64').toString();
 	console.log(b64Encoded, b64Decoded);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L23-L26)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L31-L34)
 	<!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
@@ -115,7 +115,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	decoded_str = base64.b64decode(encoded_str).decode("utf-8")
 	print(decoded_str)
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L15-L18)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L24-L27)
 	<!-- ===PYSDK_CODEC_BASE64=== -->
 
 === "Go"
@@ -125,7 +125,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	decoded, _ := base64.StdEncoding.DecodeString(encoded)
 	reencoded := base64.StdEncoding.EncodeToString(decoded)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L75-L78)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L84-L87)
 	<!-- ===GOSDK_CODEC_BASE64=== -->
 
 === "Java"
@@ -156,7 +156,7 @@ Given an integer `1337`, you may encode it as:
 	const mixedDecoded = algosdk.decodeUint64(encoded, 'bigint');
 	console.log(int, encoded, safeDecoded, mixedDecoded);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L29-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L42)
 	<!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
@@ -167,7 +167,7 @@ Given an integer `1337`, you may encode it as:
 	decoded_uint = int.from_bytes(encoded_uint, byteorder="big")
 	assert decoded_uint == val
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L21-L25)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L30-L34)
 	<!-- ===PYSDK_CODEC_UINT64=== -->
 
 === "Go"
@@ -180,7 +180,7 @@ Given an integer `1337`, you may encode it as:
 	decodedInt := binary.BigEndian.Uint64(encodedInt)
 	// decodedInt == val
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L82-L88)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L91-L97)
 	<!-- ===GOSDK_CODEC_UINT64=== -->
 
 === "Java"
@@ -232,7 +232,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L51)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L45-L59)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
@@ -243,7 +243,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L54-L60)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L62-L68)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
@@ -262,7 +262,7 @@ Create a payment transaction from one account to another using suggested paramet
 	
 	print(recovered_txn.dictify())
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L31-L43)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L40-L52)
 	<!-- ===PYSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```python
@@ -278,7 +278,7 @@ Create a payment transaction from one account to another using suggested paramet
 	
 	print(recovered_signed_txn.dictify())
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L48-L59)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L57-L68)
 	<!-- ===PYSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Go"
@@ -300,7 +300,7 @@ Create a payment transaction from one account to another using suggested paramet
 	msgpack.Decode(encodedTxn, &recoveredPayTxn)
 	log.Printf("%+v", recoveredPayTxn)
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L27-L42)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L28-L43)
 	<!-- ===GOSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```go
@@ -321,7 +321,7 @@ Create a payment transaction from one account to another using suggested paramet
 		log.Fatalf("failed to decode signed transaction: %s", err)
 	}
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L45-L61)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L46-L62)
 	<!-- ===GOSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Java"
@@ -377,7 +377,7 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 	const decodeArray = uintArrayCodec.decode(encodedArray);
 	console.log(decodeArray); // [1, 2, 3, 4, 5]
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L63-L80)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L71-L88)
 	<!-- ===JSSDK_CODEC_ABI==== -->
 
 === "Python"
@@ -407,7 +407,7 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 	decoded_array = uint_array_codec.decode(encoded_array)
 	print(decoded_array)  # prints [1, 2, 3, 4, 5]
 	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L65-L88)
+	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L74-L97)
 	<!-- ===PYSDK_CODEC_ABI=== -->
 
 === "Go"
@@ -430,7 +430,7 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 	decodedArr, _ := arrCodec.Decode(encodedArr)
 	log.Printf("%v", decodedArr) // [1 2 3 4 5]
 	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L92-L108)
+	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L101-L117)
 	<!-- ===GOSDK_CODEC_ABI=== -->
 
 === "Java"
