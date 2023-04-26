@@ -680,14 +680,14 @@ For atomic transactions, the fees set on all transactions in the group are summe
 An example of setting a pooled fee on a group of two transactions:
 
 === "JavaScript"
-<!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
+    <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 	```javascript
 	const sp = await client.getTransactionParams().do();
 	sp.fee = 2 * minFee;
 	sp.flatFee = true;
 	```
 	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/atomics.ts#L57-L60)
-<!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
+    <!-- ===JSSDK_TRANSACTION_FEE_OVERRIDE=== -->
 
 === "Python"
 	<!-- ===PYSDK_TRANSACTION_FEE_OVERRIDE=== -->
