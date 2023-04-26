@@ -84,11 +84,11 @@ The public address is devised by taking the application ID as an 8-byte big-endi
 === "JavaScript"
 <!-- ===JSSDK_CODEC_APPLICATION_ACCOUNT=== -->
 	```javascript
-	const app_id = 123;
-	const app_addr = algosdk.getApplicationAddress(app_id);
+	const appId = 123;
+	const appAddr = algosdk.getApplicationAddress(appId);
 	
-	console.log("Application ID:      " + app_id);
-	console.log("Application Address: " + app_addr);
+	console.log(`Application ID:      ${  appId}`);
+	console.log(`Application Address: ${  appAddr}`);
 	```
 	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L23-L28)
 <!-- ===JSSDK_CODEC_APPLICATION_ACCOUNT=== -->
