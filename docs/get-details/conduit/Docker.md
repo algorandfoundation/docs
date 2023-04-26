@@ -6,6 +6,15 @@ This document provides some basic guidance and commands tailored
 for the docker container. For additional information refer to
 the [full documentation](https://developer.algorand.org/docs/get-details/conduit/GettingStarted/).
 
+# Configuration
+
+Special locations in the container designed to modify behavior:
+
+| File | Description |
+| ---- | ----------- |
+| /etc/algorand/config.yml | Required. Conduit configuration file. Definition for the pipeline behavior. |
+| /data | Optional. Data directory. For persistence you may mount a volume at this location. See volume permissions sections for additional information. |
+
 # Usage
 
 Conduit needs a configuration file to define the data pipeline.
@@ -44,7 +53,7 @@ With `conduit.yml` in your current working directory, it can be mounted directly
 
 Mount `conduit.yml` with the following command:
 ```
-docker run -it -v $(pwd)/conduit.yml:/data/conduit.yml algorand/conduit
+docker run -it -v $(pwd)/conduit.yml:/etc/algorand/conduit.yml algorand/conduit
 ```
 
 # Mounting the Data Directory
