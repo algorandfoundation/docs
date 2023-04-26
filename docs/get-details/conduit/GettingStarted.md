@@ -36,9 +36,5 @@ plugins and how to include these plugins in your pipeline's configuration file s
 ## Set up Conduit for the Indexer API
 [How to configure algod, PostgreSQL and Conduit as an Indexer API backend.](./tutorials/IndexerWriter.md)
 
-## Using the Transaction Filter Plugin
-
-[A deep dive into the transaction filter plugin.](./tutorials/FilterDeepDive.md)
-
 ## Writing Block Data to the Filesystem
 [Use the file exporter to write data to files.](./tutorials/WritingBlocksToFile.md)
