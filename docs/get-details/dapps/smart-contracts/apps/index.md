@@ -96,11 +96,11 @@ The public address is devised by taking the application ID as an 8-byte big-endi
 === "Go"
 <!-- ===GOSDK_CODEC_APPLICATION_ACCOUNT=== -->
 	```go
-	var app_id uint64 = 123
-	var app_addr types.Address = crypto.GetApplicationAddress(app_id)
+	var appId uint64 = 123
+	var appAddr types.Address = crypto.GetApplicationAddress(appId)
 	
-	fmt.Println("Application ID:      ", app_id)
-	fmt.Println("Application Address: ", app_addr)
+	fmt.Println("Application ID:      ", appId)
+	fmt.Println("Application Address: ", appAddr)
 	```
 	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L76-L81)
 <!-- ===GOSDK_CODEC_APPLICATION_ACCOUNT=== -->
