@@ -43,11 +43,44 @@ Run:
 ```
 
 
-# Import examples
+# Code examples
 
-Used to import named examples from the SDK repositories into the docs. The script will clone the SDK repositories if they are not already present. The script will also update the SDK repositories if they are already present.
+## Example formatting
+
+Examples are all named descriptively and may be referenced in the markdown in multiple places if necessary.
+
+The format for a named example in the docs markdown is:
+```
+<!-- ===LANGSDK_EXAMPLENAME=== -->
+<!-- ===LANGSDK_EXAMPLENAME=== -->
+```
+Running the import script will replace any text between these two tags with the matching example from the SDK repos.
+
+A file containing all examples with descriptions is in `example_tracker/example_list.md`. 
+A script that is helpful to track any examples that are missing from languages (or typo'd) is in `example_tracker/list_examples.sh`.
+
+To ensure the language tabs display correctly the markdown must be formatted as follows:
+```
+=== "LanguageName"
+    <!-- ===LANGSDK_EXAMPLE_NAME=== -->
+    <!-- ===LANGSDK_EXAMPLE_NAME=== -->
+```
+
+That is, the comment flags must be tabbed over under the `=== "LanguageName"` line.
+
+
+
+## Running the import script
+
+The import script, `import_examples.py`, will search the configured repository paths for named examples to be pulled into the docs. The script will clone the SDK repositories if they are not already present. The script will also update the SDK repositories if they are already present.
 
 The following will import only the `PYSDK` examples:
 ```sh
 python import_examples.py --src PYSDK
 ```
+
+## New examples
+
+For any *new* examples, please follow the formatting of the existing examples in that repository.  
+
+The `examples` branch of all the SDKs should be used for development of examples.  The examples should be runable with the smoke-test shell script, so that CI can catch any issues.
