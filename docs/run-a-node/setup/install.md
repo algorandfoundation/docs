@@ -50,6 +50,12 @@ The third-party website [Algoscan Analytics](https://developer.algoscan.app/) in
 !!! info
     Private networks used for development require much lower specs as they are usually achieving much lower TPS. A Raspberry Pi with 2GB of RAM is sufficient for low-TPS private networks.
     
+
+### Docker Images
+
+Official Docker images are available from [Docker Hub](https://hub.docker.com/r/algorand/algod).
+
+
 ### Package manager installation overview
 
 See [Node Artifacts](../../reference/artifacts) reference for a detailed list of some of files that are installed by this method. An environment variable can be set that points to the data directory and goal will use that variable if no `-d` flag is specified. The binaries will be installed in the `/usr/bin` and the data directory will be set to `/var/lib/algorand`. It is recommended to add to shell config files the following environment variable that points to the data directory:
