@@ -9,25 +9,31 @@ _[Read more about how Participation Keys function in the Algorand Consensus Prot
 	- For security, the individual keys for each round are deleted from the key file as each round is completed. It is critical for the safety of the Algorand blockchain to avoid storing backups of participation key files that have been registered for an account.  
 	- The limit to the range you can specify for a partkey validity period is 2^24 - 1 (16,777,215). For security, it is recommended that the range does not exceed 3,000,000 rounds.
 
-!!! warning
-	All the `goal` commands in this page must be run under the user that owns the `data` directory and runs `algod`. They should never run under the user `root`, as this may compromise permissions in the `data` folder. For example, with a default installation of the Debian package, `goal account ...` should be replaced by `sudo -u algorand -E goal account ...`.
-
 # Generate the participation key with `goal`
 
 To generate a participation key, use the [`goal account addpartkey`](../../../clis/goal/account/addpartkey) command on the node where the participation key will reside. This command takes the address of the participating account, a range of rounds, and an optional key dilution parameter.  It then generates a [VRF key pair](../../../get-details/algorand_consensus#verifiable-random-function) and, using optimizations, generates a set of single-round voting keys for each round of the range specified. The VRF private key is what is passed into the VRF to determine if you are selected to propose or vote on a block in any given round. 
 
 === "goal"
     ```zsh 
-    $ goal account addpartkey -a <address-of-participating-account> --roundFirstValid=<partkey-first-round> --roundLastValid=<partkey-last-round> --keyDilution=<key-dilution-value> 
+    $ goal account addpartkey -a <address-of-participating-account> --roundFirstValid=<partkey-first-round> --roundLastValid=<partkey-last-round>
     Participation key generation successful
     ```
 
-This creates a participation key in the ledger directory of the node, which is where it should ultimately live. Use the `-o` flag to specify a different directory in the case where you will eventually transfer your key to a different node's ledger directory.
+This creates a participation key on the node. You can use the `-o` flag to specify a different location in the case where you will eventually transfer your key to a different node to construct the keyreg transaction.
 
 !!! tip
-	To optimize storage, the Key Dilution parameter defaults to the square root of the participation period length. It determines how many ephemeral keys will be stored on an algorand node, as they are generated in batches. For example, if your participation period is set to 3,000,000 rounds, a batch of 1,732 ephemeral keys will be generated upfront, with additional batches getting generated after each set is used.
+	To optimize storage, the Key Dilution parameter defaults to the square root of the participation period length but this can be overridden with the flag `--keyDilution`. The Key Dilution determines how many ephemeral keys will be stored on an algorand node, as they are generated in batches. For example, if your participation period is set to 3,000,000 rounds, a batch of 1,732 ephemeral keys will be generated upfront, with additional batches getting generated after each set is used.
 
-# Check that the key exists in the node's ledger directory
+# Add participation key via API
+
+If you chose to save the participation key and now want to add it to the server, you can use the following API call to add the partkey file to the node.
+
+```bash
+$ curl -X POST $URL/v2/participation -H "X-Algo-API-Token: $token" --data-binary @ALICE...VWXYZ.0.30000.partkey
+```
+Upon successfully calling the endpoint you will be returned the Participation ID (`partId`), otherwise an error will be returned.
+
+# Check that the key exists
 
 The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) command will check for any participation keys that live on the node and display pertinent information about them. 
 
@@ -40,8 +46,6 @@ The [`goal account listpartkeys`](../../../clis/goal/account/listpartkeys) comma
 
 
 The output above is an example of `goal account listpartkeys` run from a particular node. It displays all partkeys and whether or not each key has been **registered**, the **filename** of the participation key, the **first** and **last** rounds of validity for the partkey, the **parent address** (i.e. the address of the participating account) and the **first key**. The first key refers to the key batch and the index in that batch (`<key-batch>.<index>`) of the latest key that has not been deleted. This is useful in verifying that your node is participating (i.e. the batch should continue to increment as keys are deleted). It can also help ensure that you don't store extra copies of registered participation keys that have past round keys intact. 
-
-If the key you generated does not show up, check that it was correctly placed in the ledger directory `ls $ALGORAND_DATA/<network-id>/ | grep <participating-account-address>`. If not, move it there and run this command again to confirm.
 
 
 !!! warning
