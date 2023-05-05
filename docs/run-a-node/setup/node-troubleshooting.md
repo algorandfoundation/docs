@@ -53,7 +53,7 @@ One of the most common issues are that the node is on the wrong network, has the
 * **Check that the node is on the right network**: when running `goal node status`, `Genesis ID` must be `mainnet-v1.0` for MainNet, `testnet-v1.0` for TestNet, `betanet-v1.0` for BetaNet. See [Switch Networks](/docs/run-a-node/operations/switch_networks) to solve this issue.
 * **Check that the version** reported of `algod -v` and `goal version -v` are the latest stable release (if using MainNet or TestNet) or the latest beta release (if using BetaNet). See the [official repo](https://github.com/algorand/go-algorand/releases) for the list of all releases. Beta releases are clearly marked as such.
 
-You can easily check all of the above using [dAppFlow node status](https://app.dappflow.org/node-status) webapp.
+You can easily check all of the above using [dAppFlow node status](https://app.dappflow.org/node-manager/dashboard) webapp.
 Click on settings on the bottom left, fill in URL (usually `http://localhost`, inside `$ALGORAND_DATA/algod.net`), port (usually 8080, inside `$ALGORAND_DATA/algod.net`), token (from `$ALGORAND_DATA/algod.token`). 
 
 ## My node is not syncing/catching up at all (Last Committed Block is 0)
