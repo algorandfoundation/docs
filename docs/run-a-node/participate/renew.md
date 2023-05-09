@@ -9,10 +9,9 @@ The validity ranges of participation keys can overlap. For any account, at any t
 
 # Step-by-Step
 1. [Create a new participation key](./generate_keys.md) with a first voting round that is less than the last voting round of the current participation key. It should leave enough time to carry out this whole process (e.g. 40,000 rounds).
-2. Place both keys in the participating node's ledger directory.
-3. Once the network reaches the first voting round for the new key, [submit an online key registration transaction for the new participation key](./online.md).
-4. Wait at least 320 rounds to [validate that the node is participating](./online.md#check-that-the-node-is-participating).
-5. Once participation is confirmed, it is safe to [delete the old participation key](#removing-old-keys). 
+2. Once the network reaches the first voting round for the new key, [submit an online key registration transaction for the new participation key](./online.md).
+3. Wait at least 320 rounds to [validate that the node is participating](./online.md#check-that-the-node-is-participating).
+4. Once participation is confirmed, it is safe to [delete the old participation key](#removing-old-keys).
 
 <center> ![Renewal Window](../../imgs/renew-0.png) </center>
 <center>*Example key rotation window* </center>
@@ -22,9 +21,9 @@ The validity ranges of participation keys can overlap. For any account, at any t
 
 # Removing Old Keys
 
-When a participation key is no longer in use, the only way to remove it is by calling the node's participation API endpoint.
+When a participation key is no longer in use, you can remove it by running the following goal command with the participation ID of the key you want to remove.
 
 ```bash
-$ curl -X DELETE $URL/v2/participation/$partKeyID -H "X-Algo-API-Token: $token"
+$ goal account deletepartkey --partkeyid IWBP2447JQIT54XWOZ7XKWOBVITS2AEIBOEZXDACX5Q6DZ4Z7VHA
 ```
 Make sure to identify the correct key (i.e. make sure it is _not_ the currently registered key) before deleting.

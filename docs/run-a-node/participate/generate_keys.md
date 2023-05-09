@@ -24,14 +24,13 @@ This creates a participation key on the node. You can use the `-o` flag to speci
 !!! tip
 	To optimize storage, the Key Dilution parameter defaults to the square root of the participation period length but this can be overridden with the flag `--keyDilution`. The Key Dilution determines how many ephemeral keys will be stored on an algorand node, as they are generated in batches. For example, if your participation period is set to 3,000,000 rounds, a batch of 1,732 ephemeral keys will be generated upfront, with additional batches getting generated after each set is used.
 
-# Add participation key via API
+# Add participation key
 
-If you chose to save the participation key and now want to add it to the server, you can use the following API call to add the partkey file to the node.
+If you chose to save the participation key and now want to add it to the server, you can use the following command to add the partkey file to the node.
 
 ```bash
-$ curl -X POST $URL/v2/participation -H "X-Algo-API-Token: $token" --data-binary @ALICE...VWXYZ.0.30000.partkey
+$ goal account installpartkey --partkey ALICE...VWXYZ.0.30000.partkey --delete-input
 ```
-Upon successfully calling the endpoint you will be returned the Participation ID (`partId`), otherwise an error will be returned.
 
 # Check that the key exists
 
