@@ -138,7 +138,7 @@ Given a specific account public key, this call returns the accounts status, bala
 |---|---|---|---|
 |**Path**|**address**  <br>*required*|An account public key|string|
 |**Query**|**exclude**  <br>*optional*|When set to `all` will exclude asset holdings, application local state, created asset parameters, any created application parameters. Defaults to `none`.|enum (all, none)|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
 **Responses**
@@ -182,7 +182,7 @@ Given a specific account public key and application ID, this call returns the ac
 |---|---|---|---|
 |**Path**|**address**  <br>*required*|An account public key|string|
 |**Path**|**application-id**  <br>*required*|An application identifier|integer|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
 **Responses**
@@ -235,7 +235,7 @@ Given a specific account public key and asset ID, this call returns the account'
 |---|---|---|---|
 |**Path**|**address**  <br>*required*|An account public key|string|
 |**Path**|**asset-id**  <br>*required*|An asset identifier|integer|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
 **Responses**
@@ -287,7 +287,7 @@ Get the list of pending transactions by address, sorted by priority, in decreasi
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**address**  <br>*required*|An account public key|string|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Query**|**max**  <br>*optional*|Truncated number of transactions to display. If max=0, returns all pending txns.|integer|
 
 
@@ -512,7 +512,7 @@ GET /v2/blocks/{round}
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**round**  <br>*required*|The round from which to fetch block information.|integer|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
 **Responses**
@@ -645,7 +645,7 @@ GET /v2/blocks/{round}/transactions/{txid}/proof
 |---|---|---|---|
 |**Path**|**round**  <br>*required*|The round in which the transaction appears.|integer|
 |**Path**|**txid**  <br>*required*|The transaction ID for which to generate a proof.|string|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Query**|**hashtype**  <br>*optional*|The type of hash function used to create the proof, must be one of: <br>* sha512_256 <br>* sha256|enum (sha512_256, sha256)|
 
 
@@ -804,6 +804,7 @@ Get ledger deltas for a round.
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**round**  <br>*required*|The round for which the deltas are desired.|integer|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
 **Responses**
@@ -822,11 +823,41 @@ Get ledger deltas for a round.
 **Produces**
 
 * `application/json`
+* `application/msgpack`
 
 
 **Tags**
 
 * data
+* experimental
+* public
+
+
+<a name="experimentalcheck"></a>
+### GET /v2/experimental
+Returns OK if experimental API is enabled.
+```
+GET /v2/experimental
+```
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Experimental API enabled|No Content|
+|**404**|Experimental API not enabled|No Content|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* experimental
 * public
 
 
@@ -1666,7 +1697,7 @@ Get the list of pending transactions, sorted by priority, in decreasing order, t
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Query**|**max**  <br>*optional*|Truncated number of transactions to display. If max=0, returns all pending txns.|integer|
 
 
@@ -1722,7 +1753,7 @@ Or the transaction may have happened sufficiently long ago that the node no long
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**txid**  <br>*required*|A transaction ID|string|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded.|enum (json, msgpack)|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
 **Responses**
@@ -1750,7 +1781,7 @@ Or the transaction may have happened sufficiently long ago that the node no long
 
 <a name="simulatetransaction"></a>
 ### POST /v2/transactions/simulate
-Simulates a raw transaction or transaction group as it would be evaluated on the network. WARNING: This endpoint is experimental and under active development. There are no guarantees in terms of functionality or future support.
+Simulates a raw transaction or transaction group as it would be evaluated on the network. The simulation will use blockchain state from the latest committed round.
 ```
 POST /v2/transactions/simulate
 ```
@@ -1760,6 +1791,7 @@ POST /v2/transactions/simulate
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Body**|**rawtxn**  <br>*required*|The byte encoded transaction to simulate|string (binary)|
 
 
@@ -1770,6 +1802,7 @@ POST /v2/transactions/simulate
 |**200**|Result of a transaction group simulation.|[Response 200](#simulatetransaction-response-200)|
 |**400**|Bad Request - Malformed Algorand transaction|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**404**|Transaction simulator not enabled|No Content|
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
 |**503**|Service Temporarily Unavailable|[ErrorResponse](#errorresponse)|
 |**default**|Unknown Error|No Content|
@@ -1779,8 +1812,10 @@ POST /v2/transactions/simulate
 
 |Name|Description|Schema|
 |---|---|---|
-|**failure-message**  <br>*required*|\[fm\] Failure message, if the transaction would have failed during a live broadcast.|string|
-|**missing-signatures**  <br>*required*|\[ms\] Whether any transactions would have failed during a live broadcast because they were missing signatures.|boolean|
+|**last-round**  <br>*required*|The round immediately preceding this simulation. State changes through this round were used to run this simulation.|integer|
+|**txn-groups**  <br>*required*|A result object for each transaction group that was simulated.|< [SimulateTransactionGroupResult](#simulatetransactiongroupresult) > array|
+|**version**  <br>*required*|The version of this response object.|integer|
+|**would-succeed**  <br>*required*|Indicates whether the simulated transactions would have succeeded during an actual submission. If any transaction fails or is missing a signature, this will be false.|boolean|
 
 
 **Consumes**
@@ -1790,12 +1825,13 @@ POST /v2/transactions/simulate
 
 **Produces**
 
+* `application/json`
 * `application/msgpack`
 
 
 **Tags**
 
-* experimental
+* nonparticipating
 * public
 
 
@@ -1865,29 +1901,6 @@ data/basics/userBalance.go : AccountData
 |**total-created-assets**  <br>*required*|The count of all assets (AssetParams objects) created by this account.|integer|
 
 
-<a name="accountbalancerecord"></a>
-### AccountBalanceRecord
-Account and its address
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**account-data**  <br>*required*|Updated account data.|[Account](#account)|
-|**address**  <br>*required*|Address of the updated account.|string|
-
-
-<a name="accountdeltas"></a>
-### AccountDeltas
-Exposes deltas for account based resources in a single round
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**accounts**  <br>*optional*|Array of Account updates for the round|< [AccountBalanceRecord](#accountbalancerecord) > array|
-|**apps**  <br>*optional*|Array of App updates for the round.|< [AppResourceRecord](#appresourcerecord) > array|
-|**assets**  <br>*optional*|Array of Asset updates for the round.|< [AssetResourceRecord](#assetresourcerecord) > array|
-
-
 <a name="accountparticipation"></a>
 ### AccountParticipation
 AccountParticipation describes the parameters used by this account in consensus protocol.
@@ -1912,34 +1925,6 @@ Application state delta.
 |---|---|
 |**address**  <br>*required*|string|
 |**delta**  <br>*required*|[StateDelta](#statedelta)|
-
-
-<a name="accounttotals"></a>
-### AccountTotals
-Total Algos in the system grouped by account status
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**not-participating**  <br>*required*|Amount of stake in non-participating accounts|integer|
-|**offline**  <br>*required*|Amount of stake in offline accounts|integer|
-|**online**  <br>*required*|Amount of stake in online accounts|integer|
-|**rewards-level**  <br>*required*|Total number of algos received per reward unit since genesis|integer|
-
-
-<a name="appresourcerecord"></a>
-### AppResourceRecord
-Represents AppParams and AppLocalStateDelta in deltas
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**address**  <br>*required*|App account address|string|
-|**app-deleted**  <br>*required*|Whether the app was deleted|boolean|
-|**app-index**  <br>*required*|App index|integer|
-|**app-local-state**  <br>*optional*|App local state|[ApplicationLocalState](#applicationlocalstate)|
-|**app-local-state-deleted**  <br>*required*|Whether the app local state was deleted|boolean|
-|**app-params**  <br>*optional*|App params|[ApplicationParams](#applicationparams)|
 
 
 <a name="application"></a>
@@ -2045,21 +2030,6 @@ data/transactions/asset.go : AssetParams
 |**unit-name-b64**  <br>*optional*|Base64 encoded name of a unit of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**url**  <br>*optional*|\[au\] URL where more information about the asset can be retrieved. Included only when the URL is composed of printable utf-8 characters.|string|
 |**url-b64**  <br>*optional*|Base64 encoded URL where more information about the asset can be retrieved.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-
-
-<a name="assetresourcerecord"></a>
-### AssetResourceRecord
-Represents AssetParams and AssetHolding in deltas
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**address**  <br>*required*|Account address of the asset|string|
-|**asset-deleted**  <br>*required*|Whether the asset was deleted|boolean|
-|**asset-holding**  <br>*optional*|The asset holding|[AssetHolding](#assetholding)|
-|**asset-holding-deleted**  <br>*required*|Whether the asset holding was deleted|boolean|
-|**asset-index**  <br>*required*|Index of the asset|integer|
-|**asset-params**  <br>*optional*|Asset params|[AssetParams](#assetparams)|
 
 
 <a name="box"></a>
@@ -2206,19 +2176,9 @@ A single Delta containing the key, the previous value and the current value for 
 
 <a name="ledgerstatedelta"></a>
 ### LedgerStateDelta
-Contains ledger updates.
+Ledger StateDelta object
 
-
-|Name|Description|Schema|
-|---|---|---|
-|**accts**  <br>*optional*|AccountDeltas object|[AccountDeltas](#accountdeltas)|
-|**kv-mods**  <br>*optional*|Array of KV Deltas|< [KvDelta](#kvdelta) > array|
-|**modified-apps**  <br>*optional*|List of modified Apps|< [ModifiedApp](#modifiedapp) > array|
-|**modified-assets**  <br>*optional*|List of modified Assets|< [ModifiedAsset](#modifiedasset) > array|
-|**prev-timestamp**  <br>*optional*|Previous block timestamp|integer|
-|**state-proof-next**  <br>*optional*|Next round for which we expect a state proof|integer|
-|**totals**  <br>*optional*|Account Totals|[AccountTotals](#accounttotals)|
-|**tx-leases**  <br>*optional*|List of transaction leases|< [TxLease](#txlease) > array|
+*Type* : object
 
 
 <a name="lightblockheaderproof"></a>
@@ -2231,30 +2191,6 @@ Proof of membership and position of a light block header.
 |**index**  <br>*required*|The index of the light block header in the vector commitment tree|integer|
 |**proof**  <br>*required*|The encoded proof.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**treedepth**  <br>*required*|Represents the depth of the tree that is being proven, i.e. the number of edges from a leaf to the root.|integer|
-
-
-<a name="modifiedapp"></a>
-### ModifiedApp
-App which was created or deleted.
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**created**  <br>*required*|Created if true, deleted if false|boolean|
-|**creator**  <br>*required*|Address of the creator.|string|
-|**id**  <br>*required*|App Id|integer|
-
-
-<a name="modifiedasset"></a>
-### ModifiedAsset
-Asset which was created or deleted.
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**created**  <br>*required*|Created if true, deleted if false|boolean|
-|**creator**  <br>*required*|Address of the creator.|string|
-|**id**  <br>*required*|Asset Id|integer|
 
 
 <a name="participationkey"></a>
@@ -2295,6 +2231,29 @@ Details about a pending transaction. If the transaction was recently confirmed, 
 |**receiver-rewards**  <br>*optional*|Rewards in microalgos applied to the receiver account.|integer|
 |**sender-rewards**  <br>*optional*|Rewards in microalgos applied to the sender account.|integer|
 |**txn**  <br>*required*|The raw signed transaction.|object|
+
+
+<a name="simulatetransactiongroupresult"></a>
+### SimulateTransactionGroupResult
+Simulation result for an atomic transaction group
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**failed-at**  <br>*optional*|If present, indicates which transaction in this group caused the failure. This array represents the path to the failing transaction. Indexes are zero based, the first element indicates the top-level transaction, and successive elements indicate deeper inner transactions.|< integer > array|
+|**failure-message**  <br>*optional*|If present, indicates that the transaction group failed and specifies why that happened|string|
+|**txn-results**  <br>*required*|Simulation result for individual transactions|< [SimulateTransactionResult](#simulatetransactionresult) > array|
+
+
+<a name="simulatetransactionresult"></a>
+### SimulateTransactionResult
+Simulation result for an individual transaction
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**missing-signature**  <br>*optional*|A boolean indicating whether this transaction is missing signatures|boolean|
+|**txn-result**  <br>*required*||[PendingTransactionResponse](#pendingtransactionresponse)|
 
 
 <a name="statedelta"></a>
@@ -2357,16 +2316,6 @@ Represents a TEAL value.
 |**bytes**  <br>*required*|\[tb\] bytes value.|string|
 |**type**  <br>*required*|\[tt\] value type. Value `1` refers to **bytes**, value `2` refers to **uint**|integer|
 |**uint**  <br>*required*|\[ui\] uint value.|integer|
-
-
-<a name="txlease"></a>
-### TxLease
-
-|Name|Description|Schema|
-|---|---|---|
-|**expiration**  <br>*required*|Round that the lease expires|integer|
-|**lease**  <br>*required*|Lease data  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**sender**  <br>*required*|Address of the lease sender|string|
 
 
 <a name="version"></a>
