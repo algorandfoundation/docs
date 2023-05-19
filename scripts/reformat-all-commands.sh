@@ -30,7 +30,7 @@ CLI_TOOLS="~/go/bin/" # path to goal, algorand-indexer, algokey, etc.
 ./convert_swagger.py -target ../docs/rest-apis/kmd.md -specfile $GO_ALGORAND_SRC/daemon/kmd/api/swagger.json
 
 # REST ALGOD V2 (from algod.oas2.json)
-./convert_swagger.py -target ../docs/rest-apis/algod/v2.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/algod.oas2.json
+./convert_swagger.py -target ../docs/rest-apis/algod.md -specfile $GO_ALGORAND_SRC/daemon/algod/api/algod.oas2.json
 
 # REST INDEXER
 ./convert_swagger.py -target ../docs/rest-apis/indexer.md -specfile $INDEXER_SRC/api/indexer.oas2.json 
