@@ -99,49 +99,41 @@ To write to either local or global state, the opcodes `app_global_put` and `app_
 To store a value in local storage, the following contract code can be used.
 
 === "PyTeal"
-	<!-- ===PYTEAL_WRITE_SENDER_LOCAL_STATE=== -->
 	```python
-	    program = App.localPut(Int(0), Bytes("MyLocalKey"), Int(50))
+	    program = App.localPut(Txn.sender(), Bytes("MyLocalKey"), Int(50))
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L12-L14)
-	<!-- ===PYTEAL_WRITE_SENDER_LOCAL_STATE=== -->
+
 
 === "TEAL"
-	<!-- ===TEAL_WRITE_SENDER_LOCAL_STATE=== -->
 	```teal
-	int 0
+	txn Sender
 	byte "OwnLocalKey"
 	int 1337
 	app_local_put
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L14-L18)
-	<!-- ===TEAL_WRITE_SENDER_LOCAL_STATE=== -->
 
-In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. See [Reference arrays](index.md#reference-arrays) for more details.
+
+In this example, the `txn Sender` represents the sender of the transaction. Any account in the accounts array can be specified. See [Reference arrays](index.md#reference-arrays) for more details.
 
 
 === "PyTeal"
-	<!-- ===PYTEAL_WRITE_OTHER_LOCAL_STATE=== -->
 	```python
-	    program = App.localPut(Int(2), Bytes("MyLocalKey"), Int(50))
+	    program = App.localPut(Addr("GHZ..."), Bytes("MyLocalKey"), Int(50))
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L19-L21)
-	<!-- ===PYTEAL_WRITE_OTHER_LOCAL_STATE=== -->
+
 
 === "TEAL"
-	<!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
 	```teal
-	txn Accounts 2
+	addr GHZ....
 	byte "OtherLocalKey"
 	int 200
 	app_local_put
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L21-L25)
-	<!-- ===TEAL_WRITE_OTHER_LOCAL_STATE=== -->
 
-Where 0 is the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call. See [Reference arrays](index.md#reference-arrays) for more details.
+
+The account specified must be in the accounts array. See [Reference arrays](index.md#reference-arrays) for more details.
 
 !!! info
     Local storage writes are only allowed if the account has opted into the smart contract.
@@ -160,73 +152,53 @@ TEAL provides calls to read global and local state values for the current smart 
 	<!-- ===PYTEAL_READ_GLOBAL_STATE=== -->
 
 === "TEAL"
-	<!-- ===TEAL_READ_GLOBAL_STATE=== -->
 	```teal
-	
-	// READING STATE
-	
+	byte "GlobalKey"
+	app_global_get		
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L26-L29)
-	<!-- ===TEAL_READ_GLOBAL_STATE=== -->
 
 
 The following contract code reads the local state of the sender account.
 
 === "PyTeal"
-	<!-- ===PYTEAL_READ_LOCAL_STATE=== -->
 	```python
-	    program = App.localGet(Int(0), Bytes("MyLocalKey"))
+	    program = App.localGet(Txn.sender(), Bytes("MyLocalKey"))
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L33-L35)
-	<!-- ===PYTEAL_READ_LOCAL_STATE=== -->
+	
 
 === "TEAL"
-	<!-- ===TEAL_READ_LOCAL_STATE=== -->
 	```teal
-	int 0
+	txn Sender
 	byte "OwnLocalState"
 	app_local_get
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L36-L39)
-	<!-- ===TEAL_READ_LOCAL_STATE=== -->
-
-In this example, the `int 0` represents the sender of the transaction. This is a reference into the accounts array that is passed with the transaction. The address can be specified instead of the index as long as the account is in the accounts array. See [Reference arrays](index.md#reference-arrays) for more details.
-
-`int 0` represents the sender, 1 is the first additional account passed in and 2 is the second additional account passed with the application call. 
 
 The `_ex` opcodes return two values to the stack. The first value is a 0 or a 1 indicating the value was returned successfully or not, and the second value on the stack contains the actual value. These calls allow local and global states to be read from other accounts and applications (smart contracts) as long as the account and the contract are in the accounts and applications arrays. To read a local storage value with the `app_local_get_ex` opcode the following contract code should be used.
 
 === "PyTeal"
-	<!-- ===PYTEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 	```python
-	    program = App.localGetEx(Int(0), Txn.application_id(), Bytes("MyAmountGiven"))
+	    program = App.localGetEx(Txn.sender(), Txn.application_id(), Bytes("MyAmountGiven"))
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L40-L42)
-	<!-- ===PYTEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 
 === "TEAL"
-	<!-- ===TEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 	```teal
-	int 0
+	txn Sender
 	txn ApplicationID
-	byte "OwnLocalState"
+	byte "MyAmountGiven"
 	app_local_get_ex
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L45-L49)
-	<!-- ===TEAL_READ_SENDER_LOCAL_STATE_EX=== -->
 
 !!! note
     The PyTeal code snippet preemptively stores the return values from `localGetEx` in scratch space for later reference. 
 
-The `int 0` is the index into the accounts array. The actual address could also be specified as long as the account is in the accounts array. See [Reference arrays](index.md#reference-arrays) for more details. The `txn ApplicationID` line refers to the current application, but could be any application that exists on Algorand as long as the contract's ID is in the applications array. Instead of specifying the application ID, the index into the application array can be used as well. The top value on the stack will either return 0 or 1 depending on if the variable was found.  Most likely branching logic will be used after a call to the `_ex` opcode. The following example illustrates this concept.
+The `txn Sender` represents the sender of the transaction. The `txn ApplicationID` line refers to the current application, but could be any application that exists on Algorand as long as the contract's ID is in the applications array. See [Reference arrays](index.md#reference-arrays) for more details.  The top value on the stack will either return 0 or 1 depending on if the variable was found.  Most likely branching logic will be used after a call to the `_ex` opcode. The following example illustrates this concept.
 
 === "PyTeal"
-	<!-- ===PYTEAL_READ_LOCAL_STATE_EX=== -->
 	```python
 	    get_amount_given = App.localGetEx(
-	        Int(0), Txn.application_id(), Bytes("MyAmountGiven")
+	        Txn.sender(), Txn.application_id(), Bytes("MyAmountGiven")
 	    )
 	
 	    # Change these to appropriate logic for new and previous givers.
@@ -241,13 +213,11 @@ The `int 0` is the index into the accounts array. The actual address could also 
 	
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L47-L62)
-	<!-- ===PYTEAL_READ_LOCAL_STATE_EX=== -->
+
 
 === "TEAL"
-	<!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
 	```teal
-	int 0
+	txn Sender
 	txn ApplicationID
 	byte "deposited"
 	app_local_get_ex
@@ -257,8 +227,6 @@ The `int 0` is the index into the accounts array. The actual address could also 
 	new_deposit:
 	// Account is making their first deposit
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L54-L63)
-	<!-- ===TEAL_READ_LOCAL_STATE_EX=== -->
 
 The `app_global_get_ex` is used to read not only the global state of the current contract but any contract that is in the applications array. To access these foreign apps, they must be passed in with the application call. See [Reference arrays](index.md#reference-arrays) for more details. 
 
@@ -269,9 +237,8 @@ $ goal app call --foreign-app APP1ID --foreign-app APP2ID
 To read from the global state with the `app_global_get_ex` opcode, use the following TEAL.
 
 === "PyTeal"
-	<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
 	```python
-	    get_global_key = App.globalGetEx(Int(0), Bytes("MyGlobalKey"))
+	    get_global_key = App.globalGetEx(Global.current_application_id(), Bytes("MyGlobalKey"))
 	
 	    # Update with appropriate logic for use case
 	    increment_existing = Seq(Return(Int(1)))
@@ -283,20 +250,16 @@ To read from the global state with the `app_global_get_ex` opcode, use the follo
 	
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/kv_state.py#L67-L78)
-	<!-- ===PYTEAL_READ_GLOBAL_STATE_EX=== -->
+
 
 === "TEAL"
-	<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
 	```teal
-	int 0
+	global CurrentApplicationID
 	byte "GlobalKey"
 	app_global_get_ex
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/state_manipulation/approval.teal#L67-L70)
-	<!-- ===TEAL_READ_GLOBAL_STATE_EX=== -->
 
-The `int 0` represents the current application and `int 1` would reference the first passed in foreign app. Likewise, `int 2` would represent the second passed in foreign application. The actual contract IDs can also be specified as long as the contract is in the contracts array. See [Reference arrays](index.md#reference-arrays) for more details. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
+The specified contract's ID must be in the applications array. See [Reference arrays](index.md#reference-arrays) for more details. Similar to the `app_local_get_ex` opcode, generally, there will be branching logic testing whether the value was found or not. 
 
 ## Summary of global and Local state operations
 

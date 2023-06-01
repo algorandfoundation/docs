@@ -61,25 +61,23 @@ When this transaction is submitted, the `ApprovalProgram` of the smart contract 
 Other contracts may have much more complex opt in logic. TEAL also provides an opcode to check whether an account has already opted into the contract.
 
 === "PyTeal"
-	<!-- ===PYTEAL_APPL_CHECK_OPTEDIN=== -->
+
 	```python
-	    program = App.optedIn(Int(0), Txn.application_id())
+	    program = App.optedIn(Txn.sender(), Txn.application_id())
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/application.py#L18-L20)
-	<!-- ===PYTEAL_APPL_CHECK_OPTEDIN=== -->
 
 === "TEAL"
 	<!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
 	```teal
-	int 0
+	txn Sender
 	txn ApplicationID
 	app_opted_in
 	```
 	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/opting_in/approval.teal#L6-L9)
 	<!-- ===TEAL_APPL_CHECK_OPTEDIN=== -->
 
-In the above example, the int 0 is a reference index into the accounts array, where 0 is the sender. A 1 would be the first account passed into the call and so on. The actual address may also be specified as long as it is in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array. See [Reference arrays](index.md#reference-arrays) for more details.
+In the above example, `txn Sender` is the address of the transaction sender. The address can be any account in the accounts array. The `txn ApplicationID` refers to the current application ID, but technically any application ID could be used as long as its ID is in the applications array. See [Reference arrays](index.md#reference-arrays) for more details.
 
 !!! info
     Applications that only use global state do not require accounts to opt in.

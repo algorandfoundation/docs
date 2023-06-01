@@ -41,28 +41,104 @@ The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalPr
 <center>*Application Transaction Types*</center>
 
 # Reference arrays
-A set of arrays can be passed with any application transaction, which instructs the protocol to load additional data for use in the contract. These arrays are the *arguments* array, the *applications* array, the *assets* array, the *accounts* array, and the *boxes* array. These arrays are used to restrict how much of the ledger can be accessed in one specific call to the smart contract. This restriction is in place to maintaing blockchain performance. These arrays can be changed per application transaction (even within an atomic group).
 
-The arguments array is used to pass standard arguments to the contract. The arguments array is limited to 16 arguments with a 2KB total size limit. See [Passing Arguments To Smart Contracts](create.md#passing-arguments-to-smart-contracts) for more details on arguments.
+When smart contracts execute, they may require data stored within the ledger for evaluation. The following sections define how data access by a smart contract is achieved as of version 9 of the AVM. For previous versions of the AVM see the [TEAL specification](https://github.com/algorandfoundation/specs/blob/master/dev/TEAL.md#resource-availability).
 
-The other arrays are used to load data from the blockchain:
+<center>![Smart Contract](/docs/imgs/refarray_1.png)</center>
 
-* The application array is used to pass other smart contract IDs that can be used to read state for those specific contracts. 
-* The assets array is used to pass a list of asset IDs that can be used to retrieve configuration and asset balance information. 
-* The accounts array allows additional accounts to be passed to the contract for balance information and local state. Note that to access an account's asset balance, both the account and the asset ID must be specified in their respective arrays. Similarly, to access an account's local state for a specific application, both the account and the smart contract ID must be specified in their respective arrays.
-* The boxes array defines which boxes can be manipulated in a particular call to the smart contract. The box array is an array of pairs: the first element of each pair is an integer specifying the index into the application array, and the second element is the key name of the box to be accessed.   
 
-These four arrays (*applications*, *assets*, *accounts*, and *boxes*) are limited to eight total values combined, and of those, the accounts array can have no more than four values. The values passed within these arrays can change per Application Transaction.  The opcodes that make use of these arrays take an integer parameter as an index into these arrays. 
+## Resource availability
+The AVM provides several opcodes(functions) that support reading ledger data. The primary ledger data items that can be read are accounts, assets(ASAs), applications(smart contracts), and boxes. These ledger items allow the contract to look at specific information about each of these components such as reading an accounts’s Algo balance or examining the immutable properties of an ASA. These items are stored in the ledger in what can be thought of as large lists.
 
-The accounts and applications arrays contain the transaction sender and current application ID in the 0th position of the respective array. This shifts the contents of these two arrays by one slot. The opcodes that use an index into these arrays also allow passing the actual value. For example, an address can be specified for an opcode that uses the accounts array. IDs can be specified for contracts and assets for an opcode that uses the applications or assets arrays, respectively. These opcodes will fail if the specified value does not exist in the corresponding array. The use of each of these arrays is detailed throughout this guide.
+<center>![Smart Contract](/docs/imgs/refarray_2.png)</center>
 
-The following examples illustrate populating these arrays before calling a smart contract when using the Atomic Transaction Composer(ATC).
 
+Two of these components ( accounts and applications ) also contain sublists of potentially large datasets. For example, an account can opt into potentially an unlimited set of assets or applications (which store user local state). Additionally, smart contracts allow boxes of data to be stored within the ledger and are also potentially unlimited. For example, a smart contract may create a unique box of arbitrary data for every user of the smart contract.
+
+<center>![Smart Contract](/docs/imgs/refarray_3.png)</center>
+
+To maintain a high level of performance, the AVM restricts how much of the ledger can be viewed within a given contract execution. This is implemented with a set of reference arrays passed with each application transaction that define the specific ledger items that are **available** during execution. These arrays are the Account, Asset, Application, and Boxes arrays. 
+
+These four arrays are limited to eight total values combined (per application transaction). The accounts array can have no more than four accounts. The values passed in using these arrays can change per application transaction. 
+
+Additionally, when accessing one of the sublists of items, the application transaction must include both the top level item and the nested list item within the same call. For example, to read an ASA balance for a specific account, the account and the asset must both be present in the respective accounts and assets arrays for the given transaction.
+
+<center>![Smart Contract](/docs/imgs/refarray_4.png)</center>
+
+By default the reference arrays are empty with the exception of the accounts array and the applications array. The Accounts array contains the transaction sender's address, and the Application array contains the called smart contract ID.
+
+<center>![Smart Contract](/docs/imgs/refarray_5.png)</center>
+
+If a specific ledger item (account, asset, application, account+asset, account+application, application+box) can be read during a smart contract’s execution, it is said to be **available**. These four arrays determine the **availability** of these six unique ledger items.
+
+AVM opcodes that require an address, asset ID, or application ID can access the value of these from the reference arrays using slot referencing or by passing the actual address or ID. Using the actual address or ID is the preferred method as shown in the example below.
+
+```python
+@app.external
+def asa_balance_with_reference_type(
+    account: abi.Account, asa: abi.Asset, *, output: abi.Uint64
+) -> Expr:
+    asset_balance = AssetHolding.balance(account.address(), asa.asset_id())
+    return Seq(
+        asset_balance,
+        Assert(asset_balance.hasValue()),
+        output.set(asset_balance.value()),
+    )
+
+```
+ 
+Slot referencing can be used as well, but will not benefit from resource sharing.
+
+```python
+@app.external
+def asa_balance_with_slot_referencing(*, output: abi.Uint64) -> Expr:
+    asset_balance = AssetHolding.balance(Txn.accounts[0], Txn.assets[0])
+    return Seq(
+        asset_balance,
+        Assert(asset_balance.hasValue()),
+        output.set(asset_balance.value()),
+    )
+
+```
+
+!!! info
+    Since V9 of the AVM, resource sharing is now available. Specific addresses/IDs should be used and not slot references. Slot referencing may be deprecated in the future.  Read more about resource sharing below.
+
+!!! info
+    If a smart contract uses an inner transaction to initiate a call to another smart contract, the inner contract automatically inherits the resource **availability** of the top level smart contract.
+
+## Resource sharing
+Resources are shared across atomically grouped transactions. This means that if two smart contracts are in the same atomic group, they share **availability**. 
+
+For example, say you have two smart contract call transactions grouped together, transaction #1 and transaction #2. Transaction #1 has asset 123456 in its assets array, and transaction #2 has asset 555555 in its assets array. Both assets are **available** to both smart contract calls during evaluation. 
+
+<center>![Smart Contract](/docs/imgs/refarray_6.png)</center>
+
+Note that when accessing a sublist item (account+asa, account+application ocal state, application+box), both items need to be in the same transaction’s set of arrays. For example, you cannot have account A in transaction #1 and asset Z in transaction #2 and then try to get the balance of asset Z for account A. Asset Z and account A must be in the same application transaction. If both asset Z and account A are in transaction #1’s arrays, then A’s balance for Z is **available** to both transactions during evaluation. 
+
+Because Algorand supports grouping up to 16 transactions simultaneously, this pushes the **available** resources up to 8x16 or 128 items, if all 16 transactions are application transactions.
+
+If an application transaction is grouped with other types of transactions, other resources will be made **available** to the smart contract called in the application transaction. For example, if an application transaction is grouped with a payment transaction, the payment transaction’s sender and receiver accounts are **available** to the smart contract. Additionally, if the `CloseRemainderTo` field is set, that account will also be **available** to the smart contract. The table below summarizes what each transaction type adds to resource **availability**.
+
+| Transaction | Type | Availability Notes | 
+|------|------|------|
+| Payment | `pay` | `txn.Sender`, `txn.Receiver`, and `txn.CloseRemainderTo` (if set)|
+| Key Registration | `keyreg` | `txn.Sender` |
+| Asset Config/Create | `acfg` | `txn.Sender`, `txn.ConfigAsset`, and the `txn.ConfigAsset` holding of `txn.Sender`|
+| Asset Transfer | `axfer` | `txn.Sender`, `txn.AssetReceiver`, `txn.AssetSender` (if set), `txnAssetCloseTo` (if set), `txn.XferAsset`, and the `txn.XferAsset` holding of each of those accounts. |
+| Asset Freeze | `afrz` | `txn.Sender`, `txn.FreezeAccount`, `txn.FreezeAsset`, and the `txn.FreezeAsset` holding of `txn.FreezeAccount`. The `txn.FreezeAsset` holding of `txn.Sender` is not made available. |
+
+!!! info
+    In future versions of the AVM, the Atomic Transaction Composer may be enhanced to automatically generate reference arrays for specific transaction groups
+
+!!! info
+	If any application or asset is created within a group of transactions, they are **available** resources as long as they are created before they are accessed.
+
+## Boxes Array
 Boxes function similar to the other arrays but differ is significant ways which are explained in detail in the [Boxes section of the documentation](state.md#box-details).
 
-<center>![Smart Contract](/docs/imgs/stateful-2.png)</center>
-<center>*Reference Arrays*</center>
-
+## Loading the Reference Arrays 
+For information on adding entries to reference arrays when calling a smart contract see the [ATC documentation](https://developer.algorand.org/docs/get-details/atc/#foreign-references).
 
 # Application Account
 Since September 2021 all deployed smart contracts are given their own application account with an associated Algorand public address. These accounts are used by issuing [inner transactions](/docs/get-details/dapps/smart-contracts/apps/innertx/) from within the smart contract.
