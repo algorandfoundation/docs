@@ -99,7 +99,6 @@ def asa_balance_with_slot_referencing(*, output: abi.Uint64) -> Expr:
         output.set(asset_balance.value()),
     )
 
-
 ```
 
 !!! info
