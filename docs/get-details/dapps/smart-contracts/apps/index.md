@@ -147,38 +147,38 @@ The public address is devised by taking the application ID as an 8-byte big-endi
 
 === "Python"
 <!-- ===PYSDK_CODEC_APPLICATION_ACCOUNT=== -->
-	```python
-	app_id = 123
-	app_addr = logic.get_application_address(app_id)
-	
-	print(f"Application ID:   {app_id}")
-	print(f"Application Addr: {app_addr}")
-	```
-	[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L16-L21)
+```python
+app_id = 123
+app_addr = logic.get_application_address(app_id)
+
+print(f"Application ID:   {app_id}")
+print(f"Application Addr: {app_addr}")
+```
+[Snippet Source](https://github.com/algorand/py-algorand-sdk/blob/examples/examples/codec.py#L16-L21)
 <!-- ===PYSDK_CODEC_APPLICATION_ACCOUNT=== -->
 
 === "JavaScript"
 <!-- ===JSSDK_CODEC_APPLICATION_ACCOUNT=== -->
-	```javascript
-	const appId = 123;
-	const appAddr = algosdk.getApplicationAddress(appId);
-	
-	console.log(`Application ID:      ${  appId}`);
-	console.log(`Application Address: ${  appAddr}`);
-	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L23-L28)
+```javascript
+const appId = 123;
+const appAddr = algosdk.getApplicationAddress(appId);
+
+console.log(`Application ID:      ${  appId}`);
+console.log(`Application Address: ${  appAddr}`);
+```
+[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L23-L28)
 <!-- ===JSSDK_CODEC_APPLICATION_ACCOUNT=== -->
 
 === "Go"
 <!-- ===GOSDK_CODEC_APPLICATION_ACCOUNT=== -->
-	```go
-	var appId uint64 = 123
-	var appAddr types.Address = crypto.GetApplicationAddress(appId)
-	
-	fmt.Println("Application ID:      ", appId)
-	fmt.Println("Application Address: ", appAddr)
-	```
-	[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L76-L81)
+```go
+var appId uint64 = 123
+var appAddr types.Address = crypto.GetApplicationAddress(appId)
+
+fmt.Println("Application ID:      ", appId)
+fmt.Println("Application Address: ", appAddr)
+```
+[Snippet Source](https://github.com/algorand/go-algorand-sdk/blob/examples/examples/codec/main.go#L76-L81)
 <!-- ===GOSDK_CODEC_APPLICATION_ACCOUNT=== -->
 
 
