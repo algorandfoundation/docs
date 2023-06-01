@@ -138,22 +138,18 @@ If any transaction in a group of transactions is a call to a smart contract, the
 Smart contract applications can work in conjunction with assets. In addition to normal asset transaction properties, such as asset amount, sender, and receiver, TEAL provides an opcode to interrogate an account’s asset balance and whether the asset is frozen. This opcode `asset_holding_get` can be used to retrieve an asset balance or check whether the asset is frozen for any account in the transaction accounts array. The asset must also be in the assets array. See [Reference arrays](index.md#reference-arrays) for more details.
 
 === "PyTeal"
-	<!-- ===PYTEAL_APPL_ASSET_BALANCE=== -->
 	```python
-	    asset_balance = AssetHolding.balance(Int(0), Int(2))
+	    asset_balance = AssetHolding.balance(Txn.sender(), Int(123456))
 	    program = Seq(
 	        asset_balance, If(asset_balance.hasValue(), Return(Int(1)), Return(Int(0)))
 	    )
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/assets.py#L5-L10)
-	<!-- ===PYTEAL_APPL_ASSET_BALANCE=== -->
 
 === "TEAL"
-	<!-- ===TEAL_APPL_ASSET_BALANCE=== -->
 	```teal
-	int 0
-	int 2
+	txn Sender
+	int 123456
 	asset_holding_get AssetBalance
 	bnz has_balance
 	
@@ -164,28 +160,24 @@ Smart contract applications can work in conjunction with assets. In addition to 
 	has_balance:
 	//balance value is now on top of the stack
 	```
-	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appl_asset/approval.teal#L3-L14)
-	<!-- ===TEAL_APPL_ASSET_BALANCE=== -->
 
-This opcode takes two parameters. The first parameter represents an index into the accounts array, where `int 0` is the sender of the transaction’s address. If additional accounts are passed in then higher index numbers would be used to retrieve values. The actual address can also be specified as long as is it is in the accounts array. The second parameter is the Asset ID of the asset to examine. This can be either an index into the assets array or the actual asset ID. The asset must be in the assets array for the call to be successful. In this example, the asset ID is 2. See [Reference arrays](index.md#reference-arrays) for more details. 
+This opcode takes two parameters. The first parameter represents the account to check. The second parameter is the Asset ID of the asset to examine. The asset must be in the assets array and the account in the accounts array for the call to be successful. See [Reference arrays](index.md#reference-arrays) for more details. 
 
 This opcode supports getting the asset balance and the frozen state of the asset for the specific account. To get the frozen state, replace `AssetBalance` above with `AssetFrozen`. This opcode also returns two values to the top of the stack. The first is a 0 or  1, where 0 means the asset balance was not found and 1 means an asset balance was found in the accounts balance record.
 
 It is also possible to get an Asset’s configuration information within a smart contract if the asset ID is passed with the transaction in the assets array. To read the configuration, the `asset_params_get` opcode must be used. This opcode should be supplied with one parameter, which is the index into the assets array or the actual asset ID.
 
 === "PyTEAL"
-	<!-- ===PYTEAL_APPL_ASSET_PARAM=== -->
 	```python
-	    program = AssetParam.total(Int(0))
+	    program = AssetParam.total(Int(123456))
 	    print(compileTeal(program, Mode.Application))
 	```
-	[Snippet Source](https://github.com/barnjamin/pyteal/blob/examples-for-docs/_examples/assets.py#L15-L17)
-	<!-- ===PYTEAL_APPL_ASSET_PARAM=== -->
+->
 
 === "TEAL"
 	<!-- ===TEAL_APPL_ASSET_PARAM=== -->
 	```teal
-	int 0
+	int 123456
 	asset_params_get AssetTotal
 	```
 	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appl_asset/approval.teal#L18-L20)
