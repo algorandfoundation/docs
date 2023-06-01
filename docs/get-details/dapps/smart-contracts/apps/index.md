@@ -42,13 +42,13 @@ The `ClearStateProgram` handles the `ClearState` transaction and the `ApprovalPr
 
 # Reference arrays
 
-When smart contracts execute, often data stored within the ledger is required for the evaluation. The following sections define how data access by a smart contract is achieved as of version 9 of the AVM. For previous versions of the AVM see the [TEAL specification](https://github.com/algorandfoundation/specs/blob/master/dev/TEAL.md#resource-availability).
+When smart contracts execute, they may require data stored within the ledger for evaluation. The following sections define how data access by a smart contract is achieved as of version 9 of the AVM. For previous versions of the AVM see the [TEAL specification](https://github.com/algorandfoundation/specs/blob/master/dev/TEAL.md#resource-availability).
 
 <center>![Smart Contract](/docs/imgs/refarray_1.png)</center>
 
 
 ## Resource availability
-The AVM provides several opcodes(functions) that support reading ledger data. The primary ledger data items that can be read are accounts, assets(ASAs), and applications(smart contracts). These ledger items allow the contract to look at specific information about each of these components such as reading an accounts’s Algo balance or examining the immutable properties of an ASA. These items are stored in the ledger in what can be thought of as large lists.
+The AVM provides several opcodes(functions) that support reading ledger data. The primary ledger data items that can be read are accounts, assets(ASAs), applications(smart contracts), and boxes. These ledger items allow the contract to look at specific information about each of these components such as reading an accounts’s Algo balance or examining the immutable properties of an ASA. These items are stored in the ledger in what can be thought of as large lists.
 
 <center>![Smart Contract](/docs/imgs/refarray_2.png)</center>
 
