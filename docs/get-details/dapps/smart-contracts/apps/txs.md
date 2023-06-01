@@ -172,13 +172,16 @@ It is also possible to get an Asset’s configuration information within a smart
 	    program = AssetParam.total(Int(123456))
 	    print(compileTeal(program, Mode.Application))
 	```
+->
 
 === "TEAL"
+	<!-- ===TEAL_APPL_ASSET_PARAM=== -->
 	```teal
 	int 123456
 	asset_params_get AssetTotal
 	```
-
+	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/appl_asset/approval.teal#L18-L20)
+	<!-- ===TEAL_APPL_ASSET_PARAM=== -->
 
 This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
 
