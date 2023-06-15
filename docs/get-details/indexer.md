@@ -1,6 +1,6 @@
 title: Indexer
 
-This guide explains how to search the Algorand Blockchain using the Indexer. This Indexer not part of the Algorand node and requires a separate binary download. See the [Indexer Install Guide](../run-a-node/setup/indexer.md) for instructions on installing and configuring the new Indexer.
+This guide explains how to search the Algorand Blockchain using the Indexer. This Indexer is not part of the Algorand node and requires a separate binary download. See the [Indexer Install Guide](../run-a-node/setup/indexer.md) for instructions on installing and configuring the new Indexer.
 
 ![Block Proposal](../imgs/indexerv2.png)
 <center>*Algorand V2 Indexer*</center>
@@ -159,7 +159,7 @@ As an example, to get the details of a specific asset the indexer provides the `
 
 
 # Search
-Searching is similar to lookup with the ability to return multiple or filtered results. This example searches for transctions based on a few filters. 
+Searching is similar to lookup with the ability to return multiple or filtered results. This example searches for transactions based on a few filters. 
 
 === "JavaScript"
     <!-- ===JSSDK_INDEXER_SEARCH_MIN_AMOUNT=== -->
@@ -354,7 +354,7 @@ For example, adding a limit parameter of 5 to the previous call will cause only 
     <!-- ===CURL_INDEXER_PAGINATE_RESULTS=== -->
 	```bash
     $ curl "localhost:8980/v2/transactions?currency-greater-than=10&limit=5"
-    # note the "next-token" field in the most resent results and supply the value to the "next" parameter
+    # note the "next-token" field in the most recent results and supply the value to the "next" parameter
     $ curl "localhost:8979/v2/transactions?currency-greater-than=10&limit=5&next=cAoBAAAAAAAAAAAA"
     ```
     <!-- ===CURL_INDEXER_PAGINATE_RESULTS=== -->
