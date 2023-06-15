@@ -90,7 +90,7 @@ One important difference between Ethereum and Algorand smart contracts is storag
 
 Ethereum smart contract storage is a huge array of 2^256 uint256 elements. The solidity language has higher-level types like dynamic arrays and mappings that are then mapped to this huge storage array (dynamic types use keccak to compute the location of each item).
 
-For performances reasons, Algorand smart contract have [three different types of storage](../dapps/smart-contracts/apps/state). While it is possible to only use boxes and essentially have a similar model as Ethereum (with the caveat that the boxes used need to be specified in the transaction), it can be more cost-effective to use local and global storage in some cases.
+For performances reasons, Algorand smart contracts have [three different types of storage](../dapps/smart-contracts/apps/state). While it is possible to only use boxes and essentially have a similar model as Ethereum (with the caveat that the boxes used need to be specified in the transaction), it can be more cost-effective to use local and global storage in some cases.
 
 In particular, the common solidity pattern
 
@@ -104,7 +104,7 @@ is often better replaced by local storage. (With the caveat that local storage c
 
 ### Multisig Accounts
 
-On Ethereum, it is possible to write smart contracts to ensure that fund transfers requires approval/signatures by multiple distinct users. On Algorand, multisig accounts are first-class citizens and can be created very easily. See [the multisig account documentation](../accounts/create/#multisignature).
+On Ethereum, it is possible to write smart contracts to ensure that fund transfers require approval/signatures by multiple distinct users. On Algorand, multisig accounts are first-class citizens and can be created very easily. See [the multisig account documentation](../accounts/create/#multisignature).
 
 ### Atomic Transfer / Group Transaction
 
@@ -143,7 +143,7 @@ In this section, we go over common design patterns Ethereum uses and their equiv
 
 ## Transfer Tokens to an Application
 
-On Ethereum, tranferring tokens to a smart contract is done in two ways:
+On Ethereum, transferring tokens to a smart contract is done in two ways:
 
 1. For Ether, the tokens are directly sent with the call to the smart contract.
 2. For other tokens (ERC-20, ERC-721, ERC-1155), the user first needs to call a function (of the token smart contract) to approve the smart contract they want to call to spend tokens on their behalf.
