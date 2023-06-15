@@ -18,7 +18,7 @@ This section begins with an [overview](#assets-overview) of the asset implementa
 Here are several things to be aware of before getting started with assets.
 
 - For every asset an account creates or owns, its minimum balance is increased by 0.1 Algos (100,000 microAlgos). 
-- This minimum balance requirement will be placed on the original creator as long as the the asset has not been destroyed. Transfering the asset does not alleviate the creator's minimum balance requirement.
+- This minimum balance requirement will be placed on the original creator as long as the asset has not been destroyed. Transferring the asset does not alleviate the creator's minimum balance requirement.
 - Before a new asset can be transferred to a specific account the receiver must opt-in to receive the asset. This process is described below in [Receiving an asset](#receiving-an-asset). 
 - If any transaction is issued that would violate the minimum balance requirements, the transaction will fail.
 
