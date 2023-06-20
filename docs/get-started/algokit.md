@@ -12,10 +12,10 @@ If you prefer videos, take a look at this 10-minute guide to getting started.
 
 Detailed video guides for both [Windows](https://www.youtube.com/v/22RvINnZsRo) and [Mac](https://www.youtube.com/v/zsurtpCGmgE) are also available.
 
-# Prequisites
+# Prerequisites
 This guide presents installing AlgoKit using an OS agnostic procedure. For OS-specific instructions take a look at the [AlgoKit install](https://github.com/algorandfoundation/algokit-cli/blob/main/README.md#install) guide.
 
-Using this procedure requires the the following components to be installed already
+Using this procedure requires the following components to be installed already
 
 * [Python 3.10](https://www.python.org/downloads/) or higher
 * [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
@@ -124,7 +124,7 @@ Running the `build.py` python file will also generate these artifacts without de
 
 # Using Dappflow
 
-Dappflow is a web-based user interface that let's you visualise accounts, transactions, assets and applications on an Algorand network and also provides ability to deploy and call smart contracts. This works for TestNet, MainNet and also LocalNet. Furthermore, you can also create and fund accounts on LocalNet. While AlgoKit surfaces both a programming interface and a command line interface for interacting with Algorand, it also allows you to quickly open Dappflow so you can see what's happening visually.
+Dappflow is a web-based user interface that let you visualise accounts, transactions, assets and applications on an Algorand network and also provides ability to deploy and call smart contracts. This works for TestNet, MainNet and also LocalNet. Furthermore, you can also create and fund accounts on LocalNet. While AlgoKit surfaces both a programming interface and a command line interface for interacting with Algorand, it also allows you to quickly open Dappflow so you can see what's happening visually.
 
 Dappflow can be launched from AlgoKit by running the following command from the VS Code terminal.
 
@@ -175,7 +175,7 @@ Click on the Execute button and a popup will be displayed allowing you to enter 
 ![AlgoKit Dappflow](/docs/imgs/dappflow5.png){: style="width:700px" align=center }
 </center>
 
-Enter a string in the parameter and click on `Execute`. You should get get a confirmation that the method executed properly and what the smart contract returned.
+Enter a string in the parameter and click on `Execute`. You should get a confirmation that the method executed properly and what the smart contract returned.
 
 <center>
 ![AlgoKit Dappflow](/docs/imgs/dappflow6.png){: style="width:700px" align=center }
@@ -202,4 +202,4 @@ brew upgrade algokit
 - To learn more about AlgoKit and what you can do with it, check out the [AlgoKit documentation](/docs/get-details/algokit).
 - To learn more about Beaker, take a look at the [Beaker documentation](/docs/get-details/dapps/writing-contracts/beaker).
 - To get detailed AlgoKit documentation, see the [AlgoKit repository](https://github.com/algorandfoundation/algokit-cli).
-- More information on Algorand smart contracts is also availble in the [smart contract documentation](/docs/get-details/dapps/smart-contracts/apps/).
+- More information on Algorand smart contracts is also available in the [smart contract documentation](/docs/get-details/dapps/smart-contracts/apps/).
