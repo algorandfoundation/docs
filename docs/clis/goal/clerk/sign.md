@@ -30,7 +30,7 @@ goal clerk sign -i [input file] -o [output file] [flags]
 
 ```
 
-      --argb64 strings     base64 encoded args to pass to transaction logic
+      --argb64 strings     Base64 encoded args to pass to transaction logic
 
   -h, --help               help for sign
 
@@ -42,7 +42,7 @@ goal clerk sign -i [input file] -o [output file] [flags]
 
   -p, --program string     Program source to use as account logic
 
-  -P, --proto string       consensus protocol version id string
+  -P, --proto string       Consensus protocol version id string
 
   -S, --signer string      Address of key to sign with, if different from transaction "from" address due to rekeying
 

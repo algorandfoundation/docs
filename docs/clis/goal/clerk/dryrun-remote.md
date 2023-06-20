@@ -30,13 +30,13 @@ goal clerk dryrun-remote [flags]
 
 ```
 
-  -D, --dryrun-state string   dryrun request object to run
+  -D, --dryrun-state string   Dryrun request object to run
 
   -h, --help                  help for dryrun-remote
 
-  -r, --raw                   output raw response from algod
+  -r, --raw                   Output raw response from algod
 
-  -v, --verbose               print more info
+  -v, --verbose               Print more info
 
 ```
 
