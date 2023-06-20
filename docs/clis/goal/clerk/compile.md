@@ -32,17 +32,17 @@ goal clerk compile [input file 1] [input file 2]... [flags]
 
   -a, --account string   Account address to sign the program (If not specified, uses default account)
 
-  -D, --disassemble      disassemble a compiled program
+  -D, --disassemble      Disassemble a compiled program
 
   -h, --help             help for compile
 
-  -m, --map              write out source map
+  -m, --map              Write out source map
 
-  -n, --no-out           don't write contract program binary
+  -n, --no-out           Don't write contract program binary
 
   -o, --outfile string   Filename to write program bytes or signed LogicSig to
 
-  -s, --sign             sign program, output is a binary signed LogicSig record
+  -s, --sign             Sign program, output is a binary signed LogicSig record
 
 ```
 
