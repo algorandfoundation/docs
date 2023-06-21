@@ -10,7 +10,6 @@ arrange:
     - dapps
     - algokit.md
     - indexer.md
-    - walletconnect
     - stateproofs
     - encoding.md
     - parameter_tables.md

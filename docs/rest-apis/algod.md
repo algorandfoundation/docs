@@ -89,6 +89,35 @@ GET /metrics
 * public
 
 
+<a name="getready"></a>
+### GET /ready
+Returns OK if healthy and fully caught up.
+```
+GET /ready
+```
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|OK.|No Content|
+|**500**|Internal Error|No Content|
+|**503**|Node not ready yet|No Content|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* common
+* public
+
+
 <a name="swaggerjson"></a>
 ### GET /swagger.json
 Gets the current swagger spec.
@@ -374,7 +403,7 @@ GET /v2/applications/{application-id}/box
 
 
 **Description**
-Given an application ID and box name, it returns the box name and value (each base64 encoded). Box names must be in the goal app call arg encoding form 'encoding:value'. For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
+Given an application ID and box name, it returns the round, box name, and value (each base64 encoded). Box names must be in the goal app call arg encoding form 'encoding:value'. For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.
 
 
 **Parameters**
@@ -787,6 +816,51 @@ Given a catchpoint, it aborts catching up to this catchpoint
 * private
 
 
+<a name="getledgerstatedeltafortransactiongroup"></a>
+### GET /v2/deltas/txn/group/{id}
+Get a LedgerStateDelta object for a given transaction group
+```
+GET /v2/deltas/txn/group/{id}
+```
+
+
+**Description**
+Get a ledger delta for a given transaction group.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**id**  <br>*required*|A transaction ID, or transaction group ID|string|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Response containing a ledger state delta for a single transaction group.|[LedgerStateDelta](#ledgerstatedelta)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**404**|Could not find a delta for transaction ID or group ID|[ErrorResponse](#errorresponse)|
+|**408**|timed out on request|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**501**|Not Implemented|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+* `application/msgpack`
+
+
+**Tags**
+
+* nonparticipating
+* public
+
+
 <a name="getledgerstatedelta"></a>
 ### GET /v2/deltas/{round}
 Get a LedgerStateDelta object for a given round
@@ -828,8 +902,134 @@ Get ledger deltas for a round.
 
 **Tags**
 
-* data
-* experimental
+* nonparticipating
+* public
+
+
+<a name="gettransactiongroupledgerstatedeltasforround"></a>
+### GET /v2/deltas/{round}/txn/group
+Get LedgerStateDelta objects for all transaction groups in a given round
+```
+GET /v2/deltas/{round}/txn/group
+```
+
+
+**Description**
+Get ledger deltas for transaction groups in a given round.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**round**  <br>*required*|The round for which the deltas are desired.|integer|
+|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Response containing all ledger state deltas for transaction groups, with their associated Ids, in a single round.|[Response 200](#gettransactiongroupledgerstatedeltasforround-response-200)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**404**|Could not find deltas for round|[ErrorResponse](#errorresponse)|
+|**408**|timed out on request|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**501**|Not Implemented|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+<a name="gettransactiongroupledgerstatedeltasforround-response-200"></a>
+**Response 200**
+
+|Name|Schema|
+|---|---|
+|**Deltas**  <br>*required*|< [LedgerStateDeltaForTransactionGroup](#ledgerstatedeltafortransactiongroup) > array|
+
+
+**Produces**
+
+* `application/json`
+* `application/msgpack`
+
+
+**Tags**
+
+* nonparticipating
+* public
+
+
+<a name="getblocktimestampoffset"></a>
+### GET /v2/devmode/blocks/offset
+Returns the timestamp offset. Timestamp offsets can only be set in dev mode.
+```
+GET /v2/devmode/blocks/offset
+```
+
+
+**Description**
+Gets the current timestamp offset.
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Response containing the timestamp offset in seconds|[Response 200](#getblocktimestampoffset-response-200)|
+|**400**|TimeStamp offset not set.|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+<a name="getblocktimestampoffset-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**offset**  <br>*required*|Timestamp offset in seconds.|integer|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* nonparticipating
+* public
+
+
+<a name="setblocktimestampoffset"></a>
+### POST /v2/devmode/blocks/offset/{offset}
+Given a timestamp offset in seconds, adds the offset to every subsequent block header's timestamp.
+```
+POST /v2/devmode/blocks/offset/{offset}
+```
+
+
+**Description**
+Sets the timestamp offset (seconds) for blocks in dev mode. Providing an offset of 0 will unset this value and try to use the real clock for the timestamp.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**offset**  <br>*required*|The timestamp offset for blocks in dev mode.|integer|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|OK|No Content|
+|**400**|Cannot set timestamp offset to a negative integer.|[ErrorResponse](#errorresponse)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+
+**Tags**
+
+* nonparticipating
 * public
 
 
@@ -1330,7 +1530,7 @@ GET /v2/status
 |**upgrade-next-protocol-vote-before**  <br>*optional*|Next protocol round|integer|
 |**upgrade-no-votes**  <br>*optional*|No votes cast for consensus upgrade|integer|
 |**upgrade-node-vote**  <br>*optional*|This node's upgrade vote|boolean|
-|**upgrade-vote-rounds**  <br>*optional*|Total voting ounds for current upgrade|integer|
+|**upgrade-vote-rounds**  <br>*optional*|Total voting rounds for current upgrade|integer|
 |**upgrade-votes**  <br>*optional*|Total votes cast for consensus upgrade|integer|
 |**upgrade-votes-required**  <br>*optional*|Yes votes required for consensus upgrade|integer|
 |**upgrade-yes-votes**  <br>*optional*|Yes votes cast for consensus upgrade|integer|
@@ -1404,7 +1604,7 @@ Waits for a block to appear after round {round} and returns the node's status at
 |**upgrade-next-protocol-vote-before**  <br>*optional*|Next protocol round|integer|
 |**upgrade-no-votes**  <br>*optional*|No votes cast for consensus upgrade|integer|
 |**upgrade-node-vote**  <br>*optional*|This node's upgrade vote|boolean|
-|**upgrade-vote-rounds**  <br>*optional*|Total voting ounds for current upgrade|integer|
+|**upgrade-vote-rounds**  <br>*optional*|Total voting rounds for current upgrade|integer|
 |**upgrade-votes**  <br>*optional*|Total votes cast for consensus upgrade|integer|
 |**upgrade-votes-required**  <br>*optional*|Yes votes required for consensus upgrade|integer|
 |**upgrade-yes-votes**  <br>*optional*|Yes votes cast for consensus upgrade|integer|
@@ -1792,7 +1992,7 @@ POST /v2/transactions/simulate
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
-|**Body**|**rawtxn**  <br>*required*|The byte encoded transaction to simulate|string (binary)|
+|**Body**|**request**  <br>*required*|The transactions to simulate, along with any other inputs.|[SimulateRequest](#simulaterequest)|
 
 
 **Responses**
@@ -1800,9 +2000,8 @@ POST /v2/transactions/simulate
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**200**|Result of a transaction group simulation.|[Response 200](#simulatetransaction-response-200)|
-|**400**|Bad Request - Malformed Algorand transaction|[ErrorResponse](#errorresponse)|
+|**400**|Bad Request|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
-|**404**|Transaction simulator not enabled|No Content|
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
 |**503**|Service Temporarily Unavailable|[ErrorResponse](#errorresponse)|
 |**default**|Unknown Error|No Content|
@@ -1812,15 +2011,16 @@ POST /v2/transactions/simulate
 
 |Name|Description|Schema|
 |---|---|---|
+|**eval-overrides**  <br>*optional*||[SimulationEvalOverrides](#simulationevaloverrides)|
 |**last-round**  <br>*required*|The round immediately preceding this simulation. State changes through this round were used to run this simulation.|integer|
 |**txn-groups**  <br>*required*|A result object for each transaction group that was simulated.|< [SimulateTransactionGroupResult](#simulatetransactiongroupresult) > array|
 |**version**  <br>*required*|The version of this response object.|integer|
-|**would-succeed**  <br>*required*|Indicates whether the simulated transactions would have succeeded during an actual submission. If any transaction fails or is missing a signature, this will be false.|boolean|
 
 
 **Consumes**
 
-* `application/x-binary`
+* `application/json`
+* `application/msgpack`
 
 
 **Produces**
@@ -1961,9 +2161,9 @@ Stores the global information associated with an application.
 |**clear-state-program**  <br>*required*|\[clearp\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**creator**  <br>*required*|The address that created this application. This is the address where the parameters and global state for this application can be found.|string|
 |**extra-program-pages**  <br>*optional*|\[epp\] the amount of extra program pages available to this app.|integer|
-|**global-state**  <br>*optional*|[\gs\] global schema|[TealKeyValueStore](#tealkeyvaluestore)|
-|**global-state-schema**  <br>*optional*|[\gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
-|**local-state-schema**  <br>*optional*|[\lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
+|**global-state**  <br>*optional*|\[gs\] global state|[TealKeyValueStore](#tealkeyvaluestore)|
+|**global-state-schema**  <br>*optional*|\[gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
+|**local-state-schema**  <br>*optional*|\[lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
 
 
 <a name="applicationstateschema"></a>
@@ -2040,6 +2240,7 @@ Box name and its content.
 |Name|Description|Schema|
 |---|---|---|
 |**name**  <br>*required*|\[name\] box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**round**  <br>*required*|The round for which this information is relevant|integer|
 |**value**  <br>*required*|\[value\] box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -2181,6 +2382,17 @@ Ledger StateDelta object
 *Type* : object
 
 
+<a name="ledgerstatedeltafortransactiongroup"></a>
+### LedgerStateDeltaForTransactionGroup
+Contains a ledger delta for a single transaction group
+
+
+|Name|Schema|
+|---|---|
+|**Delta**  <br>*required*|[LedgerStateDelta](#ledgerstatedelta)|
+|**Ids**  <br>*required*|< string > array|
+
+
 <a name="lightblockheaderproof"></a>
 ### LightBlockHeaderProof
 Proof of membership and position of a light block header.
@@ -2223,14 +2435,37 @@ Details about a pending transaction. If the transaction was recently confirmed, 
 |**close-rewards**  <br>*optional*|Rewards in microalgos applied to the close remainder to account.|integer|
 |**closing-amount**  <br>*optional*|Closing amount for the transaction.|integer|
 |**confirmed-round**  <br>*optional*|The round where this transaction was confirmed, if present.|integer|
-|**global-state-delta**  <br>*optional*|\[gd\] Global state key/value changes for the application being executed by this transaction.|[StateDelta](#statedelta)|
+|**global-state-delta**  <br>*optional*|Global state key/value changes for the application being executed by this transaction.|[StateDelta](#statedelta)|
 |**inner-txns**  <br>*optional*|Inner transactions produced by application execution.|< [PendingTransactionResponse](#pendingtransactionresponse) > array|
-|**local-state-delta**  <br>*optional*|\[ld\] Local state key/value changes for the application being executed by this transaction.|< [AccountStateDelta](#accountstatedelta) > array|
-|**logs**  <br>*optional*|\[lg\] Logs for the application being executed by this transaction.|< string (byte) > array|
+|**local-state-delta**  <br>*optional*|Local state key/value changes for the application being executed by this transaction.|< [AccountStateDelta](#accountstatedelta) > array|
+|**logs**  <br>*optional*|Logs for the application being executed by this transaction.|< string (byte) > array|
 |**pool-error**  <br>*required*|Indicates that the transaction was kicked out of this node's transaction pool (and specifies why that happened).  An empty string indicates the transaction wasn't kicked out of this node's txpool due to an error.|string|
 |**receiver-rewards**  <br>*optional*|Rewards in microalgos applied to the receiver account.|integer|
 |**sender-rewards**  <br>*optional*|Rewards in microalgos applied to the sender account.|integer|
 |**txn**  <br>*required*|The raw signed transaction.|object|
+
+
+<a name="simulaterequest"></a>
+### SimulateRequest
+Request type for simulation endpoint.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**allow-empty-signatures**  <br>*optional*|Allow transactions without signatures to be simulated as if they had correct signatures.|boolean|
+|**allow-more-logging**  <br>*optional*|Lifts limits on log opcode usage during simulation.|boolean|
+|**extra-opcode-budget**  <br>*optional*|Applies extra opcode budget during simulation for each transaction group.|integer|
+|**txn-groups**  <br>*required*|The transaction groups to simulate.|< [SimulateRequestTransactionGroup](#simulaterequesttransactiongroup) > array|
+
+
+<a name="simulaterequesttransactiongroup"></a>
+### SimulateRequestTransactionGroup
+A transaction group to simulate.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**txns**  <br>*required*|An atomic transaction group.|< string (json) > array|
 
 
 <a name="simulatetransactiongroupresult"></a>
@@ -2240,6 +2475,8 @@ Simulation result for an atomic transaction group
 
 |Name|Description|Schema|
 |---|---|---|
+|**app-budget-added**  <br>*optional*|Total budget added during execution of app calls in the transaction group.|integer|
+|**app-budget-consumed**  <br>*optional*|Total budget consumed during execution of app calls in the transaction group.|integer|
 |**failed-at**  <br>*optional*|If present, indicates which transaction in this group caused the failure. This array represents the path to the failing transaction. Indexes are zero based, the first element indicates the top-level transaction, and successive elements indicate deeper inner transactions.|< integer > array|
 |**failure-message**  <br>*optional*|If present, indicates that the transaction group failed and specifies why that happened|string|
 |**txn-results**  <br>*required*|Simulation result for individual transactions|< [SimulateTransactionResult](#simulatetransactionresult) > array|
@@ -2252,8 +2489,22 @@ Simulation result for an individual transaction
 
 |Name|Description|Schema|
 |---|---|---|
-|**missing-signature**  <br>*optional*|A boolean indicating whether this transaction is missing signatures|boolean|
+|**app-budget-consumed**  <br>*optional*|Budget used during execution of an app call transaction. This value includes budged used by inner app calls spawned by this transaction.|integer|
+|**logic-sig-budget-consumed**  <br>*optional*|Budget used during execution of a logic sig transaction.|integer|
 |**txn-result**  <br>*required*||[PendingTransactionResponse](#pendingtransactionresponse)|
+
+
+<a name="simulationevaloverrides"></a>
+### SimulationEvalOverrides
+The set of parameters and limits override during simulation. If this set of parameters is present, then evaluation parameters may differ from standard evaluation in certain ways.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**allow-empty-signatures**  <br>*optional*|If true, transactions without signatures are allowed and simulated as if they were properly signed.|boolean|
+|**extra-opcode-budget**  <br>*optional*|The extra opcode budget added to each transaction group during simulation|integer|
+|**max-log-calls**  <br>*optional*|The maximum log calls one can make during simulation|integer|
+|**max-log-size**  <br>*optional*|The maximum byte number to log during simulation|integer|
 
 
 <a name="statedelta"></a>

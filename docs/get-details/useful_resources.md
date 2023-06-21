@@ -7,7 +7,7 @@ This page contains resources that don't necessarily have their own page or we do
 
 # AlgoDevs YouTube Channel
 
-The [AlgoDevs](https://www.youtube.com/@algodevs) YouTube channel is focused on short-form developer content that provides a quick way to get up to speed on all things Algorand. These 5-10 minute videos cover topics, like writting PyTeal smart contracts, the Algorand Virtual Machine(AVM), Asset creation, transactions, and much more. These videos are actively maintained to be up to date with the current release of Algorand. Make sure to check them out and subscribe.
+The [AlgoDevs](https://www.youtube.com/@algodevs) YouTube channel is focused on short-form developer content that provides a quick way to get up to speed on all things Algorand. These 5-10 minute videos cover topics, like writing PyTeal smart contracts, the Algorand Virtual Machine(AVM), Asset creation, transactions, and much more. These videos are actively maintained to be up to date with the current release of Algorand. Make sure to check them out and subscribe.
 # Algorand Developer Discord
 
 Join the Algorand developer [Discord](https://discord.gg/algorand) to keep up to date, ask questions, get code examples, comment on new features, and discuss Algorand standards. 

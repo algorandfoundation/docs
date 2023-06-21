@@ -30,7 +30,7 @@ goal clerk dryrun [flags]
 
 ```
 
-      --dryrun-accounts strings     additional accounts to include into dryrun request obj
+      --dryrun-accounts strings     Additional accounts to include into dryrun request obj
 
       --dryrun-dump                 Dump in dryrun format acceptable by dryrun REST api instead of running
 
@@ -40,9 +40,9 @@ goal clerk dryrun [flags]
 
   -o, --outfile string              Filename for writing dryrun state object
 
-  -P, --proto string                consensus protocol version id string
+  -P, --proto string                Consensus protocol version id string
 
-  -t, --txfile string               transaction or transaction-group to test
+  -t, --txfile string               Transaction or transaction-group to test
 
 ```
 
