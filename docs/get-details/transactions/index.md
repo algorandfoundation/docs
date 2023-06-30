@@ -7,6 +7,21 @@ At the end of this section are several useful transaction-related how-tos.
 !!! tip
 	When you are given a transaction to sign, understanding its underlying representation will help you verify that the details of the transaction are correct.
 
+# Quick start videos
+
+If you prefer videos, take a look at this 9 minute guide to learn about Algorand Transactions Overview.
+
+<center>
+[![Learn About Transactions Overview](/docs/imgs/Transactions Explained 01.png)](https://www.youtube.com/watch?v=V-tuqNx8GRI)
+</center>
+
+
+Also here is another 11 minute guide on how to Send Transactions with Algorand SDK.
+
+<center>
+[![Learn About Sending Transactions with Algorand SDK](/docs/imgs/Transactions Explained 02.png)](https://www.youtube.com/watch?v=UODn3JAT5OQ)
+</center>
+
 # Transaction Types
 There are [seven transaction types](https://github.com/algorand/go-algorand/blob/master/protocol/txntype.go) in the Algorand Protocol: 
 
