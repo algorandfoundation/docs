@@ -2,6 +2,15 @@ Title: Creation methods
 
 This section describes the three primary methods to create accounts on Algorand, how to use them in the SDKs, `goal`, and `algokey`, and the reasons you might want to choose one method over another for your application. 
 
+# Quick start videos
+
+If you prefer videos, take a look at this 10 minute guide to getting started with creating accounts, which also includes using the Pera Algo Wallet.
+
+<center>
+[![Learn How to Generate Algorand Accounts](/docs/imgs/Accounts explained 01.png)](https://www.youtube.com/watch?v=TnpGO0P0BA0)
+</center>
+
+
 The three primary ways to create accounts on Algorand are as [wallet-derived accounts](#wallet-derived-kmd) (using [kmd](../../../run-a-node/reference/artifacts#kmd)), as [standalone](#standalone), or as [multisignature accounts](#multisignature) (which entails one of the prior methods).
 
 !!! info
@@ -602,6 +611,16 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 	```
 
 # Multisignature
+
+# Quick start videos
+
+If you prefer videos, take a look at this 4 minute guide to Learn About Multisig Algorand Account.
+
+<center>
+[![Learn About Multisig Algorand Account](/docs/imgs/Accounts explained 03.png)](https://www.youtube.com/watch?v=kOugNkk4HuE)
+</center>
+
+
 
 Multisignature accounts are a logical representation of an ordered set of addresses with a threshold and version. Multisignature accounts can perform the same operations as other accounts, including sending transactions and participating in consensus. The address for a multisignature account is essentially a hash of the _ordered_ list of accounts, the threshold and version values. The threshold determines how many signatures are required to process any transaction from this multisignature account. 
 
