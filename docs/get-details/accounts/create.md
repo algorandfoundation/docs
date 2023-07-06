@@ -612,7 +612,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 # Multisignature
 
-# Quick start videos
+# Quick start videos - Multisignature
 
 If you prefer videos, take a look at this 4 minute guide to Learn About Multisig Algorand Account.
 

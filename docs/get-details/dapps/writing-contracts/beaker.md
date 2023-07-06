@@ -4,12 +4,13 @@ Beaker is a framework for building Smart Contracts using PyTeal. Beaker is desig
 
 This page provides an overview of the features available in Beaker. For complete details see the [Beaker's documentation](https://beaker.algo.xyz). 
 
-# Quick start videos - Beginner
 
-If you prefer videos, take a look at this 11 minute guide to learn about Beaker Tutorial For Beginners.
+# Quick start videos
+
+If you prefer videos, take a look at this playlist to learn about Beaker. Most of the videos in the list are under 12 minutes each.
 
 <center>
-[![Learn Beaker Tutorial For Beginners](/docs/imgs/beaker1.png)](https://www.youtube.com/watch?v=RhfC5Xd25dk)
+[![Learn About Beaker Playlist](/docs/imgs/beaker1.png)](https://www.youtube.com/playlist?list=PLwRyHoehE4370lvJJHPp6r-zvPx4Bt2Qv)
 </center>
 
 # High Level Overview 
@@ -22,14 +23,6 @@ The `ApplicationSpecification` class is used to generate a JSON manifest that de
 The `ApplicationClient` class can be used to connect to an Algorand node and interact with a specific `Application`.
 
 Beaker's sandbox module can be used to quickly connect to the default docker sandbox installation to deploy and call a contract.  
-
-# Quick start videos - Application Class
-
-If you prefer videos, take a look at this 10 minute guide to learn about Beaker Application Class.
-
-<center>
-[![Learn Beaker Application Class](/docs/imgs/beaker2.png)](https://www.youtube.com/watch?v=eac3irF9_iw)
-</center>
 
 # Install
 
@@ -72,13 +65,7 @@ print(app_spec.to_json())
 ```
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_handlers.py#L7-L9)
 <!-- ===BEAKER_APP_SPEC=== -->
-# Quick start videos - Decorators
 
-If you prefer videos, take a look at this 12 minute guide to learn about Decorators.
-
-<center>
-[![Learn Simplify Algorand Smart Contract with Decorators](/docs/imgs/beaker5.png)](https://www.youtube.com/watch?v=NIPCGprfgoc)
-</center>
 
 
 # Add Method Handlers
@@ -165,13 +152,6 @@ An application that has a blueprint applied can also implement additional handle
 
 An Application can define the state it uses to store data. This is done by defining a class that contains some number of `StateValue` objects as attributes and passing an instance of that class to the Application constructor. 
 
-# Quick start videos - Global State
-
-If you prefer videos, take a look at this 11 minute guide to learn about Beaker Global State.
-
-<center>
-[![Learn Beaker Global State](/docs/imgs/beaker3.png)](https://www.youtube.com/watch?v=ArV0KaLzEV4)
-</center>
 
 Beaker's `GlobalStateValue` class can be used to define and alter a contract's global state values. Global state values are defined by passing the `TealType` and a description the `GlobalStateValue` constructor. 
 
@@ -217,13 +197,6 @@ print(app_spec.global_state_schema.dictify())
 <!-- ===BEAKER_STATE_GLOBAL=== -->
 
 
-# Quick start videos - Local State
-
-If you prefer videos, take a look at this 9 minute guide to learn about Beaker Local State.
-
-<center>
-[![Learn Beaker Local State](/docs/imgs/beaker4.png)](https://www.youtube.com/watch?v=9p9UC1N4kmU)
-</center>
 
 Similarly, a `LocalStateValue` can be used to alter and store local state values. The code below is identical to the previous example, except the counter is stored locally.
 
@@ -261,13 +234,6 @@ print(local_app_spec.local_state_schema.dictify())
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L34-L62)
 <!-- ===BEAKER_STATE_LOCAL=== -->
 
-# Quick start videos - Box Storage
-
-If you prefer videos, take a look at this 20 minute guide to learn about Box Storage.
-
-<center>
-[![Learn Box Storage](/docs/imgs/beaker8.png)](https://www.youtube.com/watch?v=0lnov4uGqnI)
-</center>
 
 
 Beaker provides the `BoxMapping` and `BoxList` classes to work in conjunction with existing PyTeal [box functionality](/docs/get-details/dapps/smart-contracts/apps/state#box-storage).
@@ -332,13 +298,6 @@ def store_user(user: pt.abi.Address, index: pt.abi.Uint64) -> pt.Expr:
 The contract can be deployed and tested using Beaker's sandbox module and the `ApplicationClient` class.
 The code below first retrieves the accounts from the currently running sandbox instance. A `ApplicationClient` (app_client) is then instantiated with an algod client, the `Application` class that is going to be used, and the first sandbox account (sandbox default starts with a couple of predefined accounts) which will be used to sign transactions.
 
-# Quick start videos - Application Client
-
-If you prefer videos, take a look at this 12 minute guide to learn about Application Client.
-
-<center>
-[![Learn Application Client](/docs/imgs/beaker7.png)](https://www.youtube.com/watch?v=oOd64uhP_zM)
-</center>
 
 <!-- ===BEAKER_APP_CLIENT_INIT=== -->
 ```python
@@ -377,13 +336,5 @@ print(result.return_value)  # 3
 ```
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_client.py#L25-L27)
 <!-- ===BEAKER_APP_CLIENT_CALL=== -->
-
-# Quick start videos - Localnet
-
-Before deploying any Algorand smart contracts to mainnet for production, the smart contract should be tested and debugged in an Algorand private local network. Take a look at this 8 minute guide to learn about Localnet.
-
-<center>
-[![Learn Localnet](/docs/imgs/beaker6.png)](https://www.youtube.com/watch?v=LQ6V_I09cCU)
-</center>
 
 This is only a small sample of what Beaker can do. For more see [Beaker's documentation](https://beaker.algo.xyz)

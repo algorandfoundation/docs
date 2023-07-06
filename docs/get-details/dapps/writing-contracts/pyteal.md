@@ -4,6 +4,16 @@ title: PyTeal
 
 Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/).
 
+
+
+# Quick start videos
+
+If you prefer videos, take a look at this playlist to learn about PyTeal. Most of the videos in the list are under 7 minutes each.
+
+<center>
+[![Learn About PyTeal Playlist](/docs/imgs/pyteal1.png)](https://www.youtube.com/playlist?list=PLwRyHoehE435ttTjvFZA-DyqHYIYc26K_)
+</center>
+
 # PyTeal overview
 
 This section assumes the reader is familiar with [Smart Contracts](/docs/get-details/dapps/smart-contracts/#smart-contracts) and [Smart Signatures](/docs/get-details/dapps/smart-contracts/#smart-signatures).
