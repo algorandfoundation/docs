@@ -13,6 +13,10 @@ Concretely, the `config.json` for an archival node should usually just be:
 }
 ```
 
+!!! info
+    Archival nodes retain a full copy of the ledger (blockchain). Non-Archival nodes will delete old blocks and only retain what's needed to properly validate blockchain messages (currently the last 1000 blocks). Archival nodes can be used to populate indexer data. See chart below for more details.
+
+
 The configuration file (`kmd_config.json`) for `kmd` is located in the nodes `data/kmd-version` (rename `kmd_config.json.example') directory. 
 
 See [Node Types](../../run-a-node/setup/types.md) for more information.

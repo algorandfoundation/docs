@@ -37,7 +37,7 @@ Here are some common use cases:
     * ➥ non-relay archival non-participation node.
 
 # Participation Node 
-Classifying a node as a participation node is not a configuration parameter but a dynamic operation where the node is hosting participation keys for one or more online accounts. This process is described in [Participate in Consensus](../participate/index.md). Technically both non-relay and relay nodes can participate in consensus, but Algorand recommends *only* non-relay nodes participate in consensus. 
+How to install a node is described [here](../install/).  Classifying a node as a participation node is not a configuration parameter but a dynamic operation where the node is hosting participation keys for one or more online accounts. This process is described in [Participate in Consensus](../participate/index.md). Technically both non-relay and relay nodes can participate in consensus, but Algorand recommends *only* non-relay nodes participate in consensus. 
 
 !!! info
     Non-relay nodes do not have to participate in consensus. They still have access to the ledger and can be used with applications that need to connect to the network to submit transactions and read block data. 
@@ -47,7 +47,7 @@ Classifying a node as a participation node is not a configuration parameter but 
 
  By default non-relay nodes only store a limited number of blocks (approximately up to the last 1000 blocks) locally. Older blocks are dropped from the local copy of the ledger. This reduces the disk space requirement of the node. These nodes can still participate in consensus and applications can connect to these nodes for transaction submission and reading block data. The primary drawback for this type of operation is that older block data will not be available. 
  
- The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. Visit the [Node Configuration](../../reference/config) guide for details on configuring your node. 
+ The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. 
  
  The third-party website [Algoscan Analytics](https://developer.algoscan.app/) indicates the current size of the data folder for MainNet/TestNet/BetaNet archival nodes.
 
