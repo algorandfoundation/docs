@@ -8,7 +8,7 @@ arrange:
     - atomic_transfers.md
     - atc.md
     - dapps
-    - algokit.md
+    - algokit
     - indexer.md
     - stateproofs
     - encoding.md

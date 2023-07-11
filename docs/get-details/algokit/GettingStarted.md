@@ -1,4 +1,4 @@
-title: AlgoKit
+title: Getting Started
 
 AlgoKit is a collection of tools and libraries that make it easy to build applications on Algorand.
 
@@ -38,6 +38,6 @@ Will take the developer through a set of prompts to initialize a new project. Th
 
 There are a set of libraries that `AlgoKit` provides to make it easier to build solutions on Algorand. These libraries are written with developer experience in mind as a wrapper over the core algosdk libraries and abstract the most common tasks away from the developer as well as providing some advanced features such as idempotent smart contract deployment.
 
- - [Python](https://github.com/algorandfoundation/algokit-utils-py)
- - [TypeScript/JS](https://github.com/algorandfoundation/algokit-utils-ts)
+ - [Python](utils-py/index.md)
+ - [TypeScript/JS](utils-ts/README.md)
  

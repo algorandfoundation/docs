@@ -4,7 +4,6 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 - [Consensus](algorand_consensus.md) - A high-level guide on the Algorand consensus protocol.
 
-
 - [Accounts](accounts) - A guide about Algorand Accounts including keys, wallets, and addresses.
 
 - [Assets](asa) - A guide about assets and how they are implemented on Algorand at layer-1.
@@ -16,6 +15,8 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
     - [Atomic Transfers](atomic_transfers.md) - A guide to build transactions into an atomic group on Algorand.
 
     - [Atomic Transaction Composer](atc.md) - A guide to using the Atomic Transaction Composer, a simpler interface to building atomic groups.
+
+- [AlgoKit](algokit/GettingStarted) - A collection of tools and libraries that make it easy to build applications on Algorand.
 
 - [Indexer](indexer.md) - A guide to using the Algorand Indexer.
 

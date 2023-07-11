@@ -42,7 +42,7 @@ diagcfg metric enable -d dataDir [flags]
 
 ```
 
-  -d, --dataDir string   Data directory
+  -d, --dataDir string   Data directory (default "/Users/ryan/node/data")
 
 ```
 
