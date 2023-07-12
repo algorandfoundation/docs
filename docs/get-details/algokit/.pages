@@ -1,6 +1,9 @@
 title: AlgoKit
 
 arrange:
-    - GettingStarted.md
+    - index.md
+    - cli
     - utils-py
     - utils-ts
+    - tutorials
+

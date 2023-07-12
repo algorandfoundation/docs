@@ -16,7 +16,7 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
     - [Atomic Transaction Composer](atc.md) - A guide to using the Atomic Transaction Composer, a simpler interface to building atomic groups.
 
-- [AlgoKit](algokit/GettingStarted) - A collection of tools and libraries that make it easy to build applications on Algorand.
+- [AlgoKit](algokit/index.md) - A collection of tools and libraries that make it easy to build applications on Algorand.
 
 - [Indexer](indexer.md) - A guide to using the Algorand Indexer.
 

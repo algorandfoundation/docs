@@ -1,0 +1,7 @@
+title: Tutorials
+
+arrange:
+ - intro.md
+ - install-macos.md
+ - install-windows.md
+ - install-linux.md
