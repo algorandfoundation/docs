@@ -10,7 +10,7 @@ If you prefer videos, take a look at this 10 minute guide to getting started wit
 [![Learn How to Generate Algorand Accounts](/docs/imgs/Accounts explained 01.png)](https://www.youtube.com/watch?v=TnpGO0P0BA0)
 </center>
 
-https://www.youtube.com/watch?v=TnpGO0P0BA0
+[https://www.youtube.com/watch?v=TnpGO0P0BA0]
 
 The three primary ways to create accounts on Algorand are as [wallet-derived accounts](#wallet-derived-kmd) (using [kmd](../../../run-a-node/reference/artifacts#kmd)), as [standalone](#standalone), or as [multisignature accounts](#multisignature) (which entails one of the prior methods).
 
