@@ -4,6 +4,15 @@ Beaker is a framework for building Smart Contracts using PyTeal. Beaker is desig
 
 This page provides an overview of the features available in Beaker. For complete details see the [Beaker's documentation](https://beaker.algo.xyz). 
 
+
+# Quick start videos
+
+If you prefer videos, take a look at this playlist to learn about Beaker. Most of the videos in the list are under 12 minutes each.
+
+<center>
+[![Learn About Beaker Playlist](/docs/imgs/beaker1.png)](https://www.youtube.com/playlist?list=PLwRyHoehE4370lvJJHPp6r-zvPx4Bt2Qv)
+</center>
+
 # High Level Overview 
 Beaker provides several packages that extend PyTeal and provide convenience functionality for testing and deploying smart contracts. 
 
@@ -57,9 +66,13 @@ print(app_spec.to_json())
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_handlers.py#L7-L9)
 <!-- ===BEAKER_APP_SPEC=== -->
 
+
+
 # Add Method Handlers
 
 Method handlers can be added to provide functionality within the smart contract. This can be accomplished using the `external` decorator or by using a blueprint.
+
+
 
 ## external
 
@@ -139,6 +152,7 @@ An application that has a blueprint applied can also implement additional handle
 
 An Application can define the state it uses to store data. This is done by defining a class that contains some number of `StateValue` objects as attributes and passing an instance of that class to the Application constructor. 
 
+
 Beaker's `GlobalStateValue` class can be used to define and alter a contract's global state values. Global state values are defined by passing the `TealType` and a description the `GlobalStateValue` constructor. 
 
 !!! note
@@ -182,6 +196,8 @@ print(app_spec.global_state_schema.dictify())
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L3-L31)
 <!-- ===BEAKER_STATE_GLOBAL=== -->
 
+
+
 Similarly, a `LocalStateValue` can be used to alter and store local state values. The code below is identical to the previous example, except the counter is stored locally.
 
 <!-- ===BEAKER_STATE_LOCAL=== -->
@@ -217,6 +233,8 @@ print(local_app_spec.local_state_schema.dictify())
 ```
 [Snippet Source](https://github.com/algorand-devrel/beaker/blob/examples/examples/docs_app/app_state.py#L34-L62)
 <!-- ===BEAKER_STATE_LOCAL=== -->
+
+
 
 Beaker provides the `BoxMapping` and `BoxList` classes to work in conjunction with existing PyTeal [box functionality](/docs/get-details/dapps/smart-contracts/apps/state#box-storage).
 
@@ -279,6 +297,7 @@ def store_user(user: pt.abi.Address, index: pt.abi.Uint64) -> pt.Expr:
 
 The contract can be deployed and tested using Beaker's sandbox module and the `ApplicationClient` class.
 The code below first retrieves the accounts from the currently running sandbox instance. A `ApplicationClient` (app_client) is then instantiated with an algod client, the `Application` class that is going to be used, and the first sandbox account (sandbox default starts with a couple of predefined accounts) which will be used to sign transactions.
+
 
 <!-- ===BEAKER_APP_CLIENT_INIT=== -->
 ```python

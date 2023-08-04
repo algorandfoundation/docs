@@ -6,6 +6,13 @@ Algorand Smart Contracts (ASC1) are small programs that serve various functions 
 !!! warning
     When writing smart contracts, make sure to follow [TEAL guidelines](../avm/teal/guidelines). This is very important in order to prevent smart contracts from being compromised.
 
+# Quick start videos
+
+If you prefer videos, take a look at this 6 minute guide to learn about Smart Contracts Overview.
+
+<center>
+[![Learn About Building Smart Contracts Overview](/docs/imgs/Laye 1 Features 04.png)](https://www.youtube.com/watch?v=_8vLEeJDjlc)
+</center>
 
 # Smart contracts
 Smart contracts are contracts that, once deployed, are remotely callable from any node in the Algorand blockchain. Once deployed, the on-chain instantiation of the contract is referred to as an Application and assigned an Application Id. These applications are triggered by a specific type of transaction called an Application Call transaction.  These on-chain applications handle the primary decentralized logic of a dApp. 
