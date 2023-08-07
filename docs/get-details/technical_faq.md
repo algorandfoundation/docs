@@ -66,7 +66,7 @@ Common reasons include:
 
 - `transaction already in ledger: ...`
 
-    This happens when resending a transaction that has already been approved. To make the transaction unique, add a nonce to the note field or change the valid rounds.
+    This happens when resending a transaction that has already been approved or accepted into a transaction pool. To make the transaction unique, add a nonce to the note field or change the valid rounds. To check if the transaction is in the pool use `/v2/transactions/pending/{txid}` REST API endpoint. 
 
 - `underflow on subtracting SEND_AMOUNT from sender amount AVAILABLE_AMOUNT`, `account ADDRESS balance 0 below min XXX (N assets)`
 
