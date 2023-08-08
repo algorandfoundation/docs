@@ -62,7 +62,10 @@ Opcodes by version:
 
 EOF
 
-for file in ${GO_ALGORAND_SRC}/data/transactions/logic/TEAL_opcodes_v*.md; do
+opcode_files=(${GO_ALGORAND_SRC}/data/transactions/logic/TEAL_opcodes_v*.md)
+
+for ((i=${#opcode_files[@]}-1; i>=0; i--)); do
+    file=${opcode_files[$i]}
     if [ -f "$file" ]; then
         filename=$(basename "$file")  # Extract the filename without path
         version=${filename#TEAL_opcodes_v}  # Remove the prefix
@@ -71,7 +74,12 @@ for file in ${GO_ALGORAND_SRC}/data/transactions/logic/TEAL_opcodes_v*.md; do
         cp "$file" "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
         sed -i.bak '1s/#/title:/' "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
         echo "  - v${version}.md" >> $pages_file
-        echo "- [v${version}](v${version}.md)" >> $index_file
+
+        if [ $i -eq $(( ${#opcode_files[@]} - 1 )) ]; then
+          echo "- [v${version} - Current Version](v${version}.md)" >> "$index_file"
+        else
+          echo "- [v${version}](v${version}.md)" >> $index_file
+        fi
     fi
 done
 
