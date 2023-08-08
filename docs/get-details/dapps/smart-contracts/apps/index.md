@@ -6,7 +6,7 @@ Algorand smart contracts are pieces of logic that reside on the Algorand blockch
 
 See the [*PyTeal Documentation*](/docs/get-details/dapps/writing-contracts/pyteal) for information on building smart contracts in Python.
 
-See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../../avm/teal/opcodes.md) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../../avm/teal/index.md).
+See the [*TEAL Reference Guide*](../../avm/teal/specification.md) to understand how to write TEAL and the [*TEAL Opcodes*](../../avm/teal/opcodes) documentation that describes the opcodes available. This guide assumes that the reader is familiar with [TEAL](../../avm/teal/index.md).
 
 !!! important "A note about PyTeal"
     Where possible, TEAL code snippets are accompanied by their counterparts in PyTeal. Here are a few things to be aware of when comparing across these two languages:

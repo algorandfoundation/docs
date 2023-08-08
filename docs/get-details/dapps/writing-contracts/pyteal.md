@@ -28,7 +28,7 @@ The PyTeal contracts can be pre-compiled into TEAL and used directly or the logi
 
 # Building PyTeal smart contracts
 
-On Algorand, smart contracts are small programs that are evaluated when the contract is deployed or called. These contracts make use of a set of functions [(opcodes)](../avm/teal/opcodes.md) to be evaluated against the context it was called with. This context includes the current state of its storage values, the transactions in the group, any arguments and references to accounts, assets, or other applications.
+On Algorand, smart contracts are small programs that are evaluated when the contract is deployed or called. These contracts make use of a set of functions [(opcodes)](../avm/teal/opcodes) to be evaluated against the context it was called with. This context includes the current state of its storage values, the transactions in the group, any arguments and references to accounts, assets, or other applications.
 
 Besides evaluating the logic to approve or reject a transaction, the contracts may cause side effects. Side effects a contract may produce include changes to an Applications global or local state, or producing their own [transactions](../../transactions/transactions.md). These transactions are [atomic](../../atomic_transfers.md) with the outer group the application was invoked with.  The transactions produced during contract evaluation are by default sent from the Applications associated account.
 
