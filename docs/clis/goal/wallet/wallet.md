@@ -8,14 +8,6 @@ Manage wallets: encrypted collections of Algorand account keys
 
 
 
-### Synopsis
-
-
-
-Manage wallets: encrypted collections of Algorand account keys
-
-
-
 ```
 
 goal wallet [flags]

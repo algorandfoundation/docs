@@ -8,14 +8,6 @@ CLI for managing Algorand keys
 
 
 
-### Synopsis
-
-
-
-CLI for managing Algorand keys
-
-
-
 ```
 
 algokey [flags]

@@ -8,14 +8,6 @@ Read application box data
 
 
 
-### Synopsis
-
-
-
-Read application box data
-
-
-
 ```
 
 goal app box [flags]

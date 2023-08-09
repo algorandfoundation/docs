@@ -8,14 +8,6 @@ Control and manage multisig accounts
 
 
 
-### Synopsis
-
-
-
-Control and manage multisig accounts
-
-
-
 ```
 
 goal account multisig [flags]

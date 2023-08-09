@@ -8,14 +8,6 @@ Change parent address of participation key
 
 
 
-### Synopsis
-
-
-
-Change parent address of participation key
-
-
-
 ```
 
 algokey part reparent [flags]

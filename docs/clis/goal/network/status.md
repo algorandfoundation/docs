@@ -8,14 +8,6 @@ Prints status for all nodes in a deployed private network
 
 
 
-### Synopsis
-
-
-
-Prints status for all nodes in a deployed private network
-
-
-
 ```
 
 goal network status [flags]

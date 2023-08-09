@@ -8,14 +8,6 @@ Manage assets
 
 
 
-### Synopsis
-
-
-
-Manage assets
-
-
-
 ```
 
 goal asset [flags]

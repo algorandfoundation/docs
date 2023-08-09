@@ -8,14 +8,6 @@ Import key file from mnemonic
 
 
 
-### Synopsis
-
-
-
-Import key file from mnemonic
-
-
-
 ```
 
 algokey import [flags]
