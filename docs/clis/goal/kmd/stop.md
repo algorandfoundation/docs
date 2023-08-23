@@ -8,14 +8,6 @@ Stop the kmd process if it is running
 
 
 
-### Synopsis
-
-
-
-Stop the kmd process if it is running
-
-
-
 ```
 
 goal kmd stop [flags]

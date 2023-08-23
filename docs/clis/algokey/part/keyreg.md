@@ -8,14 +8,6 @@ Make key registration transaction
 
 
 
-### Synopsis
-
-
-
-Make key registration transaction
-
-
-
 ```
 
 algokey part keyreg [flags]

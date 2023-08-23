@@ -8,14 +8,6 @@ title: diagcfg
 
 
 
-### Synopsis
-
-
-
-
-
-
-
 ```
 
 diagcfg [flags]

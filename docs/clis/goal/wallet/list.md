@@ -8,14 +8,6 @@ List wallets managed by kmd
 
 
 
-### Synopsis
-
-
-
-List wallets managed by kmd
-
-
-
 ```
 
 goal wallet list [flags]

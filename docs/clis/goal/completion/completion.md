@@ -8,14 +8,6 @@ Shell completion helper
 
 
 
-### Synopsis
-
-
-
-Shell completion helper
-
-
-
 ```
 
 goal completion [flags]

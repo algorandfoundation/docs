@@ -8,14 +8,6 @@ Adds the necessary fields to a transaction that is sent from an account that was
 
 
 
-### Synopsis
-
-
-
-Adds the necessary fields to a transaction that is sent from an account that was rekeyed to a multisig account
-
-
-
 ```
 
 algokey multisig append-auth-addr -t [transaction file] -p "[threshold] [Address 1] [Address 2] ..." [flags]

@@ -40,7 +40,7 @@ goal clerk sign -i [input file] -o [output file] [flags]
 
   -o, --outfile string     Filename for writing the signed transaction
 
-  -p, --program string     Program source to use as account logic
+  -p, --program string     Program source file to use as account logic
 
   -P, --proto string       Consensus protocol version id string
 

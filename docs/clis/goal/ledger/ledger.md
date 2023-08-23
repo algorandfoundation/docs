@@ -8,14 +8,6 @@ Access ledger-related details
 
 
 
-### Synopsis
-
-
-
-Access ledger-related details
-
-
-
 ```
 
 goal ledger [flags]

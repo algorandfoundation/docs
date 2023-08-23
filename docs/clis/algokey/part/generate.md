@@ -8,14 +8,6 @@ Generate participation key
 
 
 
-### Synopsis
-
-
-
-Generate participation key
-
-
-
 ```
 
 algokey part generate [flags]
