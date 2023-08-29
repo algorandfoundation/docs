@@ -19,7 +19,7 @@ An address comes in 2 forms:
 
 You can translate from one to the other by using the SDK supplied methods. 
 
-For example, in python `encoding.encode_address` will convert the 32 byte version to the encoded 58 characters long version and `encoding.decode_address` will perform the opposite translation.
+For example, in python `encoding.encode_address` will convert the 32 byte version to the encoded 58 character long version and `encoding.decode_address` will perform the opposite translation.
 
 All SDKs have a similarly named method.
 
