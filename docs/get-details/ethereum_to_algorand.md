@@ -221,6 +221,7 @@ The equivalent of ERC on Algorand are [ARC](https://arc.algorand.foundation).
 | Ethereum          | Algorand              | Notes                                                               |
 | ----------------- | --------------------- | ------------------------------------------------------------------- |
 | ERC-20            | ASA / ARC-3 ( + ARC-19)           | ARC-3 is a convention for the metadata of ASA, ARC-19 can be used when the metadata is updatable                       |
+| ERC-20            | ASA / ARC-20            | ARC-20, aka "smart ASA", defines the interface to control an ASA through a Smart Contract (the ASA is used for accounting, the Smart Contract to transfer, freeze, etc a-la ERC-20) |
 | ERC-781, ERC-1155 | ASA / ARC-3 (+ ARC-19) or ARC-69 | ARC-3 and ARC-69 are two conventions for the metadata of an ASA NFT, ARC-19 can be used when the metadata is updatable |
 
 # Tools and Services
