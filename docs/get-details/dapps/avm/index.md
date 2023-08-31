@@ -7,10 +7,7 @@ The Algorand virtual machine (AVM) runs on every node in the Algorand blockchain
 
 If you prefer videos, take a look at this playlist to learn about AVM. Most of the videos in the list are under 5 minutes each.
 
-<center>
-[![Learn About AVM Playlist](/docs/imgs/AVM Explained 01.png)](https://www.youtube.com/playlist?list=PLwRyHoehE437GKZsksMrc2RW932TC6mZJ)
-</center>
-
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/96pwBo5jqnk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 Smart contracts, also referred to as stateful smart contracts, contain logic that is deployed and can be remotely called from any node on the Algorand blockchain. These contracts are called by issuing an Application Call transaction. The AVM evaluates the contract logic against this transaction and ultimately results in success or failure. If a call to a smart contract fails, any changes produced by that call will not be committed to the blockchain. If the call is successful, the changes will be recorded to the blockchain when the block is committed. In addition to changes to balances, the logic within a smart contract can modify key/value data associated with the contract on a global or per-account basis. 
 

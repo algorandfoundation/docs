@@ -8,9 +8,7 @@ On Algorand, atomic transfers are implemented as irreducible batch operations, w
 
 If you prefer videos, take a look at this 10 minute guide to learn about Atomic Transactions.
 
-<center>
-[![Learn About Atomic Transactions](/docs/imgs/Laye 1 Features 01.png)](https://www.youtube.com/watch?v=65I0wyq7XoI)
-</center>
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/65I0wyq7XoI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # Use cases
 

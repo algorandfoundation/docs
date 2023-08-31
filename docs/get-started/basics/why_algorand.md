@@ -10,10 +10,7 @@ In this section we will outline some of the main categories to evaluate against 
 
 If you prefer videos, take a look at this 4 minute video where Algorand's CTO John Woods Introduces Algorand's Latest Developer Video Series and the Pure Proof of Stake Consensus. 
 
-<center>
-[![Algorand CTO John Woods Introduces Algorand's Latest Developer Series](/docs/imgs/JohnWoods.png)](https://www.youtube.com/watch?v=DWC2Ocz7NEw)
-</center>
-
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/DWC2Ocz7NEw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # Our founding principles
 
