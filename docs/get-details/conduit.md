@@ -20,7 +20,7 @@ Conduit can be used to:
 
 # Installing Conduit
 
-Conduit can be installed by downloading the [built binaries](https://github.com/algorand/conduit/tree/master#download), using a [docker image](https://hub.docker.com/r/algorand/conduit) on docker hub, or [built from source](https://github.com/algorand/conduit/tree/master#install-from-source). Full instructions for Installation of Conduit are described in the [Conduit Github Repository](https://github.com/algorand/conduit/blob/master/README.md).
+Conduit can be installed by downloading the [built binaries](https://github.com/algorand/conduit/releases), using a [docker image](https://hub.docker.com/r/algorand/conduit) on docker hub, or [built from source](https://github.com/algorand/conduit/tree/master#install-from-source). Full instructions for Installation of Conduit are described in the [Conduit Github Repository](https://github.com/algorand/conduit/blob/master/README.md).
 
 
 # Conduit Architecture
@@ -33,7 +33,7 @@ The framework consists of three primary plugin components, _Importers_, _Process
 
 Default installations of the conduit binaries include two types of _importers_ ([`algod`](https://github.com/algorand/conduit/tree/master/conduit/plugins/importers/algod) and [`file_reader`](https://github.com/algorand/conduit/tree/master/conduit/plugins/importers/filereader)). The `algod` plugin is used to source data from an [Algorand Follower node](https://github.com/algorand/conduit/blob/master/docs/tutorials/IndexerWriter.md#node-algod-with-follow-mode) or an [Archival node](https://developer.algorand.org/docs/run-a-node/setup/types/#archival-mode). Using a Follower node is the recommended approach as you have access to more data for use in the _processor_ and also have access to the `postgresql` _exporter_. The `file_reader` plugin can be used to source block data from the filesystem. Most dApps will most likely use the `algod` importer. 
 
-The default installation provides one _processor_ that filters the data based on transaction properties. This plugin ([`filter_processor``](https://github.com/algorand/conduit/tree/master/conduit/plugins/processors/filterprocessor)) will be described in more detail in a subsequent section. 
+The default installation provides one _processor_ that filters the data based on transaction properties. This plugin ([`filter_processor`](https://github.com/algorand/conduit/tree/master/conduit/plugins/processors/filterprocessor)) will be described in more detail in a subsequent section. 
 
 The default installation provides two _exporters_ ([`postgresql`](https://github.com/algorand/conduit/tree/master/conduit/plugins/exporters/postgresql) and [`file_writer`](https://github.com/algorand/conduit/tree/master/conduit/plugins/exporters/filewriter)). The `file_writer` _exporter_, writes block data to the filesystem. The `postgresql` _exporter_ writes block data to a postgreSQL database. 
 
@@ -56,7 +56,7 @@ Once Installed and configured, start Conduit with your data directory as an argu
 
 # Customizing Conduit
 
-In addition to the default plugins described above, the Conduit framework allows custom plugins to be developed allowing dApp developers total customization of how the data is sourced, processed and stored or acted on. This process is described in detail with several tutorials available in the C[Conduit Github repository](https://github.com/algorand/conduit/blob/master/docs/PluginDevelopment.md). The Conduit team also hosts a known list of [externally developed plugins](https://github.com/algorand/conduit/blob/master/docs/ExternalPlugins.md). 
+In addition to the default plugins described above, the Conduit framework allows custom plugins to be developed allowing dApp developers total customization of how the data is sourced, processed and stored or acted on. This process is described in detail with several tutorials available in the [Conduit Github repository](https://github.com/algorand/conduit/blob/master/docs/PluginDevelopment.md). The Conduit team also hosts a known list of [externally developed plugins](https://github.com/algorand/conduit/blob/master/docs/ExternalPlugins.md). 
 
 !!!note
 	The Conduit team is actively looking for sample plugins that illustrate interesting use cases. If you build a plugin and want to share your work, please file a PR on the Conduit repository to add it to that page. 
