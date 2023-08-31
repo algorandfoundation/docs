@@ -8,14 +8,6 @@ The current version of the Algorand daemon (algod)
 
 
 
-### Synopsis
-
-
-
-The current version of the Algorand daemon (algod)
-
-
-
 ```
 
 goal version [flags]

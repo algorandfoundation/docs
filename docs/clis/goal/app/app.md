@@ -8,14 +8,6 @@ Manage applications
 
 
 
-### Synopsis
-
-
-
-Manage applications
-
-
-
 ```
 
 goal app [flags]

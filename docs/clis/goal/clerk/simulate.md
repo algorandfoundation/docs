@@ -46,6 +46,12 @@ goal clerk simulate [flags]
 
   -o, --result-out string          Filename for writing simulation result
 
+      --scratch                    Report scratch change during simulation time
+
+      --stack                      Report stack change during simulation time
+
+      --trace                      Enable simulation time execution trace of app calls
+
   -t, --txfile string              Transaction or transaction-group to test. Mutually exclusive with --request
 
 ```

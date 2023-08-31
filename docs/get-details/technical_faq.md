@@ -14,12 +14,12 @@ The limits applied at the protocol level are documented [here](/docs/get-details
 # Address Encoding/Decoding 
 
 An address comes in 2 forms:
-    1) encoded, 58 byte, looks something like `7K5TT4US7M3FM7L3XBJXSXLJGF2WCXPBV2YZJJO2FH46VCZOS3ICJ7E4QU`
+    1) encoded, 58 characters long, looks something like `7K5TT4US7M3FM7L3XBJXSXLJGF2WCXPBV2YZJJO2FH46VCZOS3ICJ7E4QU`
     2) decoded, 32 byte, looks something like `0xfabb39f292fb36567d7bb853795d693175615de1aeb194a5da29f9ea8b2e96d0` as hexadecimal
 
 You can translate from one to the other by using the SDK supplied methods. 
 
-For example, in python `encoding.encode_address` will convert the 32 byte version to the encoded 58 byte version and `encoding.decode_address` will perform the opposite translation.
+For example, in python `encoding.encode_address` will convert the 32 byte version to the encoded 58 character long version and `encoding.decode_address` will perform the opposite translation.
 
 All SDKs have a similarly named method.
 
@@ -66,7 +66,7 @@ Common reasons include:
 
 - `transaction already in ledger: ...`
 
-    This happens when resending a transaction that has already been approved. To make the transaction unique, add a nonce to the note field or change the valid rounds.
+    This happens when resending a transaction that has already been approved or accepted into a transaction pool. To make the transaction unique, add a nonce to the note field or change the valid rounds. To check if the transaction is in the pool use `/v2/transactions/pending/{txid}` REST API endpoint. 
 
 - `underflow on subtracting SEND_AMOUNT from sender amount AVAILABLE_AMOUNT`, `account ADDRESS balance 0 below min XXX (N assets)`
 

@@ -6,6 +6,12 @@ _As a developer, it’s important to do your research and choose a blockchain th
 
 In this section we will outline some of the main categories to evaluate against when choosing a blockchain and we’ll explain how Algorand fares in each of these categories. We are confident that by the end, you’ll determine that the Algorand blockchain is the best place to build your application!
 
+# Quick start videos
+
+If you prefer videos, take a look at this 4 minute video where Algorand's CTO John Woods Introduces Algorand's Latest Developer Video Series and the Pure Proof of Stake Consensus. 
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/DWC2Ocz7NEw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 # Our founding principles
 
 Algorand was founded by Silvio Micali, a Turing award winner, co-inventor of zero-knowledge proofs, and a world-renowned leader in the field of cryptography and information security. He founded Algorand with a vision to democratize finance and deliver on the blockchain promise. 

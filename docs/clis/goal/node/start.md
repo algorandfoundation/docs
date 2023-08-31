@@ -8,14 +8,6 @@ Initialize the specified Algorand node
 
 
 
-### Synopsis
-
-
-
-Initialize the specified Algorand node
-
-
-
 ```
 
 goal node start [flags]

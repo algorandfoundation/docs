@@ -8,14 +8,6 @@ Query local or global state from an application
 
 
 
-### Synopsis
-
-
-
-Query local or global state from an application
-
-
-
 ```
 
 goal app interact query [flags]

@@ -8,14 +8,6 @@ Create a node at the desired data directory for the desired network
 
 
 
-### Synopsis
-
-
-
-Create a node at the desired data directory for the desired network
-
-
-
 ```
 
 goal node create [flags]
@@ -41,8 +33,6 @@ goal node create [flags]
   -h, --help                 help for create
 
   -H, --hosted               Configure the new node to run hosted by algoh
-
-  -i, --indexer              Configure the new node to enable the indexer feature (implies --archival)
 
       --network string       Network the new node should point to
 

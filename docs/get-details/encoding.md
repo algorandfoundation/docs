@@ -41,7 +41,7 @@ The encoding used for Addresses and Transaction Ids is [Base32](https://en.wikip
 
 In Algorand a [public key](../accounts/#transformation-public-key-to-algorand-address) is a 32 byte array. 
 
-The Address developers or users are typically shown is a 58 byte string corresponding to a base32 encoding of the byte array of the public key + a checksum.
+The Address developers or users are typically shown is a 58 character long string corresponding to a base32 encoding of the byte array of the public key + a checksum.
 
 Given an address `4H5UNRBJ2Q6JENAXQ6HNTGKLKINP4J4VTQBEPK5F3I6RDICMZBPGNH6KD4`, encoding to and from the public key format can be done as follows:
 === "JavaScript"

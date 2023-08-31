@@ -10,6 +10,7 @@ arrange:
     - dapps
     - algokit.md
     - indexer.md
+    - conduit.md    
     - stateproofs
     - encoding.md
     - parameter_tables.md
@@ -17,5 +18,4 @@ arrange:
     - algorand_consensus.md
     - technical_faq.md
     - useful_resources.md
-    - conduit
     - ethereum_to_algorand.md

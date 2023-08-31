@@ -739,6 +739,7 @@ Given a catchpoint, it starts catching up to this catchpoint
 |**201**||[Response 201](#startcatchup-response-201)|
 |**400**|Bad Request|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**408**|Request Timeout|[ErrorResponse](#errorresponse)|
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
 |**default**|Unknown Error|No Content|
 
@@ -2012,6 +2013,7 @@ POST /v2/transactions/simulate
 |Name|Description|Schema|
 |---|---|---|
 |**eval-overrides**  <br>*optional*||[SimulationEvalOverrides](#simulationevaloverrides)|
+|**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
 |**last-round**  <br>*required*|The round immediately preceding this simulation. State changes through this round were used to run this simulation.|integer|
 |**txn-groups**  <br>*required*|A result object for each transaction group that was simulated.|< [SimulateTransactionGroupResult](#simulatetransactiongroupresult) > array|
 |**version**  <br>*required*|The version of this response object.|integer|
@@ -2232,6 +2234,18 @@ data/transactions/asset.go : AssetParams
 |**url-b64**  <br>*optional*|Base64 encoded URL where more information about the asset can be retrieved.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
+<a name="avmvalue"></a>
+### AvmValue
+Represents an AVM value.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**bytes**  <br>*optional*|bytes value.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**type**  <br>*required*|value type. Value `1` refers to **bytes**, value `2` refers to **uint64**|integer|
+|**uint**  <br>*optional*|uint value.|integer|
+
+
 <a name="box"></a>
 ### Box
 Box name and its content.
@@ -2445,6 +2459,17 @@ Details about a pending transaction. If the transaction was recently confirmed, 
 |**txn**  <br>*required*|The raw signed transaction.|object|
 
 
+<a name="scratchchange"></a>
+### ScratchChange
+A write operation into a scratch slot.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**new-value**  <br>*required*||[AvmValue](#avmvalue)|
+|**slot**  <br>*required*|The scratch slot written.|integer|
+
+
 <a name="simulaterequest"></a>
 ### SimulateRequest
 Request type for simulation endpoint.
@@ -2454,6 +2479,7 @@ Request type for simulation endpoint.
 |---|---|---|
 |**allow-empty-signatures**  <br>*optional*|Allow transactions without signatures to be simulated as if they had correct signatures.|boolean|
 |**allow-more-logging**  <br>*optional*|Lifts limits on log opcode usage during simulation.|boolean|
+|**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
 |**extra-opcode-budget**  <br>*optional*|Applies extra opcode budget during simulation for each transaction group.|integer|
 |**txn-groups**  <br>*required*|The transaction groups to simulate.|< [SimulateRequestTransactionGroup](#simulaterequesttransactiongroup) > array|
 
@@ -2466,6 +2492,18 @@ A transaction group to simulate.
 |Name|Description|Schema|
 |---|---|---|
 |**txns**  <br>*required*|An atomic transaction group.|< string (json) > array|
+
+
+<a name="simulatetraceconfig"></a>
+### SimulateTraceConfig
+An object that configures simulation execution trace.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**enable**  <br>*optional*|A boolean option for opting in execution trace features simulation endpoint.|boolean|
+|**scratch-change**  <br>*optional*|A boolean option enabling returning scratch slot changes together with execution trace during simulation.|boolean|
+|**stack-change**  <br>*optional*|A boolean option enabling returning stack changes together with execution trace during simulation.|boolean|
 
 
 <a name="simulatetransactiongroupresult"></a>
@@ -2490,6 +2528,7 @@ Simulation result for an individual transaction
 |Name|Description|Schema|
 |---|---|---|
 |**app-budget-consumed**  <br>*optional*|Budget used during execution of an app call transaction. This value includes budged used by inner app calls spawned by this transaction.|integer|
+|**exec-trace**  <br>*optional*||[SimulationTransactionExecTrace](#simulationtransactionexectrace)|
 |**logic-sig-budget-consumed**  <br>*optional*|Budget used during execution of a logic sig transaction.|integer|
 |**txn-result**  <br>*required*||[PendingTransactionResponse](#pendingtransactionresponse)|
 
@@ -2505,6 +2544,33 @@ The set of parameters and limits override during simulation. If this set of para
 |**extra-opcode-budget**  <br>*optional*|The extra opcode budget added to each transaction group during simulation|integer|
 |**max-log-calls**  <br>*optional*|The maximum log calls one can make during simulation|integer|
 |**max-log-size**  <br>*optional*|The maximum byte number to log during simulation|integer|
+
+
+<a name="simulationopcodetraceunit"></a>
+### SimulationOpcodeTraceUnit
+The set of trace information and effect from evaluating a single opcode.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**pc**  <br>*required*|The program counter of the current opcode being evaluated.|integer|
+|**scratch-changes**  <br>*optional*|The writes into scratch slots.|< [ScratchChange](#scratchchange) > array|
+|**spawned-inners**  <br>*optional*|The indexes of the traces for inner transactions spawned by this opcode, if any.|< integer > array|
+|**stack-additions**  <br>*optional*|The values added by this opcode to the stack.|< [AvmValue](#avmvalue) > array|
+|**stack-pop-count**  <br>*optional*|The number of deleted stack values by this opcode.|integer|
+
+
+<a name="simulationtransactionexectrace"></a>
+### SimulationTransactionExecTrace
+The execution trace of calling an app or a logic sig, containing the inner app call trace in a recursive way.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**approval-program-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in an approval program.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
+|**clear-state-program-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in a clear state program.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
+|**inner-trace**  <br>*optional*|An array of SimulationTransactionExecTrace representing the execution trace of any inner transactions executed.|< [SimulationTransactionExecTrace](#simulationtransactionexectrace) > array|
+|**logic-sig-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in a logic sig.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
 
 
 <a name="statedelta"></a>
