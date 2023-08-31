@@ -6,11 +6,7 @@ This section describes the three primary methods to create accounts on Algorand,
 
 If you prefer videos, take a look at this 10 minute guide to getting started with creating accounts, which also includes using the Pera Algo Wallet.
 
-<center>
-[![Learn How to Generate Algorand Accounts](/docs/imgs/Accounts explained 01.png)](https://www.youtube.com/watch?v=TnpGO0P0BA0)
-</center>
-
-https://youtu.be/TnpGO0P0BA0
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/TnpGO0P0BA0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 The three primary ways to create accounts on Algorand are as [wallet-derived accounts](#wallet-derived-kmd) (using [kmd](../../../run-a-node/reference/artifacts#kmd)), as [standalone](#standalone), or as [multisignature accounts](#multisignature) (which entails one of the prior methods).
 
