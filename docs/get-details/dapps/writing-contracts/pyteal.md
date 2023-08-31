@@ -10,9 +10,7 @@ Complete installation instructions and developer guides are available in the [Py
 
 If you prefer videos, take a look at this playlist to learn about PyTeal. Most of the videos in the list are under 7 minutes each.
 
-<center>
-[![Learn About PyTeal Playlist](/docs/imgs/pyteal1.png)](https://www.youtube.com/playlist?list=PLwRyHoehE435ttTjvFZA-DyqHYIYc26K_)
-</center>
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/yEFUv760I8A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # PyTeal overview
 

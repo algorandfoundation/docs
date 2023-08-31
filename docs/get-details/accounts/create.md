@@ -613,11 +613,7 @@ If you prefer storing your keys encrypted on disk instead of storing human-reada
 
 If you prefer videos, take a look at this 4 minute guide to Learn About Multisig Algorand Account.
 
-<center>
-[![Learn About Multisig Algorand Account](/docs/imgs/Accounts explained 03.png)](https://www.youtube.com/watch?v=kOugNkk4HuE)
-</center>
-
-
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/kOugNkk4HuE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 Multisignature accounts are a logical representation of an ordered set of addresses with a threshold and version. Multisignature accounts can perform the same operations as other accounts, including sending transactions and participating in consensus. The address for a multisignature account is essentially a hash of the _ordered_ list of accounts, the threshold and version values. The threshold determines how many signatures are required to process any transaction from this multisignature account. 
 

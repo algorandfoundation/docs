@@ -9,9 +9,7 @@ This page provides an overview of the features available in Beaker. For complete
 
 If you prefer videos, take a look at this playlist to learn about Beaker. Most of the videos in the list are under 12 minutes each.
 
-<center>
-[![Learn About Beaker Playlist](/docs/imgs/beaker1.png)](https://www.youtube.com/playlist?list=PLwRyHoehE4370lvJJHPp6r-zvPx4Bt2Qv)
-</center>
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/RhfC5Xd25dk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # High Level Overview 
 Beaker provides several packages that extend PyTeal and provide convenience functionality for testing and deploying smart contracts. 
