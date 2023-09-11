@@ -36,7 +36,11 @@ goal clerk simulate [flags]
 
       --allow-more-opcode-budget   Apply max extra opcode budget for apps per transaction group (default 320000) during simulation
 
+      --allow-unnamed-resources    Allow access to unnamed resources during simulation
+
       --extra-opcode-budget uint   Apply extra opcode budget for apps per transaction group during simulation
+
+      --full-trace                 Enable all options for simulation execution trace
 
   -h, --help                       help for simulate
 
@@ -49,6 +53,8 @@ goal clerk simulate [flags]
       --scratch                    Report scratch change during simulation time
 
       --stack                      Report stack change during simulation time
+
+      --state                      Report application state changes during simulation time
 
       --trace                      Enable simulation time execution trace of app calls
 
