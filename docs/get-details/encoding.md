@@ -105,7 +105,7 @@ Given a base64 encoded byte array `SGksIEknbSBkZWNvZGVkIGZyb20gYmFzZTY0` it may 
 	const b64Decoded = Buffer.from(b64Encoded, 'base64').toString();
 	console.log(b64Encoded, b64Decoded);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L31-L34)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L23-L26)
 	<!-- ===JSSDK_CODEC_BASE64=== -->
 
 === "Python"
@@ -156,7 +156,7 @@ Given an integer `1337`, you may encode it as:
 	const mixedDecoded = algosdk.decodeUint64(encoded, 'bigint');
 	console.log(int, encoded, safeDecoded, mixedDecoded);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L42)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L29-L34)
 	<!-- ===JSSDK_CODEC_UINT64=== -->
 
 === "Python"
@@ -232,7 +232,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L45-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L51)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 	```javascript
@@ -243,7 +243,7 @@ Create a payment transaction from one account to another using suggested paramet
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L62-L68)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L54-L60)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
@@ -377,7 +377,7 @@ All the SDKs support encoding and decoding of ABI values. The encoding is done u
 	const decodeArray = uintArrayCodec.decode(encodedArray);
 	console.log(decodeArray); // [1, 2, 3, 4, 5]
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L71-L88)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L63-L80)
 	<!-- ===JSSDK_CODEC_ABI==== -->
 
 === "Python"
