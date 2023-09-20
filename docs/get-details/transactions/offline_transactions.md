@@ -30,7 +30,7 @@ Unsigned transactions require the transaction object to be created before writin
 	);
 	console.log(restoredTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L45-L59)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L37-L51)
 	<!-- ===JSSDK_CODEC_TRANSACTION_UNSIGNED=== -->
 
 === "Python"
@@ -114,7 +114,7 @@ Signed Transactions are similar, but require an account to sign the transaction 
 	);
 	console.log(restoredSignedTxn);
 	```
-	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L62-L68)
+	[Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/codec.ts#L54-L60)
 	<!-- ===JSSDK_CODEC_TRANSACTION_SIGNED=== -->
 
 === "Python"
