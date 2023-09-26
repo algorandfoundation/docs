@@ -121,7 +121,7 @@ func parseFile(filePath string) ([]DocParts, error) {
 			// Grab common parts
 			doc := DocParts{
 				Name:        x.Names[0].Name,
-				Description: x.Doc.Text(),
+				Description: strings.TrimSpace(x.Doc.Text()),
 				Default:     parseDefault(x.Tag.Value),
 				Type:        parseType(x.Type),
 			}
