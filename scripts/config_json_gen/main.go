@@ -10,12 +10,14 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 )
 
 //go:embed template.tmpl
 var configTemplate string
+var re = regexp.MustCompile(`\r?\n`)
 
 // resolveLocalTemplate searches for the localTemplate.go file in the given path.
 func resolveLocalTemplate(pathStr string) (string, error) {
@@ -121,7 +123,7 @@ func parseFile(filePath string) ([]DocParts, error) {
 			// Grab common parts
 			doc := DocParts{
 				Name:        x.Names[0].Name,
-				Description: strings.TrimSpace(x.Doc.Text()),
+				Description: re.ReplaceAllString(strings.TrimSpace(x.Doc.Text()), "<br>"),
 				Default:     parseDefault(x.Tag.Value),
 				Type:        parseType(x.Type),
 			}
