@@ -3,6 +3,7 @@ title: AlgoKit
 arrange:
 - index.md
 - features
+- libraries
 - cli-reference.md
 - tutorials
 - architecture-decisions
