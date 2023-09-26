@@ -39,9 +39,13 @@ go build .
 
 Run:
 ```
-./config_json_gen -path ~/algorand/go-algorand/ > config.md
+./config_json_gen -path ~/algorand/go-algorand/ > ../../docs/run-a-node/reference/config.md
 ```
 
+All in one:
+```
+go run main.go -path ~/algorand/go-algorand/ > ../../docs/run-a-node/reference/config.md
+```
 
 # Code examples
 
@@ -56,7 +60,7 @@ The format for a named example in the docs markdown is:
 ```
 Running the import script will replace any text between these two tags with the matching example from the SDK repos.
 
-A file containing all examples with descriptions is in `example_tracker/example_list.md`. 
+A file containing all examples with descriptions is in `example_tracker/example_list.md`.
 A script that is helpful to track any examples that are missing from languages (or typo'd) is in `example_tracker/list_examples.sh`.
 
 To ensure the language tabs display correctly the markdown must be formatted as follows:
@@ -81,6 +85,6 @@ python import_examples.py --src PYSDK
 
 ## New examples
 
-For any *new* examples, please follow the formatting of the existing examples in that repository.  
+For any *new* examples, please follow the formatting of the existing examples in that repository.
 
 The `examples` branch of all the SDKs should be used for development of examples.  The examples should be runable with the smoke-test shell script, so that CI can catch any issues.
