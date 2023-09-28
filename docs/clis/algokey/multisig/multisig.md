@@ -8,14 +8,6 @@ Add a multisig signature to transactions from a file using a private key
 
 
 
-### Synopsis
-
-
-
-Add a multisig signature to transactions from a file using a private key
-
-
-
 ```
 
 algokey multisig [flags]

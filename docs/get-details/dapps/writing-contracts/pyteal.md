@@ -10,9 +10,7 @@ Complete installation instructions and developer guides are available in the [Py
 
 If you prefer videos, take a look at this playlist to learn about PyTeal. Most of the videos in the list are under 7 minutes each.
 
-<center>
-[![Learn About PyTeal Playlist](/docs/imgs/pyteal1.png)](https://www.youtube.com/playlist?list=PLwRyHoehE435ttTjvFZA-DyqHYIYc26K_)
-</center>
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/yEFUv760I8A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # PyTeal overview
 
@@ -329,7 +327,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. 
 
 !!!warning
-    Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are Pera wallet (mobile and web) and AlgoSigner (web extension). Pera, along with some other wallets in the ecosystem, allow transcations be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
+    Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are Pera wallet (mobile and web) and Exodus (web extension). Pera, along with some other wallets in the ecosystem, allow transcations be signed using the Wallet Connect API. The mnemonic is used here for learning purposes only.
 
 The algod_address and algod_token values are the default values to connect to a sandbox installed node. Also note that in this example, the sandbox node is connected to the Algorand TestNet network (eg `./sandbox up testnet`).
 

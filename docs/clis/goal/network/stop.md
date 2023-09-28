@@ -8,14 +8,6 @@ Stop a deployed private network
 
 
 
-### Synopsis
-
-
-
-Stop a deployed private network
-
-
-
 ```
 
 goal network stop [flags]

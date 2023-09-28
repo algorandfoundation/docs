@@ -712,6 +712,51 @@ GET /v2/blocks/{round}/transactions/{txid}/proof
 * public
 
 
+<a name="getblocktxids"></a>
+### GET /v2/blocks/{round}/txids
+Get the top level transaction IDs for the block on the given round.
+```
+GET /v2/blocks/{round}/txids
+```
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**round**  <br>*required*|The round from which to fetch block transaction IDs.|integer|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|Top level transaction IDs in a block.|[Response 200](#getblocktxids-response-200)|
+|**400**|Bad Request - Non integer number|[ErrorResponse](#errorresponse)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**404**|Non existing block|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+<a name="getblocktxids-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**blockTxids**  <br>*required*|Block transaction IDs.|< string > array|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* nonparticipating
+* public
+
+
 <a name="startcatchup"></a>
 ### POST /v2/catchup/{catchpoint}
 Starts a catchpoint catchup.
@@ -739,6 +784,7 @@ Given a catchpoint, it starts catching up to this catchpoint
 |**201**||[Response 201](#startcatchup-response-201)|
 |**400**|Bad Request|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**408**|Request Timeout|[ErrorResponse](#errorresponse)|
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
 |**default**|Unknown Error|No Content|
 
@@ -1556,7 +1602,7 @@ GET /v2/status/wait-for-block-after/{round}
 
 
 **Description**
-Waits for a block to appear after round {round} and returns the node's status at the time.
+Waits for a block to appear after round {round} and returns the node's status at the time. There is a 1 minute timeout, when reached the current status is returned regardless of whether or not it is the round after the given round.
 
 
 **Parameters**
@@ -1839,6 +1885,43 @@ POST /v2/transactions
 * public
 
 
+<a name="rawtransactionasync"></a>
+### POST /v2/transactions/async
+Fast track for broadcasting a raw transaction or transaction group to the network through the tx handler without performing most of the checks and reporting detailed errors. Should be only used for development and performance testing.
+```
+POST /v2/transactions/async
+```
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**rawtxn**  <br>*required*|The byte encoded signed transaction to broadcast to network|string (binary)|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**||No Content|
+|**400**|Bad Request - Malformed Algorand transaction|[ErrorResponse](#errorresponse)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**503**|Service Temporarily Unavailable|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+
+**Consumes**
+
+* `application/x-binary`
+
+
+**Tags**
+
+* experimental
+
+
 <a name="transactionparams"></a>
 ### GET /v2/transactions/params
 Get parameters for constructing a new transaction
@@ -2012,6 +2095,7 @@ POST /v2/transactions/simulate
 |Name|Description|Schema|
 |---|---|---|
 |**eval-overrides**  <br>*optional*||[SimulationEvalOverrides](#simulationevaloverrides)|
+|**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
 |**last-round**  <br>*required*|The round immediately preceding this simulation. State changes through this round were used to run this simulation.|integer|
 |**txn-groups**  <br>*required*|A result object for each transaction group that was simulated.|< [SimulateTransactionGroupResult](#simulatetransactiongroupresult) > array|
 |**version**  <br>*required*|The version of this response object.|integer|
@@ -2138,6 +2222,17 @@ Application index and its parameters
 |**params**  <br>*required*|\[appparams\] application parameters.|[ApplicationParams](#applicationparams)|
 
 
+<a name="applicationlocalreference"></a>
+### ApplicationLocalReference
+References an account's local state for an application.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**account**  <br>*required*|Address of the account with the local state.|string|
+|**app**  <br>*required*|Application ID of the local state application.|integer|
+
+
 <a name="applicationlocalstate"></a>
 ### ApplicationLocalState
 Stores local state associated with an application.
@@ -2164,6 +2259,20 @@ Stores the global information associated with an application.
 |**global-state**  <br>*optional*|\[gs\] global state|[TealKeyValueStore](#tealkeyvaluestore)|
 |**global-state-schema**  <br>*optional*|\[gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|\[lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
+
+
+<a name="applicationstateoperation"></a>
+### ApplicationStateOperation
+An operation against an application's global/local/box state.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**account**  <br>*optional*|For local state changes, the address of the account associated with the local state.|string|
+|**app-state-type**  <br>*required*|Type of application state. Value `g` is **global state**, `l` is **local state**, `b` is **boxes**.|string|
+|**key**  <br>*required*|The key (name) of the global/local/box state.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**new-value**  <br>*optional*||[AvmValue](#avmvalue)|
+|**operation**  <br>*required*|Operation type. Value `w` is **write**, `d` is **delete**.|string|
 
 
 <a name="applicationstateschema"></a>
@@ -2203,6 +2312,17 @@ data/basics/userBalance.go : AssetHolding
 |**is-frozen**  <br>*required*|\[f\] whether or not the holding is frozen.|boolean|
 
 
+<a name="assetholdingreference"></a>
+### AssetHoldingReference
+References an asset held by an account.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**account**  <br>*required*|Address of the account holding the asset.|string|
+|**asset**  <br>*required*|Asset ID of the holding.|integer|
+
+
 <a name="assetparams"></a>
 ### AssetParams
 AssetParams specifies the parameters for an asset.
@@ -2232,6 +2352,18 @@ data/transactions/asset.go : AssetParams
 |**url-b64**  <br>*optional*|Base64 encoded URL where more information about the asset can be retrieved.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
+<a name="avmvalue"></a>
+### AvmValue
+Represents an AVM value.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**bytes**  <br>*optional*|bytes value.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**type**  <br>*required*|value type. Value `1` refers to **bytes**, value `2` refers to **uint64**|integer|
+|**uint**  <br>*optional*|uint value.|integer|
+
+
 <a name="box"></a>
 ### Box
 Box name and its content.
@@ -2251,6 +2383,17 @@ Box descriptor describes a Box.
 
 |Name|Description|Schema|
 |---|---|---|
+|**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="boxreference"></a>
+### BoxReference
+References a box of an application.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**app**  <br>*required*|Application ID which this box belongs to|integer|
 |**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -2445,6 +2588,17 @@ Details about a pending transaction. If the transaction was recently confirmed, 
 |**txn**  <br>*required*|The raw signed transaction.|object|
 
 
+<a name="scratchchange"></a>
+### ScratchChange
+A write operation into a scratch slot.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**new-value**  <br>*required*||[AvmValue](#avmvalue)|
+|**slot**  <br>*required*|The scratch slot written.|integer|
+
+
 <a name="simulaterequest"></a>
 ### SimulateRequest
 Request type for simulation endpoint.
@@ -2452,8 +2606,10 @@ Request type for simulation endpoint.
 
 |Name|Description|Schema|
 |---|---|---|
-|**allow-empty-signatures**  <br>*optional*|Allow transactions without signatures to be simulated as if they had correct signatures.|boolean|
+|**allow-empty-signatures**  <br>*optional*|Allows transactions without signatures to be simulated as if they had correct signatures.|boolean|
 |**allow-more-logging**  <br>*optional*|Lifts limits on log opcode usage during simulation.|boolean|
+|**allow-unnamed-resources**  <br>*optional*|Allows access to unnamed resources during simulation.|boolean|
+|**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
 |**extra-opcode-budget**  <br>*optional*|Applies extra opcode budget during simulation for each transaction group.|integer|
 |**txn-groups**  <br>*required*|The transaction groups to simulate.|< [SimulateRequestTransactionGroup](#simulaterequesttransactiongroup) > array|
 
@@ -2468,6 +2624,19 @@ A transaction group to simulate.
 |**txns**  <br>*required*|An atomic transaction group.|< string (json) > array|
 
 
+<a name="simulatetraceconfig"></a>
+### SimulateTraceConfig
+An object that configures simulation execution trace.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**enable**  <br>*optional*|A boolean option for opting in execution trace features simulation endpoint.|boolean|
+|**scratch-change**  <br>*optional*|A boolean option enabling returning scratch slot changes together with execution trace during simulation.|boolean|
+|**stack-change**  <br>*optional*|A boolean option enabling returning stack changes together with execution trace during simulation.|boolean|
+|**state-change**  <br>*optional*|A boolean option enabling returning application state changes (global, local, and box changes) with the execution trace during simulation.|boolean|
+
+
 <a name="simulatetransactiongroupresult"></a>
 ### SimulateTransactionGroupResult
 Simulation result for an atomic transaction group
@@ -2480,6 +2649,7 @@ Simulation result for an atomic transaction group
 |**failed-at**  <br>*optional*|If present, indicates which transaction in this group caused the failure. This array represents the path to the failing transaction. Indexes are zero based, the first element indicates the top-level transaction, and successive elements indicate deeper inner transactions.|< integer > array|
 |**failure-message**  <br>*optional*|If present, indicates that the transaction group failed and specifies why that happened|string|
 |**txn-results**  <br>*required*|Simulation result for individual transactions|< [SimulateTransactionResult](#simulatetransactionresult) > array|
+|**unnamed-resources-accessed**  <br>*optional*||[SimulateUnnamedResourcesAccessed](#simulateunnamedresourcesaccessed)|
 
 
 <a name="simulatetransactionresult"></a>
@@ -2490,8 +2660,26 @@ Simulation result for an individual transaction
 |Name|Description|Schema|
 |---|---|---|
 |**app-budget-consumed**  <br>*optional*|Budget used during execution of an app call transaction. This value includes budged used by inner app calls spawned by this transaction.|integer|
+|**exec-trace**  <br>*optional*||[SimulationTransactionExecTrace](#simulationtransactionexectrace)|
 |**logic-sig-budget-consumed**  <br>*optional*|Budget used during execution of a logic sig transaction.|integer|
 |**txn-result**  <br>*required*||[PendingTransactionResponse](#pendingtransactionresponse)|
+|**unnamed-resources-accessed**  <br>*optional*||[SimulateUnnamedResourcesAccessed](#simulateunnamedresourcesaccessed)|
+
+
+<a name="simulateunnamedresourcesaccessed"></a>
+### SimulateUnnamedResourcesAccessed
+These are resources that were accessed by this group that would normally have caused failure, but were allowed in simulation. Depending on where this object is in the response, the unnamed resources it contains may or may not qualify for group resource sharing. If this is a field in SimulateTransactionGroupResult, the resources do qualify, but if this is a field in SimulateTransactionResult, they do not qualify. In order to make this group valid for actual submission, resources that qualify for group sharing can be made available by any transaction of the group; otherwise, resources must be placed in the same transaction which accessed them.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**accounts**  <br>*optional*|The unnamed accounts that were referenced. The order of this array is arbitrary.|< string > array|
+|**app-locals**  <br>*optional*|The unnamed application local states that were referenced. The order of this array is arbitrary.|< [ApplicationLocalReference](#applicationlocalreference) > array|
+|**apps**  <br>*optional*|The unnamed applications that were referenced. The order of this array is arbitrary.|< integer > array|
+|**asset-holdings**  <br>*optional*|The unnamed asset holdings that were referenced. The order of this array is arbitrary.|< [AssetHoldingReference](#assetholdingreference) > array|
+|**assets**  <br>*optional*|The unnamed assets that were referenced. The order of this array is arbitrary.|< integer > array|
+|**boxes**  <br>*optional*|The unnamed boxes that were referenced. The order of this array is arbitrary.|< [BoxReference](#boxreference) > array|
+|**extra-box-refs**  <br>*optional*|The number of extra box references used to increase the IO budget. This is in addition to the references defined in the input transaction group and any referenced to unnamed boxes.|integer|
 
 
 <a name="simulationevaloverrides"></a>
@@ -2502,9 +2690,41 @@ The set of parameters and limits override during simulation. If this set of para
 |Name|Description|Schema|
 |---|---|---|
 |**allow-empty-signatures**  <br>*optional*|If true, transactions without signatures are allowed and simulated as if they were properly signed.|boolean|
+|**allow-unnamed-resources**  <br>*optional*|If true, allows access to unnamed resources during simulation.|boolean|
 |**extra-opcode-budget**  <br>*optional*|The extra opcode budget added to each transaction group during simulation|integer|
 |**max-log-calls**  <br>*optional*|The maximum log calls one can make during simulation|integer|
 |**max-log-size**  <br>*optional*|The maximum byte number to log during simulation|integer|
+
+
+<a name="simulationopcodetraceunit"></a>
+### SimulationOpcodeTraceUnit
+The set of trace information and effect from evaluating a single opcode.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**pc**  <br>*required*|The program counter of the current opcode being evaluated.|integer|
+|**scratch-changes**  <br>*optional*|The writes into scratch slots.|< [ScratchChange](#scratchchange) > array|
+|**spawned-inners**  <br>*optional*|The indexes of the traces for inner transactions spawned by this opcode, if any.|< integer > array|
+|**stack-additions**  <br>*optional*|The values added by this opcode to the stack.|< [AvmValue](#avmvalue) > array|
+|**stack-pop-count**  <br>*optional*|The number of deleted stack values by this opcode.|integer|
+|**state-changes**  <br>*optional*|The operations against the current application's states.|< [ApplicationStateOperation](#applicationstateoperation) > array|
+
+
+<a name="simulationtransactionexectrace"></a>
+### SimulationTransactionExecTrace
+The execution trace of calling an app or a logic sig, containing the inner app call trace in a recursive way.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**approval-program-hash**  <br>*optional*|SHA512_256 hash digest of the approval program executed in transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**approval-program-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in an approval program.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
+|**clear-state-program-hash**  <br>*optional*|SHA512_256 hash digest of the clear state program executed in transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**clear-state-program-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in a clear state program.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
+|**inner-trace**  <br>*optional*|An array of SimulationTransactionExecTrace representing the execution trace of any inner transactions executed.|< [SimulationTransactionExecTrace](#simulationtransactionexectrace) > array|
+|**logic-sig-hash**  <br>*optional*|SHA512_256 hash digest of the logic sig executed in transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**logic-sig-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in a logic sig.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
 
 
 <a name="statedelta"></a>

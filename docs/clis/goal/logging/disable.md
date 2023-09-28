@@ -8,14 +8,6 @@ Disable Algorand remote logging
 
 
 
-### Synopsis
-
-
-
-Disable Algorand remote logging
-
-
-
 ```
 
 goal logging disable [flags]

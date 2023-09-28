@@ -8,14 +8,6 @@ Generate key
 
 
 
-### Synopsis
-
-
-
-Generate key
-
-
-
 ```
 
 algokey generate [flags]

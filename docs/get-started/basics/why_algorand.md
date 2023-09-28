@@ -10,10 +10,7 @@ In this section we will outline some of the main categories to evaluate against 
 
 If you prefer videos, take a look at this 4 minute video where Algorand's CTO John Woods Introduces Algorand's Latest Developer Video Series and the Pure Proof of Stake Consensus. 
 
-<center>
-[![Algorand CTO John Woods Introduces Algorand's Latest Developer Series](/docs/imgs/JohnWoods.png)](https://www.youtube.com/watch?v=DWC2Ocz7NEw)
-</center>
-
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/DWC2Ocz7NEw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # Our founding principles
 
@@ -95,7 +92,7 @@ The speed at which blocks are produced, the amount of transactions that can fit 
 ## Throughput
 You want to choose a blockchain that can scale and handle high throughput so that your users don’t experience long wait times when interacting with your application.
 
-On Algorand, blocks are produced every 3.9 seconds and can hold up to 25,000 transactions, which results in a throughput of about 6,000 transactions per second (6000 TPS). 
+On Algorand, blocks are produced every 3.3 seconds and can hold up to 25,000 transactions, which results in a throughput of about 7,500 transactions per second (7500 TPS). 
 
 ## Finality
 In proof-of-work blockchains, since forking is a possibility, transactions can’t be considered final until a certain amount of time passes and the likelihood of the transaction being on an orphaned chain is practically zero. This means that the actual throughput of this type of blockchain is caveated by a delay in finality. Downstream processes in an application must take this into account to avoid compounding issues if a transaction ends up being invalid.

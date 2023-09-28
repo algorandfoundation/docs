@@ -8,14 +8,6 @@ Generate zsh completion commands
 
 
 
-### Synopsis
-
-
-
-Generate zsh completion commands
-
-
-
 ```
 
 goal completion zsh [flags]

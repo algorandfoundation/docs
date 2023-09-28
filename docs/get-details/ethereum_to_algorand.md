@@ -18,17 +18,17 @@ On Ethereum, smart contracts are actually represented by accounts, while on Algo
 Concretely:
 
 * Ethereum's **Externally-owned accounts (EOA)** correspond to Algorand accounts. They are both represented by an **address**.
-    * Example of Ethereum address: 
+    * Example of Ethereum address:
         * User-friendly representation: `0x65e9980679DE55744f386aa1999307f1687A92f9`
         * Raw address: 20 bytes
-    * Example of Algorand address: 
-        * User-friendly representation: `QD3BO4RMWXBOZIPHTGGB3RSKSOAKOHM2HGN7QDZXH4ECBGJRIU3AHHC3JU` 
+    * Example of Algorand address:
+        * User-friendly representation: `QD3BO4RMWXBOZIPHTGGB3RSKSOAKOHM2HGN7QDZXH4ECBGJRIU3AHHC3JU`
         * Raw address: 32 bytes
 * Ethereum's **contract accounts** correspond to Algorand **application ID**, which are 64-bit integers. (Algorand applications also have an associated application account/address, see below.)
-    * Example of Ethereum contract account: 
+    * Example of Ethereum contract account:
         * User-friendly representation: `0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d`
         * Raw: 20 bytes
-    * Example of Algorand application ID: 
+    * Example of Algorand application ID:
         * User-friendly representation: `947957720`
         * Raw: uint64
 
@@ -62,7 +62,7 @@ This minimum transaction fee is independent of the transaction type: application
 
 ### Minimum Balance
 
-In addition to transaction fees, Algorand also has a notion of **minimum balance**. At a high-level, stored data (account balances, application states, ...) on Algorand is always associated to an account. Every time the amount of stored data increases (e.g., opt in to an ASA or application, storage of extra data as boxes in a smart contract, ...), the minimum balance requirement of the associated account increases. 
+In addition to transaction fees, Algorand also has a notion of **minimum balance**. At a high-level, stored data (account balances, application states, ...) on Algorand is always associated to an account. Every time the amount of stored data increases (e.g., opt in to an ASA or application, storage of extra data as boxes in a smart contract, ...), the minimum balance requirement of the associated account increases.
 
 The minimum balance acts like a deposit to rent space on the blockchain. If the space is liberated (e.g., opt out of the asset), the minimum balance requirement decreases. A basic account has a minimum balance requirement of 0.1 Algo. Opting in an asset for example, increases this requirement by an additional 0.1 Algo.
 
@@ -157,7 +157,7 @@ On Algorand, transferring tokens is similar whether the tokens are the Algo or a
 
 Proxy smart contracts are heavily used on Ethereum as Ethereum smart contracts are not updatable.
 
-Whereas on Algorand, applications can specify arbitrary rules for whether they can be updated or deleted. 
+Whereas on Algorand, applications can specify arbitrary rules for whether they can be updated or deleted.
 
 This is strictly more general and flexible than on Ethereum: Algorand applications can indeed prevent any update and deletion like Ethereum smart contracts.
 
@@ -220,7 +220,8 @@ The equivalent of ERC on Algorand are [ARC](https://arc.algorand.foundation).
 
 | Ethereum          | Algorand              | Notes                                                               |
 | ----------------- | --------------------- | ------------------------------------------------------------------- |
-| ERC-20            | ASA / ARC-3 ( + ARC-19)           | ARC-3 is a convention for the metadata of ASA, ARC-19 can be used when the metadata is updatable                       |
+| ERC-20            | ASA / ARC-3 (+ ARC-19)           | ARC-3 is a convention for the metadata of ASA, ARC-19 can be used when the metadata is updatable                       |
+| ERC-20            | ASA / ARC-20            | ARC-20, aka "smart ASA", defines the interface to control an ASA through a Smart Contract (the ASA is used for accounting, the Smart Contract to transfer, freeze, etc a-la ERC-20) |
 | ERC-781, ERC-1155 | ASA / ARC-3 (+ ARC-19) or ARC-69 | ARC-3 and ARC-69 are two conventions for the metadata of an ASA NFT, ARC-19 can be used when the metadata is updatable |
 
 # Tools and Services

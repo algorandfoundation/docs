@@ -8,14 +8,6 @@ Generate and install a new API token
 
 
 
-### Synopsis
-
-
-
-Generate and install a new API token
-
-
-
 ```
 
 goal node generatetoken [flags]

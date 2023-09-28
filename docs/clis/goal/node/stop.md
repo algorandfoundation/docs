@@ -8,14 +8,6 @@ Stop the specified Algorand node
 
 
 
-### Synopsis
-
-
-
-Stop the specified Algorand node
-
-
-
 ```
 
 goal node stop [flags]

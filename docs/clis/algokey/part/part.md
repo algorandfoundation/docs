@@ -8,14 +8,6 @@ Manage participation keys
 
 
 
-### Synopsis
-
-
-
-Manage participation keys
-
-
-
 ```
 
 algokey part [flags]

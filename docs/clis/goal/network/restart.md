@@ -8,14 +8,6 @@ Restart a deployed private network
 
 
 
-### Synopsis
-
-
-
-Restart a deployed private network
-
-
-
 ```
 
 goal network restart [flags]

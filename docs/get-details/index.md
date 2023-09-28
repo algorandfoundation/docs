@@ -19,7 +19,7 @@ The **Get Details** section contains explanations and how-tos for all Algorand f
 
 - [Indexer](indexer.md) - A guide to using the Algorand Indexer.
 
-- [Conduit](conduit/GettingStarted) - A guide to using the Algorand Conduit Service to gather and filter transaction data.
+- [Conduit](conduit.md) - A guide to using the Algorand Conduit Service to gather and filter transaction data.
 
 - [Protocol Parameters](parameter_tables.md) - A table containing all Algorand blockchain parameters.
 
