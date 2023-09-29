@@ -10,7 +10,7 @@ The key function to facilitate Algo transfers is `algokit.transferAlgos(transfer
 
 - All properties in [`SendTransactionParams`](./transaction.md#sendtransactionparams)
 - `from: SendTransactionFrom` - The account that will send the ALGOs
-- `to: string` - The address of the account that will receive the ALGOs
+- `to: SendTransactionFrom | string` - The address of the account that will receive the ALGOs
 - `amount: AlgoAmount` - The [amount](./amount.md) of ALGOs to send
 - `transactionParams?: SuggestedParams` - The optional [transaction parameters](./transaction.md#transaction-params)
 - `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
@@ -29,6 +29,19 @@ The ability to automatically fund an account to have a minimum amount of disposa
 - `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
 
 The function calls Algod to find the current balance and minimum balance requirement, gets the difference between those two numbers and checks to see if it's more than the `minSpendingBalance` and if so then it will send the difference, or the `minFundingIncrement` if that is specified.
+
+## `transferAsset`
+
+The key function to facilitate asset transfers is `transferAsset(transfer, algod)`, which returns a [`SendTransactionResult`](./transaction.md#sendtransactionresult) and takes a [`TransferAssetParams`](../code/interfaces/types_transfer.TransferAssetParams.md):
+
+- All properties in [`SendTransactionParams`](./transaction.md#sendtransactionparams)
+- `from: SendTransactionFrom` - The account that will send the asset
+- `to: SendTransactionFrom | string` - The account / account address that will receive the asset
+- `assetId: number` - The asset id that will be transfered
+- `amount: number | bigint` - The amount to send in the smallest divisible unit
+- `transactionParams?: SuggestedParams` - The optional [transaction parameters](./transaction.md#transaction-params)
+- `clawbackFrom: SendTransactionFrom | string` - An optional address of a target account from which to perform a clawback operation. Please note, in such cases senderAccount must be equal to clawback field on ASA metadata.
+- `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
 
 ## Dispenser
 

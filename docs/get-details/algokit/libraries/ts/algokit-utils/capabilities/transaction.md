@@ -76,7 +76,7 @@ If you want to create an encoded transaction note for adding to a transaction yo
 
 - `null` or `undefined` if there is no note
 - `Uint8Array` which is passed straight through
-- Data that us turned into JSON, any one of:
+- Data that is turned into JSON, any one of:
   - `string`
   - `number`
   - `any[]`

@@ -165,7 +165,9 @@ If you want to go a step further and automatically issue a [dry run transaction]
 algokit.Config.configure({ debug: true })
 ```
 
-If you do that then the exception will have the `traces` property within the underlying exception will have key information from the dry run within it and this will get populated into the `led.traces` property of the thrown error.
+> ⚠️ **Note:** The "dry run" feature has been deprecated and is now replaced by the "simulation" feature. Please refer to the [Simulation Documentation](https://algorand.github.io/js-algorand-sdk/classes/modelsv2.SimulateTransactionResult.html) for more details.
+
+If you do that then the exception will have the `traces` property within the underlying exception will have key information from the simulation within it and this will get populated into the `led.traces` property of the thrown error.
 
 ## `AppClientCallParams`
 

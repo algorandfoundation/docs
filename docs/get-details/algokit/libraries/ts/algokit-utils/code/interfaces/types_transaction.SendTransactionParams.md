@@ -16,6 +16,8 @@ The sending configuration for a transaction
 
   ↳ [`EnsureFundedParams`](types_transfer.EnsureFundedParams.md)
 
+  ↳ [`TransferAssetParams`](types_transfer.TransferAssetParams.md)
+
 ## Table of contents
 
 ### Properties
