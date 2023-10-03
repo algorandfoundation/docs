@@ -1,5 +1,396 @@
 title: Debugging smart contracts
 
+Since the release of go-algorand 3.15.0 the simulate endpoint for evaluating transactions has been made available to nodes. This feature allows users to submit a single transaction or a transaction group to the node, and be returned with the expected outcome (success or failure). In addition it can also supply a full or simple trace of the evaluated programs, along with changes to the stack, scratch space, and global and local states. Furthermore it can return a list of named resources which must be provided in the transaction if you choose not to include them during the simulation.
+
+# Simulate
+
+The simulate endpoint is the most recent addition when it comes to debugging smart contracts. Whether it's for helping with development, analysising existing deployed contracts, or even integrating it as part of the user experience someone has when interacting with a project, the simulate endpoint can be utilised for a variety of different workflows. Below we'll demonstrate a few of these use cases by interacting with the command-line interface as well as the RESTful API against a locally running node.
+
+When using more advance features such as `--trace` the type of data that's returned can be a bit overwhelming if you've developed the smart contract in a higher level language. But if you start out by simply submitting your transactions and checking what the `"failure-message"` says in the response you should be able to figure out the most common issues.
+
+You should also consider using these simulate responses with third-party tooling such as the community created [TEAL for VSCode](https://marketplace.visualstudio.com/items?itemName=DragMZ.teal), which allows you to step through the TEAL smart contract and see the state of the AVM change after each instruction.
+
+## Command Line
+
+Using the command line tool `goal` you can simply run a simulation against an individual or group transaction file. Select the file using the `--txfile` argument and a simulate response will be returned. This can be extremely useful when quickly prototyping ideas or learning how various TEAL opcodes work.
+
+Example:
+```sh
+$ goal app create --creator VPUJC6ZJCKDEATYRUJRNS5EMOIQGPBXRYEOMAZGKBURUPFEZXKYQZ34LQQ --approval-prog demo.teal --clear-prog clear.teal --sign -o demo.txn
+$ goal clerk simulate --txfile demo.txn
+{
+  "last-round": 555,
+  "txn-groups": [
+    {
+      "app-budget-added": 700,
+      "app-budget-consumed": 7,
+      "txn-results": [
+        {
+          "app-budget-consumed": 7,
+          "txn-result": {
+            "application-index": 1005,
+            "logs": [
+              "VGhpcyBkZW1vIGlzIGRvaW5nIGEgdGhpbmc="
+            ],
+            "pool-error": "",
+            "txn": {
+              "sig": "jMBrEx/IkH0Ctirl2RZMamxnh7VSV/uiEEWUO6pAHz2ohg/WLUOLUc4l7ZEuLHKaDoJZtzJh5dEXHw/V3/xqCQ==",
+              "txn": {
+                "apap": "CYAaVGhpcyBkZW1vIGlzIGRvaW5nIGEgdGhpbmewgSiBAghEgQE=",
+                "apsu": "CYEB",
+                "fee": 1000,
+                "fv": 552,
+                "gh": "0OS+d50dm6lo1k0tW5sDLvog4EeAZX8KwisnNW2EMG8=",
+                "lv": 1552,
+                "note": "0EbOk27RDgs=",
+                "snd": "VPUJC6ZJCKDEATYRUJRNS5EMOIQGPBXRYEOMAZGKBURUPFEZXKYQZ34LQQ",
+                "type": "appl"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "version": 2
+}
+```
+
+Should an error be raised, you'll be presented with information about what happened and which transaction of the group caused the failure. If you want a more technical breakdown of what happened during execution of your program you can enable tracing with the argument `--trace`, which will present you with a step-by-step trace of the program via the program counter (PC) value. Alternatively you can use `--full-trace` for yet more information such as stack manipulations.
+
+## API Endpoint
+
+If you're looking for a more programmatic way to interface with simulate, the API endpoint is for you. This will also be how most tooling will interact with it.
+
+Below is the same example as above, however there's an additional step we must do before we can simulate the transaction. We need to create a simulate request, which essentially just wraps the transaction(s) in a parent "txn-groups" array and includes any of the optional parameters such as `--allow-empty-signatures` if you don't have the private key to the account you're testing with. Once the simulate request has been created, we then call the API and pass it with the request.
+
+!!! note
+    You may be required to set the API token if your algod config doesn't have `DisableAPIToken` set to `true`. This can be achieved by adding the curl argument `-H 'X-Algo-API-Token: YOU_TOKEN_HERE'`
+
+Example:
+```sh
+$ goal clerk simulate --txfile group.txn --request-only-out request.json
+$ curl http://127.0.0.1:4001/v2/transactions/simulate --data @demo.json
+{
+  "last-round": 566,
+  "txn-groups": [
+    {
+      "app-budget-added": 700,
+      "app-budget-consumed": 7,
+            "txn-results": [
+        {
+          "app-budget-consumed": 7,
+          "txn-result": {
+            "application-index": 1005,
+            "logs": [
+              "VGhpcyBkZW1vIGlzIGRvaW5nIGEgdGhpbmc="
+            ],
+            "pool-error": "",
+            "txn": {
+              "sig": "jMBrEx/IkH0Ctirl2RZMamxnh7VSV/uiEEWUO6pAHz2ohg/WLUOLUc4l7ZEuLHKaDoJZtzJh5dEXHw/V3/xqCQ==",
+              "txn": {
+                "apap": "CYAaVGhpcyBkZW1vIGlzIGRvaW5nIGEgdGhpbmewgSiBAghEgQE=",
+                "apsu": "CYEB",
+                "fee": 1000,
+                "fv": 552,
+                "gh": "0OS+d50dm6lo1k0tW5sDLvog4EeAZX8KwisnNW2EMG8=",
+                "lv": 1552,
+                "note": "0EbOk27RDgs=",
+                "snd": "VPUJC6ZJCKDEATYRUJRNS5EMOIQGPBXRYEOMAZGKBURUPFEZXKYQZ34LQQ",
+                "type": "appl"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "version": 2
+}
+```
+
+## Simulate Tracing
+
+Once you're familiar with the basics of simulate you may be after more technical details about how your smart contract is operating within the AVM. This can be done by using the `--trace` and `--full-trace` arguments when creating the simulate request. Upon submitting the request to the node you'll be presented with an extra `"exec-trace"` element in the response. This new structure will detail the steps the AVM took during evaluation of the smart contract, and in the case of using `--full-trace` it will display manipulations to the stack, scratch space, and global and local states. Be aware that what it's stepping through is the lowest level of bytecode, so you will need to use additional tooling to map these traces back to a higher level language you may have written your smart contract in.
+
+Below is an example smart contract which utilises the stack, scratch space, global and local state, and box storage. Giving you a very detailed simulate response of exactly what's being changed during evaluation of the contract. By using the `--allow-unnamed-resources` option, I am able to submit the transaction without providing the box name, and in the simulate response I am told what box name I must provide when submitting the transaction to the network. This is extremely useful when you have large complex transaction groups that share resources.
+
+```sh
+$ goal app create --creator WONFHT5BPHIAU5D4YZXGY2BLTQ5YOLUNRODZ4XQRG3RSQSB6ZVZ2I2F3AI --approval-prog full.teal --clear-prog clear.teal --global-ints 1 --local-ints 1 --on-completion optin -o full.txn
+$ goal clerk simulate --txfile full.txn --allow-empty-signatures --full-trace --allow-unnamed-resources
+{
+  "eval-overrides": {
+    "allow-empty-signatures": true,
+    "allow-unnamed-resources": true
+  },
+  "exec-trace-config": {
+    "enable": true,
+    "scratch-change": true,
+    "stack-change": true,
+    "state-change": true
+  },
+  "last-round": 16938,
+  "txn-groups": [
+    {
+      "app-budget-added": 700,
+      "app-budget-consumed": 18,
+      "txn-results": [
+        {
+          "app-budget-consumed": 18,
+          "exec-trace": {
+            "approval-program-hash": "EwlhQwuh35HJQ6lELdPi53mkqlJ1z/kMRGW1mdRTBWI=",
+            "approval-program-trace": [
+              {
+                "pc": 1
+              },
+              {
+                "pc": 13,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 123
+                  }
+                ]
+              },
+              {
+                "pc": 15,
+                "scratch-changes": [
+                  {
+                    "new-value": {
+                      "type": 2,
+                      "uint": 123
+                    },
+                    "slot": 0
+                  }
+                ],
+                "stack-pop-count": 1
+              },
+              {
+                "pc": 17,
+                "stack-additions": [
+                  {
+                    "bytes": "Z2xvYmFsX3ZhbHVl",
+                    "type": 1
+                  }
+                ]
+              },
+              {
+                "pc": 31,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 123
+                  }
+                ]
+              },
+              {
+                "pc": 33,
+                "stack-pop-count": 2,
+                "state-changes": [
+                  {
+                    "app-state-type": "g",
+                    "key": "Z2xvYmFsX3ZhbHVl",
+                    "new-value": {
+                      "type": 2,
+                      "uint": 123
+                    },
+                    "operation": "w"
+                  }
+                ]
+              },
+              {
+                "pc": 34,
+                "stack-additions": [
+                  {
+                    "bytes": "s5pTz6F50Ap0fMZubGgrnDuHLo2Lh55eETbjKEg+zXM=",
+                    "type": 1
+                  }
+                ]
+              },
+              {
+                "pc": 36,
+                "stack-additions": [
+                  {
+                    "bytes": "bG9jYWxfdmFsdWU=",
+                    "type": 1
+                  }
+                ]
+              },
+              {
+                "pc": 49,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 123
+                  }
+                ]
+              },
+              {
+                "pc": 51,
+                "stack-pop-count": 3,
+                "state-changes": [
+                  {
+                    "account": "WONFHT5BPHIAU5D4YZXGY2BLTQ5YOLUNRODZ4XQRG3RSQSB6ZVZ2I2F3AI",
+                    "app-state-type": "l",
+                    "key": "bG9jYWxfdmFsdWU=",
+                    "new-value": {
+                      "type": 2,
+                      "uint": 123
+                    },
+                    "operation": "w"
+                  }
+                ]
+              },
+              {
+                "pc": 52,
+                "stack-additions": [
+                  {
+                    "bytes": "Ym94X3ZhbHVl",
+                    "type": 1
+                  }
+                ]
+              },
+              {
+                "pc": 53,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 123
+                  }
+                ]
+              },
+              {
+                "pc": 55,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 1
+                  }
+                ],
+                "stack-pop-count": 2,
+                "state-changes": [
+                  {
+                    "app-state-type": "b",
+                    "key": "Ym94X3ZhbHVl",
+                    "new-value": {
+                      "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "type": 1
+                    },
+                    "operation": "w"
+                  }
+                ]
+              },
+              {
+                "pc": 56,
+                "stack-pop-count": 1
+              },
+              {
+                "pc": 57,
+                "stack-additions": [
+                  {
+                    "bytes": "Ym94X3ZhbHVl",
+                    "type": 1
+                  }
+                ]
+              },
+              {
+                "pc": 58,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 1
+                  }
+                ],
+                "stack-pop-count": 1,
+                "state-changes": [
+                  {
+                    "app-state-type": "b",
+                    "key": "Ym94X3ZhbHVl",
+                    "operation": "d"
+                  }
+                ]
+              },
+              {
+                "pc": 59,
+                "stack-pop-count": 1
+              },
+              {
+                "pc": 60,
+                "stack-additions": [
+                  {
+                    "type": 2,
+                    "uint": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "txn-result": {
+            "application-index": 1069,
+            "global-state-delta": [
+              {
+                "key": "Z2xvYmFsX3ZhbHVl",
+                "value": {
+                  "action": 2,
+                  "uint": 123
+                }
+              }
+            ],
+            "local-state-delta": [
+              {
+                "address": "WONFHT5BPHIAU5D4YZXGY2BLTQ5YOLUNRODZ4XQRG3RSQSB6ZVZ2I2F3AI",
+                "delta": [
+                  {
+                    "key": "bG9jYWxfdmFsdWU=",
+                    "value": {
+                      "action": 2,
+                      "uint": 123
+                    }
+                  }
+                ]
+              }
+            ],
+            "pool-error": "",
+            "txn": {
+              "txn": {
+                "apan": 1,
+                "apap": "CSYBCWJveF92YWx1ZYF7NQCADGdsb2JhbF92YWx1ZTQAZzEAgAtsb2NhbF92YWx1ZTQAZig0ALlEKLxEgQE=",
+                "apgs": {
+                  "nui": 1
+                },
+                "apls": {
+                  "nui": 1
+                },
+                "apsu": "CYEB",
+                "fee": 1000,
+                "fv": 16936,
+                "gh": "0OS+d50dm6lo1k0tW5sDLvog4EeAZX8KwisnNW2EMG8=",
+                "lv": 17936,
+                "note": "IRCmDp1ak60=",
+                "snd": "WONFHT5BPHIAU5D4YZXGY2BLTQ5YOLUNRODZ4XQRG3RSQSB6ZVZ2I2F3AI",
+                "type": "appl"
+              }
+            }
+          }
+        }
+      ],
+      "unnamed-resources-accessed": {
+        "boxes": [
+          {
+            "app": 1069,
+            "name": "Ym94X3ZhbHVl"
+          }
+        ]
+      }
+    }
+  ],
+  "version": 2
+}
+```
+
+# Historical Debugging
+
+Below are two ways debugging used to be achieved with Algorand smart contracts. Whilst it's still possible to use these techniques today, there are limitations associated with them and certain features haven't been updated to support the latest AVM capabilities.
 
 !!! warning
     As of AVMv8, `dryrun` will no longer work with any contract that uses box storage. A new endpoint to replace `dryrun` along with a new tool to replace `tealdbg` is currently in development.
