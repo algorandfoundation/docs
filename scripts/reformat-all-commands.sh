@@ -39,7 +39,6 @@ CLI_TOOLS="~/go/bin/" # path to goal, algorand-indexer, algokey, etc.
 cp $GO_ALGORAND_SRC/data/transactions/logic/jsonspec.md ../docs/get-details/dapps/avm/teal/jsonspec.md
 cp $GO_ALGORAND_SRC/data/transactions/logic/README.md ../docs/get-details/dapps/avm/teal/specification.md
 sed -i.bak '1s/#/title:/' ../docs/get-details/dapps/avm/teal/specification.md
-sed -i.bak 's/TEAL_opcodes.md/..\/opcodes/' ../docs/get-details/dapps/avm/teal/specification.md
 
 # TEAL - OPCODES DIRECTORY
 rm -rf ../docs/get-details/dapps/avm/teal/opcodes
@@ -77,6 +76,10 @@ get_version_number() {
 sorted_files=($(for file in "${opcode_files[@]}"; do
   echo "$(get_version_number "$file") $file"
 done | sort -n | awk '{print $2}'))
+
+# Link to latest opcodes
+latest_version="$(get_version_number ${sorted_files[${#sorted_files[@]}-1]})"
+sed -i.bak "s/TEAL_opcodes.md/opcodes\/v${latest_version}.md/" ../docs/get-details/dapps/avm/teal/specification.md
 
 for ((i=${#sorted_files[@]}-1; i>=0; i--)); do
     file=${sorted_files[$i]}
