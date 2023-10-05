@@ -104,5 +104,5 @@ done
 # CLEANUP
 rm swagger2markup-cli.jar
 rm swagger2markup.properties
-rm ../docs/get-details/dapps/avm/teal/*.bak
-rm ../docs/get-details/dapps/avm/teal/opcodes/*.bak
+rm -f ../docs/get-details/dapps/avm/teal/*.bak
+rm -f ../docs/get-details/dapps/avm/teal/opcodes/*.bak
