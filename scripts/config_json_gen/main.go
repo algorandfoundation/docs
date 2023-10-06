@@ -7,6 +7,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"html"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -65,7 +66,7 @@ func parseDefault(tag string) string {
 	version := versions[len(versions)-1]
 	value := strings.Split(version, ":")[1]
 	value = unwrap(value, '"')
-	return value
+	return html.EscapeString(value)
 }
 
 // parseType converts the parameter type into a string.
