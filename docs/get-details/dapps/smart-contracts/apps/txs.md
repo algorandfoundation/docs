@@ -48,7 +48,7 @@ Smart contracts have access to many global variables. These variables are set fo
 	<!-- ===TEAL_GLOBAL_LATEST_TIMESTAMP=== -->
 
 # Atomic transfers and transaction properties
-The [TEAL opcodes](../../avm/teal/opcodes.md) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using the following contract code.
+The [TEAL opcodes](../../avm/teal/opcodes) documentation describes all transaction properties that are available within a TEAL program. These properties can be retrieved using the following contract code.
 
 
 === "PyTeal"
@@ -110,7 +110,7 @@ The above contract code will be true if there are two transactions submitted at 
 	[Snippet Source](https://github.com/nullun/algorand-teal-examples/blob/main/_examples/misc/global.teal#L25-L28)
 	<!-- ===TEAL_GTXN_TYPE_ENUM=== -->
 
-In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes.md) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
+In the above example, the second transaction’s type is checked, where the `int pay` references a payment transaction. See the [opcodes](../../avm/teal/opcodes) documentation for all transaction types. Note that the `gtxn` call is a zero-based index into the atomic group of transactions. The `gtxns` opcode could also have been used to retrieve the index into the atomic group from the top of the stack instead of hard coding the index. If the TEAL program fails, all transactions in the group will fail.
 
 If any transaction in a group of transactions is a call to a smart contract, the opcodes `gtxna` and `gtxnsa` can be used to access any of the transactions array values.
 
@@ -180,7 +180,7 @@ It is also possible to get an Asset’s configuration information within a smart
 	asset_params_get AssetTotal
 	```
 
-This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes.md) documentation for more details on what additional parameters can be read.
+This call returns two values. The first is a 0 or 1 indicating if the parameter was found and the second contains the value of the parameter. See the [opcodes](../../avm/teal/opcodes) documentation for more details on what additional parameters can be read.
 
 # Creating an asset or contract within a group of transactions
 The Algorand Protocol assigns an identifier (ID) when creating an asset (ASA) or a smart contract. These IDs are used to refer to the asset or the contract later when either is used in a transaction or a call to the smart contract. Because these IDs are assigned when the asset or the contract is created, the ID is not available until after the creation transaction is fully executed. In an atomic group, TEAL can retrieve the ID of a previous group transaction which created an asset or contract, enabling a smart contract to store the asset ID or another smart contract ID in its state for later usage. 
