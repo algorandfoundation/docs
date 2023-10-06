@@ -8,7 +8,7 @@ The simulate endpoint is the most recent addition when it comes to debugging sma
 
 When using more advance features such as `--trace` the type of data that's returned can be a bit overwhelming if you've developed the smart contract in a higher level language. But if you start out by simply submitting your transactions and checking what the `"failure-message"` says in the response you should be able to figure out the most common issues.
 
-You should also consider using these simulate responses with third-party tooling such as the community created [TEAL for VSCode](https://marketplace.visualstudio.com/items?itemName=DragMZ.teal), which allows you to step through the TEAL smart contract and see the state of the AVM change after each instruction.
+You should also consider using these simulate responses with third-party tooling such as the community created [TEAL for VSCode](//marketplace.visualstudio.com/items?itemName=DragMZ.teal), which allows you to step through the TEAL smart contract and see the state of the AVM change after each instruction. Additionally there is [sim-stack-parser](//github.com/joe-p/sim-stack-parser), which will not only help visulise the stack, it will also map the compiled TEAL program back to the original PyTeal contract to further help with debugging.
 
 ## Command Line
 
@@ -58,7 +58,7 @@ $ goal clerk simulate --txfile demo.txn
 
 Should an error be raised, you'll be presented with information about what happened and which transaction of the group caused the failure. If you want a more technical breakdown of what happened during execution of your program you can enable tracing with the argument `--trace`, which will present you with a step-by-step trace of the program via the program counter (PC) value. Alternatively you can use `--full-trace` for yet more information such as stack manipulations.
 
-## API Endpoint
+## Direct API Endpoint
 
 If you're looking for a more programmatic way to interface with simulate, the API endpoint is for you. This will also be how most tooling will interact with it.
 
@@ -109,7 +109,118 @@ $ curl http://127.0.0.1:4001/v2/transactions/simulate --data @demo.json
 }
 ```
 
-## Simulate Tracing
+## JavaScript SDK
+
+To use the simulate endpoint within JavaScript the [js-algorand-sdk](//github.com/algorand/js-algorand-sdk) has some built-in features to help you. The most popular route will be using the AtomicTransactionComposer's `.simulate()` [method call](//algorand.github.io/js-algorand-sdk/classes/AtomicTransactionComposer.html#simulate). To learn more about the ATC please refer to [this section](../../atc.md).
+
+The code below is a complete example that walks through the entire process of constructing a transaction, calling the simulate endpoint, and printing out the simulate response.
+
+```js
+import algosdk from 'algosdk';
+
+const client = new algosdk.Algodv2(
+	'a'.repeat(64),
+	'http://127.0.0.1',
+	4001,
+);
+
+const mn = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon invest';
+const acct = algosdk.mnemonicToSecretKey(mn);
+const signer = algosdk.makeBasicAccountTransactionSigner(acct);
+
+const approval_b64 = "CTEYSIAgOM54YO9NPIFpGWulHHE7cVNZ0dbwigCRgyDrG94ypjJgFrCBAQ==";
+const clear_b64 = "CYEB";
+
+(async () => {
+	const sp = await client.getTransactionParams().do();
+	const txn = algosdk.makeApplicationCreateTxnFromObject({
+		from: acct.addr,
+		suggestedParams: sp,
+		approvalProgram: new Uint8Array(Buffer.from(approval_b64, "base64")),
+		clearProgram: new Uint8Array(Buffer.from(clear_b64, "base64")),
+	});
+
+	const atc = new algosdk.AtomicTransactionComposer;
+	const tws = {
+		txn: txn,
+		signer: signer,
+	};
+	atc.addTransaction(tws);
+
+	const simreq = new algosdk.modelsv2.SimulateRequest({
+		allowEmptySignatures: true,
+		allowUnnamedResources: true,
+		execTraceConfig: new algosdk.modelsv2.SimulateTraceConfig({
+			enable: true,
+			scratchChange: true,
+			stackChange: true,
+			stateChange: true,
+		}),
+	});
+	const simres = await atc.simulate(client, simreq);
+
+	console.log(JSON.stringify(simres, null, 2));
+})();
+```
+
+## Python SDK
+
+To use the simulate endpoint within Python the [py-algorand-sdk](//github.com/algorand/py-algorand-sdk) has some built-in features to help you. The most popular route will be using the AtomicTransactionComposer's `.simulate()` [method call](//py-algorand-sdk.readthedocs.io/en/latest/algosdk/atomic_transaction_composer.html#algosdk.atomic_transaction_composer.AtomicTransactionComposer.simulate). To learn more about the ATC please refer to [this section](../../atc.md).
+
+The code below is a complete example that walks through the entire process of constructing a transaction, calling the simulate endpoint, and printing out the simulate response.
+
+```py
+#!/usr/bin/env python3
+
+import json
+from base64 import b64decode
+
+from algosdk.v2client.algod import AlgodClient
+from algosdk.v2client.models import simulate_request, SimulateRequestTransactionGroup
+from algosdk.transaction import ApplicationCreateTxn, OnComplete, StateSchema
+from algosdk import account, mnemonic, atomic_transaction_composer
+
+client = AlgodClient('a' * 64, "http://127.0.0.1:4001")
+
+mn = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon invest';
+sk = mnemonic.to_private_key(mn)
+pk = account.address_from_private_key(sk)
+signer = atomic_transaction_composer.AccountTransactionSigner(sk)
+
+approval_b64 = "CTEYSIAgOM54YO9NPIFpGWulHHE7cVNZ0dbwigCRgyDrG94ypjJgFrCBAQ=="
+clear_b64 = "CYEB"
+
+sp = client.suggested_params()
+txn = ApplicationCreateTxn(
+    sender = pk,
+    sp = sp,
+    approval_program = b64decode(approval_b64),
+    clear_program = b64decode(clear_b64),
+    on_complete = OnComplete.NoOpOC,
+    global_schema = StateSchema(0, 0),
+    local_schema = StateSchema(0, 0),
+    accounts = ["HDHHQYHPJU6IC2IZNOSRY4J3OFJVTUOW6CFABEMDEDVRXXRSUYZHZ2ZL4I"]
+)
+
+atc = atomic_transaction_composer.AtomicTransactionComposer()
+tws = atomic_transaction_composer.TransactionWithSigner(txn = txn, signer = signer)
+atc.add_transaction(tws)
+
+simreq = simulate_request.SimulateRequest(
+    txn_groups = SimulateRequestTransactionGroup(txns = []),
+    allow_empty_signatures = True,
+    exec_trace_config= simulate_request.SimulateTraceConfig(
+        enable = True,
+        stack_change = True,
+        scratch_change = True,
+    )
+)
+simres = atc.simulate(client)
+
+print(json.dumps(simres.__dict__))
+```
+
+## Advanced Simulate Tracing
 
 Once you're familiar with the basics of simulate you may be after more technical details about how your smart contract is operating within the AVM. This can be done by using the `--trace` and `--full-trace` arguments when creating the simulate request. Upon submitting the request to the node you'll be presented with an extra `"exec-trace"` element in the response. This new structure will detail the steps the AVM took during evaluation of the smart contract, and in the case of using `--full-trace` it will display manipulations to the stack, scratch space, and global and local states. Be aware that what it's stepping through is the lowest level of bytecode, so you will need to use additional tooling to map these traces back to a higher level language you may have written your smart contract in.
 
