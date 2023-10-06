@@ -8,14 +8,6 @@ Retrieve information about an application box.
 
 
 
-### Synopsis
-
-
-
-Retrieve information about an application box.
-
-
-
 ```
 
 goal app box info [flags]

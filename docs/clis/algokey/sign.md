@@ -8,14 +8,6 @@ Sign transactions from a file using a private key
 
 
 
-### Synopsis
-
-
-
-Sign transactions from a file using a private key
-
-
-
 ```
 
 algokey sign [flags]

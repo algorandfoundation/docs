@@ -8,14 +8,6 @@ Export key file to mnemonic and public key
 
 
 
-### Synopsis
-
-
-
-Export key file to mnemonic and public key
-
-
-
 ```
 
 algokey export [flags]

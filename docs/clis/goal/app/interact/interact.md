@@ -8,14 +8,6 @@ Interact with an application
 
 
 
-### Synopsis
-
-
-
-Interact with an application
-
-
-
 ```
 
 goal app interact [flags]

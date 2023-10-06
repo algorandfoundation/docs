@@ -4,6 +4,12 @@ Title: Rekeying
 
 Rekeying is a powerful protocol feature which enables an Algorand account holder to maintain a static public address while dynamically rotating the authoritative private spending key(s). This is accomplished by issuing a "rekey-to transaction" which sets the _authorized address_ field within the account object. Future transaction authorization using the account's public address must be provided by the spending key(s) associated with the _authorized address_ which may be a single key address, MultiSig address or LogicSig program address. Key management is an important concept to understand and Algorand provides tools to accomplish relevant tasks securely. 
 
+# Quick start videos
+
+If you prefer videos, take a look at this 4 minute guide to Learn About Algorand Account Rekeying.
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/7yffxc4Q_H0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 !!! Info
     The term "spending key(s)" is used throughout this document to signify that generally either a single key or a set of keys from a MultiSig account may authorize from a given public address. The address itself cannot distinguish how many spending keys are specifically required.
 

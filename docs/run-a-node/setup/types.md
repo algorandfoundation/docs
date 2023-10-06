@@ -45,15 +45,13 @@ How to install a node is described [here](../install/).  Classifying a node as a
 
 # Archival Mode
 
- By default non-relay nodes only store a limited number of blocks (approximately up to the last 1000 blocks) locally. Older blocks are dropped from the local copy of the ledger. This reduces the disk space requirement of the node. These nodes can still participate in consensus and applications can connect to these nodes for transaction submission and reading block data. The primary drawback for this type of operation is that older block data will not be available. 
- 
- The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger. 
- 
- The third-party website [Algoscan Analytics](https://developer.algoscan.app/) indicates the current size of the data folder for MainNet/TestNet/BetaNet archival nodes.
+By default non-relay nodes only store a limited number of blocks (approximately up to the last 1000 blocks) locally. Older blocks are dropped from the local copy of the ledger. This reduces the disk space requirement of the node. These nodes can still participate in consensus and applications can connect to these nodes for transaction submission and reading block data. The primary drawback for this type of operation is that older block data will not be available.
+
+The archival property must be set to true to run in archival mode, which will then set the node to store the entire ledger.
 
 !!! warning
-     Setting a node to run in archival mode on MainNet/TestNet/BetaNet will significantly increase the disk space requirements for the node. For example, in October 2022, a MainNet non-archival node uses around 20GB of data, while an archival node uses close to 1TB of data.
- 
+     Setting a node to run in archival mode on MainNet/TestNet/BetaNet will significantly increase the disk space requirements for the node. For example, in September 2023, a MainNet non-archival node uses around 20GB of storage, while an archival node requires approximately 2TB of storage.
+
 
 !!! info
     Relay nodes are always set to Archival mode. Non-relay nodes have the option to run in either configuration.

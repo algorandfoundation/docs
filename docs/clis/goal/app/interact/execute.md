@@ -8,14 +8,6 @@ Execute a procedure on an application
 
 
 
-### Synopsis
-
-
-
-Execute a procedure on an application
-
-
-
 ```
 
 goal app interact execute [flags]

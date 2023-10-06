@@ -4,6 +4,14 @@ title: PyTeal
 
 Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/).
 
+
+
+# Quick start videos
+
+If you prefer videos, take a look at this playlist to learn about PyTeal. Most of the videos in the list are under 7 minutes each.
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/yEFUv760I8A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 # PyTeal overview
 
 This section assumes the reader is familiar with [Smart Contracts](/docs/get-details/dapps/smart-contracts/#smart-contracts) and [Smart Signatures](/docs/get-details/dapps/smart-contracts/#smart-signatures).
@@ -18,7 +26,7 @@ The PyTeal contracts can be pre-compiled into TEAL and used directly or the logi
 
 # Building PyTeal smart contracts
 
-On Algorand, smart contracts are small programs that are evaluated when the contract is deployed or called. These contracts make use of a set of functions [(opcodes)](../avm/teal/opcodes.md) to be evaluated against the context it was called with. This context includes the current state of its storage values, the transactions in the group, any arguments and references to accounts, assets, or other applications.
+On Algorand, smart contracts are small programs that are evaluated when the contract is deployed or called. These contracts make use of a set of functions [(opcodes)](../avm/teal/opcodes) to be evaluated against the context it was called with. This context includes the current state of its storage values, the transactions in the group, any arguments and references to accounts, assets, or other applications.
 
 Besides evaluating the logic to approve or reject a transaction, the contracts may cause side effects. Side effects a contract may produce include changes to an Applications global or local state, or producing their own [transactions](../../transactions/transactions.md). These transactions are [atomic](../../atomic_transfers.md) with the outer group the application was invoked with.  The transactions produced during contract evaluation are by default sent from the Applications associated account.
 
@@ -319,7 +327,7 @@ algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 The first is a creator mnemonic. This mnemonic is used to recover the private key for the funded account that will own and create the smart contract. 
 
 !!!warning
-    Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are Pera wallet (mobile and web) and AlgoSigner (web extension). Pera, along with some other wallets in the ecosystem, allow transcations be signed using the [Wallet Connect API](../../walletconnect/index.md). The mnemonic is used here for learning purposes only.
+    Placing a mnemonic like this in code should never be done in production. Typically applications will link to some protected wallet to sign transactions. Some examples of wallets are Pera wallet (mobile and web) and Exodus (web extension). Pera, along with some other wallets in the ecosystem, allow transcations be signed using the Wallet Connect API. The mnemonic is used here for learning purposes only.
 
 The algod_address and algod_token values are the default values to connect to a sandbox installed node. Also note that in this example, the sandbox node is connected to the Algorand TestNet network (eg `./sandbox up testnet`).
 

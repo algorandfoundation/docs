@@ -3,6 +3,14 @@ title: Overview
 This section is an overview of **Accounts** on Algorand. It reviews core terminology and guides developers on how to interpret these terms in different contexts. 
 
 
+
+
+# Quick start videos
+
+If you prefer videos, take a look at this 6 minute guide to Learn How to Manage Private / Public Algorand Account Keys.
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/SewNDCBvk58" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 # Terminology
 ## Keys and Addresses
 

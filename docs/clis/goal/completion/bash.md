@@ -8,14 +8,6 @@ Generate bash completion commands
 
 
 
-### Synopsis
-
-
-
-Generate bash completion commands
-
-
-
 ```
 
 goal completion bash [flags]

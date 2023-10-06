@@ -8,14 +8,6 @@ Display license information
 
 
 
-### Synopsis
-
-
-
-Display license information
-
-
-
 ```
 
 goal license [flags]

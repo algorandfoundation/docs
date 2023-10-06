@@ -8,14 +8,6 @@ Stop, and then start, the specified Algorand node
 
 
 
-### Synopsis
-
-
-
-Stop, and then start, the specified Algorand node
-
-
-
 ```
 
 goal node restart [flags]

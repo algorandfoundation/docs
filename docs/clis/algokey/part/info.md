@@ -8,14 +8,6 @@ Print participation key information
 
 
 
-### Synopsis
-
-
-
-Print participation key information
-
-
-
 ```
 
 algokey part info [flags]

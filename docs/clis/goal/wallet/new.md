@@ -8,14 +8,6 @@ Create a new wallet
 
 
 
-### Synopsis
-
-
-
-Create a new wallet
-
-
-
 ```
 
 goal wallet new [wallet name] [flags]

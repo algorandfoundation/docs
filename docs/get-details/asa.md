@@ -12,6 +12,11 @@ With Algorand Standard Assets you can represent stablecoins, loyalty points, sys
 
 This section begins with an [overview](#assets-overview) of the asset implementation on Algorand including a review of all [asset parameters](#asset-parameters). This is followed by [how-tos](#asset-functions) in the SDKs and `goal` for all on-chain asset functions.
 
+# Quick start videos
+
+If you prefer videos, take a look at this 7 minute guide to learn about Introduction to Assets.
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/94XMLuTt8nM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 # Assets overview
 
@@ -81,6 +86,12 @@ The clawback address represents an account that is allowed to transfer assets fr
 If any of these four addresses is set to `""` that address will be cleared and can never be reset for the life of the asset. This will also effectively disable the feature of that address. For example setting the freeze address to `""` will prevent the asset from ever being frozen.
 
 # Asset functions
+
+# Quick start videos
+
+If you prefer videos, take a look at this 8 minute guide to learn about Building Solutions Using ASAs.
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/_Q37eysrRh4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Creating an asset
 **Transaction Authorizer**: Any account with sufficient Algo balance

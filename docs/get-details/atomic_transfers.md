@@ -4,6 +4,12 @@ In traditional finance, trading assets generally requires a trusted intermediary
 
 On Algorand, atomic transfers are implemented as irreducible batch operations, where a group of [transactions](../transactions) are submitted as a unit and all transactions in the batch either pass or fail. This also eliminates the need for more complex solutions like [hashed timelock contracts](https://en.bitcoinwiki.org/wiki/Hashed_Timelock_Contracts) that are implemented on other blockchains. An atomic transfer on Algorand is confirmed in less than 4 seconds, just like any other transaction. Transactions can contain Algos or Algorand Standard Assets and may also be governed by Algorand Smart Contracts. 
 
+# Quick start videos
+
+If you prefer videos, take a look at this 10 minute guide to learn about Atomic Transactions.
+
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/65I0wyq7XoI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 # Use cases
 
 Atomic transfers enable use cases such as:

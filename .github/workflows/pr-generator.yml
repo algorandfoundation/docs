@@ -130,6 +130,6 @@ jobs:
           branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
           title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
           body: "Changes generated automatically by github action docs-generator."
-          reviewers: "nullun,barnjamin,ryanrfox"
+          reviewers: "nullun,ryanrfox"
           delete-branch: true
           base: staging
