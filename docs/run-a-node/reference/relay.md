@@ -4,9 +4,10 @@ A benefit of Algorand's decentralized network implementation is that a relay is 
 
 It is possible to set up a relay for a personal network that does not require DNS entries. This is done using the following steps.
 
-See the [Algorand Foundation FAQ](https://www.algorand.foundation/general-faq#04-faq) for additional details about MainNet relays.
+
 
 # Install Node 
+See this page for [node hardware requirements](../../setup/install/#hardware-requirements).
 Follow the [install instructions](../../run-a-node/setup/install.md) for the specific operating system that the relay will run on.
 
 # Edit the Configuration File
@@ -46,5 +47,5 @@ goal node start -p "ipaddress-1:4161;ipaddress-2:4161"
 !!! warning
 	Using the above process will prevent the node from connecting to any of the Algorand networks. See the [Phonebook](../artifacts#phonebookjson) documentation for more information on how nodes connect to relays.
 
-
+See the [Algorand Foundation FAQ](https://www.algorand.foundation/general-faq#04-faq) for additional details about MainNet relays.
 
