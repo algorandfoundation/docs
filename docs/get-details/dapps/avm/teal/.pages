@@ -2,5 +2,5 @@ title: TEAL
 arrange:
   - index.md
   - specification.md
-  - opcodes.md
+  - opcodes
   - guidelines.md
