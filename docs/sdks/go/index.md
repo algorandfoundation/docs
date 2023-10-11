@@ -1,6 +1,6 @@
 title: Your First Transaction
 
-This section is a quick start guide for interacting with the Algorand network using Python. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the Python SDK, create an account and submit your first transaction on Algorand.  
+This section is a quick start guide for interacting with the Algorand network using Go. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the Go SDK, create an account and submit your first transaction on Algorand.  
  
 # Install Sandbox
 
