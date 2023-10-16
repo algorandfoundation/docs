@@ -1,4 +1,4 @@
-# AlgoKit sandbox approach
+title: sandbox approach
 
 - **Status**: Approved
 - **Owner:** Rob Moore

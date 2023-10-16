@@ -1,4 +1,4 @@
-# AlgoKit explore
+title: Explore
 
 AlgoKit provides a quick shortcut to [explore](../cli-reference.md#explore) various Algorand networks using [Dappflow](https://app.dappflow.org/) including [AlogKit LocalNet](./localnet.md)!
 

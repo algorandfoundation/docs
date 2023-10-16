@@ -1,4 +1,4 @@
-# AlgoKit Init
+title: Init
 
 The `algokit init` [command](../cli-reference.md#init) is used to quickly initialize new projects using official Algorand Templates or community provided templates. It supports a fully guided command line wizard experience, as well as fully scriptable / non-interactive functionality via command options.
 

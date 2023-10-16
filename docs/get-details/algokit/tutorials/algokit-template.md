@@ -1,4 +1,4 @@
-# Creating AlgoKit Templates
+title: Creating AlgoKit Templates
 
 This README serves as a guide on how to create custom templates for AlgoKit, a tool for initializing Algorand smart contract projects.
 Creating templates in AlgoKit involves the use of various configuration files and a templating engine to generate project structures that are tailored to your needs.

@@ -1,4 +1,4 @@
-# Smart Contract Deployment
+title: Smart Contract Deployment
 
 - **Status**: Approved
 - **Owner:** Rob Moore

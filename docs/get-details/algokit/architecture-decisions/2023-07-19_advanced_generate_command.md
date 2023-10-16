@@ -1,4 +1,4 @@
-# Advanced `algokit generate` command
+title: algokit generate command
 
 - **Status**: Approved
 - **Owner:** Altynbek Orumbayev, Inaie Ignacio

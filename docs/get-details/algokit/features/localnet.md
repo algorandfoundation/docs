@@ -1,4 +1,4 @@
-# AlgoKit LocalNet
+title: LocalNet
 
 The AlgoKit LocalNet feature allows you to manage (start, stop, reset, manage) a locally sandboxed private Algorand network. This allows you to interact and deploy changes against your own Algorand network without needing to worry about funding TestNet accounts, information you submit being publicly visible or being connected to an active Internet connection (once the network has been started).
 
