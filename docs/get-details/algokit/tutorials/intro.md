@@ -1,4 +1,4 @@
-# AlgoKit Quick Start Tutorial
+title: AlgoKit Quick Start Tutorial
 
 AlgoKit is the primary tool used by the Algorand community to develop smart contracts on the Algorand blockchain. It provides the capabilities to develop, test and deploy Algorand smart contracts within minutes! This guide is intended to help you setup AlgoKit and to start developing your application.
 

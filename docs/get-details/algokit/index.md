@@ -1,4 +1,4 @@
-# Overview
+title: Overview
 
 The Algorand AlgoKit CLI is the one-stop shop tool for developers building on the Algorand network. The goal of AlgoKit is to help developers build and launch secure, automated production-ready applications rapidly.
 
@@ -9,6 +9,7 @@ For details on how to use individual features see the following
 - [Bootstrap](./features/bootstrap.md) - Bootstrap AlgoKit project dependencies
 - [Completions](./features/completions.md) - Install shell completions for AlgoKit
 - [Deploy](./features/deploy.md) - Deploy your smart contracts effortlessly to various networks
+- [Dispenser](./features/dispenser.md) - interactive TestNet Dispenser for receiveing TestALGO
 - [Doctor](./features/doctor.md) - Check AlgoKit installation and dependencies
 - [Explore](./features/explore.md) - Explore Algorand Blockchains using Dappflow
 - [Generate](./features/generate.md) - Generate code for an Algorand project
@@ -23,7 +24,7 @@ AlgoKit has a number of global options that can impact all commands. Note: these
 - `-h, --help` The help option can be used on any command to get details on any command, its sub-commands and options.
 - `-v, --verbose` Enables DEBUG logging, useful when troubleshooting or if you want to peek under the covers and learn what AlgoKit CLI is doing.
 - `--color / --no-color` Enables or disables output of console styling, we also support the [NO_COLOR](https://no-color.org) environment variable.
-- `--skip-version-check` Skips updated AlgoKit version checking and prompting for that execution, this can also be disabled permanently on a given machine with [`algokit config version-prompt disable`](cli/#-skip-version-check).
+- `--skip-version-check` Skips updated AlgoKit version checking and prompting for that execution, this can also be disabled [permanently on a given machine](./cli-reference.md#version-prompt) with `algokit config version-prompt disable`.
 
 See also the [AlgoKit CLI Reference](./cli-reference.md), which details every command, sub-command and option.
 

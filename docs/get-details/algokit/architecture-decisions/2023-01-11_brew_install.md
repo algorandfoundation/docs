@@ -1,4 +1,4 @@
-# HomeBrew install strategy
+title: Brew install
 
 - **Status**: Approved
 - **Owner:** Daniel McGregor

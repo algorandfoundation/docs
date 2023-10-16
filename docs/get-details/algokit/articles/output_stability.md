@@ -1,4 +1,4 @@
-# Smart Contract Output Stability
+title: Contract Output Stability
 
 Smart contracts development is analogous to low level firmware software development; it's a highly constrained environment in terms of both compute power and memory storage, with a high risk of vulnerabilities due to lower level access to memory and less developer-oriented security tooling. 
 Because of this, the assembly language code that is output for a smart contract is important - a seemingly innocuous minor change could inadvertently add a security vulnerability, or could significantly change the execution and memory profile. 

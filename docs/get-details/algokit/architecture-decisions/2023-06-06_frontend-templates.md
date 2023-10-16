@@ -1,4 +1,4 @@
-# Frontend Templates
+title: Frontend Templates
 
 - **Status**: Approved
 - **Owner:** Altynbek Orumbayev
