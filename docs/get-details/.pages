@@ -2,13 +2,13 @@ title: Get details
 
 arrange:
     - index.md
+    - algokit
     - accounts
     - transactions
-    - asa.md
     - atomic_transfers.md
     - atc.md
+    - asa.md
     - dapps
-    - algokit.md
     - indexer.md
     - conduit.md    
     - stateproofs
