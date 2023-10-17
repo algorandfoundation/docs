@@ -1,41 +1,90 @@
-title: AlgoKit quick start
+title: AlgoKit Quick Start Guide
 
-AlgoKit is the primary tool used by the Algorand community to develop smart contracts on the Algorand blockchain. It provides the capabilities to develop, test and deploy Algorand smart contracts within minutes! This guide is intended to help you set up AlgoKit and start developing your application.
+AlgoKit is the primary tool used by the Algorand community to develop smart contracts on the Algorand blockchain. It provides the capabilities to develop, test and deploy Algorand smart contracts within minutes! This guide is intended to help you setup AlgoKit and to start developing your application.
 
-# Quick start videos
+## 10 minute video walkthrough
 
-If you prefer videos, take a look at this 10-minute guide to getting started.
+<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/MzBRef_Res8" title="Learn How to Build on Algorand in 10 Minutes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-<center>
-[![Learn How to Build on Algorand in 10 Minutes](/docs/imgs/algokit-intro-video-thumbnail.jpg)](https://www.youtube.com/v/MzBRef_Res8)
-</center>
+## Prerequisites
 
-Detailed video guides for both [Windows](https://www.youtube.com/v/22RvINnZsRo) and [Mac](https://www.youtube.com/v/zsurtpCGmgE) are also available.
+- [Python 3.10](https://www.python.org/downloads/) or higher
+- [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
+- [Git](https://github.com/git-guides/install-git#install-git)
+- [Docker](https://docker.com/download/)
+- [VSCode](https://code.visualstudio.com/download) (recommended)
 
-# Prerequisites
-This guide presents installing AlgoKit using an OS agnostic procedure. For OS-specific instructions take a look at the [AlgoKit install](https://github.com/algorandfoundation/algokit-cli/blob/main/README.md#install) guide.
+## Install AlgoKit
 
-Using this procedure requires the following components to be installed already
+=== "Windows"
+   > **Note**
+   > This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.10+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
 
-* [Python 3.10](https://www.python.org/downloads/) or higher
-* [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
-* [Git](https://github.com/git-guides/install-git#install-git)
-* [Docker](https://docs.docker.com/get-docker/)
-* [VSCode](https://code.visualstudio.com/download)
+   1. Ensure prerequisites are installed
+      - [Git](https://github.com/git-guides/install-git#install-git-on-windows) (or `winget install git.git`)
+      - [Docker](https://docs.docker.com/desktop/install/windows-install/) (or `winget install docker.dockerdesktop`)
+        > **Note**
+        > See [our LocalNet documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/localnet.md#prerequisites) for more tips on installing Docker on Windows
+   2. Install Python3 using WinGet
+      1. Install python: `winget install python.python.3.11`
+      2. Restart the terminal to ensure Python and pip are available on the path
+         > **Note**
+         > Windows has a feature called **App Execution Aliases** that provides redirects for the Python command that guide users to the
+         > Windows Store. Unfortunately these aliases can prevent normal execution of Python if Python is installed via other means, to disable them
+         > search for **Manage app execution aliases** from the start menu, and then turn off entries listed as
+         > **App Installer python.exe** or **App Installer python3.exe**.
+      3. Install pipx:
+         ```
+         pip install --user pipx
+         python -m pipx ensurepath
+         ```
+      4. Restart the terminal to ensure pipx is available on the path
+      5. Install AlgoKit via pipx: `pipx install algokit`
+      6. Restart the terminal to ensure AlgoKit is available on the path
+   <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/22RvINnZsRo" title="Installing AlgoKit on Windows" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-# Install AlgoKit
 
-To install AlgoKit, run the following command from a terminal.
+=== "macOS"
+   > **Note**
+   > This method will install Python 3.10 as a dependency via Homebrew. If you already have python installed, you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+   
+   1. Ensure prerequisites are installed
 
-```shell
-pipx install algokit
-```
+      - [Homebrew](https://docs.brew.sh/Installation)
+      - [Git](https://github.com/git-guides/install-git#install-git-on-mac) (should already be available if `brew` is installed)
+      - [Docker](https://docs.docker.com/desktop/install/mac-install/), (or `brew install --cask docker`)
+        > **Note**
+        > Docker requires MacOS 11+
+   2. Install using Homebrew `brew install algorandfoundation/tap/algokit`
+   3. Restart the terminal to ensure AlgoKit is available on the path
+   4. [Verify installation](#verify-installation)
+   <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/zsurtpCGmgE" title="Installing AlgoKit on macOS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-After the installation completes, **restart the terminal**.
 
-For more detailed installation documentation, see the [official installation guide](https://github.com/algorandfoundation/algokit-cli#install).
+=== "Linux"
+   1. Ensure prerequisites are installed
+      - [Python 3.10+](https://www.python.org/downloads/)
+        > **Note**
+        > There is probably a better way to install Python than to download it directly, e.g. your local Linux package manager
 
-# Verify the Installation
+      - [pipx](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
+      - [Git](https://github.com/git-guides/install-git#install-git-on-linux)
+      - [Docker](https://docs.docker.com/desktop/install/linux-install/)
+
+   2. Continue with step 2 in the following section to install via `pipx` on any OS 
+=== "pipx on any OS"
+
+   To install AlgoKit, run the following command from a terminal.
+
+   ```shell
+   pipx install algokit
+   ```
+
+   After the installation completes, **restart the terminal**.
+
+Additional AlgoKit videos are available on the [@AlgoDevs YouTube channel](https://youtube.com/@AlgoDevs).
+
+## Verify the Installation
 
 To verify AlgoKit Installed correctly run the following.
 
@@ -46,27 +95,22 @@ algokit --version
 Output similar to the following should be displayed:
 
 ```shell
-algokit, version 0.5.0
+algokit, version 1.5.0
 ```
 
-# Start a LocalNet
+## Start a LocalNet
 
-!!! note:
-        Make sure Docker is running before starting a LocalNet instance. 
-
-AlgoKit supports using a [local version of the Algorand blockchain](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/localnet.md). To start an instance of this LocalNet run the following command from the terminal:
+AlgoKit supports using a [local version of the Algorand blockchain](../features/localnet.md). To start an instance of this LocalNet run the following command from the terminal:
 
 ```shell
 algokit localnet start
 ```
 
-This should start an instance of the LocalNet within docker. If you open the Docker Desktop application you should see something similar to the following:
+This should start an instance of the LocalNet within docker. If you open the Docker Desktop application you should something similar to the following:
 
-<center>
-![Docker Desktop LocalNet Instance](/docs/imgs/localnet.png){: style="width:700px" align=center }
-</center>
+![Docker Desktop LocalNet Instance](../imgs/localnet.png)
 
-# Create an AlgoKit project
+## Create an AlgoKit project
 
 Now that AlgoKit is installed, you can rapidly create a new project to get started quickly. This can be done by running:
 
@@ -74,23 +118,19 @@ Now that AlgoKit is installed, you can rapidly create a new project to get start
 algokit init
 ```
 
-This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout [AlgoKit detailed documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/init.md). For now, use the arrow keys to select the `playground` template, which is a lightweight starting point for learning and experimentation.
+This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For now, use the arrow keys to select the `playground` template, which is a lightweight starting point for learning and experimentation.
 
 Next, you will be prompted for the name of your project. Finally, select the default value for the rest of the prompts (enter).
 
 Once finished, (if you have it installed) VS Code should automatically be opened with the initialised project and you will be prompted to install appropriate VS Code extensions. This starter app will contain one smart contract (built using the [Beaker](https://beaker.algo.xyz/) smart contract development framework) named `helloworld.py`, in the `hello_world` folder, with one method (`hello`) that takes a `String` and returns a `String`.
 
-<center>
-![AlgoKit Playground Contract](/docs/imgs/algokitplayground.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Playground Contract](../imgs/algokitplayground.png)
 
-# Run the Demo Application
+## Run the Demo Application
 
 Once the playground project is created, you will notice in the `hello_world` folder a file named `demo.py` which is a simple example of using AlgoKit to deploy and make a call to the `helloworld.py` smart contract on the LocalNet instance started earlier.
 
-<center>
-![AlgoKit Playground Demo](/docs/imgs/algokitdemo.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Playground Demo](../imgs/algokitdemo.png)
 
 Right clicking on this file and selecting `Run Python File in Terminal` will deploy the `HelloWorldApp` smart contract and then call it passing the parameter `name` with a value of `Beaker`. Alternatively, you can hit F5 (or whatever keyboard shortcut is set in VS Code for running the debugger) while you are viewing the `helloworld.py` file and it will:
 
@@ -116,15 +156,13 @@ At this point you have deployed a simple contract to an Algorand network and cal
 
 Additionally, you can find the native TEAL smart contract code and the appropriate smart contract manifest JSON files have been output to the `artifacts` folder.
 
-<center>
-![AlgoKit Playground Demo](/docs/imgs/algokitartifacts.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Playground Demo](../imgs/algokitartifacts.png)
 
 Running the `build.py` python file will also generate these artifacts without deploying. These files can be used by tools like [Dappflow](https://dappflow.org/), [goal](https://developer.algorand.org/docs/clis/goal/goal/), etc. to deploy your smart contract to the various Algorand networks.
 
-# Using Dappflow
+## Using Dappflow
 
-Dappflow is a web-based user interface that let you visualise accounts, transactions, assets and applications on an Algorand network and also provides ability to deploy and call smart contracts. This works for TestNet, MainNet and also LocalNet. Furthermore, you can also create and fund accounts on LocalNet. While AlgoKit surfaces both a programming interface and a command line interface for interacting with Algorand, it also allows you to quickly open Dappflow so you can see what's happening visually.
+Dappflow is a web-based user interface that let's you visualise accounts, transactions, assets and applications on an Algorand network and also provides ability to deploy and call smart contracts. This works for TestNet, MainNet and also LocalNet. Furthermore, you can also create and fund accounts on LocalNet. While AlgoKit surfaces both a programming interface and a command line interface for interacting with Algorand, it also allows you to quickly open Dappflow so you can see what's happening visually.
 
 Dappflow can be launched from AlgoKit by running the following command from the VS Code terminal.
 
@@ -136,70 +174,42 @@ By default it will open Dappflow to point to LocalNet (It will be displayed as `
 
 This command will launch your default web browser and load the Dappflow web application.
 
-!!! info
-        If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
+**Note:** If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
 
-<center>
-![AlgoKit Dappflow](/docs/imgs/dappflow1.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Dappflow](../imgs/dappflow1.png)
 
-## Create test account
+### Create test account
 
 To issue commands against the LocalNet network you need an account with ALGOs in it. Dappflow lets you easily create one.
 
 Select `Dev Wallets` from the left menu and click on the `Create wallet` button. This will create an account on the LocalNet and fund it with 100 Algos that can be used to test with.
 
-<center>
-![AlgoKit Dappflow](/docs/imgs/dappflow2.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Dappflow](../imgs/dappflow2.png)
 
 In the bottom left hand corner of the menu, select `Connect wallet` and you will be prompted with several wallet choices. Choose the `Dev Wallet` option. This will connect the account you just created to Dappflow so you can use that account for signing transactions from the Dappflow user interface.
 
-## Deploy the Hello World application
+### Deploy the Hello World application
 
 To deploy the built Beaker smart contract application, select the `Beaker studio` menu and click on the import beaker app. Select `File` and `Upload file`, browse to the artifacts created in the previous section of this guide. Select the `application.json` manifest file. This will load the specific manifest file for the Hello World sample application.
 
-<center>
-![AlgoKit Dappflow](/docs/imgs/dappflow3.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Dappflow](../imgs/dappflow3.png)
 
-To deploy this application again, select the `Create app` button followed by the `Create` button from the popup. You should get a `Transaction successful` message with the option to view the specific transaction in the explorer. Close out the popup and then scroll down to the `ABI` section of the page. The `hello` method should be displayed with an execute button beside it.
+To deploy this application again, select the `Create app` button followed by the `Create` button from the popup. You should get a `Transaction successful` message with the option to view the specific transaction in the explorer. Close out of the popup and then scroll down to the `ABI` section of the page. The `hello` method should be displayed with an execute button beside it.
 
-<center>
-![AlgoKit Dappflow](/docs/imgs/dappflow4.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Dappflow](../imgs/dappflow4.png)
 
-Click on the Execute button and a popup will be displayed allowing you to enter the parameter that is defined in the `HelloWorldApp` smart contract.
+Click on the Execute button and a popup will be displayed allowing you to enter the parameter that we defined in the `HelloWorldApp` smart contract.
 
-<center>
-![AlgoKit Dappflow](/docs/imgs/dappflow5.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Dappflow](../imgs/dappflow5.png)
 
-Enter a string in the parameter and click on `Execute`. You should get a confirmation that the method executed properly and what the smart contract returned.
+Enter a string in the parameter and click on `Execute`. You should get get a confirmation that the method executed properly and what the smart contract returned.
 
-<center>
-![AlgoKit Dappflow](/docs/imgs/dappflow6.png){: style="width:700px" align=center }
-</center>
+![AlgoKit Dappflow](../imgs/dappflow6.png)
 
 You have now successfully deployed and executed a smart contract method call using Dappflow!
 
-# Updating AlgoKit
+## Next steps
 
-AlgoKit can be updated using the following command if you installed with pipx:
-
-```shell
-pipx upgrade algokit
-```
-
-If you used Brew to install AlgoKit, it can be updated using:
-
-```shell
-brew upgrade algokit
-```
-
-# Next steps
-
-- To learn more about AlgoKit and what you can do with it, check out the [AlgoKit documentation](/docs/get-details/algokit).
-- To learn more about Beaker, take a look at the [Beaker documentation](/docs/get-details/dapps/writing-contracts/beaker).
-- To get detailed AlgoKit documentation, see the [AlgoKit repository](https://github.com/algorandfoundation/algokit-cli).
-- More information on Algorand smart contracts is also available in the [smart contract documentation](/docs/get-details/dapps/smart-contracts/apps/).
+- To learn more about AlgoKit and what you can do with it, checkout the [AlgoKit documentation](../index.md).
+- To learn more about Beaker, take a look at the [Beaker documentation](https://beaker.algo.xyz/).
+- More information on Algorand smart contracts is also available in the [smart contract documentation](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/).
