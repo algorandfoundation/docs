@@ -1,6 +1,62 @@
 title: Test
 
 
+## two spaces
+
+=== "Windows"
+  Windows
+
+=== "macOS"
+  macOS
+
+=== "Linux"
+  Linux
+
+=== "OS agnostic"
+  OS agnostic
+
+## three spaces
+
+=== "Windows"
+   Windows
+
+=== "macOS"
+   macOS
+
+=== "Linux"
+   Linux
+
+=== "OS agnostic"
+   OS agnostic
+
+## four spaces
+
+=== "Windows"
+    Windows
+
+=== "macOS"
+    macOS
+
+=== "Linux"
+    Linux
+
+=== "OS agnostic"
+    OS agnostic
+
+## one tab
+
+=== "Windows"
+	Windows
+
+=== "macOS"
+	macOS
+
+=== "Linux"
+	Linux
+
+=== "OS agnostic"
+	OS agnostic
+
 ## Install AlgoKit A
 
 === "Windows"
