@@ -94,7 +94,7 @@ Starting from v2, the AVM can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcode availability. Refer to [opcodes document](../opcodes) for details.
+3. Opcode availability. Refer to [opcodes document](opcodes/v*.md) for details.
 4. Some global values, such as LatestTimestamp, are only available in stateful mode.
 5. Only Applications can observe transaction effects, such as Logs or IDs allocated to ASAs or new Applications.
 
@@ -341,7 +341,7 @@ Most operations work with only one type of argument, uint64 or bytes, and fail i
 
 Many instructions accept values to designate Accounts, Assets, or Applications. Beginning with v4, these values may be given as an _offset_ in the corresponding Txn fields (Txn.Accounts, Txn.ForeignAssets, Txn.ForeignApps) _or_ as the value itself (a byte-array address for Accounts, or a uint64 ID). The values, however, must still be present in the Txn fields. Before v4, most opcodes required the use of an offset, except for reading account local values of assets or applications, which accepted the IDs directly and did not require the ID to be present in they corresponding _Foreign_ array. (Note that beginning with v4, those IDs _are_ required to be present in their corresponding _Foreign_ array.) See individual opcodes for details. In the case of account offsets or application offsets, 0 is specially defined to Txn.Sender or the ID of the current application, respectively.
 
-This summary is supplemented by more detail in the [opcodes document](../opcodes).
+This summary is supplemented by more detail in the [opcodes document](opcodes/v*.md).
 
 Some operations immediately fail the program.
 A transaction checked by a program that fails is not valid.
@@ -373,12 +373,6 @@ return stack matches the name of the input value.
 | `ecdsa_pk_recover v` | for (data A, recovery id B, signature C, D) recover a public key |
 | `ecdsa_pk_decompress v` | decompress pubkey A into components X, Y |
 | `vrf_verify s` | Verify the proof B of message A against pubkey C. Returns vrf output and verification flag. |
-| `ec_add g` | for curve points A and B, return the curve point A + B |
-| `ec_scalar_mul g` | for curve point A and scalar B, return the curve point BA, the point A multiplied by the scalar B. |
-| `ec_pairing_check g` | 1 if the product of the pairing of each point in A with its respective point in B is equal to the identity element of the target group Gt, else 0 |
-| `ec_multi_scalar_mul g` | for curve points A and scalars B, return curve point B0A0 + B1A1 + B2A2 + ... + BnAn |
-| `ec_subgroup_check g` | 1 if A is in the main prime-order subgroup of G (including the point at infinity) else 0. Program fails if A is not in G at all. |
-| `ec_map_to g` | maps field element A to group G |
 | `+` | A plus B. Fail on overflow. |
 | `-` | A minus B. Fail if B > A. |
 | `/` | A divided by B (truncated division). Fail if B == 0. |
@@ -601,7 +595,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 66 | ClearStateProgramPages | []byte | v7  | ClearState Program as an array of pages |
 
 
-Additional details in the [opcodes document](../opcodes#txn) on the `txn` op.
+Additional details in the [opcodes document](opcodes/v*.md#txn) on the `txn` op.
 
 **Global Fields**
 
