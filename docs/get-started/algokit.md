@@ -22,22 +22,23 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 ## Install AlgoKit
 
 === "Windows"
-    > **Note**
-    > This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.10+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+    !!! Note
+        This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.10+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
 
     - Ensure prerequisites are installed
         - [Git](https://github.com/git-guides/install-git#install-git-on-windows) (or `winget install git.git`)
         - [Docker](https://docs.docker.com/desktop/install/windows-install/) (or `winget install docker.dockerdesktop`)
-        > **Note**
-        > See [our LocalNet documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/localnet.md#prerequisites) for more tips on installing Docker on Windows
+
+            !!! Info
+                See [our LocalNet documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/localnet.md#prerequisites) for more tips on installing Docker on Windows
+
     - Install Python3 using WinGet
         - Install python: `winget install python.python.3.11`
         - Restart the terminal to ensure Python and pip are available on the path
-            > **Note**
-            > Windows has a feature called **App Execution Aliases** that provides redirects for the Python command that guide users to the
-            > Windows Store. Unfortunately these aliases can prevent normal execution of Python if Python is installed via other means, to disable them
-            > search for **Manage app execution aliases** from the start menu, and then turn off entries listed as
-            > **App Installer python.exe** or **App Installer python3.exe**.
+            
+            !!! Info
+                Windows has a feature called **App Execution Aliases** that provides redirects for the Python command that guide users to the Windows Store. unfortunately these aliases can prevent normal execution of Python if Python is installed via other means, to disable them search for **Manage app execution aliases** from the start menu, and then turn off entries listed as **App Installer python.exe** or **App Installer python3.exe**.
+
         - Install pipx:
             ```
             pip install --user pipx
@@ -50,27 +51,31 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/22RvINnZsRo" title="Installing AlgoKit on Windows" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 === "macOS"
-    > **Note**
-    > This method will install Python 3.10 as a dependency via Homebrew. If you already have python installed, you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+    !!! Note
+        This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
 
     - Ensure prerequisites are installed
 
         - [Homebrew](https://docs.brew.sh/Installation)
         - [Git](https://github.com/git-guides/install-git#install-git-on-mac) (should already be available if `brew` is installed)
         - [Docker](https://docs.docker.com/desktop/install/mac-install/), (or `brew install --cask docker`)
-        > **Note**
-        > Docker requires MacOS 11+
+
+            !!! Info
+                Docker requires MacOS 11+
+
     - Install using Homebrew `brew install algorandfoundation/tap/algokit`
     - Restart the terminal to ensure AlgoKit is available on the path
-    - [Verify installation](#verify-installation)
 
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/zsurtpCGmgE" title="Installing AlgoKit on macOS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 === "Linux"
     - Ensure prerequisites are installed
+
         - [Python 3.10+](https://www.python.org/downloads/)
-            > **Note**
-            > There is probably a better way to install Python than to download it directly, e.g. your local Linux package manager
+
+            !!! Info
+                There is probably a better way to install Python than to download it directly, e.g. your local Linux package manager
+
         - [pipx](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
         - [Git](https://github.com/git-guides/install-git#install-git-on-linux)
         - [Docker](https://docs.docker.com/desktop/install/linux-install/)
