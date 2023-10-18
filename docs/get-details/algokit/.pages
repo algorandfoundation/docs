@@ -1,0 +1,9 @@
+title: AlgoKit
+
+arrange:
+- index.md
+- features
+- cli-reference.md
+- tutorials
+- architecture-decisions
+- articles
