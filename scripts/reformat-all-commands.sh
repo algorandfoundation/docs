@@ -63,8 +63,7 @@ Opcodes by version:
 EOF
 
 opcode_files=(${GO_ALGORAND_SRC}/data/transactions/logic/TEAL_opcodes_v*.md)
-vfuture_version=$(grep '"LogicSigVersion": ' ${GO_ALGORAND_SRC}/data/transactions/logic/langspec_v1.json | awk '{print $2}' | tr -d '[,\n\r]')
-mainnet_version=$((${vfuture_version}-1))
+mainnet_version=$(grep '"LogicSigVersion": ' ${GO_ALGORAND_SRC}/data/transactions/logic/langspec_v1.json | awk '{print $2}' | tr -d '[,\n\r]')
 
 # Function to extract the opcode version number from the filename
 get_version_number() {
@@ -95,14 +94,14 @@ for ((i=${#sorted_files[@]}-1; i>=0; i--)); do
         sed -i.bak "s/\(\[[[:alnum:][:space:]]*\]\)(jsonspec\.md)/\1(..\/jsonspec.md)/g" "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
         echo "  - v${version}.md" >> $pages_file
 
-        if [ $i -eq $(( $vfuture_version - 1)) ]; then
+        if [ $(($i + 1)) -gt $mainnet_version ]; then
             sed -i.bak '/^title:/a\
-            \
-            !!! Warning "This page contains the opcodes currently available in vFuture (not on Mainnet) and may change before release."\
-            ' "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
+\
+!!! Warning "This page contains the opcodes currently available in vFuture (not on Mainnet) and may change before release."\
+' "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
         fi
 
-        if [ $i -eq $(( $mainnet_version - 1)) ]; then
+        if [ $(($i + 1)) -eq $mainnet_version ]; then
           echo "- [v${version} - Current version on Mainnet](v${version}.md)" >> "$index_file"
         else
           echo "- [v${version}](v${version}.md)" >> $index_file
