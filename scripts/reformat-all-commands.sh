@@ -4,6 +4,7 @@
 GO_ALGORAND_SRC=$1
 INDEXER_SRC=$2
 CLI_TOOLS="~/go/bin/" # path to goal, algorand-indexer, algokey, etc.
+CLI_TOOLS="~/.asdf/shims/"
 
 # CLI GOAL
 ./reformat.py -doc-dir ../docs/clis/goal/ -cmd $CLI_TOOLS/goal
@@ -62,7 +63,7 @@ Opcodes by version:
 EOF
 
 opcode_files=(${GO_ALGORAND_SRC}/data/transactions/logic/TEAL_opcodes_v*.md)
-vfuture_version=$(grep 'vFuture.LogicSigVersion =' ${GO_ALGORAND_SRC}/config/consensus.go | awk '{print $3}' | tr -d '\r')
+vfuture_version=$(grep '"LogicSigVersion": ' ${GO_ALGORAND_SRC}/data/transactions/logic/langspec_v1.json | awk '{print $2}' | tr -d '[,\n\r]')
 mainnet_version=$((${vfuture_version}-1))
 
 # Function to extract the opcode version number from the filename
@@ -95,15 +96,10 @@ for ((i=${#sorted_files[@]}-1; i>=0; i--)); do
         echo "  - v${version}.md" >> $pages_file
 
         if [ $i -eq $(( $vfuture_version - 1)) ]; then
-            # The most efficient POSIX-compliant way to insert a line that I could find.
-            ed -s "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md" <<EOF
-3i
-!!! Warning "This page contains the opcodes currently available in vFuture (not on Mainnet) and may change before release."
-
-.
-w
-q
-EOF
+            sed -i.bak '/^title:/a\
+            \
+            !!! Warning "This page contains the opcodes currently available in vFuture (not on Mainnet) and may change before release."\
+            ' "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
         fi
 
         if [ $i -eq $(( $mainnet_version - 1)) ]; then
