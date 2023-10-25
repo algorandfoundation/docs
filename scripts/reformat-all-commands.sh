@@ -4,7 +4,6 @@
 GO_ALGORAND_SRC=$1
 INDEXER_SRC=$2
 CLI_TOOLS="~/go/bin/" # path to goal, algorand-indexer, algokey, etc.
-CLI_TOOLS="~/.asdf/shims/"
 
 # CLI GOAL
 ./reformat.py -doc-dir ../docs/clis/goal/ -cmd $CLI_TOOLS/goal
