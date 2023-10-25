@@ -62,6 +62,8 @@ Opcodes by version:
 EOF
 
 opcode_files=(${GO_ALGORAND_SRC}/data/transactions/logic/TEAL_opcodes_v*.md)
+vfuture_version=$(grep 'vFuture.LogicSigVersion =' ${GO_ALGORAND_SRC}/config/consensus.go | awk '{print $3}' | tr -d '\r')
+mainnet_version=$((${vfuture_version}-1))
 
 # Function to extract the opcode version number from the filename
 get_version_number() {
@@ -78,8 +80,7 @@ sorted_files=($(for file in "${opcode_files[@]}"; do
 done | sort -n | awk '{print $2}'))
 
 # Link to latest opcodes
-latest_version="$(get_version_number ${sorted_files[${#sorted_files[@]}-1]})"
-sed -i.bak "s/TEAL_opcodes.md/opcodes\/v${latest_version}.md/" ../docs/get-details/dapps/avm/teal/specification.md
+sed -i.bak "s/TEAL_opcodes.md/opcodes\/v${mainnet_version}.md/" ../docs/get-details/dapps/avm/teal/specification.md
 
 for ((i=${#sorted_files[@]}-1; i>=0; i--)); do
     file=${sorted_files[$i]}
@@ -93,7 +94,19 @@ for ((i=${#sorted_files[@]}-1; i>=0; i--)); do
         sed -i.bak "s/\(\[[[:alnum:][:space:]]*\]\)(jsonspec\.md)/\1(..\/jsonspec.md)/g" "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md"
         echo "  - v${version}.md" >> $pages_file
 
-        if [ $i -eq $(( ${#opcode_files[@]} - 1 )) ]; then
+        if [ $i -eq $(( $vfuture_version - 1)) ]; then
+            # The most efficient POSIX-compliant way to insert a line that I could find.
+            ed -s "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md" <<EOF
+3i
+!!! Warning "This page contains the opcodes currently available in vFuture and may change before release."
+
+.
+w
+q
+EOF
+        fi
+
+        if [ $i -eq $(( $mainnet_version - 1)) ]; then
           echo "- [v${version} - Current Version](v${version}.md)" >> "$index_file"
         else
           echo "- [v${version}](v${version}.md)" >> $index_file
