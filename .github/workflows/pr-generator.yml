@@ -97,6 +97,7 @@ jobs:
         run: |
           cd docs/scripts/
           ./reformat-all-commands.sh ../../go-algorand/ ../../indexer/
+          go run config_json_gen/main.go -path ../../go-algorand/ > ../docs/run-a-node/reference/config.md
           git diff
 
       - name: Change version for Beta release

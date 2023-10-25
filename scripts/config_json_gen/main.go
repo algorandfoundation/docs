@@ -7,15 +7,18 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"html"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 )
 
 //go:embed template.tmpl
 var configTemplate string
+var re = regexp.MustCompile(`\r?\n`)
 
 // resolveLocalTemplate searches for the localTemplate.go file in the given path.
 func resolveLocalTemplate(pathStr string) (string, error) {
@@ -63,7 +66,7 @@ func parseDefault(tag string) string {
 	version := versions[len(versions)-1]
 	value := strings.Split(version, ":")[1]
 	value = unwrap(value, '"')
-	return value
+	return html.EscapeString(value)
 }
 
 // parseType converts the parameter type into a string.
@@ -121,7 +124,7 @@ func parseFile(filePath string) ([]DocParts, error) {
 			// Grab common parts
 			doc := DocParts{
 				Name:        x.Names[0].Name,
-				Description: x.Doc.Text(),
+				Description: re.ReplaceAllString(strings.TrimSpace(x.Doc.Text()), "<br>"),
 				Default:     parseDefault(x.Tag.Value),
 				Type:        parseType(x.Type),
 			}
