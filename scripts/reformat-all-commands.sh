@@ -98,7 +98,7 @@ for ((i=${#sorted_files[@]}-1; i>=0; i--)); do
             # The most efficient POSIX-compliant way to insert a line that I could find.
             ed -s "../docs/get-details/dapps/avm/teal/opcodes/v${version}.md" <<EOF
 3i
-!!! Warning "This page contains the opcodes currently available in vFuture and may change before release."
+!!! Warning "This page contains the opcodes currently available in vFuture (not on Mainnet) and may change before release."
 
 .
 w
@@ -107,7 +107,7 @@ EOF
         fi
 
         if [ $i -eq $(( $mainnet_version - 1)) ]; then
-          echo "- [v${version} - Current Version](v${version}.md)" >> "$index_file"
+          echo "- [v${version} - Current version on Mainnet](v${version}.md)" >> "$index_file"
         else
           echo "- [v${version}](v${version}.md)" >> $index_file
         fi
