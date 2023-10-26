@@ -46,11 +46,13 @@ goal node catchup --abort					Abort the current catchup
 
 ```
 
-  -x, --abort   Aborts the current catchup process
+  -x, --abort      Aborts the current catchup process
 
-      --force   Forces fast catchup with implicit catchpoint to start without a consent prompt
+      --force      Forces fast catchup with implicit catchpoint to start without a consent prompt
 
-  -h, --help    help for catchup
+  -h, --help       help for catchup
+
+  -m, --min uint   Catchup only if the catchpoint would advance the node by the specified minimum number of rounds
 
 ```
 

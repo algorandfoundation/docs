@@ -50,6 +50,8 @@ goal clerk simulate [flags]
 
   -o, --result-out string          Filename for writing simulation result
 
+      --round uint                 Specify the round after which the simulation will take place. If not specified, the simulation will take place after the latest round.
+
       --scratch                    Report scratch change during simulation time
 
       --stack                      Report stack change during simulation time

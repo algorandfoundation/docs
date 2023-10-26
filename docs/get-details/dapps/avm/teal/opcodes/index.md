@@ -4,8 +4,8 @@ This page lists the TEAL opcodes by version. For more information on TEAL, see t
 
 Opcodes by version:
 
-- [v10 - Current Version](v10.md)
-- [v9](v9.md)
+- [v10](v10.md)
+- [v9 - Current version on Mainnet](v9.md)
 - [v8](v8.md)
 - [v7](v7.md)
 - [v6](v6.md)

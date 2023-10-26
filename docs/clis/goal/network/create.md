@@ -30,19 +30,21 @@ goal network create [flags]
 
 ```
 
-      --devMode           Forces the configuration to enable DevMode, returns an error if the template is not compatible with DevMode.
+      --devMode            Forces the configuration to enable DevMode, returns an error if the template is not compatible with DevMode.
 
-  -h, --help              help for create
+  -h, --help               help for create
 
-  -n, --network string    Specify the name to use for the private network
+  -n, --network string     Specify the name to use for the private network
 
-      --noclean           Prevents auto-cleanup on error - for diagnosing problems
+      --noclean            Prevents auto-cleanup on error - for diagnosing problems
 
-  -K, --noimportkeys      Do not import root keys when creating the network (by default will import)
+  -K, --noimportkeys       Do not import root keys when creating the network (by default will import)
 
-  -s, --start             Automatically start the network after creating it.
+  -p, --pregendir string   Specify the path to the directory with pregenerated genesis.json, root and partkeys to import into the network directory. By default, the genesis.json and keys will be generated on start. This should only be used on private networks.
 
-  -t, --template string   Specify the path to the template file for the network
+  -s, --start              Automatically start the network after creating it.
+
+  -t, --template string    Specify the path to the template file for the network
 
 ```
 
