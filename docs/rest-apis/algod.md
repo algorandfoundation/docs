@@ -774,6 +774,7 @@ Given a catchpoint, it starts catching up to this catchpoint
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**catchpoint**  <br>*required*|A catch point|string (catchpoint)|
+|**Query**|**min**  <br>*optional*|Specify the minimum number of blocks which the ledger must be advanced by in order to start the catchup. This is useful for simplifying tools which support fast catchup, they can run the catchup unconditionally and the node will skip the catchup if it is not needed.|integer|
 
 
 **Responses**
@@ -2096,6 +2097,7 @@ POST /v2/transactions/simulate
 |---|---|---|
 |**eval-overrides**  <br>*optional*||[SimulationEvalOverrides](#simulationevaloverrides)|
 |**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
+|**initial-states**  <br>*optional*||[SimulateInitialStates](#simulateinitialstates)|
 |**last-round**  <br>*required*|The round immediately preceding this simulation. State changes through this round were used to run this simulation.|integer|
 |**txn-groups**  <br>*required*|A result object for each transaction group that was simulated.|< [SimulateTransactionGroupResult](#simulatetransactiongroupresult) > array|
 |**version**  <br>*required*|The version of this response object.|integer|
@@ -2220,6 +2222,30 @@ Application index and its parameters
 |---|---|---|
 |**id**  <br>*required*|\[appidx\] application index.|integer|
 |**params**  <br>*required*|\[appparams\] application parameters.|[ApplicationParams](#applicationparams)|
+
+
+<a name="applicationinitialstates"></a>
+### ApplicationInitialStates
+An application's initial global/local/box states that were accessed during simulation.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**app-boxes**  <br>*optional*||[ApplicationKVStorage](#applicationkvstorage)|
+|**app-globals**  <br>*optional*||[ApplicationKVStorage](#applicationkvstorage)|
+|**app-locals**  <br>*optional*|An application's initial local states tied to different accounts.|< [ApplicationKVStorage](#applicationkvstorage) > array|
+|**id**  <br>*required*|Application index.|integer|
+
+
+<a name="applicationkvstorage"></a>
+### ApplicationKVStorage
+An application's global/local/box state.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**account**  <br>*optional*|The address of the account associated with the local state.|string|
+|**kvs**  <br>*required*|Key-Value pairs representing application states.|< [AvmKeyValue](#avmkeyvalue) > array|
 
 
 <a name="applicationlocalreference"></a>
@@ -2350,6 +2376,17 @@ data/transactions/asset.go : AssetParams
 |**unit-name-b64**  <br>*optional*|Base64 encoded name of a unit of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**url**  <br>*optional*|\[au\] URL where more information about the asset can be retrieved. Included only when the URL is composed of printable utf-8 characters.|string|
 |**url-b64**  <br>*optional*|Base64 encoded URL where more information about the asset can be retrieved.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="avmkeyvalue"></a>
+### AvmKeyValue
+Represents an AVM key-value pair in an application store.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**key**  <br>*required*|**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**value**  <br>*required*||[AvmValue](#avmvalue)|
 
 
 <a name="avmvalue"></a>
@@ -2599,6 +2636,16 @@ A write operation into a scratch slot.
 |**slot**  <br>*required*|The scratch slot written.|integer|
 
 
+<a name="simulateinitialstates"></a>
+### SimulateInitialStates
+Initial states of resources that were accessed during simulation.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**app-initial-states**  <br>*optional*|The initial states of accessed application before simulation. The order of this array is arbitrary.|< [ApplicationInitialStates](#applicationinitialstates) > array|
+
+
 <a name="simulaterequest"></a>
 ### SimulateRequest
 Request type for simulation endpoint.
@@ -2611,6 +2658,7 @@ Request type for simulation endpoint.
 |**allow-unnamed-resources**  <br>*optional*|Allows access to unnamed resources during simulation.|boolean|
 |**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
 |**extra-opcode-budget**  <br>*optional*|Applies extra opcode budget during simulation for each transaction group.|integer|
+|**round**  <br>*optional*|If provided, specifies the round preceding the simulation. State changes through this round will be used to run this simulation. Usually only the 4 most recent rounds will be available (controlled by the node config value MaxAcctLookback). If not specified, defaults to the latest available round.|integer|
 |**txn-groups**  <br>*required*|The transaction groups to simulate.|< [SimulateRequestTransactionGroup](#simulaterequesttransactiongroup) > array|
 
 

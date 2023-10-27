@@ -94,7 +94,7 @@ Starting from v2, the AVM can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcode availability. Refer to [opcodes document](../opcodes) for details.
+3. Opcode availability. Refer to [opcodes document](opcodes/v9.md) for details.
 4. Some global values, such as LatestTimestamp, are only available in stateful mode.
 5. Only Applications can observe transaction effects, such as Logs or IDs allocated to ASAs or new Applications.
 
@@ -341,7 +341,7 @@ Most operations work with only one type of argument, uint64 or bytes, and fail i
 
 Many instructions accept values to designate Accounts, Assets, or Applications. Beginning with v4, these values may be given as an _offset_ in the corresponding Txn fields (Txn.Accounts, Txn.ForeignAssets, Txn.ForeignApps) _or_ as the value itself (a byte-array address for Accounts, or a uint64 ID). The values, however, must still be present in the Txn fields. Before v4, most opcodes required the use of an offset, except for reading account local values of assets or applications, which accepted the IDs directly and did not require the ID to be present in they corresponding _Foreign_ array. (Note that beginning with v4, those IDs _are_ required to be present in their corresponding _Foreign_ array.) See individual opcodes for details. In the case of account offsets or application offsets, 0 is specially defined to Txn.Sender or the ID of the current application, respectively.
 
-This summary is supplemented by more detail in the [opcodes document](../opcodes).
+This summary is supplemented by more detail in the [opcodes document](opcodes/v9.md).
 
 Some operations immediately fail the program.
 A transaction checked by a program that fails is not valid.
@@ -601,7 +601,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 66 | ClearStateProgramPages | []byte | v7  | ClearState Program as an array of pages |
 
 
-Additional details in the [opcodes document](../opcodes#txn) on the `txn` op.
+Additional details in the [opcodes document](opcodes/v9.md#txn) on the `txn` op.
 
 **Global Fields**
 
