@@ -114,7 +114,7 @@ For example, say you have two smart contract call transactions grouped together,
 
 <center>![Smart Contract](/docs/imgs/refarray_6.png)</center>
 
-Note that when accessing a sublist item (account+asa, account+application ocal state, application+box), both items need to be in the same transaction’s set of arrays. For example, you cannot have account A in transaction #1 and asset Z in transaction #2 and then try to get the balance of asset Z for account A. Asset Z and account A must be in the same application transaction. If both asset Z and account A are in transaction #1’s arrays, then A’s balance for Z is **available** to both transactions during evaluation. 
+Note that when accessing a sublist item (account+asa, account+application local state, application+box), both items need to be in the same transaction’s set of arrays. For example, you cannot have account A in transaction #1 and asset Z in transaction #2 and then try to get the balance of asset Z for account A. Asset Z and account A must be in the same application transaction. If both asset Z and account A are in transaction #1’s arrays, then A’s balance for Z is **available** to both transactions during evaluation. 
 
 Because Algorand supports grouping up to 16 transactions simultaneously, this pushes the **available** resources up to 8x16 or 128 items, if all 16 transactions are application transactions.
 
