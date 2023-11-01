@@ -1,0 +1,12 @@
+title: Python
+
+arrange:
+- index.md
+- capabilities
+- apidocs.mdtitle: TypeScript
+
+arrange:
+- index.md
+- capabilities
+- client_generator.md
+- apidocs.md
