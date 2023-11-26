@@ -45,7 +45,6 @@ Recommended system specification for relay nodes is:
 
 While directly-attached NVMe SSD are recommended, in October 2022, the use of AWS EBS gp3 was able to provide sufficient performance. Users choosing this option should constantly monitor performance of the node, and may need to upgrade to faster storage solutions in the future (e.g., in case of important increase of TPS support).
 
-The third-party website [Algoscan Analytics](https://developer.algoscan.app/) indicates the current size of the data folder for MainNet/TestNet/BetaNet archival nodes.
 
 !!! info
     Private networks used for development require much lower specs as they are usually achieving much lower TPS. A Raspberry Pi with 2GB of RAM is sufficient for low-TPS private networks.
