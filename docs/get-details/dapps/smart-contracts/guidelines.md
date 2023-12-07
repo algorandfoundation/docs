@@ -384,7 +384,9 @@ These guidelines are specific to smart signatures. They complement the other gui
     * An attacker can replay a transaction signed by a smart signature (whether in contract account or logic signature mode).
     * For example, a delegated logic signature allowing approving any change offline transaction is insecure. The first time it is used, an attacker can replay it many times and empty the account (using all the fees)! The delegated logic signature needs to 
 * Be careful about the fact that, contrary to arguments of smart contracts, arguments of smart signatures are **NOT** signed by the sender account and are **NOT** part of the computation of the group ID. In other words, an attacker can intercept a transaction signed by a smart signature and change its arguments (as long as it is still accepted by the smart signature).
-  
+* Be careful about the fact that the same smart signature can be used in multiple networks.
+  * For instance, if a smart signature is signed with the intent of using it on TestNet, that same transaction can be sent to MainNet with that same smart signature.
+  * Always use new accounts when using TestNet (or any other network) to avoid reusing the same account that signed a smart signature.
 
 ## Additional resources
 

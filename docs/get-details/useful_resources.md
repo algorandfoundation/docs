@@ -18,6 +18,12 @@ The AlgoDevs provide instructor lead bootcamps on a rotating basis ([registratio
 
 When it comes to standardising practises this is the place the be. Whether it's proposing a new data structure for common actions, or introducing a new process to achieve uniformity across platforms, this is the place to keep up to date and participate in discussions.
 
-[GitHub Repository](https://github.com/algorandfoundation/ARCs)
+- [GitHub Repository](https://github.com/algorandfoundation/ARCs)
+- [GitHub Discussions](https://github.com/algorandfoundation/ARCs/issues)
 
-[GitHub Discussions](https://github.com/algorandfoundation/ARCs/issues)
+# Services for Startups Building on Algorand
+
+| **Partner Service**            | **How to Apply**              | What You Get                       |
+|----------------------------|---------------------------|------------------------------------|
+| [AWS Credits](https://tinyurl.com/algoawscredits)            | Key in code `1cf01` and the Foundation team will do a quick verification of your project before enabling the free credits | 5000 credits for AWS cloud services       |
+| [Google Cloud Credits](https://cloud.google.com/startup/apply?hl=en#application-form) | Complete the application form   | Up to $200K in cloud credits over 2 years |

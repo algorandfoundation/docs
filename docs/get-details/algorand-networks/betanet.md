@@ -4,10 +4,10 @@ title: BetaNet 🔷
 🔷 = BetaNet availability only
 
 # Version
-`v3.19.0-beta`
+`v3.20.1-beta`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v3.19.0-beta
+https://github.com/algorand/go-algorand/releases/tag/v3.20.1-beta
 
 # Genesis ID
 `betanet-v1.0`
