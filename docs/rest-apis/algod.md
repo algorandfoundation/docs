@@ -1335,6 +1335,47 @@ Return a list of participation keys
 * private
 
 
+<a name="generateparticipationkeys"></a>
+### POST /v2/participation/generate/{address}
+Generate and install participation keys to the node.
+```
+POST /v2/participation/generate/{address}
+```
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**address**  <br>*required*|An account public key|string|
+|**Query**|**dilution**  <br>*optional*|Key dilution for two-level participation keys (defaults to sqrt of validity window).|integer|
+|**Query**|**first**  <br>*required*|First round for participation key.|integer|
+|**Query**|**last**  <br>*required*|Last round for participation key.|integer|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|An empty JSON object is returned if the generation process was started. Currently no status is available.|string|
+|**400**|Bad Request|[ErrorResponse](#errorresponse)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**503**|Service Temporarily Unavailable|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* participating
+* private
+
+
 <a name="appendkeys"></a>
 ### POST /v2/participation/{participation-id}
 Append state proof keys to a participation key
