@@ -8,4 +8,4 @@ Object holding app state values
 
 ## Indexable
 
-▪ [key: `string`]: { `keyBase64`: `string` ; `keyRaw`: `Uint8Array` ; `value`: `number` \| `bigint`  } \| { `keyBase64`: `string` ; `keyRaw`: `Uint8Array` ; `value`: `string` ; `valueBase64`: `string` ; `valueRaw`: `Uint8Array`  }
+▪ [key: `string`]: \{ `keyBase64`: `string` ; `keyRaw`: `Uint8Array` ; `value`: `number` \| `bigint`  } \| \{ `keyBase64`: `string` ; `keyRaw`: `Uint8Array` ; `value`: `string` ; `valueBase64`: `string` ; `valueRaw`: `Uint8Array`  }

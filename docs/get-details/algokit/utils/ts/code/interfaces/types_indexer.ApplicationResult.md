@@ -24,7 +24,7 @@ The result of looking up an application
 
 #### Defined in
 
-[src/types/indexer.ts:365](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L365)
+[src/types/indexer.ts:367](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L367)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:366](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L366)
+[src/types/indexer.ts:368](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L368)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:367](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L367)
+[src/types/indexer.ts:369](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L369)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:363](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L363)
+[src/types/indexer.ts:365](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L365)
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:364](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L364)
+[src/types/indexer.ts:366](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L366)

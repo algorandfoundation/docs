@@ -29,17 +29,17 @@ Algod client instance that will log transactions in `transactionLogger`
 
 #### Defined in
 
-[src/types/testing.ts:13](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L13)
+[src/types/testing.ts:18](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L18)
 
 ___
 
 ### generateAccount
 
-• **generateAccount**: (`params`: [`GetTestAccountParams`](types_testing.GetTestAccountParams.md)) => `Promise`<`default`\>
+• **generateAccount**: (`params`: [`GetTestAccountParams`](types_testing.GetTestAccountParams.md)) => `Promise`\<`default`\>
 
 #### Type declaration
 
-▸ (`params`): `Promise`<`default`\>
+▸ (`params`): `Promise`\<`default`\>
 
 Generate and fund an additional ephemerally created account
 
@@ -51,11 +51,11 @@ Generate and fund an additional ephemerally created account
 
 ##### Returns
 
-`Promise`<`default`\>
+`Promise`\<`default`\>
 
 #### Defined in
 
-[src/types/testing.ts:23](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L23)
+[src/types/testing.ts:28](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L28)
 
 ___
 
@@ -67,7 +67,7 @@ Indexer client instance
 
 #### Defined in
 
-[src/types/testing.ts:15](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L15)
+[src/types/testing.ts:20](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L20)
 
 ___
 
@@ -79,7 +79,7 @@ KMD client instance
 
 #### Defined in
 
-[src/types/testing.ts:17](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L17)
+[src/types/testing.ts:22](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L22)
 
 ___
 
@@ -91,7 +91,7 @@ Default, funded test account that is ephemerally created
 
 #### Defined in
 
-[src/types/testing.ts:21](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L21)
+[src/types/testing.ts:26](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L26)
 
 ___
 
@@ -103,37 +103,37 @@ Transaction logger that will log transaction IDs for all transactions issued by 
 
 #### Defined in
 
-[src/types/testing.ts:19](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L19)
+[src/types/testing.ts:24](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L24)
 
 ___
 
 ### waitForIndexer
 
-• **waitForIndexer**: () => `Promise`<`void`\>
+• **waitForIndexer**: () => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (): `Promise`<`void`\>
+▸ (): `Promise`\<`void`\>
 
 Wait for the indexer to catch up with all transactions logged by `transactionLogger`
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[src/types/testing.ts:25](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L25)
+[src/types/testing.ts:30](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L30)
 
 ___
 
 ### waitForIndexerTransaction
 
-• **waitForIndexerTransaction**: (`transactionId`: `string`) => `Promise`<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
+• **waitForIndexerTransaction**: (`transactionId`: `string`) => `Promise`\<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
 
 #### Type declaration
 
-▸ (`transactionId`): `Promise`<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
+▸ (`transactionId`): `Promise`\<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
 
 Wait for the indexer to catch up with the given transaction ID
 
@@ -145,8 +145,8 @@ Wait for the indexer to catch up with the given transaction ID
 
 ##### Returns
 
-`Promise`<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
+`Promise`\<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
 
 #### Defined in
 
-[src/types/testing.ts:27](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L27)
+[src/types/testing.ts:32](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L32)

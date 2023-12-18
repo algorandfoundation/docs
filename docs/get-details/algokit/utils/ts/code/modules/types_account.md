@@ -28,4 +28,4 @@ The account name identifier used for fund dispensing in test environments
 
 #### Defined in
 
-[src/types/account.ts:6](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L6)
+[src/types/account.ts:10](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L10)

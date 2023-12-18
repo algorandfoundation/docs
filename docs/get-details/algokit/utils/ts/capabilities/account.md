@@ -42,3 +42,31 @@ In order to get the accounts you can use the underlying algosdk methods where re
 ### Dispenser
 
 - [`algokit.getDispenserAccount(algod, kmd?)`](../code/modules/index.md#getdispenseraccount) - Returns an account that can act as a dispenser to fund other accounts either via Kmd (when targeting LocalNet) or by convention from environment variable via `process.env.DISPENSER_MNEMONIC` (and optionally `process.env.DISPENSER_SENDER` if rekeyed)
+
+## Rekey account
+
+One of the unique features of Algorand is the ability to change the private key that can authorise transactions for an account. This is called [rekeying](https://developer.algorand.org/docs/get-details/accounts/rekey/).
+
+You can issue a transaction to rekey an account by using the `algokit.rekeyAccount(rekey, algod)` function. The `rekey` parameter is an [`AlgoRekeyParams`](../code/interfaces/types_transfer.AlgoRekeyParams.md) object with the following properties:
+
+- All properties in [`SendTransactionParams`](./transaction.md#sendtransactionparams)
+- `from: SendTransactionFrom` - The account that will be rekeyed
+- `rekeyTo: SendTransactionFrom | string` - The address of the account that will be used to authorise transactions for the rekeyed account going forward
+- `transactionParams?: SuggestedParams` - The optional [transaction parameters](./transaction.md#transaction-params)
+- `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
+- `lease?: string | Uint8Array`: A [lease](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/) to assign to the transaction to enforce a mutually exclusive transaction (useful to prevent double-posting and other scenarios)
+
+```typescript
+// Example
+await algokit.rekeyAccount(
+  {
+    from: account,
+    rekeyTo: newAccount,
+    // Optionally specify transactionParams, note, lease and transaction sending parameters
+  },
+  algod,
+)
+
+const rekeyedAccount = algokit.rekeyedAccount(newAccount, account.addr)
+// rekeyedAccount can be used to sign transactions on behalf of account...
+```

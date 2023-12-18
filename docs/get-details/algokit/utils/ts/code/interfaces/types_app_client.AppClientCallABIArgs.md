@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- `Omit`<[`ABIAppCallArgs`](../modules/types_app.md#abiappcallargs), ``"method"``\>
+- `Omit`\<[`ABIAppCallArgs`](../modules/types_app.md#abiappcallargs), ``"method"``\>
 
   ↳ **`AppClientCallABIArgs`**
 
@@ -21,6 +21,7 @@
 - [lease](types_app_client.AppClientCallABIArgs.md#lease)
 - [method](types_app_client.AppClientCallABIArgs.md#method)
 - [methodArgs](types_app_client.AppClientCallABIArgs.md#methodargs)
+- [rekeyTo](types_app_client.AppClientCallABIArgs.md#rekeyto)
 
 ## Properties
 
@@ -36,7 +37,7 @@ Omit.accounts
 
 #### Defined in
 
-[src/types/app.ts:74](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L74)
+[src/types/app.ts:73](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L73)
 
 ___
 
@@ -52,7 +53,7 @@ Omit.apps
 
 #### Defined in
 
-[src/types/app.ts:76](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L76)
+[src/types/app.ts:75](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L75)
 
 ___
 
@@ -68,7 +69,7 @@ Omit.assets
 
 #### Defined in
 
-[src/types/app.ts:78](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L78)
+[src/types/app.ts:77](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L77)
 
 ___
 
@@ -84,7 +85,7 @@ Omit.boxes
 
 #### Defined in
 
-[src/types/app.ts:72](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L72)
+[src/types/app.ts:71](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L71)
 
 ___
 
@@ -100,7 +101,7 @@ Omit.lease
 
 #### Defined in
 
-[src/types/app.ts:70](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L70)
+[src/types/app.ts:69](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L69)
 
 ___
 
@@ -112,7 +113,7 @@ If calling an ABI method then either the name of the method, or the ABI signatur
 
 #### Defined in
 
-[src/types/app-client.ts:164](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-client.ts#L164)
+[src/types/app-client.ts:166](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-client.ts#L166)
 
 ___
 
@@ -128,4 +129,22 @@ Omit.methodArgs
 
 #### Defined in
 
-[src/types/app.ts:107](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L107)
+[src/types/app.ts:111](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L111)
+
+___
+
+### rekeyTo
+
+• `Optional` **rekeyTo**: `string` \| [`SendTransactionFrom`](../modules/types_transaction.md#sendtransactionfrom)
+
+Optional account / account address that should be authorised to transact on behalf of the from account the app call is sent from after this transaction.
+
+**Note:** Use with extreme caution and review the [official rekey guidance](https://developer.algorand.org/docs/get-details/accounts/rekey/) first.
+
+#### Inherited from
+
+Omit.rekeyTo
+
+#### Defined in
+
+[src/types/app.ts:82](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L82)

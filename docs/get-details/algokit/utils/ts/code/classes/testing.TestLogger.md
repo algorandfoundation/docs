@@ -40,7 +40,7 @@ This is useful for automated testing.
 
 ### constructor
 
-• **new TestLogger**(`originalLogger?`)
+• **new TestLogger**(`originalLogger?`): [`TestLogger`](testing.TestLogger.md)
 
 Create a new test logger that wraps the given logger if provided.
 
@@ -49,6 +49,10 @@ Create a new test logger that wraps the given logger if provided.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `originalLogger?` | [`Logger`](../modules/types_logging.md#logger) | The optional original logger to wrap. |
+
+#### Returns
+
+[`TestLogger`](testing.TestLogger.md)
 
 #### Defined in
 
@@ -182,7 +186,6 @@ The snapshotted logs.
 
 **`Example`**
 
-Jest Example
 ```typescript
 const logger = new TestLogger()
 ...

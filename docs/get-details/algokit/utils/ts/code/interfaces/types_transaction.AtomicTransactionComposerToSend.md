@@ -23,16 +23,16 @@ The `AtomicTransactionComposer` with transactions loaded to send
 
 #### Defined in
 
-[src/types/transaction.ts:121](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L121)
+[src/types/transaction.ts:126](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L126)
 
 ___
 
 ### sendParams
 
-• `Optional` **sendParams**: `Omit`<[`SendTransactionParams`](types_transaction.SendTransactionParams.md), ``"fee"`` \| ``"maxFee"`` \| ``"skipSending"`` \| ``"atc"``\>
+• `Optional` **sendParams**: `Omit`\<[`SendTransactionParams`](types_transaction.SendTransactionParams.md), ``"fee"`` \| ``"maxFee"`` \| ``"skipSending"`` \| ``"atc"``\>
 
 Any parameters to control the semantics of the send to the network
 
 #### Defined in
 
-[src/types/transaction.ts:123](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L123)
+[src/types/transaction.ts:128](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L128)

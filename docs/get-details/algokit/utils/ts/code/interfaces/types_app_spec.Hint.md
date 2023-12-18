@@ -23,17 +23,17 @@ Hint information for a given method call to allow client generation
 
 #### Defined in
 
-[src/types/app-spec.ts:58](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L58)
+[src/types/app-spec.ts:60](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L60)
 
 ___
 
 ### default\_arguments
 
-• `Optional` **default\_arguments**: `Record`<`string`, [`DefaultArgument`](../modules/types_app_spec.md#defaultargument)\>
+• `Optional` **default\_arguments**: `Record`\<`string`, [`DefaultArgument`](../modules/types_app_spec.md#defaultargument)\>
 
 #### Defined in
 
-[src/types/app-spec.ts:57](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L57)
+[src/types/app-spec.ts:59](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L59)
 
 ___
 
@@ -43,16 +43,16 @@ ___
 
 #### Defined in
 
-[src/types/app-spec.ts:56](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L56)
+[src/types/app-spec.ts:58](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L58)
 
 ___
 
 ### structs
 
-• `Optional` **structs**: `Record`<`string`, [`Struct`](types_app_spec.Struct.md)\>
+• `Optional` **structs**: `Record`\<`string`, [`Struct`](types_app_spec.Struct.md)\>
 
 Any user-defined struct/tuple types used in the method call, keyed by parameter name or `output` for return type
 
 #### Defined in
 
-[src/types/app-spec.ts:55](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L55)
+[src/types/app-spec.ts:57](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L57)

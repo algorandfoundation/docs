@@ -36,7 +36,7 @@ A HTTP Client that wraps the Algorand SDK HTTP Client with retries
 
 ### constructor
 
-• **new AlgoHttpClientWithRetry**(`tokenHeader`, `baseServer`, `port?`, `defaultHeaders?`)
+• **new AlgoHttpClientWithRetry**(`tokenHeader`, `baseServer`, `port?`, `defaultHeaders?`): [`AlgoHttpClientWithRetry`](types_algo_http_client_with_retry.AlgoHttpClientWithRetry.md)
 
 #### Parameters
 
@@ -45,7 +45,11 @@ A HTTP Client that wraps the Algorand SDK HTTP Client with retries
 | `tokenHeader` | [`TokenHeader`](../modules/types_urlTokenBaseHTTPClient.md#tokenheader) |
 | `baseServer` | `string` |
 | `port?` | `string` \| `number` |
-| `defaultHeaders` | `Record`<`string`, `any`\> |
+| `defaultHeaders` | `Record`\<`string`, `any`\> |
+
+#### Returns
+
+[`AlgoHttpClientWithRetry`](types_algo_http_client_with_retry.AlgoHttpClientWithRetry.md)
 
 #### Inherited from
 
@@ -99,17 +103,17 @@ ___
 
 ### callWithRetry
 
-▸ `Private` **callWithRetry**(`func`): `Promise`<`BaseHTTPClientResponse`\>
+▸ **callWithRetry**(`func`): `Promise`\<`BaseHTTPClientResponse`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `func` | () => `Promise`<`BaseHTTPClientResponse`\> |
+| `func` | () => `Promise`\<`BaseHTTPClientResponse`\> |
 
 #### Returns
 
-`Promise`<`BaseHTTPClientResponse`\>
+`Promise`\<`BaseHTTPClientResponse`\>
 
 #### Defined in
 
@@ -119,7 +123,7 @@ ___
 
 ### delete
 
-▸ **delete**(`relativePath`, `data`, `query?`, `requestHeaders?`): `Promise`<`BaseHTTPClientResponse`\>
+▸ **delete**(`relativePath`, `data`, `query?`, `requestHeaders?`): `Promise`\<`BaseHTTPClientResponse`\>
 
 #### Parameters
 
@@ -127,12 +131,12 @@ ___
 | :------ | :------ |
 | `relativePath` | `string` |
 | `data` | `Uint8Array` |
-| `query?` | `Query`<`string`\> |
-| `requestHeaders` | `Record`<`string`, `string`\> |
+| `query?` | `Query`\<`string`\> |
+| `requestHeaders` | `Record`\<`string`, `string`\> |
 
 #### Returns
 
-`Promise`<`BaseHTTPClientResponse`\>
+`Promise`\<`BaseHTTPClientResponse`\>
 
 #### Overrides
 
@@ -140,25 +144,25 @@ ___
 
 #### Defined in
 
-[src/types/algo-http-client-with-retry.ts:67](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/algo-http-client-with-retry.ts#L67)
+[src/types/algo-http-client-with-retry.ts:71](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/algo-http-client-with-retry.ts#L71)
 
 ___
 
 ### get
 
-▸ **get**(`relativePath`, `query?`, `requestHeaders?`): `Promise`<`BaseHTTPClientResponse`\>
+▸ **get**(`relativePath`, `query?`, `requestHeaders?`): `Promise`\<`BaseHTTPClientResponse`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `relativePath` | `string` |
-| `query?` | `Query`<`string`\> |
-| `requestHeaders` | `Record`<`string`, `string`\> |
+| `query?` | `Query`\<`string`\> |
+| `requestHeaders` | `Record`\<`string`, `string`\> |
 
 #### Returns
 
-`Promise`<`BaseHTTPClientResponse`\>
+`Promise`\<`BaseHTTPClientResponse`\>
 
 #### Overrides
 
@@ -166,13 +170,13 @@ ___
 
 #### Defined in
 
-[src/types/algo-http-client-with-retry.ts:54](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/algo-http-client-with-retry.ts#L54)
+[src/types/algo-http-client-with-retry.ts:58](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/algo-http-client-with-retry.ts#L58)
 
 ___
 
 ### post
 
-▸ **post**(`relativePath`, `data`, `query?`, `requestHeaders?`): `Promise`<`BaseHTTPClientResponse`\>
+▸ **post**(`relativePath`, `data`, `query?`, `requestHeaders?`): `Promise`\<`BaseHTTPClientResponse`\>
 
 #### Parameters
 
@@ -180,12 +184,12 @@ ___
 | :------ | :------ |
 | `relativePath` | `string` |
 | `data` | `Uint8Array` |
-| `query?` | `Query`<`string`\> |
-| `requestHeaders` | `Record`<`string`, `string`\> |
+| `query?` | `Query`\<`string`\> |
+| `requestHeaders` | `Record`\<`string`, `string`\> |
 
 #### Returns
 
-`Promise`<`BaseHTTPClientResponse`\>
+`Promise`\<`BaseHTTPClientResponse`\>
 
 #### Overrides
 
@@ -193,4 +197,4 @@ ___
 
 #### Defined in
 
-[src/types/algo-http-client-with-retry.ts:58](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/algo-http-client-with-retry.ts#L58)
+[src/types/algo-http-client-with-retry.ts:62](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/algo-http-client-with-retry.ts#L62)

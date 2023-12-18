@@ -152,6 +152,7 @@ def fixup_algokit_client_generator_ts(repo_url) :
     dst = PATH_TO_MKDOCS_CONTENT_FOR_ALGOKIT_UTILS + repo_name.split('-')[-1]
     copy(src + '/README.md', dst + '/client_generator.md')
     search_replace_text("\(./examples\)", "(https://github.com/algorandfoundation/algokit-client-generator-ts/tree/main/examples)", dst + '/client_generator.md')
+    search_replace_text("./docs/usage.md", "../", dst + '/client_generator.md')
     open(dst + '/.pages', 'a').write('title: Python\n\narrange:\n- index.md\n- capabilities\n- client_generator.md\n- code')
     
 
@@ -170,6 +171,6 @@ def main() :
     fixup_algokit_utils_py(list_of_repos[1])
     fixup_algokit_client_generator_ts(list_of_repos[2])
     fixup_algokit_client_generator_py(list_of_repos[3])
+    open(PATH_TO_MKDOCS_CONTENT_FOR_ALGOKIT_UTILS + '/../.pages', 'w').write('title: AlgoKit\n\narrange:\n- index.md\n- features\n- utils\n- cli-reference.md\n- tutorials\n- architecture-decisions\n- articles')
 
 main()
-

@@ -64,13 +64,17 @@ If neither the environment variable 'ALGOKIT_DISPENSER_ACCESS_TOKEN' nor the aut
 
 ### constructor
 
-• **new TestNetDispenserApiClient**(`params`)
+• **new TestNetDispenserApiClient**(`params`): [`TestNetDispenserApiClient`](types_dispenser_client.TestNetDispenserApiClient.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `params` | ``null`` \| [`TestNetDispenserApiClientParams`](../interfaces/types_dispenser_client.TestNetDispenserApiClientParams.md) |
+
+#### Returns
+
+[`TestNetDispenserApiClient`](types_dispenser_client.TestNetDispenserApiClient.md)
 
 #### Defined in
 
@@ -132,7 +136,7 @@ The timeout for API requests, in seconds.
 
 ### fund
 
-▸ **fund**(`address`, `amount`): `Promise`<[`DispenserFundResponse`](../interfaces/types_dispenser_client.DispenserFundResponse.md)\>
+▸ **fund**(`address`, `amount`): `Promise`\<[`DispenserFundResponse`](../interfaces/types_dispenser_client.DispenserFundResponse.md)\>
 
 Sends a funding request to the dispenser API to fund the specified address with the given amount of Algo.
 
@@ -145,7 +149,7 @@ Sends a funding request to the dispenser API to fund the specified address with 
 
 #### Returns
 
-`Promise`<[`DispenserFundResponse`](../interfaces/types_dispenser_client.DispenserFundResponse.md)\>
+`Promise`\<[`DispenserFundResponse`](../interfaces/types_dispenser_client.DispenserFundResponse.md)\>
 
 DispenserFundResponse: An object containing the transaction ID and funded amount.
 
@@ -157,13 +161,13 @@ ___
 
 ### getLimit
 
-▸ **getLimit**(): `Promise`<[`DispenserLimitResponse`](../interfaces/types_dispenser_client.DispenserLimitResponse.md)\>
+▸ **getLimit**(): `Promise`\<[`DispenserLimitResponse`](../interfaces/types_dispenser_client.DispenserLimitResponse.md)\>
 
 Sends a request to the dispenser API to get the funding limit for the Algo asset.
 
 #### Returns
 
-`Promise`<[`DispenserLimitResponse`](../interfaces/types_dispenser_client.DispenserLimitResponse.md)\>
+`Promise`\<[`DispenserLimitResponse`](../interfaces/types_dispenser_client.DispenserLimitResponse.md)\>
 
 DispenserLimitResponse: An object containing the funding limit amount.
 
@@ -175,7 +179,7 @@ ___
 
 ### processDispenserRequest
 
-▸ `Private` **processDispenserRequest**(`authToken`, `urlSuffix`, `body?`, `method?`): `Promise`<`Response`\>
+▸ **processDispenserRequest**(`authToken`, `urlSuffix`, `body?`, `method?`): `Promise`\<`Response`\>
 
 Processes a dispenser API request.
 
@@ -185,12 +189,12 @@ Processes a dispenser API request.
 | :------ | :------ | :------ | :------ |
 | `authToken` | `string` | `undefined` | The authentication token. |
 | `urlSuffix` | `string` | `undefined` | The URL suffix for the API request. |
-| `body` | ``null`` \| `Record`<`string`, `string` \| `number`\> | `null` | The request body. |
+| `body` | ``null`` \| `Record`\<`string`, `string` \| `number`\> | `null` | The request body. |
 | `method` | `string` | `'POST'` | The HTTP method. |
 
 #### Returns
 
-`Promise`<`Response`\>
+`Promise`\<`Response`\>
 
 The API response.
 
@@ -202,7 +206,7 @@ ___
 
 ### refund
 
-▸ **refund**(`refundTxnId`): `Promise`<`void`\>
+▸ **refund**(`refundTxnId`): `Promise`\<`void`\>
 
 Sends a refund request to the dispenser API for the specified refundTxnId.
 
@@ -214,7 +218,7 @@ Sends a refund request to the dispenser API for the specified refundTxnId.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

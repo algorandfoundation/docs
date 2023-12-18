@@ -23,7 +23,7 @@ Initial funds to ensure the account has
 
 #### Defined in
 
-[src/types/testing.ts:35](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L35)
+[src/types/testing.ts:40](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L40)
 
 ___
 
@@ -35,4 +35,4 @@ Whether to suppress the log (which includes a mnemonic) or not (default: do not 
 
 #### Defined in
 
-[src/types/testing.ts:37](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L37)
+[src/types/testing.ts:42](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/testing.ts#L42)

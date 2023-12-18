@@ -14,6 +14,7 @@ The key function to facilitate Algo transfers is `algokit.transferAlgos(transfer
 - `amount: AlgoAmount` - The [amount](./amount.md) of ALGOs to send
 - `transactionParams?: SuggestedParams` - The optional [transaction parameters](./transaction.md#transaction-params)
 - `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
+- `lease?: string | Uint8Array`: A [lease](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/) to assign to the transaction to enforce a mutually exclusive transaction (useful to prevent double-posting and other scenarios)
 
 ## `ensureFunded`
 
@@ -26,6 +27,7 @@ The `ensureFunded` function automatically funds an account to maintain a minimum
 - `minFundingIncrement?: AlgoAmount` - When issuing a funding amount, the minimum amount to transfer. This avoids many small transfers if this function gets called often on an active account
 - `transactionParams?: SuggestedParams` - The optional [transaction parameters](./transaction.md#transaction-params)
 - `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
+- `lease?: string | Uint8Array`: A [lease](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/) to assign to the transaction to enforce a mutually exclusive transaction (useful to prevent double-posting and other scenarios)
 
 The function calls Algod to find the current balance and minimum balance requirement, calculates the difference between those two numbers, and checks to see if it's more than the `minSpendingBalance`. If so, it will send the difference, or the `minFundingIncrement` if that is specified. If the `fundingSource` is an instance of `TestNetDispenserApiClient`, the function will use the dispenser API to fund the account. Refer to [algokit-cli documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/dispenser.md#ci-access-token) for details on obtaining an access token for AlgoKit TestNet Dispenser API.
 
@@ -41,6 +43,7 @@ The key function to facilitate asset transfers is `transferAsset(transfer, algod
 - `transactionParams?: SuggestedParams` - The optional [transaction parameters](./transaction.md#transaction-params)
 - `clawbackFrom: SendTransactionFrom | string` - An optional address of a target account from which to perform a clawback operation. Please note, in such cases senderAccount must be equal to clawback field on ASA metadata.
 - `note?: TransactionNote` - The [transaction note](./transaction.md#transaction-notes)
+- `lease?: string | Uint8Array`: A [lease](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/) to assign to the transaction to enforce a mutually exclusive transaction (useful to prevent double-posting and other scenarios)
 
 ## Dispenser
 

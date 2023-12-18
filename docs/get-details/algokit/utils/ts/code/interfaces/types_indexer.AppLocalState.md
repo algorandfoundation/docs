@@ -27,7 +27,7 @@ Round when account closed out of the application.
 
 #### Defined in
 
-[src/types/indexer.ts:623](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L623)
+[src/types/indexer.ts:625](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L625)
 
 ___
 
@@ -39,7 +39,7 @@ Whether or not the application local state is currently deleted from its account
 
 #### Defined in
 
-[src/types/indexer.ts:625](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L625)
+[src/types/indexer.ts:627](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L627)
 
 ___
 
@@ -51,7 +51,7 @@ The application which this local state is for.
 
 #### Defined in
 
-[src/types/indexer.ts:627](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L627)
+[src/types/indexer.ts:629](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L629)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:629](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L629)
+[src/types/indexer.ts:631](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L631)
 
 ___
 
@@ -75,7 +75,7 @@ Round when the account opted into the application.
 
 #### Defined in
 
-[src/types/indexer.ts:631](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L631)
+[src/types/indexer.ts:633](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L633)
 
 ___
 
@@ -87,4 +87,4 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:633](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L633)
+[src/types/indexer.ts:635](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L635)

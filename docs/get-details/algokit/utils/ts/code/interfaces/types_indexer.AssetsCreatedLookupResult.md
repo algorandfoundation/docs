@@ -24,7 +24,7 @@ The returned assets
 
 #### Defined in
 
-[src/types/indexer.ts:38](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L38)
+[src/types/indexer.ts:40](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L40)
 
 ___
 
@@ -36,7 +36,7 @@ Round at which the results were computed.
 
 #### Defined in
 
-[src/types/indexer.ts:34](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L34)
+[src/types/indexer.ts:36](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L36)
 
 ___
 
@@ -48,4 +48,4 @@ Used for pagination, when making another request provide this token with the nex
 
 #### Defined in
 
-[src/types/indexer.ts:36](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L36)
+[src/types/indexer.ts:38](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L38)

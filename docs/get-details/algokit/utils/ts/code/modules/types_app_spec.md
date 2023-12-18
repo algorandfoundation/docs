@@ -38,7 +38,7 @@ The string name of an ABI type
 
 #### Defined in
 
-[src/types/app-spec.ts:65](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L65)
+[src/types/app-spec.ts:67](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L67)
 
 ___
 
@@ -50,7 +50,7 @@ AVM data type
 
 #### Defined in
 
-[src/types/app-spec.ts:121](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L121)
+[src/types/app-spec.ts:123](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L123)
 
 ___
 
@@ -66,19 +66,19 @@ The various call configs:
 
 #### Defined in
 
-[src/types/app-spec.ts:36](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L36)
+[src/types/app-spec.ts:38](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L38)
 
 ___
 
 ### DefaultArgument
 
-Ƭ **DefaultArgument**: { `data`: `ABIMethodParams` ; `source`: ``"abi-method"``  } \| { `data`: `string` ; `source`: ``"global-state"``  } \| { `data`: `string` ; `source`: ``"local-state"``  } \| { `data`: `string` \| `number` ; `source`: ``"constant"``  }
+Ƭ **DefaultArgument**: \{ `data`: `ABIMethodParams` ; `source`: ``"abi-method"``  } \| \{ `data`: `string` ; `source`: ``"global-state"``  } \| \{ `data`: `string` ; `source`: ``"local-state"``  } \| \{ `data`: `string` \| `number` ; `source`: ``"constant"``  }
 
 Defines a strategy for obtaining a default value for a given ABI arg.
 
 #### Defined in
 
-[src/types/app-spec.ts:81](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L81)
+[src/types/app-spec.ts:83](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L83)
 
 ___
 
@@ -90,19 +90,19 @@ The name of a field
 
 #### Defined in
 
-[src/types/app-spec.ts:62](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L62)
+[src/types/app-spec.ts:64](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L64)
 
 ___
 
 ### HintSpec
 
-Ƭ **HintSpec**: `Record`<`string`, [`Hint`](../interfaces/types_app_spec.Hint.md)\>
+Ƭ **HintSpec**: `Record`\<`string`, [`Hint`](../interfaces/types_app_spec.Hint.md)\>
 
 A lookup of encoded method call spec to hint
 
 #### Defined in
 
-[src/types/app-spec.ts:20](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L20)
+[src/types/app-spec.ts:22](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L22)
 
 ___
 
@@ -121,7 +121,7 @@ Schema spec summary for global or local storage
 
 #### Defined in
 
-[src/types/app-spec.ts:170](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L170)
+[src/types/app-spec.ts:172](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L172)
 
 ___
 
@@ -133,4 +133,4 @@ The elements of the struct/tuple: `FieldName`, `ABIType`
 
 #### Defined in
 
-[src/types/app-spec.ts:68](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L68)
+[src/types/app-spec.ts:70](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L70)

@@ -32,13 +32,17 @@ Wrapper class to ensure safe, explicit conversion between µAlgos, Algos and num
 
 ### constructor
 
-• **new AlgoAmount**(`amount`)
+• **new AlgoAmount**(`amount`): [`AlgoAmount`](types_amount.AlgoAmount.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `amount` | { `algos`: `number`  } \| { `microAlgos`: `number`  } |
+| `amount` | \{ `algos`: `number`  } \| \{ `microAlgos`: `number`  } |
+
+#### Returns
+
+[`AlgoAmount`](types_amount.AlgoAmount.md)
 
 #### Defined in
 
@@ -122,7 +126,7 @@ ___
 
 ### Algos
 
-▸ `Static` **Algos**(`amount`): [`AlgoAmount`](types_amount.AlgoAmount.md)
+▸ **Algos**(`amount`): [`AlgoAmount`](types_amount.AlgoAmount.md)
 
 Create a `AlgoAmount` object representing the given number of Algos
 
@@ -144,7 +148,7 @@ ___
 
 ### MicroAlgos
 
-▸ `Static` **MicroAlgos**(`amount`): [`AlgoAmount`](types_amount.AlgoAmount.md)
+▸ **MicroAlgos**(`amount`): [`AlgoAmount`](types_amount.AlgoAmount.md)
 
 Create a `AlgoAmount` object representing the given number of µAlgos
 

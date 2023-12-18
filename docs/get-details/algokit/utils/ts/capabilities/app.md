@@ -18,6 +18,7 @@ This [type](../code/modules/types_app.md#appcallargs) is a union of two types: `
 - `apps: number[]`: The ID of any apps to load to the [foreign apps array](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#reference-arrays)
 - `assets: number[]`: The ID of any assets to load to the [foreign assets array](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#reference-arrays)
 - `lease: string | Uint8Array`: A [lease](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/) to assign to the transaction to enforce a mutually exclusive transaction (useful to prevent double-posting and other scenarios)
+- `rekeyTo: string | SendTransactionFrom`: An account or account address that should be authorised to transact on behalf of the account the app call is sent from after the app transaction is processed; **note:** use with extreme caution and review the [official rekey guidance](https://developer.algorand.org/docs/get-details/accounts/rekey/) first
 
 ### `ABIAppCallArgs`
 
@@ -38,6 +39,7 @@ This [type](../code/modules/types_app.md#appcallargs) is a union of two types: `
   - `Promise<SendTransactionResult>` - which allows you to use an AlgoKit Utils method call that [returns a transaction](transaction.md#sendtransactionresult) without needing to await the call and extract the transaction, if you do this be sure to use `skipWaiting: true` when specifying the [sending parameters](transaction.md#sendtransactionparams) so you get the transaction without sending it to the network
 - `boxes: (BoxReference | BoxIdentifier | algosdk.BoxReference)[]` - Any [boxes](#referencing-boxes) to load to the [boxes array](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/apps/#reference-arrays)
 - `lease: string | Uint8Array`: A [lease](https://developer.algorand.org/articles/leased-transactions-securing-advanced-smart-contract-design/) to assign to the transaction to enforce a mutually exclusive transaction (useful to prevent double-posting and other scenarios)
+- `rekeyTo: string | SendTransactionFrom`: An account or account address that should be authorised to transact on behalf of the account the app call is sent from after the app transaction is processed; **note:** use with extreme caution and review the [official rekey guidance](https://developer.algorand.org/docs/get-details/accounts/rekey/) first
 
 ### Utility methods
 

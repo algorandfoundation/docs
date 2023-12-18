@@ -17,11 +17,11 @@ A lookup of name -> Algorand app for a creator
 
 ### apps
 
-• **apps**: `Readonly`<{ `[name: string]`: [`AppMetadata`](types_app.AppMetadata.md);  }\>
+• **apps**: `Readonly`\<\{ `[name: string]`: [`AppMetadata`](types_app.AppMetadata.md);  }\>
 
 #### Defined in
 
-[src/types/app.ts:250](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L250)
+[src/types/app.ts:254](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L254)
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-[src/types/app.ts:249](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L249)
+[src/types/app.ts:253](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L253)

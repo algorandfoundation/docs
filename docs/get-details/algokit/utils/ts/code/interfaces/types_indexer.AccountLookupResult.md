@@ -23,7 +23,7 @@ The returned account
 
 #### Defined in
 
-[src/types/indexer.ts:18](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L18)
+[src/types/indexer.ts:20](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L20)
 
 ___
 
@@ -35,4 +35,4 @@ Round at which the results were computed.
 
 #### Defined in
 
-[src/types/indexer.ts:16](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L16)
+[src/types/indexer.ts:18](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L18)

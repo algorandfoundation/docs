@@ -56,7 +56,7 @@ ___
 
 ### traces
 
-• **traces**: `Record`<`string`, `unknown`\>[]
+• **traces**: `Record`\<`string`, `unknown`\>[]
 
 Any trace information included in the error
 

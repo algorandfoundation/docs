@@ -26,7 +26,7 @@ Round during which this asset was created.
 
 #### Defined in
 
-[src/types/indexer.ts:352](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L352)
+[src/types/indexer.ts:354](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L354)
 
 ___
 
@@ -38,7 +38,7 @@ Whether or not this asset is currently deleted.
 
 #### Defined in
 
-[src/types/indexer.ts:350](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L350)
+[src/types/indexer.ts:352](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L352)
 
 ___
 
@@ -50,7 +50,7 @@ Round during which this asset was destroyed.
 
 #### Defined in
 
-[src/types/indexer.ts:354](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L354)
+[src/types/indexer.ts:356](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L356)
 
 ___
 
@@ -62,7 +62,7 @@ Unique asset identifier.
 
 #### Defined in
 
-[src/types/indexer.ts:348](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L348)
+[src/types/indexer.ts:350](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L350)
 
 ___
 
@@ -74,4 +74,4 @@ The parameters for the asset
 
 #### Defined in
 
-[src/types/indexer.ts:356](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L356)
+[src/types/indexer.ts:358](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L358)

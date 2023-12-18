@@ -23,7 +23,7 @@ The returned asset
 
 #### Defined in
 
-[src/types/indexer.ts:56](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L56)
+[src/types/indexer.ts:58](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L58)
 
 ___
 
@@ -35,4 +35,4 @@ Round at which the results were computed.
 
 #### Defined in
 
-[src/types/indexer.ts:54](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L54)
+[src/types/indexer.ts:56](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L56)

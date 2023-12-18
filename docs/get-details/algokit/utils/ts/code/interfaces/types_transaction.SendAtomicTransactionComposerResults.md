@@ -37,7 +37,7 @@ the index of the confirmation will match the index of the underlying transaction
 
 #### Defined in
 
-[src/types/transaction.ts:56](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L56)
+[src/types/transaction.ts:61](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L61)
 
 ___
 
@@ -49,7 +49,7 @@ base64 encoded representation of the group ID of the atomic group
 
 #### Defined in
 
-[src/types/transaction.ts:62](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L62)
+[src/types/transaction.ts:67](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L67)
 
 ___
 
@@ -61,7 +61,7 @@ If ABI method(s) were called the processed return values
 
 #### Defined in
 
-[src/types/transaction.ts:66](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L66)
+[src/types/transaction.ts:71](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L71)
 
 ___
 
@@ -77,7 +77,7 @@ The transactions that have been prepared and/or sent
 
 #### Defined in
 
-[src/types/transaction.ts:52](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L52)
+[src/types/transaction.ts:57](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L57)
 
 ___
 
@@ -89,4 +89,4 @@ The transaction IDs that have been prepared and/or sent
 
 #### Defined in
 
-[src/types/transaction.ts:64](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L64)
+[src/types/transaction.ts:69](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L69)

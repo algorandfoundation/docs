@@ -39,7 +39,7 @@ Wraps key functionality around processing logic errors
 
 ### constructor
 
-• **new LogicError**(`errorDetails`, `program`, `map`)
+• **new LogicError**(`errorDetails`, `program`, `map`): [`LogicError`](types_logic_error.LogicError.md)
 
 Create a new logic error object.
 
@@ -50,6 +50,10 @@ Create a new logic error object.
 | `errorDetails` | [`LogicErrorDetails`](../interfaces/types_logic_error.LogicErrorDetails.md) | The details of the logic error |
 | `program` | `string`[] | The TEAL source code, split by line |
 | `map` | `SourceMap` | The source map of the TEAL source code |
+
+#### Returns
+
+[`LogicError`](types_logic_error.LogicError.md)
 
 #### Overrides
 
@@ -194,7 +198,7 @@ node_modules/@types/node/globals.d.ts:13
 
 ### captureStackTrace
 
-▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+▸ **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
 
 Create .stack property on a target object
 
@@ -221,7 +225,7 @@ ___
 
 ### parseLogicError
 
-▸ `Static` **parseLogicError**(`error`): `undefined` \| [`LogicErrorDetails`](../interfaces/types_logic_error.LogicErrorDetails.md)
+▸ **parseLogicError**(`error`): `undefined` \| [`LogicErrorDetails`](../interfaces/types_logic_error.LogicErrorDetails.md)
 
 Takes an error message and parses out the details of any logic errors in there.
 

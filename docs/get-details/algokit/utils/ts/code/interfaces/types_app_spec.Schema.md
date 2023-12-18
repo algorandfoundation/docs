@@ -17,22 +17,22 @@ The storage schema definition
 
 ### declared
 
-• **declared**: `Record`<`string`, [`DeclaredSchemaValueSpec`](types_app_spec.DeclaredSchemaValueSpec.md)\>
+• **declared**: `Record`\<`string`, [`DeclaredSchemaValueSpec`](types_app_spec.DeclaredSchemaValueSpec.md)\>
 
 Declared storage schema
 
 #### Defined in
 
-[src/types/app-spec.ts:156](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L156)
+[src/types/app-spec.ts:158](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L158)
 
 ___
 
 ### reserved
 
-• **reserved**: `Record`<`string`, [`ReservedSchemaValueSpec`](types_app_spec.ReservedSchemaValueSpec.md)\>
+• **reserved**: `Record`\<`string`, [`ReservedSchemaValueSpec`](types_app_spec.ReservedSchemaValueSpec.md)\>
 
 Reserved storage schema
 
 #### Defined in
 
-[src/types/app-spec.ts:158](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L158)
+[src/types/app-spec.ts:160](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app-spec.ts#L160)

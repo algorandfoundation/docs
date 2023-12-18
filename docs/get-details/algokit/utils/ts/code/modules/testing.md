@@ -45,7 +45,7 @@ test('My test', () => {
 
 #### Defined in
 
-[src/testing/fixtures/algokit-log-capture-fixture.ts:21](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algokit-log-capture-fixture.ts#L21)
+[src/testing/fixtures/algokit-log-capture-fixture.ts:22](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algokit-log-capture-fixture.ts#L22)
 
 ___
 
@@ -86,7 +86,7 @@ test('My test', async () => {
 
 #### Defined in
 
-[src/testing/fixtures/algorand-fixture.ts:35](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L35)
+[src/testing/fixtures/algorand-fixture.ts:36](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L36)
 
 ▸ **algorandFixture**(`fixtureConfig`, `config`): [`AlgorandFixture`](../interfaces/types_testing.AlgorandFixture.md)
 
@@ -124,13 +124,13 @@ test('My test', async () => {
 
 #### Defined in
 
-[src/testing/fixtures/algorand-fixture.ts:59](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L59)
+[src/testing/fixtures/algorand-fixture.ts:61](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L61)
 
 ___
 
 ### getTestAccount
 
-▸ **getTestAccount**(`param0`, `algod`, `kmd?`): `Promise`<`Account`\>
+▸ **getTestAccount**(`param0`, `algod`, `kmd?`): `Promise`\<`Account`\>
 
 Creates an ephemeral Algorand account for the purposes of testing.
 Returns a newly created random test account that is funded from the dispenser
@@ -147,22 +147,22 @@ Note: By default this will log the mnemonic of the account.
 
 #### Returns
 
-`Promise`<`Account`\>
+`Promise`\<`Account`\>
 
 The account, with private key loaded
 
 #### Defined in
 
-[src/testing/account.ts:17](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/account.ts#L17)
+[src/testing/account.ts:20](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/account.ts#L20)
 
 ___
 
 ### runWhenIndexerCaughtUp
 
-▸ **runWhenIndexerCaughtUp**<`T`\>(`run`): `Promise`<`T`\>
+▸ **runWhenIndexerCaughtUp**\<`T`\>(`run`): `Promise`\<`T`\>
 
 Runs the given indexer call until a 404 error is no longer returned.
-Tried every 200ms up to 20 times.
+Tried every 200ms up to 100 times.
 Very rudimentary implementation designed for automated testing.
 
 #### Type parameters
@@ -175,11 +175,11 @@ Very rudimentary implementation designed for automated testing.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `run` | () => `Promise`<`T`\> | The code to run |
+| `run` | () => `Promise`\<`T`\> | The code to run |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 The result (as a promise), or throws if the indexer didn't catch up in time
 
@@ -191,4 +191,4 @@ const transaction = await runWhenIndexerCaughtUp(() => indexer.lookupTransaction
 
 #### Defined in
 
-[src/testing/indexer.ts:11](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/indexer.ts#L11)
+[src/testing/indexer.ts:12](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/indexer.ts#L12)

@@ -163,8 +163,8 @@ title: API Ref
     :parser: myst
     :summary:
     ```
-* - {py:obj}`Program <algokit_utils.application_client.Program>`
-  - ```{autodoc2-docstring} algokit_utils.application_client.Program
+* - {py:obj}`Program <algokit_utils.common.Program>`
+  - ```{autodoc2-docstring} algokit_utils.common.Program
     :parser: myst
     :summary:
     ```
@@ -175,6 +175,11 @@ title: API Ref
     ```
 * - {py:obj}`TransactionParameters <algokit_utils.models.TransactionParameters>`
   - ```{autodoc2-docstring} algokit_utils.models.TransactionParameters
+    :parser: myst
+    :summary:
+    ```
+* - {py:obj}`TransactionParametersDict <algokit_utils.models.TransactionParametersDict>`
+  - ```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict
     :parser: myst
     :summary:
     ```
@@ -306,8 +311,28 @@ title: API Ref
     :parser: myst
     :summary:
     ```
+* - {py:obj}`opt_in <algokit_utils.asset.opt_in>`
+  - ```{autodoc2-docstring} algokit_utils.asset.opt_in
+    :parser: myst
+    :summary:
+    ```
+* - {py:obj}`opt_out <algokit_utils.asset.opt_out>`
+  - ```{autodoc2-docstring} algokit_utils.asset.opt_out
+    :parser: myst
+    :summary:
+    ```
+* - {py:obj}`persist_sourcemaps <algokit_utils._debugging.persist_sourcemaps>`
+  - ```{autodoc2-docstring} algokit_utils._debugging.persist_sourcemaps
+    :parser: myst
+    :summary:
+    ```
 * - {py:obj}`replace_template_variables <algokit_utils.deploy.replace_template_variables>`
   - ```{autodoc2-docstring} algokit_utils.deploy.replace_template_variables
+    :parser: myst
+    :summary:
+    ```
+* - {py:obj}`simulate_and_persist_response <algokit_utils._debugging.simulate_and_persist_response>`
+  - ```{autodoc2-docstring} algokit_utils._debugging.simulate_and_persist_response
     :parser: myst
     :summary:
     ```
@@ -1490,16 +1515,16 @@ Bases: {py:obj}`enum.Enum`
 `````
 
 ````{py:class} Program(program: str, client: algosdk.v2client.algod.AlgodClient)
-:canonical: algokit_utils.application_client.Program
+:canonical: algokit_utils.common.Program
 
-```{autodoc2-docstring} algokit_utils.application_client.Program
+```{autodoc2-docstring} algokit_utils.common.Program
 :parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
-```{autodoc2-docstring} algokit_utils.application_client.Program.__init__
+```{autodoc2-docstring} algokit_utils.common.Program.__init__
 :parser: myst
 ```
 
@@ -1694,6 +1719,144 @@ Bases: {py:obj}`enum.Enum`
    None
 
 ```{autodoc2-docstring} algokit_utils.models.TransactionParameters.suggested_params
+:parser: myst
+```
+
+````
+
+`````
+
+`````{py:class} TransactionParametersDict()
+:canonical: algokit_utils.models.TransactionParametersDict
+
+Bases: {py:obj}`typing.TypedDict`
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict
+:parser: myst
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.__init__
+:parser: myst
+```
+
+````{py:attribute} accounts
+:canonical: algokit_utils.models.TransactionParametersDict.accounts
+:type: list[str]
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.accounts
+:parser: myst
+```
+
+````
+
+````{py:attribute} boxes
+:canonical: algokit_utils.models.TransactionParametersDict.boxes
+:type: collections.abc.Sequence[tuple[int, bytes | bytearray | str | int]]
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.boxes
+:parser: myst
+```
+
+````
+
+````{py:attribute} foreign_apps
+:canonical: algokit_utils.models.TransactionParametersDict.foreign_apps
+:type: list[int]
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.foreign_apps
+:parser: myst
+```
+
+````
+
+````{py:attribute} foreign_assets
+:canonical: algokit_utils.models.TransactionParametersDict.foreign_assets
+:type: list[int]
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.foreign_assets
+:parser: myst
+```
+
+````
+
+````{py:attribute} lease
+:canonical: algokit_utils.models.TransactionParametersDict.lease
+:type: bytes | str
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.lease
+:parser: myst
+```
+
+````
+
+````{py:attribute} note
+:canonical: algokit_utils.models.TransactionParametersDict.note
+:type: bytes | str
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.note
+:parser: myst
+```
+
+````
+
+````{py:attribute} rekey_to
+:canonical: algokit_utils.models.TransactionParametersDict.rekey_to
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.rekey_to
+:parser: myst
+```
+
+````
+
+````{py:attribute} sender
+:canonical: algokit_utils.models.TransactionParametersDict.sender
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.sender
+:parser: myst
+```
+
+````
+
+````{py:attribute} signer
+:canonical: algokit_utils.models.TransactionParametersDict.signer
+:type: algosdk.atomic_transaction_composer.TransactionSigner
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.signer
+:parser: myst
+```
+
+````
+
+````{py:attribute} suggested_params
+:canonical: algokit_utils.models.TransactionParametersDict.suggested_params
+:type: algosdk.transaction.SuggestedParams
+:value: >
+   None
+
+```{autodoc2-docstring} algokit_utils.models.TransactionParametersDict.suggested_params
 :parser: myst
 ```
 
@@ -1945,10 +2108,42 @@ Bases: {py:obj}`algokit_utils._transfer.TransferParametersBase`
 ```
 ````
 
+````{py:function} opt_in(algod_client: algosdk.v2client.algod.AlgodClient, account: algokit_utils.models.Account, asset_ids: list[int]) -> dict[int, str]
+:canonical: algokit_utils.asset.opt_in
+
+```{autodoc2-docstring} algokit_utils.asset.opt_in
+:parser: myst
+```
+````
+
+````{py:function} opt_out(algod_client: algosdk.v2client.algod.AlgodClient, account: algokit_utils.models.Account, asset_ids: list[int]) -> dict[int, str]
+:canonical: algokit_utils.asset.opt_out
+
+```{autodoc2-docstring} algokit_utils.asset.opt_out
+:parser: myst
+```
+````
+
+````{py:function} persist_sourcemaps(*, sources: list[algokit_utils._debugging.PersistSourceMapInput], project_root: pathlib.Path, client: algosdk.v2client.algod.AlgodClient, with_sources: bool = True) -> None
+:canonical: algokit_utils._debugging.persist_sourcemaps
+
+```{autodoc2-docstring} algokit_utils._debugging.persist_sourcemaps
+:parser: myst
+```
+````
+
 ````{py:function} replace_template_variables(program: str, template_values: algokit_utils.deploy.TemplateValueMapping) -> str
 :canonical: algokit_utils.deploy.replace_template_variables
 
 ```{autodoc2-docstring} algokit_utils.deploy.replace_template_variables
+:parser: myst
+```
+````
+
+````{py:function} simulate_and_persist_response(atc: algosdk.atomic_transaction_composer.AtomicTransactionComposer, project_root: pathlib.Path, algod_client: algosdk.v2client.algod.AlgodClient, buffer_size_mb: float = 256) -> algosdk.atomic_transaction_composer.SimulateAtomicTransactionResponse
+:canonical: algokit_utils._debugging.simulate_and_persist_response
+
+```{autodoc2-docstring} algokit_utils._debugging.simulate_and_persist_response
 :parser: myst
 ```
 ````

@@ -23,7 +23,7 @@ The returned application
 
 #### Defined in
 
-[src/types/indexer.ts:72](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L72)
+[src/types/indexer.ts:74](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L74)
 
 ___
 
@@ -35,4 +35,4 @@ Round at which the results were computed.
 
 #### Defined in
 
-[src/types/indexer.ts:70](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L70)
+[src/types/indexer.ts:72](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L72)

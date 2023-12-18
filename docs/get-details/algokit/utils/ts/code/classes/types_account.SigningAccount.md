@@ -33,7 +33,7 @@ Account wrapper that supports a rekeyed account
 
 ### constructor
 
-• **new SigningAccount**(`account`, `sender`)
+• **new SigningAccount**(`account`, `sender`): [`SigningAccount`](types_account.SigningAccount.md)
 
 #### Parameters
 
@@ -42,9 +42,13 @@ Account wrapper that supports a rekeyed account
 | `account` | `default` |
 | `sender` | `undefined` \| `string` |
 
+#### Returns
+
+[`SigningAccount`](types_account.SigningAccount.md)
+
 #### Defined in
 
-[src/types/account.ts:100](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L100)
+[src/types/account.ts:104](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L104)
 
 ## Properties
 
@@ -54,7 +58,7 @@ Account wrapper that supports a rekeyed account
 
 #### Defined in
 
-[src/types/account.ts:65](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L65)
+[src/types/account.ts:69](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L69)
 
 ___
 
@@ -64,7 +68,7 @@ ___
 
 #### Defined in
 
-[src/types/account.ts:67](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L67)
+[src/types/account.ts:71](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L71)
 
 ___
 
@@ -74,7 +78,7 @@ ___
 
 #### Defined in
 
-[src/types/account.ts:66](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L66)
+[src/types/account.ts:70](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L70)
 
 ## Accessors
 
@@ -94,7 +98,7 @@ Account.addr
 
 #### Defined in
 
-[src/types/account.ts:72](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L72)
+[src/types/account.ts:76](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L76)
 
 ___
 
@@ -110,7 +114,7 @@ Algorand account of the sender address and signer private key
 
 #### Defined in
 
-[src/types/account.ts:93](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L93)
+[src/types/account.ts:97](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L97)
 
 ___
 
@@ -126,19 +130,19 @@ Transaction signer for the underlying signing account
 
 #### Defined in
 
-[src/types/account.ts:86](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L86)
+[src/types/account.ts:90](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L90)
 
 ___
 
 ### sk
 
-• `get` **sk**(): `Readonly`<`Uint8Array`\>
+• `get` **sk**(): `Readonly`\<`Uint8Array`\>
 
 Secret key belonging to the signer
 
 #### Returns
 
-`Readonly`<`Uint8Array`\>
+`Readonly`\<`Uint8Array`\>
 
 #### Implementation of
 
@@ -146,4 +150,4 @@ Account.sk
 
 #### Defined in
 
-[src/types/account.ts:79](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L79)
+[src/types/account.ts:83](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/account.ts#L83)
