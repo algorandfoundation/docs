@@ -1,0 +1,12 @@
+title: TypeScript
+
+arrange:
+- index.md
+- capabilities
+- codetitle: Python
+
+arrange:
+- index.md
+- capabilities
+- client_generator.md
+- code
