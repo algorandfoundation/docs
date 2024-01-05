@@ -165,4 +165,4 @@ console.log(`Decoded Note: ${Buffer.from(result.txn.txn.note).toString()}`);
 
 To view the transaction we submitted to the sandbox Algod, open [DappFlow](https://app.dappflow.org/explorer/home){target=_blank} and choose `Sandbox` configuration option, then search for the transaction ID. 
 
-To view a transaction submitted to public network like testnet, open the [Bitquery](https://explorer.bitquery.io/algorand_testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
+To view a transaction submitted to public network like testnet, open [Pera Explorer](https://testnet.explorer.perawallet.app/){:target="_blank"} or [Bitquery](https://explorer.bitquery.io/algorand_testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
