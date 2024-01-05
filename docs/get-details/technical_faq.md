@@ -178,11 +178,11 @@ Instructions for [Sandbox](https://github.com/algorand/sandbox/README.md)
 
 Which API should I use?
 
-Any of these API providers can be used to query Algod or Indexer data.
+Below is a list of API providers that can be used to query Algod or Indexer data.
 
-- [AlgoNode](https://algonode.io/api/)
-- [AlgoExplorer](https://algoexplorer.io/api-dev/v2)
-- [PureStake](https://developer.purestake.io/)
+- [AlgoNode](https://algonode.io/api/) (algod and indexer available, free tier available)
+- [Blockdaemon](https://www.blockdaemon.com/protocols/algorand) (algod only)
+- [GetBlock.io](https://getblock.io/nodes/algo/) (algod only, free tier available)
 
 Or find others [here](https://developer.algorand.org/ecosystem-projects/?tags=api-services)
 
