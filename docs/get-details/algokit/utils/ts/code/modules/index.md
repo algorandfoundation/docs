@@ -831,7 +831,7 @@ Returns an algod SDK client that automatically retries on idempotent calls
 
 ```typescript
  // Uses process.env.ALGOD_SERVER, process.env.ALGOD_PORT and process.env.ALGOD_TOKEN
- // Automatically detects if you are using PureStake to switch in the right header name for ALGOD_TOKEN
+ // Automatically detects if you are using a provider to switch in the right header name for ALGOD_TOKEN
  const algod = getAlgoClient()
  await algod.healthCheck().do()
  ```
@@ -883,7 +883,7 @@ Returns an indexer SDK client that automatically retries on idempotent calls
 
 ```typescript
  // Uses process.env.INDEXER_SERVER, process.env.INDEXER_PORT and process.env.INDEXER_TOKEN
- // Automatically detects if you are using PureStake to switch in the right header name for INDEXER_TOKEN
+ // Automatically detects if you are using a provider to switch in the right header name for INDEXER_TOKEN
  const indexer = getAlgoIndexerClient()
  await indexer.makeHealthCheck().do()
  ```
