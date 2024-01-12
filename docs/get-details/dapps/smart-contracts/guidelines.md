@@ -387,6 +387,17 @@ These guidelines are specific to smart signatures. They complement the other gui
 * Be careful about the fact that the same smart signature can be used in multiple networks.
   * For instance, if a smart signature is signed with the intent of using it on TestNet, that same transaction can be sent to MainNet with that same smart signature.
   * Always use new accounts when using TestNet (or any other network) to avoid reusing the same account that signed a smart signature.
+  * Make sure to write a smart signature that checks which network it is being run on. You can use:
+
+=== "PyTeal"
+    ```py
+    Global.genesis_hash()
+    ```
+
+=== "TEAL"
+    ```teal
+    global GenesisHash
+    ```
 
 ## Additional resources
 
