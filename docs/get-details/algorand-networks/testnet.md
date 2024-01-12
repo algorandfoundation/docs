@@ -1,10 +1,10 @@
 title: TestNet
 
 # Version
-`v3.20.1-stable`
+`v3.21.0-stable`
 
 # Release Version
-https://github.com/algorand/go-algorand/releases/tag/v3.20.1-stable
+https://github.com/algorand/go-algorand/releases/tag/v3.21.0-stable
 
 # Genesis ID
 `testnet-v1.0`

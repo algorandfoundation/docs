@@ -2811,6 +2811,8 @@ The execution trace of calling an app or a logic sig, containing the inner app c
 |**approval-program-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in an approval program.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
 |**clear-state-program-hash**  <br>*optional*|SHA512_256 hash digest of the clear state program executed in transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**clear-state-program-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in a clear state program.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|
+|**clear-state-rollback**  <br>*optional*|If true, indicates that the clear state program failed and any persistent state changes it produced should be reverted once the program exits.|boolean|
+|**clear-state-rollback-error**  <br>*optional*|The error message explaining why the clear state program failed. This field will only be populated if clear-state-rollback is true and the failure was due to an execution error.|string|
 |**inner-trace**  <br>*optional*|An array of SimulationTransactionExecTrace representing the execution trace of any inner transactions executed.|< [SimulationTransactionExecTrace](#simulationtransactionexectrace) > array|
 |**logic-sig-hash**  <br>*optional*|SHA512_256 hash digest of the logic sig executed in transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**logic-sig-trace**  <br>*optional*|Program trace that contains a trace of opcode effects in a logic sig.|< [SimulationOpcodeTraceUnit](#simulationopcodetraceunit) > array|

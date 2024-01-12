@@ -44,9 +44,6 @@ The following should be monitored:
 * clock is accurate (blocks are timestamped using the clock time from the block proposer's node, so keep your node clock accurate and on time)
 * the participation node is sending votes and proposing blocks at the expected frequency.
 
-For the last point, you can use the third-party [Metrika dashboard/alerts](https://app.metrika.co) to get alerts if your node is not participating properly and/or when your participation key is expiring.
-If you do not want to use the Metrika dashboard, put in place a similar monitoring system based on the algod logs (this is more complex).
-
 ## Securely Store Participation Keys
 
 Registered participation keys that are in operation are regularly updated through the protocol so that they cannot be used to vote on earlier rounds. Essentially, the set of keys corresponding to earlier rounds are deleted after the round passes to ensure that the compromise of a participation key by a bad actor does not give the bad actor the potential to rewrite history. Because of this, it is important that there only exists a single instance of the participation key (files ending in `*.partkey`) at any time in the system. 

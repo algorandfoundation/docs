@@ -96,7 +96,7 @@ Starting from v2, the AVM can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcode availability. Refer to [opcodes document](opcodes/v9.md) for details.
+3. Opcode availability. Refer to [opcodes document](opcodes/v10.md) for details.
 4. Some global values, such as LatestTimestamp, are only available in stateful mode.
 5. Only Applications can observe transaction effects, such as Logs or IDs allocated to ASAs or new Applications.
 
@@ -343,7 +343,7 @@ Most operations work with only one type of argument, uint64 or bytes, and fail i
 
 Many instructions accept values to designate Accounts, Assets, or Applications. Beginning with v4, these values may be given as an _offset_ in the corresponding Txn fields (Txn.Accounts, Txn.ForeignAssets, Txn.ForeignApps) _or_ as the value itself (a byte-array address for Accounts, or a uint64 ID). The values, however, must still be present in the Txn fields. Before v4, most opcodes required the use of an offset, except for reading account local values of assets or applications, which accepted the IDs directly and did not require the ID to be present in the corresponding _Foreign_ array. (Note that beginning with v4, those IDs _are_ required to be present in their corresponding _Foreign_ array.) See individual opcodes for details. In the case of account offsets or application offsets, 0 is specially defined to Txn.Sender or the ID of the current application, respectively.
 
-This summary is supplemented by more detail in the [opcodes document](opcodes/v9.md).
+This summary is supplemented by more detail in the [opcodes document](opcodes/v10.md).
 
 Some operations immediately fail the program.
 A transaction checked by a program that fails is not valid.
@@ -608,7 +608,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 66 | ClearStateProgramPages | []byte | v7  | ClearState Program as an array of pages |
 
 
-Additional details in the [opcodes document](opcodes/v9.md#txn) on the `txn` op.
+Additional details in the [opcodes document](opcodes/v10.md#txn) on the `txn` op.
 
 **Global Fields**
 
@@ -633,6 +633,7 @@ Global fields are fields that are common to all the transactions in the group. I
 | 14 | CallerApplicationAddress | address | v6  | The application address of the application that called this application. ZeroAddress if this application is at the top-level. Application mode only. |
 | 15 | AssetCreateMinBalance | uint64 | v10  | The additional minimum balance required to create (and opt-in to) an asset. |
 | 16 | AssetOptInMinBalance | uint64 | v10  | The additional minimum balance required to opt-in to an asset. |
+| 17 | GenesisHash | [32]byte | v10  | The Genesis Hash for the network. |
 
 
 **Asset Fields**
@@ -751,6 +752,12 @@ Account fields used in the `acct_params_get` opcode.
 
 ### Box Access
 
+Box opcodes that create, delete, or resize boxes affect the minimum
+balance requirement of the calling application's account.  The change
+is immediate, and can be observed after exection by using
+`min_balance`.  If the account does not possess the new minimum
+balance, the opcode fails.
+
 All box related opcodes fail immediately if used in a
 ClearStateProgram. This behavior is meant to discourage Smart Contract
 authors from depending upon the availability of boxes in a ClearState
@@ -763,13 +770,15 @@ are sure to be _available_.
 
 | Opcode | Description |
 | - | -- |
-| `box_create` | create a box named A, of length B. Fail if A is empty or B exceeds 32,768. Returns 0 if A already existed, else 1 |
+| `box_create` | create a box named A, of length B. Fail if the name A is empty or B exceeds 32,768. Returns 0 if A already existed, else 1 |
 | `box_extract` | read C bytes from box A, starting at offset B. Fail if A does not exist, or the byte range is outside A's size. |
 | `box_replace` | write byte-array C into box A, starting at offset B. Fail if A does not exist, or the byte range is outside A's size. |
+| `box_splice` | set box A to contain its previous bytes up to index B, followed by D, followed by the original bytes of A that began at index B+C. |
 | `box_del` | delete box named A if it exists. Return 1 if A existed, 0 otherwise |
 | `box_len` | X is the length of box A if A exists, else 0. Y is 1 if A exists, else 0. |
 | `box_get` | X is the contents of box A if A exists, else ''. Y is 1 if A exists, else 0. |
 | `box_put` | replaces the contents of box A with byte-array B. Fails if A exists and len(B) != len(box A). Creates A if it does not exist |
+| `box_resize` | change the size of box named A to be of length B, adding zero bytes to end or removing bytes from the end, as needed. Fail if the name A is empty, A is not an existing box, or B exceeds 32,768. |
 
 ### Inner Transactions
 
