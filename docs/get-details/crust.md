@@ -50,18 +50,20 @@ function getAuthHeader(account: algosdk.Account) {
 
 ```ts
 async function uploadToIPFS(account: algosdk.Account) {
-    const headers = { "Authorization": `Basic ${getAuthHeader(account)}`, "Content-Disposition": `form-data; name="upload_file"; filename="README.md"` }
+    const headers = {
+        "Authorization": `Basic ${getAuthHeader(account)}`
+    }
 
-    const response = await fetch('https://gw-seattle.crustcloud.io:443/api/v0/add', {
-        method: 'POST',
-        headers: {
-            ...headers,
-            'Content-Type': 'multipart/form-data; boundary=ae36a08c478c4b29b6491c99272fe367',
-        },
-        body: '--ae36a08c478c4b29b6491c99272fe367\nContent-Disposition: form-data; name="upload_file"; filename="README.md"\n\n# crust-examples\n\nTo install dependencies:\n\n```bash\nbun install\n```\n\nTo run:\n\n```bash\nbun run index.ts\n```\n\nThis project was created using `bun init` in bun v1.0.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.\n\n--ae36a08c478c4b29b6491c99272fe367--\n'
+    const apiEndpoint = 'https://gw-seattle.crustcloud.io:443/api/v0/add'
+
+    const formData = new FormData();
+    formData.append('README.md', fs.createReadStream('./README.md'));
+
+    const res = await axios.post(apiEndpoint, formData, {
+        headers: { ...headers, ...formData.getHeaders() }
     });
 
-    const json: any = await response.json()
+    const json: { Hash: string, Size: number } = await res.data
 
     return { cid: json.Hash, size: Number(json.Size) }
 }
@@ -159,18 +161,20 @@ function getAuthHeader(account: algosdk.Account) {
 }
 
 async function uploadToIPFS(account: algosdk.Account) {
-    const headers = { "Authorization": `Basic ${getAuthHeader(account)}`, "Content-Disposition": `form-data; name="upload_file"; filename="README.md"` }
+    const headers = {
+        "Authorization": `Basic ${getAuthHeader(account)}`
+    }
 
-    const response = await fetch('https://gw-seattle.crustcloud.io:443/api/v0/add', {
-        method: 'POST',
-        headers: {
-            ...headers,
-            'Content-Type': 'multipart/form-data; boundary=ae36a08c478c4b29b6491c99272fe367',
-        },
-        body: '--ae36a08c478c4b29b6491c99272fe367\nContent-Disposition: form-data; name="upload_file"; filename="README.md"\n\n# crust-examples\n\nTo install dependencies:\n\n```bash\nbun install\n```\n\nTo run:\n\n```bash\nbun run index.ts\n```\n\nThis project was created using `bun init` in bun v1.0.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.\n\n--ae36a08c478c4b29b6491c99272fe367--\n'
+    const apiEndpoint = 'https://gw-seattle.crustcloud.io:443/api/v0/add'
+
+    const formData = new FormData();
+    formData.append('README.md', fs.createReadStream('./README.md'));
+
+    const res = await axios.post(apiEndpoint, formData, {
+        headers: { ...headers, ...formData.getHeaders() }
     });
 
-    const json: any = await response.json()
+    const json: { Hash: string, Size: number } = await res.data
 
     return { cid: json.Hash, size: Number(json.Size) }
 }
