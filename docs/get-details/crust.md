@@ -153,4 +153,4 @@ async function placeOrder(
 
 #### Full Examples
 
-To see the full scripts that use the above functions go to https://github.com/joe-p/crust-examples
+To see the full scripts that use the above functions go to https://github.com/algorand-devrel/crust-examples
