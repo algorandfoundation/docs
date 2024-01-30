@@ -74,8 +74,8 @@ jobs:
       - name: Download binaries
         if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         run: |
-          wget https://algorand-releases.s3.amazonaws.com/channel/stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
-          wget https://algorand-releases.s3.amazonaws.com/indexer/${{ inputs.indexer_version }}/algorand-indexer_linux_amd64_${{ inputs.indexer_version }}.tar.bz2
+          wget https://github.com/algorand/go-algorand/releases/download/v${{ env.GO_ALGORAND_VERSION }}-stable/node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}.tar.gz
+          wget https://github.com/algorand/indexer/releases/download/v${{ inputs.indexer_version }}/indexer_Linux_x86_64_${{ inputs.indexer_version }}.tar.gz
           ls -la
 
       - name: Install binaries
@@ -87,8 +87,11 @@ jobs:
           cd node_stable_linux-amd64_${{ env.GO_ALGORAND_VERSION }}/bin/
           cp goal algokey kmd diagcfg tealdbg  ~/go/bin/
           cd ../../
-          tar xjf algorand-indexer_linux_amd64_${{ inputs.indexer_version }}.tar.bz2
-          cp algorand-indexer_linux_amd64_${{ inputs.indexer_version }}/algorand-indexer ~/go/bin/
+          mkdir -p indexer_Linux_x86_64_${{ inputs.indexer_version }}
+          tar xzf indexer_Linux_x86_64_${{ inputs.indexer_version }}.tar.gz -C indexer_Linux_x86_64_${{ inputs.indexer_version }}
+          cd indexer_Linux_x86_64_${{ inputs.indexer_version }}
+          cp algorand-indexer ~/go/bin/
+          cd ../
           ls -la
           ls -la ~/go/bin
 

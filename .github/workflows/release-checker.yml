@@ -55,8 +55,8 @@ jobs:
         run: |
           cd indexer
           git fetch --tags
-          echo "::set-output name=indexer::$(git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1)"
-          git tag --list '[0-9]*.[0-9]*.[0-9]*' | grep -v '-' | sort -V | tail -1
+          echo "::set-output name=indexer::$(git tag --list | grep '[0-9]*\.[0-9]*\.[0-9]*' | grep -v '-' | sed 's/^v//' | sort -V | tail -1)"
+          git tag --list | grep '[0-9]*\.[0-9]*\.[0-9]*' | grep -v '-' | sed 's/^v//' | sort -V | tail -1
 
       - name: Check versions # Just for easier troubleshooting
         run: |
