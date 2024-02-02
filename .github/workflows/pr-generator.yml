@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: algorand/indexer
-          ref: ${{ inputs.indexer_version }}
+          ref: v${{ inputs.indexer_version }}
           path: indexer
           submodules: true
 
