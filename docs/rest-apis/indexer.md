@@ -1648,6 +1648,7 @@ Box name and its content.
 |Name|Description|Schema|
 |---|---|---|
 |**name**  <br>*required*|\[name\] box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**round**  <br>*required*|The round for which this information is relevant|integer|
 |**value**  <br>*required*|\[value\] box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -2021,7 +2022,7 @@ data/transactions/asset.go : AssetTransferTxnFields
 |---|---|---|
 |**amount**  <br>*required*|\[aamt\] Amount of asset to transfer. A zero amount transferred to self allocates that asset in the account's Assets map.|integer|
 |**asset-id**  <br>*required*|\[xaid\] ID of the asset being transferred.|integer|
-|**close-amount**  <br>*optional*|Number of assets transfered to the close-to account as part of the transaction.|integer|
+|**close-amount**  <br>*optional*|Number of assets transferred to the close-to account as part of the transaction.|integer|
 |**close-to**  <br>*optional*|\[aclose\] Indicates that the asset should be removed from the account's Assets map, and specifies where the remaining asset holdings should be transferred.  It's always valid to transfer remaining asset holdings to the creator account.|string|
 |**receiver**  <br>*required*|\[arcv\] Recipient address of the transfer.|string|
 |**sender**  <br>*optional*|\[asnd\] The effective sender during a clawback transactions. If this is not a zero value, the real transaction sender must be the Clawback address from the AssetParams.|string|

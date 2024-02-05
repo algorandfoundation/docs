@@ -33,7 +33,6 @@ Utilities used for Indexer development. These are low level tools that may requi
 
 
 * [indexer](../../../indexer/indexer/)	 - Algorand Indexer
-* [indexer util block-generator](../block-generator/block-generator/)	 - Block generator testing tools.
 * [indexer util validator](../validator/)	 - validator
 
 

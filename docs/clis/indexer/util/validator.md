@@ -36,6 +36,8 @@ indexer util validator [flags]
 
       --algod-url string        Algod url.
 
+      --box string              If provided validate a single box (in the format "appid,b64boxname") instead of reading Stdin.
+
   -e, --error-log-file string   When specified, error messages are written to this file instead of to stderr.
 
   -h, --help                    help for validator
@@ -44,7 +46,7 @@ indexer util validator [flags]
 
       --indexer-url string      Indexer url.
 
-      --print-commands          Print curl commands, including tokens, to query algod and indexer.
+      --print-commands          Print curl commands, including tokens, to query algod and indexer contents.
 
       --print-skipped           Include accounts which were skipped in the error log.
 
