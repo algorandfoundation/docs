@@ -30,17 +30,7 @@ indexer daemon [flags]
 
 ```
 
-  -d, --algod string                           path to algod data dir, or $ALGORAND_DATA
-
-      --algod-net string                       host:port of algod
-
-      --algod-token string                     api access token for algod
-
-      --allow-migration                        allow migrations to happen even when no algod connected
-
       --api-config-file string                 supply an API config file to enable/disable parameters
-
-      --catchpoint string                      initialize local ledger using fast catchup
 
   -c, --configfile string                      file path to configuration file (indexer.yml)
 
@@ -66,11 +56,7 @@ indexer daemon [flags]
 
       --enable-all-parameters                  override default configuration and enable all parameters. Can't be used with --api-config-file
 
-  -g, --genesis string                         path to genesis.json (defaults to genesis.json in algod data dir if that was set)
-
   -h, --help                                   help for daemon
-
-      --init-ledger                            initialize local ledger using sequential mode (default true)
 
   -f, --logfile string                         file to write logs to, if unset logs are written to standard out
 
@@ -93,8 +79,6 @@ indexer daemon [flags]
       --max-transactions-limit uint32          set the maximum allowed Limit parameter for querying transactions (default 10000)
 
       --metrics-mode string                    configure the /metrics endpoint to [ON, OFF, VERBOSE] (default "OFF")
-
-      --no-algod                               disable connecting to algod for block following
 
       --pidfile string                         file to write daemon's process id to
 
