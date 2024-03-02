@@ -46,6 +46,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
             ```
         - Restart the terminal to ensure pipx is available on the path
         - Install AlgoKit via pipx: `pipx install algokit`
+        - If you used AlgoKit before, update it with pipx: `pipx upgrade algokit`
         - Restart the terminal to ensure AlgoKit is available on the path
     
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/22RvINnZsRo" title="Installing AlgoKit on Windows" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -87,6 +88,8 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
     ```shell
     pipx install algokit
     ```
+
+    If you used AlgoKit before, update it with pipx: `pipx upgrade algokit`
 
     After the installation completes, **restart the terminal**.
 
