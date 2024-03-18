@@ -108,7 +108,7 @@ algokit, version 1.5.0
 
 ## Start a LocalNet
 
-AlgoKit supports using a [local version of the Algorand blockchain](../features/localnet.md). To start an instance of this LocalNet run the following command from the terminal:
+AlgoKit supports using a [local version of the Algorand blockchain](../../get-details/algokit/features/localnet/). To start an instance of this LocalNet run the following command from the terminal:
 
 ```shell
 algokit localnet start

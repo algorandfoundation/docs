@@ -53,7 +53,7 @@ Note: rawTeal and compiledTeal are mutually exclusive. Only one of them should b
 
 #### Defined in
 
-[src/types/debugging.ts:55](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L55)
+[src/types/debugging.ts:82](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L82)
 
 ## Properties
 
@@ -63,7 +63,7 @@ Note: rawTeal and compiledTeal are mutually exclusive. Only one of them should b
 
 #### Defined in
 
-[src/types/debugging.ts:52](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L52)
+[src/types/debugging.ts:79](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L79)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/types/debugging.ts:53](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L53)
+[src/types/debugging.ts:80](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L80)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[src/types/debugging.ts:50](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L50)
+[src/types/debugging.ts:77](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L77)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[src/types/debugging.ts:51](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L51)
+[src/types/debugging.ts:78](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L78)
 
 ## Accessors
 
@@ -101,13 +101,15 @@ ___
 
 • `get` **fileName**(): `string`
 
+Get the file name
+
 #### Returns
 
 `string`
 
 #### Defined in
 
-[src/types/debugging.ts:80](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L80)
+[src/types/debugging.ts:123](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L123)
 
 ___
 
@@ -115,13 +117,15 @@ ___
 
 • `get` **rawTeal**(): `string`
 
+Get the underlying raw teal
+
 #### Returns
 
 `string`
 
 #### Defined in
 
-[src/types/debugging.ts:70](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L70)
+[src/types/debugging.ts:112](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L112)
 
 ## Methods
 
@@ -145,7 +149,7 @@ The filename without the '.teal' extension.
 
 #### Defined in
 
-[src/types/debugging.ts:90](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L90)
+[src/types/debugging.ts:133](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L133)
 
 ___
 
@@ -153,21 +157,25 @@ ___
 
 ▸ **fromCompiledTeal**(`compiledTeal`, `appName`, `fileName`): [`PersistSourceMapInput`](types_debugging.PersistSourceMapInput.md)
 
+Returns debugger source maps input from compiled TEAL code.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `compiledTeal` | [`CompiledTeal`](../interfaces/types_app.CompiledTeal.md) |
-| `appName` | `string` |
-| `fileName` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `compiledTeal` | [`CompiledTeal`](../interfaces/types_app.CompiledTeal.md) | The compiled TEAL code |
+| `appName` | `string` | The name of the app |
+| `fileName` | `string` | The name of the file to persist to |
 
 #### Returns
 
 [`PersistSourceMapInput`](types_debugging.PersistSourceMapInput.md)
 
+The persist source map input
+
 #### Defined in
 
-[src/types/debugging.ts:66](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L66)
+[src/types/debugging.ts:107](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L107)
 
 ___
 
@@ -175,18 +183,22 @@ ___
 
 ▸ **fromRawTeal**(`rawTeal`, `appName`, `fileName`): [`PersistSourceMapInput`](types_debugging.PersistSourceMapInput.md)
 
+Returns debugger source maps input from raw TEAL code.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `rawTeal` | `string` |
-| `appName` | `string` |
-| `fileName` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `rawTeal` | `string` | The raw TEAL code |
+| `appName` | `string` | The name of the app |
+| `fileName` | `string` | The name of the file to persist to |
 
 #### Returns
 
 [`PersistSourceMapInput`](types_debugging.PersistSourceMapInput.md)
 
+The persist source map input
+
 #### Defined in
 
-[src/types/debugging.ts:62](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L62)
+[src/types/debugging.ts:96](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L96)

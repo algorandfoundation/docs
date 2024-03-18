@@ -95,7 +95,7 @@ Error.message
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1068
+node_modules/typescript/lib/lib.es5.d.ts:1076
 
 ___
 
@@ -109,7 +109,7 @@ Error.name
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1067
+node_modules/typescript/lib/lib.es5.d.ts:1075
 
 ___
 
@@ -150,6 +150,12 @@ ___
 ### prepareStackTrace
 
 ▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
+
+Optional override for formatting stack traces
+
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Type declaration
 
@@ -231,9 +237,9 @@ Takes an error message and parses out the details of any logic errors in there.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `error` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `error` | `any` | The error message to parse |
 
 #### Returns
 

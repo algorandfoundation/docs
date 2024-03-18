@@ -26,6 +26,7 @@ Parameters that are passed in when creating an app.
 - [maxRoundsToWaitForConfirmation](types_app.CreateAppParams.md#maxroundstowaitforconfirmation)
 - [note](types_app.CreateAppParams.md#note)
 - [onCompleteAction](types_app.CreateAppParams.md#oncompleteaction)
+- [populateAppCallResources](types_app.CreateAppParams.md#populateappcallresources)
 - [schema](types_app.CreateAppParams.md#schema)
 - [skipSending](types_app.CreateAppParams.md#skipsending)
 - [skipWaiting](types_app.CreateAppParams.md#skipwaiting)
@@ -187,6 +188,22 @@ Override the on-completion action for the create call; defaults to NoOp
 #### Defined in
 
 [src/types/app.ts:141](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L141)
+
+___
+
+### populateAppCallResources
+
+• `Optional` **populateAppCallResources**: `boolean`
+
+**WARNING**: Not recommended for production use due to https://github.com/algorand/go-algorand/issues/5914. Whether to use simulate to automatically populate app call resources in the txn objects. Defaults to true when there are app calls in the group.
+
+#### Inherited from
+
+CreateOrUpdateAppParams.populateAppCallResources
+
+#### Defined in
+
+[src/types/transaction.ts:45](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L45)
 
 ___
 

@@ -25,6 +25,7 @@ Parameters representing a call to an app.
 - [maxFee](types_app.AppCallParams.md#maxfee)
 - [maxRoundsToWaitForConfirmation](types_app.AppCallParams.md#maxroundstowaitforconfirmation)
 - [note](types_app.AppCallParams.md#note)
+- [populateAppCallResources](types_app.AppCallParams.md#populateappcallresources)
 - [skipSending](types_app.AppCallParams.md#skipsending)
 - [skipWaiting](types_app.AppCallParams.md#skipwaiting)
 - [suppressLog](types_app.AppCallParams.md#suppresslog)
@@ -153,6 +154,22 @@ The (optional) transaction note
 #### Defined in
 
 [src/types/app.ts:174](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L174)
+
+___
+
+### populateAppCallResources
+
+• `Optional` **populateAppCallResources**: `boolean`
+
+**WARNING**: Not recommended for production use due to https://github.com/algorand/go-algorand/issues/5914. Whether to use simulate to automatically populate app call resources in the txn objects. Defaults to true when there are app calls in the group.
+
+#### Inherited from
+
+[SendTransactionParams](types_transaction.SendTransactionParams.md).[populateAppCallResources](types_transaction.SendTransactionParams.md#populateappcallresources)
+
+#### Defined in
+
+[src/types/transaction.ts:45](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L45)
 
 ___
 

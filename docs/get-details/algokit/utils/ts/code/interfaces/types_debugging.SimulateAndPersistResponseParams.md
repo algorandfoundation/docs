@@ -4,6 +4,8 @@
 
 [types/debugging](../modules/types_debugging.md).SimulateAndPersistResponseParams
 
+Parameters to a call that simulates a transaction and persists the response.
+
 ## Table of contents
 
 ### Properties
@@ -19,9 +21,11 @@
 
 • **algod**: `default`
 
+algod An Algodv2 client to perform the simulation.
+
 #### Defined in
 
-[src/types/debugging.ts:108](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L108)
+[src/types/debugging.ts:158](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L158)
 
 ___
 
@@ -29,9 +33,11 @@ ___
 
 • **atc**: `AtomicTransactionComposer`
 
+The AtomicTransactionComposer with transaction(s) loaded.
+
 #### Defined in
 
-[src/types/debugging.ts:106](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L106)
+[src/types/debugging.ts:160](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L160)
 
 ___
 
@@ -39,9 +45,11 @@ ___
 
 • **bufferSizeMb**: `number`
 
+bufferSizeMb The buffer size in megabytes.
+
 #### Defined in
 
-[src/types/debugging.ts:109](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L109)
+[src/types/debugging.ts:164](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L164)
 
 ___
 
@@ -49,6 +57,8 @@ ___
 
 • **projectRoot**: `string`
 
+projectRoot The root directory of the project.
+
 #### Defined in
 
-[src/types/debugging.ts:107](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L107)
+[src/types/debugging.ts:162](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L162)

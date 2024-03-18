@@ -24,7 +24,7 @@ Fields for an asset freeze transaction. https://developer.algorand.org/docs/rest
 
 #### Defined in
 
-[src/types/indexer.ts:297](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L297)
+[src/types/indexer.ts:477](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L477)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:299](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L299)
+[src/types/indexer.ts:479](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L479)
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:301](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L301)
+[src/types/indexer.ts:481](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L481)

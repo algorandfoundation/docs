@@ -53,7 +53,7 @@ the account public key
 
 #### Defined in
 
-[src/types/indexer.ts:181](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L181)
+[src/types/indexer.ts:192](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L192)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:183](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L183)
+[src/types/indexer.ts:194](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L194)
 
 ___
 
@@ -77,7 +77,7 @@ specifies the amount of MicroAlgos in the account, without the pending rewards.
 
 #### Defined in
 
-[src/types/indexer.ts:185](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L185)
+[src/types/indexer.ts:196](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L196)
 
 ___
 
@@ -91,7 +91,7 @@ Note the raw object uses map[int] -> AppLocalState for this type.
 
 #### Defined in
 
-[src/types/indexer.ts:190](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L190)
+[src/types/indexer.ts:201](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L201)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:192](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L192)
+[src/types/indexer.ts:203](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L203)
 
 ___
 
@@ -117,7 +117,7 @@ Note: the raw account uses StateSchema for this type.
 
 #### Defined in
 
-[src/types/indexer.ts:197](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L197)
+[src/types/indexer.ts:208](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L208)
 
 ___
 
@@ -131,7 +131,7 @@ Note the raw object uses map[int] -> AssetHolding for this type.
 
 #### Defined in
 
-[src/types/indexer.ts:202](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L202)
+[src/types/indexer.ts:213](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L213)
 
 ___
 
@@ -147,7 +147,7 @@ This field can be updated in any transaction by setting the RekeyTo field.
 
 #### Defined in
 
-[src/types/indexer.ts:209](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L209)
+[src/types/indexer.ts:220](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L220)
 
 ___
 
@@ -159,7 +159,7 @@ Round during which this account was most recently closed.
 
 #### Defined in
 
-[src/types/indexer.ts:211](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L211)
+[src/types/indexer.ts:222](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L222)
 
 ___
 
@@ -173,7 +173,7 @@ Note: the raw account uses map[int] -> AppParams for this type.
 
 #### Defined in
 
-[src/types/indexer.ts:216](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L216)
+[src/types/indexer.ts:227](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L227)
 
 ___
 
@@ -187,7 +187,7 @@ Note: the raw account uses map[int] -> Asset for this type.
 
 #### Defined in
 
-[src/types/indexer.ts:221](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L221)
+[src/types/indexer.ts:232](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L232)
 
 ___
 
@@ -199,7 +199,7 @@ Round during which this account first appeared in a transaction.
 
 #### Defined in
 
-[src/types/indexer.ts:223](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L223)
+[src/types/indexer.ts:234](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L234)
 
 ___
 
@@ -211,7 +211,7 @@ Whether or not this account is currently closed.
 
 #### Defined in
 
-[src/types/indexer.ts:225](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L225)
+[src/types/indexer.ts:236](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L236)
 
 ___
 
@@ -223,7 +223,7 @@ If participating in consensus, the parameters used by this account in the consen
 
 #### Defined in
 
-[src/types/indexer.ts:227](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L227)
+[src/types/indexer.ts:238](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L238)
 
 ___
 
@@ -235,7 +235,7 @@ amount of MicroAlgos of pending rewards in this account.
 
 #### Defined in
 
-[src/types/indexer.ts:229](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L229)
+[src/types/indexer.ts:240](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L240)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:231](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L231)
+[src/types/indexer.ts:242](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L242)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:233](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L233)
+[src/types/indexer.ts:244](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L244)
 
 ___
 
@@ -271,7 +271,7 @@ The round for which this information is relevant.
 
 #### Defined in
 
-[src/types/indexer.ts:235](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L235)
+[src/types/indexer.ts:246](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L246)
 
 ___
 
@@ -283,7 +283,7 @@ Indicates what type of signature is used by this account
 
 #### Defined in
 
-[src/types/indexer.ts:237](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L237)
+[src/types/indexer.ts:248](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L248)
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:239](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L239)
+[src/types/indexer.ts:250](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L250)
 
 ___
 
@@ -307,7 +307,7 @@ The count of all applications that have been opted in, equivalent to the count o
 
 #### Defined in
 
-[src/types/indexer.ts:241](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L241)
+[src/types/indexer.ts:252](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L252)
 
 ___
 
@@ -319,7 +319,7 @@ The count of all assets that have been opted in, equivalent to the count of Asse
 
 #### Defined in
 
-[src/types/indexer.ts:243](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L243)
+[src/types/indexer.ts:254](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L254)
 
 ___
 
@@ -331,7 +331,7 @@ For app-accounts only. The total number of bytes allocated for the keys and valu
 
 #### Defined in
 
-[src/types/indexer.ts:245](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L245)
+[src/types/indexer.ts:256](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L256)
 
 ___
 
@@ -343,7 +343,7 @@ For app-accounts only. The total number of boxes which belong to the associated 
 
 #### Defined in
 
-[src/types/indexer.ts:247](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L247)
+[src/types/indexer.ts:258](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L258)
 
 ___
 
@@ -355,7 +355,7 @@ The count of all apps (AppParams objects) created by this account.
 
 #### Defined in
 
-[src/types/indexer.ts:249](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L249)
+[src/types/indexer.ts:260](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L260)
 
 ___
 
@@ -367,4 +367,4 @@ The count of all assets (AssetParams objects) created by this account.
 
 #### Defined in
 
-[src/types/indexer.ts:251](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L251)
+[src/types/indexer.ts:262](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L262)

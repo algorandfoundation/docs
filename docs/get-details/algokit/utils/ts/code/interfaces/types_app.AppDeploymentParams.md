@@ -30,6 +30,7 @@ The parameters to deploy an app
 - [metadata](types_app.AppDeploymentParams.md#metadata)
 - [onSchemaBreak](types_app.AppDeploymentParams.md#onschemabreak)
 - [onUpdate](types_app.AppDeploymentParams.md#onupdate)
+- [populateAppCallResources](types_app.AppDeploymentParams.md#populateappcallresources)
 - [schema](types_app.AppDeploymentParams.md#schema)
 - [suppressLog](types_app.AppDeploymentParams.md#suppresslog)
 - [transactionParams](types_app.AppDeploymentParams.md#transactionparams)
@@ -226,6 +227,22 @@ What action to perform if a TEAL update is detected
 #### Defined in
 
 [src/types/app.ts:300](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L300)
+
+___
+
+### populateAppCallResources
+
+• `Optional` **populateAppCallResources**: `boolean`
+
+**WARNING**: Not recommended for production use due to https://github.com/algorand/go-algorand/issues/5914. Whether to use simulate to automatically populate app call resources in the txn objects. Defaults to true when there are app calls in the group.
+
+#### Inherited from
+
+Omit.populateAppCallResources
+
+#### Defined in
+
+[src/types/transaction.ts:45](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L45)
 
 ___
 
