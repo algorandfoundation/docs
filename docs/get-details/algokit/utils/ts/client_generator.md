@@ -20,6 +20,30 @@ The cli can be used to generate a client via the following command.
 npx --yes  @algorandfoundation/algokit-client-generator generate -a ./application.json -o ./client.generated.ts
 ```
 
+Alternatively, a client can be generated from code by invoking the `generate` function paired with either `writeDocumentPartsToString` or `writeDocumentPartsToStream` depending on your needs. We also expose helpers to optionally load and validate an application.json file.
+
+```ts
+import fs from 'fs'
+import {
+  writeDocumentPartsToStream,
+  writeDocumentPartsToString,
+  generate,
+  loadApplicationJson,
+  validateApplicationJson,
+} from '@algorandfoundation/algokit-client-generator'
+import appJson from './application.json'
+
+const appJsonFromFile = loadApplicationJson('./application.json')
+const appJsonFromObject = validateApplicationJson(appJson)
+
+const fileStream = fs.createWriteStream('./client.ts', {
+  flags: 'w',
+})
+writeDocumentPartsToStream(generate(appJsonFromFile, fileStream))
+
+const clientAsString = writeDocumentPartsToString(appJsonFromObject)
+```
+
 For details on how to use the generated client see the more detailed [usage docs](../)
 
 ## Examples
@@ -70,6 +94,8 @@ poetry run python -m examples
 ```
 
 Or in Visual Studio Code you can use the default build task (Ctrl+Shift+B).
+
+To regenerate the generated clients run `npm run update-approvals`.
 
 ### Continuous Integration / Continuous Deployment (CI/CD)
 

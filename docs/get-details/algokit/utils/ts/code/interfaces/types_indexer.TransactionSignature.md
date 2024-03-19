@@ -18,31 +18,31 @@ Validation signature associated with some data. Only one of the signatures shoul
 
 ### logicsig
 
-• **logicsig**: [`LogicTransactionSignature`](types_indexer.LogicTransactionSignature.md)
+• `Optional` **logicsig**: [`LogicTransactionSignature`](types_indexer.LogicTransactionSignature.md)
 
 Logicsig signature
 
 #### Defined in
 
-[src/types/indexer.ts:375](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L375)
+[src/types/indexer.ts:555](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L555)
 
 ___
 
 ### multisig
 
-• **multisig**: [`MultisigTransactionSignature`](types_indexer.MultisigTransactionSignature.md)
+• `Optional` **multisig**: [`MultisigTransactionSignature`](types_indexer.MultisigTransactionSignature.md)
 
 Multisig signature
 
 #### Defined in
 
-[src/types/indexer.ts:377](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L377)
+[src/types/indexer.ts:557](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L557)
 
 ___
 
 ### sig
 
-• **sig**: `string`
+• `Optional` **sig**: `string`
 
 [sig] Standard ed25519 signature.
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:382](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L382)
+[src/types/indexer.ts:562](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L562)

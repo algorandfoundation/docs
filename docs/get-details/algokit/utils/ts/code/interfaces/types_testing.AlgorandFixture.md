@@ -22,6 +22,8 @@ An Algorand automated testing fixture
 
 • **beforeEach**: () => `Promise`\<`void`\>
 
+Testing framework agnostic handler method to run before each test to prepare the `context` for that test.
+
 #### Type declaration
 
 ▸ (): `Promise`\<`void`\>

@@ -86,7 +86,7 @@ test('My test', async () => {
 
 #### Defined in
 
-[src/testing/fixtures/algorand-fixture.ts:36](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L36)
+[src/testing/fixtures/algorand-fixture.ts:38](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L38)
 
 ▸ **algorandFixture**(`fixtureConfig`, `config`): [`AlgorandFixture`](../interfaces/types_testing.AlgorandFixture.md)
 
@@ -124,7 +124,7 @@ test('My test', async () => {
 
 #### Defined in
 
-[src/testing/fixtures/algorand-fixture.ts:61](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L61)
+[src/testing/fixtures/algorand-fixture.ts:63](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/fixtures/algorand-fixture.ts#L63)
 
 ___
 
@@ -153,7 +153,7 @@ The account, with private key loaded
 
 #### Defined in
 
-[src/testing/account.ts:20](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/account.ts#L20)
+[src/testing/account.ts:19](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/testing/account.ts#L19)
 
 ___
 

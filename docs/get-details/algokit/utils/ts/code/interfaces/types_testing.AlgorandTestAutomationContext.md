@@ -37,6 +37,8 @@ ___
 
 • **generateAccount**: (`params`: [`GetTestAccountParams`](types_testing.GetTestAccountParams.md)) => `Promise`\<`default`\>
 
+Generate and fund an additional ephemerally created account
+
 #### Type declaration
 
 ▸ (`params`): `Promise`\<`default`\>
@@ -111,6 +113,8 @@ ___
 
 • **waitForIndexer**: () => `Promise`\<`void`\>
 
+Wait for the indexer to catch up with all transactions logged by `transactionLogger`
+
 #### Type declaration
 
 ▸ (): `Promise`\<`void`\>
@@ -130,6 +134,8 @@ ___
 ### waitForIndexerTransaction
 
 • **waitForIndexerTransaction**: (`transactionId`: `string`) => `Promise`\<[`TransactionLookupResult`](types_indexer.TransactionLookupResult.md)\>
+
+Wait for the indexer to catch up with the given transaction ID
 
 #### Type declaration
 

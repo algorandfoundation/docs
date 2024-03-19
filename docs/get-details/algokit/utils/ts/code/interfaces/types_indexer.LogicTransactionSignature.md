@@ -29,7 +29,7 @@ https://developer.algorand.org/docs/get-details/transactions/signatures/#logic-s
 
 #### Defined in
 
-[src/types/indexer.ts:393](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L393)
+[src/types/indexer.ts:573](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L573)
 
 ___
 
@@ -45,7 +45,7 @@ Base64 encoded TEAL program.
 
 #### Defined in
 
-[src/types/indexer.ts:400](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L400)
+[src/types/indexer.ts:580](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L580)
 
 ___
 
@@ -57,7 +57,7 @@ The signature of the multisig the logic signature delegating the logicsig. https
 
 #### Defined in
 
-[src/types/indexer.ts:402](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L402)
+[src/types/indexer.ts:582](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L582)
 
 ___
 
@@ -71,4 +71,4 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:407](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L407)
+[src/types/indexer.ts:587](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L587)

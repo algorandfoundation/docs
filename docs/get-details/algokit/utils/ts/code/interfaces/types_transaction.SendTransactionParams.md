@@ -30,6 +30,7 @@ The sending configuration for a transaction
 - [fee](types_transaction.SendTransactionParams.md#fee)
 - [maxFee](types_transaction.SendTransactionParams.md#maxfee)
 - [maxRoundsToWaitForConfirmation](types_transaction.SendTransactionParams.md#maxroundstowaitforconfirmation)
+- [populateAppCallResources](types_transaction.SendTransactionParams.md#populateappcallresources)
 - [skipSending](types_transaction.SendTransactionParams.md#skipsending)
 - [skipWaiting](types_transaction.SendTransactionParams.md#skipwaiting)
 - [suppressLog](types_transaction.SendTransactionParams.md#suppresslog)
@@ -81,6 +82,18 @@ The maximum number of rounds to wait for confirmation, only applies if `skipWait
 #### Defined in
 
 [src/types/transaction.ts:43](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L43)
+
+___
+
+### populateAppCallResources
+
+• `Optional` **populateAppCallResources**: `boolean`
+
+**WARNING**: Not recommended for production use due to https://github.com/algorand/go-algorand/issues/5914. Whether to use simulate to automatically populate app call resources in the txn objects. Defaults to true when there are app calls in the group.
+
+#### Defined in
+
+[src/types/transaction.ts:45](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L45)
 
 ___
 

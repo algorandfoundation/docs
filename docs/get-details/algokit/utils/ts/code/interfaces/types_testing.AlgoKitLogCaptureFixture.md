@@ -21,6 +21,8 @@
 
 • **afterEach**: () => `void`
 
+Testing framework agnostic handler method to run after each test to reset the logger.
+
 #### Type declaration
 
 ▸ (): `void`
@@ -40,6 +42,8 @@ ___
 ### beforeEach
 
 • **beforeEach**: () => `void`
+
+Testing framework agnostic handler method to run before each test to prepare the `testLogger` for that test.
 
 #### Type declaration
 

@@ -1,7 +1,7 @@
 title: IPFS Pinning With Crust
 
 ## IPFS
-Algorand offers [various ways to store data in contracts](docs/get-details/dapps/smart-contracts/apps/state.md), but there are still many use cases where storing the data off-chain makes more sense. This is paticularly true when the data is large and not used directly on-chain (for example, NFT metadata and images). A common solution for off-chain data storage is the InterPlanetary File System (IPFS) protocol. In short, IPFS is a peer-to-peer file sharing protocol. For more information on IPFS, see https://docs.ipfs.tech/concepts/faq/.
+Algorand offers [various ways to store data in contracts](../dapps/smart-contracts/apps/state/), but there are still many use cases where storing the data off-chain makes more sense. This is paticularly true when the data is large and not used directly on-chain (for example, NFT metadata and images). A common solution for off-chain data storage is the InterPlanetary File System (IPFS) protocol. In short, IPFS is a peer-to-peer file sharing protocol. For more information on IPFS, see https://docs.ipfs.tech/concepts/faq/.
 
 In order to share files via IPFS, one must pin a file on the network. Pinning a file means assigning it a unique Content Identifier (CID) and making it availible to download. It is common for developers to use a pinning service like Pinata, web3.storage, or nft.storage. While these services do indeed pin the file on IPFS, they are still using centralized servers to do so. This means those using these services are dependend on them to keep running them and are locked into their pricing model.
 
