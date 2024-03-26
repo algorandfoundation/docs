@@ -1,6 +1,7 @@
 title: Writing Smart Contracts  
 
 arrange:
+  - python.md
   - pyteal.md
   - beaker.md
   

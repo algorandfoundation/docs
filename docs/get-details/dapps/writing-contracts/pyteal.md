@@ -1,5 +1,8 @@
 title: PyTeal
 
+!!! note
+For a native Python experience, checkout our [Algorand Python](https://algorandfoundation.github.io/puya/) docs.
+
 [PyTeal](https://github.com/algorand/pyteal) is a python library for generating [TEAL](/docs/get-details/dapps/avm/teal/) programs that provides a convenient and familiar syntax. 
 
 Complete installation instructions and developer guides are available in the [PyTeal documentation](https://pyteal.readthedocs.io/en/latest/).
