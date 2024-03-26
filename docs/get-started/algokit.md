@@ -4,7 +4,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 
 - Smart contract templates - kickstart your dApp by selecting from our template library
 - Web3 infrastructure - all the network, database, wallet, block explorer and APIs running locally
-- Toolchain integrations - for languages you love: TypeScript and Python
+- Toolchain integrations - for languages you love: Python and Typescript
 - React component generation - frontend design simplified using components generated for each contract method call
 
 ## 10 minute video walkthrough
@@ -13,7 +13,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 
 ## Prerequisites
 
-- [Python 3.10](https://www.python.org/downloads/) or higher
+- [Python 3.12](https://www.python.org/downloads/) or higher
 - [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
 - [Git](https://github.com/git-guides/install-git#install-git)
 - [Docker](https://docker.com/download/)
@@ -23,7 +23,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 
 === "Windows"
     !!! Note
-        This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.10+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+        This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
 
     - Ensure prerequisites are installed
         - [Git](https://github.com/git-guides/install-git#install-git-on-windows) (or `winget install git.git`)
@@ -33,7 +33,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
                 See [our LocalNet documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/localnet.md#prerequisites) for more tips on installing Docker on Windows
 
     - Install Python3 using WinGet
-        - Install python: `winget install python.python.3.11`
+        - Install python: `winget install python.python.3.12`
         - Restart the terminal to ensure Python and pip are available on the path
             
             !!! Info
@@ -72,7 +72,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 === "Linux"
     - Ensure prerequisites are installed
 
-        - [Python 3.10+](https://www.python.org/downloads/)
+        - [Python 3.12+](https://www.python.org/downloads/)
 
             !!! Info
                 There is probably a better way to install Python than to download it directly, e.g. your local Linux package manager
@@ -106,7 +106,7 @@ algokit --version
 Output similar to the following should be displayed:
 
 ```shell
-algokit, version 1.5.0
+algokit, version 2.0.0
 ```
 
 ## Start a LocalNet
@@ -133,7 +133,7 @@ This will launch a guided menu system to create a specific project tailored to y
 
 Next, you will be prompted for the name of your project. Finally, select the default value for the rest of the prompts (enter).
 
-Once finished, (if you have it installed) VS Code should automatically be opened with the initialised project and you will be prompted to install appropriate VS Code extensions. This starter app will contain one smart contract (built using the [Beaker](https://beaker.algo.xyz/) smart contract development framework) named `helloworld.py`, in the `hello_world` folder, with one method (`hello`) that takes a `String` and returns a `String`.
+Once finished, (if you have it installed) VS Code should automatically be opened with the initialised project and you will be prompted to install appropriate VS Code extensions. This starter app will contain one smart contract (built with [Python](https://algorandfoundation.github.io/puya/) named `contract.py`, in the `hello_world` folder, with one method (`hello`) that takes a `String` and returns a `String`.
 
 ![AlgoKit Playground Contract](../imgs/algokitplayground.png)
 
@@ -147,7 +147,7 @@ Right clicking on this file and selecting `Run Python File in Terminal` will dep
 
 1. Start LocalNet
 2. Build the smart contract
-3. Deploy and call the smart contract (`demo.py`)
+3. Deploy and call the smart contract (`contract.py`)
 
 This should produce something similiar to the following in the VSCode terminal.
 
@@ -222,5 +222,5 @@ You have now successfully deployed and executed a smart contract method call usi
 ## Next steps
 
 - To learn more about AlgoKit and what you can do with it, checkout the [AlgoKit documentation](../index.md).
-- To learn more about Beaker, take a look at the [Beaker documentation](https://beaker.algo.xyz/).
+- To learn more about Python on Algorand, take a look at the [Python documentation](https://algorandfoundation.github.io/puya/).
 - More information on Algorand smart contracts is also available in the [smart contract documentation](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/).
