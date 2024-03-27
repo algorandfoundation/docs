@@ -22,8 +22,8 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 ## Install AlgoKit
 
 === "Windows"
-    !!! Note
-        This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+!!! Note
+This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
 
     - Ensure prerequisites are installed
         - [Git](https://github.com/git-guides/install-git#install-git-on-windows) (or `winget install git.git`)
@@ -35,7 +35,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
     - Install Python3 using WinGet
         - Install python: `winget install python.python.3.12`
         - Restart the terminal to ensure Python and pip are available on the path
-            
+
             !!! Info
                 Windows has a feature called **App Execution Aliases** that provides redirects for the Python command that guide users to the Windows Store. unfortunately these aliases can prevent normal execution of Python if Python is installed via other means, to disable them search for **Manage app execution aliases** from the start menu, and then turn off entries listed as **App Installer python.exe** or **App Installer python3.exe**.
 
@@ -48,12 +48,12 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
         - Install AlgoKit via pipx: `pipx install algokit`
         - If you used AlgoKit before, update it with pipx: `pipx upgrade algokit`
         - Restart the terminal to ensure AlgoKit is available on the path
-    
+
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/22RvINnZsRo" title="Installing AlgoKit on Windows" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 === "macOS"
-    !!! Note
-        This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
+!!! Note
+This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
 
     - Ensure prerequisites are installed
 
@@ -69,8 +69,7 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
 
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/zsurtpCGmgE" title="Installing AlgoKit on macOS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-=== "Linux"
-    - Ensure prerequisites are installed
+=== "Linux" - Ensure prerequisites are installed
 
         - [Python 3.12+](https://www.python.org/downloads/)
 
@@ -80,10 +79,10 @@ The Algorand AlgoKit CLI is the one-stop shop tool for developers building on th
         - [pipx](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
         - [Git](https://github.com/git-guides/install-git#install-git-on-linux)
         - [Docker](https://docs.docker.com/desktop/install/linux-install/)
-    - Continue with step 2 in the following section to install via `pipx` on any OS 
+    - Continue with step 2 in the following section to install via `pipx` on any OS
 
 === "OS agnostic"
-    To install AlgoKit, run the following command from a terminal.
+To install AlgoKit, run the following command from a terminal.
 
     ```shell
     pipx install algokit
@@ -129,21 +128,21 @@ Now that AlgoKit is installed, you can rapidly create a new project to get start
 algokit init
 ```
 
-This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For now, use the arrow keys to select the `playground` template, which is a lightweight starting point for learning and experimentation.
+This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For now, use the arrow keys to select the `starter` template, which is a lightweight starting point for learning and experimentation.
 
 Next, you will be prompted for the name of your project. Finally, select the default value for the rest of the prompts (enter).
 
 Once finished, (if you have it installed) VS Code should automatically be opened with the initialised project and you will be prompted to install appropriate VS Code extensions. This starter app will contain one smart contract (built with [Python](https://algorandfoundation.github.io/puya/) named `contract.py`, in the `hello_world` folder, with one method (`hello`) that takes a `String` and returns a `String`.
 
-![AlgoKit Playground Contract](../imgs/algokitplayground.png)
+![AlgoKit Starter Contract](../imgs/algokitv2_starter.png)
 
 ## Run the Demo Application
 
-Once the playground project is created, you will notice in the `hello_world` folder a file named `demo.py` which is a simple example of using AlgoKit to deploy and make a call to the `helloworld.py` smart contract on the LocalNet instance started earlier.
+Once the starter project is created, you will notice in the `smart_contracts/hello_world` folder a file named `deploy_config.py` which is a simple example of using AlgoKit to deploy and make a call to the `contract.py` smart contract on the LocalNet instance started earlier.
 
-![AlgoKit Playground Demo](../imgs/algokitdemo.png)
+![AlgoKit Starter config ](../imgs/algokit_v2_demo.png)
 
-Right clicking on this file and selecting `Run Python File in Terminal` will deploy the `HelloWorldApp` smart contract and then call it passing the parameter `name` with a value of `Beaker`. Alternatively, you can hit F5 (or whatever keyboard shortcut is set in VS Code for running the debugger) while you are viewing the `helloworld.py` file and it will:
+By hitting F5 you will deploy the `HelloWorldApp` smart contract and then call it passing the parameter `name` with a value of `world`. You can edit this parameter in the `deploy_config.py` file and it will:
 
 1. Start LocalNet
 2. Build the smart contract
@@ -152,24 +151,20 @@ Right clicking on this file and selecting `Run Python File in Terminal` will dep
 This should produce something similiar to the following in the VSCode terminal.
 
 ```shell
-(playground-py3.11) User@Algo-User-MBP myalgokit project % "/Users/user/code/algokit/myalgokit pro
-ject/.venv/bin/python" "/Users/user/code/algokit/myalgokit project/playground/hello_world/demo.py"
-Deployed app in txid SBNIJYZUOXVPXDFJHAVDDCO5TQ4WZ7P37QOOQM6CSVSMIURETHNQ
-        App ID: 11
-        Address: 377KDIVHB7K2LFFJIPUPQFWJGVD36MAP4EI6Y2HAGRAW6JPK4MDUBC3YVY
-
-Hello, Beaker
+HelloWorld not found in PDEEWXLITMAPDMDYGP4XUV2EUJVPNZVKR7OUSSFZ63U4XNL2Y25FN5PYN4 account, deploying app.
+HelloWorld (v1.0) deployed successfully, with app id 1002.
+Called hello on HelloWorld (1002) with name=world, received: Hello, world
 ```
 
-The App ID of of the deployed contract and its Algorand address is displayed, followed by the message returned from the smart contract call (`Hello, Beaker`).
+The App ID of of the deployed contract and its Algorand address is displayed, followed by the message returned from the smart contract call (`Hello, world`).
 
 At this point you have deployed a simple contract to an Algorand network and called it successfully!
 
 Additionally, you can find the native TEAL smart contract code and the appropriate smart contract manifest JSON files have been output to the `artifacts` folder.
 
-![AlgoKit Playground Demo](../imgs/algokitartifacts.png)
+![AlgoKit Starter Demo](../imgs/algokitv2_json.png)
 
-Running the `build.py` python file will also generate these artifacts without deploying. These files can be used by tools like [Dappflow](https://dappflow.org/), [goal](https://developer.algorand.org/docs/clis/goal/goal/), etc. to deploy your smart contract to the various Algorand networks.
+These files can be used by tools like [Dappflow](https://dappflow.org/), [goal](https://developer.algorand.org/docs/clis/goal/goal/), etc. to deploy your smart contract to the various Algorand networks.
 
 ## Using Dappflow
 
@@ -181,7 +176,7 @@ Dappflow can be launched from AlgoKit by running the following command from the 
 algokit explore
 ```
 
-By default it will open Dappflow to point to LocalNet (It will be displayed as `sandnet-v1` in the upper left hand corner.), but you can pass in parameters to point it to TestNet and MainNet too.
+By default it will open Dappflow to point to LocalNet (It will be displayed as `sandbox` in the upper left hand corner.), but you can pass in parameters to point it to TestNet and MainNet too.
 
 This command will launch your default web browser and load the Dappflow web application.
 
@@ -201,7 +196,7 @@ In the bottom left hand corner of the menu, select `Connect wallet` and you will
 
 ### Deploy the Hello World application
 
-To deploy the built Beaker smart contract application, select the `Beaker studio` menu and click on the import beaker app. Select `File` and `Upload file`, browse to the artifacts created in the previous section of this guide. Select the `application.json` manifest file. This will load the specific manifest file for the Hello World sample application.
+To deploy the built Beaker smart contract application, select the `Beaker studio` menu and click on the import beaker app. Select `File` and `Upload file`, browse to the artifacts created in the previous section of this guide. Select the `*.arc32.json` manifest file. This will load the specific manifest file for the Hello World sample application.
 
 ![AlgoKit Dappflow](../imgs/dappflow3.png)
 
