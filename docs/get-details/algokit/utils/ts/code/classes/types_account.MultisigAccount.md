@@ -165,7 +165,7 @@ Sign the given transaction
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transaction` | `Uint8Array` \| `Transaction` | Either a transaction object or a raw, partially signed transaction |
+| `transaction` | `Transaction` \| `Uint8Array` | Either a transaction object or a raw, partially signed transaction |
 
 #### Returns
 

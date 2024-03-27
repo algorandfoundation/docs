@@ -4,6 +4,8 @@
 
 [types/debugging](../modules/types_debugging.md).AVMDebuggerSourceMapEntry
 
+AVM debugger source map entry class.
+
 ## Table of contents
 
 ### Constructors
@@ -26,12 +28,14 @@
 
 • **new AVMDebuggerSourceMapEntry**(`location`, `programHash`): [`AVMDebuggerSourceMapEntry`](types_debugging.AVMDebuggerSourceMapEntry.md)
 
+Create an AVM debugger source map entry.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `location` | `string` |
-| `programHash` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `location` | `string` | The location of the file the source map is for. |
+| `programHash` | `string` | The hash of the TEAL binary. |
 
 #### Returns
 
@@ -39,7 +43,7 @@
 
 #### Defined in
 
-[src/types/debugging.ts:12](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L12)
+[src/types/debugging.ts:23](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L23)
 
 ## Properties
 
@@ -47,9 +51,11 @@
 
 • **location**: `string`
 
+The location of the file the source map is for.
+
 #### Defined in
 
-[src/types/debugging.ts:13](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L13)
+[src/types/debugging.ts:24](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L24)
 
 ___
 
@@ -57,9 +63,11 @@ ___
 
 • **programHash**: `string`
 
+The hash of the TEAL binary.
+
 #### Defined in
 
-[src/types/debugging.ts:14](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L14)
+[src/types/debugging.ts:25](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L25)
 
 ## Methods
 
@@ -79,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/types/debugging.ts:17](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L17)
+[src/types/debugging.ts:28](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L28)
 
 ___
 
@@ -93,4 +101,4 @@ ___
 
 #### Defined in
 
-[src/types/debugging.ts:21](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L21)
+[src/types/debugging.ts:32](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L32)

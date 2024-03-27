@@ -26,6 +26,7 @@ Parameters that are passed in when updating an app.
 - [maxFee](types_app.UpdateAppParams.md#maxfee)
 - [maxRoundsToWaitForConfirmation](types_app.UpdateAppParams.md#maxroundstowaitforconfirmation)
 - [note](types_app.UpdateAppParams.md#note)
+- [populateAppCallResources](types_app.UpdateAppParams.md#populateappcallresources)
 - [skipSending](types_app.UpdateAppParams.md#skipsending)
 - [skipWaiting](types_app.UpdateAppParams.md#skipwaiting)
 - [suppressLog](types_app.UpdateAppParams.md#suppresslog)
@@ -186,6 +187,22 @@ CreateOrUpdateAppParams.note
 #### Defined in
 
 [src/types/app.ts:131](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/app.ts#L131)
+
+___
+
+### populateAppCallResources
+
+• `Optional` **populateAppCallResources**: `boolean`
+
+**WARNING**: Not recommended for production use due to https://github.com/algorand/go-algorand/issues/5914. Whether to use simulate to automatically populate app call resources in the txn objects. Defaults to true when there are app calls in the group.
+
+#### Inherited from
+
+CreateOrUpdateAppParams.populateAppCallResources
+
+#### Defined in
+
+[src/types/transaction.ts:45](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L45)
 
 ___
 

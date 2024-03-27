@@ -18,13 +18,13 @@
 
 ### subsignature
 
-• **subsignature**: [`MultisigTransactionSubSignature`](types_indexer.MultisigTransactionSubSignature.md)
+• **subsignature**: [`MultisigTransactionSubSignature`](types_indexer.MultisigTransactionSubSignature.md)[]
 
 [subsig] Holds pairs of public key and signatures.
 
 #### Defined in
 
-[src/types/indexer.ts:413](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L413)
+[src/types/indexer.ts:593](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L593)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:415](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L415)
+[src/types/indexer.ts:595](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L595)
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 #### Defined in
 
-[src/types/indexer.ts:417](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L417)
+[src/types/indexer.ts:597](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/indexer.ts#L597)

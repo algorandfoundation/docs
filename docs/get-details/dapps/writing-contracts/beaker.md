@@ -1,5 +1,8 @@
 title: Beaker
 
+!!! note
+For a native Python experience, checkout our [Algorand Python](https://algorandfoundation.github.io/puya/) docs.
+
 Beaker is a framework for building Smart Contracts using PyTeal. Beaker is designed to simplify writing, testing and deploying Algorand smart contracts. The Beaker source code available on [github](https://github.com/algorand-devrel/beaker). 
 
 This page provides an overview of the features available in Beaker. For complete details see the [Beaker's documentation](https://beaker.algo.xyz). 

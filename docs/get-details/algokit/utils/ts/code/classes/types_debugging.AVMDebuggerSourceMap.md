@@ -4,6 +4,8 @@
 
 [types/debugging](../modules/types_debugging.md).AVMDebuggerSourceMap
 
+AVM debugger source map class.
+
 ## Table of contents
 
 ### Constructors
@@ -37,7 +39,7 @@
 
 #### Defined in
 
-[src/types/debugging.ts:29](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L29)
+[src/types/debugging.ts:47](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L47)
 
 ## Properties
 
@@ -47,7 +49,7 @@
 
 #### Defined in
 
-[src/types/debugging.ts:27](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L27)
+[src/types/debugging.ts:41](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L41)
 
 ## Methods
 
@@ -55,13 +57,17 @@
 
 ▸ **toDict**(): [`AVMDebuggerSourceMapDict`](../interfaces/types_debugging.AVMDebuggerSourceMapDict.md)
 
+Converts the source map to a dictionary that can be passed around and then parsed back using `AVMDebuggerSourceMap.fromDict`.
+
 #### Returns
 
 [`AVMDebuggerSourceMapDict`](../interfaces/types_debugging.AVMDebuggerSourceMapDict.md)
 
+The dictionary
+
 #### Defined in
 
-[src/types/debugging.ts:39](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L39)
+[src/types/debugging.ts:66](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L66)
 
 ___
 
@@ -69,16 +75,20 @@ ___
 
 ▸ **fromDict**(`data`): [`AVMDebuggerSourceMap`](types_debugging.AVMDebuggerSourceMap.md)
 
+Creates a source map from a dictionary of source map data.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `data` | [`AVMDebuggerSourceMapDict`](../interfaces/types_debugging.AVMDebuggerSourceMapDict.md) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | [`AVMDebuggerSourceMapDict`](../interfaces/types_debugging.AVMDebuggerSourceMapDict.md) | The data |
 
 #### Returns
 
 [`AVMDebuggerSourceMap`](types_debugging.AVMDebuggerSourceMap.md)
 
+The source map
+
 #### Defined in
 
-[src/types/debugging.ts:33](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L33)
+[src/types/debugging.ts:56](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/debugging.ts#L56)

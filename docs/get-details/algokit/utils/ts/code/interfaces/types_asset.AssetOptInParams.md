@@ -26,6 +26,7 @@ Parameters for `assetOptIn` call.
 - [maxFee](types_asset.AssetOptInParams.md#maxfee)
 - [maxRoundsToWaitForConfirmation](types_asset.AssetOptInParams.md#maxroundstowaitforconfirmation)
 - [note](types_asset.AssetOptInParams.md#note)
+- [populateAppCallResources](types_asset.AssetOptInParams.md#populateappcallresources)
 - [skipSending](types_asset.AssetOptInParams.md#skipsending)
 - [skipWaiting](types_asset.AssetOptInParams.md#skipwaiting)
 - [suppressLog](types_asset.AssetOptInParams.md#suppresslog)
@@ -142,6 +143,22 @@ The (optional) transaction note
 #### Defined in
 
 [src/types/asset.ts:15](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/asset.ts#L15)
+
+___
+
+### populateAppCallResources
+
+• `Optional` **populateAppCallResources**: `boolean`
+
+**WARNING**: Not recommended for production use due to https://github.com/algorand/go-algorand/issues/5914. Whether to use simulate to automatically populate app call resources in the txn objects. Defaults to true when there are app calls in the group.
+
+#### Inherited from
+
+[SendTransactionParams](types_transaction.SendTransactionParams.md).[populateAppCallResources](types_transaction.SendTransactionParams.md#populateappcallresources)
+
+#### Defined in
+
+[src/types/transaction.ts:45](https://github.com/algorandfoundation/algokit-utils-ts/blob/main/src/types/transaction.ts#L45)
 
 ___
 
