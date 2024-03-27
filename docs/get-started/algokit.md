@@ -22,8 +22,8 @@ In addition, AlgoKit features:
 ## Install AlgoKit
 
 === "Windows"
-!!! Note
-This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+    !!! Note
+        This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
 
     - Ensure prerequisites are installed
         - [Git](https://github.com/git-guides/install-git#install-git-on-windows) (or `winget install git.git`)
@@ -52,8 +52,8 @@ This method will install the most recent python3 version [via winget](https://le
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/22RvINnZsRo" title="Installing AlgoKit on Windows" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 === "macOS"
-!!! Note
-This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
+    !!! Note
+        This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
 
     - Ensure prerequisites are installed
 
@@ -69,7 +69,8 @@ This method will install the latest Python3 release as a dependency via Homebrew
 
     <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/zsurtpCGmgE" title="Installing AlgoKit on macOS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-=== "Linux" - Ensure prerequisites are installed
+=== "Linux"
+    - Ensure prerequisites are installed
 
         - [Python 3.12+](https://www.python.org/downloads/)
 
@@ -82,7 +83,7 @@ This method will install the latest Python3 release as a dependency via Homebrew
     - Continue with step 2 in the following section to install via `pipx` on any OS
 
 === "OS agnostic"
-To install AlgoKit, run the following command from a terminal.
+    To install AlgoKit, run the following command from a terminal.
 
     ```shell
     pipx install algokit
