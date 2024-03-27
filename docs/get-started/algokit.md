@@ -1,11 +1,11 @@
 title: AlgoKit Quick Start Guide
 
-The Algorand AlgoKit CLI is the one-stop shop tool for developers building on the Algorand network. The goal of AlgoKit is to help developers build and launch secure, automated production-ready applications rapidly. AlgoKit contains these components:
-
-- Smart contract templates - kickstart your dApp by selecting from our template library
-- Web3 infrastructure - all the network, database, wallet, block explorer and APIs running locally
-- Toolchain integrations - for languages you love: Python and Typescript
-- React component generation - frontend design simplified using components generated for each contract method call
+AlgoKit is a simple, one-stop tool for developers to quickly and easily build and launch secure, automated, production-ready decentralized applications on the Algorand protocol -- now also featuring native support for Python! This empowers developers to write Algorand apps in regular Python, one of the world's most popular programming languages.
+In addition, AlgoKit features:
+- A library of smart contract templates to kickstart your  build
+- All necessary application infrastructure running locally
+- Toolchain integrations for languages you love, like Python and TypeScript
+- A simplified frontend design experience
 
 ## 10 minute video walkthrough
 
