@@ -16,30 +16,48 @@ This guide explains how to install the Algorand Node software on Linux distribut
 !!! tip
     If you are a developer and want to use a private network, [AlgoKit](/docs/get-started/algokit) is often simpler than installing a node manually. However, it is still recommended to install the Algorand software without running a node, to get access to the developer tools such as `msgpacktool` and `algokey`.
 
-### Hardware requirements
+### Hardware Requirements
 
-(Last update to this section: November 3, 2022.)
+(Last update to this section: April 3, 2024.)
 
 Due to the higher TPS on MainNet, to successfully run an Algorand MainNet node, the following hardware is necessary:
 
-* at least 4GB of RAM (8GB strongly recommended)
-* a not-too-slow SSD: HDD and SD cards are too slow for a MainNet node and will most likely prevent the node to sync
+* 8GB of RAM (Some node operators successfully use 4GB, but it requires additional memory management and may still lag behind during extremely high network activity)
+* A not-too-slow SSD: HDD and SD cards are too slow for a MainNet node and will most likely prevent the node to sync
 * at least 100Mbps connection (1Gbps recommended)
 
 Participation nodes (especially those with high stake) and relays have higher requirements to ensure the performance of the overall blockchain.
 
-Recommended system specification for participation nodes is:
+Recommended system specification for **participation** nodes is:
 
 * 8 vCPU
 * 16 GB RAM
 * 100 GB NVMe SSD or equivalent
 * 1 Gbps connection with low latency
 
-Recommended system specification for relay nodes is:
+Recommended system specification for **archival non-relay** nodes is:
+
+* 8 vCPU
+* 16 GB RAM
+* 3 TB SSD (blocks and catchpoint storage - `ColdDataDir` in the [configuration file](https://developer.algorand.org/docs/run-a-node/reference/config/#algod-configuration-settings))
+* 100 GB NVMe SSD (accounts - `HotDataDir` in the [configuration file](https://developer.algorand.org/docs/run-a-node/reference/config/#algod-configuration-settings))
+* 5 TB/month egress
+* 1 Gbps connection with low latency
+
+Recommended system specification for **non-archival relay** (aka light relay) nodes is:
 
 * 16 vCPU
 * 32 GB RAM
-* 3 TB NVMe SSD or equivalent
+* 256 GB NVMe SSD or equivalent
+* 30 TB/month egress
+* 1 Gbps connection with very low latency
+
+Recommended system specification for **archival relay** nodes is:
+
+* 16 vCPU
+* 32 GB RAM
+* 3 TB SSD (blocks and catchpoint storage - `ColdDataDir` in the [configuration file](https://developer.algorand.org/docs/run-a-node/reference/config/#algod-configuration-settings))
+* 100 GB NVMe SSD (accounts - `HotDataDir` in the [configuration file](https://developer.algorand.org/docs/run-a-node/reference/config/#algod-configuration-settings))
 * 30 TB/month egress
 * 1 Gbps connection with very low latency
 
