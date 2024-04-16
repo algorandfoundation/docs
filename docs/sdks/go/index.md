@@ -1,4 +1,4 @@
-title: Your First Transaction
+title: Go SDK: Your First Transaction
 
 This section is a quick start guide for interacting with the Algorand network using Go. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the Go SDK, create an account and submit your first transaction on Algorand.  
  
