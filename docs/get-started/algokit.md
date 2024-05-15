@@ -7,10 +7,6 @@ In addition, AlgoKit features:
 - Toolchain integrations for languages you love, like Python and TypeScript
 - A simplified frontend design experience
 
-## 10 minute video walkthrough
-
-<iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/MzBRef_Res8" title="Learn How to Build on Algorand in 10 Minutes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
 ## Prerequisites
 
 - [Python 3.12](https://www.python.org/downloads/) or higher
@@ -49,8 +45,6 @@ In addition, AlgoKit features:
         - If you used AlgoKit before, update it with pipx: `pipx upgrade algokit`
         - Restart the terminal to ensure AlgoKit is available on the path
 
-    <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/22RvINnZsRo" title="Installing AlgoKit on Windows" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
 === "macOS"
     !!! Note
         This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
@@ -67,7 +61,6 @@ In addition, AlgoKit features:
     - Install using Homebrew `brew install algorandfoundation/tap/algokit`
     - Restart the terminal to ensure AlgoKit is available on the path
 
-    <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube-nocookie.com/embed/zsurtpCGmgE" title="Installing AlgoKit on macOS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 === "Linux"
     - Ensure prerequisites are installed
