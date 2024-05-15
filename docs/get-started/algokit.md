@@ -190,7 +190,7 @@ In the bottom left hand corner of the menu, select `Connect wallet` and you will
 
 ### Deploy the Hello World application
 
-To deploy the built Beaker smart contract application, select the `Beaker studio` menu and click on the import beaker app. Select `File` and `Upload file`, browse to the artifacts created in the previous section of this guide. Select the `*.arc32.json` manifest file. This will load the specific manifest file for the Hello World sample application.
+To deploy your smart contract application, select the `Beaker studio` menu and click on the import beaker app. Select `File` and `Upload file`, browse to the artifacts created in the previous section of this guide. Select the `*.arc32.json` manifest file. This will load the specific manifest file for the Hello World sample application.
 
 ![AlgoKit Dappflow](../imgs/dappflow3.png)
 
