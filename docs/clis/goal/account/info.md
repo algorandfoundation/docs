@@ -34,7 +34,7 @@ goal account info [flags]
 
   -h, --help               help for info
 
-      --onlyShowAssetIds   Only show ASA IDs and not pull asset metadata
+      --onlyShowAssetIDs   Only show ASA IDs and not pull asset metadata
 
 ```
 
