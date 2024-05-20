@@ -246,6 +246,58 @@ Given a specific account public key and application ID, this call returns the ac
 * public
 
 
+<a name="accountassetsinformation"></a>
+### GET /v2/accounts/{address}/assets
+Get a list of assets held by an account, inclusive of asset params.
+```
+GET /v2/accounts/{address}/assets
+```
+
+
+**Description**
+Lookup an account's asset holdings.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**address**  <br>*required*|An account public key|string|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|AccountAssetsInformationResponse contains a list of assets held by an account.|[Response 200](#accountassetsinformation-response-200)|
+|**400**|Malformed address|[ErrorResponse](#errorresponse)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+|**default**|Unknown Error|No Content|
+
+<a name="accountassetsinformation-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**asset-holdings**  <br>*optional*||< [AccountAssetHolding](#accountassetholding) > array|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+|**round**  <br>*required*|The round for which this information is relevant.|integer|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* experimental
+* public
+
+
 <a name="accountassetinformation"></a>
 ### GET /v2/accounts/{address}/assets/{asset-id}
 Get account information about a given asset.
@@ -647,6 +699,54 @@ GET /v2/blocks/{round}/lightheader/proof
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
 |**503**|Service Temporarily Unavailable|[ErrorResponse](#errorresponse)|
 |**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* nonparticipating
+* public
+
+
+<a name="getblocklogs"></a>
+### GET /v2/blocks/{round}/logs
+Get all of the logs from outer and inner app calls in the given round
+```
+GET /v2/blocks/{round}/logs
+```
+
+
+**Description**
+Get all of the logs from outer and inner app calls in the given round
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**round**  <br>*required*|The round from which to fetch block log information.|integer|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|All logs emitted in the given round. Each app call, whether top-level or inner, that contains logs results in a separate AppCallLogs object. Therefore there may be multiple AppCallLogs with the same application ID and outer transaction ID in the event of multiple inner app calls to the same app. App calls with no logs are not included in the response. AppCallLogs are returned in the same order that their corresponding app call appeared in the block (pre-order traversal of inner app calls)|[Response 200](#getblocklogs-response-200)|
+|**400**|Bad Request - Non integer number|[ErrorResponse](#errorresponse)|
+|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**404**|Nonexistent block|[ErrorResponse](#errorresponse)|
+|**500**|Internal Error|[ErrorResponse](#errorresponse)|
+
+<a name="getblocklogs-response-200"></a>
+**Response 200**
+
+|Name|Schema|
+|---|---|
+|**logs**  <br>*required*|< [AppCallLogs](#appcalllogs) > array|
 
 
 **Produces**
@@ -2212,6 +2312,9 @@ data/basics/userBalance.go : AccountData
 |**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
 |**created-apps**  <br>*optional*|\[appp\] parameters of applications created by this account including app global data.<br><br>Note: the raw account uses `map[int] -> AppParams` for this type.|< [Application](#application) > array|
 |**created-assets**  <br>*optional*|\[apar\] parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
+|**incentive-eligible**  <br>*optional*|Whether or not the account can receive block incentives if its balance is in range at proposal time.|boolean|
+|**last-heartbeat**  <br>*optional*|The round in which this account last went online, or explicitly renewed their online status.|integer|
+|**last-proposed**  <br>*optional*|The round in which this account last proposed the block.|integer|
 |**min-balance**  <br>*required*|MicroAlgo balance required by the account.<br><br>The requirement grows based on asset and application usage.|integer|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
 |**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
@@ -2226,6 +2329,17 @@ data/basics/userBalance.go : AccountData
 |**total-boxes**  <br>*optional*|\[tbx\] The number of existing boxes created by this account's app.|integer|
 |**total-created-apps**  <br>*required*|The count of all apps (AppParams objects) created by this account.|integer|
 |**total-created-assets**  <br>*required*|The count of all assets (AssetParams objects) created by this account.|integer|
+
+
+<a name="accountassetholding"></a>
+### AccountAssetHolding
+AccountAssetHolding describes the account's asset holding and asset parameters (if either exist) for a specific asset ID.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**asset-holding**  <br>*required*|\[asset\] Details about the asset held by this account.<br><br>The raw account uses `AssetHolding` for this type.|[AssetHolding](#assetholding)|
+|**asset-params**  <br>*optional*|\[apar\] parameters of the asset held by this account.<br><br>The raw account uses `AssetParams` for this type.|[AssetParams](#assetparams)|
 
 
 <a name="accountparticipation"></a>
@@ -2252,6 +2366,18 @@ Application state delta.
 |---|---|
 |**address**  <br>*required*|string|
 |**delta**  <br>*required*|[StateDelta](#statedelta)|
+
+
+<a name="appcalllogs"></a>
+### AppCallLogs
+The logged messages from an app call along with the app ID and outer transaction ID. Logs appear in the same order that they were emitted.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**application-index**  <br>*required*|The application from which the logs were generated|integer|
+|**logs**  <br>*required*|An array of logs|< string (byte) > array|
+|**txId**  <br>*required*|The transaction ID of the outer app call that lead to these logs|string|
 
 
 <a name="application"></a>

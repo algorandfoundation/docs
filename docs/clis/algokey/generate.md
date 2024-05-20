@@ -22,8 +22,6 @@ algokey generate [flags]
 
 ```
 
-      --discreet            Print mnemonic discreetly to an alternate screen
-
   -h, --help                help for generate
 
   -f, --keyfile string      Private key filename
