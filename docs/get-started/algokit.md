@@ -9,7 +9,7 @@ In addition, AlgoKit features:
 
 ## Prerequisites
 
-- [Python 3.12](https://www.python.org/downloads/) or higher
+- [Python 3.12](https://www.python.org/downloads/)`/admin`. or higher
 - [PipX](https://pypa.github.io/pipx/#on-linux-install-via-pip-requires-pip-190-or-later)
 - [Git](https://github.com/git-guides/install-git#install-git)
 - [Docker](https://docker.com/download/)
