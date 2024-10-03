@@ -58,6 +58,7 @@ goal node [flags]
 * [goal node catchup](../catchup/)	 - Catchup the Algorand node to a specific catchpoint
 * [goal node clone](../clone/)	 - Clone the specified node to create another node
 * [goal node create](../create/)	 - Create a node at the desired data directory for the desired network
+* [goal node generate-p2pid](../generate-p2pid/)	 - Generate a new p2p private key
 * [goal node generatetoken](../generatetoken/)	 - Generate and install a new API token
 * [goal node lastround](../lastround/)	 - Print the last round number
 * [goal node pendingtxns](../pendingtxns/)	 - Get a snapshot of current pending transactions on this node
