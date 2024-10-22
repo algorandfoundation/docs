@@ -313,7 +313,7 @@ Copy the contents of the doctor message (in Markdown format) in your clipboard.
 
 ## explore
 
-Explore the specified network in the browser using Dappflow.
+Explore the specified network in the browser using Lora.
 
 ```shell
 algokit explore [OPTIONS] [[localnet|testnet|mainnet]]
@@ -482,7 +482,7 @@ algokit localnet console [OPTIONS]
 
 ### explore
 
-Explore the AlgoKit LocalNet using Dappflow
+Explore the AlgoKit LocalNet using Lora
 
 ```shell
 algokit localnet explore [OPTIONS]
