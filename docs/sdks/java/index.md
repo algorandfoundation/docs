@@ -1,6 +1,6 @@
 title: Java SDK: Your First Transaction
 
-This section is a quick start guide for interacting with Algorand network using Java. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the Java SDK, create an account and submit your first transaction.
+This section is a quick start guide for interacting with Algorand network using Java. This guide will help to install [Algorand sandbox](https://github.com/algorand/sandbox){target=blank}, which provides a node for testing and development. This guide will also help to install the Java SDK, create an account and submit your first transaction.
 
 # Install Sandbox
 
@@ -8,8 +8,8 @@ This section is a quick start guide for interacting with Algorand network using 
     This step is only required if you are not using AlgoKit. If you are using AlgoKit, you can spin up a sandbox using the LocalNet, see [AlgoKit getting started guide](/docs/get-started/algokit/#start-a-localnet) for more information. 
 
 !!! Prerequisites
-    - Docker Compose ([install guide](https://docs.docker.com/compose/install/){:target="_blank"})
-    - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){:target="_blank"})
+    - Docker Compose ([install guide](https://docs.docker.com/compose/install/){target=blank})
+    - Git ([install guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){target=blank})
 
 Algorand provides a docker instance for setting up a node, which can be used to get started developing. To install and use this instance, follow these instructions.
 
@@ -28,7 +28,7 @@ This will install and start private network. To read more about Algorand network
 Algorand provides an [SDK for Java](https://github.com/algorand/java-algorand-sdk). The instructions for installing the SDK are as follows. The Java SDK is available in the MVN repository and can be used in your Maven project by including the following dependency.
 
 !!! Prerequisites
-    Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){:target="_blank"}.
+    Java SDK requires Java 7+ and Android minSdkVersion 16+. Check for the latest version of the Java SDK [here](https://github.com/algorand/java-algorand-sdk#installation){target=blank}.
 
 ```java
 <dependency>
@@ -40,7 +40,7 @@ Algorand provides an [SDK for Java](https://github.com/algorand/java-algorand-sd
 
 The [GitHub repository](https://github.com/algorand/js-algorand-sdk){target=_blank} contains additional documentation and examples.
 
-See the Java SDK [reference documentation](https://algorand.github.io/java-algorand-sdk/){:target="_blank"} for more information on packages and methods.
+See the Java SDK [reference documentation](https://algorand.github.io/java-algorand-sdk/){target=blank} for more information on packages and methods.
 
 The SDK is installed and can now interact with the Sandbox created earlier.
 
@@ -56,17 +56,17 @@ System.out.println("Passphrase: " + acct.toMnemonic());
 [Snippet Source](https://github.com/algorand/java-algorand-sdk/blob/examples/examples/src/main/java/com/algorand/examples/Overview.java#L76-L79)
 <!-- ===JAVASDK_ACCOUNT_GENERATE=== -->
 
-[More Information](../../get-details/accounts/create/#standalone){:target="_blank"}
+[More Information](../../get-details/accounts/create/#standalone){target=blank}
 
 !!! Warning
-    Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](../../../../ecosystem-projects/#wallets){:target="_blank"}. For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/){:target="_blank"}, click [here](https://github.com/algorand/algorand-wallet){:target="_blank"}.
+    Never share Mnemonic private keys. Production environments require stringent private key management. For more information on key management in community Wallets, click [here](../../../../ecosystem-projects/#wallets){target=blank}. For the [Algorand open source wallet](https://developer.algorand.org/articles/algorand-wallet-now-open-source/){target=blank}, click [here](https://github.com/algorand/algorand-wallet){target=blank}.
 
 # Fund the Account
 Before sending transactions to the Algorand network, the account must be funded to cover the minimal transaction fees that exist on Algorand. In this example, we'll be using prefunded accounts available in the Sandbox. To fund an account on Testnet account use the [Algorand faucet](https://dispenser.testnet.aws.algodev.network/){target=_blank}. 
 
 
 !!! Info
-    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](../../get-details/accounts/#minimum-balance){:target="_blank"}.
+    All Algorand accounts require a minimum balance to be registered in the ledger. To read more about Algorand minimums see this [link](../../get-details/accounts/#minimum-balance){target=blank}.
 
 
 # Connect Your Client
@@ -138,7 +138,7 @@ SignedTransaction sptxn = acct.signTransaction(ptxn);
 <!-- ===JAVASDK_TRANSACTION_PAYMENT_SIGN=== -->
 
 !!! Info
-    Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](../../get-details/transactions/signatures){:target="_blank"}.
+    Algorand provides additional ways for transactions to be signed, other than by a standalone account. For more information see [Authorization](../../get-details/transactions/signatures){target=blank}.
 
 # Submit the Transaction
 The signed transaction can now be submitted to the network. The SDK `waitForConfirmation` utility function is called after the transaction is submitted to wait until the transaction is broadcast to the Algorand blockchain and is confirmed. 
@@ -161,4 +161,4 @@ System.out.printf("Transaction %s confirmed in round %d\n", txid, result.confirm
 
 To view the transaction we submitted to the sandbox Algod, open [Lora](https://lora.algokit.io/localnet){target=_blank} and choose `LocalNet` configuration option, then search for the transaction ID. 
 
-To view a transaction submitted to public network like testnet, open [Lora](https://lora.algokit.io/testnet){target=_blank} or [Pera Explorer](https://testnet.explorer.perawallet.app/){:target="_blank"} and paste the transaction ID into the search bar.
+To view a transaction submitted to public network like testnet, open [Lora](https://lora.algokit.io/testnet){target=_blank} or [Pera Explorer](https://testnet.explorer.perawallet.app/){target=blank} and paste the transaction ID into the search bar.
