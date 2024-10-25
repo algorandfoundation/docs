@@ -1,7 +1,9 @@
 title: AlgoKit Quick Start Guide
 
 AlgoKit is a simple, one-stop tool for developers to quickly and easily build and launch secure, automated, production-ready decentralized applications on the Algorand protocol -- now also featuring native support for Python! This empowers developers to write Algorand apps in regular Python, one of the world's most popular programming languages.
+
 In addition, AlgoKit features:
+
 - A library of smart contract templates to kickstart your  build
 - All necessary application infrastructure running locally
 - Toolchain integrations for languages you love, like Python and TypeScript
@@ -122,11 +124,16 @@ Now that AlgoKit is installed, you can rapidly create a new project to get start
 algokit init
 ```
 
-This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For now, use the arrow keys to select the `starter` template, which is a lightweight starting point for learning and experimentation.
+This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For this guide, we will use the Python smart contract starter template. Select the following options:
+1. `Smart Contracts`
+2. `Python`
+3. name of your project: `DEMO`
+4. Template preset: select `Starter`.
+5. Contract deployment code: select `Python`
+6. algokit project bootstrap: `Y`
+7. git repository: `Y`
 
-Next, you will be prompted for the name of your project. Finally, select the default value for the rest of the prompts (enter).
-
-Once finished, (if you have it installed) VS Code should automatically be opened with the initialised project and you will be prompted to install appropriate VS Code extensions. This starter app will contain one smart contract (built with [Python](https://algorandfoundation.github.io/puya/) named `contract.py`, in the `hello_world` folder, with one method (`hello`) that takes a `String` and returns a `String`.
+Once finished, (if you have it installed) VS Code should automatically be opened with the initialized project and you will be prompted to install appropriate VS Code extensions. This starter app will contain one smart contract (built with [Algorand Python](https://algorandfoundation.github.io/puya/) named `contract.py`, in the `hello_world` folder, with one method (`hello`) that takes a `String` and returns a `String`.
 
 ![AlgoKit Starter Contract](../imgs/algokitv2_starter.png)
 
@@ -136,13 +143,20 @@ Once the starter project is created, you will notice in the `smart_contracts/hel
 
 ![AlgoKit Starter config ](../imgs/algokit_v2_demo.png)
 
-By hitting F5 you will deploy the `HelloWorldApp` smart contract and then call it passing the parameter `name` with a value of `world`. You can edit this parameter in the `deploy_config.py` file and it will:
+By hitting F5 you will deploy the `HelloWorld` smart contract and then call it passing the parameter `name` with a value of `world`. You can edit this parameter in the `deploy_config.py` file and it will:
 
 1. Start LocalNet
 2. Build the smart contract
 3. Deploy and call the smart contract (`contract.py`)
 
-This should produce something similiar to the following in the VSCode terminal.
+If you would like to manually build and deploy the `HelloWorld` smart contract run the following AlgoKit commands:
+
+```shell
+algokit project run build
+algokit project run deploy 
+```
+
+This should produce something similar to the following in the VSCode terminal.
 
 ```shell
 HelloWorld not found in PDEEWXLITMAPDMDYGP4XUV2EUJVPNZVKR7OUSSFZ63U4XNL2Y25FN5PYN4 account, deploying app.
@@ -158,55 +172,89 @@ Additionally, you can find the native TEAL smart contract code and the appropria
 
 ![AlgoKit Starter Demo](../imgs/algokitv2_json.png)
 
-These files can be used by tools like [Dappflow](https://dappflow.org/), [goal](https://developer.algorand.org/docs/clis/goal/goal/), etc. to deploy your smart contract to the various Algorand networks.
+These files can be used by tools like [Lora](https://lora.algokit.io/localnet), [goal](https://developer.algorand.org/docs/clis/goal/goal/), etc. to deploy your smart contract to the various Algorand networks.
 
-## Using Dappflow
+## Using Lora
 
-Dappflow is a web-based user interface that let's you visualise accounts, transactions, assets and applications on an Algorand network and also provides ability to deploy and call smart contracts. This works for TestNet, MainNet and also LocalNet. Furthermore, you can also create and fund accounts on LocalNet. While AlgoKit surfaces both a programming interface and a command line interface for interacting with Algorand, it also allows you to quickly open Dappflow so you can see what's happening visually.
+Lora is a web-based user interface that let's you visualize accounts, transactions, assets and applications on an Algorand network and also provides ability to deploy and call smart contracts. This works for TestNet, MainNet and also LocalNet. While AlgoKit surfaces both a programming interface and a command line interface for interacting with Algorand, it also allows you to quickly open Lora so you can see what's happening visually.
 
-Dappflow can be launched from AlgoKit by running the following command from the VS Code terminal.
+Lora can be launched from AlgoKit by running the following command from the terminal.
 
 ```shell
 algokit explore
 ```
 
-By default it will open Dappflow to point to LocalNet (It will be displayed as `sandbox` in the upper left hand corner.), but you can pass in parameters to point it to TestNet and MainNet too.
+By default it will open Lora and point to LocalNet (It will be displayed as `LocalNet` in the upper right hand corner), but you can pass in parameters to point it to TestNet and MainNet too.
 
-This command will launch your default web browser and load the Dappflow web application.
+This command will launch your default web browser and load the Lora web application.
 
 **Note:** If you are using Safari, then it won't work against LocalNet and you will need to open it in a different browser.
 
-![AlgoKit Dappflow](../imgs/dappflow1.png)
+![Lora](../imgs/lora1.png)
 
-### Create test account
+### Create / Connect  local account for testing
 
-To issue commands against the LocalNet network you need an account with ALGOs in it. Dappflow lets you easily create one.
+To issue commands against the LocalNet network you need an account with ALGO in it. Lora gives you three options for connecting to a local wallet: `Connect KMD`, `Connect MNEMONIC`, and `Connect Lute`
 
-Select `Dev Wallets` from the left menu and click on the `Create wallet` button. This will create an account on the LocalNet and fund it with 100 Algos that can be used to test with.
+- `Connect KMD`: Lora will automatically import KMD wallet.
 
-![AlgoKit Dappflow](../imgs/dappflow2.png)
+- `Connect MNEMONIC`: You can manually input a MNEMONIC for an account you own. 
 
-In the bottom left hand corner of the menu, select `Connect wallet` and you will be prompted with several wallet choices. Choose the `Dev Wallet` option. This will connect the account you just created to Dappflow so you can use that account for signing transactions from the Dappflow user interface.
+- `Connect Lute`: You can create local accounts from [Lute](https://lute.app/) and connect to them.
+
+In this guide, we will use the KMD wallet.
+
+Select `Connect wallet` located at top right hand side of the webpage and you will be prompted with the three wallet choices. Choose the `Connect KMD` option. This will prompt you to enter the KMD password. If this is your first time building on Algorand, you do not have a KMD password so leave it blank and click `OK`. This will connect the KMD account to Lora so you can use that account for signing transactions from the Lora user interface.
+
+![Lora](../imgs/lora-wallet.png)
 
 ### Deploy the Hello World application
 
-To deploy your smart contract application, select the `Beaker studio` menu and click on the import beaker app. Select `File` and `Upload file`, browse to the artifacts created in the previous section of this guide. Select the `*.arc32.json` manifest file. This will load the specific manifest file for the Hello World sample application.
+1. To deploy your smart contract application, select the `App Lab` menu and click on the `Create` button. 
+![Lora](../imgs/lora2.png)
 
-![AlgoKit Dappflow](../imgs/dappflow3.png)
+2. Click `Deploy new` and `Select an ARC-32 JSON app spec file` to browse to the artifacts created in the previous section of this guide. Select the `HelloWorld.arc32.json` manifest file. 
+![Lora](../imgs/lora3.png)
+![Lora](../imgs/lora4.png)
+![Lora](../imgs/lora5.png)
 
-To deploy this application again, select the `Create app` button followed by the `Create` button from the popup. You should get a `Transaction successful` message with the option to view the specific transaction in the explorer. Close out of the popup and then scroll down to the `ABI` section of the page. The `hello` method should be displayed with an execute button beside it.
+3. This will load the specific manifest file for the Hello World sample application. Click `Next`.
+![Lora](../imgs/lora6.png)
 
-![AlgoKit Dappflow](../imgs/dappflow4.png)
+4. You can change the `Name` and the `Version` of your app. We will keep it as it is. Click `Next`.
+![Lora](../imgs/lora7.png)
 
-Click on the Execute button and a popup will be displayed allowing you to enter the parameter that we defined in the `HelloWorldApp` smart contract.
+5. Click the `() Call` button. Then build and add the create transaction by clicking `Add`.
+![Lora](../imgs/lora8.png)
+![Lora](../imgs/lora9.png)
 
-![AlgoKit Dappflow](../imgs/dappflow5.png)
 
-Enter a string in the parameter and click on `Execute`. You should get get a confirmation that the method executed properly and what the smart contract returned.
+6. Click `Deploy` and sign the transaction by clicking `OK` in the KMD pop up to deploy the smart contract to the local Algorand network.
+![Lora](../imgs/lora10.png)
 
-![AlgoKit Dappflow](../imgs/dappflow6.png)
+7. You should now see the deployed `HelloWorld` contract on the `App Lab` page. 
+![Lora](../imgs/lora11.png)
 
-You have now successfully deployed and executed a smart contract method call using Dappflow!
+8. Now click on the `App ID` inside of the `HelloWorld` card to go to the `Application` page.
+![Lora](../imgs/lora12.png)
+
+10. Inside the `ABI Methods` section, you should see the `hello` method. Click on the drop down and the `Call` button. You will be prompted with a popup allowing you to enter the parameter for the `hello` method and call it. 
+![Lora](../imgs/lora13.png)
+
+
+11. Enter a string in the `value` input and click on `Add`. 
+![Lora](../imgs/lora14.png)
+
+12. You should now see the transaction you just built on the `Application` page. Click `Send` and sign the transaction with your KMD wallet to execute the transaction.
+![Lora](../imgs/lora15.png)
+
+13. You should now see the `Send Result` showing you the details about the transaction you just executed!
+![Lora](../imgs/lora16.png)
+
+1.  You can also click on `Transaction ID` to go to the `Transaction` page and see the full detail of the transaction.
+![Lora](../imgs/lora17.png)
+
+You have now successfully deployed and executed a smart contract method call using Lora!
 
 ## Next steps
 

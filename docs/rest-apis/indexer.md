@@ -1391,25 +1391,29 @@ data/basics/userBalance.go : AccountData
 |Name|Description|Schema|
 |---|---|---|
 |**address**  <br>*required*|the account public key|string|
-|**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer|
+|**amount**  <br>*required*|total number of MicroAlgos in the account|integer|
 |**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer|
-|**apps-local-state**  <br>*optional*|\[appl\] applications local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalState](#applicationlocalstate) > array|
-|**apps-total-extra-pages**  <br>*optional*|\[teap\] the sum of all extra application program pages for this account.|integer|
-|**apps-total-schema**  <br>*optional*|\[tsch\] stores the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
-|**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
-|**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
+|**apps-local-state**  <br>*optional*|application local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalState](#applicationlocalstate) > array|
+|**apps-total-extra-pages**  <br>*optional*|the sum of all extra application program pages for this account.|integer|
+|**apps-total-schema**  <br>*optional*|the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
+|**assets**  <br>*optional*|assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
+|**auth-addr**  <br>*optional*|The address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
 |**closed-at-round**  <br>*optional*|Round during which this account was most recently closed.|integer|
-|**created-apps**  <br>*optional*|\[appp\] parameters of applications created by this account including app global data.<br><br>Note: the raw account uses `map[int] -> AppParams` for this type.|< [Application](#application) > array|
-|**created-assets**  <br>*optional*|\[apar\] parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
+|**created-apps**  <br>*optional*|parameters of applications created by this account including app global data.<br><br>Note: the raw account uses `map[int] -> AppParams` for this type.|< [Application](#application) > array|
+|**created-assets**  <br>*optional*|parameters of assets created by this account.<br><br>Note: the raw account uses `map[int] -> Asset` for this type.|< [Asset](#asset) > array|
 |**created-at-round**  <br>*optional*|Round during which this account first appeared in a transaction.|integer|
 |**deleted**  <br>*optional*|Whether or not this account is currently closed.|boolean|
+|**incentive-eligible**  <br>*optional*|can the account receive block incentives if its balance is in range at proposal time.|boolean|
+|**last-heartbeat**  <br>*optional*|The round in which this account last went online, or explicitly renewed their online status.|integer|
+|**last-proposed**  <br>*optional*|The round in which this account last proposed the block.|integer|
+|**min-balance**  <br>*required*|MicroAlgo balance required by the account.<br><br>The requirement grows based on asset and application usage.|integer|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
 |**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
-|**reward-base**  <br>*optional*|\[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.|integer|
-|**rewards**  <br>*required*|\[ern\] total rewards of MicroAlgos the account has received, including pending rewards.|integer|
+|**reward-base**  <br>*optional*|used as part of the rewards computation. Only applicable to accounts which are participating.|integer|
+|**rewards**  <br>*required*|total rewards of MicroAlgos the account has received, including pending rewards.|integer|
 |**round**  <br>*required*|The round for which this information is relevant.|integer|
-|**sig-type**  <br>*optional*|Indicates what type of signature is used by this account, must be one of:<br>* sig<br>* msig<br>* lsig<br>* or null if unknown|enum (sig, msig, lsig)|
-|**status**  <br>*required*|\[onl\] delegation status of the account's MicroAlgos<br>* Offline - indicates that the associated account is delegated.<br>*  Online  - indicates that the associated account used as part of the delegation pool.<br>*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
+|**sig-type**  <br>*optional*|the type of signature used by this account, must be one of:<br>* sig<br>* msig<br>* lsig<br>* or null if unknown|enum (sig, msig, lsig)|
+|**status**  <br>*required*|voting status of the account's MicroAlgos<br>* Offline - indicates that the associated account is delegated.<br>*  Online  - indicates that the associated account used as part of the delegation pool.<br>*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
 |**total-apps-opted-in**  <br>*required*|The count of all applications that have been opted in, equivalent to the count of application local data (AppLocalState objects) stored in this account.|integer|
 |**total-assets-opted-in**  <br>*required*|The count of all assets that have been opted in, equivalent to the count of AssetHolding objects held by this account.|integer|
 |**total-box-bytes**  <br>*required*|For app-accounts only. The total number of bytes allocated for the keys and values of boxes which belong to the associated application.|integer|
@@ -1425,12 +1429,12 @@ AccountParticipation describes the parameters used by this account in consensus 
 
 |Name|Description|Schema|
 |---|---|---|
-|**selection-participation-key**  <br>*required*|\[sel\] Selection public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**state-proof-key**  <br>*optional*|\[stprf\] Root of the state proof key (if any)  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**vote-first-valid**  <br>*required*|\[voteFst\] First round for which this participation is valid.|integer|
-|**vote-key-dilution**  <br>*required*|\[voteKD\] Number of subkeys in each batch of participation keys.|integer|
-|**vote-last-valid**  <br>*required*|\[voteLst\] Last round for which this participation is valid.|integer|
-|**vote-participation-key**  <br>*required*|\[vote\] root participation public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**selection-participation-key**  <br>*required*|Selection public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**state-proof-key**  <br>*optional*|Root of the state proof key (if any)  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**vote-first-valid**  <br>*required*|First round for which this participation is valid.|integer|
+|**vote-key-dilution**  <br>*required*|Number of subkeys in each batch of participation keys.|integer|
+|**vote-last-valid**  <br>*required*|Last round for which this participation is valid.|integer|
+|**vote-participation-key**  <br>*required*|root participation public key (if any) currently registered for this round.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="accountstatedelta"></a>
@@ -1454,8 +1458,8 @@ Application index and its parameters
 |**created-at-round**  <br>*optional*|Round when this application was created.|integer|
 |**deleted**  <br>*optional*|Whether or not this application is currently deleted.|boolean|
 |**deleted-at-round**  <br>*optional*|Round when this application was deleted.|integer|
-|**id**  <br>*required*|\[appidx\] application index.|integer|
-|**params**  <br>*required*|\[appparams\] application parameters.|[ApplicationParams](#applicationparams)|
+|**id**  <br>*required*|application index.|integer|
+|**params**  <br>*required*|application parameters.|[ApplicationParams](#applicationparams)|
 
 
 <a name="applicationlocalstate"></a>
@@ -1468,9 +1472,9 @@ Stores local state associated with an application.
 |**closed-out-at-round**  <br>*optional*|Round when account closed out of the application.|integer|
 |**deleted**  <br>*optional*|Whether or not the application local state is currently deleted from its account.|boolean|
 |**id**  <br>*required*|The application which this local state is for.|integer|
-|**key-value**  <br>*optional*|\[tkv\] storage.|[TealKeyValueStore](#tealkeyvaluestore)|
+|**key-value**  <br>*optional*|storage.|[TealKeyValueStore](#tealkeyvaluestore)|
 |**opted-in-at-round**  <br>*optional*|Round when the account opted into the application.|integer|
-|**schema**  <br>*required*|\[hsch\] schema.|[ApplicationStateSchema](#applicationstateschema)|
+|**schema**  <br>*required*|schema.|[ApplicationStateSchema](#applicationstateschema)|
 
 
 <a name="applicationlogdata"></a>
@@ -1480,7 +1484,7 @@ Stores the global information associated with an application.
 
 |Name|Description|Schema|
 |---|---|---|
-|**logs**  <br>*required*|\[lg\] Logs for the application being executed by the transaction.|< string (byte) > array|
+|**logs**  <br>*required*|Logs for the application being executed by the transaction.|< string (byte) > array|
 |**txid**  <br>*required*|Transaction ID|string|
 
 
@@ -1491,13 +1495,13 @@ Stores the global information associated with an application.
 
 |Name|Description|Schema|
 |---|---|---|
-|**approval-program**  <br>*required*|\[approv\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**clear-state-program**  <br>*required*|\[clearp\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**approval-program**  <br>*required*|approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**clear-state-program**  <br>*required*|clear state program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**creator**  <br>*optional*|The address that created this application. This is the address where the parameters and global state for this application can be found.|string|
-|**extra-program-pages**  <br>*optional*|\[epp\] the amount of extra program pages available to this app.|integer|
-|**global-state**  <br>*optional*|[\gs\] global schema|[TealKeyValueStore](#tealkeyvaluestore)|
-|**global-state-schema**  <br>*optional*|[\gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
-|**local-state-schema**  <br>*optional*|[\lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
+|**extra-program-pages**  <br>*optional*|the number of extra program pages available to this app.|integer|
+|**global-state**  <br>*optional*|global state|[TealKeyValueStore](#tealkeyvaluestore)|
+|**global-state-schema**  <br>*optional*|global schema|[ApplicationStateSchema](#applicationstateschema)|
+|**local-state-schema**  <br>*optional*|local schema|[ApplicationStateSchema](#applicationstateschema)|
 
 
 <a name="applicationstateschema"></a>
@@ -1507,8 +1511,8 @@ Specifies maximums on the number of each type that may be stored.
 
 |Name|Description|Schema|
 |---|---|---|
-|**num-byte-slice**  <br>*required*|\[nbs\] num of byte slices.|integer|
-|**num-uint**  <br>*required*|\[nui\] num of uints.|integer|
+|**num-byte-slice**  <br>*required*|number of byte slices.|integer|
+|**num-uint**  <br>*required*|number of uints.|integer|
 
 
 <a name="asset"></a>
@@ -1535,10 +1539,10 @@ data/basics/userBalance.go : AssetHolding
 
 |Name|Description|Schema|
 |---|---|---|
-|**amount**  <br>*required*|\[a\] number of units held.|integer|
+|**amount**  <br>*required*|number of units held.|integer|
 |**asset-id**  <br>*required*|Asset ID of the holding.|integer|
 |**deleted**  <br>*optional*|Whether or not the asset holding is currently deleted from its account.|boolean|
-|**is-frozen**  <br>*required*|\[f\] whether or not the holding is frozen.|boolean|
+|**is-frozen**  <br>*required*|whether or not the holding is frozen.|boolean|
 |**opted-in-at-round**  <br>*optional*|Round during which the account opted into this asset holding.|integer|
 |**opted-out-at-round**  <br>*optional*|Round during which the account opted out of this asset holding.|integer|
 
@@ -1555,20 +1559,20 @@ data/transactions/asset.go : AssetParams
 
 |Name|Description|Schema|
 |---|---|---|
-|**clawback**  <br>*optional*|\[c\] Address of account used to clawback holdings of this asset.  If empty, clawback is not permitted.|string|
+|**clawback**  <br>*optional*|Address of account used to clawback holdings of this asset.  If empty, clawback is not permitted.|string|
 |**creator**  <br>*required*|The address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.|string|
-|**decimals**  <br>*required*|\[dc\] The number of digits to use after the decimal point when displaying this asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths, and so on. This value must be between 0 and 19 (inclusive).  <br>**Minimum value** : `0`  <br>**Maximum value** : `19`|integer|
-|**default-frozen**  <br>*optional*|\[df\] Whether holdings of this asset are frozen by default.|boolean|
-|**freeze**  <br>*optional*|\[f\] Address of account used to freeze holdings of this asset.  If empty, freezing is not permitted.|string|
-|**manager**  <br>*optional*|\[m\] Address of account used to manage the keys of this asset and to destroy it.|string|
-|**metadata-hash**  <br>*optional*|\[am\] A commitment to some unspecified asset metadata. The format of this metadata is up to the application.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**name**  <br>*optional*|\[an\] Name of this asset, as supplied by the creator. Included only when the asset name is composed of printable utf-8 characters.|string|
+|**decimals**  <br>*required*|The number of digits to use after the decimal point when displaying this asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths, and so on. This value must be between 0 and 19 (inclusive).  <br>**Minimum value** : `0`  <br>**Maximum value** : `19`|integer|
+|**default-frozen**  <br>*optional*|Whether holdings of this asset are frozen by default.|boolean|
+|**freeze**  <br>*optional*|Address of account used to freeze holdings of this asset.  If empty, freezing is not permitted.|string|
+|**manager**  <br>*optional*|Address of account used to manage the keys of this asset and to destroy it.|string|
+|**metadata-hash**  <br>*optional*|A commitment to some unspecified asset metadata. The format of this metadata is up to the application.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**name**  <br>*optional*|Name of this asset, as supplied by the creator. Included only when the asset name is composed of printable utf-8 characters.|string|
 |**name-b64**  <br>*optional*|Base64 encoded name of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**reserve**  <br>*optional*|\[r\] Address of account holding reserve (non-minted) units of this asset.|string|
-|**total**  <br>*required*|\[t\] The total number of units of this asset.|integer|
-|**unit-name**  <br>*optional*|\[un\] Name of a unit of this asset, as supplied by the creator. Included only when the name of a unit of this asset is composed of printable utf-8 characters.|string|
+|**reserve**  <br>*optional*|Address of account holding reserve (non-minted) units of this asset.|string|
+|**total**  <br>*required*|The total number of units of this asset.|integer|
+|**unit-name**  <br>*optional*|Name of a unit of this asset, as supplied by the creator. Included only when the name of a unit of this asset is composed of printable utf-8 characters.|string|
 |**unit-name-b64**  <br>*optional*|Base64 encoded name of a unit of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**url**  <br>*optional*|\[au\] URL where more information about the asset can be retrieved. Included only when the URL is composed of printable utf-8 characters.|string|
+|**url**  <br>*optional*|URL where more information about the asset can be retrieved. Included only when the URL is composed of printable utf-8 characters.|string|
 |**url-b64**  <br>*optional*|Base64 encoded URL where more information about the asset can be retrieved.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -1582,10 +1586,14 @@ data/bookkeeping/block.go : Block
 
 |Name|Description|Schema|
 |---|---|---|
+|**bonus**  <br>*optional*|the potential bonus payout for this block.|integer|
+|**fees-collected**  <br>*optional*|the sum of all fees paid by transactions in this block.|integer|
 |**genesis-hash**  <br>*required*|\[gh\] hash to which this block belongs.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**genesis-id**  <br>*required*|\[gen\] ID to which this block belongs.|string|
 |**participation-updates**  <br>*optional*||[ParticipationUpdates](#participationupdates)|
 |**previous-block-hash**  <br>*required*|\[prev\] Previous block hash.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**proposer**  <br>*optional*|the proposer of this block.|string|
+|**proposer-payout**  <br>*optional*|the actual amount transferred to the proposer from the fee sink.|integer|
 |**rewards**  <br>*optional*||[BlockRewards](#blockrewards)|
 |**round**  <br>*required*|\[rnd\] Current round on which this block was appended to the chain.|integer|
 |**seed**  <br>*required*|\[seed\] Sortition seed.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
@@ -1778,6 +1786,7 @@ Participation account data that needs to be checked/acted on by the network.
 
 |Name|Description|Schema|
 |---|---|---|
+|**absent-participation-accounts**  <br>*optional*|\[partupabs\] a list of online accounts that need to be suspended.|< string > array|
 |**expired-participation-accounts**  <br>*optional*|\[partupdrmv\] a list of online accounts that needs to be converted to offline since their participation key expired.|< string > array|
 
 
@@ -1902,9 +1911,9 @@ Represents a TEAL value.
 
 |Name|Description|Schema|
 |---|---|---|
-|**bytes**  <br>*required*|\[tb\] bytes value.|string|
-|**type**  <br>*required*|\[tt\] value type. Value `1` refers to **bytes**, value `2` refers to **uint**|integer|
-|**uint**  <br>*required*|\[ui\] uint value.|integer|
+|**bytes**  <br>*required*|bytes value.|string|
+|**type**  <br>*required*|type of the value. Value `1` refers to **bytes**, value `2` refers to **uint**|integer|
+|**uint**  <br>*required*|uint value.|integer|
 
 
 <a name="transaction"></a>

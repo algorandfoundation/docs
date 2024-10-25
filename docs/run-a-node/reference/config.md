@@ -32,7 +32,7 @@ The `algod` process configuration parameters are shown in the table below.
 
 | Property| Description | Default Value |
 |------|------|------|
-| Version | Version tracks the current version of the defaults so we can migrate old -> new<br>This is specifically important whenever we decide to change the default value<br>for an existing parameter. This field tag must be updated any time we add a new version. | 33 |
+| Version | Version tracks the current version of the defaults so we can migrate old -> new<br>This is specifically important whenever we decide to change the default value<br>for an existing parameter. This field tag must be updated any time we add a new version. | 34 |
 | Archival | Archival nodes retain a full copy of the block history. Non-Archival nodes will delete old blocks and only retain what's need to properly validate blockchain messages (the precise number of recent blocks depends on the consensus parameters. Currently the last 1321 blocks are required). This means that non-Archival nodes require significantly less storage than Archival nodes.  If setting this to true for the first time, the existing ledger may need to be deleted to get the historical values stored as the setting only affects current blocks forward. To do this, shutdown the node and delete all .sqlite files within the data/testnet-version directory, except the crash.sqlite file. Restart the node and wait for the node to sync. | false |
 | GossipFanout | GossipFanout sets the maximum number of peers the node will connect to with outgoing connections. If the list of peers is less than this setting, fewer connections will be made. The node will not connect to the same peer multiple times (with outgoing connections). | 4 |
 | NetAddress | NetAddress is the address and/or port on which a node listens for incoming connections, or blank to ignore incoming connections. Specify an IP and port or just a port. For example, 127.0.0.1:0 will listen on a random port on the localhost. |  |
@@ -54,7 +54,8 @@ The `algod` process configuration parameters are shown in the table below.
 | CrashDBDir | CrashDBDir is an optional directory to persist agreement's consensus participation state.<br>For isolation, the node will create a subdirectory in this location, named by the genesis-id of the network.<br>If not specified, the node will use the HotDataDir |  |
 | LogFileDir | LogFileDir is an optional directory to store the log, node.log<br>If not specified, the node will use the HotDataDir.<br>The -o command line option can be used to override this output location. |  |
 | LogArchiveDir | LogArchiveDir is an optional directory to store the log archive.<br>If not specified, the node will use the ColdDataDir. |  |
-| IncomingConnectionsLimit | IncomingConnectionsLimit specifies the max number of incoming connections<br>for the port configured in NetAddress. 0 means no connections allowed. Must be non-negative.<br>Estimating 1.5MB per incoming connection, 1.5MB*2400 = 3.6GB | 2400 |
+| IncomingConnectionsLimit | IncomingConnectionsLimit specifies the max number of incoming connections<br>for the gossip protocol configured in NetAddress. 0 means no connections allowed. Must be non-negative.<br>Estimating 1.5MB per incoming connection, 1.5MB*2400 = 3.6GB | 2400 |
+| P2PHybridIncomingConnectionsLimit | P2PHybridIncomingConnectionsLimit is used as IncomingConnectionsLimit for P2P connections in hybrid mode.<br>For pure P2P nodes IncomingConnectionsLimit is used. | 1200 |
 | BroadcastConnectionsLimit | BroadcastConnectionsLimit specifies the number of connections that<br>will receive broadcast (gossip) messages from this node. If the<br>node has more connections than this number, it will send broadcasts<br>to the top connections by priority (outgoing connections first, then<br>by money held by peers based on their participation key). 0 means<br>no outgoing messages (not even transaction broadcasting to outgoing<br>peers). -1 means unbounded (default). | -1 |
 | AnnounceParticipationKey | AnnounceParticipationKey specifies that this node should announce its<br>participation key (with the largest stake) to its gossip peers.  This<br>allows peers to prioritize our connection, if necessary, in case of a<br>DoS attack.  Disabling this means that the peers will not have any<br>additional information to allow them to prioritize our connection. | true |
 | PriorityPeers | PriorityPeers specifies peer IP addresses that should always get<br>outgoing broadcast messages from this node. |  |
@@ -110,8 +111,9 @@ The `algod` process configuration parameters are shown in the table below.
 | HeartbeatUpdateInterval | HeartbeatUpdateInterval defines the interval at which the heartbeat information is being sent to the<br>telemetry (when enabled). Defined in seconds. Minimum value is 60. | 600 |
 | EnableProfiler | EnableProfiler enables the go pprof endpoints, should be false if<br>the algod api will be exposed to untrusted individuals | false |
 | EnableRuntimeMetrics | EnableRuntimeMetrics exposes Go runtime metrics in /metrics and via node_exporter. | false |
+| EnableNetDevMetrics | EnableNetDevMetrics exposes network interface total bytes sent/received metrics in /metrics | false |
 | TelemetryToLog | TelemetryToLog configures whether to record messages to node.log that are normally only sent to remote event monitoring. | true |
-| DNSSecurityFlags | DNSSecurityFlags instructs algod validating DNS responses.<br>Possible fla values<br>0x00 - disabled<br>0x01 (dnssecSRV) - validate SRV response<br>0x02 (dnssecRelayAddr) - validate relays' names to addresses resolution<br>0x04 (dnssecTelemetryAddr) - validate telemetry and metrics names to addresses resolution<br>... | 1 |
+| DNSSecurityFlags | DNSSecurityFlags instructs algod validating DNS responses.<br>Possible fla values<br>0x00 - disabled<br>0x01 (dnssecSRV) - validate SRV response<br>0x02 (dnssecRelayAddr) - validate relays' names to addresses resolution<br>0x04 (dnssecTelemetryAddr) - validate telemetry and metrics names to addresses resolution<br>0x08 (dnssecTXT) - validate TXT response<br>... | 9 |
 | EnablePingHandler | EnablePingHandler controls whether the gossip node would respond to ping messages with a pong message. | true |
 | DisableOutgoingConnectionThrottling | DisableOutgoingConnectionThrottling disables the connection throttling of the network library, which<br>allow the network library to continuously disconnect relays based on their relative (and absolute) performance. | false |
 | NetworkProtocolVersion | NetworkProtocolVersion overrides network protocol version ( if present ) |  |
@@ -164,10 +166,14 @@ The `algod` process configuration parameters are shown in the table below.
 | StorageEngine | StorageEngine allows to control which type of storage to use for the ledger.<br>Available options are:<br>- sqlite (default)<br>- pebbledb (experimental, in development) | sqlite |
 | TxIncomingFilterMaxSize | TxIncomingFilterMaxSize sets the maximum size for the de-duplication cache used by the incoming tx filter<br>only relevant if TxIncomingFilteringFlags is non-zero | 500000 |
 | BlockServiceMemCap | BlockServiceMemCap is the memory capacity in bytes which is allowed for the block service to use for HTTP block requests.<br>When it exceeds this capacity, it redirects the block requests to a different node | 500000000 |
-| EnableP2P | EnableP2P turns on the peer to peer network | false |
+| EnableP2P | EnableP2P turns on the peer to peer network.<br>When both EnableP2P and EnableP2PHybridMode (below) are set, EnableP2PHybridMode takes precedence. | false |
+| EnableP2PHybridMode | EnableP2PHybridMode turns on both websockets and P2P networking.<br>Enabling this setting also requires PublicAddress to be set. | false |
+| P2PHybridNetAddress | P2PHybridNetAddress sets the listen address used for P2P networking, if hybrid mode is set. |  |
+| EnableDHTProviders | EnableDHT will turn on the hash table for use with capabilities advertisement | false |
 | P2PPersistPeerID | P2PPersistPeerID will write the private key used for the node's PeerID to the P2PPrivateKeyLocation.<br>This is only used when P2PEnable is true. If P2PPrivateKey is not specified, it uses the default location. | false |
 | P2PPrivateKeyLocation | P2PPrivateKeyLocation allows the user to specify a custom path to the private key used for the node's PeerID.<br>The private key provided must be an ed25519 private key.<br>This is only used when P2PEnable is true. If the parameter is not set, it uses the default location. |  |
 | DisableAPIAuth | DisableAPIAuth turns off authentication for public (non-admin) API endpoints. | false |
+| GoMemLimit | GoMemLimit provides the Go runtime with a soft memory limit. The default behavior is no limit,<br>unless the GOMEMLIMIT environment variable is set. | 0 |
 
 
 

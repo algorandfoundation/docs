@@ -4,6 +4,84 @@ title: algod
 <a name="paths"></a>
 ## Paths
 
+<a name="getconfig"></a>
+### GET /debug/settings/config
+Gets the merged config file.
+```
+GET /debug/settings/config
+```
+
+
+**Description**
+Returns the merged (defaults + overrides) config file in json.
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|The merged config file in json.|string|
+|**default**|Unknown Error|No Content|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* private
+
+
+<a name="getdebugsettingsprof"></a>
+### GET /debug/settings/pprof
+
+**Description**
+Retrieves the current settings for blocking and mutex profiles
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|DebugPprof is the response to the /debug/extra/pprof endpoint|[DebugSettingsProf](#debugsettingsprof)|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* private
+
+
+<a name="putdebugsettingsprof"></a>
+### PUT /debug/settings/pprof
+
+**Description**
+Enables blocking and mutex profiles, and returns the old settings
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|DebugPprof is the response to the /debug/extra/pprof endpoint|[DebugSettingsProf](#debugsettingsprof)|
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* private
+
+
 <a name="getgenesis"></a>
 ### GET /genesis
 Gets the genesis information.
@@ -2049,6 +2127,7 @@ POST /v2/transactions/async
 |**200**||No Content|
 |**400**|Bad Request - Malformed Algorand transaction|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
+|**404**|Developer or Experimental API not enabled|No Content|
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
 |**503**|Service Temporarily Unavailable|[ErrorResponse](#errorresponse)|
 |**default**|Unknown Error|No Content|
@@ -2062,6 +2141,7 @@ POST /v2/transactions/async
 **Tags**
 
 * experimental
+* public
 
 
 <a name="transactionparams"></a>
@@ -2614,6 +2694,17 @@ References a box of an application.
 |**minor**  <br>*required*|integer (int64)|
 
 
+<a name="debugsettingsprof"></a>
+### DebugSettingsProf
+algod mutex and blocking profiling state.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**block-rate**  <br>*optional*|The rate of blocking events. The profiler aims to sample an average of one blocking event per rate nanoseconds spent blocked. To turn off profiling entirely, pass rate 0.  <br>**Example** : `1000`|integer|
+|**mutex-rate**  <br>*optional*|The rate of mutex events. On average 1/rate events are reported. To turn off profiling entirely, pass rate 0  <br>**Example** : `1000`|integer|
+
+
 <a name="dryrunrequest"></a>
 ### DryrunRequest
 Request data type for dryrun endpoint. Given the Transactions and simulated ledger state upload, run TEAL scripts and return debugging information.
@@ -2825,6 +2916,7 @@ Request type for simulation endpoint.
 |**allow-unnamed-resources**  <br>*optional*|Allows access to unnamed resources during simulation.|boolean|
 |**exec-trace-config**  <br>*optional*||[SimulateTraceConfig](#simulatetraceconfig)|
 |**extra-opcode-budget**  <br>*optional*|Applies extra opcode budget during simulation for each transaction group.|integer|
+|**fix-signers**  <br>*optional*|If true, signers for transactions that are missing signatures will be fixed during evaluation.|boolean|
 |**round**  <br>*optional*|If provided, specifies the round preceding the simulation. State changes through this round will be used to run this simulation. Usually only the 4 most recent rounds will be available (controlled by the node config value MaxAcctLookback). If not specified, defaults to the latest available round.|integer|
 |**txn-groups**  <br>*required*|The transaction groups to simulate.|< [SimulateRequestTransactionGroup](#simulaterequesttransactiongroup) > array|
 
@@ -2876,6 +2968,7 @@ Simulation result for an individual transaction
 |---|---|---|
 |**app-budget-consumed**  <br>*optional*|Budget used during execution of an app call transaction. This value includes budged used by inner app calls spawned by this transaction.|integer|
 |**exec-trace**  <br>*optional*||[SimulationTransactionExecTrace](#simulationtransactionexectrace)|
+|**fixed-signer**  <br>*optional*|The account that needed to sign this transaction when no signature was provided and the provided signer was incorrect.|string|
 |**logic-sig-budget-consumed**  <br>*optional*|Budget used during execution of a logic sig transaction.|integer|
 |**txn-result**  <br>*required*||[PendingTransactionResponse](#pendingtransactionresponse)|
 |**unnamed-resources-accessed**  <br>*optional*||[SimulateUnnamedResourcesAccessed](#simulateunnamedresourcesaccessed)|
@@ -2907,6 +3000,7 @@ The set of parameters and limits override during simulation. If this set of para
 |**allow-empty-signatures**  <br>*optional*|If true, transactions without signatures are allowed and simulated as if they were properly signed.|boolean|
 |**allow-unnamed-resources**  <br>*optional*|If true, allows access to unnamed resources during simulation.|boolean|
 |**extra-opcode-budget**  <br>*optional*|The extra opcode budget added to each transaction group during simulation|integer|
+|**fix-signers**  <br>*optional*|If true, signers for transactions that are missing signatures will be fixed during evaluation.|boolean|
 |**max-log-calls**  <br>*optional*|The maximum log calls one can make during simulation|integer|
 |**max-log-size**  <br>*optional*|The maximum byte number to log during simulation|integer|
 

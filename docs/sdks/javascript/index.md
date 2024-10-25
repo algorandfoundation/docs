@@ -1,6 +1,6 @@
 title: JS SDK: Your First Transaction
 
-This section is a quick start guide for interacting with the Algorand network using JavaScript. This guide will help to install the [Algorand sandbox](https://github.com/algorand/sandbox){:target="_blank"}, which provides a node for testing and development. This guide will also help to install the JavaScript SDK, create an account and submit your first transaction using different JavaScript Runtimes.
+This section is a quick start guide for interacting with the Algorand network using JavaScript. This guide will help to install the [Algorand sandbox](https://github.com/algorand/sandbox){target=blank}, which provides a node for testing and development. This guide will also help to install the JavaScript SDK, create an account and submit your first transaction using different JavaScript Runtimes.
 ​
 # Install Sandbox
 
@@ -163,6 +163,6 @@ console.log(`Decoded Note: ${Buffer.from(result.txn.txn.note).toString()}`);
 ​
 # View the Transaction
 
-To view the transaction we submitted to the sandbox Algod, open [DappFlow](https://app.dappflow.org/explorer/home){target=_blank} and choose `Sandbox` configuration option, then search for the transaction ID. 
+To view the transaction we submitted to the sandbox Algod, open [Lora](https://lora.algokit.io/localnet){target=_blank} and choose `LocalNet` configuration option, then search for the transaction ID. 
 
-To view a transaction submitted to public network like testnet, open [Pera Explorer](https://testnet.explorer.perawallet.app/){:target="_blank"} or [Bitquery](https://explorer.bitquery.io/algorand_testnet){:target="_blank"} and paste the transaction ID into the search bar or simply click on the funded transaction link on the dispenser page.
+To view a transaction submitted to public network like testnet, open [Lora](https://lora.algokit.io/testnet){target=_blank} or [Pera Explorer](https://testnet.explorer.perawallet.app/){target=blank} and paste the transaction ID into the search bar.

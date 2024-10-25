@@ -59,7 +59,7 @@ jobs:
         if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
         uses: actions/setup-go@v3
         with:
-          go-version: 1.20.7
+          go-version: 1.21.10
 
       - name: Generate conduit docs
         if: (contains(inputs.go_algorand_version, '-stable')) && (!contains(inputs.indexer_version, '-'))
@@ -134,6 +134,6 @@ jobs:
           branch: "automatic-pr-go-algorand-${{ inputs.go_algorand_version }}-indexer-${{ inputs.indexer_version }}"
           title: "Automatic update generated for go-algorand: ${{ inputs.go_algorand_version }} and indexer: ${{ inputs.indexer_version }}"
           body: "Changes generated automatically by github action docs-generator."
-          reviewers: "nullun"
+          reviewers: "nullun,SilentRhetoric,Loedn,larkiny"
           delete-branch: true
           base: staging
