@@ -1,0 +1,33 @@
+name: Trigger Documentation Build
+
+on:
+  push:
+    branches:
+      - master
+      - staging
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_ID }}
+          private-key: ${{ secrets.BOT_SK }}
+
+      - name: Trigger documentation build
+        run: |
+          # Set environment based on branch
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            ENV="production"
+          else
+            ENV="staging"
+          fi
+          
+          # Trigger repository_dispatch event
+          curl -X POST \
+            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"event_type\": \"docs_update\", \"client_payload\": {\"ref\": \"${{ github.ref }}\", \"environment\": \"$ENV\"}}" \
+            https://api.github.com/repos/algorandfoundation/algorand-developer-portal/dispatches
