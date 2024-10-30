@@ -50,11 +50,13 @@ indexer daemon [flags]
 
       --default-transactions-limit uint32      set the default Limit parameter for querying transactions, if none is provided (default 1000)
 
-      --dev-mode                               allow performance intensive operations like searching for accounts at a particular round
+      --dev-mode                               has no effect currently, reserved for future performance intensive operations
 
   -n, --dummydb                                use dummy indexer db
 
       --enable-all-parameters                  override default configuration and enable all parameters. Can't be used with --api-config-file
+
+      --enable-private-network-access-header   respond to Private Network Access preflight requests
 
   -h, --help                                   help for daemon
 

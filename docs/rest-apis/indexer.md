@@ -50,7 +50,7 @@ Search for accounts.
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
-|**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations. Using application-id or asset-id filters will return both creator and opt-in accounts. Filtering by include-all will return creator and opt-in accounts for deleted assets and accounts. Non-opt-in managers are not included in the results when asset-id is used.|integer|
+|**Query**|**round**  <br>*optional*|Deprecated and disallowed. This parameter used to include results for a specified round. Requests with this parameter set are now rejected.|integer|
 
 
 **Responses**
@@ -116,7 +116,7 @@ Lookup account information.
 |**Path**|**account-id**  <br>*required*|account string|string|
 |**Query**|**exclude**  <br>*optional*|Exclude additional items such as asset holdings, application local data stored for this account, asset parameters created by this account, and application parameters created by this account.|< enum (all, assets, created-assets, apps-local-state, created-apps, none) > array|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
-|**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
+|**Query**|**round**  <br>*optional*|Deprecated and disallowed. This parameter used to include results for a specified round. Requests with this parameter set are now rejected.|integer|
 
 
 **Responses**
