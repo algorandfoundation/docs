@@ -153,7 +153,7 @@ If you would like to manually build and deploy the `HelloWorld` smart contract r
 
 ```shell
 algokit project run build
-algokit project run deploy 
+algokit project deploy 
 ```
 
 This should produce something similar to the following in the VSCode terminal.
