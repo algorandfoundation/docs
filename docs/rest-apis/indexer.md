@@ -50,7 +50,7 @@ Search for accounts.
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
-|**Query**|**round**  <br>*optional*|Deprecated and disallowed. This parameter used to include results for a specified round. Requests with this parameter set are now rejected.|integer|
+|**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations. Using application-id or asset-id filters will return both creator and opt-in accounts. Filtering by include-all will return creator and opt-in accounts for deleted assets and accounts. Non-opt-in managers are not included in the results when asset-id is used.|integer|
 
 
 **Responses**
@@ -116,7 +116,7 @@ Lookup account information.
 |**Path**|**account-id**  <br>*required*|account string|string|
 |**Query**|**exclude**  <br>*optional*|Exclude additional items such as asset holdings, application local data stored for this account, asset parameters created by this account, and application parameters created by this account.|< enum (all, assets, created-assets, apps-local-state, created-apps, none) > array|
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
-|**Query**|**round**  <br>*optional*|Deprecated and disallowed. This parameter used to include results for a specified round. Requests with this parameter set are now rejected.|integer|
+|**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 
 
 **Responses**
@@ -505,7 +505,7 @@ Lookup account transactions. Transactions are returned newest to oldest.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf, hb)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -1115,7 +1115,7 @@ Lookup transactions for an asset. Transactions are returned oldest to newest.
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf, hb)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -1166,6 +1166,77 @@ Lookup transactions for an asset. Transactions are returned oldest to newest.
 **Tags**
 
 * lookup
+
+
+<a name="searchforblockheaders"></a>
+### GET /v2/block-headers
+
+**Description**
+Search for block headers. Block headers are returned in ascending round order. Transactions are not included in the output.
+
+
+**Parameters**
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Query**|**absent**  <br>*optional*|Accounts marked as absent in the block header's participation updates. This parameter accepts a comma separated list of addresses.|< string > array|
+|**Query**|**after-time**  <br>*optional*|Include results after the given time. Must be an RFC 3339 formatted string.|string (date-time)|
+|**Query**|**before-time**  <br>*optional*|Include results before the given time. Must be an RFC 3339 formatted string.|string (date-time)|
+|**Query**|**expired**  <br>*optional*|Accounts marked as expired in the block header's participation updates. This parameter accepts a comma separated list of addresses.|< string > array|
+|**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
+|**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
+|**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
+|**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+|**Query**|**proposers**  <br>*optional*|Accounts marked as proposer in the block header's participation updates. This parameter accepts a comma separated list of addresses.|< string > array|
+
+
+**Responses**
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|(empty)|[Response 200](#searchforblockheaders-response-200)|
+|**404**|Response for errors|[Response 404](#searchforblockheaders-response-404)|
+|**500**|Response for errors|[Response 500](#searchforblockheaders-response-500)|
+
+<a name="searchforblockheaders-response-200"></a>
+**Response 200**
+
+|Name|Description|Schema|
+|---|---|---|
+|**blocks**  <br>*required*||< [Block](#block) > array|
+|**current-round**  <br>*required*|Round at which the results were computed.|integer|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+
+<a name="searchforblockheaders-response-404"></a>
+**Response 404**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+<a name="searchforblockheaders-response-500"></a>
+**Response 500**
+
+|Name|Schema|
+|---|---|
+|**data**  <br>*optional*|object|
+|**message**  <br>*required*|string|
+
+
+**Consumes**
+
+* `application/json`
+
+
+**Produces**
+
+* `application/json`
+
+
+**Tags**
+
+* search
 
 
 <a name="lookupblock"></a>
@@ -1251,7 +1322,7 @@ Search for transactions. Transactions are returned oldest to newest unless the a
 |**Query**|**rekey-to**  <br>*optional*|Include results which include the rekey-to field.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round.|integer|
 |**Query**|**sig-type**  <br>*optional*|SigType filters just results using the specified type of signature:<br>* sig - Standard<br>* msig - MultiSig<br>* lsig - LogicSig|enum (sig, msig, lsig)|
-|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
+|**Query**|**tx-type**  <br>*optional*||enum (pay, keyreg, acfg, axfer, afrz, appl, stpf, hb)|
 |**Query**|**txid**  <br>*optional*|Lookup the specific transaction by ID.|string|
 
 
@@ -1710,6 +1781,20 @@ The type of hash function used to create the proof, must be one of:
 *Type* : enum (sha512_256, sha256)
 
 
+<a name="hbprooffields"></a>
+### HbProofFields
+\[hbprf\] HbProof is a signature using HeartbeatAddress's partkey, thereby showing it is online.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**hb-pk**  <br>*optional*|\[p\] Public key of the heartbeat message.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**hb-pk1sig**  <br>*optional*|\[p1s\] Signature of OneTimeSignatureSubkeyOffsetID(PK, Batch, Offset) under the key PK2.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**hb-pk2**  <br>*optional*|\[p2\] Key for new-style two-level ephemeral signature.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**hb-pk2sig**  <br>*optional*|\[p2s\] Signature of OneTimeSignatureSubkeyBatchID(PK2, Batch) under the master key (OneTimeSignatureVerifier).  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**hb-sig**  <br>*optional*|\[s\] Signature of the heartbeat message.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
 <a name="healthcheck"></a>
 ### HealthCheck
 A health check response.
@@ -1943,6 +2028,7 @@ data/transactions/transaction.go : Transaction
 |**genesis-id**  <br>*optional*|\[gen\] genesis block ID.|string|
 |**global-state-delta**  <br>*optional*|\[gd\] Global state key/value changes for the application being executed by this transaction.|[StateDelta](#statedelta)|
 |**group**  <br>*optional*|\[grp\] Base64 encoded byte array of a sha512/256 digest. When present indicates that this transaction is part of a transaction group and the value is the sha512/256 hash of the transactions in that group.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**heartbeat-transaction**  <br>*optional*||[TransactionHeartbeat](#transactionheartbeat)|
 |**id**  <br>*optional*|Transaction ID|string|
 |**inner-txns**  <br>*optional*|Inner transactions produced by application execution.|< [Transaction](#transaction) > array|
 |**intra-round-offset**  <br>*optional*|Offset into the round where this transaction was confirmed.|integer|
@@ -1960,7 +2046,7 @@ data/transactions/transaction.go : Transaction
 |**sender-rewards**  <br>*optional*|\[rs\] rewards applied to sender account.|integer|
 |**signature**  <br>*optional*||[TransactionSignature](#transactionsignature)|
 |**state-proof-transaction**  <br>*optional*||[TransactionStateProof](#transactionstateproof)|
-|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction<br>* \[stpf\] state-proof-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl, stpf)|
+|**tx-type**  <br>*required*|\[type\] Indicates what type of transaction this is. Different types have different fields.<br><br>Valid types, and where their fields are stored:<br>* \[pay\] payment-transaction<br>* \[keyreg\] keyreg-transaction<br>* \[acfg\] asset-config-transaction<br>* \[axfer\] asset-transfer-transaction<br>* \[afrz\] asset-freeze-transaction<br>* \[appl\] application-transaction<br>* \[stpf\] state-proof-transaction<br>* \[hb\] heartbeat-transaction|enum (pay, keyreg, acfg, axfer, afrz, appl, stpf, hb)|
 
 
 <a name="transactionapplication"></a>
@@ -2035,6 +2121,23 @@ data/transactions/asset.go : AssetTransferTxnFields
 |**close-to**  <br>*optional*|\[aclose\] Indicates that the asset should be removed from the account's Assets map, and specifies where the remaining asset holdings should be transferred.  It's always valid to transfer remaining asset holdings to the creator account.|string|
 |**receiver**  <br>*required*|\[arcv\] Recipient address of the transfer.|string|
 |**sender**  <br>*optional*|\[asnd\] The effective sender during a clawback transactions. If this is not a zero value, the real transaction sender must be the Clawback address from the AssetParams.|string|
+
+
+<a name="transactionheartbeat"></a>
+### TransactionHeartbeat
+Fields for a heartbeat transaction.
+
+Definition:
+data/transactions/heartbeat.go : HeartbeatTxnFields
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**hb-address**  <br>*required*|\[hbad\] HbAddress is the account this txn is proving onlineness for.|string|
+|**hb-key-dilution**  <br>*required*|\[hbkd\] HbKeyDilution must match HbAddress account's current KeyDilution.|integer|
+|**hb-proof**  <br>*required*||[HbProofFields](#hbprooffields)|
+|**hb-seed**  <br>*required*|\[hbsd\] HbSeed must be the block seed for the this transaction's firstValid block.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**hb-vote-id**  <br>*required*|\[hbvid\] HbVoteID must match the HbAddress account's current VoteID.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="transactionkeyreg"></a>
