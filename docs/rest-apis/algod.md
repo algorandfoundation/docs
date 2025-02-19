@@ -672,6 +672,7 @@ GET /v2/blocks/{round}
 |---|---|---|---|
 |**Path**|**round**  <br>*required*|The round from which to fetch block information.|integer|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
+|**Query**|**header-only**  <br>*optional*|If true, only the block header (exclusive of payset or certificate) may be included in response.|boolean|
 
 
 **Responses**
@@ -743,53 +744,6 @@ GET /v2/blocks/{round}/hash
 **Produces**
 
 * `application/json`
-
-
-**Tags**
-
-* nonparticipating
-* public
-
-
-<a name="getblockheader"></a>
-### GET /v2/blocks/{round}/header
-Get the block header for the block on the given round.
-```
-GET /v2/blocks/{round}/header
-```
-
-
-**Parameters**
-
-|Type|Name|Description|Schema|
-|---|---|---|---|
-|**Path**|**round**  <br>*required*|The round from which to fetch block header information.|integer|
-|**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
-
-
-**Responses**
-
-|HTTP Code|Description|Schema|
-|---|---|---|
-|**200**|Block header.|[Response 200](#getblockheader-response-200)|
-|**400**|Bad Request - Non integer number|[ErrorResponse](#errorresponse)|
-|**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
-|**404**|None existing block|[ErrorResponse](#errorresponse)|
-|**500**|Internal Error|[ErrorResponse](#errorresponse)|
-|**default**|Unknown Error|No Content|
-
-<a name="getblockheader-response-200"></a>
-**Response 200**
-
-|Name|Description|Schema|
-|---|---|---|
-|**blockHeader**  <br>*required*|Block header data.|object|
-
-
-**Produces**
-
-* `application/json`
-* `application/msgpack`
 
 
 **Tags**
