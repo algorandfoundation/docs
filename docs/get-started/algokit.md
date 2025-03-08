@@ -137,6 +137,7 @@ Once finished, (if you have it installed) VS Code should automatically be opened
 
 ![AlgoKit Starter Contract](../imgs/algokitv2_starter.png)
 
+
 ## Run the Demo Application
 
 Once the starter project is created, you will notice in the `smart_contracts/hello_world` folder a file named `deploy_config.py` which is a simple example of using AlgoKit to deploy and make a call to the `contract.py` smart contract on the LocalNet instance started earlier.
