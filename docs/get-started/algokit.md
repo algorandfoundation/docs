@@ -4,7 +4,7 @@ AlgoKit is a simple, one-stop tool for developers to quickly and easily build an
 
 In addition, AlgoKit features:
 
-- A library of smart contract templates to kickstart your  build
+- A library of smart contract templates to kickstart your build
 - All necessary application infrastructure running locally
 - Toolchain integrations for languages you love, like Python and TypeScript
 - A simplified frontend design experience
@@ -20,8 +20,8 @@ In addition, AlgoKit features:
 ## Install AlgoKit
 
 === "Windows"
-    !!! Note
-        This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
+!!! Note
+This method will install the most recent python3 version [via winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/). If you already have python 3.12+ installed, you may you may prefer to use `pipx install algokit` as explained within the pipx on any OS section so you can control the python version used.
 
     - Ensure prerequisites are installed
         - [Git](https://github.com/git-guides/install-git#install-git-on-windows) (or `winget install git.git`)
@@ -48,8 +48,8 @@ In addition, AlgoKit features:
         - Restart the terminal to ensure AlgoKit is available on the path
 
 === "macOS"
-    !!! Note
-        This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
+!!! Note
+This method will install the latest Python3 release as a dependency via Homebrew. If you already have Python 3.10+ installed, you may prefer to use `pipx install algokit` as explained within the OS agnostic tab so you can control the python version used.
 
     - Ensure prerequisites are installed
 
@@ -63,9 +63,7 @@ In addition, AlgoKit features:
     - Install using Homebrew `brew install algorandfoundation/tap/algokit`
     - Restart the terminal to ensure AlgoKit is available on the path
 
-
-=== "Linux"
-    - Ensure prerequisites are installed
+=== "Linux" - Ensure prerequisites are installed
 
         - [Python 3.12+](https://www.python.org/downloads/)
 
@@ -78,7 +76,7 @@ In addition, AlgoKit features:
     - Continue with step 2 in the following section to install via `pipx` on any OS
 
 === "OS agnostic"
-    To install AlgoKit, run the following command from a terminal.
+To install AlgoKit, run the following command from a terminal.
 
     ```shell
     pipx install algokit
@@ -125,6 +123,7 @@ algokit init
 ```
 
 This will launch a guided menu system to create a specific project tailored to your needs. You will first be prompted to select a specific template. The templates are basic starter applications for various Algorand development scenarios. To read more about templates checkout AlgoKit detailed documentation. For this guide, we will use the Python smart contract starter template. Select the following options:
+
 1. `Smart Contracts`
 2. `Python`
 3. name of your project: `DEMO`
@@ -153,7 +152,7 @@ If you would like to manually build and deploy the `HelloWorld` smart contract r
 
 ```shell
 algokit project run build
-algokit project deploy 
+algokit project deploy
 ```
 
 This should produce something similar to the following in the VSCode terminal.
@@ -192,13 +191,13 @@ This command will launch your default web browser and load the Lora web applicat
 
 ![Lora](../imgs/lora1.png)
 
-### Create / Connect  local account for testing
+### Create / Connect local account for testing
 
 To issue commands against the LocalNet network you need an account with ALGO in it. Lora gives you three options for connecting to a local wallet: `Connect KMD`, `Connect MNEMONIC`, and `Connect Lute`
 
 - `Connect KMD`: Lora will automatically import KMD wallet.
 
-- `Connect MNEMONIC`: You can manually input a MNEMONIC for an account you own. 
+- `Connect MNEMONIC`: You can manually input a MNEMONIC for an account you own.
 
 - `Connect Lute`: You can create local accounts from [Lute](https://lute.app/) and connect to them.
 
@@ -210,54 +209,52 @@ Select `Connect wallet` located at top right hand side of the webpage and you wi
 
 ### Deploy the Hello World application
 
-1. To deploy your smart contract application, select the `App Lab` menu and click on the `Create` button. 
-![Lora](../imgs/lora2.png)
+1. To deploy your smart contract application, select the `App Lab` menu and click on the `Create` button.
+   ![Lora](../imgs/lora2.png)
 
-2. Click `Deploy new` and `Select an ARC-32 JSON app spec file` to browse to the artifacts created in the previous section of this guide. Select the `HelloWorld.arc32.json` manifest file. 
-![Lora](../imgs/lora3.png)
-![Lora](../imgs/lora4.png)
-![Lora](../imgs/lora5.png)
+2. Click `Deploy new` and `Select an ARC-32 JSON app spec file` to browse to the artifacts created in the previous section of this guide. Select the `HelloWorld.arc32.json` manifest file.
+   ![Lora](../imgs/lora3.png)
+   ![Lora](../imgs/lora4.png)
+   ![Lora](../imgs/lora5.png)
 
 3. This will load the specific manifest file for the Hello World sample application. Click `Next`.
-![Lora](../imgs/lora6.png)
+   ![Lora](../imgs/lora6.png)
 
 4. You can change the `Name` and the `Version` of your app. We will keep it as it is. Click `Next`.
-![Lora](../imgs/lora7.png)
+   ![Lora](../imgs/lora7.png)
 
 5. Click the `() Call` button. Then build and add the create transaction by clicking `Add`.
-![Lora](../imgs/lora8.png)
-![Lora](../imgs/lora9.png)
-
+   ![Lora](../imgs/lora8.png)
+   ![Lora](../imgs/lora9.png)
 
 6. Click `Deploy` and sign the transaction by clicking `OK` in the KMD pop up to deploy the smart contract to the local Algorand network.
-![Lora](../imgs/lora10.png)
+   ![Lora](../imgs/lora10.png)
 
-7. You should now see the deployed `HelloWorld` contract on the `App Lab` page. 
-![Lora](../imgs/lora11.png)
+7. You should now see the deployed `HelloWorld` contract on the `App Lab` page.
+   ![Lora](../imgs/lora11.png)
 
 8. Now click on the `App ID` inside of the `HelloWorld` card to go to the `Application` page.
-![Lora](../imgs/lora12.png)
+   ![Lora](../imgs/lora12.png)
 
-10. Inside the `ABI Methods` section, you should see the `hello` method. Click on the drop down and the `Call` button. You will be prompted with a popup allowing you to enter the parameter for the `hello` method and call it. 
-![Lora](../imgs/lora13.png)
+9. Inside the `ABI Methods` section, you should see the `hello` method. Click on the drop down and the `Call` button. You will be prompted with a popup allowing you to enter the parameter for the `hello` method and call it.
+   ![Lora](../imgs/lora13.png)
 
+10. Enter a string in the `value` input and click on `Add`.
+    ![Lora](../imgs/lora14.png)
 
-11. Enter a string in the `value` input and click on `Add`. 
-![Lora](../imgs/lora14.png)
+11. You should now see the transaction you just built on the `Application` page. Click `Send` and sign the transaction with your KMD wallet to execute the transaction.
+    ![Lora](../imgs/lora15.png)
 
-12. You should now see the transaction you just built on the `Application` page. Click `Send` and sign the transaction with your KMD wallet to execute the transaction.
-![Lora](../imgs/lora15.png)
+12. You should now see the `Send Result` showing you the details about the transaction you just executed!
+    ![Lora](../imgs/lora16.png)
 
-13. You should now see the `Send Result` showing you the details about the transaction you just executed!
-![Lora](../imgs/lora16.png)
-
-1.  You can also click on `Transaction ID` to go to the `Transaction` page and see the full detail of the transaction.
-![Lora](../imgs/lora17.png)
+13. You can also click on `Transaction ID` to go to the `Transaction` page and see the full detail of the transaction.
+    ![Lora](../imgs/lora17.png)
 
 You have now successfully deployed and executed a smart contract method call using Lora!
 
 ## Next steps
 
-- To learn more about AlgoKit and what you can do with it, checkout the [AlgoKit documentation](../index.md).
+- To learn more about AlgoKit and what you can do with it, checkout the [AlgoKit documentation](../get-details/algokit/index.md).
 - To learn more about Python on Algorand, take a look at the [Python documentation](https://algorandfoundation.github.io/puya/).
 - More information on Algorand smart contracts is also available in the [smart contract documentation](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/).
