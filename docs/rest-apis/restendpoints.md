@@ -74,3 +74,12 @@ curl http://$(cat ~/node/data/algod.net)/v2/blocks/16486179 -H "X-Algo-API-Token
 ```
 
 In the above example, the block information will be displayed if the block exists on the local node. If the node is a non-Archival node, blocks older than 1000 blocks will not be available.
+
+# RPC Providers
+
+[Chain.Love](https://chain.love) provides freemium access to the RPC endpoints of the Algorand network with 10 requests per minute available anonymously and free of charge.
+
+Here is a quickstart example on how to get information of the block using Chain.Love endpoints:
+*   ```shell
+        curl --location 'https://algod.algorand.chain.love/v2/blocks/1?format=json'
+    ```
