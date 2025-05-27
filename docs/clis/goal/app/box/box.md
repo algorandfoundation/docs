@@ -60,6 +60,8 @@ goal app box [flags]
 
   -k, --kmddir string              Data directory for kmd
 
+      --reject-version uint        If set non-zero, reject for this app version or higher
+
   -w, --wallet string              Set the wallet to be used for the selected operation
 
 ```
@@ -72,7 +74,7 @@ goal app box [flags]
 
 * [goal app](../../../app/app/)	 - Manage applications
 * [goal app box info](../info/)	 - Retrieve information about an application box.
-* [goal app box list](../list/)	 - List all application boxes belonging to an application
+* [goal app box list](../list/)	 - List application boxes belonging to an application
 
 
 

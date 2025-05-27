@@ -24,7 +24,11 @@ goal wallet new [wallet name] [flags]
 
   -h, --help                       help for new
 
+      --no-display-seed            Create a new wallet without displaying the seed phrase.
+
   -r, --recover goal account new   Recover the wallet from the backup mnemonic provided at wallet creation (NOT the mnemonic provided by goal account export or by algokey). Regenerate accounts in the wallet with goal account new
+
+      --unencrypted                Create a new wallet without a password.
 
 ```
 

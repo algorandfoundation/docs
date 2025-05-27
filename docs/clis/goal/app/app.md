@@ -44,6 +44,8 @@ goal app [flags]
 
   -h, --help                       help for app
 
+      --reject-version uint        If set non-zero, reject for this app version or higher
+
   -w, --wallet string              Set the wallet to be used for the selected operation
 
 ```

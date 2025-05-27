@@ -98,7 +98,7 @@ Returns the entire genesis file in json.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|The genesis file in json.|string|
+|**200**|The genesis file in json.|[Genesis](#genesis)|
 |**default**|Unknown Error|No Content|
 
 
@@ -569,14 +569,14 @@ Given an application ID and box name, it returns the round, box name, and value 
 
 <a name="getapplicationboxes"></a>
 ### GET /v2/applications/{application-id}/boxes
-Get all box names for a given application.
+Get boxes for a given application.
 ```
 GET /v2/applications/{application-id}/boxes
 ```
 
 
 **Description**
-Given an application ID, return all Box names. No particular ordering is guaranteed. Request fails when client or server-side configured limits prevent returning all Box names.
+Given an application ID, return boxes in lexographical order by name. If the results must be truncated, a next-token is supplied to continue the request.
 
 
 **Parameters**
@@ -584,14 +584,17 @@ Given an application ID, return all Box names. No particular ordering is guarant
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Path**|**application-id**  <br>*required*|An application identifier|integer|
-|**Query**|**max**  <br>*optional*|Max number of box names to return. If max is not set, or max == 0, returns all box-names.|integer|
+|**Query**|**max**  <br>*optional*|Maximum number of boxes to return. Server may impose a lower limit.|integer|
+|**Query**|**next**  <br>*optional*|A box name, in the goal app call arg form 'encoding:value'. When provided, the returned boxes begin (lexographically) with the supplied name. Callers may implement pagination by reinvoking the endpoint with the token from a previous call's next-token.|string|
+|**Query**|**prefix**  <br>*optional*|A box name prefix, in the goal app call arg form 'encoding:value'. For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.|string|
+|**Query**|**values**  <br>*optional*|If true, box values will be returned.|boolean|
 
 
 **Responses**
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|Box names of an application|[Response 200](#getapplicationboxes-response-200)|
+|**200**|Boxes of an application|[Response 200](#getapplicationboxes-response-200)|
 |**400**|Bad Request|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API Token|[ErrorResponse](#errorresponse)|
 |**500**|Internal Error|[ErrorResponse](#errorresponse)|
@@ -600,9 +603,11 @@ Given an application ID, return all Box names. No particular ordering is guarant
 <a name="getapplicationboxes-response-200"></a>
 **Response 200**
 
-|Name|Schema|
-|---|---|
-|**boxes**  <br>*required*|< [BoxDescriptor](#boxdescriptor) > array|
+|Name|Description|Schema|
+|---|---|---|
+|**boxes**  <br>*required*||< [Box](#box) > array|
+|**next-token**  <br>*optional*|Used for pagination, when making another request provide this token with the next parameter.|string|
+|**round**  <br>*required*|The round for which this information is relevant.|integer|
 
 
 **Produces**
@@ -2533,6 +2538,7 @@ Stores the global information associated with an application.
 |**global-state**  <br>*optional*|\[gs\] global state|[TealKeyValueStore](#tealkeyvaluestore)|
 |**global-state-schema**  <br>*optional*|\[gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|\[lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
+|**version**  <br>*optional*|\[v\] the number of updates to the application programs|integer|
 
 
 <a name="applicationstateoperation"></a>
@@ -2656,19 +2662,9 @@ Box name and its content.
 
 |Name|Description|Schema|
 |---|---|---|
-|**name**  <br>*required*|\[name\] box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**round**  <br>*required*|The round for which this information is relevant|integer|
-|**value**  <br>*required*|\[value\] box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-
-
-<a name="boxdescriptor"></a>
-### BoxDescriptor
-Box descriptor describes a Box.
-
-
-|Name|Description|Schema|
-|---|---|---|
-|**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**name**  <br>*required*|The box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**round**  <br>*optional*|The round for which this information is relevant|integer|
+|**value**  <br>*required*|The box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="boxreference"></a>
@@ -2803,15 +2799,44 @@ Key-value pairs for StateDelta.
 |**value**  <br>*required*|[EvalDelta](#evaldelta)|
 
 
-<a name="kvdelta"></a>
-### KvDelta
-A single Delta containing the key, the previous value and the current value for a single round.
+<a name="genesis"></a>
+### Genesis
+
+|Name|Schema|
+|---|---|
+|**alloc**  <br>*required*|< [GenesisAllocation](#genesisallocation) > array|
+|**comment**  <br>*optional*|string|
+|**devmode**  <br>*optional*|boolean|
+|**fees**  <br>*required*|string|
+|**id**  <br>*required*|string|
+|**network**  <br>*required*|string|
+|**proto**  <br>*required*|string|
+|**rwd**  <br>*required*|string|
+|**timestamp**  <br>*required*|integer (int64)|
 
 
-|Name|Description|Schema|
-|---|---|---|
-|**key**  <br>*optional*|The key, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**value**  <br>*optional*|The new value of the KV store entry, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+<a name="genesisallocation"></a>
+### GenesisAllocation
+
+|Name|Schema|
+|---|---|
+|**addr**  <br>*required*|string|
+|**comment**  <br>*required*|string|
+|**state**  <br>*required*|[state](#genesisallocation-state)|
+
+<a name="genesisallocation-state"></a>
+**state**
+
+|Name|Schema|
+|---|---|
+|**algo**  <br>*required*|integer (uint64)|
+|**onl**  <br>*optional*|integer|
+|**sel**  <br>*optional*|string|
+|**stprf**  <br>*optional*|string|
+|**vote**  <br>*optional*|string|
+|**voteFst**  <br>*optional*|integer (uint64)|
+|**voteKD**  <br>*optional*|integer (uint64)|
+|**voteLst**  <br>*optional*|integer (uint64)|
 
 
 <a name="ledgerstatedelta"></a>
