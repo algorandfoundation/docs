@@ -32,7 +32,7 @@ The `algod` process configuration parameters are shown in the table below.
 
 | Property| Description | Default Value |
 |------|------|------|
-| Version | Version tracks the current version of the defaults so we can migrate old -> new<br>This is specifically important whenever we decide to change the default value<br>for an existing parameter. This field tag must be updated any time we add a new version. | 35 |
+| Version | Version tracks the current version of the defaults so we can migrate old -> new<br>This is specifically important whenever we decide to change the default value<br>for an existing parameter. This field tag must be updated any time we add a new version. | 36 |
 | Archival | Archival nodes retain a full copy of the block history. Non-Archival nodes will delete old blocks and only retain what's need to properly validate blockchain messages (the precise number of recent blocks depends on the consensus parameters. Currently the last 1321 blocks are required). This means that non-Archival nodes require significantly less storage than Archival nodes.  If setting this to true for the first time, the existing ledger may need to be deleted to get the historical values stored as the setting only affects current blocks forward. To do this, shutdown the node and delete all .sqlite files within the data/testnet-version directory, except the crash.sqlite file. Restart the node and wait for the node to sync. | false |
 | GossipFanout | GossipFanout sets the maximum number of peers the node will connect to with outgoing connections. If the list of peers is less than this setting, fewer connections will be made. The node will not connect to the same peer multiple times (with outgoing connections). | 4 |
 | NetAddress | NetAddress is the address and/or port on which a node listens for incoming connections, or blank to ignore incoming connections. Specify an IP and port or just a port. For example, 127.0.0.1:0 will listen on a random port on the localhost. |  |
@@ -176,6 +176,7 @@ The `algod` process configuration parameters are shown in the table below.
 | P2PPrivateKeyLocation | P2PPrivateKeyLocation allows the user to specify a custom path to the private key used for the node's PeerID.<br>The private key provided must be an ed25519 private key.<br>This is only used when P2PEnable is true. If the parameter is not set, it uses the default location. |  |
 | DisableAPIAuth | DisableAPIAuth turns off authentication for public (non-admin) API endpoints. | false |
 | GoMemLimit | GoMemLimit provides the Go runtime with a soft memory limit. The default behavior is no limit,<br>unless the GOMEMLIMIT environment variable is set. | 0 |
+| EnableVoteCompression | EnableVoteCompression controls whether vote compression is enabled for websocket networks | true |
 
 
 

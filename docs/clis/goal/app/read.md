@@ -76,6 +76,8 @@ goal app read [flags]
 
   -k, --kmddir string              Data directory for kmd
 
+      --reject-version uint        If set non-zero, reject for this app version or higher
+
   -w, --wallet string              Set the wallet to be used for the selected operation
 
 ```

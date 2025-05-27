@@ -4,7 +4,7 @@ title: goal app box list
 
 
 
-List all application boxes belonging to an application
+List application boxes belonging to an application
 
 
 
@@ -12,11 +12,9 @@ List all application boxes belonging to an application
 
 
 
-List all application boxes belonging to an application.
+List application boxes belonging to an application.
 
-For printable strings, the box name is formatted as 'str:hello'
-
-For everything else, the box name is formatted as 'b64:A=='. 
+Printable names and values are formatted as 'str:hello' otherwise 'b64:A=='.
 
 
 
@@ -34,9 +32,15 @@ goal app box list [flags]
 
 ```
 
-  -h, --help       help for list
+  -h, --help            help for list
 
-  -m, --max uint   Maximum number of boxes to list. 0 means no limit.
+  -l, --limit uint      The maximum number of boxes to list. 0 means no limit.
+
+  -n, --next string     The next-token returned from a previous call, used for pagination.
+
+  -p, --prefix string   Return only boxes that begin with the supplied prefix.
+
+  -v, --values          Request and display box values.
 
 ```
 
@@ -73,6 +77,8 @@ goal app box list [flags]
       --foreign-asset strings      Indexes of assets whose parameters are read in this transaction
 
   -k, --kmddir string              Data directory for kmd
+
+      --reject-version uint        If set non-zero, reject for this app version or higher
 
   -w, --wallet string              Set the wallet to be used for the selected operation
 
