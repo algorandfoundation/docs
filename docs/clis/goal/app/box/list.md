@@ -4,7 +4,7 @@ title: goal app box list
 
 
 
-List application boxes belonging to an application
+List all application boxes belonging to an application
 
 
 
@@ -12,9 +12,11 @@ List application boxes belonging to an application
 
 
 
-List application boxes belonging to an application.
+List all application boxes belonging to an application.
 
-Printable names and values are formatted as 'str:hello' otherwise 'b64:A=='.
+For printable strings, the box name is formatted as 'str:hello'
+
+For everything else, the box name is formatted as 'b64:A=='. 
 
 
 
@@ -32,15 +34,9 @@ goal app box list [flags]
 
 ```
 
-  -h, --help            help for list
+  -h, --help       help for list
 
-  -l, --limit uint      The maximum number of boxes to list. 0 means no limit.
-
-  -n, --next string     The next-token returned from a previous call, used for pagination.
-
-  -p, --prefix string   Return only boxes that begin with the supplied prefix.
-
-  -v, --values          Request and display box values.
+  -m, --max uint   Maximum number of boxes to list. 0 means no limit.
 
 ```
 

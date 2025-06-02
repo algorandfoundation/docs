@@ -74,7 +74,7 @@ goal app box [flags]
 
 * [goal app](../../../app/app/)	 - Manage applications
 * [goal app box info](../info/)	 - Retrieve information about an application box.
-* [goal app box list](../list/)	 - List application boxes belonging to an application
+* [goal app box list](../list/)	 - List all application boxes belonging to an application
 
 
 
