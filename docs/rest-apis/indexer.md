@@ -50,6 +50,7 @@ Search for accounts.
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+|**Query**|**online-only**  <br>*optional*|When this is set to true, return only accounts whose participation status is currently online.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations. Using application-id or asset-id filters will return both creator and opt-in accounts. Filtering by include-all will return creator and opt-in accounts for deleted assets and accounts. Non-opt-in managers are not included in the results when asset-id is used.|integer|
 
 
@@ -1314,6 +1315,7 @@ Search for transactions. Transactions are returned oldest to newest unless the a
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**exclude-close-to**  <br>*optional*|Combine with address and address-role parameters to define what type of address to search for. The close to fields are normally treated as a receiver, if you would like to exclude them set this parameter to true.|boolean|
+|**Query**|**group-id**  <br>*optional*|Lookup transactions by group ID. This field must be base64-encoded, and afterwards, base64 characters that are URL-unsafe (i.e. =, /, +) must be URL-encoded|string|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
@@ -1573,6 +1575,7 @@ Stores the global information associated with an application.
 |**global-state**  <br>*optional*|global state|[TealKeyValueStore](#tealkeyvaluestore)|
 |**global-state-schema**  <br>*optional*|global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|local schema|[ApplicationStateSchema](#applicationstateschema)|
+|**version**  <br>*optional*|the number of updates to the application programs|integer|
 
 
 <a name="applicationstateschema"></a>
@@ -1738,6 +1741,17 @@ Box descriptor describes an app box without a value.
 
 |Name|Description|Schema|
 |---|---|---|
+|**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="boxreference"></a>
+### BoxReference
+BoxReference names a box by its name and the application ID it belongs to.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**app**  <br>*required*|Application ID to which the box belongs, or zero if referring to the called application.|integer|
 |**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -2063,6 +2077,7 @@ data/transactions/application.go : ApplicationCallTxnFields
 |**application-args**  <br>*optional*|\[apaa\] transaction specific arguments accessed from the application's approval-program and clear-state-program.|< string > array|
 |**application-id**  <br>*required*|\[apid\] ID of the application being configured or empty if creating.|integer|
 |**approval-program**  <br>*optional*|\[apap\] Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**box-references**  <br>*optional*|\[apbx\] the boxes that can be accessed by this transaction (and others in the same group).|< [BoxReference](#boxreference) > array|
 |**clear-state-program**  <br>*optional*|\[apsu\] Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**extra-program-pages**  <br>*optional*|\[epp\] specifies the additional app program len requested in pages.|integer|
 |**foreign-apps**  <br>*optional*|\[apfa\] Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|< integer > array|
@@ -2070,6 +2085,7 @@ data/transactions/application.go : ApplicationCallTxnFields
 |**global-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
 |**local-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
 |**on-completion**  <br>*required*||[OnCompletion](#oncompletion)|
+|**reject-version**  <br>*optional*|\[aprv\] the lowest application version for which this transaction should immediately fail. 0 indicates that no version check should be performed.|integer|
 
 
 <a name="transactionassetconfig"></a>
