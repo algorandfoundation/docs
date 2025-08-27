@@ -56,9 +56,9 @@ In order to interact with the Algorand blockchain, you must have a funded accoun
 
 <!-- ===JSSDK_ACCOUNT_GENERATE=== -->
 ```javascript
-const generatedAccount = algosdk.generateAccount();
-const passphrase = algosdk.secretKeyToMnemonic(generatedAccount.sk);
-console.log(`My address: ${generatedAccount.addr}`);
+const acct = algosdk.generateAccount();
+const passphrase = algosdk.secretKeyToMnemonic(acct.sk);
+console.log(`My address: ${acct.addr}`);
 console.log(`My passphrase: ${passphrase}`);
 ```
 [Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/accounts.ts#L80-L84)
@@ -117,9 +117,9 @@ Transactions are used to interact with the Algorand network. To create a payment
 ```javascript
 const suggestedParams = await algodClient.getTransactionParams().do();
 const ptxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-  from: acct.addr,
+  sender: acct.addr,
   suggestedParams,
-  to: acct2.addr,
+  receiver: acct.addr,
   amount: 10000,
   note: new Uint8Array(Buffer.from('hello world')),
 });
@@ -135,7 +135,7 @@ Before the transaction is considered valid, it must be signed by a private key. 
 ​
 <!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
 ```javascript
-const signedTxn = ptxn.signTxn(acct.privateKey);
+const signedTxn = ptxn.signTxn(acct.sk);
 ```
 [Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L34-L35)
 <!-- ===JSSDK_TRANSACTION_PAYMENT_SIGN=== -->
@@ -151,10 +151,10 @@ The signed transaction can now be submitted to the network.`waitForConfirmation`
  
  <!-- ===JSSDK_TRANSACTION_PAYMENT_SUBMIT=== -->
 ```javascript
-const { txId } = await algodClient.sendRawTransaction(signedTxn).do();
-const result = await algosdk.waitForConfirmation(algodClient, txId, 4);
+const { txid } = await algodClient.sendRawTransaction(signedTxn).do();
+const result = await algosdk.waitForConfirmation(algodClient, txid, 4);
 console.log(result);
-console.log(`Transaction Information: ${result.txn}`);
+console.log(`Transaction Information: `, result.txn);
 console.log(`Decoded Note: ${Buffer.from(result.txn.txn.note).toString()}`);
 ```
 [Snippet Source](https://github.com/algorand/js-algorand-sdk/blob/examples/examples/overview.ts#L38-L43)
