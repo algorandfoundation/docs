@@ -1666,6 +1666,7 @@ data/bookkeeping/block.go : Block
 |**genesis-id**  <br>*required*|\[gen\] ID to which this block belongs.|string|
 |**participation-updates**  <br>*optional*||[ParticipationUpdates](#participationupdates)|
 |**previous-block-hash**  <br>*required*|\[prev\] Previous block hash.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**previous-block-hash-512**  <br>*optional*|\[prev512\] Previous block hash, using SHA-512.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**proposer**  <br>*optional*|the proposer of this block.|string|
 |**proposer-payout**  <br>*optional*|the actual amount transferred to the proposer from the fee sink.|integer|
 |**rewards**  <br>*optional*||[BlockRewards](#blockrewards)|
@@ -1676,6 +1677,7 @@ data/bookkeeping/block.go : Block
 |**transactions**  <br>*optional*|\[txns\] list of transactions corresponding to a given round.|< [Transaction](#transaction) > array|
 |**transactions-root**  <br>*required*|\[txn\] TransactionsRoot authenticates the set of transactions appearing in the block. More specifically, it's the root of a merkle tree whose leaves are the block's Txids, in lexicographic order. For the empty block, it's 0. Note that the TxnRoot does not authenticate the signatures on the transactions, only the transactions themselves. Two blocks with the same transactions but in a different order and with different signatures will have the same TxnRoot.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**transactions-root-sha256**  <br>*required*|\[txn256\] TransactionsRootSHA256 is an auxiliary TransactionRoot, built using a vector commitment instead of a merkle tree, and SHA256 hash function instead of the default SHA512_256. This commitment can be used on environments where only the SHA256 function exists.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**transactions-root-sha512**  <br>*optional*|\[txn512\] TransactionsRootSHA512 is an auxiliary TransactionRoot, built using a vector commitment instead of a merkle tree, and SHA512 hash function instead of the default SHA512_256.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**txn-counter**  <br>*optional*|\[tc\] TxnCounter counts the number of transactions committed in the ledger, from the time at which support for this feature was introduced.<br><br>Specifically, TxnCounter is the number of the next transaction that will be committed after this block.  It is 0 when no transactions have ever been committed (since TxnCounter started being supported).|integer|
 |**upgrade-state**  <br>*optional*||[BlockUpgradeState](#blockupgradestate)|
 |**upgrade-vote**  <br>*optional*||[BlockUpgradeVote](#blockupgradevote)|
@@ -1825,6 +1827,17 @@ A health check response.
 |**version**  <br>*required*|Current version.|string|
 
 
+<a name="holdingref"></a>
+### HoldingRef
+HoldingRef names a holding by referring to an Address and Asset it belongs to.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*required*|\[d\] Address in access list, or the sender of the transaction.|string|
+|**asset**  <br>*required*|\[s\] Asset ID for asset in access list.|integer|
+
+
 <a name="indexerstateproofmessage"></a>
 ### IndexerStateProofMessage
 
@@ -1835,6 +1848,17 @@ A health check response.
 |**latest-attested-round**  <br>*optional*|\[l\]|integer|
 |**ln-proven-weight**  <br>*optional*|\[P\]|integer|
 |**voters-commitment**  <br>*optional*|\[v\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="localsref"></a>
+### LocalsRef
+LocalsRef names a local state by referring to an Address and App it belongs to.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*required*|\[d\] Address in access list, or the sender of the transaction.|string|
+|**app**  <br>*required*|\[p\] Application ID for app in access list, or zero if referring to the called application.|integer|
 
 
 <a name="merklearrayproof"></a>
@@ -1887,6 +1911,21 @@ Participation account data that needs to be checked/acted on by the network.
 |---|---|---|
 |**absent-participation-accounts**  <br>*optional*|\[partupabs\] a list of online accounts that need to be suspended.|< string > array|
 |**expired-participation-accounts**  <br>*optional*|\[partupdrmv\] a list of online accounts that needs to be converted to offline since their participation key expired.|< string > array|
+
+
+<a name="resourceref"></a>
+### ResourceRef
+ResourceRef names a single resource. Only one of the fields should be set.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*optional*|\[d\] Account whose balance record is accessible by the executing ApprovalProgram or ClearStateProgram.|string|
+|**application-id**  <br>*optional*|\[p\] Application id whose GlobalState may be read by the executing<br> ApprovalProgram or ClearStateProgram.|integer|
+|**asset-id**  <br>*optional*|\[s\] Asset whose AssetParams may be read by the executing<br> ApprovalProgram or ClearStateProgram.|integer|
+|**box**  <br>*optional*||[BoxReference](#boxreference)|
+|**holding**  <br>*optional*||[HoldingRef](#holdingref)|
+|**local**  <br>*optional*||[LocalsRef](#localsref)|
 
 
 <a name="statedelta"></a>
@@ -2073,6 +2112,7 @@ data/transactions/application.go : ApplicationCallTxnFields
 
 |Name|Description|Schema|
 |---|---|---|
+|**access**  <br>*optional*|\[al\] Access unifies `accounts`, `foreign-apps`, `foreign-assets`, and `box-references` under a single list. If access is non-empty, these lists must be empty. If access is empty, those lists may be non-empty.|< [ResourceRef](#resourceref) > array|
 |**accounts**  <br>*optional*|\[apat\] List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|< string > array|
 |**application-args**  <br>*optional*|\[apaa\] transaction specific arguments accessed from the application's approval-program and clear-state-program.|< string > array|
 |**application-id**  <br>*required*|\[apid\] ID of the application being configured or empty if creating.|integer|
@@ -2215,13 +2255,14 @@ data/transactions/logicsig.go
 |---|---|---|
 |**args**  <br>*optional*|\[arg\] Logic arguments, base64 encoded.|< string > array|
 |**logic**  <br>*required*|\[l\] Program signed by a signature or multi signature, or hashed to be the address of ana ccount. Base64 encoded TEAL program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**logic-multisig-signature**  <br>*optional*||[TransactionSignatureMultisig](#transactionsignaturemultisig)|
 |**multisig-signature**  <br>*optional*||[TransactionSignatureMultisig](#transactionsignaturemultisig)|
 |**signature**  <br>*optional*|\[sig\] ed25519 signature.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="transactionsignaturemultisig"></a>
 ### TransactionSignatureMultisig
-\[msig\] structure holding multiple subsignatures.
+structure holding multiple subsignatures.
 
 Definition:
 crypto/multisig.go : MultisigSig
