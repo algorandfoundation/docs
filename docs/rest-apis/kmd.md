@@ -1259,6 +1259,7 @@ APIV1POSTMultisigProgramSignRequest is the request for `POST /v1/multisig/signpr
 |**data**  <br>*optional*|**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**partial_multisig**  <br>*optional*||[MultisigSig](#multisigsig)|
 |**public_key**  <br>*optional*||[PublicKey](#publickey)|
+|**use_legacy_msig**  <br>*optional*||boolean|
 |**wallet_handle_token**  <br>*optional*||string|
 |**wallet_password**  <br>*optional*||string|
 
