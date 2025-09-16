@@ -38,7 +38,7 @@ goal clerk simulate [flags]
 
       --allow-unnamed-resources    Allow access to unnamed resources during simulation
 
-      --extra-opcode-budget uint   Apply extra opcode budget for apps per transaction group during simulation
+      --extra-opcode-budget int    Apply extra opcode budget for apps per transaction group during simulation
 
       --full-trace                 Enable all options for simulation execution trace
 

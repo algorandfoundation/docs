@@ -51,6 +51,7 @@ goal wallet [flags]
 * [goal](../../../goal/goal/)	 - CLI for interacting with Algorand
 * [goal wallet list](../list/)	 - List wallets managed by kmd
 * [goal wallet new](../new/)	 - Create a new wallet
+* [goal wallet rename](../rename/)	 - Rename wallet
 
 
 

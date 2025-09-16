@@ -32,6 +32,8 @@ goal clerk inspect [input file 1] [input file 2]... [flags]
 
   -h, --help   help for inspect
 
+  -t, --txid   Display the TxID for each transaction
+
 ```
 
 

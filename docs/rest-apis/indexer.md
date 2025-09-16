@@ -50,6 +50,7 @@ Search for accounts.
 |**Query**|**include-all**  <br>*optional*|Include all items including closed accounts, deleted applications, destroyed assets, opted-out asset holdings, and closed-out application localstates.|boolean|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
+|**Query**|**online-only**  <br>*optional*|When this is set to true, return only accounts whose participation status is currently online.|boolean|
 |**Query**|**round**  <br>*optional*|Include results for the specified round. For performance reasons, this parameter may be disabled on some configurations. Using application-id or asset-id filters will return both creator and opt-in accounts. Filtering by include-all will return creator and opt-in accounts for deleted assets and accounts. Non-opt-in managers are not included in the results when asset-id is used.|integer|
 
 
@@ -1314,6 +1315,7 @@ Search for transactions. Transactions are returned oldest to newest unless the a
 |**Query**|**currency-greater-than**  <br>*optional*|Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**currency-less-than**  <br>*optional*|Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.|integer|
 |**Query**|**exclude-close-to**  <br>*optional*|Combine with address and address-role parameters to define what type of address to search for. The close to fields are normally treated as a receiver, if you would like to exclude them set this parameter to true.|boolean|
+|**Query**|**group-id**  <br>*optional*|Lookup transactions by group ID. This field must be base64-encoded, and afterwards, base64 characters that are URL-unsafe (i.e. =, /, +) must be URL-encoded|string|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return. There could be additional pages even if the limit is not reached.|integer|
 |**Query**|**max-round**  <br>*optional*|Include results at or before the specified max-round.|integer|
 |**Query**|**min-round**  <br>*optional*|Include results at or after the specified min-round.|integer|
@@ -1573,6 +1575,7 @@ Stores the global information associated with an application.
 |**global-state**  <br>*optional*|global state|[TealKeyValueStore](#tealkeyvaluestore)|
 |**global-state-schema**  <br>*optional*|global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|local schema|[ApplicationStateSchema](#applicationstateschema)|
+|**version**  <br>*optional*|the number of updates to the application programs|integer|
 
 
 <a name="applicationstateschema"></a>
@@ -1663,6 +1666,7 @@ data/bookkeeping/block.go : Block
 |**genesis-id**  <br>*required*|\[gen\] ID to which this block belongs.|string|
 |**participation-updates**  <br>*optional*||[ParticipationUpdates](#participationupdates)|
 |**previous-block-hash**  <br>*required*|\[prev\] Previous block hash.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**previous-block-hash-512**  <br>*optional*|\[prev512\] Previous block hash, using SHA-512.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**proposer**  <br>*optional*|the proposer of this block.|string|
 |**proposer-payout**  <br>*optional*|the actual amount transferred to the proposer from the fee sink.|integer|
 |**rewards**  <br>*optional*||[BlockRewards](#blockrewards)|
@@ -1673,6 +1677,7 @@ data/bookkeeping/block.go : Block
 |**transactions**  <br>*optional*|\[txns\] list of transactions corresponding to a given round.|< [Transaction](#transaction) > array|
 |**transactions-root**  <br>*required*|\[txn\] TransactionsRoot authenticates the set of transactions appearing in the block. More specifically, it's the root of a merkle tree whose leaves are the block's Txids, in lexicographic order. For the empty block, it's 0. Note that the TxnRoot does not authenticate the signatures on the transactions, only the transactions themselves. Two blocks with the same transactions but in a different order and with different signatures will have the same TxnRoot.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**transactions-root-sha256**  <br>*required*|\[txn256\] TransactionsRootSHA256 is an auxiliary TransactionRoot, built using a vector commitment instead of a merkle tree, and SHA256 hash function instead of the default SHA512_256. This commitment can be used on environments where only the SHA256 function exists.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**transactions-root-sha512**  <br>*optional*|\[txn512\] TransactionsRootSHA512 is an auxiliary TransactionRoot, built using a vector commitment instead of a merkle tree, and SHA512 hash function instead of the default SHA512_256.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**txn-counter**  <br>*optional*|\[tc\] TxnCounter counts the number of transactions committed in the ledger, from the time at which support for this feature was introduced.<br><br>Specifically, TxnCounter is the number of the next transaction that will be committed after this block.  It is 0 when no transactions have ever been committed (since TxnCounter started being supported).|integer|
 |**upgrade-state**  <br>*optional*||[BlockUpgradeState](#blockupgradestate)|
 |**upgrade-vote**  <br>*optional*||[BlockUpgradeVote](#blockupgradevote)|
@@ -1738,6 +1743,17 @@ Box descriptor describes an app box without a value.
 
 |Name|Description|Schema|
 |---|---|---|
+|**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="boxreference"></a>
+### BoxReference
+BoxReference names a box by its name and the application ID it belongs to.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**app**  <br>*required*|Application ID to which the box belongs, or zero if referring to the called application.|integer|
 |**name**  <br>*required*|Base64 encoded box name  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -1811,6 +1827,17 @@ A health check response.
 |**version**  <br>*required*|Current version.|string|
 
 
+<a name="holdingref"></a>
+### HoldingRef
+HoldingRef names a holding by referring to an Address and Asset it belongs to.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*required*|\[d\] Address in access list, or the sender of the transaction.|string|
+|**asset**  <br>*required*|\[s\] Asset ID for asset in access list.|integer|
+
+
 <a name="indexerstateproofmessage"></a>
 ### IndexerStateProofMessage
 
@@ -1821,6 +1848,17 @@ A health check response.
 |**latest-attested-round**  <br>*optional*|\[l\]|integer|
 |**ln-proven-weight**  <br>*optional*|\[P\]|integer|
 |**voters-commitment**  <br>*optional*|\[v\]  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+
+
+<a name="localsref"></a>
+### LocalsRef
+LocalsRef names a local state by referring to an Address and App it belongs to.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*required*|\[d\] Address in access list, or the sender of the transaction.|string|
+|**app**  <br>*required*|\[p\] Application ID for app in access list, or zero if referring to the called application.|integer|
 
 
 <a name="merklearrayproof"></a>
@@ -1873,6 +1911,21 @@ Participation account data that needs to be checked/acted on by the network.
 |---|---|---|
 |**absent-participation-accounts**  <br>*optional*|\[partupabs\] a list of online accounts that need to be suspended.|< string > array|
 |**expired-participation-accounts**  <br>*optional*|\[partupdrmv\] a list of online accounts that needs to be converted to offline since their participation key expired.|< string > array|
+
+
+<a name="resourceref"></a>
+### ResourceRef
+ResourceRef names a single resource. Only one of the fields should be set.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**address**  <br>*optional*|\[d\] Account whose balance record is accessible by the executing ApprovalProgram or ClearStateProgram.|string|
+|**application-id**  <br>*optional*|\[p\] Application id whose GlobalState may be read by the executing<br> ApprovalProgram or ClearStateProgram.|integer|
+|**asset-id**  <br>*optional*|\[s\] Asset whose AssetParams may be read by the executing<br> ApprovalProgram or ClearStateProgram.|integer|
+|**box**  <br>*optional*||[BoxReference](#boxreference)|
+|**holding**  <br>*optional*||[HoldingRef](#holdingref)|
+|**local**  <br>*optional*||[LocalsRef](#localsref)|
 
 
 <a name="statedelta"></a>
@@ -2059,10 +2112,12 @@ data/transactions/application.go : ApplicationCallTxnFields
 
 |Name|Description|Schema|
 |---|---|---|
+|**access**  <br>*optional*|\[al\] Access unifies `accounts`, `foreign-apps`, `foreign-assets`, and `box-references` under a single list. If access is non-empty, these lists must be empty. If access is empty, those lists may be non-empty.|< [ResourceRef](#resourceref) > array|
 |**accounts**  <br>*optional*|\[apat\] List of accounts in addition to the sender that may be accessed from the application's approval-program and clear-state-program.|< string > array|
 |**application-args**  <br>*optional*|\[apaa\] transaction specific arguments accessed from the application's approval-program and clear-state-program.|< string > array|
 |**application-id**  <br>*required*|\[apid\] ID of the application being configured or empty if creating.|integer|
 |**approval-program**  <br>*optional*|\[apap\] Logic executed for every application transaction, except when on-completion is set to "clear". It can read and write global state for the application, as well as account-specific local state. Approval programs may reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**box-references**  <br>*optional*|\[apbx\] the boxes that can be accessed by this transaction (and others in the same group).|< [BoxReference](#boxreference) > array|
 |**clear-state-program**  <br>*optional*|\[apsu\] Logic executed for application transactions with on-completion set to "clear". It can read and write global state for the application, as well as account-specific local state. Clear state programs cannot reject the transaction.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**extra-program-pages**  <br>*optional*|\[epp\] specifies the additional app program len requested in pages.|integer|
 |**foreign-apps**  <br>*optional*|\[apfa\] Lists the applications in addition to the application-id whose global states may be accessed by this application's approval-program and clear-state-program. The access is read-only.|< integer > array|
@@ -2070,6 +2125,7 @@ data/transactions/application.go : ApplicationCallTxnFields
 |**global-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
 |**local-state-schema**  <br>*optional*||[StateSchema](#stateschema)|
 |**on-completion**  <br>*required*||[OnCompletion](#oncompletion)|
+|**reject-version**  <br>*optional*|\[aprv\] the lowest application version for which this transaction should immediately fail. 0 indicates that no version check should be performed.|integer|
 
 
 <a name="transactionassetconfig"></a>
@@ -2199,13 +2255,14 @@ data/transactions/logicsig.go
 |---|---|---|
 |**args**  <br>*optional*|\[arg\] Logic arguments, base64 encoded.|< string > array|
 |**logic**  <br>*required*|\[l\] Program signed by a signature or multi signature, or hashed to be the address of ana ccount. Base64 encoded TEAL program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**logic-multisig-signature**  <br>*optional*||[TransactionSignatureMultisig](#transactionsignaturemultisig)|
 |**multisig-signature**  <br>*optional*||[TransactionSignatureMultisig](#transactionsignaturemultisig)|
 |**signature**  <br>*optional*|\[sig\] ed25519 signature.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="transactionsignaturemultisig"></a>
 ### TransactionSignatureMultisig
-\[msig\] structure holding multiple subsignatures.
+structure holding multiple subsignatures.
 
 Definition:
 crypto/multisig.go : MultisigSig

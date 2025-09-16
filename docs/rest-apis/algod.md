@@ -98,7 +98,7 @@ Returns the entire genesis file in json.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|The genesis file in json.|string|
+|**200**|The genesis file in json.|[Genesis](#genesis)|
 |**default**|Unknown Error|No Content|
 
 
@@ -243,7 +243,7 @@ Given a specific account public key, this call returns the account's status, bal
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**address**  <br>*required*|An account public key|string|
+|**Path**|**address**  <br>*required*|An account public key.|string|
 |**Query**|**exclude**  <br>*optional*|When set to `all` will exclude asset holdings, application local state, created asset parameters, any created application parameters. Defaults to `none`.|enum (all, none)|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
@@ -287,8 +287,8 @@ Given a specific account public key and application ID, this call returns the ac
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**address**  <br>*required*|An account public key|string|
-|**Path**|**application-id**  <br>*required*|An application identifier|integer|
+|**Path**|**address**  <br>*required*|An account public key.|string|
+|**Path**|**application-id**  <br>*required*|An application identifier.|integer|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
@@ -340,7 +340,7 @@ Lookup an account's asset holdings.
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**address**  <br>*required*|An account public key|string|
+|**Path**|**address**  <br>*required*|An account public key.|string|
 |**Query**|**limit**  <br>*optional*|Maximum number of results to return.|integer|
 |**Query**|**next**  <br>*optional*|The next page of results. Use the next token provided by the previous results.|string|
 
@@ -392,8 +392,8 @@ Given a specific account public key and asset ID, this call returns the account'
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**address**  <br>*required*|An account public key|string|
-|**Path**|**asset-id**  <br>*required*|An asset identifier|integer|
+|**Path**|**address**  <br>*required*|An account public key.|string|
+|**Path**|**asset-id**  <br>*required*|An asset identifier.|integer|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
@@ -445,7 +445,7 @@ Get the list of pending transactions by address, sorted by priority, in decreasi
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**address**  <br>*required*|An account public key|string|
+|**Path**|**address**  <br>*required*|An account public key.|string|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Query**|**max**  <br>*optional*|Truncated number of transactions to display. If max=0, returns all pending txns.|integer|
 
@@ -498,7 +498,7 @@ Given a application ID, it returns application information including creator, ap
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**application-id**  <br>*required*|An application identifier|integer|
+|**Path**|**application-id**  <br>*required*|An application identifier.|integer|
 
 
 **Responses**
@@ -540,7 +540,7 @@ Given an application ID and box name, it returns the round, box name, and value 
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**application-id**  <br>*required*|An application identifier|integer|
+|**Path**|**application-id**  <br>*required*|An application identifier.|integer|
 |**Query**|**name**  <br>*required*|A box name, in the goal app call arg form 'encoding:value'. For ints, use the form 'int:1234'. For raw bytes, use the form 'b64:A=='. For printable strings, use the form 'str:hello'. For addresses, use the form 'addr:XYZ...'.|string|
 
 
@@ -583,7 +583,7 @@ Given an application ID, return all Box names. No particular ordering is guarant
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**application-id**  <br>*required*|An application identifier|integer|
+|**Path**|**application-id**  <br>*required*|An application identifier.|integer|
 |**Query**|**max**  <br>*optional*|Max number of box names to return. If max is not set, or max == 0, returns all box-names.|integer|
 
 
@@ -632,7 +632,7 @@ Given a asset ID, it returns asset information including creator, name, total su
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**asset-id**  <br>*required*|An asset identifier|integer|
+|**Path**|**asset-id**  <br>*required*|An asset identifier.|integer|
 
 
 **Responses**
@@ -670,7 +670,7 @@ GET /v2/blocks/{round}
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round from which to fetch block information.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Query**|**header-only**  <br>*optional*|If true, only the block header (exclusive of payset or certificate) may be included in response.|boolean|
 
@@ -719,7 +719,7 @@ GET /v2/blocks/{round}/hash
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round from which to fetch block hash information.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -764,7 +764,7 @@ GET /v2/blocks/{round}/lightheader/proof
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round to which the light block header belongs.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -807,7 +807,7 @@ Get all of the logs from outer and inner app calls in the given round
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round from which to fetch block log information.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -851,7 +851,7 @@ GET /v2/blocks/{round}/transactions/{txid}/proof
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round in which the transaction appears.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 |**Path**|**txid**  <br>*required*|The transaction ID for which to generate a proof.|string|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 |**Query**|**hashtype**  <br>*optional*|The type of hash function used to create the proof, must be one of: <br>* sha512_256 <br>* sha256|enum (sha512_256, sha256)|
@@ -861,23 +861,12 @@ GET /v2/blocks/{round}/transactions/{txid}/proof
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|Proof of transaction in a block.|[Response 200](#gettransactionproof-response-200)|
+|**200**|Proof of transaction in a block.|[TransactionProof](#transactionproof)|
 |**400**|Malformed round number or transaction ID|[ErrorResponse](#errorresponse)|
 |**401**|Invalid API token|[ErrorResponse](#errorresponse)|
 |**404**|Non-existent block or transaction|[ErrorResponse](#errorresponse)|
 |**500**|Internal error, including protocol not supporting proofs.|[ErrorResponse](#errorresponse)|
 |**default**|Unknown error|No Content|
-
-<a name="gettransactionproof-response-200"></a>
-**Response 200**
-
-|Name|Description|Schema|
-|---|---|---|
-|**hashtype**  <br>*required*|The type of hash function used to create the proof, must be one of: <br>* sha512_256 <br>* sha256|enum (sha512_256, sha256)|
-|**idx**  <br>*required*|Index of the transaction in the block's payset.|integer|
-|**proof**  <br>*required*|Proof of transaction membership.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**stibhash**  <br>*required*|Hash of SignedTxnInBlock for verifying proof.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**treedepth**  <br>*required*|Represents the depth of the tree that is being proven, i.e. the number of edges from a leaf to the root.|integer|
 
 
 **Produces**
@@ -903,7 +892,7 @@ GET /v2/blocks/{round}/txids
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round from which to fetch block transaction IDs.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -1103,7 +1092,7 @@ Get ledger deltas for a round.
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round for which the deltas are desired.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
@@ -1148,7 +1137,7 @@ Get ledger deltas for transaction groups in a given round.
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round for which the deltas are desired.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 |**Query**|**format**  <br>*optional*|Configures whether the response object is JSON or MessagePack encoded. If not provided, defaults to JSON.|enum (json, msgpack)|
 
 
@@ -1407,7 +1396,7 @@ Sets the minimum sync round on the ledger.
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round for which the deltas are desired.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -1526,10 +1515,10 @@ POST /v2/participation/generate/{address}
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**address**  <br>*required*|An account public key|string|
-|**Query**|**dilution**  <br>*optional*|Key dilution for two-level participation keys (defaults to sqrt of validity window).|integer|
-|**Query**|**first**  <br>*required*|First round for participation key.|integer|
-|**Query**|**last**  <br>*required*|Last round for participation key.|integer|
+|**Path**|**address**  <br>*required*|An account public key.|string|
+|**Query**|**dilution**  <br>*optional*|Key dilution for two-level participation keys (defaults to sqrt of validity window).|integer (uint64)|
+|**Query**|**first**  <br>*required*|First round for participation key.|integer (uint64)|
+|**Query**|**last**  <br>*required*|Last round for participation key.|integer (uint64)|
 
 
 **Responses**
@@ -1726,7 +1715,7 @@ GET /v2/stateproofs/{round}
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round for which a state proof is desired.|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -1830,7 +1819,7 @@ Waits for a block to appear after round {round} and returns the node's status at
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**round**  <br>*required*|The round to wait until returning status|integer|
+|**Path**|**round**  <br>*required*|A round number.|integer|
 
 
 **Responses**
@@ -2384,10 +2373,10 @@ data/basics/userBalance.go : AccountData
 |Name|Description|Schema|
 |---|---|---|
 |**address**  <br>*required*|the account public key|string|
-|**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer|
-|**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer|
+|**amount**  <br>*required*|\[algo\] total number of MicroAlgos in the account|integer (uint64)|
+|**amount-without-pending-rewards**  <br>*required*|specifies the amount of MicroAlgos in the account, without the pending rewards.|integer (uint64)|
 |**apps-local-state**  <br>*optional*|\[appl\] applications local data stored in this account.<br><br>Note the raw object uses `map[int] -> AppLocalState` for this type.|< [ApplicationLocalState](#applicationlocalstate) > array|
-|**apps-total-extra-pages**  <br>*optional*|\[teap\] the sum of all extra application program pages for this account.|integer|
+|**apps-total-extra-pages**  <br>*optional*|\[teap\] the sum of all extra application program pages for this account.|integer (uint64)|
 |**apps-total-schema**  <br>*optional*|\[tsch\] stores the sum of all of the local schemas and global schemas in this account.<br><br>Note: the raw account uses `StateSchema` for this type.|[ApplicationStateSchema](#applicationstateschema)|
 |**assets**  <br>*optional*|\[asset\] assets held by this account.<br><br>Note the raw object uses `map[int] -> AssetHolding` for this type.|< [AssetHolding](#assetholding) > array|
 |**auth-addr**  <br>*optional*|\[spend\] the address against which signing should be checked. If empty, the address of the current account is used. This field can be updated in any transaction by setting the RekeyTo field.|string|
@@ -2396,20 +2385,20 @@ data/basics/userBalance.go : AccountData
 |**incentive-eligible**  <br>*optional*|Whether or not the account can receive block incentives if its balance is in range at proposal time.|boolean|
 |**last-heartbeat**  <br>*optional*|The round in which this account last went online, or explicitly renewed their online status.|integer|
 |**last-proposed**  <br>*optional*|The round in which this account last proposed the block.|integer|
-|**min-balance**  <br>*required*|MicroAlgo balance required by the account.<br><br>The requirement grows based on asset and application usage.|integer|
+|**min-balance**  <br>*required*|MicroAlgo balance required by the account.<br><br>The requirement grows based on asset and application usage.|integer (uint64)|
 |**participation**  <br>*optional*||[AccountParticipation](#accountparticipation)|
-|**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer|
-|**reward-base**  <br>*optional*|\[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.|integer|
-|**rewards**  <br>*required*|\[ern\] total rewards of MicroAlgos the account has received, including pending rewards.|integer|
+|**pending-rewards**  <br>*required*|amount of MicroAlgos of pending rewards in this account.|integer (uint64)|
+|**reward-base**  <br>*optional*|\[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.|integer (uint64)|
+|**rewards**  <br>*required*|\[ern\] total rewards of MicroAlgos the account has received, including pending rewards.|integer (uint64)|
 |**round**  <br>*required*|The round for which this information is relevant.|integer|
 |**sig-type**  <br>*optional*|Indicates what type of signature is used by this account, must be one of:<br>* sig<br>* msig<br>* lsig|enum (sig, msig, lsig)|
 |**status**  <br>*required*|\[onl\] delegation status of the account's MicroAlgos<br>* Offline - indicates that the associated account is delegated.<br>*  Online  - indicates that the associated account used as part of the delegation pool.<br>*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.|string|
-|**total-apps-opted-in**  <br>*required*|The count of all applications that have been opted in, equivalent to the count of application local data (AppLocalState objects) stored in this account.|integer|
-|**total-assets-opted-in**  <br>*required*|The count of all assets that have been opted in, equivalent to the count of AssetHolding objects held by this account.|integer|
-|**total-box-bytes**  <br>*optional*|\[tbxb\] The total number of bytes used by this account's app's box keys and values.|integer|
-|**total-boxes**  <br>*optional*|\[tbx\] The number of existing boxes created by this account's app.|integer|
-|**total-created-apps**  <br>*required*|The count of all apps (AppParams objects) created by this account.|integer|
-|**total-created-assets**  <br>*required*|The count of all assets (AssetParams objects) created by this account.|integer|
+|**total-apps-opted-in**  <br>*required*|The count of all applications that have been opted in, equivalent to the count of application local data (AppLocalState objects) stored in this account.|integer (uint64)|
+|**total-assets-opted-in**  <br>*required*|The count of all assets that have been opted in, equivalent to the count of AssetHolding objects held by this account.|integer (uint64)|
+|**total-box-bytes**  <br>*optional*|\[tbxb\] The total number of bytes used by this account's app's box keys and values.|integer (uint64)|
+|**total-boxes**  <br>*optional*|\[tbx\] The number of existing boxes created by this account's app.|integer (uint64)|
+|**total-created-apps**  <br>*required*|The count of all apps (AppParams objects) created by this account.|integer (uint64)|
+|**total-created-assets**  <br>*required*|The count of all assets (AssetParams objects) created by this account.|integer (uint64)|
 
 
 <a name="accountassetholding"></a>
@@ -2529,10 +2518,11 @@ Stores the global information associated with an application.
 |**approval-program**  <br>*required*|\[approv\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**clear-state-program**  <br>*required*|\[clearp\] approval program.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**creator**  <br>*required*|The address that created this application. This is the address where the parameters and global state for this application can be found.|string|
-|**extra-program-pages**  <br>*optional*|\[epp\] the amount of extra program pages available to this app.|integer|
+|**extra-program-pages**  <br>*optional*|\[epp\] the amount of extra program pages available to this app.|integer (uint64)|
 |**global-state**  <br>*optional*|\[gs\] global state|[TealKeyValueStore](#tealkeyvaluestore)|
 |**global-state-schema**  <br>*optional*|\[gsch\] global schema|[ApplicationStateSchema](#applicationstateschema)|
 |**local-state-schema**  <br>*optional*|\[lsch\] local schema|[ApplicationStateSchema](#applicationstateschema)|
+|**version**  <br>*optional*|\[v\] the number of updates to the application programs|integer|
 
 
 <a name="applicationstateoperation"></a>
@@ -2556,8 +2546,8 @@ Specifies maximums on the number of each type that may be stored.
 
 |Name|Description|Schema|
 |---|---|---|
-|**num-byte-slice**  <br>*required*|\[nbs\] num of byte slices.|integer|
-|**num-uint**  <br>*required*|\[nui\] num of uints.|integer|
+|**num-byte-slice**  <br>*required*|\[nbs\] num of byte slices.|integer (uint64)|
+|**num-uint**  <br>*required*|\[nui\] num of uints.|integer (uint64)|
 
 
 <a name="asset"></a>
@@ -2581,7 +2571,7 @@ data/basics/userBalance.go : AssetHolding
 
 |Name|Description|Schema|
 |---|---|---|
-|**amount**  <br>*required*|\[a\] number of units held.|integer|
+|**amount**  <br>*required*|\[a\] number of units held.|integer (uint64)|
 |**asset-id**  <br>*required*|Asset ID of the holding.|integer|
 |**is-frozen**  <br>*required*|\[f\] whether or not the holding is frozen.|boolean|
 
@@ -2611,7 +2601,7 @@ data/transactions/asset.go : AssetParams
 |---|---|---|
 |**clawback**  <br>*optional*|\[c\] Address of account used to clawback holdings of this asset.  If empty, clawback is not permitted.|string|
 |**creator**  <br>*required*|The address that created this asset. This is the address where the parameters for this asset can be found, and also the address where unwanted asset units can be sent in the worst case.|string|
-|**decimals**  <br>*required*|\[dc\] The number of digits to use after the decimal point when displaying this asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths, and so on. This value must be between 0 and 19 (inclusive).  <br>**Minimum value** : `0`  <br>**Maximum value** : `19`|integer|
+|**decimals**  <br>*required*|\[dc\] The number of digits to use after the decimal point when displaying this asset. If 0, the asset is not divisible. If 1, the base unit of the asset is in tenths. If 2, the base unit of the asset is in hundredths, and so on. This value must be between 0 and 19 (inclusive).  <br>**Minimum value** : `0`  <br>**Maximum value** : `19`|integer (uint64)|
 |**default-frozen**  <br>*optional*|\[df\] Whether holdings of this asset are frozen by default.|boolean|
 |**freeze**  <br>*optional*|\[f\] Address of account used to freeze holdings of this asset.  If empty, freezing is not permitted.|string|
 |**manager**  <br>*optional*|\[m\] Address of account used to manage the keys of this asset and to destroy it.|string|
@@ -2619,7 +2609,7 @@ data/transactions/asset.go : AssetParams
 |**name**  <br>*optional*|\[an\] Name of this asset, as supplied by the creator. Included only when the asset name is composed of printable utf-8 characters.|string|
 |**name-b64**  <br>*optional*|Base64 encoded name of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**reserve**  <br>*optional*|\[r\] Address of account holding reserve (non-minted) units of this asset.|string|
-|**total**  <br>*required*|\[t\] The total number of units of this asset.|integer|
+|**total**  <br>*required*|\[t\] The total number of units of this asset.|integer (uint64)|
 |**unit-name**  <br>*optional*|\[un\] Name of a unit of this asset, as supplied by the creator. Included only when the name of a unit of this asset is composed of printable utf-8 characters.|string|
 |**unit-name-b64**  <br>*optional*|Base64 encoded name of a unit of this asset, as supplied by the creator.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**url**  <br>*optional*|\[au\] URL where more information about the asset can be retrieved. Included only when the URL is composed of printable utf-8 characters.|string|
@@ -2646,7 +2636,7 @@ Represents an AVM value.
 |---|---|---|
 |**bytes**  <br>*optional*|bytes value.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**type**  <br>*required*|value type. Value `1` refers to **bytes**, value `2` refers to **uint64**|integer|
-|**uint**  <br>*optional*|uint value.|integer|
+|**uint**  <br>*optional*|uint value.|integer (uint64)|
 
 
 <a name="box"></a>
@@ -2656,9 +2646,9 @@ Box name and its content.
 
 |Name|Description|Schema|
 |---|---|---|
-|**name**  <br>*required*|\[name\] box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**name**  <br>*required*|The box name, base64 encoded  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**round**  <br>*required*|The round for which this information is relevant|integer|
-|**value**  <br>*required*|\[value\] box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**value**  <br>*required*|The box value, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
 <a name="boxdescriptor"></a>
@@ -2688,11 +2678,11 @@ References a box of an application.
 |Name|Schema|
 |---|---|
 |**branch**  <br>*required*|string|
-|**build_number**  <br>*required*|integer (int64)|
+|**build_number**  <br>*required*|integer|
 |**channel**  <br>*required*|string|
 |**commit_hash**  <br>*required*|string|
-|**major**  <br>*required*|integer (int64)|
-|**minor**  <br>*required*|integer (int64)|
+|**major**  <br>*required*|integer|
+|**minor**  <br>*required*|integer|
 
 
 <a name="debugsettingsprof"></a>
@@ -2702,8 +2692,8 @@ algod mutex and blocking profiling state.
 
 |Name|Description|Schema|
 |---|---|---|
-|**block-rate**  <br>*optional*|The rate of blocking events. The profiler aims to sample an average of one blocking event per rate nanoseconds spent blocked. To turn off profiling entirely, pass rate 0.  <br>**Example** : `1000`|integer|
-|**mutex-rate**  <br>*optional*|The rate of mutex events. On average 1/rate events are reported. To turn off profiling entirely, pass rate 0  <br>**Example** : `1000`|integer|
+|**block-rate**  <br>*optional*|The rate of blocking events. The profiler aims to sample an average of one blocking event per rate nanoseconds spent blocked. To turn off profiling entirely, pass rate 0.  <br>**Example** : `1000`|integer (uint64)|
+|**mutex-rate**  <br>*optional*|The rate of mutex events. On average 1/rate events are reported. To turn off profiling entirely, pass rate 0  <br>**Example** : `1000`|integer (uint64)|
 
 
 <a name="dryrunrequest"></a>
@@ -2715,7 +2705,7 @@ Request data type for dryrun endpoint. Given the Transactions and simulated ledg
 |---|---|---|
 |**accounts**  <br>*required*||< [Account](#account) > array|
 |**apps**  <br>*required*||< [Application](#application) > array|
-|**latest-timestamp**  <br>*required*|LatestTimestamp is available to some TEAL scripts. Defaults to the latest confirmed timestamp this algod is attached to.|integer (int64)|
+|**latest-timestamp**  <br>*required*|LatestTimestamp is available to some TEAL scripts. Defaults to the latest confirmed timestamp this algod is attached to.  <br>**Minimum value** : `0`|integer|
 |**protocol-version**  <br>*required*|ProtocolVersion specifies a specific version string to operate under, otherwise whatever the current protocol of the network this algod is running in.|string|
 |**round**  <br>*required*|Round is available to some TEAL scripts. Defaults to the current round on the network this algod is attached to.|integer|
 |**sources**  <br>*required*||< [DryrunSource](#dryrunsource) > array|
@@ -2787,9 +2777,9 @@ Represents a TEAL value delta.
 
 |Name|Description|Schema|
 |---|---|---|
-|**action**  <br>*required*|\[at\] delta action.|integer|
+|**action**  <br>*required*|\[at\] delta action.|integer (uint64)|
 |**bytes**  <br>*optional*|\[bs\] bytes value.|string|
-|**uint**  <br>*optional*|\[ui\] uint value.|integer|
+|**uint**  <br>*optional*|\[ui\] uint value.|integer (uint64)|
 
 
 <a name="evaldeltakeyvalue"></a>
@@ -2803,15 +2793,44 @@ Key-value pairs for StateDelta.
 |**value**  <br>*required*|[EvalDelta](#evaldelta)|
 
 
-<a name="kvdelta"></a>
-### KvDelta
-A single Delta containing the key, the previous value and the current value for a single round.
+<a name="genesis"></a>
+### Genesis
+
+|Name|Schema|
+|---|---|
+|**alloc**  <br>*required*|< [GenesisAllocation](#genesisallocation) > array|
+|**comment**  <br>*optional*|string|
+|**devmode**  <br>*optional*|boolean|
+|**fees**  <br>*required*|string|
+|**id**  <br>*required*|string|
+|**network**  <br>*required*|string|
+|**proto**  <br>*required*|string|
+|**rwd**  <br>*required*|string|
+|**timestamp**  <br>*required*|integer (int64)|
 
 
-|Name|Description|Schema|
-|---|---|---|
-|**key**  <br>*optional*|The key, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
-|**value**  <br>*optional*|The new value of the KV store entry, base64 encoded.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+<a name="genesisallocation"></a>
+### GenesisAllocation
+
+|Name|Schema|
+|---|---|
+|**addr**  <br>*required*|string|
+|**comment**  <br>*required*|string|
+|**state**  <br>*required*|[state](#genesisallocation-state)|
+
+<a name="genesisallocation-state"></a>
+**state**
+
+|Name|Schema|
+|---|---|
+|**algo**  <br>*required*|integer (uint64)|
+|**onl**  <br>*required*|integer|
+|**sel**  <br>*optional*|string|
+|**stprf**  <br>*optional*|string|
+|**vote**  <br>*optional*|string|
+|**voteFst**  <br>*optional*|integer (uint64)|
+|**voteKD**  <br>*optional*|integer (uint64)|
+|**voteLst**  <br>*optional*|integer (uint64)|
 
 
 <a name="ledgerstatedelta"></a>
@@ -3067,7 +3086,7 @@ Represents the message that the state proofs are attesting to.
 |**BlockHeadersCommitment**  <br>*required*|The vector commitment root on all light block headers within a state proof interval.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 |**FirstAttestedRound**  <br>*required*|The first round the message attests to.|integer|
 |**LastAttestedRound**  <br>*required*|The last round the message attests to.|integer|
-|**LnProvenWeight**  <br>*required*|An integer value representing the natural log of the proven weight with 16 bits of precision. This value would be used to verify the next state proof.|integer|
+|**LnProvenWeight**  <br>*required*|An integer value representing the natural log of the proven weight with 16 bits of precision. This value would be used to verify the next state proof.|integer (uint64)|
 |**VotersCommitment**  <br>*required*|The vector commitment root of the top N accounts to sign the next StateProof.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
 
 
@@ -3098,7 +3117,21 @@ Represents a TEAL value.
 |---|---|---|
 |**bytes**  <br>*required*|\[tb\] bytes value.|string|
 |**type**  <br>*required*|\[tt\] value type. Value `1` refers to **bytes**, value `2` refers to **uint**|integer|
-|**uint**  <br>*required*|\[ui\] uint value.|integer|
+|**uint**  <br>*required*|\[ui\] uint value.|integer (uint64)|
+
+
+<a name="transactionproof"></a>
+### TransactionProof
+Proof of transaction in a block.
+
+
+|Name|Description|Schema|
+|---|---|---|
+|**hashtype**  <br>*required*|The type of hash function used to create the proof, must be one of: <br>* sha512_256 <br>* sha256|enum (sha512_256, sha256)|
+|**idx**  <br>*required*|Index of the transaction in the block's payset.|integer|
+|**proof**  <br>*required*|Proof of transaction membership.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**stibhash**  <br>*required*|Hash of SignedTxnInBlock for verifying proof.  <br>**Pattern** : `"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==\|[A-Za-z0-9+/]{3}=)?$"`|string (byte)|
+|**treedepth**  <br>*required*|Represents the depth of the tree that is being proven, i.e. the number of edges from a leaf to the root.|integer|
 
 
 <a name="version"></a>

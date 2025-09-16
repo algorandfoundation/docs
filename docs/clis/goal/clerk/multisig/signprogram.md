@@ -18,7 +18,7 @@ Start a multisig LogicSig, or add a signature to an existing multisig, for a giv
 
 ```
 
-goal clerk multisig signprogram -t [transaction file] -a [address] [flags]
+goal clerk multisig signprogram -a [address] [flags]
 
 ```
 
@@ -33,6 +33,8 @@ goal clerk multisig signprogram -t [transaction file] -a [address] [flags]
   -a, --address string         Address of the key to sign with
 
   -h, --help                   help for signprogram
+
+      --legacy-msig            Use legacy multisig (if not specified, auto-detect consensus params from algod)
 
   -L, --lsig string            Partial LogicSig to add signature to
 

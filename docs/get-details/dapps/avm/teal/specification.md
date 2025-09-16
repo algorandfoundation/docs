@@ -81,7 +81,7 @@ In order to maintain existing semantics for previously written
 programs, AVM code is versioned.  When new opcodes are introduced, or
 behavior is changed, a new version is introduced.  Programs carrying
 old versions are executed with their original semantics. In the AVM
-bytecode, the version is an incrementing integer, currently 6, and
+bytecode, the version is an incrementing integer, currently 12, and
 denoted vX throughout this document.
 
 ## Execution Modes
@@ -93,7 +93,7 @@ Starting from v2, the AVM can run programs in two modes:
 Differences between modes include:
 1. Max program length (consensus parameters LogicSigMaxSize, MaxAppTotalProgramLen & MaxExtraAppProgramPages)
 2. Max program cost (consensus parameters LogicSigMaxCost, MaxAppProgramCost)
-3. Opcode availability. Refer to [opcodes document](opcodes/v11.md) for details.
+3. Opcode availability. Refer to [opcodes document](opcodes/v12.md) for details.
 4. Some global values, such as LatestTimestamp, are only available in stateful mode.
 5. Only Applications can observe transaction effects, such as Logs or IDs allocated to ASAs or new Applications.
 
@@ -202,10 +202,27 @@ ClearStateProgram fails, and the app's state _is cleared_.
 
 ### Resource availability
 
-Smart contracts have limits on the amount of blockchain state they
-may examine.  Opcodes may only access blockchain resources such as
-Accounts, Assets, Boxes, and contract state if the given resource is
-_available_.
+Smart contracts have limits on the amount of blockchain state they may
+examine.  These limits are enforced by failing any opcode that
+attempts to access a resource unless the resource is
+_available_. These resources are:
+
+ * Accounts, which must be available to access their balance, or other
+ account parameters such as voting details.
+ * Assets, which must be available to access global asset parameters, such
+   the as the asset's URL, Name, or privileged addresses.
+ * Holdings, which must be available to access a particular address's
+   balance or frozen status for a particular asset.
+ * Applications, which must be available to read an application's
+   programs, parameters, or global state.
+ * Locals, which must be available to read a particular address's local
+   state for a particular application.
+ * Boxes, which must be available to read or write a box, designated
+   by an application and name for the box.
+
+Resources are _available_ based on the contents of the executing
+transaction and, in later versions, the contents of other transactions
+in the same group.
 
  * A resource in the "foreign array" fields of the ApplicationCall
    transaction (`txn.Accounts`, `txn.ForeignAssets`, and
@@ -214,32 +231,47 @@ _available_.
  * The `txn.Sender`, `global CurrentApplicationID`, and `global
    CurrentApplicationAddress` are _available_.
 
- * Prior to v4, all assets were considered _available_ to the
-   `asset_holding_get` opcode, and all applications were _available_
-   to the `app_local_get_ex` opcode.
+ * In pre-v4 applications, all holdings are _available_ to the
+   `asset_holding_get` opcode, and all locals are _available_ to the
+   `app_local_get_ex` opcode if the *account* of the resource is
+   _available_.
 
- * Since v6, any asset or contract that was created earlier in the
-   same transaction group (whether by a top-level or inner
-   transaction) is _available_. In addition, any account that is the
-   associated account of a contract that was created earlier in the
-   group is _available_.
+ * In v6 and later applications, any asset or application that was
+   created earlier in the same transaction group (whether by a
+   top-level or inner transaction) is _available_. In addition, any
+   account that is the associated account of a contract that was
+   created earlier in the group is _available_.
 
- * Since v7, the account associated with any contract present in the
-   `txn.ForeignApplications` field is _available_.
-   
- * Since v9, there is group-level resource sharing. Any resource that
-   is available in _some_ top-level transaction in a transaction group
-   is available in _all_ v9 or later application calls in the group,
-   whether those application calls are top-level or inner.
-   
+ * In v7 and later applications, the account associated with any
+   contract present in the `txn.ForeignApplications` field is
+   _available_.
+
+ * In v4 and above applications, Holdings and Locals are _available_
+   if, both components of the resource are available according to the
+   above rules.
+
+ * In v9 and later applications, there is group-level resource
+   sharing. Any resource that is available in _some_ top-level
+   transaction in a transaction group is available in _all_ v9 or
+   later application calls in the group, whether those application
+   calls are top-level or inner.
+
+ * v9 and later applications may use the `txn.Access` list instead of
+   the foreign arrays. When using `txn.Access` Holdings and Locals are
+   no longer made available automatically because their components
+   are. Application accounts are also not made available because of
+   the availability of their corresponding app. Each resource must be
+   listed explicitly. However, `txn.Access` allows for the listing of
+   more resources than the foreign arrays.  Listed resources become
+   available to other (post-v8) applications through group sharing.
+
  * When considering whether an asset holding or application local
-   state is available by group-level resource sharing, the holding or
-   local state must be available in a top-level transaction without
-   considering group sharing. For example, if account A is made
-   available in one transaction, and asset X is made available in
-   another, group resource sharing does _not_ make A's X holding
-   available.
-     
+   state is available for group-level resource sharing, the holding or
+   local state must be available in a top-level transaction based on
+   pre-v9 rules. For example, if account A is made available in one
+   transaction, and asset X is made available in another, group
+   resource sharing does _not_ make A's X holding available.
+
  * Top-level transactions that are not application calls also make
    resources available to group-level resource sharing. The following
    resources are made available by other transaction types.
@@ -263,10 +295,11 @@ _available_.
 
 
  * A Box is _available_ to an Approval Program if _any_ transaction in
-   the same group contains a box reference (`txn.Boxes`) that denotes
-   the box. A box reference contains an index `i`, and name `n`. The
-   index refers to the `ith` application in the transaction's
-   ForeignApplications array, with the usual convention that 0
+   the same group contains a box reference (in `txn.Boxes` or
+   `txn.Access`) that denotes the box. A box reference contains an
+   index `i`, and name `n`. The index refers to the `ith` application
+   in the transaction's `ForeignApplications` or `Access` array (only
+   one of which can be used), with the usual convention that 0
    indicates the application ID of the app called by that
    transaction. No box is ever _available_ to a ClearStateProgram.
 
@@ -344,7 +377,7 @@ Most operations work with only one type of argument, uint64 or bytes, and fail i
 
 Many instructions accept values to designate Accounts, Assets, or Applications. Beginning with v4, these values may be given as an _offset_ in the corresponding Txn fields (Txn.Accounts, Txn.ForeignAssets, Txn.ForeignApps) _or_ as the value itself (a byte-array address for Accounts, or a uint64 ID). The values, however, must still be present in the Txn fields. Before v4, most opcodes required the use of an offset, except for reading account local values of assets or applications, which accepted the IDs directly and did not require the ID to be present in the corresponding _Foreign_ array. (Note that beginning with v4, those IDs _are_ required to be present in their corresponding _Foreign_ array.) See individual opcodes for details. In the case of account offsets or application offsets, 0 is specially defined to Txn.Sender or the ID of the current application, respectively.
 
-This summary is supplemented by more detail in the [opcodes document](opcodes/v11.md).
+This summary is supplemented by more detail in the [opcodes document](opcodes/v12.md).
 
 Some operations immediately fail the program.
 A transaction checked by a program that fails is not valid.
@@ -467,6 +500,7 @@ these results may contain leading zero bytes.
 | `keccak256` | Keccak256 hash of value A, yields [32]byte |
 | `sha512_256` | SHA512_256 hash of value A, yields [32]byte |
 | `sha3_256` | SHA3_256 hash of value A, yields [32]byte |
+| `falcon_verify` | for (data A, compressed-format signature B, pubkey C) verify the signature of data against the pubkey => {0 or 1} |
 | `ed25519verify` | for (data A, signature B, pubkey C) verify the signature of ("ProgData" \|\| program_hash \|\| data) against the pubkey => {0 or 1} |
 | `ed25519verify_bare` | for (data A, signature B, pubkey C) verify the signature of the data against the pubkey => {0 or 1} |
 | `ecdsa_verify v` | for (data A, signature B, C and pubkey D, E) verify the signature of the data against the pubkey => {0 or 1} |
@@ -594,9 +628,10 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 60 | CreatedAssetID | uint64 | v5  | Asset ID allocated by the creation of an ASA (only with `itxn` in v5). Application mode only |
 | 61 | CreatedApplicationID | uint64 | v5  | ApplicationID allocated by the creation of an application (only with `itxn` in v5). Application mode only |
 | 62 | LastLog | []byte | v6  | The last message emitted. Empty bytes if none were emitted. Application mode only |
-| 63 | StateProofPK | []byte | v6  | 64 byte state proof public key |
+| 63 | StateProofPK | [64]byte | v6  | State proof public key |
 | 65 | NumApprovalProgramPages | uint64 | v7  | Number of Approval Program pages |
 | 67 | NumClearStateProgramPages | uint64 | v7  | Number of ClearState Program pages |
+| 68 | RejectVersion | uint64 | v12  | Application version for which the txn must reject |
 
 ##### Array Fields
 | Index | Name | Type | In | Notes |
@@ -610,7 +645,7 @@ Some of these have immediate data in the byte or bytes after the opcode.
 | 66 | ClearStateProgramPages | []byte | v7  | ClearState Program as an array of pages |
 
 
-Additional details in the [opcodes document](opcodes/v11.md#txn) on the `txn` op.
+Additional details in the [opcodes document](opcodes/v12.md#txn) on the `txn` op.
 
 **Global Fields**
 
@@ -673,17 +708,18 @@ Asset fields include `AssetHolding` and `AssetParam` fields that are used in the
 
 App fields used in the `app_params_get` opcode.
 
-| Index | Name | Type | Notes |
-| - | ------ | -- | --------- |
-| 0 | AppApprovalProgram | []byte | Bytecode of Approval Program |
-| 1 | AppClearStateProgram | []byte | Bytecode of Clear State Program |
-| 2 | AppGlobalNumUint | uint64 | Number of uint64 values allowed in Global State |
-| 3 | AppGlobalNumByteSlice | uint64 | Number of byte array values allowed in Global State |
-| 4 | AppLocalNumUint | uint64 | Number of uint64 values allowed in Local State |
-| 5 | AppLocalNumByteSlice | uint64 | Number of byte array values allowed in Local State |
-| 6 | AppExtraProgramPages | uint64 | Number of Extra Program Pages of code space |
-| 7 | AppCreator | address | Creator address |
-| 8 | AppAddress | address | Address for which this application has authority |
+| Index | Name | Type | In | Notes |
+| - | ------ | -- | - | --------- |
+| 0 | AppApprovalProgram | []byte |      | Bytecode of Approval Program |
+| 1 | AppClearStateProgram | []byte |      | Bytecode of Clear State Program |
+| 2 | AppGlobalNumUint | uint64 |      | Number of uint64 values allowed in Global State |
+| 3 | AppGlobalNumByteSlice | uint64 |      | Number of byte array values allowed in Global State |
+| 4 | AppLocalNumUint | uint64 |      | Number of uint64 values allowed in Local State |
+| 5 | AppLocalNumByteSlice | uint64 |      | Number of byte array values allowed in Local State |
+| 6 | AppExtraProgramPages | uint64 |      | Number of Extra Program Pages of code space |
+| 7 | AppCreator | address |      | Creator address |
+| 8 | AppAddress | address |      | Address for which this application has authority |
+| 9 | AppVersion | uint64 | v12  | Version of the app, incremented each time the approval or clear program changes |
 
 
 **Account Fields**
