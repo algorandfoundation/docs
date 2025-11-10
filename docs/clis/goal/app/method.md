@@ -76,6 +76,8 @@ goal app method [flags]
 
   -o, --out string                  Write transaction to this file
 
+      --reject-version uint         RejectVersion for application transaction
+
   -s, --sign                        Use with -o to indicate that the dumped transaction should be signed
 
   -S, --signer string               Address of key to sign with, if different from transaction "from" address due to rekeying
@@ -121,8 +123,6 @@ goal app method [flags]
   -k, --kmddir string              Data directory for kmd
 
       --local strings              A Local State that may be accessed from application logic. An optional app-id and comma, followed by an address. Zero or omitted app-id indicates the local state for app being called.
-
-      --reject-version uint        If set non-zero, reject for this app version or higher
 
   -w, --wallet string              Set the wallet to be used for the selected operation
 

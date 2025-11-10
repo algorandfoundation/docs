@@ -40,6 +40,8 @@ goal app read [flags]
 
   -h, --help           help for read
 
+      --local --from   Fetch account-specific state for this application. --from address is required when using this flag
+
 ```
 
 
@@ -77,8 +79,6 @@ goal app read [flags]
       --holding strings            A Holding that may be accessed from application logic. An asset-id followed by a comma and an address
 
   -k, --kmddir string              Data directory for kmd
-
-      --local strings              A Local State that may be accessed from application logic. An optional app-id and comma, followed by an address. Zero or omitted app-id indicates the local state for app being called.
 
       --reject-version uint        If set non-zero, reject for this app version or higher
 
