@@ -27,3 +27,7 @@ When it comes to standardising practises this is the place the be. Whether it's 
 |----------------------------|---------------------------|------------------------------------|
 | [AWS Credits](https://tinyurl.com/algoawscredits)            | Key in code `1cf01` and the Foundation team will do a quick verification of your project before enabling the free credits | 5000 credits for AWS cloud services       |
 | [Google Cloud Credits](https://cloud.google.com/startup/apply?hl=en#application-form) | Complete the application form   | Up to $200K in cloud credits over 2 years |
+
+# RPC Endpoint Benchmarks
+
+[OpenChainBench](https://openchainbench.com/benchmarks/algorand-rpc) provides live latency benchmarks for Algorand algod API endpoints. Tracks p50/p90/p99 response times for AlgoNode and Nodely, measured every 60 seconds from US-East, EU-West and Singapore.
